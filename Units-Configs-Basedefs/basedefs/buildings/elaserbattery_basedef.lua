@@ -1,10 +1,10 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 50,
+	buildCostMetal                = buildcostmetal,
 	builder                       = false,
 	buildTime                     = 5,
-	buildpic					  = "elaserbattery.png",
+	buildpic					  = buildpic,
 	canAttack                     = true,
 	canstop                       = "1",
 	category                      = "BUILDING NOTAIR",

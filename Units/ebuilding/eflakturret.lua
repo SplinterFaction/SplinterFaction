@@ -7,6 +7,10 @@ unitName = [[eflakturret]]
 
 isUpgraded	= [[0]]
 
+buildpic = [[eflakturret.png]]
+
+buildcostmetal = 125
+
 humanName = [[Fortifier]]
 
 objectName = [[eflakturret.s3o]]

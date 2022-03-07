@@ -10,19 +10,16 @@
 --------------------------------------------------------------------------------
 
 return {
-	name='Evolution RTS -',
-	description='EvoRTS',
-	shortname='EvoRTS',
+	name='SplinterFaction',
+	description='SplinterFaction',
+	shortname='SF',
 	version='dev',
 	mutator='Official',
-	game='Evolution RTS',
-	shortGame='EvoRTS',
+	game='SplinterFaction',
+	shortGame='SF',
 	modtype=1,
 	depend = {
 		"Evolution RTS Music Addon v3",
 		-- "Spring Features v1.9",
-		-- "Evolution RTS Music Addon v1",
-		-- "Shard LuaAI $VERSION",
-		-- "Evolution RTS Shard LuaAI $VERSION",		
 	},
 }

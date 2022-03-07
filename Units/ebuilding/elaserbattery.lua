@@ -7,6 +7,10 @@ unitName = [[elaserbattery]]
 
 isUpgraded	= [[0]]
 
+buildpic = [[elaserbattery.png]]
+
+buildcostmetal = 40
+
 humanName = [[Aegis]]
 
 objectName = [[elaserbattery.s3o]]
