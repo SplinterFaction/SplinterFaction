@@ -55,6 +55,11 @@ local ringsDefs = {
 		{ color = {0,1,0,0.6}, lineWidth = 5, radius = 1000, divs = 128 },
         --{ color = {0.5, 0, 1, 0.2}, lineWidth = 5, radius = 500 },
     },
+	[UnitDefNames.healstation.id] = {
+        --{ color = {1,0.5,0,0.8}, lineWidth = 2, radius = 800 },
+        --{ color = {0.5,0,1,0.2}, lineWidth = 5, radius = 500 },
+		{ color = {0,1,0,0.6}, lineWidth = 10, radius = 500, divs = 128 },
+    },
 	[UnitDefNames.eorb.id] = {
         --{ color = {1,0.5,0,0.8}, lineWidth = 2, radius = 800 },
         --{ color = {0.5,0,1,0.2}, lineWidth = 5, radius = 500 },

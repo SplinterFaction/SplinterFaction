@@ -33,11 +33,12 @@ function gadget:GetInfo()
 end
 
 local repairUnits= {
-	[UnitDefNames.eorb.id] = {radius=1000,strength=1.0},
-	[UnitDefNames.eorb_up1.id] = {radius=1000,strength=2.0},
-	[UnitDefNames.eorb_up2.id] = {radius=1000,strength=3.0},
-	[UnitDefNames.eorb_up3.id] = {radius=1000,strength=4.0},
-	[UnitDefNames.ehbotengineer_turret.id] = {radius=1000,strength=2.0},
+	-- [UnitDefNames.eorb.id] = {radius=1000,strength=1.0},
+	-- [UnitDefNames.eorb_up1.id] = {radius=1000,strength=2.0},
+	-- [UnitDefNames.eorb_up2.id] = {radius=1000,strength=3.0},
+	-- [UnitDefNames.eorb_up3.id] = {radius=1000,strength=4.0},
+	-- [UnitDefNames.ehbotengineer_turret.id] = {radius=1000,strength=2.0},
+	[UnitDefNames.healstation.id] = {radius=500,strength=10.0},
 	[UnitDefNames.ecommanderhealer.id] = {radius=1000,strength=10.0},
 	[UnitDefNames.ecommanderbattleai.id] = {radius=1000,strength=5.0},
 	[UnitDefNames.ecommanderhealerai.id] = {radius=1000,strength=50.0},
@@ -45,7 +46,7 @@ local repairUnits= {
 	[UnitDefNames.ecommandercloakai.id] = {radius=1000,strength=10.0},
 	[UnitDefNames.ecommanderbuildai.id] = {radius=1000,strength=20.0},
 	[UnitDefNames.ecommanderfactoryai.id] = {radius=1000,strength=20.0},
-	[UnitDefNames.zarm.id] = {radius=1000,strength=10.0},
+	-- [UnitDefNames.zarm.id] = {radius=1000,strength=10.0},
 }
 
 local delayAfterHit=150             --Frames after a hit that no repairs will take place in
