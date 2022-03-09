@@ -146,8 +146,8 @@ function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdO
 
     --if cmdID ~= CMD_SET_WANTED_MAX_SPEED and cmdID ~= 1 then -- 1 == CMD_INSERT (+others) then
     -- If transporter or unit to be loaded is moved or stop, cancel load
-    if cmdID == CMD_MOVE or cmdID == CMD_STOP then
-        --TODO: Fix this. It's a mess..
+    --TODO: Fix this. It's a mess..
+    --if cmdID == CMD_MOVE or cmdID == CMD_STOP then
         --if loadtheseunits[unitID] ~= nil then
         --    --Spring.Echo("Canceling passenger load of "..unitID)
         --    CancelLoad(unitID)
@@ -159,13 +159,13 @@ function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdO
         --        CancelLoad(unitID)
         --    end
         --end
-    end
+    --end
 
     if cmdID == CMD_UNLOAD_UNITS or cmdID == CMD_UNLOAD_UNIT then
         --Spring.Echo(DebugiTable(cmdParams))
         local x, y, z = cmdParams[1], cmdParams[2], cmdParams[3] -- x, y, z position of click
         -- Set radius when cmdID == UNLOAD_UNITS (area unload)
-        transportstounload[unitID] = { x = x, y = y, z = z, r = (cmdID == CMD_UNLOAD_UNITS and cmdParams[4] or nil) }
+        transportstounload[unitID] = { x = x, y = y, z = z, r = (cmdID == CMD_UNLOAD_UNIT and cmdParams[4] or nil) }
         --Spring.Echo("Added ttu: "..unitID)
         return true
     -- Any command issued between issue-unload and actual unload has to update currentassignablecapacity

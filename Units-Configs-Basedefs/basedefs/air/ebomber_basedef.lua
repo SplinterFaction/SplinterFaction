@@ -1,7 +1,7 @@
 unitDef                    = {
 	--acceleration                 = 0.5,
 	airStrafe                    = false,
-	airHoverFactor				 = 0,
+	airHoverFactor				 = -1.0,
 	--brakeRate                    = 1,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 60,
@@ -30,7 +30,7 @@ unitDef                    = {
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	loopbackattack               = true,
-	maxacc						 = 1,
+	--maxacc						 = 1,
 	
 	maxAileron					 = 0.01,
 	maxElevator					 = 0.01,
@@ -40,7 +40,6 @@ unitDef                    = {
 	maxDamage                    = 670,
 	maxSlope                     = 90,
 	maxVelocity                  = 13,
-	verticalSpeed		         = 15,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,

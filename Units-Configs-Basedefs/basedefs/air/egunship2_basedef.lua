@@ -1,7 +1,7 @@
 unitDef                    = {
 	--acceleration                 = 0.5,
 	airStrafe                    = false,
-	airHoverFactor				 = 0,
+	airHoverFactor				 = -1.0,
 	--brakeRate                    = 1,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 76,
@@ -29,7 +29,7 @@ unitDef                    = {
 	iconType                     = "air_arm",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
-	maxacc						 = 1,
+	--maxacc						 = 1,
 	
 	maxAileron					 = 0.01,
 	maxElevator					 = 0.01,

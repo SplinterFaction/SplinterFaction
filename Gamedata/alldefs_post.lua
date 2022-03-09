@@ -103,7 +103,7 @@ function UnitDef_Post(name, uDef)
 	
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	-- 3dbuildrange for all none plane builders
+	-- 3dbuildrange for all non plane builders
 	--
 	--[[
 	for name, ud in pairs(UnitDefs) do
@@ -209,6 +209,19 @@ function UnitDef_Post(name, uDef)
 	if string.find(name, '_scav') then
 		VFS.Include("gamedata/scavengers/unitdef_post.lua")
 		uDef = scav_Udef_Post(name, uDef)
+	end
+
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+	-- Implement idle autoheal for all units
+	if uDef.idletime == nil then uDef.idletime = 0 end
+	if uDef.idletime > 450 then
+		uDef.idletime = 450
+	end
+	
+	if uDef.idleautoheal == nil then uDef.idleautoheal = 0 end
+	if uDef.idleautoheal < 1 then
+		uDef.idleautoheal = 2.5
 	end
 
 	--------------------------------------------------------------------------------
