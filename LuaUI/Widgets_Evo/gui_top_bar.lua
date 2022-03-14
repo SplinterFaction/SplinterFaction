@@ -337,8 +337,8 @@ local function updateButtons()
 
 	local text = '    '
     if (WG['teamstats'] ~= nil) then text = text..'Stats   ' end
-    if (WG['commands'] ~= nil) then text = text..'Cmd   ' end
-    if (WG['keybinds'] ~= nil) then text = text..'Keys   ' end
+    if (WG['commands'] ~= nil) then text = text..'Commands List   ' end
+    if (WG['keybinds'] ~= nil) then text = text..'Keybinds   ' end
     if (WG['changelog'] ~= nil) then text = text..'Changes   ' end
     if (WG['options'] ~= nil) then text = text..'Settings   ' end
 	if chobbyLoaded then
@@ -398,13 +398,13 @@ local function updateButtons()
             if (WG['commands'] ~= nil) then
                 buttons = buttons + 1
                 if buttons > 1 then offset = offset+width end
-                width = font2:GetTextWidth('  Cmd ') * fontsize + (buttons == 1 and 20 or 0)
+                width = font2:GetTextWidth('Commands List') * fontsize + (buttons == 1 and 20 or 0)
                 buttonsArea['buttons']['commands'] = {area[1]+offset, area[2]+margin, area[1]+offset+width, area[4]}
 			end
             if (WG['keybinds'] ~= nil) then
                 buttons = buttons + 1
                 if buttons > 1 then offset = offset+width end
-                width = font2:GetTextWidth('  Keys ') * fontsize + (buttons == 1 and 20 or 0)
+                width = font2:GetTextWidth('  Keybinds ') * fontsize + (buttons == 1 and 20 or 0)
                 buttonsArea['buttons']['keybinds'] = {area[1]+offset, area[2]+margin, area[1]+offset+width, area[4]}
             end
             if (WG['changelog'] ~= nil) then
