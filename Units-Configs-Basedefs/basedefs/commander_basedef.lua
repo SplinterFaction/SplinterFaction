@@ -64,7 +64,7 @@ unitDef                    = {
 	turnRate                     = 5000,
 	unitname                     = unitName,
 	upright                      = false,
-	workerTime                   = 1,
+	workerTime                   = workertime,
 	capturespeed                 = 0.25,
 	TerraformSpeed               = 2147000,
 	ReclaimSpeed                 = 1,	-- 0.03125 =  1 hp per second

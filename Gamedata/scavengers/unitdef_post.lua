@@ -5,9 +5,9 @@ for name,uDef in pairs(UnitDefs) do
     scavUnit[#scavUnit+1] = name..'_scav'
 end
 
-local rana = math.random(3,1000)
-local ranb = math.random(2,a)
-local ranc = math.random(1,b)
+-- local rana = math.random(3,1000)
+-- local ranb = math.random(2,a)
+-- local ranc = math.random(1,b)
 
 
 

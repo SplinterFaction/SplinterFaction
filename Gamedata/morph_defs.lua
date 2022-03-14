@@ -89,6 +89,20 @@ local timeToBuild_eflakturret = energyCost_eflakturret / 10
 -- energycost = time * rate
 -- time = energycost / rate
 
+--Fed Commander Upgrades
+
+local energyCost_fedcommander_up1 = 60 * 10
+local timeToBuild_fedcommander_up1 = energyCost_fedcommander_up1 / 10
+
+local energyCost_fedcommander_up2 = 180 * 25
+local timeToBuild_fedcommander_up2 = energyCost_fedcommander_up2 / 25
+
+local energyCost_fedcommander_up3 = 300 * 50
+local timeToBuild_fedcommander_up3 = energyCost_fedcommander_up3 / 50
+
+local energyCost_fedcommander_up4 = 480 * 100
+local timeToBuild_fedcommander_up4 = energyCost_fedcommander_up4 / 100
+
 --Loz Commander Upgrades
 
 local energyCost_lozcommander_up1 = 60 * 10
@@ -142,6 +156,58 @@ local energyCost_karganneth = 0
 local timeToBuild_karganneth = 10
 
 local morphDefs = {
+
+--fedcommander
+
+	fedcommander = {
+		{
+		into = 'fedcommander_up1',
+		time = timeToBuild_fedcommander_up1,
+		cmdname = [[Tech 1]],
+		energy = energyCost_fedcommander_up1,
+		metal = 0,
+		text = 'Evolve Tech 1 with upgraded weapons and armor',
+		},
+	},
+	
+	fedcommander_up1 = {
+		{
+		into = 'fedcommander_up2',
+		time = timeToBuild_fedcommander_up2,
+		cmdname = [[Tech 2]],
+		energy = energyCost_fedcommander_up2,
+		metal = 0,
+		text = 'Evolve Tech 2 with upgraded weapons and armor',
+		require = [[tech1]],
+		},
+	},
+		
+	fedcommander_up2 = {
+		{
+		into = 'fedcommander_up3',
+		time = timeToBuild_fedcommander_up3,
+		cmdname = [[Tech 3]],
+		energy = energyCost_fedcommander_up3,
+		metal = 0,
+		text = 'Evolve Tech 3 with upgraded weapons and armor',
+		require = [[tech2]],
+		},
+	},
+		
+	fedcommander_up3 = {
+		{
+		into = 'fedcommander_up4',
+		time = timeToBuild_fedcommander_up4,
+		cmdname = [[Tech 3
+		BattleMech]],
+		energy = energyCost_fedcommander_up4,
+		metal = 0,
+		text = 'Evolve into a BattleMech with Devestating weapons and armor',
+		require = [[tech3]],
+		},
+	},
+
+--
 
 --lozcommander
 

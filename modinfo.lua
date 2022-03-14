@@ -19,7 +19,7 @@ return {
 	shortGame='SF',
 	modtype=1,
 	depend = {
-		"Evolution RTS Music Addon v3",
+		"Dreamstate Logic Music Addon 1",
 		-- "Spring Features v1.9",
 	},
 }

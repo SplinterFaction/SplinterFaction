@@ -176,7 +176,7 @@ weaponDefs                 = {
 		size					 = 2,
 		weaponType		         = "Cannon",
 		soundHit                 = "explosions/mediumcannonhit.wav",
-		soundStart               = "weapons/Shotgun Boom 102.wav",
+		soundStart               = "weapons/Shotgun Shot 5.wav",
 		
 		turret                   = true,
 		weaponVelocity           = 400,

@@ -19,11 +19,19 @@ function widget:GetInfo()
 		date	= "november 2016",
 		license	= "GNU GPL, v2 or later",
 		layer	= -4,
-		enabled	= false	--	loaded by default?
+		enabled	= true	--	loaded by default?
 	}
 end
 
 local pauseWhenPaused = false
+
+local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "JosefinSans-SemiBold.ttf")
+local vsx,vsy = Spring.GetViewGeometry()
+local fontfileScale = (0.5 + (vsx*vsy / 5700000))
+local fontfileSize = 36
+local fontfileOutlineSize = 8.5
+local fontfileOutlineStrength = 1.33
+local font = gl.LoadFont(fontfile, fontfileSize*fontfileScale, fontfileOutlineSize*fontfileScale, fontfileOutlineStrength)
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -36,8 +44,8 @@ local buttons = {}
 local previousTrack = ''
 local curTrack	= "no name"
 
-local peaceTracks = VFS.DirList('luaui/Widgets_Evo/music/peace', '*.ogg')
-local warTracks = VFS.DirList('luaui/Widgets_Evo/music/war', '*.ogg')
+local peaceTracks = VFS.DirList('luaui/Widgets/music/peace', '*.ogg')
+local warTracks = VFS.DirList('luaui/Widgets/music/war', '*.ogg')
 
 --We check to make sure that we can function properly without crashing due to missing music tracks
 local next = next
@@ -48,7 +56,9 @@ end
 
 if next(warTracks) == nil then
 	Spring.Echo("[Music Player] No War tracks were found (you must have at least 2)! Add some and try again!")
-	return false
+	noWarTracks = true
+	dynamicMusic = 0
+	interruptMusic = 0
 end
 
 local tracks = peaceTracks
@@ -98,20 +108,20 @@ local shown = false
 local mouseover = false
 local volume
 
-local dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 1)
-local interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 1)
+local dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 0)
+local interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 0)
 local warMeter = 0
 local fadelvl = Spring.GetConfigInt("snd_volmusic", 20) * 0.01
 local fadeOut = false
 
 --Assume that if it isn't set, dynamic music is true
 if dynamicMusic == nil then
-	dynamicMusic = 1
+	dynamicMusic = 0
 end
 
 --Assume that if it isn't set, interrupt music is true
 if interruptMusic == nil then
-	interruptMusic = 1
+	interruptMusic = 0
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -280,18 +290,28 @@ local function createList()
 		
 		-- track name
 		glColor(0.45,0.45,0.45,1)
+		
 		local trackname = string.gsub(curTrack, ".ogg", "")
 		local text = ''
+		--local charactersToCut = GetPathLenght()
+		charactersInPath = 23
+		if tracks and tracks == peaceTracks then
+			charactersInPath = charactersInPath + 23
+		elseif tracks and tracks == warTracks then
+			charactersInPath = charactersInPath + 1
+		end
 		for i=charactersInPath, #trackname do
 	    local c = string.sub(trackname, i,i)
-			local width = glGetTextWidth(text..c)*textsize
+			local width = font:GetTextWidth(text..c)*textsize
 	    if width > maxTextWidth then
 	    	break
 	    else
 	    	text = text..c
 	    end
 		end
-		glText('\255\135\135\135'..text, buttons['next'][3]+textXPadding, bottom+textYPadding, textsize, 'no')
+		font:Begin()
+		font:Print('\255\255\255\135'..text, buttons['next'][3]+textXPadding, bottom+textYPadding, textsize, 'no')
+		font:End()
 		
 	end)
 	drawlist[4] = glCreateList( function()
@@ -461,17 +481,17 @@ function widget:GameFrame(n)
 		--This is a little messy, but we need to be able to update these values on the fly so I see no better way
 		music_volume_percentage = Spring.GetConfigInt("snd_volmusic", 20) * 0.01
 		
-		dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 1)
-		interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 1)
+		dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 0)
+		interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 0)
 		
-		--Assume that if it isn't set, dynamic music is true
+		--Assume that if it isn't set, dynamic music should be the below value
 		if dynamicMusic == nil then
-			dynamicMusic = 1
+			dynamicMusic = 0
 		end
 
-		--Assume that if it isn't set, interrupt music is true
+		--Assume that if it isn't set, interrupt music should be the below value
 		if interruptMusic == nil then
-			interruptMusic = 1
+			interruptMusic = 0
 		end	
 	end
     if n%5 == 4 then
@@ -559,6 +579,9 @@ function PlayNewTrack()
 			tracks = warTracks
 			--Spring.Echo("Current tracklist is : War Tracks")
 		end
+	end
+	if noWarTracks == true then
+		tracks = peaceTracks
 	end
 	local newTrack = previousTrack
 	repeat
