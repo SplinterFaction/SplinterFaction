@@ -1,18 +1,18 @@
--- UNITDEF -- EKMAR --
+-- UNITDEF -- SHIELDBATTERY --
 --------------------------------------------------------------------------------
 
-local unitName                    = "ekmar"
+local unitName                    = "shieldbattery"
 
 --------------------------------------------------------------------------------
 
 local armortype					 = [[building]]
 
-local techrequired				 = [[tech2]]
+local techrequired				 = [[tech3]]
 
-local shield1Power               = 2500
-local shield1PowerRegen          = 25
-local shield1PowerRegenEnergy    = 25
-local buildCostMetal 			  = 50
+local shield1Power               = 25000
+local shield1PowerRegen          = 100
+local shield1PowerRegenEnergy    = 200
+local buildCostMetal 			  = 400
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -22,16 +22,17 @@ local unitDef                     = {
 	buildCostMetal                = buildCostMetal,
 	builder                       = false,
 	buildTime                     = 1,
+	buildpic					  = "shieldbattery.png",
 	canAttack                     = false,
 	canstop                       = "1",
 	category                      = "BUILDING NOTAIR WALL",
 	damageModifier                = 0.2,
-	description                   = [[Protective Shield • Shield can link with other shield units to increase charging and capacity]],
+	description                   = [[Stores shield power for other shields to use]],
 	energyStorage                 = 0,
 	energyUse                     = 0,
-	explodeAs                     = "mediumBuildingExplosionGenericBlue",
-	footprintX                    = 2,
-	footprintZ                    = 2,
+	explodeAs                     = "hugeBuildingExplosionGenericBlue",
+	footprintX                    = 8,
+	footprintZ                    = 8,
 	floater			              = true,
 	iconType                      = "baseshield",
 	idleAutoHeal                  = .5,
@@ -41,20 +42,20 @@ local unitDef                     = {
 	maxWaterDepth                 = 999999,
 	mass				          = 1000,
 	metalStorage                  = 0,
-	name                          = "Kmar",
+	name                          = "The Copper Top",
 	--onOffable					  = true,
-	objectName                    = "ebarricade3.s3o",
-	script			              = "ebarricade3.cob",
+	objectName                    = "shieldbattery.s3o",
+	script			              = "shieldbattery.cob",
 	repairable		              = false,
-	selfDestructAs                = "mediumBuildingExplosionGenericBlue",
+	selfDestructAs                = "hugeBuildingExplosionGenericBlue",
 	selfDestructCountdown         = 0,
 	side                          = "ARM",
 	sightDistance                 = 0,
 	smoothAnim                    = true,
 	TEDClass                      = "FORT",
-	unitname                      = "ekmar",
+	unitname                      = unitName,
 	workerTime                    = 0,
-	yardMap                       = "ooo ooo ooo",
+	yardMap                       = "oooooooo",
 
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {
@@ -111,7 +112,7 @@ local weaponDefs                  = {
 		Visibleshieldrepulse      = false,
 		ShieldStartingPower       = 0,
 		Shieldenergyuse           = 0,
-		Shieldradius              = 750,
+		Shieldradius              = 1,
 		Shieldpower               = shield1Power,
 		Shieldpowerregen          = shield1PowerRegen,
 		Shieldpowerregenenergy    = shield1PowerRegenEnergy,

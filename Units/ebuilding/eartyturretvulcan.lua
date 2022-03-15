@@ -1,21 +1,21 @@
--- UNITDEF -- EARTYTURRET --
+-- UNITDEF -- EARTYTURRETVULCAN --
 --------------------------------------------------------------------------------
 
-unitName = [[eartyturret]]	
+unitName = [[eartyturretvulcan]]	
+	
+isUpgraded = [[0]]
 
-humanName = [[Big Bertha]]
-objectName = [[eartyturret.s3o]]
-script = [[eartyturret.cob]]
+humanName = [[Vulcan]]
+objectName = [[eartyturretvulcan.s3o]]
+script = [[eartyturretvulcan.cob]]
 
 tech = [[tech3]]
 armortype = [[building]]
 
 AreaOfEffect = 250
 
-weapon1 = [[artyweapon]]
-accuracy = 500
-
-isUpgraded = [[0]]
+weapon1 = [[artyweaponvulcan]]
+accuracy = 1500
 
 VFS.Include("units-configs-basedefs/basedefs/buildings/eartyturret_basedef.lua")
 

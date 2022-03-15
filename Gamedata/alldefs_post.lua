@@ -454,28 +454,36 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 		for id,wDef in pairs(WeaponDefs) do
 			-- Handle upgraded units weapon reload times
 			if wDef.customparams and wDef.customparams.isupgraded == "1" then
-				wDef.reloadtime = wDef.reloadtime * 0.85
+				if wDef.reloadtime then
+					wDef.reloadtime = wDef.reloadtime * 0.85
+				end
 				wDef.damage.default = wDef.damage.default * 1.20
 				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
 					wDef.shieldpower = wDef.shieldpower * 1.20
 				end
 			end
 			if wDef.customparams and wDef.customparams.isupgraded == "2" then
-				wDef.reloadtime = wDef.reloadtime * 0.70
+				if wDef.reloadtime then
+					wDef.reloadtime = wDef.reloadtime * 0.70
+				end
 				wDef.damage.default = wDef.damage.default * 1.35
 				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
 					wDef.shieldpower = wDef.shieldpower * 1.35
 				end
 			end
 			if wDef.customparams and wDef.customparams.isupgraded == "3" then
-				wDef.reloadtime = wDef.reloadtime * 0.65
+				if wDef.reloadtime then
+					wDef.reloadtime = wDef.reloadtime * 0.65
+				end
 				wDef.damage.default = wDef.damage.default * 1.50
 				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
 					wDef.shieldpower = wDef.shieldpower * 1.50
 				end
 			end
 			if wDef.customparams and wDef.customparams.isupgraded == "boss" then
-				wDef.reloadtime = wDef.reloadtime * 0.5
+				if wDef.reloadtime then
+					wDef.reloadtime = wDef.reloadtime * 0.5
+				end
 				wDef.damage.default = wDef.damage.default * 10
 				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
 					wDef.shieldpower = wDef.shieldpower * 2.50

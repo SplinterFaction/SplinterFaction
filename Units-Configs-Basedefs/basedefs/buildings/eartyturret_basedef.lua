@@ -52,7 +52,7 @@ unitDef                     = {
 	},
 	weapons                       = {
 		[1]                       = {
-			def                   = "artyweapon",
+			def                   = weapon1,
 			badtargetcategory     = "LIGHT ARMORED VTOL",
             --onlyTargetCategory    = "BUILDING BIO",
 		},
@@ -80,6 +80,7 @@ unitDef                     = {
 
 weaponDefs                  = {
 	artyweapon  		          = {
+		accuracy				 = accuracy,
 		AreaOfEffect             = AreaOfEffect,
 		avoidFriendly            = false,
 		avoidFeature             = false,
@@ -99,7 +100,7 @@ weaponDefs                  = {
 		
 		name                     = "Plasma Cannon",
 		range                    = 8000,
-		reloadtime               = 30,
+		reloadtime               = 15,
 		size					 = 16,
 		weaponType		         = "Cannon",
 		soundHit                 = "explosions/artyhit.wav",
@@ -113,7 +114,46 @@ weaponDefs                  = {
 			--effectedByunitHealthModifier = true,
 		},  
 		damage                   = {
-			default              = 1000,
+			default              = 500,
+		},
+	},
+	
+	artyweaponvulcan  		          = {
+		accuracy				 = accuracy,
+		AreaOfEffect             = AreaOfEffect,
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		
+		cegTag                   = "artyshot2",
+		avoidNeutral	         = false,
+		explosionGenerator       = "custom:NUKEDATBEWMSMALL",
+		energypershot            = 0,
+		edgeEffectiveness        = 0.1,
+		
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		
+		minIntensity			 = 1,
+		
+		name                     = "Plasma Cannon",
+		range                    = 8000,
+		reloadtime               = 1,
+		size					 = 16,
+		weaponType		         = "Cannon",
+		soundHit                 = "explosions/artyhit.wav",
+		soundStart               = "weapons/arty2.wav",
+		
+		turret                   = true,
+		weaponVelocity           = 1000,
+		customparams             = {
+			damagetype		     = "antibuilding", 
+			isupgraded		  	 = isUpgraded,
+			--effectedByunitHealthModifier = true,
+		},  
+		damage                   = {
+			default              = 500,
 		},
 	},
 

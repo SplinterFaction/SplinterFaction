@@ -676,6 +676,13 @@ effectUnitDefs = {
 --    {class='Bursts', options=efusion2Bursts},
     {class='ShieldJitter', options={delay=0,life=math.huge, pos={0,20,0.0}, size=405, precision=0, strength   = 0.001, repeatEffect=true}},
   },
+  
+	megapowerplant = {
+		{class='Bursts',options=cafusBursts},
+		{class='StaticParticles',options=cafusCorona},
+		{class='ShieldSphere',options=cafusShieldSphere},
+		{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,158,0}, size=100, precision=22, repeatEffect=true}},
+	},
 	
 	
 	----// FUSIONS //--------------------------
