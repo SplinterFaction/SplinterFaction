@@ -3,13 +3,17 @@
 #include "sfxtype.h"
 #include "exptype.h"
 
-piece  base, turret, barrel1, firepoint1, sfxpoint1, lilypad;
+piece  base, ball, topring, middlering, lilypad;
 
-static-var  Static_Var_1, Static_Var_2;
+static-var  Static_Var_1;
 
 
 SmokeUnit(healthpercent, sleeptime, smoketype)
 {
+	while( get BUILD_PERCENT_LEFT )
+	{
+		sleep 400;
+	}
 	while( TRUE )
 	{
 		healthpercent = get HEALTH;
@@ -20,7 +24,7 @@ SmokeUnit(healthpercent, sleeptime, smoketype)
 			{
 				smoketype = 256 | 1;
 			}
-			emit-sfx 1026 from base;
+			emit-sfx 1024 from ball;
 		}
 		sleeptime = healthpercent * 50;
 		if( sleeptime < 200 )
@@ -33,8 +37,8 @@ SmokeUnit(healthpercent, sleeptime, smoketype)
 
 setSFXoccupy(Func_Var_1)
 {
-	Static_Var_2 = Func_Var_1;
-	if( Static_Var_2 == 2 )
+	Static_Var_1 = Func_Var_1;
+	if( Static_Var_1 == 2 )
 	{
 		move base to y-axis [-0.500000] speed [50.000000];
 		show lilypad;
@@ -44,7 +48,7 @@ setSFXoccupy(Func_Var_1)
 		move base to y-axis [0.000000] speed [50.000000];
 		hide lilypad;
 	}
-	if( Static_Var_2 == 4 )
+	if( Static_Var_1 == 4 )
 	{
 		move base to y-axis [0.000000] speed [50.000000];
 		hide lilypad;
@@ -56,70 +60,41 @@ setSFXoccupy(Func_Var_1)
 	}
 }
 
-cannotfire()
-{
-	while( TRUE )
-	{
-		if( !Static_Var_1 )
-		{
-			emit-sfx 1025 from sfxpoint1;
-		}
-		sleep 1500;
-	}
-}
-
 Create()
 {
-	Static_Var_1 = 1;
-	while( get BUILD_PERCENT_LEFT )
-	{
-		sleep 400;
-	}
-	start-script SmokeUnit();
-	start-script cannotfire();
-}
-
-RestoreAfterDelay()
-{
-	sleep 3000;
-	turn turret to y-axis <0.000000> speed <60.000000>;
-	turn barrel1 to x-axis <0.000000> speed <30.000000>;
+	spin ball around y-axis speed <20.005495>;
+	spin ball around z-axis speed <30.005495>;
+	spin middlering around y-axis speed <-90.005495>;
+	spin middlering around z-axis speed <-60.005495>;
+	spin topring around y-axis speed <90.005495>;
+	spin topring around z-axis speed <60.005495>;
 }
 
 AimWeapon1(Func_Var_1, Func_Var_2)
 {
 	signal 2;
 	set-signal-mask 2;
-	while( !Static_Var_1 )
-	{
-		sleep 200;
-	}
-	turn turret to y-axis Func_Var_1 speed <5000.000000>;
-	turn barrel1 to x-axis <0.000000> - Func_Var_2 speed <5000.000000>;
-	wait-for-turn turret around y-axis;
-	wait-for-turn barrel1 around x-axis;
-	start-script RestoreAfterDelay();
 	return (1);
 }
 
 FireWeapon1()
 {
-	emit-sfx 1024 + 0 from firepoint1;
 }
 
 AimFromWeapon1(Func_Var_1)
 {
-	Func_Var_1 = 1;
+	Func_Var_1 = 0;
 }
 
 QueryWeapon1(Func_Var_1)
 {
-	Func_Var_1 = 3;
+	Func_Var_1 = 0;
 }
 
 Killed(severity, corpsetype)
 {
 	corpsetype = 1;
-	explode turret type EXPLODE_ON_HIT;
-	explode barrel1 type EXPLODE_ON_HIT;
+	explode ball type EXPLODE_ON_HIT;
+	explode topring type EXPLODE_ON_HIT;
+	explode middlering type EXPLODE_ON_HIT;
 }

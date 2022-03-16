@@ -5,17 +5,25 @@ unitName                    = [[esiloplanetcracker]]
 
 --------------------------------------------------------------------------------
 
-name = [[Planetcracker: World Destroying Nuclear Missile]]
+name = [[Planetcracker]]
+description = [[World Destroying Nuclear Missile Facility]]
 
-armortype					 = [[building]]
-techrequired				 = [[tech3]]
+buildpic = [[esiloplanetcracker.png]]
+
+armortype = [[building]]
+techrequired = [[tech3]]
 
 weapon1 = [[planetcracker]]
 
-buildCostMetal = 1750
-objectname = [[esilo2.s3o]]
+footprintx = 32
+footprintz = 32
+
+buildCostMetal = 10000
+objectname = [[esiloplanetcracker.s3o]]
 script = [[esilo2.cob]]
 deathexplosion = [[planetcracker]]
+
+weaponmodel = [[planetcrackernuke.s3o]]
 
 VFS.Include("units-configs-basedefs/basedefs/buildings/esilo_basedef.lua")
 
