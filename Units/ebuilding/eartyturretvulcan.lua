@@ -17,7 +17,7 @@ AreaOfEffect = 250
 weapon1 = [[artyweaponvulcan]]
 accuracy = 1500
 
-VFS.Include("units-configs-basedefs/basedefs/buildings/eartyturret_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/buildings/eartyturretvulcan_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
