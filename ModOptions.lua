@@ -33,26 +33,14 @@ local options= {
 -- Shard AI Options
 	{
 		key    = 'aioptions',
-		name   = 'DAI (AI Opponent) Options',
-		desc   = 'Allows you to adjust ShardLua settings',
+		name   = 'AI Opponent Options',
+		desc   = 'Allows you to adjust AI settings',
 		type   = 'section',
 	},
 	{
-		key    = 'aidebug',
-		name   = 'AI is spamming chat with debug values',
-		desc   = 'AI is spamming chat with debug values',
-		type="list",
-		def="disabled",
-		section= "aioptions",
-		items={
-			{key="disabled", name="Disabled", desc="Clean Chat"},
-			{key="enabled", name="Enabled", desc="Cries in Spam"},
-		}
-	},
-	{
 		key    = 'ai_enableincomemultiplier',
-		name   = 'Enable DAI resource cheats',
-		desc   = 'Enable DAI resource cheats',
+		name   = 'Enable AI resource cheats',
+		desc   = 'Enable AI resource cheats',
 		type="list",
 		def="disabled",
 		section= "aioptions",
@@ -309,43 +297,6 @@ local options= {
 		max    = 2000,
 		step   = 1,  -- quantization is aligned to the def value
 		-- (step <= 0) means that there is no quantization
-	},
-	{
-		key    = 'scavengers',
-		name   = 'Scavenger amount',
-		desc   = 'This multiplier will be applied on the amount of civilians a map will end up with',
-		type   = 'number',
-		section= 'gameplayoptions',
-		def    = 0,
-		min    = 0,
-		max    = 5,
-		step   = 0.1,
-	},
-	{
-		key    = 'scavengerstech',
-		name   = 'Scavengers Tech Speed',
-		desc   = 'Determines how fast scav tech ramps up. Adaptive will adjust to players skill',
-		type   = 'list',
-		section = 'gameplayoptions',
-		def  = "adaptive",
-		items={
-			{key="adaptive", name="Adaptive", desc="Adapts to players skill"},
-			{key="easy", name="Easy", desc="Slow ramp up for newbies and noobs"},
-			{key="medium", name="Medium", desc="Normal ramp up for slightly experienced players"},
-			{key="hard", name="Hard", desc="Hard ramp up for experienced players"},
-			{key="brutal", name="Brutal", desc="You'll die"},
-		}
-	},
-	{
-		key    = 'lootboxes',
-		name   = 'Lootboxes',
-		desc   = '1 to enable, 0 to disable',
-		type   = 'number',
-		section= 'gameplayoptions',
-		def    = 1,
-		min    = 0,
-		max    = 1,
-		step   = 1,
 	},
 	{
 		key="deathmode",

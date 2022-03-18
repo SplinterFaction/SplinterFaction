@@ -263,27 +263,27 @@ if mexRandomLayout == "standard" then
 	end
 	
 	if mapSQRT > 144 and mapSQRT <= 196 then -- An exception for 14x14 maps
-		mexSpotsPerSide = mexSpotsPerSide * 0.75
+		mexSpotsPerSide = mexSpotsPerSide * 0.66
 		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
 	
 	if mapSQRT > 196 and mapSQRT <= 256 then -- An exception for 16x16 maps
-		mexSpotsPerSide = mexSpotsPerSide * 1
+		mexSpotsPerSide = mexSpotsPerSide * 0.75
 		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
 	
 	if mapSQRT > 256 and mapSQRT <= 400 then -- An exception for 20x20 maps
-		mexSpotsPerSide = mexSpotsPerSide * 1.5
+		mexSpotsPerSide = mexSpotsPerSide * 1
 		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
 	
 	if mapSQRT > 400 and mapSQRT <= 576 then -- An exception for 24x24 maps
-		mexSpotsPerSide = mexSpotsPerSide * 1.75
+		mexSpotsPerSide = mexSpotsPerSide * 1.5
 		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
 	
 	if mapSQRT > 576 then -- An exception for 28x28 maps
-		mexSpotsPerSide = mexSpotsPerSide * 2
+		mexSpotsPerSide = mexSpotsPerSide * 1.5
 		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end	
 
