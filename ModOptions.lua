@@ -512,6 +512,187 @@ local options= {
 		step   = 1,  -- quantization is aligned to the def value
 		-- (step <= 0) means that there is no quantization
 	},
+
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	-- Scavengers
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	{
+		key		= "options_scavengers",
+		name	= "Scavengers",
+		desc	= "Gameplay options for Scavengers gamemode",
+		type	= "section",
+	},
+	{
+		key    = 'scavdifficulty',
+		name   = 'Base Difficulty',
+		desc   = 'Scavengers Base Difficulty Level',
+		type   = 'list',
+		section = 'options_scavengers',
+		def  = "veryeasy",
+		items={
+			{key="noob", name="Noob", desc="Noob"},
+			{key="veryeasy", name="Very Easy", desc="Very Easy"},
+			{key="easy", name="Easy", desc="Easy"},
+			{key="medium", name="Medium", desc="Medium"},
+			{key="hard", name="Hard", desc="Hard"},
+			{key="veryhard", name="Very Hard", desc="Very Hard"},
+			{key="expert", name="Expert", desc="Expert"},
+			{key="brutal", name="Brutal", desc="You'll die"},
+		}
+	},
+	{
+		key    = 'scavgraceperiod',
+		name   = 'Grace Period',
+		desc   = 'Time before Scavengers start sending attacks (in minutes).',
+		type   = 'number',
+		section= 'options_scavengers',
+		def    = 5,
+		min    = 1,
+		max    = 20,
+		step   = 1,
+	},
+	{
+		key    = 'scavmaxtechlevel',
+		name   = 'Maximum Scavengers Tech Level',
+		desc   = 'Caps Scav tech level at specific point.',
+		type   = 'list',
+		section = 'options_scavengers',
+		def  = "tech4",
+		items={
+			{key="tech4", name="Tech 4", desc="Tech 4"},
+			{key="tech3", name="Tech 3", desc="Tech 3"},
+			{key="tech2", name="Tech 2", desc="Tech 2"},
+			{key="tech1", name="Tech 1", desc="Tech 1"},
+		}
+	},
+	{
+		key    = 'scavendless',
+		name   = 'Endless Mode',
+		desc   = 'Disables final boss fight, turning Scavengers into an endless survival mode',
+		type   = 'bool',
+		section = 'options_scavengers',
+		def  = false,
+	},
+	{
+		key    = 'scavtechcurve',
+		name   = 'Game Lenght Multiplier',
+		desc   = 'Higher than 1 - Longer, Lower than 1 - Shorter',
+		type   = 'number',
+		section= 'options_scavengers',
+		def    = 1,
+		min    = 0.01,
+		max    = 10,
+		step   = 0.01,
+	},
+	{
+		key    = 'scavbosshealth',
+		name   = 'Final Boss Health Multiplier',
+		--desc   = '',
+		type   = 'number',
+		section= 'options_scavengers',
+		def    = 1,
+		min    = 0.01,
+		max    = 10,
+		step   = 0.01,
+	},
+	{
+		key    = 'scavevents',
+		name   = 'Random Events',
+		desc   = 'Random Events System',
+		type   = 'bool',
+		section = 'options_scavengers',
+		def  = true,
+	},
+	{
+		key    = 'scaveventsamount',
+		name   = 'Random Events Amount',
+		desc   = 'Modifies frequency of random events',
+		type   = 'list',
+		section = 'options_scavengers',
+		def  = "normal",
+		items={
+			{key="normal", name="Normal", desc="Normal"},
+			{key="lower", name="Lower", desc="Halved"},
+			{key="higher", name="Higher", desc="Doubled"},
+		}
+	},
+	{
+		key    = 'scavconstructors',
+		name   = 'Scavenger Commanders',
+		desc   = "When disabled, Scavengers won't build bases but will spawn more unit waves to balance it out.",
+		type   = 'bool',
+		section = 'options_scavengers',
+		def  = true,
+	},
+	{
+		key    = 'scavstartboxcloud',
+		name   = 'Scavenger Startbox Cloud (Requires Startbox for Scavenger team)',
+		desc   = "Spawns purple cloud in Scav startbox area, giving them safe space.",
+		type   = 'bool',
+		section = 'options_scavengers',
+		def  = true,
+	},
+	{
+		key    = 'scavspawnarea',
+		name   = 'Scavenger Spawn Area (Requires Startbox for Scavenger team)',
+		desc   = "When enabled, Scavengers will only spawn beacons within an area that starts in their startbox and grows up with time. When disabled, they will spawn freely around the map",
+		type   = 'bool',
+		section = 'options_scavengers',
+		def  = true,
+	},
+
+
+	-- Hidden
+	{
+		key    = 'scavunitcountmultiplier',
+		name   = 'Spawn Wave Size Multiplier',
+		desc   = '',
+		type   = 'number',
+		section= 'options_scavengers',
+		def    = 1,
+		min    = 0.01,
+		max    = 10,
+		step   = 0.01,
+		hidden = true,
+	},
+	{
+		key    = 'scavunitspawnmultiplier',
+		name   = 'Frequency of Spawn Waves Multiplier',
+		desc   = '',
+		type   = 'number',
+		section= 'options_scavengers',
+		def    = 1,
+		min    = 0.01,
+		max    = 10,
+		step   = 0.01,
+		hidden = true,
+	},
+	{
+		key    = 'scavbuildspeedmultiplier',
+		name   = 'Scavenger Build Speed Multiplier',
+		desc   = '',
+		type   = 'number',
+		section= 'options_scavengers',
+		def    = 1,
+		min    = 0.01,
+		max    = 10,
+		step   = 0.01,
+		hidden = true,
+	},
+	{
+		key    = 'scavunitveterancymultiplier',
+		name   = 'Scavenger Unit Experience Level Multiplier',
+		desc   = 'Higher means stronger Scav units',
+		type   = 'number',
+		section= 'options_scavengers',
+		def    = 1,
+		min    = 0.01,
+		max    = 10,
+		step   = 0.01,
+		hidden = true,
+	},
 -- End Control Victory Options
 }
 
