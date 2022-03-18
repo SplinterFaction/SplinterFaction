@@ -44,7 +44,7 @@ local function AddUnit(unitID, unitDefID)
   for i=1,#def do
     local fxTable = units[unitID].fx
     local fx = def[i]
-    local options = Spring.Utilities.CopyTable(fx.options)
+    local options = table.copy(fx.options)
     options.unit = unitID
     local fxID = LupsAddParticles(fx.class, options)
     if fxID ~= -1 then

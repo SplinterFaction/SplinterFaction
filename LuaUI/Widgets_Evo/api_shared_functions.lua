@@ -19,7 +19,7 @@ local diffTex    = ":n:bitmaps/icons/frame_diff.png"
 local frameTex   = ":n:bitmaps/icons/frame_slate.png"
 
 Spring.Utilities = Spring.Utilities or {}
-VFS.Include("LuaRules/Utilities/tablefunctions.lua")
+VFS.Include("common/tablefunctions.lua")
 
 local function GetBuildIconFrame(udef) 
   if (udef.customParams.isconstructor) then

@@ -51,8 +51,8 @@ local matTemplate = {
 
 
 local materials = {
-	normalMappedS3o = Spring.Utilities.CopyTable(matTemplate, true),
-	normalMappedS3oFlipped = Spring.Utilities.CopyTable(matTemplate, true),
+	normalMappedS3o = table.copy(matTemplate, true),
+	normalMappedS3oFlipped = table.copy(matTemplate, true),
 }
 
 table.insert(materials.normalMappedS3oFlipped.shaderDefinitions, "#define flip_normalmap")

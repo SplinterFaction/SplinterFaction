@@ -14,7 +14,7 @@ function widget:GetInfo()
 end
 
 VFS.Include("LuaRules/Configs/customcmds.h.lua")
-VFS.Include("LuaRules/Utilities/glVolumes.lua")
+VFS.Include("common/luautilities/glVolumes.lua")
 
 local fontfile = "JosefinSans-SemiBold.ttf"
 

@@ -19,6 +19,8 @@
 --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+VFS.Include('init.lua', nil, VFSMODE)
+
 local HANDLER_BASENAME = "gadgets.lua"
 local isMission = VFS.FileExists("mission.lua")	-- or Game.gameName:find("Scenario Editor")
 

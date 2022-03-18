@@ -1,4 +1,4 @@
-VFS.Include("LuaRules/Utilities/versionCompare.lua")
+VFS.Include("common/luautilities/versionCompare.lua")
 local reverseCompat = not Spring.Utilities.IsCurrentVersionNewerThan(100, 0)
 
 if reverseCompat then

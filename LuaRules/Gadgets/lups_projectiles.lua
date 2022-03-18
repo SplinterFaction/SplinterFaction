@@ -88,7 +88,7 @@ local function AddProjectile(_, proID, proOwnerID, weaponID)
   for i=1,#def do
     local fxTable = projectiles[proID]
     local fx = def[i]
-    local options = Spring.Utilities.CopyTable(fx.options)
+    local options = table.copy(fx.options)
     --options.unit = proOwnerID
     options.projectile = proID
     options.weapon = weaponID
