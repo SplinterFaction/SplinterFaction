@@ -17,7 +17,7 @@ VFS.Include("init.lua", nil, VFS.ZIP)
 VFS.Include(LUAUI_DIRNAME .. 'utils.lua', utilFile)
 
 WG = {}
-Spring.Utilities = {}
+VFS.Include("init.lua", nil, VFS.ZIP)
 VFS.Include("common/luautilities/glvolumes.lua")
 
 include("setupdefs.lua")

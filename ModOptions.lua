@@ -331,6 +331,80 @@ local options= {
 		step   = 1,  -- quantization is aligned to the def value
 		-- (step <= 0) means that there is no quantization
 	},
+
+	
+	{
+		key="ruins",
+		name="Ruins",
+		type="list",
+		def="scav_only",
+		section="gameplayoptions",
+		items={
+			{key="enabled", name="Enabled"},
+			{key="scav_only", name="Enabled for Scavengers only"},
+			{key="disabled", name="Disabled"},
+		}
+	},
+
+	{
+		key="ruins_density",
+		name="Ruins: Density",
+		type="list",
+		def="normal",
+		section="gameplayoptions",
+		items={
+			{key="veryrare", name="Very Rare"},
+			{key="rarer", name="Rare"},
+			{key="normal", name="Normal"},
+			{key="dense", name="Dense"},
+			{key="verydense", name="Very Dense"},
+		}
+	},
+
+	{
+		key    = 'ruins_only_t1',
+		name   = 'Ruins: Only T1',
+		type   = 'bool',
+		def    = false,
+		section= "gameplayoptions",
+	},
+
+	{
+		key    = 'ruins_civilian_disable',
+		name   = 'Ruins: Disable Civilian (Not Implemented Yet)',
+		type   = 'bool',
+		def    = false,
+		section= "gameplayoptions",
+		hidden = true,
+	},
+
+	{
+		key="lootboxes",
+		name="Lootboxes",
+		type="list",
+		def="scav_only",
+		section="gameplayoptions",
+		items={
+			{key="enabled", name="Enabled"},
+			{key="scav_only", name="Enabled for Scavengers only"},
+			{key="disabled", name="Disabled"},
+		}
+	},
+
+	{
+		key="lootboxes_density",
+		name="Lootboxes: Density",
+		type="list",
+		def="normal",
+		section="gameplayoptions",
+		items={
+			{key="veryrare", name="Very Rare"},
+			{key="rarer", name="Rare"},
+			{key="normal", name="Normal"},
+			{key="dense", name="Dense"},
+			{key="verydense", name="Very Dense"},
+		}
+	},
 	
 -- Control Victory Options	
 	{
