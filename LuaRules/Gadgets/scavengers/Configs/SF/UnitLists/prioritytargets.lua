@@ -1,6 +1,6 @@
 local priorityTargets = {
-	"armcom",
-	"corcom",
+	"fedcommander",
+	"lozcommander",
 }
 
 local priorityTargetsID = {}

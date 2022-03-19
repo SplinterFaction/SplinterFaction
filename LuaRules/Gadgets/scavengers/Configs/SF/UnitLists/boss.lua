@@ -1,6 +1,6 @@
 return {
 	Bosses = {
-		"armcomboss_scav",
-		"corcomboss_scav",
+		"fedcommander_up4_scav",
+		"lozcommander_up4_scav",
 	}
 }
