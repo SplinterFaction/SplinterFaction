@@ -125,11 +125,17 @@ local function generateCode(type)
 	Spring.Echo(blueprintName .. " written to " .. outputFile)
 end
 
-function widget:TextCommand(command)
+function widget:TextMessage(command)
 	if command == "scavblpcon" then
 		generateCode(types.blueprint)
 	elseif command == "scavblpruin" then
 		generateCode(types.ruin)
+	end
+end
+
+function widget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
+	if UnitDefs[unitDefID].name == "atm" then
+		generateCode(types.blueprint)
 	end
 end
 
