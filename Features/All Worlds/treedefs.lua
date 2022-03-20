@@ -13,7 +13,7 @@ local function CreateTreeDef(type)
      reclaimable = true,
 	 upright = true,
 	 category = "vegetation",
-     energy = 0,
+     energy = 150,
 
      damage      = 5,
      metal = 0,

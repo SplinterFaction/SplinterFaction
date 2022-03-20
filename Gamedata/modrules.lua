@@ -34,7 +34,7 @@ local modrules  = {
 
 
   reclaim = {
-    multiReclaim  = 0,    -- defaults to 0
+    multiReclaim  = 1,    -- defaults to 0
     reclaimMethod = 0,    -- defaults to 1
     unitMethod    = 0,    -- defaults to 1
 

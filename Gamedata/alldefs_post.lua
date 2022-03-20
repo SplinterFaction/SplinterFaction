@@ -28,7 +28,7 @@ end
 
 unitHealthModifier = unitHealthModifier * 0.01
 
-canAnyUnitsReclaim = false
+canAnyUnitsReclaim = true
 
 -------------------------
 -- DEFS POST PROCESSING
@@ -188,7 +188,7 @@ function UnitDef_Post(name, uDef)
 	--------------------------------------------------------------------------------
 	-- Turn off nanospray globally
 	if uDef.shownanospray then
-		uDef.shownanospray = false
+		uDef.shownanospray = true
 	end
 	
 	--------------------------------------------------------------------------------
@@ -652,6 +652,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if canAnyUnitsReclaim == false then
 				if unitDef.canreclaim == true then
 					unitDef.canreclaim = false
+				end
+				else
+				if unitDef.canreclaim == false then
+					unitDef.canreclaim = true
 				end
 			end
 		end

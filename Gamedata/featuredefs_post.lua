@@ -49,18 +49,6 @@ for name, fd in pairs(FeatureDefs) do
 		end
 	end
 	
-	-- Set Reclaimtime that isn't insane. Default engine reclaimtime is (m+e) * 6 which is arbitrary as all hell.
-	if tonumber(fd["metal"]) == nil or tonumber(fd["metal"]) == 0 then
-		fd.metal = 1
-	end
-	if tonumber(fd["energy"]) == nil or tonumber(fd["energy"]) == 0 then
-		fd.energy = 1
-	end
-	
-	local reclaimvalue = (tonumber(fd["metal"]) + tonumber(fd["energy"])) / 4
-	
-	fd.reclaimtime = reclaimvalue
-	
 	-- Reset maximum feature values
 	-- if tonumber(fd["metal"]) == nil or tonumber(fd["metal"]) == 0 then
 		-- fd.metal = 100
