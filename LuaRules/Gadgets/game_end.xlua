@@ -317,8 +317,8 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeamID)
 	if allyTeamUnitCount == 0 then
 		Script.LuaRules.AllyTeamDeathMessage(allyTeamID) 
 		for teamID in pairs(allyTeamInfo.teams) do
-			if Spring.GetTeamLuaAI(unitTeamID) ~= "ScavengersAI" then
-				KillTeam(unitTeamID)
+			if Spring.GetTeamLuaAI(teamID) ~= "ScavengersAI" then
+				KillTeam(teamID)
 			else
 				-- Scavs call killteam on it's own, no need to do it here
 			end
