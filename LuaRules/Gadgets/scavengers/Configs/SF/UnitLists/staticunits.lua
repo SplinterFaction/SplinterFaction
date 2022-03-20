@@ -73,23 +73,23 @@ local beaconDefencesLand = {
 
 local beaconDefencesSea = {
 	T0 = {
-
+		"escoutdrone_scav",
 	},
 
 	T1 = {
-
+		"escoutdrone_scav",
 	},
 
 	T2 = {
-
+		"escoutdrone_scav",
 	},
   
 	T3 = {
-
+		"escoutdrone_scav",
 	},
 
 	T4 = {
-
+		"escoutdrone_scav",
 	},
 }
 

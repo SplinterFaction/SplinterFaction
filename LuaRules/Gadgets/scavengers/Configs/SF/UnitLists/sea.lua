@@ -9,13 +9,13 @@ return {
 
 	T2 = {
 		"efighter_scav",
-		"egunship_scav",
+		"egunship2_scav",
 	},
 
 	T3 = {
 		"efighter_scav",
-		"egunship_scav",
-		"ebomber2_scav",
+		"egunship2_scav",
+		"ebomber_scav",
 		"eairemp_scav",
 	},
 

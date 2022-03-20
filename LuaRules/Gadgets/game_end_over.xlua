@@ -207,12 +207,16 @@ local function DestroyAlliance(allianceID)
 						toDestroy[u] = true
 					end
 				end
-				spKillTeam(t)
+				if Spring.GetTeamLuaAI(t) ~= "ScavengersAI" then
+					spKillTeam(t)
+				end
 			end
 		elseif destroy_type == 'losecontrol' then	-- no orders can be issued to team
 			Spring.Echo("Game Over: Destroying alliance " .. allianceID)
 			for i=1,#teamList do
-				spKillTeam(teamList[i])
+				if Spring.GetTeamLuaAI(teamList[i]) ~= "ScavengersAI" then
+					spKillTeam(teamList[i])
+				end
 			end
 		end
 	end

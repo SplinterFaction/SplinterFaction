@@ -11,6 +11,12 @@ end
 local constructors = {
 	"fedcommander_scav",
 	"lozcommander_scav",
+	"fedcommander_up1_scav",
+	"lozcommander_up1_scav",
+	"fedcommander_up2_scav",
+	"lozcommander_up2_scav",
+	"fedcommander_up3_scav",
+	"lozcommander_up3_scav",
 	"fedengineer_scav",
 	"lozengineer_scav",
 }

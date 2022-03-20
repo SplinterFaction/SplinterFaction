@@ -1,14 +1,15 @@
 
 local QueuedSpawnList = {}
 local function AddToSpawnQueue(unitName, posx, posy, posz, facing, team, frame, blocking, resurrected)
-	
-    local blocking = blocking
-    if blocking == nil then blocking = UnitDefNames[unitName].blocking end
-
-    local resurrected = resurrected
-    if resurrected == nil then resurrected = false end
 
 	if UnitDefNames[unitName] then
+	
+		local blocking = blocking
+		if blocking == nil then blocking = UnitDefNames[unitName].blocking end
+
+		local resurrected = resurrected
+		if resurrected == nil then resurrected = false end
+		
 		local QueueSpawnCommand = {
             unitName = unitName,
             frame = frame, 
