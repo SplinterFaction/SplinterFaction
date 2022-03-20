@@ -185,10 +185,11 @@ local scavconfig = {
 		constructortimer 					= 600, -- time in seconds between commander/constructor spawns
 		constructortimerreductionframes		= 36000, -- increase frequency of commander spawns every this many frames
 		minimumconstructors					= math.ceil(teamcount*3*spawnmultiplier),
-		useresurrectors						= true,
-		searesurrectors						= true,
+		useresurrectors						= false,
+		searesurrectors						= false,
 		useconstructors						= true,
-		usecollectors						= true,
+		usecollectors						= false,
+		usecapturers						= false,
 	},
 	unitControllerModuleConfig = {
 		minimumrangeforfight				= 650,

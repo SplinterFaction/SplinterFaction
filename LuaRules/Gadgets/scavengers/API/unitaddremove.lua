@@ -108,7 +108,7 @@ local function AddScavUnit(unitID, unitDefID, unitName, unitTeam)
 			local r = math_random(0,100)
 			if scavengerGamePhase == "initial" or r <= 10 then
 				scavCollector[unitID] = true
-			elseif r <= 25 then
+			elseif r <= 25 and scavconfig.constructorControllerModuleConfig.usecapturers then
 				scavCapturer[unitID] = true
 			else
 				scavReclaimer[unitID] = true
