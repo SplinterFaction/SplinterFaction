@@ -49,6 +49,21 @@ for name, fd in pairs(FeatureDefs) do
 		end
 	end
 	
+	if tonumber(fd["metal"]) == nil then
+		fd.metal = 1
+	end
+	
+	if tonumber(fd["energy"]) == nil then
+		fd.energy = 1
+	end
+	
+	if tonumber(fd["metal"]) >= tonumber(fd["energy"]) then
+		fd.reclaimtime = fd.metal * 0.25
+	else
+		fd.reclaimtime = fd.energy * 0.25
+	end
+	
+	
 	-- Reset maximum feature values
 	-- if tonumber(fd["metal"]) == nil or tonumber(fd["metal"]) == 0 then
 		-- fd.metal = 100

@@ -224,7 +224,14 @@ function UnitDef_Post(name, uDef)
 		uDef.idleautoheal = 2.5
 	end
 
+	-------------------------------------------------------------------------- ------
 	--------------------------------------------------------------------------------
+	-- Make units unable to be repaired via nanolathe
+	if uDef.repairable then
+		uDef.repairable = false
+	end
+
+	-------------------------------------------------------------------------- ------
 	--------------------------------------------------------------------------------
 	-- Use per piece collision volumes
 	-- !Potentially very expensive!
@@ -642,10 +649,6 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 			
-			-- Set maximum possible workertime to 8
-			if unitDef.workertime and unitDef.workertime >= 8 then
-				unitDef.workertime = 8
-			end
 			-- Set reclaimspeed to be a multiple of workertime. This relies on max defaults set in featuredefs post. Without some max defaults there, this will be a funny result.
 			unitDef.reclaimspeed = unitDef.workertime
 			

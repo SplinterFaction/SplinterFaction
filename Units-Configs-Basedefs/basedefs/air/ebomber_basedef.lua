@@ -63,7 +63,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:jethtrail",
+			"custom:jetstrail",
 			"custom:blacksmoke",
 		},
 	},
