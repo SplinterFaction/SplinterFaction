@@ -26,12 +26,12 @@ local barScale                  = 1
 
 local barHeightOffset           = 34		 -- set value that healthbars for units that can unfold and become larger than its unitdef.height are still visible
 
-local barHeight                 = 5
-local barWidth                  = 24         --// (barWidth)x2 total width!!!
+local barHeight                 = 7.5
+local barWidth                  = 35         --// (barWidth)x2 total width!!!
 local barAlpha                  = 0.85
 local barOutlineAlpha           = 0.8
 local barInnerAlpha             = 0.5
-local barValueAlpha             = 0.9	      -- alpha of the colored part
+local barValueAlpha             = 0.5	      -- alpha of the colored part
 
 local featureBarHeight          = 1.6
 local featureBarWidth           = 7.5
@@ -55,7 +55,7 @@ local featureHpThreshold        = 0.85
 local featureResurrectVisibility= true      -- draw feature bars for resurrected features on same distance as normal unit bars
 local featureReclaimVisibility  = true      -- draw feature bars for reclaimed features on same distance as normal unit bars
 
-local minPercentageDistance     = 120000     -- always show health percentage text below this distance
+local minPercentageDistance     = 500000     -- always show health percentage text below this distance
 local infoDistance              = 800000
 local maxFeatureInfoDistance    = 300000    --max squared distance at which text it drawn for features 
 local maxFeatureDistance        = 550000    --max squared distance at which any info is drawn for features 
@@ -935,10 +935,10 @@ do
           glMyText(1)
         end
 	    glColor(1,1,1,barAlpha)
-	    glText(barInfo.text,barStart,yoffset-outlineSize,4,"ro")
+	    glText(barInfo.text,barStart,yoffset-outlineSize,10,"ro")
         if (drawBarTitles and barInfo.title ~= "health") then
           glColor(1,1,1,titlesAlpha)
-          glText(barInfo.title,0,yoffset-outlineSize,4.70,"cdo")
+          glText(barInfo.title,0,yoffset-outlineSize,6,"cdo")
         end
         if (barShader) then glMyText(0) end
         gl.PopMatrix()
@@ -962,7 +962,7 @@ do
         end
         if (drawBarTitles and barInfo.title ~= "health") then
           glColor(1,1,1,featureTitlesAlpha)
-          glText(barInfo.title,0,yoffset-outlineSize,4.70,"cdo")
+          glText(barInfo.title,0,yoffset-outlineSize,6,"cdo")
         end
         if (barShader) then glMyText(0) end
       end

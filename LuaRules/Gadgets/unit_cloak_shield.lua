@@ -429,22 +429,24 @@ function gadget:GameFrame(frameNum)
     elseif (not data.want) then
       ShrinkRadius(data)
     else
-	  local newState = Spring.Utilities.GetUnitActiveState(unitID) and (GetUnitRulesParam(unitID, "forcedOff") ~= 1)
-      if (newState) then
-        GrowRadius(data)
-      else
-        ShrinkRadius(data)
-      end
+		if Spring.Utilities.GetUnitActiveState(unitID) then
+			local newState = Spring.Utilities.GetUnitActiveState(unitID) and (GetUnitRulesParam(unitID, "forcedOff") ~= 1)
+			if (newState) then
+			  GrowRadius(data)
+			else
+			  ShrinkRadius(data)
+			end
 
-      if (data.active ~= newState) then
-        data.active = newState
-        if (newState) then
-          SetUnitRulesParam(unitID, "cloak_shield", 2)
-        else
-          SetUnitRulesParam(unitID, "cloak_shield", 1)
-          data.delay = data.def.delay
-        end
-      end
+			if (data.active ~= newState) then
+			data.active = newState
+				if (newState) then
+				  SetUnitRulesParam(unitID, "cloak_shield", 2)
+				else
+				  SetUnitRulesParam(unitID, "cloak_shield", 1)
+				  data.delay = data.def.delay
+				end
+			end
+		end
     end
 
     if (checkCloakees and (data.radius > 0)) then

@@ -20,7 +20,7 @@ function widget:GetInfo()
     author    = "trepan (modified by jK)",
     date      = "Feb, 2008",
     license   = "GNU GPL, v2 or later",
-    layer     = -9,
+    layer     = -999,
     enabled   = true  --  loaded by default?
   }
 end
@@ -210,12 +210,12 @@ local function DrawEtaText(timeLeft,yoffset)
     end
   end
 
-  gl.Translate(0, yoffset,10)
+  gl.Translate(0, yoffset,-25)
   gl.Billboard()
   gl.Translate(0, 5 ,0)
   --fontHandler.DrawCentered(etaStr)
   font:Begin()
-  font:Print(etaStr, 0, 0, 5.75, "co")
+  font:Print(etaStr, 0, 0, 20, "cos")
   font:End()
 end
 
@@ -230,7 +230,7 @@ function widget:DrawWorld()
 	if Spring.IsGUIHidden() == false then 
 	  gl.DepthTest(true)
 
-	  gl.Color(1, 1, 1,0.1)
+	  gl.Color(1, 1, 1,1)
 	  --fontHandler.UseDefaultFont()
 	  local cx, cy, cz = Spring.GetCameraPosition()
 	  for unitID, bi in pairs(etaTable) do
