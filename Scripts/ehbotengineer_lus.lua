@@ -2,6 +2,7 @@ base, turret, nanos, nanopoint1, nanopoint2, dirt, backpack, exhaust1, exhaust2 
 local SIG_AIM = {}
 
 local nanoPieces = {[0] = nanopoint1, [1] = nanopoint2}
+local SIG_AIM = 2
 
 -- state variables
 isMoving = "isMoving"
@@ -43,6 +44,7 @@ function BuildFX()
 end
 
 function RestoreAfterDelay()
+	SetSignalMask(SIG_AIM)
 	if building == false then
 		Sleep(2000)
 		Turn(base, y_axis, 0, 5)
@@ -53,9 +55,12 @@ function script.StopBuilding()
     SetUnitValue(COB.INBUILDSTANCE, 0)
 	building = false
 	StartThread(RestoreAfterDelay)
+	Signal(SIG_AIM)
+	SetSignalMask(SIG_AIM)
 end
 
 function script.StartBuilding(heading, pitch)
+	Signal(SIG_AIM)
 	Turn(base, y_axis, heading, 100)
     SetUnitValue(COB.INBUILDSTANCE, 1)
 	building = true

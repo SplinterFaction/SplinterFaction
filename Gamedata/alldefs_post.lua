@@ -29,6 +29,7 @@ end
 unitHealthModifier = unitHealthModifier * 0.01
 
 canAnyUnitsReclaim = true
+useDefaultNanospray = true
 
 -------------------------
 -- DEFS POST PROCESSING
@@ -186,9 +187,15 @@ function UnitDef_Post(name, uDef)
 	
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	-- Turn off nanospray globally
-	if uDef.shownanospray then
-		uDef.shownanospray = true
+	-- Turn on/off nanospray globally
+	if useDefaultNanospray == true then
+		if uDef.shownanospray == nil or uDef.shownanospray == false then
+			uDef.shownanospray = true
+		end
+	else
+		if uDef.shownanospray == nil or uDef.shownanospray == true then
+			uDef.shownanospray = false
+		end	
 	end
 	
 	--------------------------------------------------------------------------------
