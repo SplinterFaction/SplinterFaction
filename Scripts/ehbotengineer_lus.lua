@@ -38,6 +38,7 @@ end
 function BuildFX()
 	while(building == true) do
 		EmitSfx (nanopoint1, 1024)
+		Sleep(200)
 		EmitSfx (nanopoint2, 1024)
 		Sleep(550)
 	end
@@ -50,6 +51,10 @@ function RestoreAfterDelay()
 		Turn(base, y_axis, 0, 5)
 	end
 end		
+
+local nanoPoints = {nano1}
+
+Spring.SetUnitNanoPieces(unitID, nanoPoints)
 
 function script.StopBuilding()
     SetUnitValue(COB.INBUILDSTANCE, 0)
