@@ -1,4 +1,5 @@
-base, turret, nanos, nanopoint1, nanopoint2, dirt, backpack, exhaust1, exhaust2 = piece('base', 'turret', 'nanos', 'nanopoint1', 'nanopoint2', 'dirt', 'backpack', 'exhaust1', 'exhaust2')
+pelvis,turret, nanos, nanopoint1, nanopoint2, dirt, lthigh, rthigh, lleg, rleg, lfoot = piece('pelvis', 'turret', 'nanos', 'nanopoint1', 'nanopoint2', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot')
+
 local SIG_AIM = {}
 
 local nanoPieces = {[0] = nanopoint1, [1] = nanopoint2}
@@ -9,27 +10,48 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, turret, barrel1})
-	StartThread(doYouEvenLift)
+	StartThread(common.SmokeUnit, {pelvis, turret, barrel1})
 	StartThread(BuildFX)
+	StartThread(StopWalking)
 	building = false
 	Spring.SetUnitNanoPieces(unitID, nanoPieces)
 end
 
 common = include("headers/common_includes_lus.lua")
 
+
+function walk()
+	if (isMoving) then --Frame:8
+		while(isMoving) do
+			Turn(rthigh, x_axis, 5, 4 )
+			Turn(rleg, x_axis, 2, 4)
+			WaitForTurn(rleg, x_axis)
+			WaitForTurn(rthigh, x_axis)
+			Turn(rthigh, x_axis, 0, 4)
+			Turn(rleg, x_axis, 0, 5)
+			WaitForTurn(rleg, x_axis)
+			WaitForTurn(rthigh, x_axis)
+
+			Sleep(200)
+		end
+	end
+end
+
+function StopWalking()
+	Turn(rthigh, x_axis, 0, 5)
+	Turn(rleg, x_axis, 0, 5)
+end
+
 function script.StartMoving()
    isMoving = true
    	StartThread(thrust)
+	StartThread(walk)
 end
 
 function script.StopMoving()
    isMoving = false
+   StartThread(StopWalking)
 end   
-
-function doYouEvenLift()
-	common.HbotLift()
-end
 
 function thrust()
 	common.DirtTrail()
@@ -48,7 +70,7 @@ function RestoreAfterDelay()
 	SetSignalMask(SIG_AIM)
 	if building == false then
 		Sleep(2000)
-		Turn(base, y_axis, 0, 5)
+		Turn(turret, y_axis, 0, 5)
 	end
 end		
 
@@ -66,7 +88,7 @@ end
 
 function script.StartBuilding(heading, pitch)
 	Signal(SIG_AIM)
-	Turn(base, y_axis, heading, 100)
+	Turn(turret, y_axis, heading, 100)
     SetUnitValue(COB.INBUILDSTANCE, 1)
 	building = true
 	StartThread(BuildFX)
@@ -80,7 +102,7 @@ end
 function script.Killed()
 		Explode(nanos, SFX.EXPLODE_ON_HIT)
 		Explode(turret, SFX.EXPLODE_ON_HIT)
-		Explode(base, SFX.EXPLODE_ON_HIT)
+		Explode(pelvis, SFX.EXPLODE_ON_HIT)
 		Explode(backpack, SFX.EXPLODE_ON_HIT)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end
