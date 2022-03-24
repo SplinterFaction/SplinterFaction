@@ -1,33 +1,33 @@
--- UNITDEF -- lozengineer --
+-- UNITDEF -- lozengineer_up2 --
 --------------------------------------------------------------------------------
 
-unitName = "lozengineer"
+unitName = "lozengineer_up2"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 40
+buildCostMetal = 160
 buildDistance = 350
 
-buildpic = [[lozengineer.png]]
+buildpic = [[lozengineer_up1.png]]
 
-maxDamage = 500
+maxDamage = 1500
 
-lozt1buildlist = Shared.buildListLozt1
+lozt1buildlist = Shared.buildListLozt3
 
-workertime = 1
+workertime = 4
 
-humanName = [[Architect]]
+humanName = [[Architect MkIII]]
 
-footprintx = 2
-footprintz = 2
-movementclass = "HOVERTANK2"
+footprintx = 4
+footprintz = 4
+movementclass = "HOVERTANK4"
 
-objectName = [[f2engineer.s3o]]
-script = [[f2engineer_lus.lua]]
+objectName = [[f2engineer_up2.s3o]]
+script = [[f2engineer_up2_lus.lua]]
 
-areamexdef = [[emetalextractor]]
+areamexdef = [[emetalextractor_up2]]
 armortype = [[light]]
-requiretech = [[tech0]]
+requiretech = [[tech2]]
 
 VFS.Include("units-configs-basedefs/basedefs/Faction 2/f2engineer_basedef.lua")
 

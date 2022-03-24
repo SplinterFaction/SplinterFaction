@@ -2,6 +2,7 @@
 --------------------------------------------------------------------------------
 
 unitName = [[eradar2_up1]]	
+buildpic = [[eradar2_up1.png]]
 
 buildCostMetal = 40
 

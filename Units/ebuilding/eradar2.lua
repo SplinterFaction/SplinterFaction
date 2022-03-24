@@ -1,7 +1,8 @@
 -- UNITDEF -- eradar2 --
 --------------------------------------------------------------------------------
 
-unitName = [[eradar2]]	
+unitName = [[eradar2]]
+buildpic = [[eradar2.png]]
 
 buildCostMetal = 5
 
