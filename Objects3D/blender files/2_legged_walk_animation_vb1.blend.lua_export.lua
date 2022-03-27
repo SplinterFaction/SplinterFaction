@@ -1,73 +1,3 @@
-pelvis, turret, barrel1, firepoint1, firepoint2, dirt, gat1, gat2, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'firepoint2', 'dirt', 'gat1', 'gat2', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
-local SIG_AIM = {}
-
--- state variables
-isMoving = "isMoving"
-terrainType = "terrainType"
-
-function script.Create()
-	StartThread(common.SmokeUnit, {pelvis, turret, barrel1})
-end
-
-common = include("headers/common_includes_lus.lua")
-
-function thrust()
-	common.DirtTrail()
-end
-
-local function RestoreAfterDelay()
-	Sleep(2000)
-	Turn(turret, y_axis, 0, 5)
-	Turn(barrel1, x_axis, 0, 5)
-	Spring.UnitScript.StopSpin( gat1, z_axis, 0.01)
-	Spring.UnitScript.StopSpin( gat2, z_axis, 0.01)
-end		
-
-function script.AimFromWeapon(weaponID)
-	--Spring.Echo("AimFromWeapon: FireWeapon")
-	return turret
-end
-
-local firepoints = {firepoint1, firepoint2}
-local currentFirepoint = 1
-
-function script.QueryWeapon(weaponID)
-	return firepoints[currentFirepoint]
-end
-
-function script.FireWeapon(weaponID)
-	currentFirepoint = 3 - currentFirepoint
-	Spring.UnitScript.Spin( gat1, z_axis, 5 )
-	Spring.UnitScript.Spin( gat2, z_axis, -5 )
-	EmitSfx (firepoints[currentFirepoint], 1024)
-end
-
-function script.AimWeapon(weaponID, heading, pitch)
-	Signal(SIG_AIM)
-	SetSignalMask(SIG_AIM)
-	Turn(turret, y_axis, heading, 100)
-	Turn(barrel1, x_axis, -pitch, 100)
-	WaitForTurn(turret, y_axis)
-	WaitForTurn(barrel1, x_axis)
-	StartThread(RestoreAfterDelay)
-	--Spring.Echo("AimWeapon: FireWeapon")
-	return true
-end
-
-function script.Killed()
-		Explode(barrel1, SFX.EXPLODE_ON_HIT)
-		Explode(turret, SFX.EXPLODE_ON_HIT)
-		Explode(turret, SFX.EXPLODE_ON_HIT)
-		Explode(gat1, SFX.EXPLODE_ON_HIT)
-		Explode(gat2, SFX.EXPLODE_ON_HIT)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
-end
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
--- START THE WALK SCRIPT
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
 -- For T:\Objects3D\blender files\2_legged_walk_animation_vb1.blend Created by https://github.com/Beherith/Skeletor_S3O V((0, 3, 7))
 local ANIM_FRAMES = 4
 local SIG_WALK = 1
@@ -119,7 +49,7 @@ local function Walk()
 		Turn(lthigh, x_axis, -1.380327, 24.933515 * speedMult) -- delta=47.62
 		Turn(lthigh, z_axis, 0.472109, 14.387383 * speedMult) -- delta=27.48
 		Turn(lthigh, y_axis, -0.555316, 15.107415 * speedMult) -- delta=-28.85
-		Turn(barrel1, x_axis, -0.103721, 3.111627 * speedMult) -- delta=5.94
+		Turn(nanos, x_axis, -0.103721, 3.111627 * speedMult) -- delta=5.94
 		Move(pelvis, y_axis, -0.450000, 13.500000 * speedMult) -- delta=-0.45
 		Turn(pelvis, x_axis, -0.043633, 1.308997 * speedMult) -- delta=2.50
 		Turn(rfoot, x_axis, -0.739945, 2.219067 * speedMult) -- delta=4.24
@@ -139,7 +69,7 @@ local function Walk()
 		Turn(lthigh, x_axis, -0.725615, 19.641336 * speedMult) -- delta=-37.51
 		Turn(lthigh, z_axis, 0.006083, 13.980763 * speedMult) -- delta=-26.70
 		Turn(lthigh, y_axis, -0.134483, 12.624983 * speedMult) -- delta=24.11
-		Turn(barrel1, x_axis, -0.275261, 5.146208 * speedMult) -- delta=9.83
+		Turn(nanos, x_axis, -0.275261, 5.146208 * speedMult) -- delta=9.83
 		Move(pelvis, y_axis, -1.180000, 21.899999 * speedMult) -- delta=-0.73
 		Turn(pelvis, x_axis, -0.087266, 1.308997 * speedMult) -- delta=2.50
 		Turn(pelvis, y_axis, 0.130900, 3.926991 * speedMult) -- delta=7.50
@@ -161,7 +91,7 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.169631, 26.857386 * speedMult) -- delta=-51.29
 		Turn(lthigh, z_axis, -0.001782, 0.235951 * speedMult) -- delta=-0.45
 		Turn(lthigh, y_axis, 0.000409, 4.046767 * speedMult) -- delta=7.73
-		Turn(barrel1, x_axis, -0.103721, 5.146208 * speedMult) -- delta=-9.83
+		Turn(nanos, x_axis, -0.103721, 5.146208 * speedMult) -- delta=-9.83
 		Move(pelvis, y_axis, -0.450000, 21.899999 * speedMult) -- delta=0.73
 		Turn(pelvis, x_axis, -0.043633, 1.308997 * speedMult) -- delta=-2.50
 		Turn(pelvis, y_axis, -0.000000, 3.926991 * speedMult) -- delta=-7.50
@@ -184,7 +114,7 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.367865, 5.947015 * speedMult) -- delta=-11.36
 		Turn(lthigh, z_axis, -0.013571, 0.353682 * speedMult) -- delta=-0.68
 		Turn(lthigh, y_axis, 0.002489, 0.062384 * speedMult) -- delta=0.12
-		Turn(barrel1, x_axis, 0.000000, 3.111627 * speedMult) -- delta=-5.94
+		Turn(nanos, x_axis, 0.000000, 3.111627 * speedMult) -- delta=-5.94
 		Move(pelvis, y_axis, 0.000000, 13.500000 * speedMult) -- delta=0.45
 		Turn(pelvis, x_axis, -0.000000, 1.308997 * speedMult) -- delta=-2.50
 		Turn(rfoot, x_axis, 0.386673, 5.454532 * speedMult) -- delta=-10.42
@@ -204,7 +134,7 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.427135, 1.778097 * speedMult) -- delta=-3.40
 		Turn(lthigh, z_axis, 0.019141, 0.981359 * speedMult) -- delta=1.87
 		Turn(lthigh, y_axis, 0.085938, 2.503492 * speedMult) -- delta=4.78
-		Turn(barrel1, x_axis, -0.081531, 2.445934 * speedMult) -- delta=4.67
+		Turn(nanos, x_axis, -0.081531, 2.445934 * speedMult) -- delta=4.67
 		Move(pelvis, y_axis, -0.450000, 13.500000 * speedMult) -- delta=-0.45
 		Turn(pelvis, x_axis, 0.043633, 1.308997 * speedMult) -- delta=-2.50
 		Turn(rfoot, x_axis, -0.154634, 16.239202 * speedMult) -- delta=31.01
@@ -224,7 +154,7 @@ local function Walk()
 		Turn(lthigh, x_axis, 1.027544, 18.012296 * speedMult) -- delta=-34.40
 		Turn(lthigh, z_axis, -0.127417, 4.396728 * speedMult) -- delta=-8.40
 		Turn(lthigh, y_axis, 0.091642, 0.171125 * speedMult) -- delta=0.33
-		Turn(barrel1, x_axis, -0.231348, 4.494519 * speedMult) -- delta=8.58
+		Turn(nanos, x_axis, -0.231348, 4.494519 * speedMult) -- delta=8.58
 		Move(pelvis, y_axis, -1.180000, 21.899999 * speedMult) -- delta=-0.73
 		Turn(pelvis, x_axis, 0.087266, 1.308997 * speedMult) -- delta=-2.50
 		Turn(pelvis, y_axis, -0.130900, 3.926991 * speedMult) -- delta=-7.50
@@ -248,7 +178,7 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.477281, 16.507893 * speedMult) -- delta=31.53
 		Turn(lthigh, z_axis, -0.096186, 0.936936 * speedMult) -- delta=1.79
 		Turn(lthigh, y_axis, -0.044768, 4.092329 * speedMult) -- delta=-7.82
-		Turn(barrel1, x_axis, -0.081531, 4.494519 * speedMult) -- delta=-8.58
+		Turn(nanos, x_axis, -0.081531, 4.494519 * speedMult) -- delta=-8.58
 		Move(pelvis, y_axis, -0.450000, 21.899999 * speedMult) -- delta=0.73
 		Turn(pelvis, x_axis, 0.043633, 1.308997 * speedMult) -- delta=2.50
 		Turn(pelvis, y_axis, -0.000000, 3.926991 * speedMult) -- delta=7.50
@@ -271,7 +201,7 @@ local function Walk()
 		Turn(lthigh, x_axis, -0.549209, 30.794722 * speedMult) -- delta=58.81
 		Turn(lthigh, z_axis, -0.007471, 2.661446 * speedMult) -- delta=5.08
 		Turn(lthigh, y_axis, -0.051735, 0.209008 * speedMult) -- delta=-0.40
-		Turn(barrel1, x_axis, 0.000000, 2.445934 * speedMult) -- delta=-4.67
+		Turn(nanos, x_axis, 0.000000, 2.445934 * speedMult) -- delta=-4.67
 		Move(pelvis, y_axis, 0.000000, 13.500000 * speedMult) -- delta=0.45
 		Turn(pelvis, x_axis, -0.000000, 1.308997 * speedMult) -- delta=2.50
 		Turn(rfoot, x_axis, -0.665976, 19.401357 * speedMult) -- delta=37.05
@@ -300,7 +230,7 @@ local function StopWalking()
 	Turn(lthigh, x_axis, 0.000000, 76.986806 * speedMult)
 	Turn(lthigh, y_axis, 0.000000, 37.768536 * speedMult)
 	Turn(lthigh, z_axis, 0.000000, 35.968458 * speedMult)
-	Turn(barrel1, x_axis, 0.000000, 12.865521 * speedMult)
+	Turn(nanos, x_axis, 0.000000, 12.865521 * speedMult)
 	Turn(pelvis, x_axis, 0.000000, 3.272493 * speedMult)
 	Turn(pelvis, y_axis, 0.000000, 9.817477 * speedMult)
 	Turn(rfoot, x_axis, 0.000000, 61.523507 * speedMult)
@@ -326,9 +256,3 @@ function script.StopMoving()
 	walking = false
 	StartThread(StopWalking)
 end
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
--- END THE WALK SCRIPT
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------

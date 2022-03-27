@@ -9,7 +9,7 @@ isUpgraded = [[0]]
 
 humanName = [[Sniper]]
 
-objectName = "ehbotsniper.s3o"
+objectName = "ehbotsniper_legs.s3o"
 script = "ehbotsniper_lus.lua"
 
 tech = [[tech2]]
