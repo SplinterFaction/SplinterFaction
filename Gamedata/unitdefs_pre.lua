@@ -367,16 +367,17 @@ end
 --Buildlists for factories
 
 Shared.buildListf1landfac = {
-	[[eallterrlight]],
-	[[ehbotpeewee]],
-	[[eallterrriot_shotgun]],
-	[[ehbotthud]],
-	[[eallterrassault]],
-	[[eallterrshield]],
-	[[eallterrmed]],
-	[[ehbotsniper]],
-	[[eallterrheavy]],
-	[[ehbotrocko]],
+	[[fedak]],
+	[[fedstorm]],
+	[[fedthud]],
+	[[fedcrasher]],
+	[[fedzipper]],
+	[[fedstumpy]],
+	[[fedstreetsweeper]],
+	[[fedsledge]],
+	[[fedassault]],
+	[[federaser]],
+	[[fedanarchid]],
 	[[fedengineer]],
 	[[eorb]],
 	
@@ -384,15 +385,9 @@ Shared.buildListf1landfac = {
 
 Shared.buildListf2landfac = {
 	[[eamphibbuggy]],
-	[[elighttank3]],
-	[[eriottank2_shotgun]],
 	[[eamphibneedle]],
-	[[eartytank]],
-	[[ebox]],
 	[[eamphibmedtank]],
-	[[eheavytank3]],
 	[[eamphibrock]],
-	[[emissiletank]],
 	[[lozengineer]],
 	[[eorb]],
 }
