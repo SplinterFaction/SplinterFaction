@@ -23,7 +23,7 @@ SaveDefsToCustomParams = false
 -------------------------
 unitHealthModifier = tonumber(Spring.GetModOptions().unithealthmodifier)
 if unitHealthModifier == nil then
-	unitHealthModifier = 500
+	unitHealthModifier = 100
 end
 
 unitHealthModifier = unitHealthModifier * 0.01
@@ -277,14 +277,14 @@ function WeaponDef_Post(name, wDef)
 	end
 	
 	--Potentially fix times when weapons explode without doing damage
-	if tonumber(wDef.areaofeffect) ~= nil and tonumber(wDef.areaofeffect) <= 25 then
+	if tonumber(wDef.areaofeffect) ~= nil and tonumber(wDef.areaofeffect) <= 10 then
 		if wDef.customparams and wDef.customparams.aoeoverride == true then
 			wDef.areaofeffect = wDef.areaofeffect
 		else
-			wDef.areaofeffect = 25
+			wDef.areaofeffect = 10
 		end
 	end
-	if tonumber(wDef.areaofeffect) ~= nil and tonumber(wDef.areaofeffect) <= 25 then
+	if tonumber(wDef.areaofeffect) ~= nil and tonumber(wDef.areaofeffect) <= 10 then
 		if wDef.customparams and wDef.customparams.edgeeffectiveness == true then
 			wDef.edgeeffectiveness = wDef.edgeeffectiveness
 		else
@@ -294,46 +294,6 @@ function WeaponDef_Post(name, wDef)
 	
 	--Override map gravity for all weapons
 	wDef.mygravity = 0.14
-	--------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------
-	-- Set up params for Point Defense turrets
-	if wDef.customparams and wDef.customparams.ispointdefenselaser == true then
-		if wDef.customparams.primaryweaponrange ~= nil then
-			primaryWeaponRange = tonumber(wDef.customparams.primaryweaponrange)
-			else
-			primaryWeaponRange = 0
-		end
-		wDef.areaofeffect = 0
-		wDef.avoidfeature = false
-		wDef.avoidfriendly = false
-		wDef.collidefeature = false
-		wDef.collidefriendly = false
-		wDef.corethickness = 0.2
-		wDef.duration = 0.2
-		wDef.explosiongenerator = [[custom:genericshellexplosion-small-sparks-burn]]
-		wDef.falloffrate = 1
-		wDef.impulsefactor = 0
-		wDef.interceptedbyshieldtype = 4
-		wDef.minintensity = 1
-		wDef.name = [[Point Defense Laser]]
-		wDef.projectiles = 1
-		wDef.range = primaryWeaponRange
-		wDef.reloadtime = 0.25
-		wDef.weapontype = [[LaserCannon]]
-		wDef.rgbcolor = [[0 0.5 1]]
-		wDef.rgbcolor2 = [[1 1 1]]
-		wDef.soundtrigger = true
-		wDef.soundstart = [[weapons/pointdefensefire.wav]]
-		wDef.texture1 = [[shot]]
-		wDef.texture2 = [[empty]]
-		wDef.thickness = 2
-		wDef.tolerance = 1000
-		wDef.turret = true
-		wDef.weaponvelocity = 1500
-		wDef.customparams.damagetype = [[pdlaser]]
-		wDef.damage.default = 6.25
-		wDef.energypershot = math.floor(wDef.damage.default * 0.05 * wDef.projectiles * ((wDef.areaofeffect * 0.001) + 1) * wDef.range^0.25 * 0.5 * 10 + 0.5) * 0.1
-	end	
 	
 	--------------------------------------------------------------------------------
 	-------------------------------------------------------------------------------- Turn off waterweapons
@@ -365,7 +325,6 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 	local modOptions = Spring.GetModOptions()
 	
 		for id,unitDef in pairs(UnitDefs) do
-			unitDef.buildcostmetal = unitDef.buildcostmetal * 2
 			
 			--Disabled due to boxcollector cpu costs
 			-- if unitDef.customparams.corpse == "energycore" then
@@ -608,7 +567,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			
 			if unitDef.customparams and unitDef.customparams.unitdefbuildtime == nil then
 				-- Set Rules for Ateran race
-				if unitDef.customparams and unitDef.customparams.factionname == "ateran" then
+				if unitDef.customparams and unitDef.customparams.factionname == "ateran" 
+				or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" 
+				or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 					unitDef.buildtime = unitDef.buildcostmetal / 4
 					unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
 					if unitDef.customparams and unitDef.customparams.requiretech == "tech1" or unitDef.customparams and unitDef.customparams.isupgraded == "1" then

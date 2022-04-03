@@ -383,6 +383,72 @@ unitDeaths = {
 			default            = 0,
 		},
 	},
+
+	--byar
+	bar_tinyExplosionGeneric = {
+		weaponType		   = "Cannon",
+		impulseFactor      = smallExplosionImpulseFactor,
+		AreaOfEffect=smallExplosion,
+		explosiongenerator="custom:bar-genericunitexplosion-tiny",
+		cameraShake=smallExplosion,
+		damage = {
+			default            = 0,
+		},
+	},
+
+	bar_smallExplosionGeneric = {
+		weaponType		   = "Cannon",
+		impulseFactor      = smallExplosionImpulseFactor,
+		AreaOfEffect=smallExplosion,
+		explosiongenerator="custom:bar-genericunitexplosion-small",
+		cameraShake=smallExplosion,
+		damage = {
+			default            = 0,
+		},
+	},
+
+	bar_mediumExplosionGeneric = {
+		weaponType		   = "Cannon",
+		impulseFactor      = mediumExplosionImpulseFactor,
+		AreaOfEffect=mediumExplosion,
+		explosiongenerator="custom:bar-genericunitexplosion-medium",
+		cameraShake=mediumExplosion,
+		damage = {
+			default            = 0,
+		},
+	},
+	
+	bar_largeExplosionGeneric = {
+		weaponType		   = "Cannon",
+		impulseFactor      = largeExplosionImpulseFactor,
+		AreaOfEffect=largeExplosion,
+		explosiongenerator="custom:bar-genericunitexplosion-large",
+		cameraShake=largeExplosion,
+		damage = {
+			default            = 0,
+		},
+	},
+	
+	bar_hugeExplosionGeneric = {
+		weaponType		   = "Cannon",
+		impulseFactor      = hugeExplosionImpulseFactor,
+		AreaOfEffect=hugeExplosion,
+		explosiongenerator="custom:bar-genericunitexplosion-huge",
+		cameraShake=hugeExplosion,
+		damage = {
+			default            = 0,
+		},
+	},
+	bar_giganticExplosionGeneric = {
+		weaponType		   = "Cannon",
+		impulseFactor      = hugeExplosionImpulseFactor,
+		AreaOfEffect=hugeExplosion,
+		explosiongenerator="custom:bar-genericunitexplosion-gigantic",
+		cameraShake=hugeExplosion,
+		damage = {
+			default            = 0,
+		},
+	},
 	
 --Blue
 

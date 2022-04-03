@@ -1,21 +1,18 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedak"
+unitName = "fedcrasher"
 
 --------------------------------------------------------------------------------
+humanName = [[Crasher]]
 
-isUpgraded = [[0]]
-
-humanName = [[A.K.]]
-
-objectName = "ehbotak_legs.s3o"
-script = "fed/hbot/ehbotpeewee_lus.lua"
+objectName = "ehbotrocko_legs.s3o"
+script = "fed/hbot/fedcrasher_lus.lua"
 
 tech = [[tech1]]
 armortype = [[light]]
-supply = [[6]]
+supply = [[15]]
 
-VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedak_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedcrasher_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

@@ -1,20 +1,18 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedrazorback"
+unitName = "fedak"
 
 --------------------------------------------------------------------------------
+humanName = [[A.K.]]
 
-isUpgraded = [[0]]
+objectName = "ehbotak_legs.s3o"
+script = "fed/hbot/fedak_lus.lua"
 
-humanName = [[Razorback]]
+tech = [[tech1]]
+armortype = [[light]]
+supply = [[6]]
 
-objectName = "ehbotkarganneth_legs.s3o"
-script = "ehbotkarganneth_lus.lua"
-
-tech = [[tech3]]
-armortype = [[armored]]
-
-VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedrazorback_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedak_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

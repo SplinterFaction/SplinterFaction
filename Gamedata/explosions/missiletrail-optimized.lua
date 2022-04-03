@@ -78,7 +78,7 @@ return {
         sidetexture        = [[flashside2-purple]],
         size               = 5,
         sizegrowth         = 0,
-        ttl                = 40,
+        ttl                = 20,
       },
     },
   },

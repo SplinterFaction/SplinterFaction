@@ -3,13 +3,10 @@
 unitName = "fedthud"
 
 --------------------------------------------------------------------------------
-
-isUpgraded = [[0]]
-
 humanName = [[Thud]]
 
 objectName = "ehbotthud_legs.s3o"
-script = "ehbotthud_lus.lua"
+script = "fedthud_lus.lua"
 
 tech = [[tech1]]
 armortype = [[light]]
