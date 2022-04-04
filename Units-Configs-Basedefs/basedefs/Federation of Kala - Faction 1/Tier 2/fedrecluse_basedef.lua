@@ -2,17 +2,17 @@ unitDef                    = {
 	acceleration                 = 1,
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 44,
+	buildCostMetal               = 22,
 	builder                      = false,
 	buildTime                    = 5,
-	buildpic					 = "eallterrmed.png",
+	buildpic					 = "eallterrlight.png",
 	canAttack                    = true,
 	
 	canGuard                     = true,
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "ARMORED NOTAIR SKIRMISHER",
+	category                     = "ARMORED NOTAIR RAID",
 
 	-- Cloaking
 
@@ -26,25 +26,24 @@ unitDef                    = {
 	
 	-- End Cloaking
 
-	description                  = [[Heavy Anti-Armor Tank Destroyer]],
+	description                  = [[Frontline Skirmisher]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
-	explodeAs                    = "mediumExplosionGenericPurple",
+	explodeAs                    = "bar_mediumExplosionGeneric",
+	firestandorders              = "1",
 	footprintX                   = 2,
 	footprintZ                   = 2,
-	iconType                     = "td_arm_arm",
+	iconType                     = "raider",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
-	maxDamage                    = 250,
-	maxSlope                     = 180,
-	maxVelocity                  = 3.5,
-	maxReverseVelocity           = 1,
-	turninplacespeedlimit        = 4,
+	maxDamage                    = 125,
+	maxVelocity                  = 4,
+	maxReverseVelocity           = 2,
+	turninplacespeedlimit        = 5.5,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
-	mobilestandorders            = "1",
 	movementClass                = "ALLTERRTANK2",
 	name                         = humanName,
 	noChaseCategory              = "VTOL",
@@ -52,15 +51,15 @@ unitDef                    = {
 	script	                     = script,
 	radarDistance                = 0,
 	repairable		             = false,
-	selfDestructAs               = "mediumExplosionGenericPurple",
-	sightDistance                = 600,
+	selfDestructAs               = "bar_mediumExplosionGeneric",
+	sightDistance                = 400,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
 	transportbyenemy             = false;
 	turnInPlace                  = true,
 	turnRate                     = 5000,
-	unitname                     = "eallterrmed",
+	unitname                     = unitName,
 	upright			             = false,
 	workerTime                   = 0,
 	sfxtypes                     = { 
@@ -70,7 +69,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:gdhcannon",
+			"custom:factorysparks",
 			"custom:emptydirt",
 			"custom:blacksmoke",
 		},
@@ -86,15 +85,14 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "mediumtankcannon",
-			badTargetCategory    = "BUILDING LIGHT WALL",
+			def                  = "lighttankweapon",
+			badTargetCategory    = "BUILDING VTOL WALL",
 		},
 	},
 	customParams                 = {
-		isupgraded           	 = isUpgraded,
 		unittype				 = "mobile",
 		canbetransported 		 = "true",
-		needed_cover             = 2,
+		needed_cover             = 1,
 		death_sounds             = "generic",
 		RequireTech              = tech,
 		armortype                = armortype,
@@ -102,27 +100,22 @@ unitDef                    = {
 		supply_cost              = supply,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	             = "ateran",
+		factionname	             = "Federation of Kala",
 		corpse                   = "energycore",
 		decloakradiushalved		 = true,
 	},
 }
 
-weaponDefs                 = {
-	mediumtankcannon             = {
-		
-		AreaOfEffect             = 1,
-		avoidFriendly            = false,
+	weaponDefs                 = {
+	lighttankweapon              = {
 		avoidFeature             = false,
-		collideFriendly          = false,
+		avoidFriendly            = false,
 		collideFeature           = false,
-		beamTime                 = 0.1,
-		
-		coreThickness            = 0.5,
-		--	cegTag               = "mediumcannonweapon3",
+		collideFriendly          = false,
+		coreThickness            = 0.3,
 		duration                 = 0.1,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion",
+		explosionGenerator       = "custom:bar-genericshellexplosion-tiny",
 		fallOffRate              = 0,
 		fireStarter              = 50,
 		impulseFactor            = 0,
@@ -130,27 +123,25 @@ weaponDefs                 = {
 		
 		minintensity             = "1",
 		name                     = "Laser",
-		range                    = 600,
-		reloadtime               = 1,
+		range                    = 400,
+		reloadtime               = 2,
 		WeaponType               = "LaserCannon",
-		rgbColor                 = "1 0.5 0",
+		rgbColor                 = "0.5 0.8 1",
 		rgbColor2                = "1 1 1",
 		soundTrigger             = true,
-		soundstart               = "weapons/medallterrweapon.wav",
-		soundHit                 = "explosions/mediumcannonhit.wav",
+		soundstart               = "weapons/heavycannonGD.wav",
 		texture1                 = "shot",
 		texture2                 = "empty",
-		thickness                = 9,
+		thickness                = 6,
 		tolerance                = 1000,
 		turret                   = true,
-		weaponVelocity           = 1000,
+		weaponVelocity           = 2000,
 		customparams             = {
 			isupgraded           = isUpgraded,
-			damagetype		     = "antiarmored",  
+			damagetype		     = "antilightarmored",  
 		}, 
 		damage                   = {
-			default              = 150,
+			default              = 50,
 		},
 	},
-
 }

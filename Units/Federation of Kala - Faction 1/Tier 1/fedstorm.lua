@@ -1,25 +1,22 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedsledge"
+unitName = "fedstorm"
 
 --------------------------------------------------------------------------------
+humanName = [[Storm]]
 
-isUpgraded = [[0]]
+objectName = "ehbotsniper_legs.s3o"
+script = "fed/hbot/fedstorm_lus.lua"
 
-humanName = [[Sledge]]
+tech = [[tech1]]
+armortype = [[light]]
+supply = [[9]]
 
-objectName = "eallterrheavy2.s3o"
-script = "eallterrheavy.cob"
-
-tech = [[tech2]]
-armortype = [[armored]]
-supply = [[6]]
-
-VFS.Include("Units-Configs-Basedefs/basedefs/allterrain/fed/fedsledge_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 1/fedstorm_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName]    = unitDef })
+return lowerkeys({ [unitName] = unitDef })
 
 --------------------------------------------------------------------------------

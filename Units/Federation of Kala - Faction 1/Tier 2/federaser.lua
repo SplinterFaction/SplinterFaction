@@ -1,21 +1,18 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedanarchid"
+unitName = "federaser"
 
 --------------------------------------------------------------------------------
+humanName = [[Eraser]]
 
-isUpgraded = [[0]]
+objectName = "eallterrshield.s3o"
+script = "eallterrshield.cob"
 
-humanName = [[Anarchid]]
-
-objectName = "eallterranarchid.s3o"
-script = "eallterranarchid.cob"
-
-tech = [[tech3]]
+tech = [[tech2]]
 armortype = [[armored]]
---supply = [[35]]
+supply = [[5]]
 
-VFS.Include("Units-Configs-Basedefs/basedefs/allterrain/fed/fedanarchid_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/federaser_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

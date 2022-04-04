@@ -1,21 +1,21 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedzipper"
+unitName = "fedanvil"
 
 --------------------------------------------------------------------------------
 
 isUpgraded = [[0]]
 
-humanName = [[Zipper]]
+humanName = [[Anvil]]
 
-objectName = "eallterrlight2.s3o"
-script = "eallterrlight.cob"
+objectName = "eallterrassault.s3o"
+script = "eallterrassault.cob"
 
 tech = [[tech2]]
-armortype = [[light]]
-supply = [[2]]
+armortype = [[armored]]
+supply = [[8]]
 
-VFS.Include("Units-Configs-Basedefs/basedefs/allterrain/fed/fedzipper_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedanvil_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

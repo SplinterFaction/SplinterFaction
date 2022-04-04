@@ -1,18 +1,20 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedstorm"
+unitName = "fedrazorback"
 
 --------------------------------------------------------------------------------
-humanName = [[Storm]]
 
-objectName = "ehbotsniper_legs.s3o"
-script = "fed/hbot/fedstorm_lus.lua"
+isUpgraded = [[0]]
 
-tech = [[tech1]]
-armortype = [[light]]
-supply = [[9]]
+humanName = [[Razorback]]
 
-VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedstorm_basedef.lua")
+objectName = "ehbotkarganneth_legs.s3o"
+script = "fed/hbot/fedrazorback_lus.lua"
+
+tech = [[tech3]]
+armortype = [[armored]]
+
+VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 3/fedrazorback_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

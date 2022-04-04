@@ -1,25 +1,22 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedstumpy"
+unitName = "fedthud"
 
 --------------------------------------------------------------------------------
+humanName = [[Thud]]
 
-isUpgraded = [[0]]
+objectName = "ehbotthud_legs.s3o"
+script = "fedthud_lus.lua"
 
-humanName = [[Stumpy]]
+tech = [[tech1]]
+armortype = [[light]]
+supply = [[7]]
 
-objectName = "eallterrmed2.s3o"
-script = "eallterrmed.cob"
-
-tech = [[tech2]]
-armortype = [[armored]]
-supply = [[4]]
-
-VFS.Include("Units-Configs-Basedefs/basedefs/allterrain/fed/fedstumpy_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 1/fedthud_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName]    = unitDef })
+return lowerkeys({ [unitName] = unitDef })
 
 --------------------------------------------------------------------------------

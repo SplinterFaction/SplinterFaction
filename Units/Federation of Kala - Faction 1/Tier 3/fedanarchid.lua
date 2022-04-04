@@ -1,24 +1,25 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedrazorback"
+unitName = "fedanarchid"
 
 --------------------------------------------------------------------------------
 
 isUpgraded = [[0]]
 
-humanName = [[Razorback]]
+humanName = [[Anarchid]]
 
-objectName = "ehbotkarganneth_legs.s3o"
-script = "fed/hbot/fedrazorback_lus.lua"
+objectName = "eallterranarchid.s3o"
+script = "eallterranarchid.cob"
 
 tech = [[tech3]]
 armortype = [[armored]]
+--supply = [[35]]
 
-VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedrazorback_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 3/fedanarchid_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName] = unitDef })
+return lowerkeys({ [unitName]    = unitDef })
 
 --------------------------------------------------------------------------------

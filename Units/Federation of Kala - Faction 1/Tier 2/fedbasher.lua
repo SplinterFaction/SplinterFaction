@@ -1,22 +1,22 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedthud"
+unitName = "fedbasher"
 
 --------------------------------------------------------------------------------
-humanName = [[Thud]]
+humanName = [[Basher]]
 
-objectName = "ehbotthud_legs.s3o"
-script = "fedthud_lus.lua"
+objectName = "eallterrmed2.s3o"
+script = "eallterrmed.cob"
 
-tech = [[tech1]]
-armortype = [[light]]
-supply = [[7]]
+tech = [[tech2]]
+armortype = [[armored]]
+supply = [[4]]
 
-VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedthud_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedbasher_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName] = unitDef })
+return lowerkeys({ [unitName]    = unitDef })
 
 --------------------------------------------------------------------------------

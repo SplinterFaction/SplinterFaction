@@ -1,25 +1,22 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedstreetsweeper"
+unitName = "fedcrasher"
 
 --------------------------------------------------------------------------------
+humanName = [[Crasher]]
 
-isUpgraded = [[0]]
+objectName = "ehbotrocko_legs.s3o"
+script = "fed/hbot/fedcrasher_lus.lua"
 
-humanName = [[StreetSweeper]]
-
-objectName = "eallterrriot2.s3o"
-script = "eallterrriot.cob"
-
-tech = [[tech2]]
+tech = [[tech1]]
 armortype = [[light]]
-supply = [[3]]
+supply = [[15]]
 
-VFS.Include("Units-Configs-Basedefs/basedefs/allterrain/fed/fedstreetsweeper_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 1/fedcrasher_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName]    = unitDef })
+return lowerkeys({ [unitName] = unitDef })
 
 --------------------------------------------------------------------------------

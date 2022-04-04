@@ -1,22 +1,22 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedcrasher"
+unitName = "fedsledge"
 
 --------------------------------------------------------------------------------
-humanName = [[Crasher]]
+humanName = [[Sledge]]
 
-objectName = "ehbotrocko_legs.s3o"
-script = "fed/hbot/fedcrasher_lus.lua"
+objectName = "eallterrheavy2.s3o"
+script = "eallterrheavy.cob"
 
-tech = [[tech1]]
-armortype = [[light]]
-supply = [[15]]
+tech = [[tech2]]
+armortype = [[armored]]
+supply = [[6]]
 
-VFS.Include("units-configs-basedefs/basedefs/hbot/fed/fedcrasher_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedsledge_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName] = unitDef })
+return lowerkeys({ [unitName]    = unitDef })
 
 --------------------------------------------------------------------------------

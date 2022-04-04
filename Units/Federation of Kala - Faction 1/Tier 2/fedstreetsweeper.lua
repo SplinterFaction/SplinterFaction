@@ -1,21 +1,18 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedassault"
+unitName = "fedstreetsweeper"
 
 --------------------------------------------------------------------------------
+humanName = [[StreetSweeper]]
 
-isUpgraded = [[0]]
-
-humanName = [[Anvil]]
-
-objectName = "eallterrassault.s3o"
-script = "eallterrassault.cob"
+objectName = "eallterrriot2.s3o"
+script = "eallterrriot.cob"
 
 tech = [[tech2]]
 armortype = [[armored]]
-supply = [[8]]
+supply = [[3]]
 
-VFS.Include("Units-Configs-Basedefs/basedefs/allterrain/fed/fedassault_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedstreetsweeper_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
