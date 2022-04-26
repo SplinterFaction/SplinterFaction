@@ -1,4 +1,4 @@
-pelvis, turret, barrel1, firepoint1, firepoint2, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'firepoint2', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
+pelvis, turret, barrel1, firepoint1, firepoint2, firepoint3, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'firepoint2', 'firepoint3', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
 local SIG_AIM = {}
 
 -- state variables
@@ -26,7 +26,7 @@ function script.AimFromWeapon(weaponID)
 	return turret
 end
 
-local firepoints = {firepoint1, firepoint2}
+local firepoints = {firepoint1, firepoint2, firepoint3}
 local currentFirepoint = 1
 
 function script.QueryWeapon(weaponID)
@@ -34,7 +34,7 @@ function script.QueryWeapon(weaponID)
 end
 
 function script.FireWeapon(weaponID)
-	currentFirepoint = 3 - currentFirepoint
+	currentFirepoint = 4 - currentFirepoint
 	EmitSfx (firepoints[currentFirepoint], 1024)
 end
 

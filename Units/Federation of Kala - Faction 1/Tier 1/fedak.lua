@@ -5,7 +5,7 @@ unitName = "fedak"
 --------------------------------------------------------------------------------
 humanName = [[A.K.]]
 
-objectName = "ehbotak_legs.s3o"
+objectName = "fedakmk1.s3o"
 script = "fed/hbot/fedak_lus.lua"
 
 tech = [[tech1]]

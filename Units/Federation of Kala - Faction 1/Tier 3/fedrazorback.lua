@@ -8,7 +8,7 @@ isUpgraded = [[0]]
 
 humanName = [[Razorback]]
 
-objectName = "ehbotkarganneth_legs.s3o"
+objectName = "fedrazorback.s3o"
 script = "fed/hbot/fedrazorback_lus.lua"
 
 tech = [[tech3]]

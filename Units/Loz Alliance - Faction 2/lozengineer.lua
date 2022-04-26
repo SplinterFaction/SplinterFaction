@@ -29,7 +29,7 @@ areamexdef = [[emetalextractor]]
 armortype = [[light]]
 requiretech = [[tech0]]
 
-VFS.Include("units-configs-basedefs/basedefs/Faction 2/f2engineer_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/f2engineer_basedef.lua")
 
 --------------------------------------------------------------------------------
 
