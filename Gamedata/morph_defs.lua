@@ -135,6 +135,19 @@ local timeToBuild_lozcommander_up4 = energyCost_lozcommander_up4 / 100
 
 --
 
+--Fed Engineer Upgrades
+
+local energyCost_fedengineer_up1  = 48 * 10
+local timeToBuild_fedengineer_up1 = energyCost_fedengineer_up1 / 10
+
+local energyCost_fedengineer_up2  = 76 * 25
+local timeToBuild_fedengineer_up2 = energyCost_fedengineer_up2 / 25
+
+local energyCost_fedengineer_up3  = 154 * 50
+local timeToBuild_fedengineer_up3 = energyCost_fedengineer_up3 / 50
+
+--
+
 --Loz Engineer Upgrades
 
 local energyCost_lozengineer_up1  = 48 * 10
@@ -320,6 +333,43 @@ local morphDefs = {
 		time    = timeToBuild_lozengineer_up3,
 		cmdname = [[Tech 3]],
 		energy  = energyCost_lozengineer_up3,
+		metal   = 0,
+		text    = 'Evolve Tech 3 Engineer',
+		require = [[tech3]],
+		},
+	},
+
+
+	fedengineer = {
+		{
+		into    = 'fedengineer_up1',
+		time    = timeToBuild_fedengineer_up1,
+		cmdname = [[Tech 1]],
+		energy  = energyCost_fedengineer_up1,
+		metal   = 0,
+		text    = 'Evolve Tech 1 Engineer',
+		require = [[tech1]],
+		},
+	},
+
+	fedengineer_up1 = {
+		{
+		into    = 'fedengineer_up2',
+		time    = timeToBuild_fedengineer_up2,
+		cmdname = [[Tech 2]],
+		energy  = energyCost_fedengineer_up2,
+		metal   = 0,
+		text    = 'Evolve Tech 2 Engineer',
+		require = [[tech2]],
+		},
+	},
+
+	fedengineer_up2 = {
+		{
+		into    = 'fedengineer_up3',
+		time    = timeToBuild_fedengineer_up3,
+		cmdname = [[Tech 3]],
+		energy  = energyCost_fedengineer_up3,
 		metal   = 0,
 		text    = 'Evolve Tech 3 Engineer',
 		require = [[tech3]],

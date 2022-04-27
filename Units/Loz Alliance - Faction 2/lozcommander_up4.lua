@@ -25,7 +25,7 @@ script = [[lozcommandtank.cob]]
 footprintx = 6
 footprintz = 6
 
-buildlist = Shared.buildListLoz
+buildlist = Shared.buildListLozt4
 
 weapon1 = [[heavybeamweapon]]
 
