@@ -9,7 +9,7 @@ local armortype					 = [[building]]
 local storage					  = 50
 local supplygranted				  = 25
 
-local buildCostMetal 			  = 15
+local buildCostMetal 			  = 50
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -22,18 +22,13 @@ local unitDef                     = {
 	canAttack			          = false,
 	category                      = "BUILDING NOTAIR ECO",
 
-	collisionVolumeScales         = [[66 74 126]],
-	collisionVolumeOffsets        = [[0 10 0]],
-	collisionVolumeTest           = 1,
-	collisionVolumeType           = "box",
-
 	description                   = [[Provides +]] .. supplygranted .. [[ Supply • Provides +]] .. storage .. [[ Metal/Energy Storage]],
 	energyStorage                 = storage,
 	metalStorage                 = storage,
 	energyUse                     = 0,
 	explodeAs                     = "smallBuildingExplosionGenericPurple",
-	footprintX                    = 2,
-	footprintZ                    = 4,
+	footprintX                    = 3,
+	footprintZ                    = 3,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	icontype                      = "storage",
@@ -42,8 +37,8 @@ local unitDef                     = {
 	maxWaterDepth                 = 5000,
 	--metalStorage                  = storage,
 	name                          = "Supply/Storage Depot",
-	objectName                    = "estorage2_small.s3o",
-	script			              = "estorage2.cob",
+	objectName                    = "storage.s3o",
+	script			              = "estorage3.cob",
 	radarDistance                 = 0,
 	repairable		              = false,
 	selfDestructAs                = "smallBuildingExplosionGenericPurple",
@@ -52,7 +47,7 @@ local unitDef                     = {
 	smoothAnim                    = true,
 	unitname                      = "estorage",
 	workerTime                    = 0,
-	yardMap                       = "oo oo oo oo oo oo oo oo",
+	yardMap                       = "ooo ooo ooo",
 
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {
@@ -62,8 +57,6 @@ local unitDef                     = {
 		
 		explosiongenerators       = {
 			"custom:blacksmoke",
-			"custom:fusionreactionstoragenew-small",
-			"custom:fusionreactionstoragenew-blue-small",
 			"custom:skyhatelaser",
 		},
 	},

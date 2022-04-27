@@ -166,7 +166,9 @@ function UnitDef_Post(name, uDef)
 
 	--Override groundplate used
 	if uDef.usegrounddecal == true and uDef.customparams and uDef.customparams.customgrounddecal ~= true then
-		if uDef.customparams and uDef.customparams.factionname == "ateran" then
+		if uDef.customparams and uDef.customparams.factionname == "ateran" or
+			uDef.customparams and uDef.customparams.factionname == "Federation of Kala" or
+			uDef.customparams and uDef.customparams.factionname == "Loz Alliance" then
 			uDef.buildinggrounddecaltype = "groundplate.dds"
 			--Make decals sizing easy
 			if uDef.footprintx ~= nil and uDef.footprintz ~= nil then
@@ -343,17 +345,20 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end			
 			
-			-- Set building Hitpoints
+			-- Set Unit Hitpoints
 				-- Ateran
 			if unitDef.customparams and unitDef.customparams.factionname == "ateran" 
 			or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" 
 			or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 				if unitDef.customparams then
+					if unitDef.customparams.unittype == "mobile" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 5
+					end
 					if unitDef.customparams.unittype == "building" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
 					end
 					if unitDef.customparams.unittype == "factory" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 30
+						unitDef.maxdamage = unitDef.buildcostmetal * 5
 					end
 					if unitDef.customparams.unittype == "turret" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
@@ -615,6 +620,12 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					unitDef.buildtime = unitDef.buildcostmetal / 4
 					unitDef.buildcostenergy = unitDef.buildcostmetal * 0.25
 				end
+
+				if unitDef.customparams and unitDef.customparams.supply_cost then
+					local supplycost = unitDef.buildcostmetal * 0.1
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
+
 			end
 			
 			-- Set reclaimspeed to be a multiple of workertime. This relies on max defaults set in featuredefs post. Without some max defaults there, this will be a funny result.

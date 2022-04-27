@@ -32,5 +32,36 @@ return {
     },
   },
 
+  ["skyhatelaser-storage"] = {
+    dirtg = {
+      air                = true,
+      class              = [[CSimpleParticleSystem]],
+      count              = 1,
+      ground             = true,
+      properties = {
+        airdrag            = 0.8,
+        --alwaysvisible      = true,
+        colormap           = [[0.75 0.25 0 0.1 	0 0 0 0.0]],
+        directional        = true,
+        emitrot            = 0,
+        emitrotspread      = 0,
+        emitvector         = [[dir]],
+        gravity            = [[0, 0, 0]],
+        numparticles       = 1,
+        particlelife       = 15,
+        particlelifespread = 0,
+        particlesize       = 20,
+        particlesizespread = 0,
+        particlespeed      = 7.5,
+        particlespeedspread = 0,
+        pos                = [[0, 2, 0]],
+        sizegrowth         = 5,
+        sizemod            = 1,
+        texture            = [[laser]],
+        useairlos          = false,
+      },
+    },
+  },
+
 }
 

@@ -3,7 +3,7 @@ unitDef                    = {
 	acceleration                 = 0.18,
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 875,
+	buildCostMetal               = 1000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "eallterranarchid.png",
@@ -106,10 +106,10 @@ unitDef                    = {
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		armortype                = armortype,
-		--supply_cost              = supply,
+		supply_cost              = supply,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	             = "ateran",
+		factionname	             = "Federation of Kala",
 		corpse                   = "energycore",
 		decloakradiushalved		 = true,
 	},
@@ -155,7 +155,7 @@ weaponDefs                 = {
 			damagetype		     = "antibuilding",  
 		}, 
 		damage                   = {
-			default              = 440,
+			default              = 200,
 		},
 	},
 	
@@ -190,7 +190,7 @@ weaponDefs                 = {
 		weaponVelocity           = 400,
 		customparams             = {
 			isupgraded           	 = isUpgraded,
-			damagetype		     = "antiarmored",  
+			damagetype		     = "antibuilding",  
 		},      
 		damage                   = {
 			default              = 6,
