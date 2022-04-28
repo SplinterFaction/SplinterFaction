@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 27,
+	buildCostMetal                = 75,
 	builder                       = false,
 	buildTime                     = 5,
 	buildpic					  = "elightturret2.png",
@@ -88,7 +88,6 @@ unitDef                     = {
 
 weaponDefs                  = {
 	lighteweapon                  = {
-		AreaOfEffect             = 25,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -126,7 +125,7 @@ weaponDefs                  = {
 			effectedByunitHealthModifier = true,
 		},      
 		damage                    = {
-			default               = 100,
+			default               = 50,
 		},
 	},
 }

@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 8192,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 60,
+	buildCostMetal                = 150,
 	builder                       = false,
 	buildTime                     = 5,
 	buildpic					  = "eheavyturret2.png",
@@ -91,7 +91,6 @@ unitDef                     = {
 weaponDefs                  = {
 	eheavyturretweapon2           = {
 		
-		AreaOfEffect              = 250,
 		avoidFeature              = false,
 		avoidFriendly             = false,		
 		collideFeature            = false,
@@ -128,7 +127,7 @@ weaponDefs                  = {
 			effectedByunitHealthModifier = true,
 		}, 
 		damage                    = {
-			default               = 500,
+			default               = 125,
 		},
 	},
 }
