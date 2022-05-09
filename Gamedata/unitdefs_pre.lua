@@ -58,9 +58,9 @@ Shared.buildListFed = {
 	[[eshieldgen]],
 	[[esilo]],
 	[[esiloplanetcracker]],
-	[[escoutdrone]],
+	-- [[escoutdrone]],
 	[[fedengineer]],
-	[[fedorb]],
+	-- [[fedorb]],
 	[[ehbotkarganneth]],
 	[[eallterranarchid]],
 	[[ekrow]],
@@ -77,9 +77,9 @@ Shared.buildListFedt1 = {
 	[[emine]],
 	[[elightturret2]],
 	[[elaserbattery]],
-	[[escoutdrone]],
+	-- [[escoutdrone]],
 	[[fedengineer]],
-	[[fedorb]],
+	-- [[fedorb]],
 }
 
 Shared.buildListFedt2 = {
@@ -100,9 +100,9 @@ Shared.buildListFedt2 = {
 	[[eflakturret]],
 	[[healstation]],
 	[[eshieldgen]],
-	[[escoutdrone]],
+	-- [[escoutdrone]],
 	[[fedengineer_up1]],
-	[[fedorb]],
+	-- [[fedorb]],
 }
 
 Shared.buildListFedt3 = {
@@ -131,9 +131,9 @@ Shared.buildListFedt3 = {
 	[[eshieldgen]],
 	[[esilo]],
 	[[esiloplanetcracker]],
-	[[escoutdrone]],
+	-- [[escoutdrone]],
 	[[fedengineer_up2]],
-	[[fedorb]],
+	-- [[fedorb]],
 }
 
 Shared.buildListFedt4 = {
@@ -163,9 +163,9 @@ Shared.buildListFedt4 = {
 	[[eshieldgen]],
 	[[esilo]],
 	[[esiloplanetcracker]],
-	[[escoutdrone]],
+	-- [[escoutdrone]],
 	[[fedengineer_up3]],
-	[[fedorb]],
+	-- [[fedorb]],
 	[[fedakm2]],
 	[[fedrazorback]],
 	[[fedanarchid]],
@@ -200,7 +200,7 @@ Shared.buildListLoz = {
 	[[esiloplanetcracker]],
 	[[escoutdrone]],
 	[[lozengineer]],
-	[[lozorb]],
+	-- [[lozorb]],
 	[[eamphibleveler]],
 	[[elacerator]],
 	[[ekrow]],
@@ -219,7 +219,7 @@ Shared.buildListLozt1 = {
 	[[elaserbattery]],
 	[[escoutdrone]],
 	[[lozengineer]],
-	[[lozorb]],
+	-- [[lozorb]],
 }
 
 Shared.buildListLozt2 = {
@@ -242,7 +242,7 @@ Shared.buildListLozt2 = {
 	[[eshieldgen]],
 	[[escoutdrone]],
 	[[lozengineer_up1]],
-	[[lozorb]],
+	-- [[lozorb]],
 }
 
 Shared.buildListLozt3 = {
@@ -273,7 +273,7 @@ Shared.buildListLozt3 = {
 	[[esiloplanetcracker]],
 	[[escoutdrone]],
 	[[lozengineer_up2]],
-	[[lozorb]],
+	-- [[lozorb]],
 }
 
 Shared.buildListLozt4 = {
@@ -305,7 +305,7 @@ Shared.buildListLozt4 = {
 	[[esiloplanetcracker]],
 	[[escoutdrone]],
 	[[lozengineer_up3]],
-	[[lozorb]],
+	-- [[lozorb]],
 	[[eamphibleveler]],
 	[[elacerator]],
 	[[ekrow]],
@@ -313,12 +313,12 @@ Shared.buildListLozt4 = {
 }
 
 Shared.fedOrb = {
-	[[fedorb]],
+	-- [[fedorb]],
 	[[fedengineer]],
 }
 
 Shared.lozOrb = {
-	[[lozorb]],
+	-- [[lozorb]],
 	[[lozengineer]],
 }
 

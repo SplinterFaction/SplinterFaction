@@ -12,7 +12,7 @@ local techrequired				 = [[tech2]]
 local shield1Power               = 2500
 local shield1PowerRegen          = 25
 local shield1PowerRegenEnergy    = 25
-local buildCostMetal 			  = 50
+local buildCostMetal 			  = 250
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {

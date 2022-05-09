@@ -9,8 +9,7 @@ local armortype					 = [[building]]
 
 local techrequired				 = [[tech2]]
 
-local buildCostMetal 			  = 20
-local maxDamage					  = buildCostMetal * 12.5
+local buildCostMetal 			  = 150
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -20,7 +19,7 @@ local unitDef                     = {
 	builder                       = false,
 	buildTime                     = 5,
 	category                      = "BUILDING NOTAIR",
-	description                   = [[Radar Jamming Tower â€¢ Generates a Cloaking Field]],
+	description                   = [[Radar Jamming Tower and Generates a Cloaking Field]],
 	energyMake                    = 0,
 	energyStorage                 = 0,
 	energyUse                     = 0,
@@ -30,7 +29,7 @@ local unitDef                     = {
 	iconType                      = "radarjam",
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
-	maxDamage                     = maxDamage,
+	maxDamage                     = 100,
 	maxSlope                      = 60,
 	maxWaterDepth                 = 5000,
 	metalStorage                  = 0,

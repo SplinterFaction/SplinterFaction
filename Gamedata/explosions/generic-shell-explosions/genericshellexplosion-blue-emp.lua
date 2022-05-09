@@ -85,35 +85,35 @@ return {
     },
 	
 	-- put this next to groundflash
-	explosionwave = {
-      air                = true,
-      class              = [[CSimpleParticleSystem]],
-      count              = 1,
-      ground             = true,
-      water              = true, 
-	  underwater         = true,
-      properties = {
-        airdrag            = 0.87,
-        alwaysvisible      = true,
-        colormap           = [[0 0.5 1 0.05	0 0 0 0.0]], -- same as groundflash colors
-        directional        = false,
-        emitrot            = 90,
-        emitrotspread      = 5,
-        emitvector         = [[0, 0, 0]],
-        gravity            = [[0, 0, 0]],
-        numparticles       = 1,
-        particlelife       = [[30]], -- same as groundflash ttl
-        particlelifespread = 30,
-        particlesize       = 2,
-        particlesizespread = 1,
-        particlespeed      = [[8 r20]],
-        particlespeedspread = 6,
-        pos                = [[0, 1, 0]],
-        sizegrowth         = 4, -- same as groundflash circlegrowth
-        sizemod            = 1.0,
-        texture            = [[explosionwave]],
-      },
-    },
+	-- explosionwave = {
+    --   air                = true,
+    --   class              = [[CSimpleParticleSystem]],
+    --   count              = 1,
+    --   ground             = true,
+    --   water              = true, 
+	--   underwater         = true,
+    --   properties = {
+    --     airdrag            = 0.87,
+    --     alwaysvisible      = true,
+    --     colormap           = [[0 0.5 1 0.05	0 0 0 0.0]], -- same as groundflash colors
+    --     directional        = false,
+    --     emitrot            = 90,
+    --     emitrotspread      = 5,
+    --     emitvector         = [[0, 0, 0]],
+    --     gravity            = [[0, 0, 0]],
+    --     numparticles       = 1,
+    --     particlelife       = [[30]], -- same as groundflash ttl
+    --     particlelifespread = 30,
+    --     particlesize       = 2,
+    --     particlesizespread = 1,
+    --     particlespeed      = [[8 r20]],
+    --     particlespeedspread = 6,
+    --     pos                = [[0, 1, 0]],
+    --     sizegrowth         = 4, -- same as groundflash circlegrowth
+    --     sizemod            = 1.0,
+    --     texture            = [[explosionwave]],
+    --   },
+    -- },
 	
     groundflash = {
       air                = true,
@@ -162,25 +162,25 @@ return {
       },
     },
 	
-    outerflash = {
-      air                = true,
-      class              = [[heatcloud]],
-      count              = 2,
-      ground             = true,
-      water              = true, 
-	  underwater         = true,
-      properties = {
-        alwaysvisible      = true,
-        heat               = 10,
-        heatfalloff        = 1.1,
-        maxheat            = 20,
-        pos                = [[r-2 r2, 5, r-2 r2]],
-        size               = 1,
-        sizegrowth         = 30,
-        speed              = [[0, 1 0, 0]],
-        texture            = [[brightblueexplo]],
-      },
-    },
+    -- outerflash = {
+    --   air                = true,
+    --   class              = [[heatcloud]],
+    --   count              = 2,
+    --   ground             = true,
+    --   water              = true, 
+	--   underwater         = true,
+    --   properties = {
+    --     alwaysvisible      = true,
+    --     heat               = 10,
+    --     heatfalloff        = 1.1,
+    --     maxheat            = 20,
+    --     pos                = [[r-2 r2, 5, r-2 r2]],
+    --     size               = 1,
+    --     sizegrowth         = 30,
+    --     speed              = [[0, 1 0, 0]],
+    --     texture            = [[brightblueexplo]],
+    --   },
+    -- },
   },
 
 }

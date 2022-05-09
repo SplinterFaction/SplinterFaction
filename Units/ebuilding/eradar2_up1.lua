@@ -4,7 +4,7 @@
 unitName = [[eradar2_up1]]	
 buildpic = [[eradar2_up1.png]]
 
-buildCostMetal = 40
+buildCostMetal = 100
 
 humanName = [[Radar Tower]]
 objectName = [[eradar3_large.s3o]]

@@ -8,7 +8,7 @@ local unitName                    = "emine"
 local armortype					 = [[building]]
 --local supply					 = [[1]]
 
-local weapon1Damage              = 1000
+local weapon1Damage              = 250
 local weapon1AOE				 = 25
 
 local function roundToFirstDecimal(energycosttofire)
@@ -20,7 +20,7 @@ local unitDef                     = {
 	blocking			          = false,
 	buildAngle                    = 1024,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 5,
+	buildCostMetal                = 20,
 	builder                       = false,
 	buildTime                     = 5,
 	category                      = "LIGHT NOTAIR",

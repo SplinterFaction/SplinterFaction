@@ -9,7 +9,7 @@ isUpgraded	= [[0]]
 
 buildpic = [[elaserbattery.png]]
 
-buildcostmetal = 40
+buildcostmetal = 80
 
 humanName = [[Aegis]]
 
