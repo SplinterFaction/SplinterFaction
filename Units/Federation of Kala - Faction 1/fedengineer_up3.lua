@@ -14,7 +14,7 @@ maxDamage = 500 --This is set automatically
 
 fedbuildlists = Shared.buildListFedt4
 
-workertime = 8
+workertime = 4
 
 humanName = [[Lifter Mk IV]]
 

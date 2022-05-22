@@ -15,7 +15,7 @@ techrequired = [[0 overseer]]
 
 maxdamage = 10000
 maxvelocity = 3
-workertime = 3
+workertime = 4
 
 movementclass = [[COMMANDERTANK4]]
 
