@@ -1,0 +1,11 @@
+
+*.db
+/.git
+/.svn
+*.py
+*.pyc
+*.iml
+.DS_Store
+.idea/*
+SplinterFaction/*
+mocaccino/*

@@ -12,7 +12,7 @@ humanName = [[Pincushion]]
 objectName = [[elightturret3.s3o]]
 script = [[elightturret2.cob]]
 
-tech = [[tech0]]
+tech = [[tech1]]
 armortype = [[building]]
 --supply = [[3]]
 
