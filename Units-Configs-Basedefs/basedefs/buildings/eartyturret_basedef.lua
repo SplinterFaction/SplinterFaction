@@ -89,7 +89,7 @@ weaponDefs                  = {
 		
 		cegTag                   = "artyshot2",
 		avoidNeutral	         = false,
-		explosionGenerator       = "custom:NUKEDATBEWMSMALL",
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		energypershot            = 0,
 		edgeEffectiveness        = 0.1,
 		
@@ -128,7 +128,7 @@ weaponDefs                  = {
 		
 		cegTag                   = "artyshot2",
 		avoidNeutral	         = false,
-		explosionGenerator       = "custom:NUKEDATBEWMSMALL",
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		energypershot            = 0,
 		edgeEffectiveness        = 0.1,
 		

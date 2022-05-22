@@ -18,35 +18,41 @@ local constructors = {
 	"fedcommander_up3_scav",
 	"lozcommander_up3_scav",
 	"fedengineer_scav",
+	"fedengineer_up1_scav",
+	"fedengineer_up2_scav",
+	"fedengineer_up3_scav",
 	"lozengineer_scav",
+	"lozengineer_up1_scav",
+	"lozengineer_up2_scav",
+	"lozengineer_up3_scav",
 }
 
 local constructorsT1 = {
 	"fedcommander_up1_scav",
 	"lozcommander_up1_scav",
-	"fedengineer_scav",
-	"lozengineer_scav",
+	"fedengineer_up1_scav",
+	"lozengineer_up1_scav",
 }
 
 local constructorsT2 = {
 	"fedcommander_up2_scav",
 	"lozcommander_up2_scav",
-	"fedengineer_scav",
-	"lozengineer_scav",
+	"fedengineer_up2_scav",
+	"lozengineer_up2_scav",
 }
 
 local constructorsT3 = {
 	"fedcommander_up3_scav",
 	"lozcommander_up3_scav",
-	"fedengineer_scav",
-	"lozengineer_scav",
+	"fedengineer_up3_scav",
+	"lozengineer_up3_scav",
 }
 
 local constructorsT4 = {
-	"fedcommander_up3_scav",
-	"lozcommander_up3_scav",
-	"fedengineer_scav",
-	"lozengineer_scav",
+	"fedcommander_up4_scav",
+	"lozcommander_up4_scav",
+	"fedengineer_up3_scav",
+	"lozengineer_up3_scav",
 }
 
 local swapUnitsToScav = {
@@ -64,23 +70,47 @@ local playerCommanders = {
 }
 
 local assisters = {
-	"fedorb_scav",
-	"lozorb_scav",
+	"fedengineer_scav",
+	"fedengineer_up1_scav",
+	"fedengineer_up2_scav",
+	"fedengineer_up3_scav",
+	"lozengineer_scav",
+	"lozengineer_up1_scav",
+	"lozengineer_up2_scav",
+	"lozengineer_up3_scav",
 }
 
 local resurrectors = {
-	"fedorb_scav",
-	"lozorb_scav",
+	"fedengineer_scav",
+	"fedengineer_up1_scav",
+	"fedengineer_up2_scav",
+	"fedengineer_up3_scav",
+	"lozengineer_scav",
+	"lozengineer_up1_scav",
+	"lozengineer_up2_scav",
+	"lozengineer_up3_scav",
 }
 
 local resurrectorsSea = {
-	"fedorb_scav",
-	"lozorb_scav",
+	"fedengineer_scav",
+	"fedengineer_up1_scav",
+	"fedengineer_up2_scav",
+	"fedengineer_up3_scav",
+	"lozengineer_scav",
+	"lozengineer_up1_scav",
+	"lozengineer_up2_scav",
+	"lozengineer_up3_scav",
 }
 
 local collectors = {
-	"fedorb_scav",
-	"lozorb_scav",
+	"fedengineer_scav",
+	"fedengineer_up1_scav",
+	"fedengineer_up2_scav",
+	"fedengineer_up3_scav",
+	"lozengineer_scav",
+	"lozengineer_up1_scav",
+	"lozengineer_up2_scav",
+	"lozengineer_up3_scav",
 }
 
 local constructorsID = getUnitIDList(constructors)

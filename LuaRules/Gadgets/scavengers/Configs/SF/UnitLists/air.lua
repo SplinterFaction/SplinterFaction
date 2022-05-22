@@ -4,19 +4,17 @@ return {
 	},
 
 	T1 = {
-		"efighter_scav",
+		"escoutdrone_scav",
 	},
 
 	T2 = {
-		"efighter_scav",
-		"egunship2_scav",
+		"fedgunship_scav",
+		"fedbomber_scav",
 	},
 
 	T3 = {
-		"efighter_scav",
-		"egunship2_scav",
-		"ebomber_scav",
-		"eairemp_scav",
+		"fedgunship_scav",
+		"fedbomber_scav",
 	},
 
 	T4 = {

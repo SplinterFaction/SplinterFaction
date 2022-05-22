@@ -34,7 +34,7 @@ Shared.buildList = {
 
 Shared.buildListFed = {
 	[[f1landfac]],
-	[[eairplant]],
+	[[fedairplant]],
 	[[emetalextractor]],
 	[[esolar2]],
 	[[egeothermal]],
@@ -69,7 +69,7 @@ Shared.buildListFed = {
 
 Shared.buildListFedt1 = {
 	[[f1landfac]],
-	[[eairplant]],
+	[[fedairplant]],
 	[[emetalextractor]],
 	[[esolar2]],
 	[[estorage]],
@@ -84,7 +84,7 @@ Shared.buildListFedt1 = {
 
 Shared.buildListFedt2 = {
 	[[f1landfac]],
-	[[eairplant]],
+	[[fedairplant]],
 	[[emetalextractor_up1]],
 	[[esolar2]],
 	[[egeothermal]],
@@ -107,7 +107,7 @@ Shared.buildListFedt2 = {
 
 Shared.buildListFedt3 = {
 	[[f1landfac]],
-	[[eairplant]],
+	[[fedairplant]],
 	[[emetalextractor_up2]],
 	[[esolar2]],
 	[[egeothermal]],
@@ -138,7 +138,7 @@ Shared.buildListFedt3 = {
 
 Shared.buildListFedt4 = {
 	[[f1landfac]],
-	[[eairplant]],
+	[[fedairplant]],
 	[[emetalextractor_up3]],
 	[[esolar2]],
 	[[egeothermal]],
@@ -170,6 +170,12 @@ Shared.buildListFedt4 = {
 	[[fedrazorback]],
 	[[fedanarchid]],
 	-- [[ecommander]],
+}
+
+Shared.fedAirPlantBuildList = {
+	[[fedgunship]],
+	[[fedbomber]],
+
 }
 
 Shared.buildListLoz = {
@@ -483,9 +489,7 @@ Shared.buildListf1landfac = {
 	[[fedanvil]],
 	[[federaser]],
 	[[fedanarchid]],
-	[[fedengineer]],
-	[[eorb]],
-	
+	[[fedengineer]],	
 }
 
 Shared.buildListf2landfac = {

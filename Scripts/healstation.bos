@@ -3,7 +3,7 @@
 #include "sfxtype.h"
 #include "exptype.h"
 
-piece  base, fins, fin1, fin2, fin3, fin4, nanopoint1;
+piece  land1, pad1, base, fins, fin1, fin2, fin3, fin4, nanopoint1;
 
 static-var Static_Var_1, Static_Var_3, Static_Var_5, statechg_DesiredState, statechg_StateChanging, bMoving, terraintype, building, moving;
 
@@ -37,6 +37,12 @@ SmokeUnit(healthpercent, sleeptime, smoketype)
    }
 }
 
+QueryLandingPad(landpiece1)
+{
+    landpiece1 = 0;
+
+    return (0);
+}
 
 buildflame()
 {

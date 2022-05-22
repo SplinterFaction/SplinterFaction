@@ -1145,7 +1145,9 @@ do
           if (fullText and drawBarPercentage > 0) then
             infotext = reload..'%'
           end
-          AddBar("reload",reload,"reload",infoText or '')
+		  if reload <= 900 then
+          	AddBar("reload",reload,"reload",infoText or '')
+		  end
         end
       end
 
