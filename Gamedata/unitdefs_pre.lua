@@ -488,6 +488,8 @@ Shared.buildListf1landfac = {
 	[[fedsledge]],
 	[[fedanvil]],
 	[[federaser]],
+	[[fedakm2]],
+	[[fedrazorback]],
 	[[fedanarchid]],
 	[[fedengineer]],	
 }

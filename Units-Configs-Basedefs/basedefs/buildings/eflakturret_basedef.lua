@@ -36,7 +36,7 @@ unitDef                     = {
 	selfDestructAs                = "mediumBuildingExplosionGeneric",
 	side                          = "CORE",
 	sightDistance                 = 100,
-	airsightdistance			  = 1500,
+	airsightdistance			  = 1000,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -106,7 +106,7 @@ weaponDefs                  = {
 		impulseFactor            = 0,
 		minintensity             = "1",
 		name                     = "Laser",
-		range                    = 1500,
+		range                    = 1000,
 		reloadtime               = 1,
 		WeaponType               = "Cannon",
 		rgbColor                 = "1 0.5 0",
@@ -128,7 +128,7 @@ weaponDefs                  = {
 			effectedByunitHealthModifier = true,
 		}, 
 		damage                   = {
-			default              = 125,
+			default              = 75,
 		},
 	},  
 }

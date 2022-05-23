@@ -4,7 +4,7 @@ unitDef                    = {
 	airHoverFactor				 = -1.0,
 	--brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 60,
+	buildCostMetal               = 300,
 	builder                      = false,
 	buildTime                    = 2.5,
 	buildpic					 = "ebomber.png",
@@ -16,7 +16,7 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "AIRARMORED VTOL",
 	collide                      = true,
-	cruiseAlt                    = 400,
+	cruiseAlt                    = 200,
 	description                  = [[Bomber]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -39,7 +39,7 @@ unitDef                    = {
 	
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 5.5,
+	maxVelocity                  = 6,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -194,7 +194,7 @@ weaponDefs                 = {
 			nofriendlyfire	     = true,
 		}, 
 		damage                   = {
-			default              = 100,
+			default              = 150,
 		},
 	},  
 }
