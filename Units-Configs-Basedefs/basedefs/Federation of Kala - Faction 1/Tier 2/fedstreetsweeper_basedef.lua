@@ -15,19 +15,6 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "ARMORED NOTAIR RIOT",
-
-	-- Cloaking
-
-	cancloak		             = true,
-	cloakCost		             = 0,
-	cloakCostMoving	             = 0,
-	minCloakDistance             = 70,
-	decloakOnFire	             = true,
-	decloakSpherical             = true,
-	initCloaked		             = false,
-	
-	-- End Cloaking
-
 	description                  = [[Shotgun/Riot Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,

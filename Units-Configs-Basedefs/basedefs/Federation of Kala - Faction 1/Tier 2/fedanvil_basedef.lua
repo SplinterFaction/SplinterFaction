@@ -14,19 +14,6 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "ARMORED NOTAIR ARTILLERY",
-
-	-- Cloaking
-
-	cancloak		             = true,
-	cloakCost		             = 0,
-	cloakCostMoving	             = 0,
-	minCloakDistance             = 70,
-	decloakOnFire	             = true,
-	decloakSpherical             = true,
-	initCloaked		             = false,
-	
-	-- End Cloaking
-
 	description                  = [[Self-Propelled Precision Artillery]],
 	energyMake                   = 0,
 	energyStorage                = 0,

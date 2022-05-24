@@ -13,19 +13,6 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "LIGHT NOTAIR RAID",
-
-	-- Cloaking
-
-	cancloak		             = true,
-	cloakCost		             = 0,
-	cloakCostMoving	             = 0,
-	minCloakDistance             = 150,
-	decloakOnFire	             = false,
-	decloakSpherical             = true,
-	initCloaked		             = true,
-	-- Starting out cloaked will dramatically increase the initial cost, however, it is much more convenient from a micromanagement standpoint.
-	-- End Cloaking
-
 	description                  = [[Shield/Cloak Field Emitter]],
 	energyMake                   = 0,
 	energyStorage                = 0,
