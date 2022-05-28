@@ -7,16 +7,6 @@ local function blueprint0()
 	return {
 		type = types.Land,
 		tiers = { tiers.T0, tiers.T1, tiers.T2, tiers.T3, tiers.T4 },
-		radius = 0,
-		buildings = {
-		},
-	}
-end
-
-local function blueprint1()
-	return {
-		type = types.Land,
-		tiers = { tiers.T0, tiers.T1, tiers.T2, tiers.T3, tiers.T4 },
 		radius = 389,
 		buildings = {
 			{ unitDefID = UnitDefNames.emine_scav.id, xOffset = -499, zOffset = 156, direction = 0},
