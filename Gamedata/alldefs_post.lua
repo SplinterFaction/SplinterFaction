@@ -2,7 +2,7 @@
 -- DOCUMENTATION
 -------------------------
 
--- Evolution RTS contains weapondefs in its unitdef files
+-- SplinterFaction contains weapondefs in its unitdef files
 -- Standalone weapondefs are only loaded by Spring after unitdefs are loaded
 -- So, if we want to do post processing and include all the unit+weapon defs, and have the ability to bake these changes into files, we must do it after both have been loaded
 -- That means, ALL UNIT AND WEAPON DEF POST PROCESSING IS DONE HERE
@@ -343,47 +343,6 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						break
 					end
 				end
-			end			
-			
-			-- Set Unit Hitpoints
-				-- Ateran
-			if unitDef.customparams and unitDef.customparams.factionname == "ateran" 
-			or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" 
-			or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
-				if unitDef.customparams then
-					if unitDef.customparams.unittype == "mobile" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 5
-					end
-					if unitDef.customparams.unittype == "building" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 5
-					end
-					if unitDef.customparams.unittype == "factory" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 5
-					end
-					if unitDef.customparams.unittype == "turret" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 5
-					end
-					if unitDef.customparams.unittype == "shield" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 5
-					end
-				end
-			end
-				-- Zaal
-			if unitDef.customparams and unitDef.customparams.factionname == "zaal" then
-				if unitDef.customparams then
-					if unitDef.customparams.unittype == "building" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 10
-					end
-				end
-			end
-
-			-- Add a modifier for unit HP
-			if unitDef.maxdamage then
-				--Spring.Echo(uDef.name)
-				--Spring.Echo(uDef.maxdamage)
-				unitDef.maxdamage = unitDef.maxdamage * unitHealthModifier --Look in the top of this file for default health modifier
-				--Spring.Echo(uDef.name)
-				--Spring.Echo(uDef.maxdamage)
 			end
 		end
 
@@ -400,95 +359,95 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 		--------------------------------------------------------------------------------
 		-- Process Upgrades --
 		--------------------------------------------------------------------------------
-	
-		for id,uDef in pairs(UnitDefs) do
-			-- Handle upgraded units HP and Max Speed
-			if uDef.customparams and uDef.customparams.isupgraded == "1" then
-				uDef.maxdamage = uDef.maxdamage * 1.20
-				if uDef.maxvelocity then
-					uDef.maxvelocity = uDef.maxvelocity * 0.95
-				end
-			end
-			if uDef.customparams and uDef.customparams.isupgraded == "2" then
-				uDef.maxdamage = uDef.maxdamage * 1.35
-				if uDef.maxvelocity then
-					uDef.maxvelocity = uDef.maxvelocity * 0.90
-				end
-			end
-			if uDef.customparams and uDef.customparams.isupgraded == "3" then
-				uDef.maxdamage = uDef.maxdamage * 1.50
-				if uDef.maxvelocity then
-					uDef.maxvelocity = uDef.maxvelocity * 0.85
-				end
-			end
-			if uDef.customparams and uDef.customparams.isupgraded == "boss" then
-				uDef.maxdamage = uDef.maxdamage * 2.50
-				if uDef.maxvelocity then
-					uDef.maxvelocity = uDef.maxvelocity * 0.75
-				end
-			end
-		end
-	
-		for id,wDef in pairs(WeaponDefs) do
-			-- Handle upgraded units weapon reload times
-			if wDef.customparams and wDef.customparams.isupgraded == "1" then
-				if wDef.reloadtime then
-					wDef.reloadtime = wDef.reloadtime * 0.85
-				end
-				wDef.damage.default = wDef.damage.default * 1.20
-				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-					wDef.shieldpower = wDef.shieldpower * 1.20
-				end
-			end
-			if wDef.customparams and wDef.customparams.isupgraded == "2" then
-				if wDef.reloadtime then
-					wDef.reloadtime = wDef.reloadtime * 0.70
-				end
-				wDef.damage.default = wDef.damage.default * 1.35
-				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-					wDef.shieldpower = wDef.shieldpower * 1.35
-				end
-			end
-			if wDef.customparams and wDef.customparams.isupgraded == "3" then
-				if wDef.reloadtime then
-					wDef.reloadtime = wDef.reloadtime * 0.65
-				end
-				wDef.damage.default = wDef.damage.default * 1.50
-				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-					wDef.shieldpower = wDef.shieldpower * 1.50
-				end
-			end
-			if wDef.customparams and wDef.customparams.isupgraded == "boss" then
-				if wDef.reloadtime then
-					wDef.reloadtime = wDef.reloadtime * 0.5
-				end
-				wDef.damage.default = wDef.damage.default * 10
-				if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-					wDef.shieldpower = wDef.shieldpower * 2.50
-				end
-			end
-			
-			--Handle Shields
-			if wDef.customparams and wDef.customparams.isshieldupgraded == "1" then
-				if wDef.exteriorshield == true then
-					wDef.shieldpower = wDef.shieldpower * 1.20
-				end
-			end
-			if wDef.customparams and wDef.customparams.isshieldupgraded == "2" then
-				if wDef.exteriorshield == true then
-					wDef.shieldpower = wDef.shieldpower * 1.35
-				end
-			end
-			if wDef.customparams and wDef.customparams.isshieldupgraded == "3" then
-				if wDef.exteriorshield == true then
-					wDef.shieldpower = wDef.shieldpower * 1.50
-				end
-			end
-			if wDef.customparams and wDef.customparams.isshieldupgraded == "boss" then
-				if wDef.exteriorshield == true then
-					wDef.shieldpower = wDef.shieldpower * 2.50
-				end
-			end
+	--
+		-- for id,uDef in pairs(UnitDefs) do
+		-- 	-- Handle upgraded units HP and Max Speed
+		-- 	if uDef.customparams and uDef.customparams.isupgraded == "1" then
+		-- 		uDef.maxdamage = uDef.maxdamage * 1.20
+		-- 		if uDef.maxvelocity then
+		-- 			uDef.maxvelocity = uDef.maxvelocity * 0.95
+		-- 		end
+		-- 	end
+		-- 	if uDef.customparams and uDef.customparams.isupgraded == "2" then
+		-- 		uDef.maxdamage = uDef.maxdamage * 1.35
+		-- 		if uDef.maxvelocity then
+		-- 			uDef.maxvelocity = uDef.maxvelocity * 0.90
+		-- 		end
+		-- 	end
+		-- 	if uDef.customparams and uDef.customparams.isupgraded == "3" then
+		-- 		uDef.maxdamage = uDef.maxdamage * 1.50
+		-- 		if uDef.maxvelocity then
+		-- 			uDef.maxvelocity = uDef.maxvelocity * 0.85
+		-- 		end
+		-- 	end
+		-- 	if uDef.customparams and uDef.customparams.isupgraded == "boss" then
+		-- 		uDef.maxdamage = uDef.maxdamage * 2.50
+		-- 		if uDef.maxvelocity then
+		-- 			uDef.maxvelocity = uDef.maxvelocity * 0.75
+		-- 		end
+		-- 	end
+		-- end
+	--
+		-- for id,wDef in pairs(WeaponDefs) do
+		-- 	-- Handle upgraded units weapon reload times
+		-- 	if wDef.customparams and wDef.customparams.isupgraded == "1" then
+		-- 		if wDef.reloadtime then
+		-- 			wDef.reloadtime = wDef.reloadtime * 0.85
+		-- 		end
+		-- 		wDef.damage.default = wDef.damage.default * 1.20
+		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+		-- 			wDef.shieldpower = wDef.shieldpower * 1.20
+		-- 		end
+		-- 	end
+		-- 	if wDef.customparams and wDef.customparams.isupgraded == "2" then
+		-- 		if wDef.reloadtime then
+		-- 			wDef.reloadtime = wDef.reloadtime * 0.70
+		-- 		end
+		-- 		wDef.damage.default = wDef.damage.default * 1.35
+		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+		-- 			wDef.shieldpower = wDef.shieldpower * 1.35
+		-- 		end
+		-- 	end
+		-- 	if wDef.customparams and wDef.customparams.isupgraded == "3" then
+		-- 		if wDef.reloadtime then
+		-- 			wDef.reloadtime = wDef.reloadtime * 0.65
+		-- 		end
+		-- 		wDef.damage.default = wDef.damage.default * 1.50
+		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+		-- 			wDef.shieldpower = wDef.shieldpower * 1.50
+		-- 		end
+		-- 	end
+		-- 	if wDef.customparams and wDef.customparams.isupgraded == "boss" then
+		-- 		if wDef.reloadtime then
+		-- 			wDef.reloadtime = wDef.reloadtime * 0.5
+		-- 		end
+		-- 		wDef.damage.default = wDef.damage.default * 10
+		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+		-- 			wDef.shieldpower = wDef.shieldpower * 2.50
+		-- 		end
+		-- 	end
+		--
+		-- 	--Handle Shields
+		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "1" then
+		-- 		if wDef.exteriorshield == true then
+		-- 			wDef.shieldpower = wDef.shieldpower * 1.20
+		-- 		end
+		-- 	end
+		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "2" then
+		-- 		if wDef.exteriorshield == true then
+		-- 			wDef.shieldpower = wDef.shieldpower * 1.35
+		-- 		end
+		-- 	end
+		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "3" then
+		-- 		if wDef.exteriorshield == true then
+		-- 			wDef.shieldpower = wDef.shieldpower * 1.50
+		-- 		end
+		-- 	end
+		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "boss" then
+		-- 		if wDef.exteriorshield == true then
+		-- 			wDef.shieldpower = wDef.shieldpower * 2.50
+		-- 		end
+		-- 	end
 	
 		--------------------------------------------------------------------------------
 		--------------------------------------------------------------------------------
@@ -530,16 +489,16 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- There are 2 weapondef customparams used to control this
 			-- oldcosttofireformula = true, will result in the original formula that did not account for weapon range to be used
 			-- nocosttofire == true, will result in cost to fire being set at 0
-			local weaponDefaultDamage = wDef.damage.default
-			local weaponAreaOfEffect = wDef.areaofeffect or 0
-			local weaponRange = wDef.range or 0
-			local weaponProjectiles = wDef.projectiles or 1
-			local weaponBurst = wDef.burst or 1
-			if wDef.customparams and wDef.customparams.nocosttofire == true then
-				wDef.energypershot = 0
-			else
-				wDef.energypershot = 0
-			end
+			-- local weaponDefaultDamage = wDef.damage.default
+			-- local weaponAreaOfEffect = wDef.areaofeffect or 0
+			-- local weaponRange = wDef.range or 0
+			-- local weaponProjectiles = wDef.projectiles or 1
+			-- local weaponBurst = wDef.burst or 1
+			-- if wDef.customparams and wDef.customparams.nocosttofire == true then
+			-- 	wDef.energypershot = 0
+			-- else
+			-- 	wDef.energypershot = 0
+			-- end
 			
 			--Here is the rest of the function for units using energy to fire their weapons
 --[[			elseif wDef.customparams and wDef.customparams.oldcosttofireforumula == true then
@@ -639,6 +598,53 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				if unitDef.canreclaim == false then
 					unitDef.canreclaim = true
 				end
+			end
+
+			--------------------------------------------------------------------------------
+			-- Metal and Role Based Finalized HP -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
+			--------------------------------------------------------------------------------
+
+			-- Set Base Unit Hitpoints
+			if unitDef.customparams and unitDef.customparams.factionname == "ateran"
+					or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
+					or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
+				if unitDef.customparams then
+					if unitDef.customparams.unittype == "mobile" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
+					end
+					if unitDef.customparams.unittype == "building" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 5
+					end
+				end
+			end
+
+			-- Add a modifier for unit HP based upon role
+			if unitDef.customparams.unitrole == "mbt" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+			if unitDef.customparams.unitrole == "scout" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.2
+			end
+			if unitDef.customparams.unitrole == "artillery" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.3
+			end
+			if unitDef.customparams.unitrole == "aa" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.3
+			end
+			if unitDef.customparams.unitrole == "directfiresupport" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.5
+			end
+			if unitDef.customparams.unitrole == "indirectfiresupport" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.6
+			end
+
+			-- Allow Hitpoints to be globally Controlled via Modotions
+			if unitDef.maxdamage then
+				--Spring.Echo(uDef.name)
+				--Spring.Echo(uDef.maxdamage)
+				unitDef.maxdamage = unitDef.maxdamage * unitHealthModifier --Look in the top of this file for default health modifier
+				--Spring.Echo(uDef.name)
+				--Spring.Echo(uDef.maxdamage)
 			end
 		end
 	end
