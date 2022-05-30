@@ -388,7 +388,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 		-- 	end
 		-- end
 	--
-		-- for id,wDef in pairs(WeaponDefs) do
+		for id,wDef in pairs(WeaponDefs) do
 		-- 	-- Handle upgraded units weapon reload times
 		-- 	if wDef.customparams and wDef.customparams.isupgraded == "1" then
 		-- 		if wDef.reloadtime then
@@ -528,11 +528,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 		--------------------------------------------------------------------------------
 
 		for id,unitDef in pairs(UnitDefs) do
-			
+
 			if unitDef.customparams and unitDef.customparams.unitdefbuildtime == nil then
 				-- Set Rules for Ateran race
-				if unitDef.customparams and unitDef.customparams.factionname == "ateran" 
-				or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" 
+				if unitDef.customparams and unitDef.customparams.factionname == "ateran"
+				or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
 				or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 					unitDef.buildtime = unitDef.buildcostmetal / 4
 					unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
@@ -552,7 +552,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.buildcostenergy = unitDef.customparams.buildcostenergyoverride
 					end
 				end
-				
+
 				-- Set Rules for Zaal race
 				if unitDef.customparams and unitDef.customparams.factionname == "zaal" then
 					unitDef.buildtime = unitDef.buildcostmetal / 4
@@ -573,7 +573,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.buildcostenergy = unitDef.customparams.buildcostenergyoverride
 					end
 				end
-				
+
 				-- This is a catchall for units that don't have a factionname declared
 				if unitDef.customparams and unitDef.customparams.factionname == nil then
 					unitDef.buildtime = unitDef.buildcostmetal / 4
@@ -586,10 +586,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 
 			end
-			
+
 			-- Set reclaimspeed to be a multiple of workertime. This relies on max defaults set in featuredefs post. Without some max defaults there, this will be a funny result.
 			unitDef.reclaimspeed = unitDef.workertime
-			
+
 			if canAnyUnitsReclaim == false then
 				if unitDef.canreclaim == true then
 					unitDef.canreclaim = false
