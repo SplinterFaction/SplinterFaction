@@ -15,6 +15,7 @@ function widget:Initialize()
 
 		Spring.SendCommands("cheat")
 		Spring.SendCommands("globallos")
+		Spring.SendCommands("godmode")
 
 		widgetHandler:RemoveWidget()
 end
