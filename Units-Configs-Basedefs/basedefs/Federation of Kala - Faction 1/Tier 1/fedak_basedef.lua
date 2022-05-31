@@ -7,7 +7,7 @@ unitDef                    = {
 	acceleration                 = 1,
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 44,
+	buildCostMetal               = 68,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedak.png]],
@@ -32,7 +32,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 100,
 	maxSlope                     = 90,
-	maxVelocity                  = 5,
+	maxVelocity                  = 3,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -45,7 +45,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallexplosiongenericred",
 	side                         = "CORE",
-	sightDistance                = 350,
+	sightDistance                = 400,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
@@ -90,8 +90,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		isupgraded			  	 = isUpgraded,
-		unittype				  = "mobile",
+		unittype				 = "mobile",
 		unitrole				 = "scout",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
@@ -108,7 +107,6 @@ unitDef                    = {
 
 weaponDefs                 = {
 	flashweapon                = {
-		AreaOfEffect           = 20,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -126,8 +124,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "E.M.G.",
-		range                  = 350,
-		reloadtime             = 1,
+		range                  = 400,
+		reloadtime             = 2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/pointdefensefire.wav",
@@ -140,11 +138,9 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 800,
 		customparams             = {
-			damagetype		     = "default",
-			single_hit		 	 = true,
 		},      
 		damage                   = {
-			default              = 4.75,
+			default              = 4,
 		},
 	},
 }

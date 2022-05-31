@@ -99,6 +99,7 @@ end
 local function Walk()
 	Signal(SIG_WALK)
 	SetSignalMask(SIG_WALK)
+
 	local speedMult, sleepTime = GetSpeedParams()
 
 	-- Frame: 4 (first step)
@@ -128,7 +129,6 @@ local function Walk()
 		Turn(lthigh, x_axis, -1.380327, 24.933515 * speedMult) -- delta=47.62
 		Turn(lthigh, z_axis, 0.472109, 14.387383 * speedMult) -- delta=27.48
 		Turn(lthigh, y_axis, -0.555316, 15.107415 * speedMult) -- delta=-28.85
-		Turn(nanos, x_axis, -0.103721, 3.111627 * speedMult) -- delta=5.94
 		Move(pelvis, y_axis, -0.450000, 13.500000 * speedMult) -- delta=-0.45
 		Turn(pelvis, x_axis, -0.043633, 1.308997 * speedMult) -- delta=2.50
 		Turn(rfoot, x_axis, -0.739945, 2.219067 * speedMult) -- delta=4.24
@@ -138,7 +138,6 @@ local function Walk()
 		Turn(rthigh, x_axis, 0.513957, 4.382776 * speedMult) -- delta=-8.37
 		Turn(rthigh, z_axis, 0.029370, 1.288250 * speedMult) -- delta=2.46
 		Turn(rthigh, y_axis, 0.091910, 2.682649 * speedMult) -- delta=5.12
-		Turn(turret, x_axis, 0.061844, 1.855333 * speedMult) -- delta=-3.54
 		Sleep(sleepTime)
 		-- Frame:12
 		Turn(lfoot, x_axis, 0.437922, 17.776462 * speedMult) -- delta=-33.95
@@ -148,7 +147,6 @@ local function Walk()
 		Turn(lthigh, x_axis, -0.725615, 19.641336 * speedMult) -- delta=-37.51
 		Turn(lthigh, z_axis, 0.006083, 13.980763 * speedMult) -- delta=-26.70
 		Turn(lthigh, y_axis, -0.134483, 12.624983 * speedMult) -- delta=24.11
-		Turn(nanos, x_axis, -0.275261, 5.146208 * speedMult) -- delta=9.83
 		Move(pelvis, y_axis, -1.180000, 21.899999 * speedMult) -- delta=-0.73
 		Turn(pelvis, x_axis, -0.087266, 1.308997 * speedMult) -- delta=2.50
 		Turn(pelvis, y_axis, 0.130900, 3.926991 * speedMult) -- delta=7.50
@@ -159,9 +157,6 @@ local function Walk()
 		Turn(rthigh, x_axis, 1.194566, 20.418252 * speedMult) -- delta=-39.00
 		Turn(rthigh, z_axis, -0.211673, 7.231300 * speedMult) -- delta=-13.81
 		Turn(rthigh, y_axis, -0.256113, 10.440699 * speedMult) -- delta=-19.94
-		Turn(turret, x_axis, 0.132274, 2.112885 * speedMult) -- delta=-4.04
-		Turn(turret, z_axis, 0.040837, 1.225122 * speedMult) -- delta=2.34
-		Turn(turret, y_axis, -0.014375, 0.431263 * speedMult) -- delta=-0.82
 		Sleep(sleepTime)
 		-- Frame:16
 		Turn(lfoot, x_axis, -0.019264, 13.715583 * speedMult) -- delta=26.19
@@ -170,7 +165,6 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.169631, 26.857386 * speedMult) -- delta=-51.29
 		Turn(lthigh, z_axis, -0.001782, 0.235951 * speedMult) -- delta=-0.45
 		Turn(lthigh, y_axis, 0.000409, 4.046767 * speedMult) -- delta=7.73
-		Turn(nanos, x_axis, -0.103721, 5.146208 * speedMult) -- delta=-9.83
 		Move(pelvis, y_axis, -0.450000, 21.899999 * speedMult) -- delta=0.73
 		Turn(pelvis, x_axis, -0.043633, 1.308997 * speedMult) -- delta=-2.50
 		Turn(pelvis, y_axis, -0.000000, 3.926991 * speedMult) -- delta=-7.50
@@ -181,9 +175,6 @@ local function Walk()
 		Turn(rthigh, x_axis, 0.564478, 18.902634 * speedMult) -- delta=36.10
 		Turn(rthigh, z_axis, -0.100809, 3.325912 * speedMult) -- delta=6.35
 		Turn(rthigh, y_axis, -0.046769, 6.280313 * speedMult) -- delta=11.99
-		Turn(turret, x_axis, 0.061844, 2.112885 * speedMult) -- delta=4.04
-		Turn(turret, z_axis, 0.000000, 1.225122 * speedMult) -- delta=-2.34
-		Turn(turret, y_axis, 0.000000, 0.431263 * speedMult) -- delta=0.82
 		Sleep(sleepTime)
 		-- Frame:20
 		Turn(lfoot, x_axis, -0.665976, 19.401356 * speedMult) -- delta=37.05
@@ -193,7 +184,6 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.367865, 5.947015 * speedMult) -- delta=-11.36
 		Turn(lthigh, z_axis, -0.013571, 0.353682 * speedMult) -- delta=-0.68
 		Turn(lthigh, y_axis, 0.002489, 0.062384 * speedMult) -- delta=0.12
-		Turn(nanos, x_axis, 0.000000, 3.111627 * speedMult) -- delta=-5.94
 		Move(pelvis, y_axis, 0.000000, 13.500000 * speedMult) -- delta=0.45
 		Turn(pelvis, x_axis, -0.000000, 1.308997 * speedMult) -- delta=-2.50
 		Turn(rfoot, x_axis, 0.386673, 5.454532 * speedMult) -- delta=-10.42
@@ -203,7 +193,6 @@ local function Walk()
 		Turn(rthigh, x_axis, -0.549209, 33.410617 * speedMult) -- delta=63.81
 		Turn(rthigh, z_axis, -0.007471, 2.800151 * speedMult) -- delta=5.35
 		Turn(rthigh, y_axis, -0.051735, 0.148983 * speedMult) -- delta=-0.28
-		Turn(turret, x_axis, -0.000000, 1.855333 * speedMult) -- delta=3.54
 		Sleep(sleepTime)
 		-- Frame:24
 		Turn(lfoot, x_axis, -0.739910, 2.218022 * speedMult) -- delta=4.24
@@ -213,7 +202,6 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.427135, 1.778097 * speedMult) -- delta=-3.40
 		Turn(lthigh, z_axis, 0.019141, 0.981359 * speedMult) -- delta=1.87
 		Turn(lthigh, y_axis, 0.085938, 2.503492 * speedMult) -- delta=4.78
-		Turn(nanos, x_axis, -0.081531, 2.445934 * speedMult) -- delta=4.67
 		Move(pelvis, y_axis, -0.450000, 13.500000 * speedMult) -- delta=-0.45
 		Turn(pelvis, x_axis, 0.043633, 1.308997 * speedMult) -- delta=-2.50
 		Turn(rfoot, x_axis, -0.154634, 16.239202 * speedMult) -- delta=31.01
@@ -233,7 +221,6 @@ local function Walk()
 		Turn(lthigh, x_axis, 1.027544, 18.012296 * speedMult) -- delta=-34.40
 		Turn(lthigh, z_axis, -0.127417, 4.396728 * speedMult) -- delta=-8.40
 		Turn(lthigh, y_axis, 0.091642, 0.171125 * speedMult) -- delta=0.33
-		Turn(nanos, x_axis, -0.231348, 4.494519 * speedMult) -- delta=8.58
 		Move(pelvis, y_axis, -1.180000, 21.899999 * speedMult) -- delta=-0.73
 		Turn(pelvis, x_axis, 0.087266, 1.308997 * speedMult) -- delta=-2.50
 		Turn(pelvis, y_axis, -0.130900, 3.926991 * speedMult) -- delta=-7.50
@@ -244,10 +231,6 @@ local function Walk()
 		Turn(rthigh, x_axis, -0.898402, 16.454989 * speedMult) -- delta=-31.43
 		Turn(rthigh, z_axis, -0.012550, 25.663462 * speedMult) -- delta=-49.01
 		Turn(rthigh, y_axis, 0.143999, 31.940272 * speedMult) -- delta=61.00-- WARNING: possible gimbal lock issue detected in frame 28 bone rthigh
-
-		Turn(turret, x_axis, -0.103430, 1.394556 * speedMult) -- delta=2.66
-		Turn(turret, z_axis, -0.043722, 1.311669 * speedMult) -- delta=-2.51
-		Turn(turret, y_axis, 0.019748, 0.592429 * speedMult) -- delta=1.13
 		Sleep(sleepTime)
 		-- Frame:32
 		Turn(lfoot, x_axis, 0.204854, 24.604069 * speedMult) -- delta=-46.99
@@ -257,7 +240,6 @@ local function Walk()
 		Turn(lthigh, x_axis, 0.477281, 16.507893 * speedMult) -- delta=31.53
 		Turn(lthigh, z_axis, -0.096186, 0.936936 * speedMult) -- delta=1.79
 		Turn(lthigh, y_axis, -0.044768, 4.092329 * speedMult) -- delta=-7.82
-		Turn(nanos, x_axis, -0.081531, 4.494519 * speedMult) -- delta=-8.58
 		Move(pelvis, y_axis, -0.450000, 21.899999 * speedMult) -- delta=0.73
 		Turn(pelvis, x_axis, 0.043633, 1.308997 * speedMult) -- delta=2.50
 		Turn(pelvis, y_axis, -0.000000, 3.926991 * speedMult) -- delta=7.50
@@ -268,9 +250,6 @@ local function Walk()
 		Turn(rthigh, x_axis, 0.082365, 29.423007 * speedMult) -- delta=-56.19
 		Turn(rthigh, z_axis, -0.001818, 0.321968 * speedMult) -- delta=0.61
 		Turn(rthigh, y_axis, 0.000412, 4.307626 * speedMult) -- delta=-8.23
-		Turn(turret, x_axis, -0.056945, 1.394556 * speedMult) -- delta=-2.66
-		Turn(turret, z_axis, 0.000000, 1.311669 * speedMult) -- delta=2.51
-		Turn(turret, y_axis, 0.000000, 0.592429 * speedMult) -- delta=-1.13
 		Sleep(sleepTime)
 		-- Frame:36
 		Turn(lfoot, x_axis, 0.386673, 5.454564 * speedMult) -- delta=-10.42
@@ -280,7 +259,6 @@ local function Walk()
 		Turn(lthigh, x_axis, -0.549209, 30.794722 * speedMult) -- delta=58.81
 		Turn(lthigh, z_axis, -0.007471, 2.661446 * speedMult) -- delta=5.08
 		Turn(lthigh, y_axis, -0.051735, 0.209008 * speedMult) -- delta=-0.40
-		Turn(nanos, x_axis, 0.000000, 2.445934 * speedMult) -- delta=-4.67
 		Move(pelvis, y_axis, 0.000000, 13.500000 * speedMult) -- delta=0.45
 		Turn(pelvis, x_axis, -0.000000, 1.308997 * speedMult) -- delta=2.50
 		Turn(rfoot, x_axis, -0.665976, 19.401357 * speedMult) -- delta=37.05
@@ -290,7 +268,6 @@ local function Walk()
 		Turn(rthigh, x_axis, 0.367865, 8.565003 * speedMult) -- delta=-16.36
 		Turn(rthigh, z_axis, -0.013571, 0.352596 * speedMult) -- delta=-0.67
 		Turn(rthigh, y_axis, 0.002489, 0.062312 * speedMult) -- delta=0.12
-		Turn(turret, x_axis, -0.000000, 1.708342 * speedMult) -- delta=-3.26
 		Sleep(sleepTime)
 	end
 end
@@ -309,7 +286,6 @@ local function StopWalking()
 	Turn(lthigh, x_axis, 0.000000, 76.986806 * speedMult)
 	Turn(lthigh, y_axis, 0.000000, 37.768536 * speedMult)
 	Turn(lthigh, z_axis, 0.000000, 35.968458 * speedMult)
-	Turn(nanos, x_axis, 0.000000, 12.865521 * speedMult)
 	Turn(pelvis, x_axis, 0.000000, 3.272493 * speedMult)
 	Turn(pelvis, y_axis, 0.000000, 9.817477 * speedMult)
 	Turn(rfoot, x_axis, 0.000000, 61.523507 * speedMult)
@@ -319,9 +295,6 @@ local function StopWalking()
 	Turn(rthigh, x_axis, 0.000000, 83.526541 * speedMult)
 	Turn(rthigh, y_axis, 0.000000, 79.850681 * speedMult)
 	Turn(rthigh, z_axis, 0.000000, 64.158654 * speedMult)
-	Turn(turret, x_axis, 0.000000, 5.282213 * speedMult)
-	Turn(turret, y_axis, 0.000000, 1.481072 * speedMult)
-	Turn(turret, z_axis, 0.000000, 3.279172 * speedMult)
 end
 
 function script.StartMoving()

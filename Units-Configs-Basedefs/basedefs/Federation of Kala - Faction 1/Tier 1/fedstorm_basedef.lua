@@ -7,7 +7,7 @@ unitDef                    = {
 	acceleration                 = 1,
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 50,
+	buildCostMetal               = 100,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedstorm.png]],
@@ -46,7 +46,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallexplosiongenericwhite",
 	side                         = "CORE",
-	sightDistance                = 450,
+	sightDistance                = 500,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
@@ -91,9 +91,8 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		isupgraded			  	 = isUpgraded,
-		unittype				  = "mobile",
-		unitrole				 = "scout",
+		unittype				 = "mobile",
+		unitrole				 = "mbt",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -125,8 +124,8 @@ weaponDefs                 = {
 		
 		minintensity              = "1",
 		name                      = "Laser",
-		range                     = 450,
-		reloadtime                = 0.5,
+		range                     = 500,
+		reloadtime                = 1.2,
 		WeaponType                = "LaserCannon",
 		rgbColor                  = "0 0.5 1",
 		rgbColor2                 = "1 1 1",
@@ -140,10 +139,9 @@ weaponDefs                 = {
 		turret                    = true,
 		weaponVelocity            = 3000,
 		customparams              = {
-			damagetype		      = "default",
 		}, 
 		damage                    = {
-			default               = 17,
+			default               = 45,
 		},
 	},
 }

@@ -1,9 +1,5 @@
-pelvis,turret, nanos, nanopoint1, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'nanos', 'nanopoint1', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
-
+pelvis, turret, barrel1, firepoint1, firepoint2, firepoint3, firepoint4, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'firepoint2', 'firepoint3', 'firepoint4', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
 local SIG_AIM = {}
-
-local nanoPieces = {[0] = nanopoint1}
-local SIG_AIM = 2
 
 -- state variables
 isMoving = "isMoving"
@@ -11,9 +7,6 @@ terrainType = "terrainType"
 
 function script.Create()
 	StartThread(common.SmokeUnit, {pelvis, turret, barrel1})
-	StartThread(BuildFX)
-	building = false
-	Spring.SetUnitNanoPieces(unitID, nanoPieces)
 end
 
 common = include("headers/common_includes_lus.lua")
@@ -22,44 +15,49 @@ function thrust()
 	common.DirtTrail()
 end
 
-function BuildFX()
-	while(building == true) do
-		EmitSfx (nanopoint1, 1024)
-		Sleep(550)
-	end
-end
-
-function RestoreAfterDelay()
-	SetSignalMask(SIG_AIM)
-	if building == false then
-		Sleep(2000)
-	end
+local function RestoreAfterDelay()
+	Sleep(2000)
+	Turn(turret, y_axis, 0, 5)
+	Turn(barrel1, x_axis, 0, 5)
 end		
 
-function script.StopBuilding()
-    SetUnitValue(COB.INBUILDSTANCE, 0)
-	building = false
-	StartThread(RestoreAfterDelay)
+function script.AimFromWeapon(weaponID)
+	--Spring.Echo("AimFromWeapon: FireWeapon")
+	return turret
+end
+
+local firepoints = {firepoint1, firepoint2, firepoint3, firepoint4}
+local currentFirepoint = 1
+
+function script.QueryWeapon(weaponID)
+	return firepoints[currentFirepoint]
+end
+
+function script.FireWeapon(weaponID)
+	currentFirepoint = 5 - currentFirepoint
+	EmitSfx (firepoints[currentFirepoint], 1024)
+end
+
+function script.AimWeapon(weaponID, heading, pitch)
 	Signal(SIG_AIM)
 	SetSignalMask(SIG_AIM)
-end
-
-function script.StartBuilding(heading, pitch)
-	Signal(SIG_AIM)
-    SetUnitValue(COB.INBUILDSTANCE, 1)
-	building = true
-	StartThread(BuildFX)
-end
-
-function script.QueryNanoPiece()
-	local nano = nanoPieces[nanoNum]
-	return nano
+	Turn(turret, y_axis, heading, 10)
+	Turn(barrel1, x_axis, -pitch, 10)
+	WaitForTurn(turret, y_axis)
+	WaitForTurn(barrel1, x_axis)
+	StartThread(RestoreAfterDelay)
+	--Spring.Echo("AimWeapon: FireWeapon")
+	return true
 end
 
 function script.Killed()
-		Explode(nanos, SFX.EXPLODE_ON_HIT)
+		Explode(barrel1, SFX.EXPLODE_ON_HIT)
 		Explode(turret, SFX.EXPLODE_ON_HIT)
 		Explode(pelvis, SFX.EXPLODE_ON_HIT)
+		Explode(rthigh, SFX.EXPLODE_ON_HIT)
+		Explode(rleg, SFX.EXPLODE_ON_HIT)
+		Explode(lthigh, SFX.EXPLODE_ON_HIT)
+		Explode(lleg, SFX.EXPLODE_ON_HIT)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end
 
