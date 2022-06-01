@@ -136,9 +136,9 @@ local weaponDefs                  = {
 		model                    = "missilesmallvlaunch.s3o",
 		edgeeffectiveness	      = 1,
 		energypershot             = 0,
-		range                     =400,
-		reloadtime                =8,
-		weaponvelocity            =2500,
+		range                     = 100,
+		reloadtime                = 8,
+		weaponvelocity            = 2500,
 		
 		
 		smokeTrail               = false,
