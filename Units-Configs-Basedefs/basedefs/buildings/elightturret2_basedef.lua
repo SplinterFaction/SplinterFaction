@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 75,
+	buildCostMetal                = 160,
 	builder                       = false,
 	buildTime                     = 5,
 	buildpic					  = "elightturret2.png",
@@ -35,7 +35,7 @@ unitDef                     = {
 	repairable		              = false,
 	selfDestructAs                = "mediumBuildingExplosionGeneric",
 	side                          = "CORE",
-	sightDistance                 = 650,
+	sightDistance                 = 630,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -104,7 +104,7 @@ weaponDefs                  = {
 		
 		minintensity             = "1",
 		name                     = "Laser",
-		range                    = 650,
+		range                    = 630,
 		reloadtime               = 0.5,
 		WeaponType               = "LaserCannon",
 		rgbColor               = "0 0 1",
@@ -119,13 +119,9 @@ weaponDefs                  = {
 		weaponVelocity           = 2000,
 		waterweapon				 = true,
 		customparams              = {
-			isupgraded		  	 = isUpgraded,
-			damagetype		      = "turretantilight",
-			unittype			 = "turret",
-			effectedByunitHealthModifier = true,
 		},      
 		damage                    = {
-			default               = 50,
+			default               = 60,
 		},
 	},
 }
