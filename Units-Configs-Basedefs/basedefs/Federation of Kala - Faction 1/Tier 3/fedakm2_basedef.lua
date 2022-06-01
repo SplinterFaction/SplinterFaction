@@ -89,8 +89,8 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		isupgraded			  	 = isUpgraded,
 		unittype				  = "mobile",
+		unitrole				 = "mbt",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -137,7 +137,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 1000,
 		customparams             = {
-			damagetype		     = "antilight",
+
 		},      
 		damage                   = {
 			default              = 25,

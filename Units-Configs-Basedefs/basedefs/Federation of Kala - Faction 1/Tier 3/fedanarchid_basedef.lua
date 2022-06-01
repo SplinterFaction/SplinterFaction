@@ -102,7 +102,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				  = "mobile",
-		isupgraded           	 = isUpgraded,
+		unitrole				 = "artillery",
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		armortype                = armortype,

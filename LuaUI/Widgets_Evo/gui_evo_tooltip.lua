@@ -432,7 +432,8 @@ function GetTooltipWeaponData(ud)
 				local AOE = weap.damageAreaOfEffect
 				
 
-                NewTooltip = NewTooltip.."\n\255\255\255\255"..weap.description.."    "..actionStr.." (+50% vs "..damagetype..")     AoE: "..AOE.."(r)     Range: "..FormatNbr(range,2)
+                -- NewTooltip = NewTooltip.."\n\255\255\255\255"..weap.description.."    "..actionStr.." (+50% vs "..damagetype..")     AoE: "..AOE.."(r)     Range: "..FormatNbr(range,2)
+				NewTooltip = NewTooltip.."\n\255\255\255\255"..weap.description.."    AoE: "..AOE.."(r)     Range: "..FormatNbr(range,2)
 
                 if energyPerSecond  > 0 then
                    NewTooltip = NewTooltip.."     \255\255\255\0E/s: "..FormatNbr(energyPerSecond,1)

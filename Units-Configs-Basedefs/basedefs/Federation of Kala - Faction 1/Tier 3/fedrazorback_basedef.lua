@@ -90,8 +90,8 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		isupgraded			  	 = isUpgraded,
 		unittype				  = "mobile",
+		unitrole				 = "directfiresupport",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -138,8 +138,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 800,
 		customparams             = {
-			damagetype		     = "antiarmored",
-			single_hit		 	 = true,
+
 		},      
 		damage                   = {
 			default              = 25,

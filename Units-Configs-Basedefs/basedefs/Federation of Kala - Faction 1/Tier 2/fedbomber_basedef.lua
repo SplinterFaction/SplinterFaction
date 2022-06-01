@@ -145,8 +145,6 @@ weaponDefs                 = {
 		flightTime               = 10,
 		weaponVelocity           = 800,
 		customparams             = {
-			isupgraded			 = isUpgraded,
-			damagetype		     = "antibuilding",  
 			nofriendlyfire	     = 1,
 		},
 		damage                   = {
@@ -189,8 +187,6 @@ weaponDefs                 = {
 		turret                   = false,
 		weaponVelocity           = 150,
 		customparams             = {
-			damagetype		     = "antibuilding",
-			isupgraded           = isUpgraded,
 			nofriendlyfire	     = true,
 		}, 
 		damage                   = {

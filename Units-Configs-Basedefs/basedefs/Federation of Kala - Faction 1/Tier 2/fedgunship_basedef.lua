@@ -140,8 +140,7 @@ weaponDefs                 = {
 		flightTime               = 2.5,
 		weaponVelocity           = 1500,
 		customparams             = {
-			isupgraded           = isUpgraded,
-			damagetype		     = "antilightarmored",  
+
 		},      
 		damage                   = {
 			default              = 150,
