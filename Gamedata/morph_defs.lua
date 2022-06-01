@@ -107,68 +107,68 @@ local timeToBuild_eflakturret = energyCost_eflakturret / 10
 
 --Fed Commander Upgrades
 
-local energyCost_fedcommander_up1  = 60 * 10
-local timeToBuild_fedcommander_up1 = energyCost_fedcommander_up1 / 10
+local energyCost_fedcommander_up1  = 60 * 25
+local timeToBuild_fedcommander_up1 = energyCost_fedcommander_up1 / 25
 
-local energyCost_fedcommander_up2  = 180 * 25
-local timeToBuild_fedcommander_up2 = energyCost_fedcommander_up2 / 25
+local energyCost_fedcommander_up2  = 180 * 50
+local timeToBuild_fedcommander_up2 = energyCost_fedcommander_up2 / 50
 
-local energyCost_fedcommander_up3  = 300 * 50
-local timeToBuild_fedcommander_up3 = energyCost_fedcommander_up3 / 50
+local energyCost_fedcommander_up3  = 300 * 100
+local timeToBuild_fedcommander_up3 = energyCost_fedcommander_up3 / 100
 
-local energyCost_fedcommander_up4  = 480 * 100
-local timeToBuild_fedcommander_up4 = energyCost_fedcommander_up4 / 100
+local energyCost_fedcommander_up4  = 480 * 200
+local timeToBuild_fedcommander_up4 = energyCost_fedcommander_up4 / 200
 
 --Loz Commander Upgrades
 
-local energyCost_lozcommander_up1  = 60 * 10
-local timeToBuild_lozcommander_up1 = energyCost_lozcommander_up1 / 10
+local energyCost_lozcommander_up1  = 60 * 25
+local timeToBuild_lozcommander_up1 = energyCost_lozcommander_up1 / 25
 
-local energyCost_lozcommander_up2  = 180 * 25
-local timeToBuild_lozcommander_up2 = energyCost_lozcommander_up2 / 25
+local energyCost_lozcommander_up2  = 180 * 50
+local timeToBuild_lozcommander_up2 = energyCost_lozcommander_up2 / 50
 
-local energyCost_lozcommander_up3  = 300 * 50
-local timeToBuild_lozcommander_up3 = energyCost_lozcommander_up3 / 50
+local energyCost_lozcommander_up3  = 300 * 100
+local timeToBuild_lozcommander_up3 = energyCost_lozcommander_up3 / 100
 
-local energyCost_lozcommander_up4  = 480 * 100
-local timeToBuild_lozcommander_up4 = energyCost_lozcommander_up4 / 100
+local energyCost_lozcommander_up4  = 480 * 200
+local timeToBuild_lozcommander_up4 = energyCost_lozcommander_up4 / 200
 
 --
 
 --Fed Engineer Upgrades
 
-local energyCost_fedengineer_up1  = 48 * 10
-local timeToBuild_fedengineer_up1 = energyCost_fedengineer_up1 / 10
+local energyCost_fedengineer_up1  = 48 * 25
+local timeToBuild_fedengineer_up1 = energyCost_fedengineer_up1 / 25
 
-local energyCost_fedengineer_up2  = 76 * 25
-local timeToBuild_fedengineer_up2 = energyCost_fedengineer_up2 / 25
+local energyCost_fedengineer_up2  = 76 * 50
+local timeToBuild_fedengineer_up2 = energyCost_fedengineer_up2 / 50
 
-local energyCost_fedengineer_up3  = 154 * 50
-local timeToBuild_fedengineer_up3 = energyCost_fedengineer_up3 / 50
+local energyCost_fedengineer_up3  = 154 * 100
+local timeToBuild_fedengineer_up3 = energyCost_fedengineer_up3 / 100
 
 --
 
 --Loz Engineer Upgrades
 
-local energyCost_lozengineer_up1  = 48 * 10
-local timeToBuild_lozengineer_up1 = energyCost_lozengineer_up1 / 10
+local energyCost_lozengineer_up1  = 48 * 25
+local timeToBuild_lozengineer_up1 = energyCost_lozengineer_up1 / 25
 
-local energyCost_lozengineer_up2  = 76 * 25
-local timeToBuild_lozengineer_up2 = energyCost_lozengineer_up2 / 25
+local energyCost_lozengineer_up2  = 76 * 50
+local timeToBuild_lozengineer_up2 = energyCost_lozengineer_up2 / 50
 
-local energyCost_lozengineer_up3  = 154 * 50
-local timeToBuild_lozengineer_up3 = energyCost_lozengineer_up3 / 50
+local energyCost_lozengineer_up3  = 154 * 100
+local timeToBuild_lozengineer_up3 = energyCost_lozengineer_up3 / 100
 
 --
 
-local energyCost_emetalextractor_up1  = 60 * 10
-local timeToBuild_emetalextractor_up1 = energyCost_emetalextractor_up1 / 10
+local energyCost_emetalextractor_up1  = 60 * 25
+local timeToBuild_emetalextractor_up1 = energyCost_emetalextractor_up1 / 25
 
-local energyCost_emetalextractor_up2  = 300 * 25
-local timeToBuild_emetalextractor_up2 = energyCost_emetalextractor_up2 / 25
+local energyCost_emetalextractor_up2  = 300 * 50
+local timeToBuild_emetalextractor_up2 = energyCost_emetalextractor_up2 / 50
 
-local energyCost_emetalextractor_up3  = 480 * 50
-local timeToBuild_emetalextractor_up3 = energyCost_emetalextractor_up3 / 50
+local energyCost_emetalextractor_up3  = 480 * 100
+local timeToBuild_emetalextractor_up3 = energyCost_emetalextractor_up3 / 100
 
 local energyCost_zmex_up1  = 1200
 local timeToBuild_zmex_up1 = energyCost_zmex_up1 * 0.10
