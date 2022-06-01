@@ -7,6 +7,7 @@ unitName = [[fedcommander_up4]]
 
 humanname = [[Federation of Kala BattleMech Command Unit]]
 buildpicture = [[ecommander.png]]
+buildcostmetal = 3500
 
 armortype = [[armored]]
 supplygiven = [[0]]
