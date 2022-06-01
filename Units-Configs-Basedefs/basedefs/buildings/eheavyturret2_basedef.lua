@@ -122,9 +122,7 @@ weaponDefs                  = {
 		weaponVelocity            = 3000,
 		waterweapon				 = true,
 		customparams              = {
-			isupgraded		  	 = isUpgraded,
-			damagetype		      = "turretantilightarmored",
-			effectedByunitHealthModifier = true,
+
 		}, 
 		damage                    = {
 			default               = 125,

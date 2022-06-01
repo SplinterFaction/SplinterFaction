@@ -109,9 +109,7 @@ weaponDefs                  = {
 		turret                   = true,
 		weaponVelocity           = 1000,
 		customparams             = {
-			damagetype		     = "antibuilding", 
-			isupgraded		  	 = isUpgraded,
-			--effectedByunitHealthModifier = true,
+
 		},  
 		damage                   = {
 			default              = 500,
@@ -148,9 +146,7 @@ weaponDefs                  = {
 		turret                   = true,
 		weaponVelocity           = 1000,
 		customparams             = {
-			damagetype		     = "antibuilding", 
-			isupgraded		  	 = isUpgraded,
-			--effectedByunitHealthModifier = true,
+
 		},  
 		damage                   = {
 			default              = 500,

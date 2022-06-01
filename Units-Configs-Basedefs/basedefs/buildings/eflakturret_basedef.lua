@@ -123,9 +123,7 @@ weaponDefs                  = {
 		turret                   = true,
 		weaponVelocity           = 3000,
 		customparams             = {
-			damagetype		     = "antiair",
-			isupgraded           = isUpgraded,
-			effectedByunitHealthModifier = true,
+
 		}, 
 		damage                   = {
 			default              = 75,

@@ -126,9 +126,7 @@ weaponDefs                  = {
 		weaponVelocity           = 1000,
 		waterweapon		         = true,
 		customparams              = {
-			isupgraded		  	 = isUpgraded,
-			damagetype		      = "antiair",
-			effectedByunitHealthModifier = true,
+
 		},      
 		damage                    = {
 			default               = 30,
