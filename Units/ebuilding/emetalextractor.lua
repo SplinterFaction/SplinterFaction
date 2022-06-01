@@ -7,7 +7,7 @@ unitName = [[emetalextractor]]
 
 ateranMexCost = Spring.GetModOptions().metalextractorcostateran or 50
 
-metalMultiplier = 1
+metalMultiplier = 2
 
 buildCostMetal = ateranMexCost
 energyUse = 0

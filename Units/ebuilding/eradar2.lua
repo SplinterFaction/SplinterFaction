@@ -9,12 +9,12 @@ buildCostMetal = 25
 humanName = [[Radar Tower]]
 objectName = [[eradar3_small.s3o]]
 
-radarDistance = 1000
+radarDistance = 1750
 radarEmitHeight = 64
 
-sightDistance = 750
-sonarDistance = 750
-seismicDistance = 750
+sightDistance = 1750
+sonarDistance = 1750
+seismicDistance = 1750
 
 tech = [[tech0]]
 armortype = [[building]]

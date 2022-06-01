@@ -5,7 +5,7 @@ unitName = [[emetalextractor_up1]]
 
 --------------------------------------------------------------------------------
 
-metalMultiplier = 2
+metalMultiplier = 4
 
 buildCostMetal = 150
 energyUse = 25

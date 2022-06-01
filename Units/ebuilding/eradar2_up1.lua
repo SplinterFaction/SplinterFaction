@@ -12,9 +12,9 @@ objectName = [[eradar3_large.s3o]]
 radarDistance = 3000
 radarEmitHeight = 128
 
-sightDistance = 1500
-sonarDistance = 1500
-seismicDistance = 1500
+sightDistance = 3000
+sonarDistance = 3000
+seismicDistance = 3000
 
 tech = [[tech2]]
 armortype = [[building]]
