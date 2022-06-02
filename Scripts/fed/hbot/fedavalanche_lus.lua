@@ -1,4 +1,4 @@
-pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, laserbarrel1, laserfirepoint1, laserbarrel2, laserfirepoint2, missilebarrel, missilefirepoint1 = piece('pelvis', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot', 'turret', 'laserbarrel1', 'laserfirepoint1', 'laserbarrel2', 'laserfirepoint2', 'missilebarrel', 'missilefirepoint1' )
+pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, cannonbarrel1, cannonfirepoint1, cannonbarrel2, cannonfirepoint2, missilebarrel, missilefirepoint1 = piece('pelvis', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot', 'turret', 'cannonbarrel1', 'cannonfirepoint1', 'cannonbarrel2', 'cannonfirepoint2', 'missilebarrel', 'missilefirepoint1' )
 local SIG_AIM = {}
 local SIG_AIM2 = {}
 local SIG_AIM3 = {}
@@ -21,8 +21,8 @@ function RestoreAfterDelay()
     Sleep(2000)
     -- Reset Turret and Barrels
     Turn(turret, y_axis, 0, 1)
-    Turn(laserbarrel1, x_axis, 0, 1)
-    Turn(laserbarrel2, x_axis, 0, 1)
+    Turn(cannonbarrel1, x_axis, 0, 1)
+    Turn(cannonbarrel2, x_axis, 0, 1)
 end
 
 function script.AimFromWeapon(WeaponID)
@@ -32,9 +32,9 @@ end
 
 function script.QueryWeapon(WeaponID)
     if WeaponID == 1 then
-        return laserfirepoint1
+        return cannonfirepoint1
     elseif WeaponID == 2 then
-        return laserfirepoint2
+        return cannonfirepoint2
     else
         return missilefirepoint1
     end
@@ -42,9 +42,9 @@ end
 
 function script.FireWeapon(WeaponID)
     if WeaponID == 1 then
-        EmitSfx (laserfirepoint1, 1024)
+        EmitSfx (cannonfirepoint1, 1024)
     elseif WeaponID == 2 then
-        EmitSfx (laserfirepoint2, 1024)
+        EmitSfx (cannonfirepoint2, 1024)
     else
         EmitSfx (missilefirepoint1, 1024)
     end
@@ -56,8 +56,8 @@ function script.AimWeapon(WeaponID, heading, pitch)
         SetSignalMask(SIG_AIM)
         Turn(turret, y_axis, heading, 10)
         WaitForTurn(turret, y_axis)
-        Turn(laserbarrel1, x_axis, -pitch, 10)
-        WaitForTurn(laserbarrel1, x_axis)
+        Turn(cannonbarrel1, x_axis, -pitch, 10)
+        WaitForTurn(cannonbarrel1, x_axis)
         StartThread(RestoreAfterDelay)
         --Spring.Echo("AimWeapon: FireWeapon")
         return true
@@ -66,8 +66,8 @@ function script.AimWeapon(WeaponID, heading, pitch)
         SetSignalMask(SIG_AIM2)
         Turn(turret, y_axis, heading, 10)
         WaitForTurn(turret, y_axis)
-        Turn(laserbarrel2, x_axis, -pitch, 10)
-        WaitForTurn(laserbarrel2, x_axis)
+        Turn(cannonbarrel2, x_axis, -pitch, 10)
+        WaitForTurn(cannonbarrel2, x_axis)
         return true
     else
         Signal(SIG_AIM3)
@@ -78,8 +78,8 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-    Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
-    Explode(laserbarrel2, SFX.EXPLODE_ON_HIT)
+    Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT)
+    Explode(cannonbarrel2, SFX.EXPLODE_ON_HIT)
     Explode(missilebarrel, SFX.EXPLODE_ON_HIT)
     Explode(turret, SFX.EXPLODE_ON_HIT)
     Explode(pelvis, SFX.EXPLODE_ON_HIT)

@@ -136,7 +136,6 @@ weaponDefs                 = {
 		flightTime               = 2.5,
 		weaponVelocity           = 3000,
 		customparams             = {
-			damagetype		     = "default",
 		},     
 		damage                   = {
 			default              = 17,

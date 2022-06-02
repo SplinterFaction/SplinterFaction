@@ -1,4 +1,4 @@
-pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, laserbarrel, laserfirepoint1, rocketbarrel, rocketfirepoint1 = piece('pelvis', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot', 'turret', 'laserbarrel', 'laserfirepoint1', 'rocketbarrel', 'rocketfirepoint1')
+pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, cannonbarrel, cannonfirepoint1, rocketbarrel, rocketfirepoint1 = piece('pelvis', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot', 'turret', 'cannonbarrel', 'cannonfirepoint1', 'rocketbarrel', 'rocketfirepoint1')
 local SIG_AIM = {}
 local SIG_AIM2 = {}
 
@@ -20,7 +20,7 @@ function RestoreAfterDelay()
     Sleep(2000)
     -- Reset Turret and Barrels
     Turn(turret, y_axis, 0, 1)
-    Turn(laserbarrel, x_axis, 0, 1)
+    Turn(cannonbarrel, x_axis, 0, 1)
     Turn(rocketbarrel, x_axis, 0, 1)
 end
 
@@ -31,7 +31,7 @@ end
 
 function script.QueryWeapon(WeaponID)
     if WeaponID == 1 then
-        return laserfirepoint1
+        return cannonfirepoint1
     else
         return rocketfirepoint1
     end
@@ -39,7 +39,7 @@ end
 
 function script.FireWeapon(WeaponID)
     if WeaponID == 1 then
-        EmitSfx (laserfirepoint1, 1024)
+        EmitSfx (cannonfirepoint1, 1024)
     else
         EmitSfx (rocketfirepoint1, 1024)
     end
@@ -51,8 +51,8 @@ function script.AimWeapon(WeaponID, heading, pitch)
         SetSignalMask(SIG_AIM)
         Turn(turret, y_axis, heading, 10)
         WaitForTurn(turret, y_axis)
-        Turn(laserbarrel, x_axis, -pitch, 10)
-        WaitForTurn(laserbarrel, x_axis)
+        Turn(cannonbarrel, x_axis, -pitch, 10)
+        WaitForTurn(cannonbarrel, x_axis)
         StartThread(RestoreAfterDelay)
         --Spring.Echo("AimWeapon: FireWeapon")
         return true
@@ -68,7 +68,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-    Explode(laserbarrel, SFX.EXPLODE_ON_HIT)
+    Explode(cannonbarrel, SFX.EXPLODE_ON_HIT)
     Explode(rocketbarrel, SFX.EXPLODE_ON_HIT)
     Explode(turret, SFX.EXPLODE_ON_HIT)
     Explode(pelvis, SFX.EXPLODE_ON_HIT)

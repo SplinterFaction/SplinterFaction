@@ -145,7 +145,6 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 600,
 		customparams             = {
-			damagetype		     = "default",
 		},      
 		damage                   = {
 			default              = 72,
@@ -185,8 +184,6 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 800,
 		customparams             = {
-			damagetype		     = "default",
-			single_hit		 	 = true,
 		},
 		damage                   = {
 			default              = 4,
