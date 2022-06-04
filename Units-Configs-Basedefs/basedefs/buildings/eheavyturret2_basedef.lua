@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 8192,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 150,
+	buildCostMetal                = 410,
 	builder                       = false,
 	buildTime                     = 5,
 	buildpic					  = "eheavyturret2.png",
@@ -16,8 +16,8 @@ unitDef                     = {
 	energyStorage                 = 0,
 	energyUse                     = 0,
 	explodeAs                     = "largeBuildingExplosionGenericRed",
-	footprintX                    = 3,
-	footprintZ                    = 3,
+	footprintX                    = 4,
+	footprintZ                    = 4,
 	floater			              = true,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
@@ -41,7 +41,7 @@ unitDef                     = {
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
-	yardMap                       = "oooooo oooooo oooooo oooooo oooooo oooooo",
+	yardMap                       = "oooo oooo oooo oooo oooo oooo oooo oooo oooo",
 
 	sfxtypes                      = { 
 		pieceExplosionGenerators  = { 
@@ -90,7 +90,7 @@ unitDef                     = {
 
 weaponDefs                  = {
 	eheavyturretweapon2           = {
-		
+		areaofeffect			  = 25,
 		avoidFeature              = false,
 		avoidFriendly             = false,		
 		collideFeature            = false,
@@ -106,7 +106,7 @@ weaponDefs                  = {
 		interceptedByShieldType   = 4,	
 		minintensity              = "1",
 		name                      = "Laser",
-		range                     = 750,
+		range                     = 1200,
 		reloadtime                = 2,
 		WeaponType                = "LaserCannon",
 		rgbColor                  = "1 0.5 0",
@@ -125,7 +125,7 @@ weaponDefs                  = {
 
 		}, 
 		damage                    = {
-			default               = 125,
+			default               = 200,
 		},
 	},
 }

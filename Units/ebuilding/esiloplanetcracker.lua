@@ -18,7 +18,7 @@ weapon1 = [[planetcracker]]
 footprintx = 32
 footprintz = 32
 
-buildCostMetal = 10000
+buildCostMetal = 100000
 objectname = [[esiloplanetcracker.s3o]]
 script = [[esilo2.cob]]
 deathexplosion = [[planetcracker]]

@@ -42,12 +42,23 @@ if gadgetHandler:IsSyncedCode() then
 				local unitName = UnitDefs[unitDefID].name
 				local unitCostMetal = UnitDefs[unitDefID].metalCost
 				local unitCostEnergy = UnitDefs[unitDefID].energyCost
+				local unit = UnitDefs[unitDefID]
 				posx, posy, posz = Spring.GetUnitPosition(unitID)
 				-- Spring.Echo("[Death Spawns] Unit Name is " .. unitName)
 				local featureID = Spring.CreateFeature (partsList[math.random(1,#partsList)], posx, posy, posz, 0, unitTeam)
 				if featureID then
 					-- Spring.Echo("[Death Spawns] Unit Cost is " .. unitCostMetal)
-					Spring.SetFeatureResources(featureID, unitCostMetal * 0.25, unitCostEnergy * 0.25)
+					local featureValueMetal = unit.metalCost * 0.25
+					local featureValueEnergy = unit.energyCost * 0.25
+					local reclaimTime
+					if featureValueMetal >= featureValueEnergy then
+						reclaimTime = featureValueMetal * 0.25
+					else
+						reclaimTime = featureValueEnergy * 0.25
+					end
+					-- Spring.Echo(featureValueMetal)
+					-- Spring.Echo(featureValueEnergy)
+					Spring.SetFeatureResources(featureID, featureValueMetal, featureValueEnergy, reclaimTime, 1.0, featureValueMetal, featureValueEnergy)
 					Spring.SetFeaturePosition(featureID, posx, posy, posz,  false)
 					
 					dirx = math.random(1,100000)

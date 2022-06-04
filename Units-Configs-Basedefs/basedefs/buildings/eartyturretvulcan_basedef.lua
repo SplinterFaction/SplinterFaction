@@ -53,8 +53,7 @@ unitDef                     = {
 	weapons                       = {
 		[1]                       = {
 			def                   = weapon1,
-			badtargetcategory     = "LIGHT ARMORED VTOL",
-            --onlyTargetCategory    = "BUILDING BIO",
+			onlytargetcategory     = "BUILDING",
 		},
 	},
 	customParams                  = {
