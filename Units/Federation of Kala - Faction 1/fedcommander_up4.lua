@@ -18,7 +18,7 @@ maxdamage = 20000
 maxvelocity = 3
 workertime = 5
 
-movementclass = [[COMMANDERTANK6]]
+movementclass = [[WALKERTANK6]]
 
 objectname = [[ecommander4-battle-large.s3o]]
 script = [[ecommander4-battle.cob]]
@@ -30,7 +30,7 @@ buildlist = Shared.buildListFedt4
 
 weapon1 = [[heavybeamweapon]]
 
-VFS.Include("units-configs-basedefs/basedefs/commander_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedcommander_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

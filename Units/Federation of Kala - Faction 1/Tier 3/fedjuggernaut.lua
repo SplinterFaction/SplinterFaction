@@ -1,18 +1,18 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedakm2"
+unitName = "fedjuggernaut"
 
 --------------------------------------------------------------------------------
-humanName = [[A.K.M.2]]
+humanName = [[Juggernaut]]
 
-objectName = "fedakmk2.s3o"
-script = "fed/hbot/fedakm2_lus.lua"
+objectName = "fedjuggernaut.s3o"
+script = "/fed/hbot/fedjuggernaut_lus.lua"
 
 tech = [[tech3]]
-armortype = [[armored]]
-supply = [[6]]
+armortype = [[light]]
+supply = [[7]]
 
-VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 3/fedakm2_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 3/fedjuggernaut_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

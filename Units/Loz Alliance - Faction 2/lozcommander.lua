@@ -17,7 +17,7 @@ maxdamage = 2000
 maxvelocity = 3
 workertime = 1
 
-movementclass = [[COMMANDERTANK4]]
+movementclass = [[WALKERTANK4]]
 
 objectname = [[lozcommandtank.s3o]]
 script = [[lozcommandtank.cob]]

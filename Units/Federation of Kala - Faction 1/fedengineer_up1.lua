@@ -20,7 +20,7 @@ humanName = [[Lifter MkII]]
 
 footprintx = 2
 footprintz = 2
-movementclass = "HOVERHBOT2"
+movementclass = "WALKERTANK2"
 
 objectName = [[fedengineer_up1.s3o]]
 script = [[fedengineer_up1_lus.lua]]
