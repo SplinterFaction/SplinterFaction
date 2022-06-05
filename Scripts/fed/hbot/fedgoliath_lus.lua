@@ -1,4 +1,4 @@
-pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, gatlingbarrel1, gatlingbarrel2, gatlingfirepoint1, gatlingfirepoint2, laserbarrel1, laserbarrel2, laserfirepoint1, laserfirepoint2 = piece('pelvis', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot', 'turret', 'gatlingbarrel1', 'gatlingbarrel2', 'gatlingfirepoint1', 'gatlingfirepoint2', 'laserbarrel1', 'laserbarrel2', 'laserfirepoint1', 'laserfirepoint2')
+pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, gatlingbarrel1, gatlingbarrel2, gatlingfirepoint1, gatlingfirepoint2, cannonbarrel1, cannonbarrel2, cannonfirepoint1, cannonfirepoint2 = piece('pelvis', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot', 'turret', 'gatlingbarrel1', 'gatlingbarrel2', 'gatlingfirepoint1', 'gatlingfirepoint2', 'cannonbarrel1', 'cannonbarrel2', 'cannonfirepoint1', 'cannonfirepoint2')
 local SIG_AIM = {}
 local SIG_AIM2 = {}
 local SIG_AIM3 = {}
@@ -23,9 +23,9 @@ function RestoreAfterDelay()
     -- Reset Turret and Barrels
     Turn(turret, y_axis, 0, 1)
     Turn(gatlingbarrel1, x_axis, 0, 1)
-    Turn(laserbarrel1, x_axis, 0, 1)
+    Turn(cannonbarrel1, x_axis, 0, 1)
     Turn(gatlingbarrel2, x_axis, 0, 1)
-    Turn(laserbarrel2, x_axis, 0, 1)
+    Turn(cannonbarrel2, x_axis, 0, 1)
 end
 
 function script.AimFromWeapon(WeaponID)
@@ -37,11 +37,11 @@ function script.QueryWeapon(WeaponID)
     if WeaponID == 1 then
         return gatlingfirepoint1
     elseif WeaponID == 2 then
-        return laserfirepoint1
-    elseif WeaponID == 3 then
         return gatlingfirepoint2
+    elseif WeaponID == 3 then
+        return cannonfirepoint1
     elseif WeaponID == 4 then
-        return laserfirepoint2
+        return cannonfirepoint2
     end
 end
 
@@ -49,11 +49,11 @@ function script.FireWeapon(WeaponID)
     if WeaponID == 1 then
         EmitSfx (gatlingfirepoint1, 1024)
     elseif WeaponID == 2 then
-        EmitSfx (laserfirepoint1, 1024)
-    elseif WeaponID == 3 then
         EmitSfx (gatlingfirepoint2, 1024)
+    elseif WeaponID == 3 then
+        EmitSfx (cannonfirepoint1, 1024)
     elseif WeaponID == 4 then
-        EmitSfx (laserfirepoint2, 1024)
+        EmitSfx (cannonfirepoint2, 1024)
     end
 end
 
@@ -73,35 +73,35 @@ function script.AimWeapon(WeaponID, heading, pitch)
         SetSignalMask(SIG_AIM2)
         Turn(turret, y_axis, heading, 10)
         WaitForTurn(turret, y_axis)
-        Turn(laserbarrel1, x_axis, -pitch, 10)
-        WaitForTurn(laserbarrel1, x_axis)
+        Turn(gatlingbarrel2, x_axis, -pitch, 10)
+        WaitForTurn(gatlingbarrel2, x_axis)
+        StartThread(RestoreAfterDelay)
+        --Spring.Echo("AimWeapon: FireWeapon")
         return true
     elseif WeaponID == 3 then
         Signal(SIG_AIM3)
         SetSignalMask(SIG_AIM3)
         Turn(turret, y_axis, heading, 10)
         WaitForTurn(turret, y_axis)
-        Turn(gatlingbarrel2, x_axis, -pitch, 10)
-        WaitForTurn(gatlingbarrel2, x_axis)
-        StartThread(RestoreAfterDelay)
-        --Spring.Echo("AimWeapon: FireWeapon")
+        Turn(cannonbarrel1, x_axis, -pitch, 10)
+        WaitForTurn(cannonbarrel1, x_axis)
         return true
     elseif WeaponID == 4 then
         Signal(SIG_AIM4)
         SetSignalMask(SIG_AIM4)
         Turn(turret, y_axis, heading, 10)
         WaitForTurn(turret, y_axis)
-        Turn(laserbarrel2, x_axis, -pitch, 10)
-        WaitForTurn(laserbarrel2, x_axis)
+        Turn(cannonbarrel2, x_axis, -pitch, 10)
+        WaitForTurn(cannonbarrel2, x_axis)
         return true
     end
 end
 
 function script.Killed()
     Explode(gatlingbarrel1, SFX.EXPLODE_ON_HIT)
-    Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
+    Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT)
     Explode(gatlingbarrel2, SFX.EXPLODE_ON_HIT)
-    Explode(laserbarrel2, SFX.EXPLODE_ON_HIT)
+    Explode(cannonbarrel2, SFX.EXPLODE_ON_HIT)
     Explode(turret, SFX.EXPLODE_ON_HIT)
     Explode(pelvis, SFX.EXPLODE_ON_HIT)
     Explode(rthigh, SFX.EXPLODE_ON_HIT)
