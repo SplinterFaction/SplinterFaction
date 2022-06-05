@@ -16,7 +16,7 @@ end
 if gadgetHandler:IsSyncedCode() then return false end
 
 local n = 0
-local ATLASUNIT = UnitDefNames["ecommander"].id
+local ATLASUNIT = UnitDefNames["fedcommander"].id
 
 function gadget:DrawWorld()
     n  = n + 1

@@ -36,36 +36,19 @@ end
 
 local aiStartUnits = {
 	["fedcommander"] = {
-		"ecommanderbattleai",
-		-- "ecommanderbuildai",
-		-- "ecommandercloakai",
-		-- "ecommanderfactoryai",
-		-- "ecommandershieldai",
-		-- "ecommanderhealerai",
+		"fedcommander",
 	},
 	["lozcommander"] = {
-		"ecommanderbattleai",
-		-- "ecommanderbuildai",
-		-- "ecommandercloakai",
-		-- "ecommanderfactoryai",
-		-- "ecommandershieldai",
-		-- "ecommanderhealerai",
+		"fedcommander",
 	},
 }
 
 local factionDefComms = {
-	--[0] = "ecommander",
-	--[1] = "zarm",
-	--[2] = "xcommander",\
-	
 	[0] = "fedcommander",
 	[1] = "lozcommander",
 }
 
 local validStartComm = {
-	--[UnitDefNames["ecommander"].id] = true,
-	--[UnitDefNames["zarm"].id] = true,
-	--[UnitDefNames["xcommander"].id] = true,
 	[UnitDefNames["fedcommander"].id] = true,
 	[UnitDefNames["lozcommander"].id] = true,
 }
@@ -132,8 +115,6 @@ local function SpawnStartUnit(teamID)
 			playerFaction = "Federation of Kala"
 		elseif startUnit == "lozcommander" then
 			playerFaction = "Loz Alliance"
-		--elseif startUnit == "xcommander" then
-		--	playerFaction = "pattern"
 		elseif startUnit == nil then
 			playerFaction = "Script is Fucked"
 		else
@@ -168,16 +149,16 @@ local function SpawnStartUnit(teamID)
 			or ((z>Game.mapSizeZ/2) and "north" or "south")
 		local unitID = Spring.CreateUnit(startUnit, x, y, z, facing, teamID)
 -- Fun times
-		if startUnit == "ecommander" then
+		-- if startUnit == "ecommander" then
 			--id1=Spring.CreateUnit("eorb", x+100, y+200, z, facing, teamID)
 			--id1=Spring.CreateUnit("eorb", x-100, y-200, z, facing, teamID)
 			--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
-		end
-		if startUnit == "zarm" then
-			id1=Spring.CreateUnit("ztumor", x+100, y+200, z, facing, teamID)
-			id1=Spring.CreateUnit("ztumor", x-100, y-200, z, facing, teamID)
+		-- end
+		-- if startUnit == "zarm" then
+		--	id1=Spring.CreateUnit("ztumor", x+100, y+200, z, facing, teamID)
+		--	id1=Spring.CreateUnit("ztumor", x-100, y-200, z, facing, teamID)
 			--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
-		end
+		-- end
 	end
 
 	-- set start resources, either from mod options or custom team keys

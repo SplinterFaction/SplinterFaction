@@ -26,10 +26,6 @@ local y = 121
 local z = 122
 
 nameToKeyCode = {
-	ehbotfac = {f, b},
-	eminifac = {f, t},
-	ebasefactory = {f, h},
-	eamphibfac = {f, a},
 	eairplant = {f, p},
 	f1landfac = {f, l},
 	f2landfac = {f, l},
@@ -51,52 +47,7 @@ nameToKeyCode = {
 	eartyturret = {v, l},
 	eshieldgen = {v, a},
 	esilo = {v, s},
-	escoutdrone = {b, d},
-	ebox = {b, x},
 	ehbotengineer = {b, e},
 	fedengineer = {b, e},
 	lozengineer = {b, e},
-	eorb = {b, o},
-	ecommander = {v, o},
-
-	-- HBots
-	ehbotpeewee     = {q},
-	ehbotthud       = {w},
-	ehbotsniper     = {e},
-	ehbotrocko      = {r},
-	ehbotkarganneth = {t},
-
-	-- ATs
-	eallterrlight    = {q},
-	eallterrriot     = {w},
-	eallterrmed      = {e},
-	eallterrheavy    = {r},
-	eallterrassault  = {t},
-	eallterranarchid = {y},
-	eallterrshield   = {u},
-
-	-- Hovers
-	elighttank3  = {q},
-	eriottank2   = {w},
-	eheavytank3  = {e},
-	emissiletank = {r},
-	eartytank    = {t},
-	elacerator   = {y},
-
-	-- Amphibious
-	eamphibbuggy   = {q},
-	eamphibriot    = {w},
-	eamphibneedle  = {e},
-	eamphibmedtank = {r},
-	eamphibrock    = {t},
-	eamphibarty    = {y},
-	eamphibleveler = {u},
-
-	-- Air
-	efighter   = {q},
-	egunship2  = {w},
-	ebomber    = {e},
-	eairemp    = {r},
-	etransport = {t},
-	ekrow      = {y},
 }

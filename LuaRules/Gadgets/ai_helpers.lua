@@ -78,9 +78,9 @@ local NanoTC = {}
 local ClosestNanoTC = {}
 
 for unitDefID, defs in pairs(UnitDefs) do
-	if string.find(defs.name, "ecommander") or string.find(defs.name, "zarm") then
-		isNanoTC[unitDefID] = true
-	end
+	-- if string.find(defs.name, "ecommander") or string.find(defs.name, "zarm") then
+	--	isNanoTC[unitDefID] = true
+	-- end
 end
 
 GG.AiHelpers.NanoTC.GetClosestNanoTC = function (unitID)
@@ -143,47 +143,8 @@ end
 -----------------------
 
 local Interest = {
-	ecommander = true,
-	ecommanderbattle = true,
-	ecommanderbuild = true,
-	ecommandercloak = true,
-	ecommanderfactory = true,
-	ecommandermeteor = true,
-	ecommandershield = true,
-	ecommanderhealerai = true,
-	ecommanderbattleai = true,
-	ecommanderbuildai = true,
-	ecommandercloakai = true,
-	ecommanderfactoryai = true,
-	ecommandermeteorai = true,
-	ecommandershieldai = true,
-	eairplant = true,
-	eairplant_up1 = true,
-	eairplant_up2 = true,
-	eairplant_up3 = true,
-	eminifac = true,
-	eminifac_up1 = true,
-	eminifac_up2 = true,
-	eminifac_up3 = true,
-	eamphibfac = true,
-	eamphibfac_up1 = true,
-	eamphibfac_up2 = true,
-	eamphibfac_up3 = true,
-	ehbotfac = true,
-	ehbotfac_up1 = true,
-	ehbotfac_up2 = true,
-	ehbotfac_up3 = true,
-	efusion2 = true,
-	esilo = true,
-	etech1 = true,
-	etech2 = true,
-	etech3 = true,
-	eartyturret = true,
-	eartyturret_up1 = true,
-	eartyturret_up2 = true,
-	eartyturret_up3 = true,
-	ekmar = true,
-	zarm = true,
+	fedcommander = true,
+	lozcommander = true,
 }
 
 GG.AiHelpers.TargetsOfInterest = {}

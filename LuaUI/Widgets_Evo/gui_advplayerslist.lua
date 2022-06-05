@@ -264,11 +264,11 @@ local playerReadyState = {}
 local numberOfSpecs = 0
 
 --To determine faction at start
-local sideOneDefID = UnitDefNames.ecommander.id
-local sideTwoDefID = UnitDefNames.ecommander.id
+local sideOneDefID = UnitDefNames.fedcommander.id
+local sideTwoDefID = UnitDefNames.lozcommander.id
 
-local teamSideOne = "evorts"
-local teamSideTwo = "evorts"
+local teamSideOne = "Federation of Kala"
+local teamSideTwo = "Loz Alliance"
 
 --Name for absent/resigned players
 local absentName = " --- "
@@ -1172,7 +1172,7 @@ function SetSidePics()
 			if startunit == sideOneDefID then 
 				teamSide = teamSideOne
 			end
-			if startunit == sideOneDefID then
+			if startunit == sideTwoDefID then
 				teamSide = teamSideTwo
 			end
 		else

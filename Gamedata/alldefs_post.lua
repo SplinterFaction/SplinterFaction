@@ -247,6 +247,14 @@ function UnitDef_Post(name, uDef)
 	-- I'm using this to save myself a boatload of time
 	uDef.usePieceCollisionVolumes = false
 
+	if uDef.turnrate ~= nil then
+		-- Spring.Echo(uDef.name)
+		-- Spring.Echo(uDef.turnrate)
+		uDef.acceleration = 60000
+		uDef.turnrate = 2500
+		uDef.turninplaceanglelimit = 5
+	end
+
 end
 
 --------------------------------------------------------------------------------
