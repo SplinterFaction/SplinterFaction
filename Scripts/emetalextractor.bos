@@ -3,7 +3,7 @@
 #include "sfxtype.h"
 #include "exptype.h"
 
-piece  base, pivotpoint, sfxpoint1, armleft, armright, armfront, armrear;
+piece  base, pivotpoint, sfxpoint1, armleft, armright, armfront, armrear,ball, tech1ring, tech2ring, tech3ring;
 
 static-var  Static_Var_1, Static_Var_2, Static_Var_3, statechg_DesiredState, statechg_StateChanging, ball1state, ball2state, ball3state, ball4state, ballstate;
 
@@ -126,7 +126,7 @@ fx2()
 
 Create()
 {
-	start-script fx();
+//	start-script fx();
 	start-script fx2();
 	Static_Var_1 = 0;
 	Static_Var_2 = 75;
@@ -134,6 +134,15 @@ Create()
 	turn sfxpoint1 to x-axis <-90> now;
 	call-script InitState();
 	start-script SmokeUnit();
+	
+	spin ball around y-axis speed <20.005495>;
+	spin ball around z-axis speed <30.005495>;
+	spin tech3ring around y-axis speed <-90.005495>;
+	spin tech3ring around z-axis speed <-60.005495>;
+	spin tech2ring around y-axis speed <45.005495>;
+	spin tech2ring around z-axis speed <-30.005495>;
+	spin tech1ring around y-axis speed <90.005495>;
+	spin tech1ring around z-axis speed <60.005495>;
 }
 
 Activate()

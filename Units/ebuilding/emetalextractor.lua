@@ -22,6 +22,8 @@ script = [[emetalextractor.cob]]
 tech = [[tech0]]
 armortype = [[building]]
 
+skyhateceg = [[custom:skyhatelasert0]]
+
 VFS.Include("units-configs-basedefs/basedefs/buildings/emetalextractor_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs

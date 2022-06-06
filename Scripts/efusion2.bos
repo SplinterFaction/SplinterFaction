@@ -3,7 +3,7 @@
 #include "sfxtype.h"
 #include "exptype.h"
 
-piece  base, firepoint1;
+piece  base, firepoint1, ball, tech1ring, tech2ring, tech3ring;
 
 static-var  Static_Var_1, tech;
 
@@ -70,10 +70,19 @@ fx2()
 
 Create()
 {
-	start-script fx();
+//	start-script fx();
 	start-script fx2();
 	turn firepoint1 to x-axis <-90> now;
 	start-script SmokeUnit();
+	
+	spin ball around y-axis speed <20.005495>;
+	spin ball around z-axis speed <30.005495>;
+	spin tech3ring around y-axis speed <-90.005495>;
+	spin tech3ring around z-axis speed <-60.005495>;
+	spin tech2ring around y-axis speed <45.005495>;
+	spin tech2ring around z-axis speed <-30.005495>;
+	spin tech1ring around y-axis speed <90.005495>;
+	spin tech1ring around z-axis speed <60.005495>;
 }
 /*
 TechLost()

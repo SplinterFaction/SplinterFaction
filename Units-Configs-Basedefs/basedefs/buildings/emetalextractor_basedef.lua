@@ -48,7 +48,7 @@ unitDef                     = {
 		explosiongenerators       = {
 			"custom:blacksmoke",
 			primaryCEG,
-			"custom:skyhatelaser",
+			skyhateceg,
 		},
 	},
 	sounds                        = {
