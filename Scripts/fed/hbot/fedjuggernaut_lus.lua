@@ -24,7 +24,7 @@ function thrust()
 end
 
 function RestoreAfterDelay()
-    Sleep(2000)
+    Sleep(5000)
     -- Reset Turret and Barrels
     Turn(turret, y_axis, 0, 1)
     Turn(gatlingbarrel1, x_axis, 0, 1)
@@ -96,8 +96,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
     elseif WeaponID == 2 then
         Signal(SIG_AIM2)
         SetSignalMask(SIG_AIM2)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(gatlingbarrel2, x_axis, -pitch, 10)
         WaitForTurn(gatlingbarrel2, x_axis)
         StartThread(RestoreAfterDelay)
@@ -106,48 +105,42 @@ function script.AimWeapon(WeaponID, heading, pitch)
     elseif WeaponID == 3 then
         Signal(SIG_AIM3)
         SetSignalMask(SIG_AIM3)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(cannonbarrel1, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel1, x_axis)
         return true
     elseif WeaponID == 4 then
         Signal(SIG_AIM4)
         SetSignalMask(SIG_AIM4)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(cannonbarrel2, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel2, x_axis)
         return true
     elseif WeaponID == 5 then
         Signal(SIG_AIM5)
         SetSignalMask(SIG_AIM5)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(rocketbarrel1, x_axis, -pitch, 10)
         WaitForTurn(rocketbarrel1, x_axis)
         return true
     elseif WeaponID == 6 then
         Signal(SIG_AIM6)
         SetSignalMask(SIG_AIM6)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(rocketbarrel2, x_axis, -pitch, 10)
         WaitForTurn(rocketbarrel2, x_axis)
         return true
     elseif WeaponID == 7 then
         Signal(SIG_AIM7)
         SetSignalMask(SIG_AIM7)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(missilebarrel1, x_axis, -pitch, 10)
         WaitForTurn(missilebarrel1, x_axis)
         return true
     elseif WeaponID == 8 then
         Signal(SIG_AIM8)
         SetSignalMask(SIG_AIM8)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(missilebarrel2, x_axis, -pitch, 10)
         WaitForTurn(missilebarrel2, x_axis)
         return true

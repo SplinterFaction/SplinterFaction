@@ -94,18 +94,21 @@ unitDef                    = {
 			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--			maxAngleDif = 70,
 			badTargetCategory    = "VTOL",
+			slaveto				 = 1,
 		},
 		[3]                      = {
 			def                  = "plasmacannon",
 			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--			maxAngleDif = 70,
 			badTargetCategory    = "VTOL",
+			slaveto				 = 1,
 		},
 		[4]                      = {
 			def                  = "plasmacannon",
 			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--			maxAngleDif = 70,
 			badTargetCategory    = "VTOL",
+			slaveto				 = 1,
 		},
 	},
 	customParams                 = {

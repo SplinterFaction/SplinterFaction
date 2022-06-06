@@ -59,8 +59,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
     else
         Signal(SIG_AIM2)
         SetSignalMask(SIG_AIM2)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(gatlingbarrel, x_axis, -pitch, 10)
         WaitForTurn(gatlingbarrel, x_axis)
         return true

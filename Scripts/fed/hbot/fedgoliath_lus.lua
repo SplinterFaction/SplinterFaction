@@ -71,8 +71,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
     elseif WeaponID == 2 then
         Signal(SIG_AIM2)
         SetSignalMask(SIG_AIM2)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(gatlingbarrel2, x_axis, -pitch, 10)
         WaitForTurn(gatlingbarrel2, x_axis)
         StartThread(RestoreAfterDelay)
@@ -81,16 +80,14 @@ function script.AimWeapon(WeaponID, heading, pitch)
     elseif WeaponID == 3 then
         Signal(SIG_AIM3)
         SetSignalMask(SIG_AIM3)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(cannonbarrel1, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel1, x_axis)
         return true
     elseif WeaponID == 4 then
         Signal(SIG_AIM4)
         SetSignalMask(SIG_AIM4)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(cannonbarrel2, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel2, x_axis)
         return true
