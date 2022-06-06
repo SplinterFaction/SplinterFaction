@@ -91,7 +91,10 @@ local SIG_WALK = 1
 local walking = false -- prevent script.StartMoving from spamming threads if already walking
 
 local function GetSpeedParams()
-    local attMod = (Spring.GetUnitRulesParam(unitID, "totalMoveSpeedChange") or 1)
+    local maxSpeed = UnitDefs[Spring.GetUnitDefID(unitID)].speed
+    local maxSpeed = maxSpeed *0.01
+    -- Spring.Echo(maxSpeed)
+    local attMod = (maxSpeed)
     if attMod <= 0 then
         return 0, 300
     end

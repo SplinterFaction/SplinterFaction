@@ -251,8 +251,9 @@ function UnitDef_Post(name, uDef)
 		-- Spring.Echo(uDef.name)
 		-- Spring.Echo(uDef.turnrate)
 		uDef.acceleration = 60000
-		uDef.turnrate = 2500
-		uDef.turninplaceanglelimit = 5
+		uDef.turnrate = 1000
+		uDef.turninplacespeedlimit = 10
+		uDef.turninplace = false
 	end
 
 end
