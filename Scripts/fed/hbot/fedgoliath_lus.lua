@@ -94,6 +94,8 @@ function script.AimWeapon(WeaponID, heading, pitch)
     end
 end
 
+Spring.SetUnitWeaponState(unitID, 1, {reaimTime = 1})
+
 function script.Killed()
     Explode(gatlingbarrel1, SFX.EXPLODE_ON_HIT)
     Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT)

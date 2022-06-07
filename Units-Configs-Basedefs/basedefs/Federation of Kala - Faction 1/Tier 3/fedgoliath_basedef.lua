@@ -7,7 +7,7 @@ unitDef                    = {
 	acceleration                 = 1,
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 1750,
+	buildCostMetal               = 2000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedgoliath.png]],
@@ -148,7 +148,7 @@ weaponDefs                 = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 720,
-		reloadtime             = 1.5,
+		reloadtime             = 2.8,
 		size				   = 2,
 		projectiles			   = 4,
 		weaponType		       = "Cannon",
@@ -163,7 +163,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 20,
+			default              = 65,
 		},
 	},
 	machinegun                   = {
@@ -199,7 +199,7 @@ weaponDefs                 = {
 
 		},
 		damage                   = {
-			default              = 35,
+			default              = 55,
 		},
 	},
 }

@@ -51,7 +51,7 @@ if gadgetHandler:IsSyncedCode() then
 					local featureValueMetal = unit.metalCost * 0.25
 					local featureValueEnergy = unit.energyCost * 0.25
 					local reclaimTime
-					if featureValueMetal >= featureValueEnergy then
+					if featureValueMetal ~= nil then
 						reclaimTime = featureValueMetal * 0.25
 					else
 						reclaimTime = featureValueEnergy * 0.25

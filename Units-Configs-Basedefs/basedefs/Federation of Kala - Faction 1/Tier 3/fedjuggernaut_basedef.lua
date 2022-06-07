@@ -190,7 +190,7 @@ weaponDefs                 = {
 
 		},
 		damage                   = {
-			default              = 25,
+			default              = 30,
 		},
 	},
 	plasmacannon                	= {
@@ -227,7 +227,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 750,
+			default              = 1000,
 		},
 	},
 	clusterrockets             = {
@@ -265,7 +265,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 30,
+			default              = 40,
 		},
 	},
 	missile            = {
@@ -287,7 +287,7 @@ weaponDefs                 = {
 		model                    = "missilesmallvlaunch.s3o",
 		name                     = "Rocket",
 		range                    = 1000,
-		reloadtime               = 4,
+		reloadtime               = 1,
 		weaponType		         = "MissileLauncher",
 
 
