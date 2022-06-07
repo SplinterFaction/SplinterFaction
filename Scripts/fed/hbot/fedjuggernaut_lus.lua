@@ -83,6 +83,7 @@ function script.FireWeapon(WeaponID)
 end
 
 function script.AimWeapon(WeaponID, heading, pitch)
+    Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
     if WeaponID == 1 then
         Signal(SIG_AIM)
         SetSignalMask(SIG_AIM)

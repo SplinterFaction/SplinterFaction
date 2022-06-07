@@ -51,6 +51,7 @@ function script.FireWeapon(WeaponID)
 end
 
 function script.AimWeapon(WeaponID, heading, pitch)
+    Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
     if WeaponID == 1 then
         Signal(SIG_AIM)
         SetSignalMask(SIG_AIM)
@@ -64,15 +65,14 @@ function script.AimWeapon(WeaponID, heading, pitch)
     elseif WeaponID == 2 then
         Signal(SIG_AIM2)
         SetSignalMask(SIG_AIM2)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(cannonbarrel2, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel2, x_axis)
         return true
     else
         Signal(SIG_AIM3)
         SetSignalMask(SIG_AIM3)
-        Turn(turret, y_axis, heading, 10)
+
         return true
     end
 end
