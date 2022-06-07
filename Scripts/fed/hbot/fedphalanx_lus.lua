@@ -39,6 +39,7 @@ function script.FireWeapon(weaponID)
 end
 
 function script.AimWeapon(weaponID, heading, pitch)
+	Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
 	Signal(SIG_AIM)
 	SetSignalMask(SIG_AIM)
 	Turn(turret, y_axis, heading, 10)
