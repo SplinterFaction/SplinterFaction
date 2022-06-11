@@ -1,25 +1,18 @@
 --------------------------------------------------------------------------------
 
-unitName = [[lozorb]]
+unitName = "lozflea"
 
 --------------------------------------------------------------------------------
+humanName = [[Flea]]
 
-isUpgraded	= [[0]]
+objectName = "lozflea.s3o"
+script = "lozflea_lus.lua"
 
-humanName = [[O.R.B.]]
-
-objectName = [[eorb4.s3o]]
-script = [[eorb3.cob]]
-
-workerTime = 1
-buildDistance = 350
-
-tech = [[tech0]]
+tech = [[tech1]]
 armortype = [[light]]
+supply = [[1]]
 
-buildlist = Shared.lozOrb
-
-VFS.Include("units-configs-basedefs/basedefs/eorb_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/Tier 1/lozflea_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

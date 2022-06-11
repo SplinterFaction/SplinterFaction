@@ -1,15 +1,19 @@
 pelvis, turret, barrel1, firepoint1, firepoint2, firepoint3, firepoint4, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'firepoint2', 'firepoint3', 'firepoint4', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
+
+common = include("headers/common_includes_lus.lua")
+
 local SIG_AIM = {}
 
 -- state variables
 isMoving = "isMoving"
 terrainType = "terrainType"
 
+-- Lessgooooo (Walk)
+common.WalkScript()
+
 function script.Create()
 	StartThread(common.SmokeUnit, {pelvis, turret, barrel1})
 end
-
-common = include("headers/common_includes_lus.lua")
 
 function thrust()
 	common.DirtTrail()
