@@ -29,7 +29,7 @@ unitDef                    = {
 	maxReverseVelocity           = 2,
 	maxWaterDepth                = 25,
 	metalStorage                 = 0,
-	movementClass                = "TANK2",
+	movementClass                = "WHEELEDTANK2",
 	name                         = humanName,
 	noChaseCategory              = "VTOL",
 	objectName                   = objectName,
@@ -40,7 +40,6 @@ unitDef                    = {
 	sightDistance                = 1000,
 	stealth			             = true,
 	seismicSignature             = 1,
-	sonarStealth		         = false,
 	smoothAnim                   = true,
 	transportbyenemy             = false,
 	--  This stuff is set in alldefs post --
