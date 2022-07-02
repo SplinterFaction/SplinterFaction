@@ -139,7 +139,6 @@ local presets = {
 		grassdetail = 0,
 		treeradius = 0,
 		advsky = false,
-		timecyclesweathereffects = false,
 		outline = false,
 		guishader = false,
 		shadows = false,
@@ -166,7 +165,6 @@ local presets = {
 		grassdetail = 0,
 		treeradius = 200,
 		advsky = false,
-		timecyclesweathereffects = false,
 		outline = false,
 		guishader = false,
 		shadows = false,
@@ -193,7 +191,6 @@ local presets = {
 		grassdetail = 0,
 		treeradius = 400,
 		advsky = false,
-		timecyclesweathereffects = false,
 		outline = false,
 		guishader = false,
 		shadows = true,
@@ -220,7 +217,6 @@ local presets = {
 		grassdetail = 0,
 		treeradius = 800,
 		advsky = true,
-		timecyclesweathereffects = false,
 		outline = true,
 		guishader = true,
 		shadows = true,
@@ -247,7 +243,6 @@ local presets = {
 		grassdetail = 0,
 		treeradius = 800,
 		advsky = true,
-		timecyclesweathereffects = false,
 		outline = true,
 		guishader = true,
 		shadows = true,
@@ -1152,9 +1147,6 @@ function applyOptionValue(i, skipRedrawWindow)
 			Spring.SetConfigInt("TreeWind",value)
 		elseif id == 'advsky' then
 			Spring.SetConfigInt("AdvSky",value)
-		elseif id == 'timecyclesweathereffects' then
-			Spring.SetConfigInt("evo_timecyclesweathereffects",value)
-			Spring.SendCommands("luarules reloadluaui")
 		elseif id == 'shadows' then
 			Spring.SendCommands("Shadows "..value)
 		elseif id == 'vsync' then
@@ -1245,10 +1237,6 @@ function applyOptionValue(i, skipRedrawWindow)
 			saveOptionValue('Snow', 'snow', 'setSnowMap', {'snowMaps',Game.mapName:lower()}, options[i].value)
 		elseif id == 'snowautoreduce' then
 			saveOptionValue('Snow', 'snow', 'setAutoReduce', {'autoReduce'}, options[i].value)
-		elseif id == 'dof_highquality' then
-			saveOptionValue('Depth of Field', 'dof', 'setHighQuality', {'highQuality'}, options[i].value)
-		elseif id == 'dof_autofocus' then
-			saveOptionValue('Depth of Field', 'dof', 'setAutofocus', {'autofocus'}, options[i].value)
 		elseif id == 'sun_reset' then
             options[getOptionByID('sun_x')].value = defaultMapSunPos[1]
             options[getOptionByID('sun_y')].value = defaultMapSunPos[2]
@@ -1502,10 +1490,6 @@ function applyOptionValue(i, skipRedrawWindow)
 			Spring.SetConfigFloat("ui_opacity", value)
 		elseif id == 'snowamount' then
 			saveOptionValue('Snow', 'snow', 'setMultiplier', {'customParticleMultiplier'}, value)
-		elseif id == 'dof_focusdepth' then
-			saveOptionValue('Depth of Field', 'dof', 'setFocusDepth', {'focusDepth'}, value)
-		elseif id == 'dof_fstop' then
-			saveOptionValue('Depth of Field', 'dof', 'setFstop', {'fStop'}, value)
 		elseif id == 'sun_x' then
 			local sunX,sunY,sunZ = gl.GetSun("pos")
 			sunX = value
@@ -2092,10 +2076,6 @@ function loadAllWidgetData()
 
 	loadWidgetData("GUI Shader", "guishaderintensity", {'blurIntensity'})
 
-	loadWidgetData("Depth of Field", "dof_focusdepth", {'focusDepth'})
-	loadWidgetData("Depth of Field", "dof_fstop", {'fStop'})
-	loadWidgetData("Depth of Field", "dof_highquality", {'highQuality'})
-	loadWidgetData("Depth of Field", "dof_autofocus", {'autofocus'})
 
 	loadWidgetData("Snow", "snowamount", {'customParticleMultiplier'})
 	loadWidgetData("Snow", "snowmap", {'snowMaps',Game.mapName:lower()})
@@ -2261,11 +2241,7 @@ function init()
 		{id="ssao_strength", group="gfx", name=widgetOptionColor.."   strength", type="slider", min=1, max=5, step=0.05, value=3.5, description=''},
 		{id="ssao_radius", group="gfx", name=widgetOptionColor.."   radius", type="slider", min=4, max=7, step=1, value=4, description=''},
 
-		{id="dof", group="gfx", widget="Depth of Field", name="Depth of Field", type="bool", value=GetWidgetToggleValue("Depth of Field"), description='Applies out of focus blur'},
-		{id="dof_autofocus", group="gfx", name=widgetOptionColor.."   autofocus", type="bool", value=true, description='Disable to have mouse position focus'},
-		--{id="dof_focusdepth", group="gfx", name=widgetOptionColor.."   focus depth", type="slider", min=0, max=2000, step=1, value=300, description=''},
-		{id="dof_fstop", group="gfx", name=widgetOptionColor.."   f-stop", type="slider", min=1, max=16, step=0.1, value=3, description='Set amount of blur\n\nOnly works if autofocus is off'},
-		--{id="dof_highquality", group="gfx", name=widgetOptionColor.."   high quality", type="bool", value=false, description=''},
+		{id="cas", group="gfx", widget="Contrast Adaptive Sharpen (Old)", name="Contrast Adaptive Sharpen", type="bool", value=GetWidgetToggleValue("Contrast Adaptive Sharpen"), description='Applies sharpening (may overwhelm antialiasing settings)'},
 
 		{id="outline", group="gfx", widget="Outline", name="Unit outline", type="bool", value=GetWidgetToggleValue("Outline"), description='Adds a small outline to all units which makes them crisp.'},
 		{id="outline_size", group="gfx", name=widgetOptionColor.."   size", min=0.5, max=3, step=0.05, type="slider", value=1, description='Set the size of the outline'},
@@ -2294,13 +2270,10 @@ function init()
 
 		--{id="treeradius", group="gfx", name="Tree render distance", type="slider", restart=true, min=0, max=2000, step=50, value=tonumber(Spring.GetConfigInt("TreeRadius",1) or 1000), description='Applies to SpringRTS engine default trees\n\nChanges will be applied next game'},
 
-		{id="timecyclesweathereffects", group="gfx", name="Day/Night/Weather Cycles", type="bool", value=tonumber(Spring.GetConfigInt("evo_timecyclesweathereffects",0) or 0) == 1, description='Enables Day/Night Cycles and Weather Effects\n\nTHIS IS HIGHLY EXPERIMENTAL!!! *Could Cause Crashes on older hardware!!!*\n*NOTE* This will cause all widgets to reload'},
 		{id="snow", group="gfx", widget="Snow", name="Snow", type="bool", value=GetWidgetToggleValue("Snow"), description='Snow widget (By default.. maps with wintery names have snow applied)'},
 		{id="snowmap", group="gfx", name=widgetOptionColor.."   enabled on this map", type="bool", value=true, description='It will remember what you toggled for every map\n\n\(by default: maps with wintery names have this toggled)'},
 		{id="snowautoreduce", group="gfx", name=widgetOptionColor.."   auto reduce", type="bool", value=true, description='Automaticly reduce snow when average FPS gets lower\n\n(re-enabling this needs time to readjust  to average fps again'},
 		{id="snowamount", group="gfx", name=widgetOptionColor.."   amount", type="slider", min=0.2, max=2, step=0.2, value=1, description='Tip: disable "auto reduce" option temporarily to see the max snow amount you have set'},
-
-		{id="dofintensity", group="gfx", name="DoF intensity", type="slider", min=0.05, max=5, step=0.01, value=1.5, description='Enable Depth of Field with F8 first'},
 
 		{id="resurrectionhalos", group="gfx", widget="Resurrection Halos", name="Resurrected unit halos", type="bool", value=GetWidgetToggleValue("Resurrection Halos"), description='Gives units have have been resurrected a little halo above it.'},
         {id="tombstones", group="gfx", widget="Tombstones", name="Tombstones", type="bool", value=GetWidgetToggleValue("Tombstones"), description='Displays tombstones where commanders died'},
@@ -2377,10 +2350,9 @@ function init()
 		{id="buildmenulargeicons", group="ui", name="Buildmenu large icons", type="bool", value=(WG['red_buildmenu']~=nil and WG['red_buildmenu'].getConfigLargeUnitIcons~=nil and WG['red_buildmenu'].getConfigLargeUnitIcons()), description='Use large unit icons'},
 		{id="buildmenutooltip", group="ui", name="Buildmenu tooltip", type="bool", value=(WG['red_buildmenu']~=nil and WG['red_buildmenu'].getConfigUnitTooltip~=nil and WG['red_buildmenu'].getConfigUnitTooltip()), description='Enables unit tooltip when hovering over unit in buildmenu'},
 		{id="buildmenubigtooltip", group="ui", name=widgetOptionColor.."   extensive unit info", type="bool", value=(WG['red_buildmenu']~=nil and WG['red_buildmenu'].getConfigUnitBigTooltip~=nil and WG['red_buildmenu'].getConfigUnitBigTooltip()), description='Displays elaborative unit description when availible'},
-		{id="buildpichelp", group="ui", name="Flashing Buildpic Help", type="bool", value=tonumber(Spring.GetConfigInt("evo_buildpichelp",1) or 1) == 1, description="Flashes relevant build menu items when resources are in a crisis situation"},
 
 		{id="resourceprompts", group="ui", name="Audio/Visual Helper Prompts", type="bool", value=tonumber(Spring.GetConfigInt("evo_resourceprompts",1) or 1) == 1, description="If enabled, messages will be sent to the chat as well as\naudio cues when your resources need attention"},
-		{id="simplifiedresourcebar", group="ui", name="Simplified Resource Bar", type="bool", value=tonumber(Spring.GetConfigInt("evo_simplifiedresourcebar",1) or 1) == 1, description="Removes extra information from the resource bar"},
+		{id="simplifiedresourcebar", group="ui", name="Simplified Resource Bar", type="bool", value=tonumber(Spring.GetConfigInt("evo_simplifiedresourcebar",0) or 0) == 1, description="Removes extra information from the resource bar"},
 
 		--{id="fancyselunits", group="gfx", widget="Fancy Selected Units", name="Fancy Selected Units", type="bool", value=GetWidgetToggleValue("Fancy Selected Units"), description=''},
 
@@ -2390,6 +2362,8 @@ function init()
 		--{id="mascotte", group="ui", widget="AdvPlayersList mascotte", name="Playerlist mascotte", type="bool", value=GetWidgetToggleValue("AdvPlayersList mascotte"), description='Shows a mascotte on top of the (adv)playerslist'},
 
 		{id="displaydps", group="ui", widget="Display DPS", name="Display DPS", type="bool", value=GetWidgetToggleValue("Display DPS"), description='Display the \'Damage Per Second\' done where target are hit'},
+
+		{id="damagecursortip", group="ui", widget="Damage Cursor Tip v2", name="Damage Cursor Tip", type="bool", value=GetWidgetToggleValue("Damage Cursor Tip"), description='Displays damage percentages at the mouse cursor (Not particularly useful)'},
 
 		{id="nametags_icon", group="ui", name="Commander name on icon", type="bool", value=(WG['nametags']~=nil and WG['nametags'].getDrawForIcon()), description='Show commander name when its displayed as icon'},
 
@@ -2421,6 +2395,9 @@ function init()
 
 		{id="pausescreen", group="ui", widget="Pause Screen", name="Pause screen", type="bool", value=GetWidgetToggleValue("Pause Screen"), description='Displays an overlay when the game is paused'},
 		{id="givenunits", group="ui", widget="Given Units", name="Given unit icons", type="bool", value=GetWidgetToggleValue("Given Units"), description='Tags given units with \'new\' icon'},
+		{id="pip", group="ui", widget="Picture-in-Picture", name="Picture-in-Picture", type="bool", value=GetWidgetToggleValue("Picture-in-Picture"), description='Displays a Picture-in-Picture view of anywhere on the map'},
+		{id="pip", group="ui", widget="Picture-in-Picture #2", name="Picture-in-Picture #2", type="bool", value=GetWidgetToggleValue("Picture-in-Picture #2"), description='Displays an Additional Picture-in-Picture view of anywhere on the map'},
+		{id="pip", group="ui", widget="Picture-in-Picture #3", name="Picture-in-Picture #3", type="bool", value=GetWidgetToggleValue("Picture-in-Picture #3"), description='Displays an Additional Picture-in-Picture view of anywhere on the map'},
 
 
 		-- GAME

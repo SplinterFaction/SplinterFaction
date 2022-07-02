@@ -53,6 +53,173 @@ local function GetAdvShadingActive()
 	return advUnitShading and advMapShading
 end
 
+local function GetEngineUniformBufferDefs()
+    local eubs = [[
+layout(std140, binding = 0) uniform UniformMatrixBuffer {
+	mat4 screenView;
+	mat4 screenProj;
+	mat4 screenViewProj;
+
+	mat4 cameraView;
+	mat4 cameraProj;
+	mat4 cameraViewProj;
+	mat4 cameraBillboardView;
+
+	mat4 cameraViewInv;
+	mat4 cameraProjInv;
+	mat4 cameraViewProjInv;
+
+	mat4 shadowView;
+	mat4 shadowProj;
+	mat4 shadowViewProj;
+
+	mat4 reflectionView;
+	mat4 reflectionProj;
+	mat4 reflectionViewProj;
+
+	mat4 orthoProj01;
+
+	// transforms for [0] := Draw, [1] := DrawInMiniMap, [2] := Lua DrawInMiniMap
+	mat4 mmDrawView; //world to MM
+	mat4 mmDrawProj; //world to MM
+	mat4 mmDrawViewProj; //world to MM
+
+	mat4 mmDrawIMMView; //heightmap to MM
+	mat4 mmDrawIMMProj; //heightmap to MM
+	mat4 mmDrawIMMViewProj; //heightmap to MM
+
+	mat4 mmDrawDimView; //mm dims
+	mat4 mmDrawDimProj; //mm dims
+	mat4 mmDrawDimViewProj; //mm dims
+};
+
+layout(std140, binding = 1) uniform UniformParamsBuffer {
+	vec3 rndVec3; //new every draw frame.
+	uint renderCaps; //various render booleans
+
+	vec4 timeInfo; //gameFrame, gameSeconds, drawFrame, frameTimeOffset
+	vec4 viewGeometry; //vsx, vsy, vpx, vpy
+	vec4 mapSize; //xz, xzPO2
+	vec4 mapHeight; //height minCur, maxCur, minInit, maxInit
+
+	vec4 fogColor; //fog color
+	vec4 fogParams; //fog {start, end, 0.0, scale}
+
+	vec4 sunDir; // (sky != nullptr) ? sky->GetLight()->GetLightDir() : float4(/*map default*/ 0.0f, 0.447214f, 0.894427f, 1.0f);
+
+	vec4 sunAmbientModel;
+	vec4 sunAmbientMap;
+	vec4 sunDiffuseModel;
+	vec4 sunDiffuseMap;
+	vec4 sunSpecularModel; // float4{ sunLighting->modelSpecularColor.xyz, sunLighting->specularExponent };
+	vec4 sunSpecularMap; //  float4{ sunLighting->groundSpecularColor.xyz, sunLighting->specularExponent };
+
+	vec4 shadowDensity; //  float4{ sunLighting->groundShadowDensity, sunLighting->modelShadowDensity, 0.0, 0.0 };
+
+	vec4 windInfo; // windx, windy, windz, windStrength
+	vec2 mouseScreenPos; //x, y. Screen space.
+	uint mouseStatus; // bits 0th to 32th: LMB, MMB, RMB, offscreen, mmbScroll, locked
+	uint mouseUnused;
+	vec4 mouseWorldPos; //x,y,z; w=0 -- offmap. Ignores water, doesn't ignore units/features under the mouse cursor
+
+	vec4 teamColor[255]; //all team colors
+};
+
+// glsl rotate convencience funcs: https://github.com/dmnsgn/glsl-rotate
+
+mat3 rotation3dX(float angle) {
+	float s = sin(angle);
+	float c = cos(angle);
+
+	return mat3(
+		1.0, 0.0, 0.0,
+		0.0, c, s,
+		0.0, -s, c
+	);
+}
+
+mat3 rotation3dY(float a) {
+	float s = sin(a);
+	float c = cos(a);
+
+  return mat3(
+    c, 0.0, -s,
+    0.0, 1.0, 0.0,
+    s, 0.0, c);
+}
+
+mat3 rotation3dZ(float angle) {
+	float s = sin(angle);
+	float c = cos(angle);
+
+	return mat3(
+		c, s, 0.0,
+		-s, c, 0.0,
+		0.0, 0.0, 1.0
+	);
+}
+
+mat4 scaleMat(vec3 s) {
+	return mat4(
+		s.x, 0.0, 0.0, 0.0,
+		0.0, s.y, 0.0, 0.0,
+		0.0, 0.0, s.z, 0.0,
+		0.0, 0.0, 0.0, 1.0
+	);
+}
+
+mat4 translationMat(vec3 t) {
+	return mat4(
+		1.0, 0.0, 0.0, 0.0,
+		0.0, 1.0, 0.0, 0.0,
+		0.0, 0.0, 1.0, 0.0,
+		t.x, t.y, t.z, 1.0
+	);
+}
+
+mat4 mat4mix(mat4 a, mat4 b, float alpha) {
+	return (a * (1.0 - alpha) + b * alpha);
+}
+
+// Additional helper functions useful in Spring
+
+vec2 heighmapUVatWorldPos(vec2 worldpos){
+	const vec2 inverseMapSize = 1.0 / mapSize.xy;
+	// Some texel magic to make the heightmap tex perfectly align:
+	const vec2 heightmaptexel = vec2(8.0, 8.0);
+	worldpos +=  vec2(-8.0, -8.0) * (worldpos * inverseMapSize) + vec2(4.0, 4.0) ;
+	vec2 uvhm = clamp(worldpos, heightmaptexel, mapSize.xy - heightmaptexel);
+	uvhm = uvhm	* inverseMapSize;
+	return uvhm;
+}
+/*
+vec3 hsv2rgb(vec3 c){
+	vec4 K=vec4(1.,2./3.,1./3.,3.);
+	return c.z*mix(K.xxx,saturate(abs(fract(c.x+K.xyz)*6.-K.w)-K.x),c.y);
+}
+
+vec3 rgb2hsv(vec3 c){
+	vec4 K=vec4(0.,-1./3.,2./3.,-1.);
+	vec4 p=mix(vec4(c.bg ,K.wz),vec4(c.gb,K.xy ),step(c.b,c.g));
+	vec4 q=mix(vec4(p.xyw,c.r ),vec4(c.r ,p.yzx),step(p.x,c.r));
+	float d=q.x-min(q.w,q.y);
+	float e=1e-10;
+	return vec3(abs(q.z+(q.w-q.y)/(6.*d+e)),d/(q.x+e),q.x);
+}
+*/
+
+]]
+
+    return eubs
+end
+
+local function CreateShaderDefinesString(args) -- Args is a table of stuff that are the shader parameters
+  local defines = {}
+  for k, v in pairs (args) do
+      defines[#defines + 1] = string.format("#define %s %s\n", tostring(k), tostring(v))
+  end
+  return table.concat(defines)
+end
 
 local LuaShader = setmetatable({}, {
 	__call = function(self, ...) return new(self, ...) end,
@@ -62,6 +229,95 @@ LuaShader.isGeometryShaderSupported = IsGeometryShaderSupported()
 LuaShader.isTesselationShaderSupported = IsTesselationShaderSupported()
 LuaShader.isDeferredShadingEnabled = IsDeferredShadingEnabled()
 LuaShader.GetAdvShadingActive = GetAdvShadingActive
+LuaShader.GetEngineUniformBufferDefs = GetEngineUniformBufferDefs
+LuaShader.CreateShaderDefinesString = CreateShaderDefinesString
+
+
+local function lines(str)
+	local t = {}
+	local function helper(line) table.insert(t, line) return "" end
+	helper((str:gsub("(.-)\r?\n", helper)))
+	return t
+end
+
+
+function LuaShader:CreateLineTable()
+	--[[
+	-- self.shaderParams == 
+			 ({[ vertex   = "glsl code" ,]
+		   [ tcs      = "glsl code" ,]
+		   [ tes      = "glsl code" ,]
+		   [ geometry = "glsl code" ,]
+		   [ fragment = "glsl code" ,]
+		   [ uniform       = { uniformName = number value, ...} ,] (specify a Lua array as an argument to uniformName to initialize GLSL arrays)
+		   [ uniformInt    = { uniformName = number value, ...} ,] (specify a Lua array as an argument to uniformName to initialize GLSL arrays)
+		   [ uniformFloat  = { uniformName = number value, ...} ,] (specify a Lua array as an argument to uniformName to initialize GLSL arrays)
+		   [ uniformMatrix = { uniformName = number value, ...} ,]
+		   [ geoInputType = number inType,]
+		   [ geoOutputType = number outType,]
+		   [ geoOutputVerts = number maxVerts,]
+		   [ definitions = "string of shader #defines", ]
+		 })
+	]]--
+	
+	local numtoline = {}
+	
+	--try to translate errors that look like this into lines: 
+	--	0(31048) : error C1031: swizzle mask element not present in operand "ra"
+	--	0(31048) : error C1031: swizzle mask element not present in operand "ra"
+	--for k, v in pairs(self) do
+	--	Spring.Echo(k)
+	--end
+	
+	for _, shadertype in pairs({'vertex', 'tcs', 'tes', 'geometry', 'fragment', 'compute'}) do 
+		if self.shaderParams[shadertype] ~= nil then 
+			local shaderLines = (self.shaderParams.definitions or "") .. self.shaderParams[shadertype]
+			local currentlinecount = 0
+			for i, line in ipairs(lines(shaderLines)) do
+				numtoline[currentlinecount] = string.format("%s:%i %s", shadertype, currentlinecount, line)
+				--Spring.Echo(currentlinecount, numtoline[currentlinecount] )
+				if line:find("#line ", nil, true) then 
+					local defline = tonumber(line:sub(7)) 
+					if defline then 
+						currentlinecount = defline
+					end
+				else
+				
+					currentlinecount = currentlinecount + 1
+				end
+			end
+		end
+	end
+	return numtoline
+end
+
+local function translateLines(alllines, errorcode) 
+	if string.len(errorcode) < 3 then 
+		return ("The shader compilation error code was very short. This likely means a Linker error, check the [in] [out] blocks linking VS/GS/FS shaders to each other to make sure the structs match")
+	end
+	local result = ""
+	for _,line in pairs(lines(errorcode)) do 
+		local pstart = line:find("(", nil, true)
+		local pend = line:find(")", nil, true)
+		local found = false
+		if pstart and pend then 
+			local lineno = line:sub(pstart +1,pend-1)
+			--Spring.Echo(lineno)
+			lineno = tonumber(lineno) 
+			--Spring.Echo(lineno, alllines[lineno])
+			if alllines[lineno] then 
+				result = result .. string.format("%s\n ^^ %s \n", alllines[lineno], line)
+				found = true
+			end
+		end
+		if found == false then 
+			result = result .. line ..'\n'
+		end
+	end
+	return result
+end
+
+
 
 -----------------============ Warnings & Error Gandling ============-----------------
 function LuaShader:OutputLogEntry(text, isError)
@@ -70,12 +326,19 @@ function LuaShader:OutputLogEntry(text, isError)
 	local warnErr = (isError and "error") or "warning"
 
 	message = string.format("LuaShader: [%s] shader %s(s):\n%s", self.shaderName, warnErr, text)
-
-	if self.logHash[message] == nil then
-		self.logHash[message] = 0
+	Spring.Echo(message)
+	
+	if isError then 
+		local linetable = self:CreateLineTable()
+		Spring.Echo(translateLines(linetable, text))
 	end
 
-	if self.logHash[message] <= self.logEntries then
+
+	if self.logHash[message] == nil then
+	--	self.logHash[message] = 0
+	end
+
+	if false and self.logHash[message] <= self.logEntries then
 		local newCnt = self.logHash[message] + 1
 		self.logHash[message] = newCnt
 		if (newCnt == self.logEntries) then
@@ -145,7 +408,7 @@ end
 -----------------========= End of Handle Ghetto Include<> ==========-----------------
 
 -----------------============ General LuaShader methods ============-----------------
-function LuaShader:Compile()
+function LuaShader:Compile(suppresswarnings)
 	if not gl.CreateShader then
 		self:ShowError("GLSL Shaders are not supported by hardware or drivers")
 		return false
@@ -171,7 +434,7 @@ function LuaShader:Compile()
 	if not shaderObj then
 		self:ShowError(shLog)
 		return false
-	elseif (shLog ~= "") then
+	elseif (shLog ~= "") and suppresswarnings ~= true then
 		self:ShowWarning(shLog)
 	end
 

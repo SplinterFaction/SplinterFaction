@@ -544,32 +544,7 @@ local function GetIDAtPoint(wx, wz)
 	if fID then return fID + Game.maxUnits end
 end
 local function UnitQueueVertices(uID)
-	local uCmds = Spring.GetUnitCommands(uID)
-	if #uCmds == 0 then return end
-	local ux, uy, uz = spGetUnitPosition(uID)
-	local px, pz = WorldToPipCoords(ux, uz)
-	for i = 1, #uCmds do
-		local cmd = uCmds[i]
-		if (cmd.id < 0) or positionCmds[cmd.id] then
-			local cx, cy, cz
-			if #cmd.params >= 3 then
-				cx, cy, cz = cmd.params[1], cmd.params[2], cmd.params[3]
-			elseif #cmd.params == 1 then
-				if cmd.params[1] > Game.maxUnits then
-					cx, cy, cz = spGetFeaturePosition(cmd.params[1] - Game.maxUnits)
-				else
-					cx, cy, cz = spGetUnitPosition(cmd.params[1])
-				end
-			end
-			if cx then
-				local nx, nz = WorldToPipCoords(cx, cz)
-				glColor(cmdColors[cmd.id] or cmdColors.unknown)
-				glVertex(px, pz)
-				glVertex(nx, nz)
-				px, pz = nx, nz
-			end
-		end
-	end
+
 end
 local function GetCmdOpts(alt, ctrl, meta, shift, right)
 	
