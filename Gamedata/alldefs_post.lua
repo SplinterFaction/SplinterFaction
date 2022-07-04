@@ -646,6 +646,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "indirectfiresupport" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.6
 			end
+			if unitDef.customparams.unitrole == "assault" then
+				unitDef.maxdamage = unitDef.maxdamage * 2
+			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions
 			if unitDef.maxdamage then
