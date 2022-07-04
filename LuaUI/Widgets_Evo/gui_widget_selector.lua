@@ -109,8 +109,8 @@ local buttons = { --see MouseRelease for which functions are called by which but
     [1] = "Reload LuaUI",
     [2] = "Unload ALL Widgets",
     [3] = "Allow/Disallow User Widgets",
-    [4] = "Reset LuaUI",
-    [5] = "Factory Reset LuaUI",
+--    [4] = "Reset LuaUI",
+--    [5] = "Factory Reset LuaUI",
 }
 
 local allowuserwidgets = true

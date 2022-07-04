@@ -129,7 +129,7 @@ function UnitDef_Post(name, uDef)
 	--
 	
 	if uDef.builder == true and uDef.sounds then
-		uDef.sounds.build = "miscfx/buildstart-nano.wav"
+		uDef.sounds.build = "miscfx/Health Pickup 3.wav"
 	end
 	
 	--------------------------------------------------------------------------------

@@ -5,6 +5,7 @@ else
 end
 
 flowMappingToggle = true
+allowRawMovement = true
 
 local genericDepthmodParams = {
 		minHeight      = 0,
@@ -39,7 +40,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK3 = {
@@ -54,7 +55,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK4 = {
@@ -69,7 +70,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK5 = {
@@ -84,7 +85,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK6 = {
@@ -99,7 +100,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK7 = {
@@ -114,7 +115,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK8 = {
@@ -129,7 +130,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK9 = {
@@ -144,7 +145,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK10 = {
@@ -159,7 +160,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK11 = {
@@ -174,7 +175,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK12 = {
@@ -189,7 +190,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK13 = {
@@ -204,7 +205,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK14 = {
@@ -219,7 +220,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK15 = {
@@ -234,7 +235,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WALKERTANK16 = {
@@ -249,7 +250,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -269,7 +270,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK3 = {
@@ -284,7 +285,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK4 = {
@@ -299,7 +300,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK5 = {
@@ -314,7 +315,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK6 = {
@@ -329,7 +330,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK7 = {
@@ -344,7 +345,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK8 = {
@@ -359,7 +360,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK9 = {
@@ -374,7 +375,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK10 = {
@@ -389,7 +390,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK11 = {
@@ -404,7 +405,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK12 = {
@@ -419,7 +420,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK13 = {
@@ -434,7 +435,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK14 = {
@@ -449,7 +450,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK15 = {
@@ -464,7 +465,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     WHEELEDTANK16 = {
@@ -479,7 +480,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -512,7 +513,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -528,7 +529,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -544,7 +545,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -560,7 +561,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -576,7 +577,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -592,7 +593,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -613,7 +614,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -629,7 +630,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -645,7 +646,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -661,7 +662,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -677,7 +678,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -693,7 +694,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=3,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -712,7 +713,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -726,7 +727,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -740,7 +741,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -754,7 +755,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -768,7 +769,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -789,7 +790,7 @@ local moveDefs = {
         heatmod=unitHeat,
         slopemod=2,
         depthMod=0,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -805,7 +806,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -821,7 +822,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=2,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -837,7 +838,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=2,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -853,7 +854,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=2,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -869,7 +870,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=2,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -890,7 +891,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -911,7 +912,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     HOVERTANKEXPERIMENTAL9 = {
@@ -924,7 +925,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     EXPERIMENTALTANK12 = {
@@ -937,7 +938,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -958,7 +959,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     COMMANDERTANK6 = {
@@ -973,7 +974,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     COMMANDERTANKAI4 = {
@@ -988,7 +989,7 @@ local moveDefs = {
         minwaterdepth=10,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -1009,7 +1010,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     ZAALKBOT1 = {
@@ -1024,7 +1025,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     ZAALKBOT2 = {
@@ -1039,7 +1040,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     ZAALKBOT3 = {
@@ -1054,7 +1055,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     ZAALKBOT4 = {
@@ -1069,7 +1070,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     ZAALKBOT5 = {
@@ -1083,7 +1084,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
     ZAALKBOT6 = {
@@ -1098,7 +1099,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -1118,7 +1119,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
@@ -1134,7 +1135,7 @@ local moveDefs = {
         minwaterdepth=0,
         heatmod=unitHeat,
         slopemod=4,
-        allowRawMovement=true,
+        allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
 
