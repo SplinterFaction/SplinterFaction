@@ -496,8 +496,10 @@ local function GetTooltipCost(sUse, sGive, e, m)
 	if sGive > 0 then supplyStr = supplyStr .. "Gives "..useSupplyTexture..supplyColour.." "..sGive..white.."   " end
 	if sUse > 0 then supplyStr = supplyStr .. "Uses "..useSupplyTexture..supplyColour.." "..sUse..white.."   " end
 	local costStr = "Cost: " ..
-		useEnergyTexture..energyColour.." "..e..white.." / "..
-		useMetalTexture..metalColour.." "..m
+		useMetalTexture..metalColour.." "..m..white.." / "..
+		useEnergyTexture..energyColour.." "..e
+		-- useEnergyTexture..energyColour.." "..e..white.." / "..
+		-- useMetalTexture..metalColour.." "..m
 	return supplyStr .. costStr
 end
 -- get tooltip for armor
@@ -513,8 +515,10 @@ end
 -- get tooltip for resource upkeeps
 local function GetTooltipUpkeep(eMake, eUse, mMake, mUse)
 	return
-		useEnergyTexture..generateResColour.." +"..FormatNbr(eMake, 1)..white.." / "..useResColour..FormatNbr(-eUse, 1).."    "..
-		useMetalTexture..generateResColour.." +"..FormatNbr(mMake, 1)..white.." / "..useResColour..FormatNbr(-mUse, 1)
+		useMetalTexture..generateResColour.." +"..FormatNbr(mMake, 1)..white.." / "..useResColour..FormatNbr(-mUse, 1).."    "..
+		useEnergyTexture..generateResColour.." +"..FormatNbr(eMake, 1)..white.." / "..useResColour..FormatNbr(-eUse, 1)
+		--useEnergyTexture..generateResColour.." +"..FormatNbr(eMake, 1)..white.." / "..useResColour..FormatNbr(-eUse, 1).."    "..
+		--useMetalTexture..generateResColour.." +"..FormatNbr(mMake, 1)..white.." / "..useResColour..FormatNbr(-mUse, 1)
 end
 -- get tooltip for one unit
 local function GetTooltipUnit(id)
@@ -999,24 +1003,25 @@ function GenerateNewTooltip()
 		if metalValue == "0" and energyValue == "0" then
 			CurrentTooltip = featureName
 		else
-			CurrentTooltip = CurrentTooltip:gsub("(%d+)(.-)(%d+)", "%3%2%1", 1) -- first swap metal and energy values for Evo (Supply, Energy, Metal)
+			-- Following line breaks the tooltip display quite often
+			-- CurrentTooltip = CurrentTooltip:gsub("(%d+)(.-)(%d+)", "%3%2%1", 1) -- first swap metal and energy values for Evo (Supply, Energy, Metal)
 			CurrentTooltip = CurrentTooltip:sub(1, energy) .. CurrentTooltip:sub(energy + 5) -- remove default resource color
 			CurrentTooltip = CurrentTooltip:sub(1, metal) .. CurrentTooltip:sub(metal + 5) -- ditto
-			CurrentTooltip = CurrentTooltip:gsub("Metal: ", useEnergyTexture .. " " .. energyColour) -- swap the metal and energy strings to fit the values
-			CurrentTooltip = CurrentTooltip:gsub("Energy: ", useMetalTexture .. " " .. metalColour)
+			CurrentTooltip = CurrentTooltip:gsub("Metal: ", useMetalTexture .. " " .. metalColour) -- swap the metal and energy strings to fit the values
+			CurrentTooltip = CurrentTooltip:gsub("Energy: ", useEnergyTexture .. " " .. energyColour)
 		end
 	else
 		if CurrentTooltip == "Repair: Repairs another unit" then
 			CurrentTooltip = "Build: Builds unfinished structures" -- hack for Evo (no repair after construction completed)
 		end
-		
+
 		-- ignore sell command as well
 		if not CurrentTooltip:find("Refund amount") and not CurrentTooltip:find("Evolve into") then
 			-- Evo's Evolve tooltip is too cancer
 			--if CurrentTooltip:find("Evolve into") and not CurrentTooltip:find("turret") then CurrentTooltip = CurrentTooltip:sub(5) end
 			CurrentTooltip = CurrentTooltip:gsub("(.-: )", "\255\170\255\170%1"..white, 1)
 		end
-	 
+
 		--[[local action = string.match(CurrentTooltip,"(.-)\n")
 		if action then
 			action = string.match(action,"(.-): ")

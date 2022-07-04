@@ -29,15 +29,17 @@ Spring.SendCommands({"resbar 0"})
 -- configurable settings
 local FontSize = 22
 local supplyOffset = 0
-local supplyBarWidth = 340
-local energyOffset = 350
-local energyBarWidth = 340
-local metalOffset = 700
-local metalBarWidth = 340
-local width, height = metalOffset+metalBarWidth+supplyBarWidth, 40
+local fullBarOffset = 700
+local SpecificResourceBarWidth = 340
+local supplyBarWidth = SpecificResourceBarWidth
+local metalOffset = 350
+local metalBarWidth = SpecificResourceBarWidth
+local energyOffset = 700
+local energyBarWidth = SpecificResourceBarWidth
+local width, height = fullBarOffset+SpecificResourceBarWidth+SpecificResourceBarWidth, 40
 local textOffsetX, textOffsetY = 5, 17
 local bgFlashPeriod = 45
-local maxBasicIncome = Spring.GetModOptions().maxbasicincome or 15
+local maxBasicIncome = Spring.GetModOptions().maxbasicincome or 0
 -- resource bars: ON means the bars show percentage, OFF means they simply change color depending on state
 local progressBars = true
 
@@ -416,7 +418,8 @@ function generateDisplayList()
 		
 		-- background
 	  	gl.Color(0,0,0,ui_opacity)
-		RectRound(supplyOffset-bgmargin, -bgmargin, metalOffset+metalBarWidth+bgmargin, height+bgmargin, 10)
+		-- Using energy/metal/supply offsets for these is stupid. You never know what order they will be displayed in, so just make a new var with proper comments.
+		RectRound(supplyOffset-bgmargin, -bgmargin, fullBarOffset+SpecificResourceBarWidth+bgmargin, height+bgmargin, 10)
 
 		if (WG['guishader'] ~= nil) then
 			local scaleDiffX = -((posx*widgetScale)-posx)/widgetScale
@@ -462,7 +465,7 @@ function generateDisplayList2()
 		gl.Color(bgSupplyR,bgSupplyG,0,0.33)
 		gl.Texture(barTexture)
 		RectRound(supplyOffset,0,supplyOffset+supplyBarWidth,height, 5)
-		
+
 		gl.Color(bgEnergyR,bgEnergyG,0,0.33)
 		RectRound(energyOffset,0,energyOffset+energyBarWidth,height, 5)
 
@@ -530,11 +533,11 @@ function generateDisplayList2()
 		end
 		font2:Begin()
 		font2:Print(supplyStr, supplyOffset+supplyBarWidth, textOffsetY, FontSize, "onr")
-		
-		
+
+
 		-- energy bar
 		r, g, b = 0, 0, 0
-		
+
 		if energyPercentage > 0.8 then
 			g = 0.9
 		elseif energyPercentage < 0.2 then
@@ -542,15 +545,15 @@ function generateDisplayList2()
 		else
 			r, g, b = 1, 0.9, 0
 		end
-		
+
 		gl.Color(r,g,b,1)
 		if not progressBars then
 			energyPercentage = 1
 		end
-		
+
 		gl.Texture(barTexture)
 		gl.TexRect(energyOffset,0,energyOffset+(energyBarWidth*energyPercentage),height/6)
-		
+
 		gl.Color(r,g,b,glowAlpha)
 		gl.Texture(barGlowCenterTexture)
 		gl.TexRect(energyOffset,-glowSize,energyOffset+(energyBarWidth*energyPercentage),(height/6)+glowSize)
@@ -558,9 +561,9 @@ function generateDisplayList2()
 		gl.TexRect(energyOffset-glowSize-glowSize,-glowSize,energyOffset,(height/6)+glowSize)
 		gl.Texture(barGlowEdgeTexture)
 		gl.TexRect(energyOffset+(energyBarWidth*energyPercentage)+glowSize+glowSize,-glowSize,energyOffset+(energyBarWidth*energyPercentage),(height/6)+glowSize)
-		
+
 		gl.Texture(barTexture)
-		
+
 		if simplifiedResourceBar == 1 then
 			if ei > ep then
 				energyIncomeColor = green
@@ -654,14 +657,14 @@ function generateDisplayList3()
 	  gl.Color(1,1,1,1)
 	  gl.Texture(supplyTexture)
 	  gl.TexRect(supplyOffset+1, height-iconSize, supplyOffset+iconSize+1, height)
-	  
+
 	  gl.Texture(energyTexture)
 	  gl.TexRect(energyOffset+1, height-iconSize, energyOffset+iconSize+1, height)
-	  
+
 	  gl.Texture(metalTexture)
 	  gl.TexRect(metalOffset+1, height-iconSize, metalOffset+iconSize+1, height)
-	  
-	  
+
+
 		gl.PopMatrix()
 	end)
 end

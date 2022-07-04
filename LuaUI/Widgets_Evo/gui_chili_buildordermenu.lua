@@ -77,7 +77,7 @@ local showTechReq = sGetConfigInt("evo_showtechreq", 1) == 1
 local showHotkeys = sGetConfigInt("evo_showhotkeys", 1) == 1
 WG.buildOrderUI = {updateConfigInt = false}
 
-local fontSize = 12 * widgetScale
+local fontSize =  18 * widgetScale
 
 
 --Horizontal
@@ -275,6 +275,39 @@ if buildOrderUI == 5 then
 			loadonto = true, selfd = false, settargetnoground = true,
 		},
 	}
+end
+
+--Traditional with larger pictures
+if buildOrderUI == 6 then
+    Config = {
+        ordermenu = {
+            name = 'ordermenu',
+            rows = 4, columns = 4,
+            x = '0%', y = '24%',
+            width = '50%', height = '25%',
+            orientation = 'horizontal',
+            maxWidth = 390,
+            padding = {5, 5, 5, 5},     -- outer panel
+        },
+        buildmenu = {
+            name = 'buildmenu',
+            rows = 3, columns = 3,
+            x = '0%', y = '50%',
+            width = '50%', height = '50%',
+            orientation = 'horizontal',
+            maxWidth = 390,
+            padding = {5, 5, 5, 5},
+        },
+        labels = {
+            captionFontMaxSize = fontSize,
+            queueFontSize = fontSize, --32 (MaDDoX)
+            costFontSize = fontSize,
+        },
+        hiddenCMDs = {
+            timewait = true, deathwait = true, squadwait = true, gatherwait = true,
+            loadonto = true, selfd = false, settargetnoground = true,
+        },
+    }
 end
 
 --------------------------------------------------------------------------------
@@ -539,13 +572,14 @@ local function addBuildCommand(cmd)
     local str = ''
     if showCost then
         local s, e = 0, 0
-        local comma = color2incolor(1,1,1) .. ','
+        local separator = color2incolor(1,1,1) .. '/'
         s, e = stringfind(cmd.tooltip, 'Uses %+%d* Supply')
-        if s then str = str .. color2incolor(1,0.5,0) .. stringsub(cmd.tooltip, s + 6, e - 7) .. comma end
-        s, e = stringfind(cmd.tooltip, 'Energy cost %d*')
-        str = str .. color2incolor(1,1,0) .. stringsub(cmd.tooltip, s + 12, e) .. comma
+        if s then str = str .. color2incolor(1,0.5,0) .. stringsub(cmd.tooltip, s + 6, e - 7) .. " " .. separator end
         s, e = stringfind(cmd.tooltip, 'Metal cost %d*')
-        str = str .. color2incolor(0.53,0.77,0.89) .. stringsub(cmd.tooltip, s + 11, e) .. comma
+        str = str .. color2incolor(0.53,0.77,0.89) .. stringsub(cmd.tooltip, s + 11, e) .. " " .. separator
+        s, e = stringfind(cmd.tooltip, 'Energy cost %d*')
+        str = str .. " " .. color2incolor(1,1,0) .. stringsub(cmd.tooltip, s + 12, e) .. " " .. separator
+
     end
     local techReqColors = {color2incolor(1,0.5,0), color2incolor(0,0.8,1), color2incolor(1,0,1), color2incolor(0,1,0)}
     if showTechReq and cmd.disabled then
