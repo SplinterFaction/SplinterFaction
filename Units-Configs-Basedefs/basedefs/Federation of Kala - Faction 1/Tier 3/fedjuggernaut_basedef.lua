@@ -85,56 +85,52 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "machinegun",
---			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
---			maxAngleDif = 70,
+			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
+			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
 		},
 		[2]                      = {
 			def                  = "machinegun",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
+			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
+			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
 			slaveto				 = 1,
 		},
 		[3]                      = {
 			def                  = "plasmacannon",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
+			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
+			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
 			slaveto				 = 1,
 		},
 		[4]                      = {
 			def                  = "plasmacannon",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
+			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
+			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
 			slaveto				 = 1,
 		},
 		[5]                      = {
 			def                  = "clusterrockets",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
+			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
+			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
 			slaveto				 = 1,
 		},
 		[6]                      = {
 			def                  = "clusterrockets",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
+			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
+			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
 			slaveto				 = 1,
 		},
 		[7]                      = {
 			def                  = "missile",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
 			badTargetCategory    = "VTOL",
 			slaveto				 = 1,
 		},
 		[8]                      = {
 			def                  = "missile",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
 			badTargetCategory    = "VTOL",
 			slaveto				 = 1,
 		},
@@ -182,7 +178,7 @@ weaponDefs                 = {
 		texture2               = "empty",
 		coreThickness          = 0.5,
 		thickness              = 5,
-		tolerance              = 10000,
+		tolerance              = 2000,
 		turret                 = true,
 		weaponTimer            = 1,
 		weaponVelocity         = 800,
@@ -220,7 +216,7 @@ weaponDefs                 = {
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		--sprayAngle             = 1000,
-		tolerance              = 10000,
+		tolerance              = 2000,
 		turret                 = true,
 		weaponTimer            = 1,
 		weaponVelocity         = 600,
@@ -254,7 +250,7 @@ weaponDefs                 = {
 		soundStart               = "weapons/rocket1.wav",
 		soundHit                 = "explosions/explode5.wav",
 		startVelocity            = 300,
-		tolerance                = 8000,
+		tolerance                = 2000,
 		turnrate                 = 2500,
 		turret                   = true,
 		trajectoryHeight		 = 1.5,

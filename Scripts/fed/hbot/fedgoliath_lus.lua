@@ -63,11 +63,12 @@ end
 
 function script.AimWeapon(WeaponID, heading, pitch)
     Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
+    Turn(turret, y_axis, heading, 10)
+    WaitForTurn(turret, y_axis)
     if WeaponID == 1 then
         Signal(SIG_AIM)
         SetSignalMask(SIG_AIM)
-        Turn(turret, y_axis, heading, 10)
-        WaitForTurn(turret, y_axis)
+
         Turn(gatlingbarrel1, x_axis, -pitch, 10)
         WaitForTurn(gatlingbarrel1, x_axis)
         StartThread(RestoreAfterDelay)
