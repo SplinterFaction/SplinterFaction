@@ -512,7 +512,18 @@ local function GetTooltipArmor(ud)
 	elseif str == "air" then return "Air" end
 	return "Default"
 end
+
+-- get tooltip for armor
+local function GetTooltipRole(ud)
+	-- TODO replace text with icons
+	local str = ud.customParams.unitrole
+	if str == nil then
+		return "Unit Role Undefined"
+	end
+	return str
+end
 -- get tooltip for resource upkeeps
+
 local function GetTooltipUpkeep(eMake, eUse, mMake, mUse)
 	return
 		useMetalTexture..generateResColour.." +"..FormatNbr(mMake, 1)..white.." / "..useResColour..FormatNbr(-mUse, 1).."    "..
@@ -525,10 +536,10 @@ local function GetTooltipUnit(id)
 	local result = ""
 	local u=id
 	local ud=UnitDefs[Spring.GetUnitDefID(u)]
-	
+
 	local metalMake,metalUse,energyMake,energyUse = Spring.GetUnitResources(u)
 	local isFriendly = metalMake ~= nil       -- assume only friendly units have this info
-	
+
 	-- build progress, health and shield
 	local health,maxHealth,paralyzeDamage,captureProgress,buildProgress = Spring.GetUnitHealth(u)
 	stunned_or_beingbuilt, stunned, beingbuilt = Spring.GetUnitIsStunned(u)
@@ -567,8 +578,8 @@ local function GetTooltipUnit(id)
 		rangeMod = 1 + rangeMod
 	end
 	]]
-										
-										
+
+
 	-- paralysis
 	if stunned then
 		result = result.."\255\194\173\255   PARALYZED"
@@ -576,10 +587,10 @@ local function GetTooltipUnit(id)
 	-- cloaking
 	if spGetUnitIsCloaked(u) then
 		result = result.."\255\170\170\170   CLOAKED"
-	end        
+	end
 	-- alliance                
 	if isFriendly == false then
-		result = result.."   \255\255\0\0ENEMY"	
+		result = result.."   \255\255\0\0ENEMY"
 	end
 	result = result.."\n"
 	if buildProgress and buildProgress<1 then
@@ -601,52 +612,57 @@ local function GetTooltipUnit(id)
 		armorTypeStr = "None"
 	end
 
+	local unitRoleStr = ud.customParams.unitrole
+	if unitRoleStr == nil then
+		unitRoleStr = "Unit Role Undefined"
+	end
+
 	local hasShield, ShieldPower=Spring.GetUnitShieldState(id)
 	local maxShieldPower = ud.shieldPower
 	if (health ~= nil) then
-		result = result.."\255\200\200\200Health: ".."\255\200\200\200"..floor(health).."\255\200\200\200/\255\200\200\200"..floor(maxHealth).." ("..armorTypeStr..")"
-		if hasShield then result=result.."\255\135\135\255      Shield: "..FormatNbr(math.min(ShieldPower,maxShieldPower)).."/"..FormatNbr(maxShieldPower) end
+	result = result.."\255\200\200\200Health: ".."\255\200\200\200"..floor(health).."\255\200\200\200/\255\200\200\200"..floor(maxHealth).." ("..unitRoleStr..")"
+	if hasShield then result=result.."\255\135\135\255      Shield: "..FormatNbr(math.min(ShieldPower,maxShieldPower)).."/"..FormatNbr(maxShieldPower) end
 	end
-	
+
 	-- energy and metal upkeep
 	if isFriendly then
-		--result = result.."    \255\200\200\200Metal: \255\0\255\0+"..FormatNbr(metalMake,1).."\255\255\255\255/\255\255\0\0"..FormatNbr(-metalUse,1)
-		--result = result.."    \255\255\255\0Energy: \255\0\255\0+"..FormatNbr(energyMake,1).."\255\255\255\255/\255\255\0\0"..FormatNbr(-energyUse,1)
-		-- result=result.."\255\255\255\0     +E/M ratio: "..FormatNbr(energyMake / ud.metalCost,4).."\n"
-		local upkeepStr = GetTooltipUpkeep(energyMake, energyUse, metalMake, metalUse)
-		result = result.."    "..upkeepStr
+	--result = result.."    \255\200\200\200Metal: \255\0\255\0+"..FormatNbr(metalMake,1).."\255\255\255\255/\255\255\0\0"..FormatNbr(-metalUse,1)
+	--result = result.."    \255\255\255\0Energy: \255\0\255\0+"..FormatNbr(energyMake,1).."\255\255\255\255/\255\255\0\0"..FormatNbr(-energyUse,1)
+	-- result=result.."\255\255\255\0     +E/M ratio: "..FormatNbr(energyMake / ud.metalCost,4).."\n"
+	local upkeepStr = GetTooltipUpkeep(energyMake, energyUse, metalMake, metalUse)
+	result = result.."    "..upkeepStr
 	end
 
 	-- weapons
 	result = result..GetTooltipWeaponData(ud).."\n"
-  
+
 	-- build power
 	if ud.buildSpeed and ud.buildSpeed > 0 then
-		result = result.."\n"..GetTooltipBuildPower(ud.buildSpeed)..  "\255\255\255\255\n"
+	result = result.."\n"..GetTooltipBuildPower(ud.buildSpeed)..  "\255\255\255\255\n"
 	end
-				
+
 	-- upgrades (upgrade centers only)
 	--[[local isUpgradeCenter = string.find(ud.name, "upgrade_center")
 	local teamId = spGetUnitTeam(u)
 	if isUpgradeCenter then
 		result = result..GetTooltipUpgradeData(teamId).."\n\n"
 	end]]
-				
+
 	-- speed
-	
+
 	--Disable Speed Readout
 	--if ud.speed and ud.speed>0 then
-		--[[local speedMod = spGetUnitRulesParam(u,"upgrade_speed")
-		if not speedMod then
-			speedMod = 1
-		else
-			speedMod = 1 + speedMod
-		end]]
-		--local speedMod = 1
-		
-		--local vx,vy,vz = spGetUnitVelocity(u)
-		--local speed = 30*math.sqrt(vx*vx+vz*vz)
-		--result = result.."\255\193\255\187Speed: \255\134\255\121"..FormatNbr(speed).."\255\193\255\187/\255\134\255\121"..FormatNbr(ud.speed*speedMod,2).."\255\255\255\255      "
+	--[[local speedMod = spGetUnitRulesParam(u,"upgrade_speed")
+    if not speedMod then
+        speedMod = 1
+    else
+        speedMod = 1 + speedMod
+    end]]
+	--local speedMod = 1
+
+	--local vx,vy,vz = spGetUnitVelocity(u)
+	--local speed = 30*math.sqrt(vx*vx+vz*vz)
+	--result = result.."\255\193\255\187Speed: \255\134\255\121"..FormatNbr(speed).."\255\193\255\187/\255\134\255\121"..FormatNbr(ud.speed*speedMod,2).."\255\255\255\255      "
 	--end
 
 	--[[if ud.transportCapacity>0 and ud.transportMass>0 and isFriendly then
@@ -667,12 +683,12 @@ local function GetTooltipUnit(id)
 	--[[if not isUpgradeCenter then
 		result = result..GetTooltipUpgradeLabel(spGetUnitTeam(u))
 	end]]
-				
+
 	--[[if ud.customParams.tip then
 		result = result.."\n\255\180\180\180"..ud.customParams.tip.."\255\255\255\255\n"
 	end]]
 	return result
-end
+	end
 	
 -- generates new tooltip 
 function GenerateNewTooltip()
@@ -829,10 +845,11 @@ function GenerateNewTooltip()
 			local unitsupplygive = fud.customParams.supply_granted or 0
 			local costStr = GetTooltipCost(unitsupplycost, unitsupplygive, unitenergycost or fud.energyCost, unitmetalcost or fud.metalCost)
 			local armorTypeStr = GetTooltipArmor(fud)
+			local unitRoleStr = GetTooltipRole(fud)
 			NewTooltip = NewTooltip.."\n"..unitpre.."\n"..fud.humanName..hotkeyStr.." ("..fud.tooltip..")\n"..
 				costStr.."\255\213\213\255".."    Build time: ".."\255\170\170\255"..
 				floor((29+floor(31+fud.buildTime/(buildpower/32)))/30).."s".."    "..GetTooltipTransportability(fud).."\n"..
-				"\255\200\200\200Health: ".."\255\200\200\200"..fud.health.." ("..armorTypeStr..")"
+				"\255\200\200\200Health: ".."\255\200\200\200"..fud.health.." ("..unitRoleStr..")"
 				if fud.shieldPower > 0 then NewTooltip=NewTooltip.."\255\135\135\255     Shield: "..FormatNbr(fud.shieldPower) end
 					
 			-- weapons
