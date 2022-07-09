@@ -44,6 +44,7 @@ local resources = {
 			blooddropwhite='PD/blooddropwhite.tga',
 			bloodblastwhite='PD/bloodblastwhite.tga',
 			null='PD/null.tga',
+            flareprojectiletexture = 'default/randdots.tga',
          },
       }
    }

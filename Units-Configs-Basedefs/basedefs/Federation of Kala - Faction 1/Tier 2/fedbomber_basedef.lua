@@ -1,8 +1,8 @@
 unitDef                    = {
-	--acceleration                 = 0.5,
+	acceleration                 = 5,
 	airStrafe                    = false,
 	airHoverFactor				 = -1.0,
-	--brakeRate                    = 1,
+	brakeRate                    = 5,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 300,
 	builder                      = false,
@@ -16,7 +16,7 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "AIRARMORED VTOL",
 	collide                      = true,
-	cruiseAlt                    = 200,
+	cruiseAlt                    = 300,
 	description                  = [[Bomber]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -30,13 +30,6 @@ unitDef                    = {
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	loopbackattack               = true,
-	--maxacc						 = 1,
-	
-	maxAileron					 = 0.01,
-	maxElevator					 = 0.01,
-	maxRudder					 = 0.01,
-	maxBank					 	 = 0.01,
-	
 	maxDamage                    = 670,
 	maxSlope                     = 90,
 	maxVelocity                  = 6,
@@ -78,7 +71,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "bomb",
+			def                  = "missile",
 			-- onlyTargetCategory	 = "BUILDING",
 			noChaseCategory      = "VTOL LIGHT ARMORED",
 		},
@@ -124,7 +117,7 @@ weaponDefs                 = {
 		metalpershot             = 0,
 		model                    = "missile.s3o",
 		name                     = "Rockets",
-		range                    = 800,
+		range                    = 400,
 		reloadtime               = 6,
 		weaponType		         = "MissileLauncher",		
 		

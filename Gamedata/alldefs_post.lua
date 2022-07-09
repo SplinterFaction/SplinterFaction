@@ -58,34 +58,34 @@ function UnitDef_Post(name, uDef)
 	--
 
 	local function tobool(val)
-	  local t = type(val)
-	  if (t == 'nil') then
+		local t = type(val)
+		if (t == 'nil') then
+			return false
+		elseif (t == 'boolean') then
+			return val
+		elseif (t == 'number') then
+			return (val ~= 0)
+		elseif (t == 'string') then
+			return ((val ~= '0') and (val ~= 'false'))
+		end
 		return false
-	  elseif (t == 'boolean') then
-		return val
-	  elseif (t == 'number') then
-		return (val ~= 0)
-	  elseif (t == 'string') then
-		return ((val ~= '0') and (val ~= 'false'))
-	  end
-	  return false
 	end
 
 
 	local function disableunits(unitlist)
-	  for name, ud in pairs(UnitDefs) do
-		if (ud.buildoptions) then
-		  for _, toremovename in ipairs(unitlist) do
-			for index, unitname in pairs(ud.buildoptions) do
-			  if (unitname == toremovename) then
-				table.remove(ud.buildoptions, index)
-			  end
+		for name, ud in pairs(UnitDefs) do
+			if (ud.buildoptions) then
+				for _, toremovename in ipairs(unitlist) do
+					for index, unitname in pairs(ud.buildoptions) do
+						if (unitname == toremovename) then
+							table.remove(ud.buildoptions, index)
+						end
+					end
+				end
 			end
-		  end
 		end
-	  end
 	end
-	
+
 	-- Allow all unit to see planes high above
 	-- This ties in with the global Cylinder Targetting
 	-- Default airsightdistance is sightdistance * 1.5
@@ -93,15 +93,15 @@ function UnitDef_Post(name, uDef)
 	if uDef.airsightdistance == uDef.sightdistance * 1.5 then
 		uDef.airsightdistance = uDef.sightdistance
 	end
-	
+
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Set building Mask 0 for all mobile units
 	--
 	if uDef.customparams and uDef.customparams.unittype == "mobile" then
 		uDef.buildingmask = 0
-	end	
-	
+	end
+
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- 3dbuildrange for all non plane builders
@@ -120,18 +120,47 @@ function UnitDef_Post(name, uDef)
 	--
 
 	if uDef.canfly and not uDef.istransport then
- 		uDef.collide = false
-  	end
+		uDef.collide = false
+	end
+
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+	-- Fix Spring's Awful Defaults for Planes
+	--
+
+	if uDef.canfly == true then
+
+		uDef.wingDrag            = 0.07
+		uDef.wingAngle           = 0.08
+		uDef.frontToSpeed        = 0     -- New Default
+		uDef.speedToFront        = 0.1   -- New Default
+		uDef.crashDrag           = 0.005
+		uDef.maxBank             = 0.7   -- New Default
+		uDef.maxPitch            = 0.65  -- New Default
+		uDef.turnRadius          = 20.0  -- New Default
+		uDef.verticalSpeed       = 3.0
+		uDef.maxAileron          = 0.025 -- New Default
+		uDef.maxElevator         = 0.01
+		uDef.maxRudder           = 0.01  -- New Default
+		if uDef.hoverattack == false or uDef.hoverattack == nil then
+			uDef.maxAcc          = 1.2     -- OG Default
+		else
+			uDef.maxAcc          = 0.065   -- OG Default
+		end
+		if uDef.attackSafetyDistance then
+			uDef.attackSafetyDistance = 0 --Exists only in version 99.0
+		end
+	end
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Set building start sound for all builders
 	--
-	
+
 	if uDef.builder == true and uDef.sounds then
 		uDef.sounds.build = "miscfx/Health Pickup 3.wav"
 	end
-	
+
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Calculate mincloakdistance based on unit footprint size
@@ -154,11 +183,11 @@ function UnitDef_Post(name, uDef)
 	--------------------------------------------------------------------------------
 	-- Spring Kludge Removal
 	-- 
-	uDef.activateWhenBuilt  = true 
+	uDef.activateWhenBuilt  = true
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	
+
 	--Set reverse velocity automatically
 	if uDef.maxvelocity then
 		uDef.maxreversevelocity = uDef.maxvelocity * 0.75
@@ -167,8 +196,8 @@ function UnitDef_Post(name, uDef)
 	--Override groundplate used
 	if uDef.usegrounddecal == true and uDef.customparams and uDef.customparams.customgrounddecal ~= true then
 		if uDef.customparams and uDef.customparams.factionname == "ateran" or
-			uDef.customparams and uDef.customparams.factionname == "Federation of Kala" or
-			uDef.customparams and uDef.customparams.factionname == "Loz Alliance" then
+				uDef.customparams and uDef.customparams.factionname == "Federation of Kala" or
+				uDef.customparams and uDef.customparams.factionname == "Loz Alliance" then
 			uDef.buildinggrounddecaltype = "groundplate.dds"
 			--Make decals sizing easy
 			if uDef.footprintx ~= nil and uDef.footprintz ~= nil then
@@ -186,7 +215,7 @@ function UnitDef_Post(name, uDef)
 			uDef.buildinggrounddecaltype = "groundplate.dds"
 		end
 	end
-	
+
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Turn on/off nanospray globally
@@ -197,9 +226,9 @@ function UnitDef_Post(name, uDef)
 	else
 		if uDef.shownanospray == nil or uDef.shownanospray == true then
 			uDef.shownanospray = false
-		end	
+		end
 	end
-	
+
 	--------------------------------------------------------------------------------
 	-------------------------------------------------------------------------------- Make units unable to be built in the water
 	if uDef.maxwaterdepth then
@@ -214,7 +243,7 @@ function UnitDef_Post(name, uDef)
 	if uDef.corpse == "chicken_egg" then
 		uDef.corpse = ""
 	end
-	
+
 	if string.find(name, '_scav') then
 		VFS.Include("gamedata/scavengers/unitdef_post.lua")
 		uDef = scav_Udef_Post(name, uDef)
@@ -227,7 +256,7 @@ function UnitDef_Post(name, uDef)
 	if uDef.idletime > 450 then
 		uDef.idletime = 450
 	end
-	
+
 	if uDef.idleautoheal == nil then uDef.idleautoheal = 0 end
 	if uDef.idleautoheal < 1 then
 		uDef.idleautoheal = 2.5

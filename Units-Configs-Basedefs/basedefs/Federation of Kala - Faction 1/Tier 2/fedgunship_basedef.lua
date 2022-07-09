@@ -1,8 +1,8 @@
 unitDef                    = {
-	--acceleration                 = 0.5,
+	acceleration                 = 5,
 	airStrafe                    = true,
 	airHoverFactor				 = -1.0,
-	--brakeRate                    = 1,
+	brakeRate                    = 5,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 200,
 	buildTime                    = 2.5,
@@ -29,13 +29,6 @@ unitDef                    = {
 	iconType                     = "air_arm",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
-	--maxacc						 = 1,
-	
-	maxAileron					 = 0.01,
-	maxElevator					 = 0.01,
-	maxRudder					 = 0.01,
-	maxBank					 	 = 0.01,
-	
 	maxDamage                    = 940,
 	maxSlope                     = 90,
 	maxVelocity                  = 7.5,
