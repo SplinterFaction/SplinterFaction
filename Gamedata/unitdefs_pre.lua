@@ -493,12 +493,12 @@ Shared.buildListf1landfac = {
 }
 
 Shared.buildListf2landfac = {
-	[[eamphibbuggy]],
-	[[eamphibneedle]],
-	[[eamphibmedtank]],
-	[[eamphibrock]],
-	[[lozengineer]],
-	[[eorb]],
+	[[lozflea]],
+	[[lozdiamondback]],
+	[[lozroach]],
+	[[lozscorpion]],
+	[[lozreaper]],
+	[[lozluger]],
 }
 
 Shared.buildListHoverFactory = {
