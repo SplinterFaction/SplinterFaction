@@ -105,7 +105,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		collideFeature           = false,
 		
-		cegTag                   = "artyshot2",
+		--cegTag                   = "artyshot2",
 		avoidNeutral	         = false,
 		explosionGenerator       = "custom:genericshellexplosion-medium",
 		energypershot            = 0,
@@ -116,7 +116,7 @@ weaponDefs                 = {
 		name                     = "Plasma Cannon",
 		range                    = 1300,
 		reloadtime               = 10,
-		size					 = 10,
+		size					 = 5,
 		weaponType		         = "Cannon",
 		soundHit                 = "explosions/artyhit.wav",
 		soundStart               = "weapons/arty2.wav",

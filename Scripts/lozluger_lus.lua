@@ -1,4 +1,4 @@
-base, rearwheels, frontwheels, tanks, mount, turret, cannonbarrel1, cannonfirepoint1 = piece('base', 'rearwheels', 'frontwheels', 'tanks', 'mount', 'turret', 'cannonbarrel1', 'cannonfirepoint1')
+base, rearwheels, frontwheels, tanks, turret, cannonbarrel1, cannonfirepoint1 = piece('base', 'rearwheels', 'frontwheels', 'tanks', 'turret', 'cannonbarrel1', 'cannonfirepoint1')
 local SIG_AIM = {}
 
 common = include("headers/common_includes_lus.lua")

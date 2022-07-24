@@ -1,4 +1,3 @@
--- UNITDEF -- lozcommander --
 --------------------------------------------------------------------------------
 
 unitName = [[lozcommander]]
@@ -17,19 +16,19 @@ maxdamage = 2000
 maxvelocity = 3
 workertime = 1
 
-movementclass = [[WALKERTANK4]]
+movementclass = [[WHEELEDTANK3]]
 
-objectname = [[lozcommandtank.s3o]]
-script = [[lozcommandtank.cob]]
+objectname = [[lozcommander.s3o]]
+script = [[lozcommander_lus.lua]]
 
-footprintx = 4
-footprintz = 4
+footprintx = 3
+footprintz = 3
 
 buildlist = Shared.buildListLozt1
 
 weapon1 = [[machinegun]]
 
-VFS.Include("units-configs-basedefs/basedefs/commander_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

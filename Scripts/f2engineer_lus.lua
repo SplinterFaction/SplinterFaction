@@ -30,19 +30,19 @@ function thrust()
 	common.DirtTrail()
 end
 
+function RestoreAfterDelay()
+	SetSignalMask(SIG_AIM)
+	if building == false then
+		Sleep(2000)
+	end
+end
+
 function BuildFX()
 	while(building == true) do
 		EmitSfx (nano1, 1024)
 		Sleep(550)
 	end
 end
-
-function RestoreAfterDelay()
-	SetSignalMask(SIG_AIM)
-	if building == false then
-		Sleep(2000)
-	end
-end		
 
 function script.StopBuilding()
     SetUnitValue(COB.INBUILDSTANCE, 0)

@@ -1,4 +1,3 @@
--- UNITDEF -- lozcommander_up3 --
 --------------------------------------------------------------------------------
 
 unitName = [[lozcommander_up3]]
@@ -17,13 +16,13 @@ maxdamage = 15000
 maxvelocity = 3
 workertime = 4
 
-movementclass = [[COMMANDERTANK4]]
+movementclass = [[WHEELEDTANK6]]
 
-objectname = [[lozcommandtank.s3o]]
-script = [[lozcommandtank.cob]]
+objectname = [[lozcommander_up3.s3o]]
+script = [[lozcommander_lus.lua]]
 
-footprintx = 4
-footprintz = 4
+footprintx = 6
+footprintz = 6
 
 buildlist = Shared.buildListLozt4
 

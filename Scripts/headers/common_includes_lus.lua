@@ -51,6 +51,51 @@ common = {
 		Spring.UnitScript.StopSpin(frontwheels,x_axis,math.rad(100))
 		Spring.UnitScript.StopSpin(rearwheels,x_axis,math.rad(100))
 	end,
+	-- 4 wheels
+	WheelStartSpin4 = function ()
+		Spring.UnitScript.Spin(wheels1,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels2,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels3,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels4,x_axis,math.rad(250))
+	end,
+	WheelStopSpin4 = function ()
+		Spring.UnitScript.StopSpin(wheels1,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels2,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels3,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels4,x_axis,math.rad(100))
+	end,
+	-- 5 wheels
+	WheelStartSpin5 = function ()
+		Spring.UnitScript.Spin(wheels1,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels2,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels3,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels4,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels5,x_axis,math.rad(250))
+	end,
+	WheelStopSpin5 = function ()
+		Spring.UnitScript.StopSpin(wheels1,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels2,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels3,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels4,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels5,x_axis,math.rad(100))
+	end,
+	-- 6 wheels
+	WheelStartSpin6 = function ()
+		Spring.UnitScript.Spin(wheels1,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels2,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels3,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels4,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels5,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels6,x_axis,math.rad(250))
+	end,
+	WheelStopSpin6 = function ()
+		Spring.UnitScript.StopSpin(wheels1,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels2,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels3,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels4,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels5,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels6,x_axis,math.rad(100))
+	end,
 
 	SmokeUnit = function (smokePieces)
 		local n = #smokePieces
