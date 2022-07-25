@@ -10,7 +10,7 @@ buildpicture = [[lozcommander.png]]
 techprovided = [[tech0, tech1, tech2, -overseer]]
 techrequired = [[0 overseer]]
 
-maxdamage = 10000
+buildCostMetal = 12000
 maxvelocity = 3
 workertime = 3
 
@@ -26,7 +26,7 @@ buildlist = Shared.buildListLozt3
 
 weapon1 = [[machinegun_up2]]
 
-VFS.Include("units-configs-basedefs/basedefs/commander_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

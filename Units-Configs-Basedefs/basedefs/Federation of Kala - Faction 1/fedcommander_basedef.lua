@@ -7,7 +7,7 @@ unitDef                    = {
 	acceleration                 = 0.2,
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 2500,
+	buildCostMetal               = buildcostmetal,
 	buildDistance                = 350,
 	builder                      = true,
 	buildTime                    = 2.5,
@@ -38,7 +38,7 @@ unitDef                    = {
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	levelground                  = true,
-	maxDamage                    = maxdamage,
+	maxDamage                    = 1,
 	maxSlope                     = 180,
 	maxVelocity                  = maxvelocity,
 	maxReverseVelocity           = 1,
@@ -99,18 +99,17 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		unittype				  = "mobile",
+		unittype				 = "mobile",
+		unitrole 				 = "Commander",
 		area_mex_def			 = "emetalextractor",
 		ProvideTech              = techprovided,
 		RequireTech				 = techrequired,
 		canbetransported 		 = "true",
 		iscommander              = true,
 		needed_cover             = 2,
-		supply_granted            = supplygiven,
 		death_sounds             = "generic",
 		factionname	             = "Federation of Kala",
-		
-		armortype                = armortype,
+
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
@@ -153,8 +152,6 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 1500,
 		customparams             = {
-			damagetype		      = "light", 
-			nocosttofire		    = true,
 		}, 
 		damage                   = {
 			default              = 200,
@@ -193,8 +190,6 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 1500,
 		customparams             = {
-			damagetype		      = "light", 
-			nocosttofire		    = true,
 		}, 
 		damage                   = {
 			default              = 300,
@@ -233,8 +228,6 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 1500,
 		customparams             = {
-			damagetype		      = "light", 
-			nocosttofire		    = true,
 		}, 
 		damage                   = {
 			default              = 450,
@@ -273,8 +266,6 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 1500,
 		customparams             = {
-			damagetype		      = "light", 
-			nocosttofire		    = true,
 		}, 
 		damage                   = {
 			default              = 675,
@@ -326,9 +317,7 @@ weaponDefs                 = {
 		weaponType                = "StarburstLauncher",
 		weaponVelocity            = 1000,
 		customparams              = {
-			damagetype		      = "light",  
 			death_sounds 		  = "nuke",
-			nocosttofire		  = true,
 		},      
 		damage                    = {
 			default               = 1000,
@@ -371,8 +360,6 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 800,
 		customparams             = {
-			isupgraded           	 = isUpgraded,
-			damagetype		     = "antilightarmored",  
 		}, 
 		damage                   = {
 			default              = 500,

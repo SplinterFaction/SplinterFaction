@@ -157,7 +157,7 @@ local closeButtonSize = 30
 local screenHeight = 520-bgMargin-bgMargin
 local screenWidth = 400-bgMargin-bgMargin
 
-local textareaMinLines = 10		-- wont scroll down more, will show at least this amount of lines 
+local textareaMinLines = 10		-- wont scroll down more, will show at least this amount of lines
 
 local customScale = 1
 

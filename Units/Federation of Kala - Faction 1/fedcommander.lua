@@ -1,4 +1,3 @@
--- UNITDEF -- fedcommander --
 --------------------------------------------------------------------------------
 
 unitName = [[fedcommander]]
@@ -6,25 +5,22 @@ unitName = [[fedcommander]]
 --------------------------------------------------------------------------------
 
 humanname = [[Federation of Kala Command Unit]]
-buildpicture = [[ecommander.png]]
-buildcostmetal = 1000
+buildpicture = [[fedcommander.png]]
+buildcostmetal = 3000
 
-armortype = [[light]]
-supplygiven = [[0]]
 techprovided = [[tech0, -overseer]]
 techrequired = [[0 overseer]]
 
-maxdamage = 2000
 maxvelocity = 3
 workertime = 1
 
-movementclass = [[WALKERTANK4]]
+movementclass = [[WALKERTANK3]]
 
-objectname = [[ecommander4-battle.s3o]]
+objectname = [[fedcommander.s3o]]
 script = [[ecommander4-battle.cob]]
 
-footprintx = 4
-footprintz = 4
+footprintx = 3
+footprintz = 3
 
 buildlist = Shared.buildListFedt1
 

@@ -47,9 +47,9 @@ end
 
 
 function switchUnitToHoldFire(unitID, unitDefID)
-    if (unitDefID == UnitDefNames["ecommandermeteor"].id) then
-        spGiveOrderToUnit(unitID, CMD.FIRE_STATE, { 0 }, {})
-     end
+   -- if (unitDefID == UnitDefNames["ecommandermeteor"].id) then
+   --     spGiveOrderToUnit(unitID, CMD.FIRE_STATE, { 0 }, {})
+   -- end
 end
 
 function widget:PlayerChanged(playerID)
