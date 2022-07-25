@@ -1,7 +1,7 @@
-base, spinner, nano1, spinner2, nano2, dirt = piece('base', 'spinner', 'nano1', 'spinner2', 'nano2', 'dirt')
+base, nanopoint1, dirt = piece('base', 'nanopoint1', 'dirt')
 local SIG_AIM = {}
 
-local nanoPieces = {[0] = nano1, nano2}
+local nanoPieces = {[0] = nanopoint1}
 local SIG_AIM = 2
 
 -- state variables
@@ -9,7 +9,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, spinner})
+	StartThread(common.SmokeUnit, {base})
 	StartThread(BuildFX)
 	building = false
 	Spring.SetUnitNanoPieces(unitID, nanoPieces)
@@ -24,19 +24,10 @@ end
 
 function script.StopMoving()
    isMoving = false
-end   
+end
 
 function thrust()
 	common.DirtTrail()
-end
-
-function BuildFX()
-	while(building == true) do
-		EmitSfx (nano1, 1024)
-		Sleep(200)
-		EmitSfx (nano2, 1024)
-		Sleep(550)
-	end
 end
 
 function RestoreAfterDelay()
@@ -44,7 +35,14 @@ function RestoreAfterDelay()
 	if building == false then
 		Sleep(2000)
 	end
-end		
+end
+
+function BuildFX()
+	while(building == true) do
+		EmitSfx (nanopoint1, 1024)
+		Sleep(550)
+	end
+end
 
 function script.StopBuilding()
     SetUnitValue(COB.INBUILDSTANCE, 0)
@@ -67,7 +65,6 @@ function script.QueryNanoPiece()
 end
 
 function script.Killed()
-		Explode(spinner, SFX.EXPLODE_ON_HIT)
 		Explode(base, SFX.EXPLODE_ON_HIT)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

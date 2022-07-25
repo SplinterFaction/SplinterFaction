@@ -20,16 +20,15 @@ humanName = [[Architect]]
 
 footprintx = 2
 footprintz = 2
-movementclass = "HOVERTANK2"
+movementclass = "WHEELEDTANK2"
 
-objectName = [[f2engineer.s3o]]
-script = [[f2engineer_lus.lua]]
+objectName = [[lozengineer.s3o]]
+script = [[lozengineer_lus.lua]]
 
 areamexdef = [[emetalextractor]]
-armortype = [[light]]
 requiretech = [[tech0]]
 
-VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/f2engineer_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozengineer_basedef.lua")
 
 --------------------------------------------------------------------------------
 

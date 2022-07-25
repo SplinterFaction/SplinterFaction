@@ -7,8 +7,6 @@ unitName = [[lozcommander_up4]]
 humanname = [[Loz Alliance BattleMech Command Unit]]
 buildpicture = [[lozcommander.png]]
 
-armortype = [[armored]]
-supplygiven = [[0]]
 techprovided = [[tech0, tech1, tech2, tech3, -overseer]]
 techrequired = [[0 overseer]]
 
