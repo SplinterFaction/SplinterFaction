@@ -499,6 +499,7 @@ Shared.buildListf2landfac = {
 	[[lozscorpion]],
 	[[lozreaper]],
 	[[lozluger]],
+	[[lozpulverizer]],
 }
 
 Shared.buildListHoverFactory = {
