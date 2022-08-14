@@ -132,6 +132,9 @@ Shared.buildListFedt3 = {
 	[[esilo]],
 	[[esiloplanetcracker]],
 	-- [[escoutdrone]],
+	[[fedgoliath]],
+	[[fedjuggernaut]],
+	[[fedanarchid]],
 	[[fedengineer_up2]],
 	-- [[fedorb]],
 }
@@ -278,6 +281,7 @@ Shared.buildListLozt3 = {
 	[[esilo]],
 	[[esiloplanetcracker]],
 	[[escoutdrone]],
+	[[lozmammoth]],
 	[[lozengineer_up2]],
 	-- [[lozorb]],
 }
@@ -486,9 +490,6 @@ Shared.buildListf1landfac = {
 	[[fedcobra]],
 	[[fedavalanche]],
 	[[fedphalanx]],
-	[[fedakm2]],
-	[[fedrazorback]],
-	[[fedanarchid]],
 	[[fedengineer]],	
 }
 
@@ -500,6 +501,7 @@ Shared.buildListf2landfac = {
 	[[lozreaper]],
 	[[lozluger]],
 	[[lozpulverizer]],
+	[[lozmammoth]],
 }
 
 Shared.buildListHoverFactory = {
