@@ -13,7 +13,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, railturret1, burstturret1, burstturret2, missileturret1, missileturret2})
+	StartThread(common.SmokeUnit, {base, railturret1})
 end
 
 common = include("headers/common_includes_lus.lua")
@@ -36,7 +36,7 @@ local function RestoreAfterDelay()
 	Turn(burstturret2, y_axis, 0, 1)
 	Turn(missileturret1, y_axis, 0, 1)
 	Turn(missileturret2, y_axis, 0, 1)
-	Turn(railgunbarrel1, x_axis, 0, 1)
+	Turn(railbarrel1, x_axis, 0, 1)
 	Turn(burstbarrel1, x_axis, 0, 1)
 	Turn(burstbarrel2, x_axis, 0, 1)
 	Turn(missilebarrel1, x_axis, 0, 1)
@@ -126,7 +126,7 @@ end
 
 function script.Killed()
 		Explode(railturret1, SFX.EXPLODE_ON_HIT)
-		Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT)
+		Explode(railbarrel1, SFX.EXPLODE_ON_HIT)
 		Explode(burstbarrel1, SFX.EXPLODE_ON_HIT)
 		Explode(burstbarrel2, SFX.EXPLODE_ON_HIT)
 		Explode(missilebarrel1, SFX.EXPLODE_ON_HIT)

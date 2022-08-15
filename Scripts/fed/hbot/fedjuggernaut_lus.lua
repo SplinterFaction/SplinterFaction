@@ -87,7 +87,7 @@ end
 
 function script.AimWeapon(WeaponID, heading, pitch)
     Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
-    Turn(turret, y_axis, heading, 10)
+    Turn(turret, y_axis, heading, 1)
     WaitForTurn(turret, y_axis)
     if WeaponID == 1 then
         Signal(SIG_AIM)

@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 1,
 	brakeRate                    = 0.2,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 2300,
+	buildCostMetal               = 3000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozmammoth.png",
@@ -17,8 +17,8 @@ unitDef                    = {
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = "mediumExplosionGenericRed",
-	footprintX                   = 8,
-	footprintZ                   = 8,
+	footprintX                   = 6,
+	footprintZ                   = 6,
 	iconType                     = "td_arm_all",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
@@ -29,7 +29,7 @@ unitDef                    = {
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
-	movementClass                = "WHEELEDTANK8",
+	movementClass                = "WHEELEDTANK6",
 	name                         = humanName,
 	noChaseCategory              = "VTOL",
 	objectName                   = objectName,
@@ -224,7 +224,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 50,
+			default              = 250,
 		},
 	},
 }
