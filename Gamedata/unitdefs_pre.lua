@@ -314,12 +314,9 @@ Shared.buildListLozt4 = {
 	[[esilo]],
 	[[esiloplanetcracker]],
 	[[escoutdrone]],
-	[[lozengineer_up3]],
-	-- [[lozorb]],
-	[[eamphibleveler]],
-	[[elacerator]],
-	[[ekrow]],
-	-- [[ecommander]],
+	[[lozmammoth]],
+	[[lozsilverback]],
+	[[lozengineer_up2]],
 }
 
 Shared.fedOrb = {
@@ -490,7 +487,12 @@ Shared.buildListf1landfac = {
 	[[fedcobra]],
 	[[fedavalanche]],
 	[[fedphalanx]],
-	[[fedengineer]],	
+	[[fedgoliath]],
+	[[fedjuggernaut]],
+	[[fedengineer]],
+	[[fedengineer_up1]],
+	[[fedengineer_up2]],
+	[[fedengineer_up3]],
 }
 
 Shared.buildListf2landfac = {
@@ -502,6 +504,11 @@ Shared.buildListf2landfac = {
 	[[lozluger]],
 	[[lozpulverizer]],
 	[[lozmammoth]],
+	[[lozsilverback]],
+	[[lozengineer]],
+	[[lozengineer_up1]],
+	[[lozengineer_up2]],
+	[[lozengineer_up3]],
 }
 
 Shared.buildListHoverFactory = {
