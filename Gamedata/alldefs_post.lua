@@ -35,7 +35,7 @@ useDefaultNanospray = true
 -- DEFS POST PROCESSING
 -------------------------
 
-local function tobool(val)
+function tobool(val)
 	local t = type(val)
 	if (t == 'nil') then
 		return false
@@ -54,22 +54,10 @@ function UnitDef_Post(name, uDef)
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	-- Utility
-	--
-
-	local function tobool(val)
-		local t = type(val)
-		if (t == 'nil') then
-			return false
-		elseif (t == 'boolean') then
-			return val
-		elseif (t == 'number') then
-			return (val ~= 0)
-		elseif (t == 'string') then
-			return ((val ~= '0') and (val ~= 'false'))
-		end
-		return false
-	end
+	--Use DDS for Buildpics
+	local buildpicfilename = uDef.unitname .. ".dds"
+	uDef.buildpic = tostring(buildpicfilename)
+	--Spring.Echo (buildpicfilename .. " <-> " .. uDef.buildpicname)
 
 
 	local function disableunits(unitlist)

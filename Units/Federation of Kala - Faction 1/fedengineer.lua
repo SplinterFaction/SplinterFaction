@@ -12,7 +12,7 @@ buildpic = [[fedengineer.png]]
 
 maxDamage = 500 --This is set automatically
 
-fedbuildlists = Shared.buildListFedt1
+fedbuildlists = Shared.buildListFedt0
 
 workertime = 1
 

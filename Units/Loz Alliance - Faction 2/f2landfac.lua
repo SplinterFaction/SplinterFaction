@@ -10,12 +10,14 @@ maxDamage = buildCostMetal * 12.5
 
 humanName = [[Land Factory]]
 
-objectName = "ehoverfactory.s3o"
-script = "ehoverfac.cob"
+objectName = "f2landfac.s3o"
+script = "f2landfac.cob"
+
+tech = [[tech1]]
 
 hoverFactoryBuildList = Shared.buildListf2landfac
 
-VFS.Include("units-configs-basedefs/basedefs/hover/ebasefactory_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/hover/f2landfac_basedef.lua")
 
 --------------------------------------------------------------------------------
 

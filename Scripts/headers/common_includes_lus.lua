@@ -106,6 +106,7 @@ common = {
 			local health = GetUnitValue(COB.HEALTH)
 			if (health <= 66) then -- only smoke if less then 2/3rd health left
 				common.CustomEmitter(smokePieces[math.random(1,n)], "blacksmoke") --CEG name in quotes (string)
+				common.CustomEmitter(smokePieces[math.random(1,n)], "burnblacksmall") --CEG name in quotes (string)
 			end
 			Sleep(20*health + 200)
 		end

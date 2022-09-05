@@ -22,7 +22,7 @@ script = [[lozcommander_lus.lua]]
 footprintx = 3
 footprintz = 3
 
-buildlist = Shared.buildListLozt1
+buildlist = Shared.buildListLozt0
 
 weapon1 = [[machinegun]]
 

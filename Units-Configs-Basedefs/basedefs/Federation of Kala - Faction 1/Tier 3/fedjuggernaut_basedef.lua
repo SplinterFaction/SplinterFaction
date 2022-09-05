@@ -84,13 +84,13 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "machinegun",
+			def                  = "particlebeamcannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
 		},
 		[2]                      = {
-			def                  = "machinegun",
+			def                  = "particlebeamcannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory    = "VTOL",
@@ -152,38 +152,39 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	machinegun                   = {
-		AreaOfEffect           = 25,
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "0.5 0.5 0",
-		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-large-sparks-burn",
-		edgeEffectiveness	   = 1,
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.1,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "Laser Cannon",
-		range                  = 1000,
-		reloadtime             = 0.2,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/Sci Fi Blaster 4.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.5,
-		thickness              = 5,
-		tolerance              = 2000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 800,
-		customparams             = {
+	particlebeamcannon                 = {
 
+		accuracy                 = 0,
+		AreaOfEffect             = 10,
+		avoidFeature             = false,
+		avoidFriendly            = false,
+		collideFeature           = false,
+		collideFriendly          = false,
+		explosionGenerator       = "custom:burnblack",
+		coreThickness            = 0.1,
+		duration                 = 0.8,
+		energypershot            = 0,
+		fallOffRate              = 0.1,
+		fireStarter              = 50,
+		interceptedByShieldType  = 4,
+		soundstart               = "weapons/Bio gun Shot 6.wav",
+
+		minintensity             = 1,
+		impulseFactor            = 0,
+		name                     = "Something with Flames",
+		range                    = 1000,
+		reloadtime               = 0.2,
+		WeaponType               = [[LaserCannon]],
+		rgbColor                 = "1 0.5 0",
+		rgbColor2                = "1 1 1",
+		thickness                = 2,
+		tolerance                = 1000,
+		turret                   = true,
+		texture1                 = "shot",
+		texture2                 = "empty",
+		weaponVelocity           = 1000,
+		sprayangle				 = 500,
+		customparams             = {
 		},
 		damage                   = {
 			default              = 30,

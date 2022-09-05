@@ -326,6 +326,36 @@ return {
     },
   },
 
+  ["burnblacksmall"] = {
+    kickedupdirt = {
+      air                = true,
+      class              = [[CSimpleParticleSystem]],
+      count              = 1,
+      ground             = true,
+      properties = {
+        airdrag            = 0.87,
+        alwaysvisible      = true,
+        colormap           = [[1 0.5 0.0 0.2	0 0 0 0.2 0	0 0 0.01]],
+        directional        = false,
+        emitrot            = 90,
+        emitrotspread      = 5,
+        emitvector         = [[0, 1, 0]],
+        gravity            = [[0, 0.1, 0]],
+        numparticles       = 30,
+        particlelife       = 2,
+        particlelifespread = 15,
+        particlesize       = 2,
+        particlesizespread = 1,
+        particlespeed      = 1,
+        particlespeedspread = 3,
+        pos                = [[0, 1, 0]],
+        sizegrowth         = 1,
+        sizemod            = 0.9,
+        texture            = [[flame]],
+      },
+    },
+  },
+
   ["burngreen"] = {
     groundflash = {
       circlealpha        = 0.1,

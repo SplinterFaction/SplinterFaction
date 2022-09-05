@@ -86,68 +86,53 @@ function script.FireWeapon(WeaponID)
 end
 
 function script.AimWeapon(WeaponID, heading, pitch)
-    Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
+
     Turn(turret, y_axis, heading, 1)
-    WaitForTurn(turret, y_axis)
+
     if WeaponID == 1 then
         Signal(SIG_AIM)
         SetSignalMask(SIG_AIM)
-
+        WaitForTurn(turret, y_axis)
         Turn(gatlingbarrel1, x_axis, -pitch, 10)
         WaitForTurn(gatlingbarrel1, x_axis)
         StartThread(RestoreAfterDelay)
         --Spring.Echo("AimWeapon: FireWeapon")
         return true
     elseif WeaponID == 2 then
-        Signal(SIG_AIM2)
-        SetSignalMask(SIG_AIM2)
+        WaitForTurn(turret, y_axis)
 
         Turn(gatlingbarrel2, x_axis, -pitch, 10)
         WaitForTurn(gatlingbarrel2, x_axis)
-        StartThread(RestoreAfterDelay)
         --Spring.Echo("AimWeapon: FireWeapon")
         return true
     elseif WeaponID == 3 then
-        Signal(SIG_AIM3)
-        SetSignalMask(SIG_AIM3)
+        WaitForTurn(turret, y_axis)
 
         Turn(cannonbarrel1, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel1, x_axis)
         return true
     elseif WeaponID == 4 then
-        Signal(SIG_AIM4)
-        SetSignalMask(SIG_AIM4)
+        WaitForTurn(turret, y_axis)
 
         Turn(cannonbarrel2, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel2, x_axis)
         return true
     elseif WeaponID == 5 then
-        Signal(SIG_AIM5)
-        SetSignalMask(SIG_AIM5)
+        WaitForTurn(turret, y_axis)
 
         Turn(rocketbarrel1, x_axis, -pitch, 10)
         WaitForTurn(rocketbarrel1, x_axis)
         return true
     elseif WeaponID == 6 then
-        Signal(SIG_AIM6)
-        SetSignalMask(SIG_AIM6)
+        WaitForTurn(turret, y_axis)
 
         Turn(rocketbarrel2, x_axis, -pitch, 10)
         WaitForTurn(rocketbarrel2, x_axis)
         return true
     elseif WeaponID == 7 then
-        Signal(SIG_AIM7)
-        SetSignalMask(SIG_AIM7)
 
-        Turn(missilebarrel1, x_axis, -pitch, 10)
-        WaitForTurn(missilebarrel1, x_axis)
         return true
     elseif WeaponID == 8 then
-        Signal(SIG_AIM8)
-        SetSignalMask(SIG_AIM8)
-
-        Turn(missilebarrel2, x_axis, -pitch, 10)
-        WaitForTurn(missilebarrel2, x_axis)
         return true
     end
 end

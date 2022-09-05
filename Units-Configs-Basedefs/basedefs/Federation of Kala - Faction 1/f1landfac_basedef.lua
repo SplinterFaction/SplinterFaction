@@ -1,4 +1,3 @@
--- ALL TERRAIN FACTORY : DEFFOS FOR INHERITING
 
 unitDef                      = {
 	activatewhenbuilt              = false,
@@ -7,7 +6,6 @@ unitDef                      = {
 	buildCostMetal                 = buildCostMetal,
 	builder                        = true,
 	buildTime                      = 5,
-	buildpic					   = "eminifac.png",
 	canBeAssisted                  = true,
 	canGuard                       = true,
 	canMove                        = true,
@@ -20,17 +18,6 @@ unitDef                      = {
 	collisionVolumeScales          = "298 142 168",
 	collisionVolumeTest            = 1,
 	collisionVolumeType            = "box",
-
-	-- Cloaking
-
-	cancloak		               = true,
-	cloakCost		               = 0,
-	minCloakDistance               = 250,
-	decloakOnFire	               = true,
-	decloakSpherical               = true,
-	initCloaked		               = false,
-	
-	-- End Cloaking
 
 	description                    = [[Build a Tech Facility to unlock units. Build Supply Depots to increase your army size.]],
 	energyStorage                  = 0,
@@ -84,6 +71,7 @@ unitDef                      = {
 	},
 	customParams                   = {
 		unittype				  = "factory",
+		RequireTech              = tech,
 		death_sounds               = "generic",
 		armortype                  = "building", 
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 

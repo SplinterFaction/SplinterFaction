@@ -22,7 +22,7 @@ script = [[ecommander4-battle.cob]]
 footprintx = 3
 footprintz = 3
 
-buildlist = Shared.buildListFedt1
+buildlist = Shared.buildListFedt0
 
 weapon1 = [[machinegun]]
 

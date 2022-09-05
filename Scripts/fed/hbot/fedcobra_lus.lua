@@ -50,21 +50,20 @@ function script.FireWeapon(WeaponID)
 end
 
 function script.AimWeapon(WeaponID, heading, pitch)
-    Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
+
     Turn(turret, y_axis, heading, 10)
-    WaitForTurn(turret, y_axis)
+
     if WeaponID == 1 then
         Signal(SIG_AIM)
         SetSignalMask(SIG_AIM)
-
+        WaitForTurn(turret, y_axis)
         Turn(cannonbarrel, x_axis, -pitch, 10)
         WaitForTurn(cannonbarrel, x_axis)
         StartThread(RestoreAfterDelay)
         --Spring.Echo("AimWeapon: FireWeapon")
         return true
     else
-        Signal(SIG_AIM2)
-        SetSignalMask(SIG_AIM2)
+        WaitForTurn(turret, y_axis)
 
         Turn(rocketbarrel, x_axis, -pitch, 10)
         WaitForTurn(rocketbarrel, x_axis)

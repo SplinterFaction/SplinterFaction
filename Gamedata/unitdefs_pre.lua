@@ -1,479 +1,3 @@
-Shared.buildList = {
-	[[ehbotfac]],
-	[[eminifac]],
-	[[ebasefactory]],
-	[[eamphibfac]],
-	[[eairplant]],
-	[[etech1]],
-	[[emetalextractor]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[efusion2]],
-	[[estorage]],
-	[[eradar2]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eartyturret]],
-	-- [[euwturret]],
-	[[eshieldgen]],
-	[[esilo]],
-	[[escoutdrone]],
-	[[ehbotengineer]],
-	[[eorb]],
-	[[eamphibleveler]],
-	[[ehbotkarganneth]],
-	[[eallterranarchid]],
-	[[elacerator]],
-	[[ekrow]],
-	-- [[ecommander]],
-}
-
-Shared.buildListFed = {
-	[[f1landfac]],
-	[[fedairplant]],
-	[[emetalextractor]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[efusion2]],
-	[[megapowerplant]],
-	[[estorage]],
-	[[eradar2]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[shieldbattery]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[eartyturret]],
-	[[eartyturretvulcan]],
-	[[meteorcommand]],
-	-- [[euwturret]],
-	[[healstation]],
-	[[eshieldgen]],
-	[[esilo]],
-	[[esiloplanetcracker]],
-	-- [[escoutdrone]],
-	[[fedengineer]],
-	-- [[fedorb]],
-	[[ehbotkarganneth]],
-	[[eallterranarchid]],
-	[[ekrow]],
-	-- [[ecommander]],
-}
-
-Shared.buildListFedt1 = {
-	[[f1landfac]],
-	[[fedairplant]],
-	[[emetalextractor]],
-	[[esolar2]],
-	[[estorage]],
-	[[eradar2]],
-	[[emine]],
-	[[elightturret2]],
-	[[elaserbattery]],
-	-- [[escoutdrone]],
-	[[fedengineer]],
-	-- [[fedorb]],
-}
-
-Shared.buildListFedt2 = {
-	[[f1landfac]],
-	[[fedairplant]],
-	[[emetalextractor_up1]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[estorage]],
-	[[eradar2]],
-	[[eradar2_up1]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[healstation]],
-	[[eshieldgen]],
-	-- [[escoutdrone]],
-	[[fedengineer_up1]],
-	-- [[fedorb]],
-}
-
-Shared.buildListFedt3 = {
-	[[f1landfac]],
-	[[fedairplant]],
-	[[emetalextractor_up2]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[efusion2]],
-	[[megapowerplant]],
-	[[estorage]],
-	[[eradar2]],
-	[[eradar2_up1]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[shieldbattery]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[eartyturret]],
-	[[eartyturretvulcan]],
-	[[meteorcommand]],
-	[[healstation]],
-	[[eshieldgen]],
-	[[esilo]],
-	[[esiloplanetcracker]],
-	-- [[escoutdrone]],
-	[[fedgoliath]],
-	[[fedjuggernaut]],
-	[[fedanarchid]],
-	[[fedengineer_up2]],
-	-- [[fedorb]],
-}
-
-Shared.buildListFedt4 = {
-	[[f1landfac]],
-	[[fedairplant]],
-	[[emetalextractor_up3]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[efusion2]],
-	[[megapowerplant]],
-	[[estorage]],
-	[[eradar2]],
-	[[eradar2_up1]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[shieldbattery]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[eartyturret]],
-	[[eartyturretvulcan]],
-	[[meteorcommand]],
-	-- [[euwturret]],
-	[[healstation]],
-	[[eshieldgen]],
-	[[esilo]],
-	[[esiloplanetcracker]],
-	-- [[escoutdrone]],
-	[[fedengineer_up3]],
-	-- [[fedorb]],
-	[[fedakm2]],
-	[[fedrazorback]],
-	[[fedanarchid]],
-	-- [[ecommander]],
-}
-
-Shared.fedAirPlantBuildList = {
-	[[fedgunship]],
-	[[fedbomber]],
-
-}
-
-Shared.buildListLoz = {
-	[[f2landfac]],
-	[[eairplant]],
-	[[emetalextractor]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[efusion2]],
-	[[megapowerplant]],
-	[[estorage]],
-	[[eradar2]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[shieldbattery]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[eartyturret]],
-	[[eartyturretvulcan]],
-	[[meteorcommand]],
-	-- [[euwturret]],
-	[[healstation]],
-	[[eshieldgen]],
-	[[esilo]],
-	[[esiloplanetcracker]],
-	[[escoutdrone]],
-	[[lozengineer]],
-	-- [[lozorb]],
-	[[eamphibleveler]],
-	[[elacerator]],
-	[[ekrow]],
-	-- [[ecommander]],
-}
-
-Shared.buildListLozt1 = {
-	[[f2landfac]],
-	[[eairplant]],
-	[[emetalextractor]],
-	[[esolar2]],
-	[[estorage]],
-	[[eradar2]],
-	[[emine]],
-	[[elightturret2]],
-	[[elaserbattery]],
-	[[escoutdrone]],
-	[[lozengineer]],
-	-- [[lozorb]],
-}
-
-Shared.buildListLozt2 = {
-	[[f2landfac]],
-	[[eairplant]],
-	[[emetalextractor_up1]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[estorage]],
-	[[eradar2]],
-	[[eradar2_up1]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[healstation]],
-	[[eshieldgen]],
-	[[escoutdrone]],
-	[[lozengineer_up1]],
-	-- [[lozorb]],
-}
-
-Shared.buildListLozt3 = {
-	[[f2landfac]],
-	[[eairplant]],
-	[[emetalextractor_up2]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[efusion2]],
-	[[megapowerplant]],
-	[[estorage]],
-	[[eradar2]],
-	[[eradar2_up1]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[shieldbattery]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[eartyturret]],
-	[[eartyturretvulcan]],
-	[[meteorcommand]],
-	[[healstation]],
-	[[eshieldgen]],
-	[[esilo]],
-	[[esiloplanetcracker]],
-	[[escoutdrone]],
-	[[lozmammoth]],
-	[[lozengineer_up2]],
-	-- [[lozorb]],
-}
-
-Shared.buildListLozt4 = {
-	[[f2landfac]],
-	[[eairplant]],
-	[[emetalextractor_up3]],
-	[[esolar2]],
-	[[egeothermal]],
-	[[efusion2]],
-	[[megapowerplant]],
-	[[estorage]],
-	[[eradar2]],
-	[[eradar2_up1]],
-	[[ejammer2]],
-	[[ekmar]],
-	[[shieldbattery]],
-	[[emine]],
-	[[elightturret2]],
-	[[eheavyturret2]],
-	[[elaserbattery]],
-	[[eflakturret]],
-	[[eartyturret]],
-	[[eartyturretvulcan]],
-	[[meteorcommand]],
-	-- [[euwturret]],
-	[[healstation]],
-	[[eshieldgen]],
-	[[esilo]],
-	[[esiloplanetcracker]],
-	[[escoutdrone]],
-	[[lozmammoth]],
-	[[lozsilverback]],
-	[[lozengineer_up2]],
-}
-
-Shared.fedOrb = {
-	-- [[fedorb]],
-	[[fedengineer]],
-}
-
-Shared.lozOrb = {
-	-- [[lozorb]],
-	[[lozengineer]],
-}
-
-Shared.buildListeCommanderFactory = {
-	[[ehbotengineer]],
-	[[eorb]],
-	[[escoutdrone]],
-	[[ebox]],
-	[[ehbotfac]],
-	[[eminifac]],
-	[[ebasefactory]],
-	[[eamphibfac]],
-	[[eairplant]],
-	[[ehbotpeewee]],
-	[[ehbotthud]],
-	[[ehbotsniper]],
-	[[eallterrlight]],
-	[[eallterrriot_shotgun]],
-	[[eallterrheavy]],
-	[[elighttank3]],
-	[[eriottank2_shotgun]],
-	[[eheavytank3]],
-	[[eamphibbuggy]],
-	[[eamphibriot_shotgun]],
-	[[eamphibmedtank]],
-	[[efighter]],
-	[[egunship2]],
-	[[ebomber]],
-	[[eamphibleveler]],
-	[[ehbotkarganneth]],
-	[[eallterranarchid]],
-	[[elacerator]],
-	[[ekrow]],
-}
-
-Shared.buildListZaal = {
-	[[zlightswarm]],
-	[[zmedswarm]],
-	[[zskirmisher]],
-	[[zpyro]],
-	[[zassault]],
-	[[zarty]],
-	[[zqueen]],
-	[[zairscout]],
-	[[zairtoairfighter]],
-	[[zairtogroundfighter]],
-	[[zairbomber]],
-}
-
-Shared.buildListZaalConstructor = {
-	[[zconstructor]],
-	[[ztenticle]],
-	[[zhatch]],
-	[[zmex]],
-	[[zespire1]],
-	[[ztiberium]],
-}
-
-Shared.buildListZaalArm = {
-	[[zconstructor]],
-}
-
-Shared.buildListZaalTumor = {
-	[[ztumor]],
-}
-	
-local turrets = {
-	[[ehbotpeewee_turret]],
-	[[ehbotthud_turret]],
-	[[ehbotsniper_turret]],
-	[[ehbotrocko_turret]],
-}
-
-Shared.buildListTurret = {}
-for i = 1, #Shared.buildList do
-	Shared.buildListTurret[i] = Shared.buildList[i]
-end
-for i = 1, #turrets do
-	Shared.buildListTurret[#Shared.buildListTurret + 1] = turrets[i]
-end
-
-local factory = {
-	[[ehbotfac]],
-	[[eminifac]],
-	[[ebasefactory]],
-	[[eamphibfac]],
-	[[eairplant]],
-	[[ehbotpeewee]],
-	[[ehbotthud]],
-	[[ehbotsniper]],
-	[[eallterrlight]],
-	[[eallterrriot_shotgun]],
-	[[eallterrheavy]],
-	[[elighttank3]],
-	[[eriottank2_shotgun]],
-	[[eheavytank3]],
-	[[eamphibbuggy]],
-	[[eamphibriot_shotgun]],
-	[[eamphibmedtank]],
-	[[efighter]],
-	[[egunship2]],
-	[[ebomber]],
-	[[eamphibleveler]],
-	[[ehbotkarganneth]],
-	[[eallterranarchid]],
-	[[elacerator]],
-	[[ekrow]],
-}
-
-Shared.buildListFactory = {}
-for i = 1, #Shared.buildList do
-	Shared.buildListFactory[i] = Shared.buildList[i]
-end
-for i = 1, #factory do
-	Shared.buildListFactory[#Shared.buildListFactory + 1] = factory[i]
-end
-
--- Shared.buildListAIOverseer = {
-	-- ------------- Basic
-	-- [[ehbotfac]],
-	-- [[eminifac]],
-	-- [[ebasefactory]],
-	-- [[eamphibfac]],
-	-- [[eairplant]],
-	-- [[etech1]],
-	-- [[emetalextractor]],
-	-- [[esolar2]],
-	-- [[egeothermal]],
-	-- [[efusion2]],
-	-- [[estorage]],
-	-- [[eradar2]],
-	-- [[ejammer2]],
-	-- [[ekmar]],
-	-- [[emine]],
-	-- [[elightturret2]],
-	-- [[eheavyturret2]],
-	-- [[elaserbattery]],
-	-- [[eartyturret]],
-	-- -- [[euwturret]],
-	-- [[eshieldgen]],
-	-- [[esilo]],
-	-- [[escoutdrone]],
-	-- [[ebox]],
-	-- [[ehbotengineer]],
-	-- [[eorb]],
-	-- -- [[ecommander]],
--- }
-
 -----------------------------
 -----------------------------
 --Buildlists for factories
@@ -511,204 +35,216 @@ Shared.buildListf2landfac = {
 	[[lozengineer_up3]],
 }
 
-Shared.buildListHoverFactory = {
-		[[elighttank3]],
-		[[eriottank2_shotgun]],
-		[[eheavytank3]],
-		[[emissiletank]],
-		[[eartytank]],
-		[[elacerator]],
-}
-
-Shared.buildListHoverFactory_up1 = {
-		[[elighttank3_up1]],
-		[[eriottank2_up1]],
-		[[eheavytank3_up1]],
-		[[emissiletank_up1]],
-		[[eartytank_up1]],
-		[[elacerator_up1]],
-}
-
-Shared.buildListHoverFactory_up2 = {
-		[[elighttank3_up2]],
-		[[eriottank2_up2]],
-		[[eheavytank3_up2]],
-		[[emissiletank_up2]],
-		[[eartytank_up2]],
-		[[elacerator_up2]],
-}
-
-Shared.buildListHoverFactory_up3 = {
-		[[elighttank3_up3]],
-		[[eriottank2_up3]],
-		[[eheavytank3_up3]],
-		[[emissiletank_up3]],
-		[[eartytank_up3]],
-		[[elacerator_up3]],
-}
-
---
---
-
-Shared.buildListAmphibFactory = {
-		[[eamphibbuggy]],
-		[[eamphibriot_shotgun]],
-		[[eamphibneedle]],
-		[[eamphibmedtank]],
-		[[eamphibrock]],
-		[[eamphibarty]],
-		[[eamphibleveler]],
-}
-
-Shared.buildListAmphibFactory_up1 = {
-		[[eamphibbuggy_up1]],
-		[[eamphibriot_up1]],
-		[[eamphibneedle_up1]],
-		[[eamphibmedtank_up1]],
-		[[eamphibrock_up1]],
-		[[eamphibarty_up1]],
-		[[eamphibleveler_up1]],
-}
-
-Shared.buildListAmphibFactory_up2 = {
-		[[eamphibbuggy_up2]],
-		[[eamphibriot_up2]],
-		[[eamphibneedle_up2]],
-		[[eamphibmedtank_up2]],
-		[[eamphibrock_up2]],
-		[[eamphibarty_up2]],
-		[[eamphibleveler_up2]],
-}
-
-Shared.buildListAmphibFactory_up3 = {
-		[[eamphibbuggy_up3]],
-		[[eamphibriot_up3]],
-		[[eamphibneedle_up3]],
-		[[eamphibmedtank_up3]],
-		[[eamphibrock_up3]],
-		[[eamphibarty_up3]],
-		[[eamphibleveler_up3]],
-}
-
---
---
-
-Shared.buildListAllTerrainFactory = {
-		[[eallterrlight]],
-		[[eallterrriot_shotgun]],
-		[[eallterrmed]],
-		[[eallterrheavy]],
-		[[eallterrassault]],
-		[[eallterrshield]],
-		[[eallterranarchid]],
-}
-
-Shared.buildListAllTerrainFactory_up1 = {
-		[[eallterrlight_up1]],
-		[[eallterrriot_up1]],
-		[[eallterrmed_up1]],
-		[[eallterrheavy_up1]],
-		[[eallterrassault_up1]],
-		[[eallterrshield_up1]],
-		[[eallterranarchid_up1]],
-}
-
-Shared.buildListAllTerrainFactory_up2 = {
-		[[eallterrlight_up2]],
-		[[eallterrriot_up2]],
-		[[eallterrmed_up2]],
-		[[eallterrheavy_up2]],
-		[[eallterrassault_up2]],
-		[[eallterrshield_up2]],
-		[[eallterranarchid_up2]],
-}
-
-Shared.buildListAllTerrainFactory_up3 = {
-		[[eallterrlight_up3]],
-		[[eallterrriot_up3]],
-		[[eallterrmed_up3]],
-		[[eallterrheavy_up3]],
-		[[eallterrassault_up3]],
-		[[eallterrshield_up3]],
-		[[eallterranarchid_up3]],
-}
---
---
-Shared.buildListAirPlant = {
-		-- [[edrone]],
-		[[efighter]],
-		[[egunship2]],
-		[[ebomber]],
-		[[eairemp]],
-		[[etransport]],
-		[[ekrow]],		
-}
-Shared.buildListAirPlant_up1 = {
-		-- [[edrone_up1]],
-		[[efighter_up1]],
-		[[egunship2_up1]],
-		[[ebomber_up1]],
-		[[eairemp_up1]],
-		[[etransport_up1]],
-		[[ekrow_up1]],		
-}
-Shared.buildListAirPlant_up2 = {
-		-- [[edrone_up2]],
-		[[efighter_up2]],
-		[[egunship2_up2]],
-		[[ebomber_up2]],
-		[[eairemp_up2]],
-		[[etransport_up2]],
-		[[ekrow_up2]],		
-}
-Shared.buildListAirPlant_up3 = {
-		-- [[edrone_up3]],
-		[[efighter_up3]],
-		[[egunship2_up3]],
-		[[ebomber_up3]],
-		[[eairemp_up3]],
-		[[etransport_up3]],
-		[[ekrow_up3]],		
-}
---
---
-Shared.buildListHbotFactory = {
-		[[ehbotpeewee]],
-		[[ehbotthud]],
-		[[ehbotsniper]],
-		[[ehbotrocko]],
-		[[ehbotkarganneth]],
-}
-Shared.buildListHbotFactory_up1 = {
-		[[ehbotpeewee_up1]],
-		[[ehbotthud_up1]],
-		[[ehbotsniper_up1]],
-		[[ehbotrocko_up1]],
-		[[ehbotkarganneth_up1]],
-}
-Shared.buildListHbotFactory_up2 = {
-		[[ehbotpeewee_up2]],
-		[[ehbotthud_up2]],
-		[[ehbotsniper_up2]],
-		[[ehbotrocko_up2]],
-		[[ehbotkarganneth_up2]],
-}
-Shared.buildListHbotFactory_up3 = {
-		[[ehbotpeewee_up3]],
-		[[ehbotthud_up3]],
-		[[ehbotsniper_up3]],
-		[[ehbotrocko_up3]],
-		[[ehbotkarganneth_up3]],
-}
-
 -----------------------------
 -----------------------------
---Buildlists for T3/Experimentals
+--Buildlists for mobile builders
 
-Shared.buildListT3 = {
-		[[eamphibleveler]],
-		[[ehbotkarganneth]],
-		[[eallterranarchid]],
-		[[elacerator]],
-		[[ekrow]],
+Shared.buildListFedt0 = {
+	[[f1landfac]],
+	[[emetalextractor]],
+	[[esolar2]],
+	[[estorage]],
+	[[eradar2]],
+	[[emine]],
+	[[elightturret2]],
+	[[elaserbattery]],
+	[[fedengineer]],
 }
+
+Shared.buildListFedt1 = {
+	[[f1landfac]],
+	[[emetalextractor_up1]],
+	[[esolar2]],
+	[[egeothermal]],
+	[[estorage]],
+	[[eradar2]],
+	[[eradar2_up1]],
+	[[ejammer2]],
+	[[ekmar]],
+	[[emine]],
+	[[elightturret2]],
+	[[eheavyturret2]],
+	[[elaserbattery]],
+	[[eflakturret]],
+	[[healstation]],
+	[[eshieldgen]],
+	[[fedengineer_up1]],
+}
+
+Shared.buildListFedt2 = {
+	[[f1landfac]],
+	[[emetalextractor_up2]],
+	[[esolar2]],
+	[[egeothermal]],
+	[[efusion2]],
+	[[megapowerplant]],
+	[[estorage]],
+	[[eradar2]],
+	[[eradar2_up1]],
+	[[ejammer2]],
+	[[ekmar]],
+	[[shieldbattery]],
+	[[emine]],
+	[[elightturret2]],
+	[[eheavyturret2]],
+	[[elaserbattery]],
+	[[eflakturret]],
+	[[eartyturret]],
+	[[eartyturretvulcan]],
+	-- [[meteorcommand]],
+	[[healstation]],
+	[[eshieldgen]],
+	[[esilo]],
+	-- [[esiloplanetcracker]],
+	[[fedengineer_up2]],
+}
+
+Shared.buildListFedt3 = {
+	[[f1landfac]],
+	[[emetalextractor_up3]],
+	[[esolar2]],
+	[[egeothermal]],
+	[[efusion2]],
+	[[megapowerplant]],
+	[[estorage]],
+	[[eradar2]],
+	[[eradar2_up1]],
+	[[ejammer2]],
+	[[ekmar]],
+	[[shieldbattery]],
+	[[emine]],
+	[[elightturret2]],
+	[[eheavyturret2]],
+	[[elaserbattery]],
+	[[eflakturret]],
+	[[eartyturret]],
+	[[eartyturretvulcan]],
+	-- [[meteorcommand]],
+	[[healstation]],
+	[[eshieldgen]],
+	[[esilo]],
+	-- [[esiloplanetcracker]],
+	[[fedanarchid]],
+	[[fedengineer_up3]],
+}
+
+Shared.fedAirPlantBuildList = {
+	[[fedgunship]],
+	[[fedbomber]],
+
+}
+
+Shared.buildListLoz = {
+}
+
+Shared.buildListLozt0 = {
+	[[f2landfac]],
+	[[emetalextractor]],
+	[[esolar2]],
+	[[estorage]],
+	[[eradar2]],
+	[[emine]],
+	[[elightturret2]],
+	[[elaserbattery]],
+	[[lozengineer]],
+}
+
+Shared.buildListLozt1 = {
+	[[f2landfac]],
+	[[emetalextractor_up1]],
+	[[esolar2]],
+	[[egeothermal]],
+	[[estorage]],
+	[[eradar2]],
+	[[eradar2_up1]],
+	[[ejammer2]],
+	[[ekmar]],
+	[[emine]],
+	[[elightturret2]],
+	[[eheavyturret2]],
+	[[elaserbattery]],
+	[[eflakturret]],
+	[[healstation]],
+	[[eshieldgen]],
+	[[lozengineer_up1]],
+}
+
+Shared.buildListLozt2 = {
+	[[f2landfac]],
+	[[emetalextractor_up2]],
+	[[esolar2]],
+	[[egeothermal]],
+	[[efusion2]],
+	[[megapowerplant]],
+	[[estorage]],
+	[[eradar2]],
+	[[eradar2_up1]],
+	[[ejammer2]],
+	[[ekmar]],
+	[[shieldbattery]],
+	[[emine]],
+	[[elightturret2]],
+	[[eheavyturret2]],
+	[[elaserbattery]],
+	[[eflakturret]],
+	[[eartyturret]],
+	[[eartyturretvulcan]],
+	-- [[meteorcommand]],
+	[[healstation]],
+	[[eshieldgen]],
+	[[esilo]],
+	-- [[esiloplanetcracker]],
+	[[lozengineer_up2]],
+
+}
+
+Shared.buildListLozt3 = {
+	[[f2landfac]],
+	[[emetalextractor_up3]],
+	[[esolar2]],
+	[[egeothermal]],
+	[[efusion2]],
+	[[megapowerplant]],
+	[[estorage]],
+	[[eradar2]],
+	[[eradar2_up1]],
+	[[ejammer2]],
+	[[ekmar]],
+	[[shieldbattery]],
+	[[emine]],
+	[[elightturret2]],
+	[[eheavyturret2]],
+	[[elaserbattery]],
+	[[eflakturret]],
+	[[eartyturret]],
+	[[eartyturretvulcan]],
+	-- [[meteorcommand]],
+	[[healstation]],
+	[[eshieldgen]],
+	[[esilo]],
+	-- [[esiloplanetcracker]],
+	[[lozeurypterid]],
+	[[lozengineer_up3]],
+}
+
+--[[
+Shared.buildListTurret = {}
+for i = 1, #Shared.buildList do
+	Shared.buildListTurret[i] = Shared.buildList[i]
+end
+for i = 1, #turrets do
+	Shared.buildListTurret[#Shared.buildListTurret + 1] = turrets[i]
+end
+
+local factory = {
+
+}
+
+Shared.buildListFactory = {}
+for i = 1, #Shared.buildList do
+	Shared.buildListFactory[i] = Shared.buildList[i]
+end
+for i = 1, #factory do
+	Shared.buildListFactory[#Shared.buildListFactory + 1] = factory[i]
+end
+]]--

@@ -1,12 +1,15 @@
 
 // One ninth of the full cycle duration, in millisecond
 // The larger this value the slower the walk animation
-#define WALK_PERIOD 50
+#define WALK_PERIOD 80
 
 
 piece	base,turret1,barrel1,firepoint1,turret2,barrel2,firepoint2,turret3,barrel3,firepoint3,
 		rf1,rf2,lf1,lf2,rr1,rr2,lr1,lr2,rfdirt,rrdirt,lfdirt,lrdirt;
 		#define barrel barrel1
+
+#include "sfxtype.h" 
+#include "exptype.h" 
 
 static-var maxreloadtime,moving;
 
@@ -19,10 +22,6 @@ static-var maxreloadtime,moving;
 #define SIG_MOVE 8
 
 #include "sfxtype.h"
-#define SMOKEPIECE1 base
-#include "SmokeUnit.h"
-
-
 
 #define FRONT_RIGHT_DOWN\
 	turn rf1 to y-axis <60> speed <42> *1000/(WALK_PERIOD);\
@@ -253,6 +252,32 @@ StopMoving()
 	turn lr1 to z-axis <0> speed <40> *1000/(WALK_PERIOD);
 }
 
+SmokeUnit(healthpercent, sleeptime, smoketype) // this is a standard smoke point define 
+{ 
+while( get BUILD_PERCENT_LEFT ) 
+{ 
+sleep 400; 
+} 
+while( TRUE ) 
+{ 
+healthpercent = get HEALTH; 
+if( healthpercent < 66 ) 
+{ 
+smoketype = 256 | 2; 
+if( Rand( 1, 66 ) < healthpercent ) 
+{ 
+smoketype = 256 | 1; 
+} 
+emit-sfx 1028 from turret1; 
+} 
+sleeptime = healthpercent * 50; 
+if( sleeptime < 200 ) 
+{ 
+sleeptime = 200; 
+} 
+sleep sleeptime; 
+} 
+} 
 
 Create()
 {
@@ -278,7 +303,7 @@ SetMaxReloadTime(t)
 
 RestoreAfterDelay()
 {
-	sleep maxreloadtime*3/2;
+	sleep 2000;
 	turn turret1 to y-axis 0 speed <60>;
 	turn barrel1 to x-axis 0 speed <30>;
 	turn turret2 to y-axis 0 speed <60>;
@@ -319,7 +344,7 @@ FirePrimary()
 {
 	signal SIG_FIRE1;
 	set-signal-mask SIG_FIRE1;
-	emit-sfx 1024 + 0 from firepoint1;
+//	emit-sfx 1024 + 0 from firepoint1;
 //	move barrel to z-axis [-10] now;
 //	move barrel to z-axis [0] speed [4];
 }
@@ -350,14 +375,7 @@ FireSecondary()
 {
 	signal SIG_FIRE2;
 	set-signal-mask SIG_FIRE2;
-	sleep 1;
-         emit-sfx 1026  from firepoint2;
-	sleep 1;
-         emit-sfx 1026  from firepoint2;
-	sleep 1;
-         emit-sfx 1026  from firepoint2;
-	sleep 1;
-         emit-sfx 1026  from firepoint2;
+	emit-sfx 1024 + 0 from firepoint2;
 //	move barrel to z-axis [-10] now;
 //	move barrel to z-axis [0] speed [4];
 }
@@ -389,14 +407,7 @@ FireTertiary()
 {
 	signal SIG_FIRE3;
 	set-signal-mask SIG_FIRE3;
-	sleep 1;
-         emit-sfx 1026  from firepoint3;
-	sleep 1;
-         emit-sfx 1026  from firepoint3;
-	sleep 1;
-         emit-sfx 1026  from firepoint3;
-	sleep 1;
-         emit-sfx 1026  from firepoint3;
+	emit-sfx 1024 + 0 from firepoint3;
 //	move barrel to z-axis [-10] now;
 //	move barrel to z-axis [0] speed [4];
 }

@@ -12,7 +12,7 @@ buildpic = [[lozengineer_up1.png]]
 
 maxDamage = 2000
 
-lozt1buildlist = Shared.buildListLozt4
+lozt1buildlist = Shared.buildListLozt3
 
 workertime = 8
 
