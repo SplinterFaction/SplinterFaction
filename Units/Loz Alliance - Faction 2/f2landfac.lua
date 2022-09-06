@@ -15,9 +15,11 @@ script = "f2landfac.cob"
 
 tech = [[tech1]]
 
+explodeAs = [[largebuildingexplosiongeneric]]
+
 hoverFactoryBuildList = Shared.buildListf2landfac
 
-VFS.Include("units-configs-basedefs/basedefs/hover/f2landfac_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/f2landfac_basedef.lua")
 
 --------------------------------------------------------------------------------
 

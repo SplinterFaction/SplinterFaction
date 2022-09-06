@@ -9,8 +9,8 @@ objectName = "fedbear.s3o"
 script = "/fed/hbot/fedbear_lus.lua"
 
 tech = [[tech2]]
-armortype = [[light]]
-supply = [[7]]
+
+explodeAs = [[mediumexplosiongeneric]]
 
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedbear_basedef.lua")
 

@@ -16,6 +16,8 @@ tech = [[tech1]]
 
 F1LandFacBuildList = Shared.buildListf1landfac
 
+explodeAs = [[largebuildingexplosiongeneric]]
+
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/f1landfac_basedef.lua")
 
 --------------------------------------------------------------------------------

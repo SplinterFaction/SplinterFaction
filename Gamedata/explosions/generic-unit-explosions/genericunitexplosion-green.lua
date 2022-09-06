@@ -5,23 +5,6 @@
 
 return {
   ["genericunitexplosion-huge-green"] = {
-    groundflash = {
-      air                = true,
-      alwaysvisible      = true,
-      circlealpha        = 0.6,
-      circlegrowth       = 4,
-      flashalpha         = 0.6,
-      flashsize          = 800,
-      ground             = true,
-      ttl                = 100,
-      water              = true, 
-	  underwater         = true,
-      color = {
-        [1]  = 0,
-        [2]  = 1,
-        [3]  = 0,
-      },
-    },
     kickedupdirt = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
@@ -109,23 +92,6 @@ return {
   },
 
   ["genericunitexplosion-medium-green"] = {
-    groundflash = {
-      air                = true,
-      alwaysvisible      = true,
-      circlealpha        = 0.6,
-      circlegrowth       = 2,
-      flashalpha         = 0.6,
-      flashsize          = 400,
-      ground             = true,
-      ttl                = 100,
-      water              = true, 
-	  underwater         = true,
-      color = {
-        [1]  = 0,
-        [2]  = 1,
-        [3]  = 0,
-      },
-    },
     kickedupdirt = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
@@ -213,23 +179,6 @@ return {
   },
 
   ["genericunitexplosion-large-green"] = {
-    groundflash = {
-      air                = true,
-      alwaysvisible      = true,
-      circlealpha        = 0.6,
-      circlegrowth       = 3,
-      flashalpha         = 0.6,
-      flashsize          = 600,
-      ground             = true,
-      ttl                = 100,
-      water              = true, 
-	  underwater         = true,
-      color = {
-        [1]  = 0,
-        [2]  = 1,
-        [3]  = 0,
-      },
-    },
     kickedupdirt = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
@@ -317,23 +266,6 @@ return {
   },
 
   ["genericunitexplosion-small-green"] = {
-    groundflash = {
-      air                = true,
-      alwaysvisible      = true,
-      circlealpha        = 0.6,
-      circlegrowth       = 1.5,
-      flashalpha         = 0.6,
-      flashsize          = 200,
-      ground             = true,
-      ttl                = 100,
-      water              = true, 
-	  underwater         = true,
-      color = {
-        [1]  = 0,
-        [2]  = 1,
-        [3]  = 0,
-      },
-    },
     kickedupdirt = {
       air                = true,
       class              = [[CSimpleParticleSystem]],

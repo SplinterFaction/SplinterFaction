@@ -5,7 +5,7 @@ local SIG_AIM = {}
 terrainType = "terrainType"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {ball})
+	StartThread(common.SmokeUnit, {ball, topring, middlering})
 	StartThread(common.shieldBallSpin)
 end
 

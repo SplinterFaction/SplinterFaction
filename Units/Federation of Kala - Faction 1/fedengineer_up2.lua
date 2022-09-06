@@ -26,8 +26,9 @@ objectName = [[fedengineer_up2.s3o]]
 script = [[fedengineer_up2_lus.lua]]
 
 areamexdef = [[emetalextractor_up2]]
-armortype = [[armored]]
 requiretech = [[tech2]]
+
+explodeAs = [[largeexplosiongenericgreen]]
 
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedengineer_basedef.lua")
 

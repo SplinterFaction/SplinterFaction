@@ -15,7 +15,7 @@ terrainType = "terrainType"
 common.WalkScript()
 
 function script.Create()
-	StartThread(common.SmokeUnit, {pelvis, turret, barrel1})
+	StartThread(common.SmokeUnit, {pelvis,turret, nanos, nanos2, nanos3, nanopoint1, nanopoint2, nanopoint3, nanopoint4, lthigh, rthigh, lleg, rleg, lfoot, rfoot})
 	StartThread(BuildFX)
 	building = false
 	Spring.SetUnitNanoPieces(unitID, nanoPieces)

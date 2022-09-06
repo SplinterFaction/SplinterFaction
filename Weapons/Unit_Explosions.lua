@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- These represent both the area of effect and the camerashake amount
+-- These represent both the area of effect and the camerashake amount as well as the light effect on the ground and surrounding units
 local smallExplosion = 200
 local smallExplosionImpulseFactor = 0
 local mediumExplosion = 400
@@ -8,6 +8,19 @@ local largeExplosion = 600
 local largeExplosionImpulseFactor = 0
 local hugeExplosion = 1000
 local hugeExplosionImpulseFactor = 0
+
+local smallExplosionTTL = 60
+local mediumExplosionTTL = 120
+local largeExplosionTTL = 180
+local hugeExplosionTTL = 240
+
+-- colors
+local red = [[1 0 0]]
+local green = [[0 1 0]]
+local blue = [[0 0 1]]
+local orange = [[1 0.5 0]]
+local white = [[1 1 1]]
+local purple = [[0.50999999940395 0 0.68999999165535]]
 
 unitDeaths = {
 
@@ -21,6 +34,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-small",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -32,6 +50,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-medium",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -43,6 +66,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-large",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -54,6 +82,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-huge",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -67,6 +100,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-small-blue",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -78,6 +116,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-medium-blue",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -89,6 +132,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-large-blue",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -100,6 +148,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-huge-Blue",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -113,6 +166,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-small-blue-emp",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -124,6 +182,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-medium-blue-emp",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -135,6 +198,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-large-blue-emp",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -146,6 +214,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-huge-Blue-emp",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -159,6 +232,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-small-green",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -170,6 +248,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-medium-green",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -181,6 +264,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-large-green",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -192,6 +280,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-huge-green",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -205,6 +298,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-small-purple",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -216,6 +314,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-medium-purple",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -227,6 +330,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-large-purple",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -238,6 +346,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-huge-purple",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -251,6 +364,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-small-red",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -262,6 +380,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-medium-red",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -273,6 +396,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-large-red",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -284,6 +412,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-huge-red",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -297,6 +430,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-small-white",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -308,6 +446,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-medium-white",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -319,6 +462,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-large-white",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -330,6 +478,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericbuildingexplosion-huge-white",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -346,6 +499,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericunitexplosion-small",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -357,6 +515,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericunitexplosion-medium",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -368,6 +531,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericunitexplosion-large",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -379,6 +547,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericunitexplosion-huge",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -458,6 +631,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericunitexplosion-small-blue",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -469,6 +647,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericunitexplosion-medium-blue",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -480,6 +663,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericunitexplosion-large-blue",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -491,6 +679,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericunitexplosion-huge-blue",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -504,6 +697,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericunitexplosion-small-green",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -515,6 +713,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericunitexplosion-medium-green",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -526,6 +729,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericunitexplosion-large-green",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -537,6 +745,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericunitexplosion-huge-green",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -550,6 +763,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericunitexplosion-small-purple",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -561,6 +779,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericunitexplosion-medium-purple",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -572,6 +795,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericunitexplosion-large-purple",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -583,6 +811,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericunitexplosion-huge-purple",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -597,6 +830,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericunitexplosion-small-red",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -608,6 +846,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericunitexplosion-medium-red",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -619,6 +862,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericunitexplosion-large-red",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -630,6 +878,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericunitexplosion-huge-red",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -644,6 +897,11 @@ unitDeaths = {
 		AreaOfEffect=smallExplosion,
 		explosiongenerator="custom:genericunitexplosion-small-white",
 		cameraShake=smallExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -655,6 +913,11 @@ unitDeaths = {
 		AreaOfEffect=mediumExplosion,
 		explosiongenerator="custom:genericunitexplosion-medium-white",
 		cameraShake=mediumExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -666,6 +929,11 @@ unitDeaths = {
 		AreaOfEffect=largeExplosion,
 		explosiongenerator="custom:genericunitexplosion-large-white",
 		cameraShake=largeExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},
@@ -677,6 +945,11 @@ unitDeaths = {
 		AreaOfEffect=hugeExplosion,
 		explosiongenerator="custom:genericunitexplosion-huge-white",
 		cameraShake=hugeExplosion,
+		customparams = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+		},
 		damage = {
 			default            = 0,
 		},

@@ -1,4 +1,4 @@
-pelvis,turret, nanos, nanopoint1, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'nanos', 'nanopoint1', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
+pelvis, turret, nanos, nanopoint1, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'nanos', 'nanopoint1', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
 
 common = include("headers/common_includes_lus.lua")
 
@@ -15,7 +15,7 @@ terrainType = "terrainType"
 common.WalkScript()
 
 function script.Create()
-	StartThread(common.SmokeUnit, {pelvis, turret, barrel1})
+	StartThread(common.SmokeUnit, {pelvis, turret, nanos, nanopoint1, lthigh, rthigh, lleg, rleg, lfoot, rfoot})
 	StartThread(BuildFX)
 	building = false
 	Spring.SetUnitNanoPieces(unitID, nanoPieces)

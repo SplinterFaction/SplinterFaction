@@ -8,7 +8,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-    StartThread(common.SmokeUnit, {base, turret})
+    StartThread(common.SmokeUnit, {base, rearwheels, frontwheels, tanks, turret, cannonbarrel1, cannonfirepoint1})
     building = false
 end
 

@@ -28,6 +28,8 @@ script = [[lozengineer_lus.lua]]
 areamexdef = [[emetalextractor]]
 requiretech = [[tech0]]
 
+explodeAs = [[smallexplosiongenericgreen]]
+
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozengineer_basedef.lua")
 
 --------------------------------------------------------------------------------

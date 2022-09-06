@@ -11,6 +11,8 @@ script = "fedanarchid.cob"
 
 tech = [[tech4]]
 
+explodeAs = [[hugeexplosiongeneric]]
+
 VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 4/fedanarchid_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs

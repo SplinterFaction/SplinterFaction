@@ -11,6 +11,8 @@ script = "lozmammoth_lus.lua"
 
 tech = [[tech3]]
 
+explodeAs = [[largeexplosiongeneric]]
+
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/Tier 3/lozmammoth_basedef.lua")
 	
 unitDef.weaponDefs = weaponDefs

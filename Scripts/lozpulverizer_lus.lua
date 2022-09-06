@@ -9,7 +9,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, laserbarrel1, flakbarrel1})
+	StartThread(common.SmokeUnit, {base, wheels1, wheels2, wheels3, wheels4, wheels5, laserturret, laserbarrel1, laserfirepoint1, flakturret, flakbarrel1, flakfirepoint1})
 end
 
 common = include("headers/common_includes_lus.lua")

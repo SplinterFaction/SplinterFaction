@@ -13,7 +13,7 @@ terrainType = "terrainType"
 common.WalkScript()
 
 function script.Create()
-    StartThread(common.SmokeUnit, {pelvis, turret})
+    StartThread(common.SmokeUnit, {pelvis, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, cannonbarrel, cannonfirepoint1, rocketbarrel, rocketfirepoint1})
 end
 
 function thrust()

@@ -8,7 +8,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-    StartThread(common.SmokeUnit, {base, rearwheels, emitter})
+    StartThread(common.SmokeUnit, {base, rearwheels, frontwheels, emitter, firepoint1})
     Spring.UnitScript.Spin(emitter,y_axis,math.rad(5))
     building = false
 end

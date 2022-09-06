@@ -12,11 +12,12 @@ local SIG_AIM5 = {}
 isMoving = "isMoving"
 terrainType = "terrainType"
 
-function script.Create()
-	StartThread(common.SmokeUnit, {base})
-end
-
 common = include("headers/common_includes_lus.lua")
+
+
+function script.Create()
+	StartThread(common.SmokeUnit, {railturret1, railbarrel1, railfirepoint1, burstturret1, burstbarrel1, burstfirepoint1, burstturret2, burstbarrel2, burstfirepoint2, missileturret1, missilebarrel1, missilefirepoint1, missileturret2, missilebarrel2, missilefirepoint2})
+end
 
 function script.StartMoving()
 	isMoving = true

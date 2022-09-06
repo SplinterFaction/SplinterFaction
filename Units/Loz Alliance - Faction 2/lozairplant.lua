@@ -13,6 +13,8 @@ humanName = [[VTOL Factory]]
 objectName = "eairplant3.s3o"
 script = "eairplant3.cob"
 
+explodeAs = [[largebuildingexplosiongenericred]]
+
 airPlantBuildList = Shared.buildListAirPlant
 
 VFS.Include("Units-Configs-Basedefs/basedefs/air/eairplant_basedef.lua")

@@ -11,6 +11,8 @@ script = "lozsilverback_lus.lua"
 
 tech = [[tech3]]
 
+explodeAs = [[largeexplosiongenericred]]
+
 shield1Power               = 10000
 shield1PowerRegen          = 25
 shield1PowerRegenEnergy    = 0

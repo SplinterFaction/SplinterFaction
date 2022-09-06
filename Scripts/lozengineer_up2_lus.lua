@@ -9,7 +9,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base})
+	StartThread(common.SmokeUnit, {base, nanopoint1, nanopoint2, nanopoint3})
 	StartThread(BuildFX)
 	building = false
 	Spring.SetUnitNanoPieces(unitID, nanoPieces)
