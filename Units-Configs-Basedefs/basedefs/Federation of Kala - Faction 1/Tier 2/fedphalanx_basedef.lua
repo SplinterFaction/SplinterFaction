@@ -124,9 +124,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "MachineGun",
-		predictBoost		   = 0.5,
 		range                  = 800,
-		reloadtime             = 0.1,
+		reloadtime             = 0.2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/pointdefensefire.wav",
@@ -137,11 +136,11 @@ weaponDefs                 = {
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 2000,
+		weaponVelocity         = 4000,
 		customparams             = {
 		},
 		damage                   = {
-			default              = 6,
+			default              = 12,
 		},
 	},
 }
