@@ -669,6 +669,19 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "assault" then
 				unitDef.maxdamage = unitDef.maxdamage * 2
 			end
+			-- Turrets
+			if unitDef.customparams.unitrole == "Light Turret" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.7
+			end
+			if unitDef.customparams.unitrole == "Medium Turret" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+			if unitDef.customparams.unitrole == "Heavy Turret" then
+				unitDef.maxdamage = unitDef.maxdamage * 1.2
+			end
+			if unitDef.customparams.unitrole == "Mine" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.1
+			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions
 			if unitDef.maxdamage then
