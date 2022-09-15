@@ -559,7 +559,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				-- Set Rules for Ateran race
 				if unitDef.customparams and unitDef.customparams.factionname == "ateran"
 				or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
-				or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
+				or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
+				or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
 					unitDef.buildtime = unitDef.buildcostmetal / 4
 					unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
 					if unitDef.customparams and unitDef.customparams.requiretech == "tech1" or unitDef.customparams and unitDef.customparams.isupgraded == "1" then
@@ -571,26 +572,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					if unitDef.customparams and unitDef.customparams.requiretech == "tech3" or unitDef.customparams and unitDef.customparams.isupgraded == "3" then
 						unitDef.buildcostenergy = unitDef.buildcostmetal * 12
 					end
-					if unitDef.customparams and unitDef.customparams.noenergycost == true then
-						unitDef.buildcostenergy = 0
-					end
-					if unitDef.customparams and unitDef.customparams.buildcostenergyoverride ~= nil then
-						unitDef.buildcostenergy = unitDef.customparams.buildcostenergyoverride
-					end
-				end
-
-				-- Set Rules for Zaal race
-				if unitDef.customparams and unitDef.customparams.factionname == "zaal" then
-					unitDef.buildtime = unitDef.buildcostmetal / 4
-					unitDef.buildcostenergy = unitDef.buildcostmetal * 5
-					if unitDef.customparams and unitDef.customparams.requiretech == "tech1" or unitDef.customparams and unitDef.customparams.isupgraded == "1" then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 7.5
-					end
-					if unitDef.customparams and unitDef.customparams.requiretech == "tech2" or unitDef.customparams and unitDef.customparams.isupgraded == "2" then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 10
-					end
-					if unitDef.customparams and unitDef.customparams.requiretech == "tech3" or unitDef.customparams and unitDef.customparams.isupgraded == "3" then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 12.5
+					if unitDef.customparams and unitDef.customparams.requiretech == "tech4" or unitDef.customparams and unitDef.customparams.isupgraded == "4" then
+						unitDef.buildcostenergy = unitDef.buildcostmetal * 15
 					end
 					if unitDef.customparams and unitDef.customparams.noenergycost == true then
 						unitDef.buildcostenergy = 0
@@ -607,7 +590,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 
 				if unitDef.customparams and unitDef.customparams.supply_cost then
-					local supplycost = unitDef.buildcostmetal * 0.1
+					local supplycost = unitDef.buildcostmetal * 0.01
 					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
 				end
 

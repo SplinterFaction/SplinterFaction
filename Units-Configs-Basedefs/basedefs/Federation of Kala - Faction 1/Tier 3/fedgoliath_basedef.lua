@@ -120,7 +120,7 @@ unitDef                    = {
 		death_sounds             = "generic",
 		RequireTech              = tech,
 		nofriendlyfire	         = true,
-		supply_cost              = supply,
+		supply_cost              = 1,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
@@ -163,7 +163,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 65,
+			default              = 32.5,
 		},
 	},
 	particlebeamcannon                 = {
@@ -201,7 +201,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 55,
+			default              = 27.5,
 		},
 	},
 }

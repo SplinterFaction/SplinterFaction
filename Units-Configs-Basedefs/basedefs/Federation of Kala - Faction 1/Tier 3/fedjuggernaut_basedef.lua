@@ -143,7 +143,7 @@ unitDef                    = {
 		death_sounds             = "generic",
 		RequireTech              = tech,
 		nofriendlyfire	         = true,
-		supply_cost              = supply,
+		supply_cost              = 1,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
@@ -187,7 +187,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 30,
+			default              = 45,
 		},
 	},
 	plasmacannon                	= {
@@ -224,7 +224,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 1000,
+			default              = 750,
 		},
 	},
 	clusterrockets             = {
@@ -262,7 +262,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 40,
+			default              = 30,
 		},
 	},
 	missile            = {
@@ -303,7 +303,7 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 300,
+			default              = 150,
 		},
 	},
 }

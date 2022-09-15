@@ -62,7 +62,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
-		unittype				  = "turret",
+		unittype				  = "building",
 		unitrole				  = "Light Turret",
 		RequireTech				  = tech,
 		--supply_cost               = supply,

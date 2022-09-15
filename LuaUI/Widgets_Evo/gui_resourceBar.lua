@@ -43,7 +43,7 @@ local maxBasicIncome = Spring.GetModOptions().maxbasicincome or 0
 -- resource bars: ON means the bars show percentage, OFF means they simply change color depending on state
 local progressBars = true
 
-local maxSupply = tonumber(Spring.GetModOptions().supplycap) or 1000000
+local maxSupply = tonumber(Spring.GetModOptions().supplycap)
 
 -- internal settings, do not touch
 local white = "\255\255\255\255"
@@ -524,11 +524,11 @@ function generateDisplayList2()
 				supplyAvailableColor = green
 			end
 			
-				supplyStr = supplyUsedColor .. su .. white .. "/" .. supplyAvailableColor .. "∞" .. " "
+				supplyStr = supplyUsedColor .. su .. white .. "/" .. supplyAvailableColor .. sm .. " "
 				--supplyStr = supplyUsedColor .. su .. white .. "/" .. supplyAvailableColor .. sm .. " "
 			
 		else
-				supplyStr = white .. su .. "/" .. "∞" .. " (" .. orange .. "±" .. tostring(sm - su) .. white .. "/" .. green .. "∞" .. white .. ") "
+				supplyStr = white .. su .. "/" .. sm .. " (" .. orange .. "±" .. tostring(sm - su) .. white .. "/" .. green .. sm .. white .. ") "
 				--supplyStr = white .. su .. "/" .. sm .. " (" .. orange .. "±" .. tostring(sm - su) .. white .. "/" .. green .. maxSupply .. white .. ") "
 		end
 		font2:Begin()
