@@ -89,11 +89,11 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype         = "mobile",
+		unitrole		 = "Builder",
 		area_mex_def     = areamexdef,
 		requiretech      = requiretech,
 		canbetransported = "true",
 		death_sounds     = "generic",
-		armortype        = armortype,
 		nofriendlyfire   = "1",
 		noenergycost     = true,
 		normaltex        = "unittextures/lego2skin_explorernormal.dds",

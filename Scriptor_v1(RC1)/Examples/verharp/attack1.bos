@@ -1,0 +1,236 @@
+attack1(weapon)
+{
+	if (ANIM_VARIABLE)
+	{
+		move Flagrot to x-axis [-0.000006] now;
+		move Flagrot_10 to x-axis [-0.000006] now;
+		move Wake6 to x-axis [-8.845197] now;
+		move Wake6 to z-axis [2.500000] now;
+		move Wake5 to x-axis [-8.870734] now;
+		move Wake5 to z-axis [5.142231] now;
+		move Wake4 to x-axis [-9.004291] now;
+		move Wake4 to y-axis [-0.000787] now;
+		move Wake4 to z-axis [7.763294] now;
+		move Oar4_5 to x-axis [0.000006] now;
+		move Wake3 to x-axis [-0.025525] now;
+		move Wake3 to z-axis [-8.648743] now;
+		move Oar3_5 to x-axis [0.000006] now;
+		move Wake2 to x-axis [-0.017908] now;
+		move Wake2 to y-axis [0.000787] now;
+		move Wake2 to z-axis [-5.763294] now;
+		move Oar2_5 to y-axis [0.000006] now;
+		move Wake1 to x-axis [0.000421] now;
+		move Wake1 to z-axis [-2.958276] now;
+		move Oar1_5 to x-axis [0.000006] now;
+		move Oar1_5 to y-axis [0.000006] now;
+		move Oar1_5 to z-axis [0.000006] now;
+		move Flag2_10 to x-axis [0.000006] now;
+		move Flag3_10 to y-axis [0.000006] now;
+		move Flag2 to x-axis [0.000006] now;
+		move Flag3 to y-axis [0.000006] now;
+		sleep 34;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-0.850000] now;
+		turn TwistR to y-axis <11.250000> now;
+		turn TwistL to y-axis <-11.250000> now;
+		turn StringL to y-axis <16.875000> now;
+		turn StringR to y-axis <-16.875000> now;
+		turn harpoon to y-axis <5.625000> now;
+		sleep 34;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-1.800002] now;
+		turn TwistR to y-axis <22.500000> now;
+		turn TwistL to y-axis <-22.500000> now;
+		turn StringL to y-axis <33.750000> now;
+		turn StringR to y-axis <-33.750000> now;
+		turn harpoon to y-axis <10.546875> now;
+		sleep 34;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-2.750003] now;
+		move harpoon to y-axis [0.050000] now;
+		turn TwistR to y-axis <33.750000> now;
+		turn TwistL to y-axis <-33.750000> now;
+		turn StringL to y-axis <50.625000> now;
+		turn StringR to y-axis <-50.625000> now;
+		turn harpoon to y-axis <16.171875> now;
+		sleep 35;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-3.600003] now;
+		move harpoon to y-axis [0.150000] now;
+		turn TwistR to y-axis <45.000000> now;
+		turn TwistL to y-axis <-45.000000> now;
+		turn StringL to y-axis <67.500000> now;
+		turn StringR to y-axis <-67.500000> now;
+		turn harpoon to y-axis <22.148437> now;
+		sleep 34;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-4.600003] now;
+		move harpoon to y-axis [0.300000] now;
+		turn TwistR to y-axis <56.250000> now;
+		turn TwistL to y-axis <-56.250000> now;
+		turn StringL to y-axis <84.375000> now;
+		turn StringR to y-axis <-84.375000> now;
+		turn harpoon to y-axis <27.773438> now;
+		sleep 34;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-5.550002] now;
+		move harpoon to y-axis [0.400000] now;
+		turn TwistR to y-axis <67.500000> now;
+		turn TwistL to y-axis <-67.500000> now;
+		turn StringL to y-axis <101.250000> now;
+		turn StringR to y-axis <-101.250000> now;
+		turn harpoon to y-axis <33.046875> now;
+		sleep 34;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-6.600004] now;
+		move harpoon to y-axis [0.500000] now;
+		turn TwistR to y-axis <78.750000> now;
+		turn TwistL to y-axis <-78.750000> now;
+		turn StringL to y-axis <118.125000> now;
+		turn StringR to y-axis <-118.125000> now;
+		turn harpoon to y-axis <38.671875> now;
+
+		play-sound ( "CATAPUL6", PLAYSOUND_PRIORITY_BATTLE );
+
+		sleep 36;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [-7.650003] now;
+		move harpoon to y-axis [0.600000] now;
+		turn TwistR to y-axis <90.000000> now;
+		turn TwistL to y-axis <-90.000000> now;
+		turn StringL to y-axis <135.000000> now;
+		turn StringR to y-axis <-135.000000> now;
+		turn harpoon to y-axis <44.296875> now;
+
+		hide harpoon;
+		set WEAPON_LAUNCH_NOW to weapon;
+
+		sleep 364;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move harpoon to x-axis [0.000000] now;
+		move harpoon to y-axis [0.000000] now;
+		turn TwistR to y-axis <84.375000> now;
+		turn TwistL to y-axis <-84.375000> now;
+		turn StringL to y-axis <126.562500> now;
+		turn StringR to y-axis <-126.562500> now;
+		turn harpoon to y-axis <0.000000> now;
+		sleep 40;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <78.750000> now;
+		turn TwistL to y-axis <-78.750000> now;
+		turn StringL to y-axis <118.125000> now;
+		turn StringR to y-axis <-118.125000> now;
+		sleep 41;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <73.125000> now;
+		turn TwistL to y-axis <-73.125000> now;
+		turn StringL to y-axis <109.687500> now;
+		turn StringR to y-axis <-109.687500> now;
+		sleep 41;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <67.500000> now;
+		turn TwistL to y-axis <-67.500000> now;
+		turn StringL to y-axis <101.250000> now;
+		turn StringR to y-axis <-101.250000> now;
+		sleep 35;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <61.875000> now;
+		turn TwistL to y-axis <-61.875000> now;
+		turn StringL to y-axis <92.812500> now;
+		turn StringR to y-axis <-92.812500> now;
+		sleep 35;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <56.250000> now;
+		turn TwistL to y-axis <-56.250000> now;
+		turn StringL to y-axis <84.375000> now;
+		turn StringR to y-axis <-84.375000> now;
+		sleep 35;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <50.625000> now;
+		turn TwistL to y-axis <-50.625000> now;
+		turn StringL to y-axis <75.937500> now;
+		turn StringR to y-axis <-75.937500> now;
+		sleep 36;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <45.000000> now;
+		turn TwistL to y-axis <-45.000000> now;
+		turn StringL to y-axis <67.500000> now;
+		turn StringR to y-axis <-67.500000> now;
+		sleep 33;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <39.375000> now;
+		turn TwistL to y-axis <-39.375000> now;
+		turn StringL to y-axis <59.062500> now;
+		turn StringR to y-axis <-59.062500> now;
+		sleep 33;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <33.750000> now;
+		turn TwistL to y-axis <-33.750000> now;
+		turn StringL to y-axis <50.625000> now;
+		turn StringR to y-axis <-50.625000> now;
+		sleep 44;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <22.500000> now;
+		turn TwistL to y-axis <-22.500000> now;
+		turn StringL to y-axis <33.750000> now;
+		turn StringR to y-axis <-33.750000> now;
+		sleep 44;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <11.250000> now;
+		turn TwistL to y-axis <-11.250000> now;
+		turn StringL to y-axis <16.875000> now;
+		turn StringR to y-axis <-16.875000> now;
+		sleep 33;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn TwistR to y-axis <0.000000> now;
+		turn TwistL to y-axis <0.000000> now;
+		turn StringL to y-axis <0.000000> now;
+		turn StringR to y-axis <0.000000> now;
+
+		show harpoon;
+
+		sleep 5;
+	}
+}

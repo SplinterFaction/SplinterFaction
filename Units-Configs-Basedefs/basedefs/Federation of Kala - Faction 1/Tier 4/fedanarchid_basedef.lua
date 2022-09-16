@@ -89,7 +89,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				  = "mobile",
-		unitrole				 = "assault",
+		unitrole				 = "Assault",
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 

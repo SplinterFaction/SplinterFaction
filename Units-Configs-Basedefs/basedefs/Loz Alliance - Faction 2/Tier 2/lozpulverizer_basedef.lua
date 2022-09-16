@@ -85,7 +85,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "aa",
+		unitrole				 = "Anti-Air",
 		canbetransported 		 = "true",
 		needed_cover             = 3,
 		death_sounds             = "generic",

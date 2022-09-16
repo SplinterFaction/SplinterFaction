@@ -89,7 +89,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype         = "mobile",
-		unitrole		 = "Engineer",
+		unitrole		 = "Builder",
 		area_mex_def     = areamexdef,
 		requiretech      = requiretech,
 		canbetransported = "true",

@@ -1,0 +1,216 @@
+vet_flag()
+{
+	while (ANIM_VARIABLE)
+	{
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <0.000000> now;
+			turn Flag2_10 to y-axis <-18.632812> now;
+			turn Flag3_10 to y-axis <-15.117188> now;
+			sleep 36;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <2.460937> now;
+			turn Flag2_10 to y-axis <-16.875000> now;
+			turn Flag3_10 to y-axis <-16.875000> now;
+			sleep 37;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <4.921875> now;
+			turn Flag2_10 to y-axis <-15.117187> now;
+			turn Flag3_10 to y-axis <-18.632812> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <7.558594> now;
+			turn Flag2_10 to y-axis <-13.886719> now;
+			turn Flag3_10 to y-axis <-17.050781> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <10.195313> now;
+			turn Flag2_10 to y-axis <-12.656250> now;
+			turn Flag3_10 to y-axis <-15.468750> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <12.656250> now;
+			turn Flag2_10 to y-axis <-11.425781> now;
+			turn Flag3_10 to y-axis <-14.062500> now;
+			sleep 40;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <15.117188> now;
+			turn Flag2_10 to y-axis <-10.195313> now;
+			turn Flag3_10 to y-axis <-12.656250> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <16.699219> now;
+			turn Flag2_10 to y-axis <-5.097656> now;
+			turn Flag3_10 to y-axis <-11.425781> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <18.281250> now;
+			turn Flag2_10 to y-axis <0.000000> now;
+			turn Flag3_10 to y-axis <-10.195312> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <16.699219> now;
+			turn Flag2_10 to y-axis <2.460938> now;
+			turn Flag3_10 to y-axis <-5.097656> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <15.117188> now;
+			turn Flag2_10 to y-axis <4.921875> now;
+			turn Flag3_10 to y-axis <0.000000> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <13.007813> now;
+			turn Flag2_10 to y-axis <7.558594> now;
+			turn Flag3_10 to y-axis <2.812500> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <10.898438> now;
+			turn Flag2_10 to y-axis <10.195312> now;
+			turn Flag3_10 to y-axis <5.625000> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <8.085938> now;
+			turn Flag2_10 to y-axis <12.832031> now;
+			turn Flag3_10 to y-axis <8.085937> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <5.273438> now;
+			turn Flag2_10 to y-axis <15.468750> now;
+			turn Flag3_10 to y-axis <10.546875> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <2.636719> now;
+			turn Flag2_10 to y-axis <17.050781> now;
+			turn Flag3_10 to y-axis <12.832031> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <0.000000> now;
+			turn Flag2_10 to y-axis <18.632812> now;
+			turn Flag3_10 to y-axis <15.117188> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-2.460937> now;
+			turn Flag2_10 to y-axis <16.875000> now;
+			turn Flag3_10 to y-axis <16.875000> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-4.921875> now;
+			turn Flag2_10 to y-axis <15.117188> now;
+			turn Flag3_10 to y-axis <18.632812> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-7.558594> now;
+			turn Flag2_10 to y-axis <13.886719> now;
+			turn Flag3_10 to y-axis <16.875000> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-10.195312> now;
+			turn Flag2_10 to y-axis <12.656250> now;
+			turn Flag3_10 to y-axis <15.117188> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-12.832031> now;
+			turn Flag2_10 to y-axis <11.425781> now;
+			turn Flag3_10 to y-axis <13.886719> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-15.468750> now;
+			turn Flag2_10 to y-axis <10.195313> now;
+			turn Flag3_10 to y-axis <12.656250> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-16.875000> now;
+			turn Flag2_10 to y-axis <5.097656> now;
+			turn Flag3_10 to y-axis <11.601563> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-18.281250> now;
+			turn Flag2_10 to y-axis <0.000000> now;
+			turn Flag3_10 to y-axis <10.546875> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-16.875000> now;
+			turn Flag2_10 to y-axis <-2.460938> now;
+			turn Flag3_10 to y-axis <5.273438> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-15.468750> now;
+			turn Flag2_10 to y-axis <-4.921875> now;
+			turn Flag3_10 to y-axis <0.000000> now;
+			sleep 38;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-13.183594> now;
+			turn Flag2_10 to y-axis <-7.734375> now;
+			turn Flag3_10 to y-axis <-2.460938> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-10.898437> now;
+			turn Flag2_10 to y-axis <-10.546875> now;
+			turn Flag3_10 to y-axis <-4.921875> now;
+			sleep 39;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn Flag1_10 to y-axis <-5.449219> now;
+			turn Flag2_10 to y-axis <-14.589844> now;
+			turn Flag3_10 to y-axis <-10.019531> now;
+			sleep 39;
+		}
+	}
+}

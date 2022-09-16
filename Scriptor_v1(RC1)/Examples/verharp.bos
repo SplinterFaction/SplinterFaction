@@ -1,0 +1,380 @@
+piece  harpoonshipbody, emitjim, emitss, damage1, damage2, damage3, damage4, damage5,
+       damage6, damage7, damage8, damage9, Oar1, Oar2, Oar3, Oar4,
+       Oar5, Oar6, Flagrot, Flagrot_10, Wake6, Wake5, Wake4, Oar4_5,
+       Wake3, Oar3_5, Wake2, Oar2_5, Wake1, Oar1_5, Flag2_10, Flag3_10,
+       Flag2, Flag3, harpoon, TwistR, TwistL, StringL, StringR, Sail1,
+       Sail2, Sail3, Sail4, Sail5, Flag1_10, Flag1, Verground, SailRot,
+       Wake13, Wake16, Wake17, Wake18, Wake21, Wake22, harpoonstand, Oar6_5,
+       Oar5_5, harpoonstand_5, Sail1_5;
+
+static-var	moving, firing, wakes, oarsdown, restored;
+static-var	vetlevel, velocity, direction, winddir, restore_delay;
+
+#define MAX_DAMAGE_FLAMES			9
+#define MAX_SMOKE_PUFFS_PER_SECOND	5
+#define MOVE_RESTORE_SPEED			[50]
+#define TURN_RESTORE_SPEED			<50>
+#define ROLL_SPEED					50
+#define SIG_AIM						2
+#define SIG_MOVE					4
+#define SIG_TURN					8
+#define SIG_WAKE					16
+#define SIG_WIND					32
+#define SIG_RESTORE					64
+#define SIG_ROLL					128
+#define SMOKEPIECE1					harpoonshipbody
+
+#include "EXPtype.h"
+#include "SFXtype.h"
+#include "SmokeUnit.h"
+
+#define ANIM_VARIABLE			moving
+#include "verharp\slowrow.bos"
+#include "verharp\row.bos"
+#include "verharp\fastrow.bos"
+#include "verharp\turnleft.bos"
+#include "verharp\turnright.bos"
+#undef ANIM_VARIABLE
+
+#define ANIM_VARIABLE			TRUE
+#include "verharp\attack1.bos"
+#include "verharp\sail.bos"
+#include "verharp\endsail.bos"
+#include "verharp\flag.bos"
+#include "verharp\vet_flag.bos"
+#include "verharp\restore.bos"
+#undef ANIM_VARIABLE
+
+
+MotionControl()
+{
+	for (;;)
+	{
+		velocity = get CURRENT_SPEED;
+
+		if (moving)
+		{
+			if ((direction >= (0-45)) && (direction <= 45))
+			{
+				if (velocity > 75)
+					call-script fastrow();
+				else if (velocity > 25)
+					call-script row();
+				else
+					call-script slowrow();
+
+				restored = FALSE;
+			}
+			else if (direction > 45)
+			{
+				call-script turnleft();
+				restored = FALSE;
+			}
+			else if (direction < (0-45))
+			{
+				call-script turnright();
+				restored = FALSE;
+			}
+			else
+				sleep 100;					// failsafe
+		}
+		else if (!restored)
+		{
+			call-script restore();
+			restored = TRUE;
+		}
+		else
+			sleep 100;
+	}
+}
+
+OarWakeControl()
+{
+	set-signal-mask SIG_WAKE;
+
+	for (;;)
+	{
+		if (moving && oarsdown)
+		{
+			emit-sfx SFXTYPE_WAKE1 from wake1;
+			emit-sfx SFXTYPE_WAKE1 from wake2;
+			emit-sfx SFXTYPE_WAKE1 from wake3;
+			emit-sfx SFXTYPE_WAKE1 from wake4;
+			emit-sfx SFXTYPE_WAKE1 from wake5;
+			emit-sfx SFXTYPE_WAKE1 from wake6;
+
+			sleep 400;
+		}
+		else
+			sleep 100;
+	}
+}
+
+WakeControl()
+{
+	set-signal-mask SIG_WAKE;
+
+	for (;;)
+	{
+		if (moving)
+		{
+			emit-sfx SFXTYPE_WAKE1 from wake13;
+			emit-sfx SFXTYPE_WAKE1 from wake16;
+			emit-sfx SFXTYPE_WAKE1 from wake17;
+			emit-sfx SFXTYPE_WAKE1 from wake18;
+			emit-sfx SFXTYPE_REVERSEWAKE2 from wake21;
+			emit-sfx SFXTYPE_REVERSEWAKE2 from wake22;
+
+			sleep 400;
+		}
+		else
+			sleep 100;
+	}
+}
+
+StatusControl()
+{
+	var x;
+
+	for (x = 0; x < 2; sleep 1000)
+	{
+		vetlevel = get VETERAN_LEVEL;
+
+		if (x == 0)
+		{
+			if (vetlevel > 4)
+			{
+				hide harpoonstand;
+				hide oar1;
+				hide oar2;
+				hide oar3;
+				hide oar4;
+				hide oar5;
+				hide oar6;
+
+				show harpoonstand_5;
+				show oar1_5;
+				show oar2_5;
+				show oar3_5;
+				show oar4_5;
+				show oar5_5;
+				show oar6_5;
+
+				++x;
+			}
+		}
+		else if (x == 1)
+		{
+			if (vetlevel > 9)
+			{
+				start-script vet_flag();			// Looping script.
+
+				show flag1_10;
+				show flag2_10;
+				show flag3_10;
+
+				++x;
+			}
+		}
+	}
+}
+
+Create()
+{
+	hide harpoonstand_5;
+	hide oar1_5;
+	hide oar2_5;
+	hide oar3_5;
+	hide oar4_5;
+	hide oar5_5;
+	hide oar6_5;
+	hide flag1_10;
+	hide flag2_10;
+	hide flag3_10;
+
+	dont-cache flag1;								// Flag polys have to be redrawn every frame.
+	dont-cache flag2;
+	dont-cache flag3;
+
+	dont-cache flag1_10;
+	dont-cache flag2_10;
+	dont-cache flag3_10;
+	
+	moving = FALSE;
+	firing = FALSE;
+	wakes = FALSE;
+	oarsdown = FALSE;
+	restored = FALSE;
+
+	vetlevel = 0;
+	velocity = 0;
+	direction = 0;
+	winddir = 0;
+	restore_delay = 5000;
+
+	while (get BUILD_PERCENT_LEFT)
+		sleep 100;
+
+	start-script MotionControl();
+	start-script OarWakeControl();
+	start-script WakeControl();
+	start-script flag();							// Looping script.
+	start-script StatusControl();
+	start-script SmokeControl();
+}
+
+HitByWeapon(attacker, pitch, roll, severity)
+{
+	var m, n, o, p;
+
+	if ((severity > 10) && (attacker != DT_PARALYZER))
+	{
+		m = pitch * (severity / 750);
+		n = roll * (severity / 250);
+		o = pitch * ((0 - 1) * (severity / 1500));
+		p = roll * ((0 - 1) * (severity / 500));
+		
+		signal SIG_ROLL;
+		set-signal-mask SIG_ROLL;
+
+		turn harpoonshipbody to x-axis m speed <1.0> * ROLL_SPEED;
+		turn harpoonshipbody to z-axis n speed <1.0> * ROLL_SPEED;
+
+		wait-for-turn harpoonshipbody around x-axis;
+		wait-for-turn harpoonshipbody around z-axis;
+
+		turn harpoonshipbody to x-axis o speed <0.5> * ROLL_SPEED;
+		turn harpoonshipbody to z-axis p speed <0.5> * ROLL_SPEED;
+
+		wait-for-turn harpoonshipbody around x-axis;
+		wait-for-turn harpoonshipbody around z-axis;
+
+		turn harpoonshipbody to x-axis <0.0> speed <0.25> * ROLL_SPEED;
+		turn harpoonshipbody to z-axis <0.0> speed <0.25> * ROLL_SPEED;
+	}
+}
+
+MoveRate(rate)
+{
+	signal SIG_MOVE;
+	set-signal-mask SIG_MOVE;
+
+	if (rate > 0)
+	{
+		moving = TRUE;
+		signal SIG_WIND;
+
+		if (!wakes)
+		{
+			start-script OarWakeControl();
+			start-script WakeControl();
+			wakes = TRUE;
+		}
+
+		turn flagrot to y-axis <0> speed <50>;		// Flag always blows backward when moving.
+		turn flagrot_10 to y-axis <0> speed <75>;
+		start-script sail();
+	}
+	else
+	{
+		moving = FALSE;
+		signal SIG_WAKE;
+		wakes = FALSE;
+		turn flagrot to y-axis winddir speed <50>;	// Sitting still, turn to wind direction.
+		turn flagrot_10 to y-axis winddir speed <75>;
+		start-script endsail();
+	}
+}
+
+WindChange(windspeed, winddirection)
+{
+	signal SIG_WIND;								// Kill old WindChange().
+	set-signal-mask SIG_WIND;						// Make us killable.
+
+	winddir = winddirection;						// Set global variable.
+
+	if (!moving)
+	{
+		turn flagrot to y-axis winddir speed <50>;
+		turn flagrot_10 to y-axis winddir speed <75>;
+	}
+}
+
+TurnDirection(dir)
+{
+	signal SIG_TURN;
+	set-signal-mask SIG_TURN;
+
+	direction = dir;
+
+	if ((direction < 90) && (direction > (0-90)))
+		turn sailrot to y-axis <0.5>*direction speed <10>;
+	else if (direction >= 90)
+		turn sailrot to y-axis <45> speed <10>;
+	else if (direction <= (0-90))
+		turn sailrot to y-axis (0 - <45>) speed <10>;
+}
+
+RestoreAfterDelay()
+{
+	signal SIG_RESTORE;
+	set-signal-mask SIG_RESTORE;
+
+	sleep restore_delay;
+	firing = FALSE;
+	start-script restore();
+}
+
+AimWeapon(heading, pitch, weaponnum)
+{
+	signal SIG_AIM;
+	set-signal-mask SIG_AIM;
+
+	turn harpoonstand to x-axis pitch speed <100.0>;
+	turn harpoonstand to y-axis heading + <180> speed <100.0>;
+
+	wait-for-turn harpoonstand around x-axis;
+	wait-for-turn harpoonstand around y-axis;
+
+	while (firing)
+		sleep 100;
+
+	set WEAPON_READY to weaponnum;
+	start-script RestoreAfterDelay();
+}
+
+FireWeapon(weaponnum)
+{
+	firing = TRUE;
+
+	call-script attack1(weaponnum);
+	
+	firing = FALSE;
+}
+
+TargetCleared(weaponnum)
+{
+	set WEAPON_AIM_ABORTED to weaponnum;
+}
+
+QueryWeapon(piecenum)
+{
+	piecenum = emitjim;
+}
+
+SweetSpot(piecenum)
+{
+	piecenum = emitss;
+}
+
+Killed(severity, corpsetype, damagetype)
+{
+	corpsetype = 1;
+
+	explode damage1 type EXPTYPE_MEDIUMSMOKE | BITMAPONLY;
+	explode damage8 type EXPTYPE_XLARGESMOKE | BITMAPONLY;
+	explode damage3 type EXPTYPE_XLARGESMOKE | BITMAPONLY;
+	explode damage5 type EXPTYPE_XLARGEEXPLOSION | BITMAPONLY;
+	explode damage7 type EXPTYPE_XLARGEEXPLOSION | BITMAPONLY;
+	explode damage9 type EXPTYPE_MEDIUMSMOKE | BITMAPONLY;
+}

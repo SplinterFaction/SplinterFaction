@@ -1,0 +1,196 @@
+piece  tardung, emitbuild, emitweap, damage1, damage2, damage3, damage4, damage5,
+       damage6, damage7, damage8, damage9, CreatureLowerA, CreatureLowerB, CreatureLowerC, CreatureLowerD,
+       CreatureRotate, CreatureMiddleC, CreatureMiddleA, CreatureMiddleD, CreatureMiddleB, CreatureUpperD, CreatureUpperC, CreatureUpperB,
+       CreatureUpperA, creaturebase, creaturegullet, gatevet_5, basevet_10, buildpad;
+
+static-var	working,ready,buildangle;
+
+#define MAX_DAMAGE_FLAMES			9
+#define MAX_DAMAGE_FLAME_LEVEL		3
+#define MAX_SMOKE_PUFFS_PER_SECOND	5
+#define MOVE_RESTORE_SPEED			[250]
+#define TURN_RESTORE_SPEED			<250>
+
+#include "EXPtype.h"
+#include "Yard.h"
+#include "FlameUnit.h"
+#include "SmokeUnit.h"
+
+#define ANIM_VARIABLE			TRUE
+#include "tardung\startbuild.bos"
+#include "tardung\stopbuild.bos"
+#undef ANIM_VARIABLE
+
+
+Go()
+{
+	dont-cache creaturelowerA;
+	dont-cache creaturemiddleA;
+	dont-cache creatureupperA;
+	dont-cache creaturelowerB;
+	dont-cache creaturemiddleB;
+	dont-cache creatureupperB;
+	dont-cache creaturelowerC;
+	dont-cache creaturemiddleC;
+	dont-cache creatureupperC;
+	dont-cache creaturelowerD;
+	dont-cache creaturemiddleD;
+	dont-cache creatureupperD;
+	dont-cache creaturebase;
+	dont-cache creaturegullet;
+
+	call-script startbuild();
+
+	cache creaturelowerA;
+	cache creaturemiddleA;
+	cache creatureupperA;
+	cache creaturelowerB;
+	cache creaturemiddleB;
+	cache creatureupperB;
+	cache creaturelowerC;
+	cache creaturemiddleC;
+	cache creatureupperC;
+	cache creaturelowerD;
+	cache creaturemiddleD;
+	cache creatureupperD;
+	cache creaturebase;
+	cache creaturegullet;
+
+	call-script OpenYard();
+	set INBUILDSTANCE to TRUE;
+	ready = TRUE;
+}
+
+Stop()
+{
+	ready = FALSE;
+	set INBUILDSTANCE to FALSE;
+	call-script CloseYard();
+
+	dont-cache creaturelowerA;
+	dont-cache creaturemiddleA;
+	dont-cache creatureupperA;
+	dont-cache creaturelowerB;
+	dont-cache creaturemiddleB;
+	dont-cache creatureupperB;
+	dont-cache creaturelowerC;
+	dont-cache creaturemiddleC;
+	dont-cache creatureupperC;
+	dont-cache creaturelowerD;
+	dont-cache creaturemiddleD;
+	dont-cache creatureupperD;
+	dont-cache creaturebase;
+	dont-cache creaturegullet;
+
+	call-script stopbuild();
+
+	cache creaturelowerA;
+	cache creaturemiddleA;
+	cache creatureupperA;
+	cache creaturelowerB;
+	cache creaturemiddleB;
+	cache creatureupperB;
+	cache creaturelowerC;
+	cache creaturemiddleC;
+	cache creatureupperC;
+	cache creaturelowerD;
+	cache creaturemiddleD;
+	cache creatureupperD;
+	cache creaturebase;
+	cache creaturegullet;
+}
+
+#define ACTIVATECMD call-script Go();
+#define DEACTIVATECMD call-script Stop();
+#include "StateChg.h"
+
+
+StatusControl()
+{
+	var vetlevel, x;
+
+	vetlevel = 0;
+	
+	for (x = 0; x < 2; sleep 1000)
+	{
+		vetlevel = get VETERAN_LEVEL;
+
+		if (x == 0)
+		{
+			if (vetlevel > 4)
+			{
+				show gatevet_5;
+				++x;
+			}
+		}
+		else if (x == 1)
+		{
+			if (vetlevel > 9)
+			{
+				show basevet_10;
+				++x;
+			}
+		}
+	}
+}
+
+Create()
+{
+	hide basevet_10;
+	hide gatevet_5;
+
+	hide creaturebase;		// Fix clipping problem
+
+	buildangle = get ORIENTATION;
+	turn buildpad to y-axis <180>-buildangle now;
+
+	ready = FALSE;
+	working = FALSE;
+
+	dont-shade buildpad;
+	dont-shadow buildpad;
+
+	while (get BUILD_PERCENT_LEFT)
+		sleep 100;
+
+	dont-cache buildpad;
+	dont-cache emitbuild;
+
+	call-script InitState();
+	start-script StatusControl();
+	start-script DamageFlameControl();
+	start-script SmokeControl();
+}
+
+Activate()
+{
+	start-script RequestState( ACTIVE );
+}
+
+Deactivate()
+{
+	start-script RequestState( INACTIVE );
+}
+
+QueryBuildInfo(piecenum)
+{
+	piecenum = emitbuild;
+}
+
+SweetSpot(piecenum)
+{
+	piecenum = tardung;
+}
+
+Killed(severity, corpsetype, damagetype)
+{
+	corpsetype = 1;
+	explode damage1 type EXPTYPE_SMALLEXPLOSION | BITMAPONLY;
+	explode damage2 type EXPTYPE_SMALLEXPLOSION | BITMAPONLY;
+	explode damage3 type EXPTYPE_MEDIUMEXPLOSION | BITMAPONLY;
+	explode damage4 type EXPTYPE_MEDIUMEXPLOSION | BITMAPONLY;
+	explode damage5 type EXPTYPE_LARGEEXPLOSION | BITMAPONLY;
+	explode damage6 type EXPTYPE_XLARGEEXPLOSION | BITMAPONLY;
+	explode damage8 type EXPTYPE_MEDIUMEXPLOSION | BITMAPONLY;
+	explode damage9 type EXPTYPE_MEDIUMEXPLOSION | BITMAPONLY;
+}

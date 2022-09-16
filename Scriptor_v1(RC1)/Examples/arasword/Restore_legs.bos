@@ -1,0 +1,45 @@
+restore_legs()
+{
+	move Hip to x-axis [0] speed MOVE_RESTORE_SPEED;
+	turn Hip to x-axis <0> speed TURN_RESTORE_SPEED;
+	move Hip to y-axis [0] speed MOVE_RESTORE_SPEED;
+	turn Hip to y-axis <0> speed TURN_RESTORE_SPEED;
+	move Hip to z-axis [0] speed MOVE_RESTORE_SPEED;
+	turn Hip to z-axis <0> speed TURN_RESTORE_SPEED;
+	move LegUL to x-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegUL to x-axis <0> speed TURN_RESTORE_SPEED;
+	move LegUL to y-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegUL to y-axis <0> speed TURN_RESTORE_SPEED;
+	move LegUL to z-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegUL to z-axis <0> speed TURN_RESTORE_SPEED;
+	move LegUR to x-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegUR to x-axis <0> speed TURN_RESTORE_SPEED;
+	move LegUR to y-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegUR to y-axis <0> speed TURN_RESTORE_SPEED;
+	move LegUR to z-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegUR to z-axis <0> speed TURN_RESTORE_SPEED;
+	move LegLR to x-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegLR to x-axis <0> speed TURN_RESTORE_SPEED;
+	move LegLR to y-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegLR to y-axis <0> speed TURN_RESTORE_SPEED;
+	move LegLR to z-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegLR to z-axis <0> speed TURN_RESTORE_SPEED;
+	move FootR to x-axis [0] speed MOVE_RESTORE_SPEED;
+	turn FootR to x-axis <0> speed TURN_RESTORE_SPEED;
+	move FootR to y-axis [0] speed MOVE_RESTORE_SPEED;
+	turn FootR to y-axis <0> speed TURN_RESTORE_SPEED;
+	move FootR to z-axis [0] speed MOVE_RESTORE_SPEED;
+	turn FootR to z-axis <0> speed TURN_RESTORE_SPEED;
+	move LegLL to x-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegLL to x-axis <0> speed TURN_RESTORE_SPEED;
+	move LegLL to y-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegLL to y-axis <0> speed TURN_RESTORE_SPEED;
+	move LegLL to z-axis [0] speed MOVE_RESTORE_SPEED;
+	turn LegLL to z-axis <0> speed TURN_RESTORE_SPEED;
+	move FootL to x-axis [0] speed MOVE_RESTORE_SPEED;
+	turn FootL to x-axis <0> speed TURN_RESTORE_SPEED;
+	move FootL to y-axis [0] speed MOVE_RESTORE_SPEED;
+	turn FootL to y-axis <0> speed TURN_RESTORE_SPEED;
+	move FootL to z-axis [0] speed MOVE_RESTORE_SPEED;
+	turn FootL to z-axis <0> speed TURN_RESTORE_SPEED;
+}

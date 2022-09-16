@@ -104,7 +104,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				  = "mobile",
-		unitrole				 = "artillery",
+		unitrole				 = "Artillery",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",

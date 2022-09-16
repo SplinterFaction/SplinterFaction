@@ -1,0 +1,233 @@
+attack4(weapon)
+{
+	if (ANIM_VARIABLE)
+	{
+		move LegUL to y-axis [0.000006] now;
+		move LegUL to z-axis [-0.000006] now;
+		move LegUR to x-axis [-0.000006] now;
+		move LegUR to y-axis [0.000006] now;
+		move LegUR to z-axis [-0.000006] now;
+		move FootR to x-axis [0.000006] now;
+		move FootR to z-axis [0.000006] now;
+		move WakeR to y-axis [0.000006] now;
+		move WakeR to z-axis [-0.000012] now;
+		move FootL to x-axis [-0.000006] now;
+		move FootL to z-axis [0.000006] now;
+		move WakeL to y-axis [0.000006] now;
+		move WakeL to z-axis [-0.000012] now;
+		move Head to y-axis [0.000006] now;
+		move Head to z-axis [-0.000006] now;
+		move ArmUL to x-axis [0.000006] now;
+		move ArmUL to y-axis [-0.000006] now;
+		move ArmUR to x-axis [-0.000006] now;
+		move ArmUR to y-axis [-0.000006] now;
+		move BloodL to y-axis [0.000012] now;
+		move BloodM to y-axis [0.000012] now;
+		move BloodR to y-axis [0.000012] now;
+		move Torso5 to y-axis [0.000006] now;
+		move ArmUR5 to x-axis [0.000006] now;
+		move ArmUR5 to y-axis [0.000011] now;
+		move ArmLR to x-axis [-0.000006] now;
+		move HandR to y-axis [0.000006] now;
+		move Sword to x-axis [0.000006] now;
+		move Sword to z-axis [0.000006] now;
+		move Sword10 to x-axis [0.000006] now;
+		move Sword10 to y-axis [0.000006] now;
+		move Sword10 to z-axis [0.000012] now;
+		move SwordHit to z-axis [-1.200012] now;
+		move ArmUL5 to x-axis [-0.000006] now;
+		move ArmUL5 to y-axis [0.000011] now;
+		move ArmLL to x-axis [0.000006] now;
+		move HandL to y-axis [0.000006] now;
+		move Shield to x-axis [-0.000006] now;
+		turn ArmLL to x-axis <-88.945313> now;
+		turn ArmLL to z-axis <33.000000> now;
+		turn HandL to z-axis <10.000000> now;
+		sleep 116;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-7.000000> now;
+		turn Head to y-axis <3.515625> now;
+		turn ArmUL to x-axis <-38.320313> now;
+		turn ArmUL to y-axis <5.976562> now;
+		turn ArmUR to y-axis <-24.257812> now;
+		turn ArmLR to y-axis <-42.890625> now;
+		turn HandR to x-axis <62.226563> now;
+		turn HandR to y-axis <67.148437> now;
+		turn ArmLL to x-axis <-49.218750> now;
+		turn ArmLL to z-axis <62.578125> now;
+		turn HandL to x-axis <5.625000> now;
+		turn HandL to z-axis <0.000000> now;
+		sleep 131;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <49.921875> now;
+		turn Head to y-axis <-36.914063> now;
+		turn ArmUL to y-axis <-15.820312> now;
+		turn ArmUR to y-axis <30.585938> now;
+		turn ArmLR to x-axis <4.921875> now;
+		turn ArmLR to y-axis <9.492187> now;
+		turn HandR to x-axis <74.882812> now;
+		turn HandR to y-axis <0.000000> now;
+		turn HandL to z-axis <18.984375> now;
+		sleep 115;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <67.148437> now;
+		turn Torso to z-axis <1.757813> now;
+		turn Head to y-axis <-57.304688> now;
+		turn ArmUL to x-axis <10.546875> now;
+		turn ArmUL to y-axis <0.000000> now;
+		turn ArmUR to x-axis <-42.187500> now;
+		turn ArmLR to x-axis <-19.335937> now;
+		turn ArmLL to z-axis <24.609375> now;
+		turn HandL to y-axis <-33.398437> now;
+		turn HandL to z-axis <0.000000> now;
+		sleep 110;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <68.906250> now;
+		turn Torso to z-axis <4.921875> now;
+		turn Head to y-axis <-66.796875> now;
+		turn ArmUL to x-axis <30.937500> now;
+		turn ArmUR to x-axis <-48.867188> now;
+		turn ArmLR to x-axis <-43.945312> now;
+		turn ArmLR to y-axis <52.382812> now;
+		turn ArmLR to z-axis <0.000000> now;
+		turn HandR to x-axis <43.593750> now;
+		turn ArmLL to x-axis <-60.820312> now;
+
+		play-sound( "STSWISH0", PLAYSOUND_PRIORITY_BATTLE );
+
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <40.517578> now;
+		turn Torso to z-axis <2.460938> now;
+		turn Head to y-axis <-40.166016> now;
+		turn ArmUL to x-axis <23.818359> now;
+		turn ArmUL to y-axis <12.216797> now;
+		turn ArmUL to z-axis <-8.349609> now;
+		turn ArmUR to x-axis <-26.542969> now;
+		turn ArmUR to y-axis <41.396484> now;
+		turn ArmUR to z-axis <33.750000> now;
+		turn ArmLR to x-axis <-21.972656> now;
+		turn ArmLR to y-axis <26.191406> now;
+		turn ArmLR to z-axis <6.679688> now;
+		turn HandR to x-axis <43.593750> now;
+		turn ArmLL to x-axis <-50.625000> now;
+		turn ArmLL to z-axis <12.041016> now;
+		turn HandL to y-axis <-22.500000> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <12.128906> now;
+		turn Torso to z-axis <-0.703125> now;
+		turn Head to y-axis <-13.535156> now;
+		turn ArmUL to x-axis <16.699219> now;
+		turn ArmUL to y-axis <24.433594> now;
+		turn ArmUL to z-axis <-16.699219> now;
+		turn ArmUR to x-axis <-4.218750> now;
+		turn ArmUR to y-axis <52.207031> now;
+		turn ArmUR to z-axis <67.500000> now;
+		turn ArmLR to x-axis <0.000000> now;
+		turn ArmLR to y-axis <-0.000000> now;
+		turn ArmLR to z-axis <13.359375> now;
+		turn ArmLL to x-axis <-42.539062> now;
+		turn ArmLL to z-axis <-0.527344> now;
+		turn HandL to y-axis <-11.601562> now;
+
+		if (!kill_attack)
+			set WEAPON_LAUNCH_NOW to weapon;
+
+		sleep 54;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-2.460938> now;
+		turn Torso to z-axis <-2.460938> now;
+		turn Head to y-axis <-2.109375> now;
+		turn ArmUL to x-axis <15.117187> now;
+		turn ArmUL to y-axis <22.500000> now;
+		turn ArmUL to z-axis <-19.687500> now;
+		turn ArmUR to y-axis <25.312500> now;
+		turn HandR to x-axis <43.593750> now;
+		turn ArmLL to x-axis <-49.218750> now;
+		turn ArmLL to z-axis <0.000000> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-31.289063> now;
+		turn Torso to z-axis <-5.273438> now;
+		turn Head to y-axis <9.140625> now;
+		turn ArmUL to x-axis <2.460938> now;
+		turn ArmUL to y-axis <16.875000> now;
+		turn ArmUL to z-axis <-3.164063> now;
+		turn ArmUR to y-axis <-20.039062> now;
+		turn ArmUR to z-axis <44.648438> now;
+		turn ArmLL to x-axis <-55.546875> now;
+		turn ArmLL to z-axis <7.382813> now;
+		turn HandL to x-axis <-9.492188> now;
+		sleep 110;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-15.820313> now;
+		turn Torso to z-axis <-2.109375> now;
+		turn ArmUL to x-axis <-4.921875> now;
+		turn ArmUL to y-axis <-4.921875> now;
+		turn ArmUL to z-axis <0.000000> now;
+		turn ArmUR to x-axis <-2.109375> now;
+		turn ArmUR to y-axis <-36.914062> now;
+		turn ArmUR to z-axis <26.015625> now;
+		turn ArmLR to y-axis <39.726562> now;
+		turn HandR to x-axis <18.984375> now;
+		turn HandR to y-axis <-19.687500> now;
+		turn ArmLL to x-axis <-64.335937> now;
+		turn ArmLL to z-axis <11.953125> now;
+		sleep 132;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-3.515625> now;
+		turn Torso to z-axis <0.000000> now;
+		turn ArmUL to x-axis <-2.460937> now;
+		turn ArmUL to y-axis <-2.109375> now;
+		turn ArmUR to x-axis <-0.000000> now;
+		turn ArmUR to y-axis <-10.898437> now;
+		turn ArmUR to z-axis <10.195312> now;
+		turn ArmLR to y-axis <8.789062> now;
+		turn HandR to y-axis <-5.625000> now;
+		turn ArmLL to x-axis <-79.101562> now;
+		turn ArmLL to z-axis <22.148437> now;
+		sleep 146;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <0.000000> now;
+		turn Head to y-axis <0.000000> now;
+		turn ArmUL to x-axis <0.000000> now;
+		turn ArmUL to y-axis <0.000000> now;
+		turn ArmUR to x-axis <0.000000> now;
+		turn ArmUR to y-axis <0.000000> now;
+		turn ArmUR to z-axis <0.000000> now;
+		turn ArmLR to x-axis <0.000000> now;
+		turn ArmLR to y-axis <0.000000> now;
+		turn ArmLR to z-axis <0.000000> now;
+		turn HandR to x-axis <0.000000> now;
+		turn HandR to y-axis <0.000000> now;
+		turn ArmLL to x-axis <-88.945313> now;
+		turn ArmLL to z-axis <33.000000> now;
+		turn HandL to x-axis <0.000000> now;
+		turn HandL to y-axis <0.000000> now;
+		turn HandL to z-axis <10.000000> now;
+		sleep 14;
+	}
+}

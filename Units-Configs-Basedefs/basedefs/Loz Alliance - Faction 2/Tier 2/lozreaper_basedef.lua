@@ -91,7 +91,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "mbt",
+		unitrole				 = "Main Battle Tank",
 		canbetransported 		 = "true",
 		needed_cover             = 3,
 		death_sounds             = "generic",

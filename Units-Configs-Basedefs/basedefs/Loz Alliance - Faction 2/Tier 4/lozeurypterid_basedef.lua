@@ -78,7 +78,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				  = "mobile",
-		unitrole				 = "assault",
+		unitrole				 = "Assault",
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -100,7 +100,7 @@ weaponDefs                 = {
 		explosionGenerator       = "custom:NUKEDATBEWMSMALL",
 		edgeEffectiveness        = 0.1,
 		energypershot            = 0,
-		highTrajectory			 = 1,
+		-- highTrajectory			 = 1,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		name                     = "Light Cannon",

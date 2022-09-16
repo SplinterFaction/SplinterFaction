@@ -35,14 +35,53 @@ SmokeUnit(healthpercent, sleeptime, smoketype)
 	}
 }
 
+fx()
+{
+	while( get BUILD_PERCENT_LEFT )
+	{
+		sleep 400;
+	}
+	while( TRUE )
+	{
+//		if (tech)
+//		{
+			emit-sfx 1025 from sfxpoint1;
+//		}
+	sleep 500;
+	}
+}
+
+
+fx2()
+{
+	while( get BUILD_PERCENT_LEFT )
+	{
+		sleep 400;
+	}
+	while( ballstate )
+	{
+//		if (tech)
+//		{
+			emit-sfx 1026 from sfxpoint1;
+//		}
+	sleep 500;
+	}
+}
+
 Go()
 {
 	spin pivotpoint around y-axis speed <50> accelerate <10>;
 	ballstate = 1;
-	turn armfront to x-axis <60> speed <15>;
-	turn armrear to x-axis <-60> speed <15>;
-	turn armleft to z-axis <60> speed <15>;
-	turn armright to z-axis <-60> speed <15>;
+	start-script fx2();
+	
+	spin ball around y-axis speed <20.005495>;
+	spin ball around z-axis speed <30.005495>;
+	spin tech3ring around y-axis speed <-90.005495>;
+	spin tech3ring around z-axis speed <-60.005495>;
+	spin tech2ring around y-axis speed <45.005495>;
+	spin tech2ring around z-axis speed <-30.005495>;
+	spin tech1ring around y-axis speed <90.005495>;
+	spin tech1ring around z-axis speed <60.005495>;
 }
 
 Stop()
@@ -50,10 +89,15 @@ Stop()
 	stop-spin pivotpoint around y-axis decelerate <25>;
 	wait-for-turn pivotpoint around y-axis;
 	ballstate = 0;
-	turn armfront to x-axis <0> speed <50>;
-	turn armrear to x-axis <0> speed <50>;
-	turn armleft to z-axis <0> speed <50>;
-	turn armright to z-axis <0> speed <50>;
+	
+	stop-spin ball around y-axis decelerate <20.005495>;
+	stop-spin ball around z-axis decelerate <30.005495>;
+	stop-spin tech3ring around y-axis decelerate <-90.005495>;
+	stop-spin tech3ring around z-axis decelerate <-60.005495>;
+	stop-spin tech2ring around y-axis decelerate <45.005495>;
+	stop-spin tech2ring around z-axis decelerate <-30.005495>;
+	stop-spin tech1ring around y-axis decelerate <90.005495>;
+	stop-spin tech1ring around z-axis decelerate <60.005495>;
 }
 
 InitState()
@@ -88,61 +132,15 @@ RequestState(requestedstate, currentstate)
 	statechg_StateChanging = FALSE;
 }
 
-
-
-fx()
-{
-	while( get BUILD_PERCENT_LEFT )
-	{
-		sleep 400;
-	}
-	while( TRUE )
-	{
-//		if (tech)
-//		{
-			emit-sfx 1025 from sfxpoint1;
-//		}
-	sleep 500;
-	}
-}
-
-
-fx2()
-{
-	while( get BUILD_PERCENT_LEFT )
-	{
-		sleep 400;
-	}
-	while( TRUE )
-	{
-//		if (tech)
-//		{
-			emit-sfx 1026 from sfxpoint1;
-//		}
-	sleep 500;
-	}
-}
-
-
 Create()
 {
 //	start-script fx();
-	start-script fx2();
 	Static_Var_1 = 0;
 	Static_Var_2 = 75;
 	Static_Var_3 = 50;
 	turn sfxpoint1 to x-axis <-90> now;
 	call-script InitState();
 	start-script SmokeUnit();
-	
-	spin ball around y-axis speed <20.005495>;
-	spin ball around z-axis speed <30.005495>;
-	spin tech3ring around y-axis speed <-90.005495>;
-	spin tech3ring around z-axis speed <-60.005495>;
-	spin tech2ring around y-axis speed <45.005495>;
-	spin tech2ring around z-axis speed <-30.005495>;
-	spin tech1ring around y-axis speed <90.005495>;
-	spin tech1ring around z-axis speed <60.005495>;
 }
 
 Activate()

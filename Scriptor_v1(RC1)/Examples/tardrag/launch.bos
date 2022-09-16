@@ -1,0 +1,79 @@
+// MotionEd generated script file for animation
+
+launch()
+{
+	if (ANIM_VARIABLE)
+	{
+		move blklegl1 to y-axis [0.000000] speed [0.000018];
+		move blklegr1 to x-axis [0.000000] speed [0.000018];
+		move blklegr1 to y-axis [0.000000] speed [0.000018];
+		move blkwingl1 to x-axis [0.000000] speed [0.000018];
+		move blkwingl1 to y-axis [0.000000] speed [0.000018];
+		move blkwingr4 to x-axis [0.000000] speed [0.000018];
+		move blkwingl3 to x-axis [0.000000] speed [0.000017];
+		move blkneck2_5 to z-axis [0.000000] speed [0.000017];
+		move jaw to z-axis [0.000000] speed [0.000018];
+		move emitwpn1 to z-axis [0.000000] speed [0.000017];
+		move emitsmoke1 to z-axis [0.000000] speed [0.000017];
+		move emitsmoke2 to z-axis [0.000000] speed [0.000017];
+		move blklegr3 to z-axis [0.000000] speed [0.000018];
+		move blklegl3 to z-axis [0.000000] speed [0.000018];
+		turn blkbody to x-axis <-0.985135> speed <25.282555>;
+		turn blklegl1 to x-axis <-1.800000> speed <12.272727>;
+		turn blklegl1 to y-axis <-11.700000> speed <0.000000>;
+		turn blklegl1 to z-axis <0.000000> speed <39.545455>;
+		turn blklegr1 to x-axis <-13.500000> speed <23.181818>;
+		turn blklegr1 to y-axis <-7.650000> speed <58.636364>;
+		turn blklegr1 to z-axis <0.000000> speed <39.545455>;
+		turn blkneck1 to x-axis <-14.813514> speed <34.201474>;
+		turn blktail1 to x-axis <-2.000000> speed <49.848485>;
+		turn blktail1 to y-axis <0.450000> speed <7.850123>;
+		turn blkwingl1 to x-axis <-12.150000> speed <72.272727>;
+		turn blkwingl1 to y-axis <-18.450000> speed <13.008531>;
+		turn blkwingl1 to z-axis <-51.300000> speed <261.633907>;
+		turn blkwingr1 to x-axis <-5.850000> speed <53.181818>;
+		turn blkwingr1 to y-axis <13.500000> speed <56.376966>;
+		turn blkwingr1 to z-axis <58.500000> speed <270.552826>;
+		turn blkwingr2 to x-axis <1.350000> speed <21.818182>;
+		turn blkwingr2 to y-axis <34.200000> speed <62.727273>;
+		turn blkwingr2 to z-axis <-7.650000> speed <27.309582>;
+		turn blkwingr3 to y-axis <-14.400000> speed <64.238329>;
+		turn blkwingr3 to z-axis <1.350000> speed <17.727273>;
+		turn blkwingr4 to y-axis <34.650000> speed <182.727273>;
+		turn blkwingr4 to z-axis <0.000000> speed <2.727273>;
+		turn blkwingl2 to x-axis <4.500000> speed <31.363636>;
+		turn blkwingl2 to y-axis <-23.400000> speed <30.000000>;
+		turn blkwingl2 to z-axis <0.450000> speed <36.228501>;
+		turn blkwingl3 to y-axis <1.605405> speed <77.211302>;
+		turn blkwingl3 to z-axis <-17.100000> speed <65.454545>;
+		turn blkwingl4 to y-axis <-38.250000> speed <193.636364>;
+		turn blkwingl4 to z-axis <0.000000> speed <2.727273>;
+		turn blktail2 to x-axis <-8.000000> speed <59.696970>;
+		turn blktail2 to y-axis <-5.400000> speed <34.791155>;
+		turn blktail3 to x-axis <0.000000> speed <17.727273>;
+		turn blktail3 to y-axis <-13.950000> speed <57.014742>;
+		turn blkneck2 to x-axis <14.971622> speed <41.572482>;
+		turn blkhead to x-axis <2.642749> speed <155.996583>;
+		turn blklegr2 to x-axis <72.450000> speed <253.636364>;
+		turn blklegr2 to y-axis <27.000000> speed <175.757576>;
+		turn blklegr2 to z-axis <-8.100000> speed <1.363636>;
+		turn blklegr3 to x-axis <-19.800000> speed <26.314496>;
+		turn blklegr3 to y-axis <-13.950000> speed <71.461916>;
+		turn blklegr3 to z-axis <3.150000> speed <25.687961>;
+		turn blklegr4a to x-axis <86.400000> speed <139.643735>;
+		turn blklegr4b to x-axis <98.550000> speed <158.955774>;
+		turn blklegr4b to y-axis <0.000000> speed <23.955774>;
+		turn blklegr4c to x-axis <112.050000> speed <209.889435>;
+		turn blklegl2 to x-axis <53.550000> speed <196.363636>;
+		turn blklegl2 to y-axis <13.500000> speed <54.545455>;
+		turn blklegl2 to z-axis <-8.100000> speed <50.454545>;
+		turn blklegl3 to x-axis <0.900000> speed <47.469287>;
+		turn blklegl3 to y-axis <21.600000> speed <105.700246>;
+		turn blklegl3 to z-axis <-11.700000> speed <38.697789>;
+		turn blklegl4a to x-axis <76.050000> speed <113.955774>;
+		turn blklegl4b to x-axis <90.900000> speed <116.609337>;
+		turn blklegl4c to x-axis <99.900000> speed <158.144963>;
+		sleep 330;
+	}
+	sleep 5;
+}

@@ -1,21 +1,26 @@
 --------------------------------------------------------------------------------
 
-unitName = [[healstation]]
+unitName = [[metalextractor_up2]]
 
 --------------------------------------------------------------------------------
 
-humanName = [[Healstation]]
+metalMultiplier = 8
 
-objectName = [[healstation.s3o]]
-script = [[healstation.cob]]
+buildCostMetal = 600
+energyUse = 50
 
-workerTime = 1
-buildDistance = 350
+primaryCEG = "custom:fusionreactionnuclear-3color"
+
+humanName = [[Metal Extractor Mk III]]
+
+objectName = [[emetalextractor2_up2.s3o]]
+script = [[emetalextractor.cob]]
 
 tech = [[tech2]]
-armortype = [[light]]
 
-VFS.Include("units-configs-basedefs/basedefs/buildings/healstation_basedef.lua")
+skyhateceg = [[custom:skyhatelasert2]]
+
+VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

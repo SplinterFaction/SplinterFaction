@@ -35,8 +35,8 @@ local ringsDefs = {
     },
 	
 	-- Shield Units
-	[UnitDefNames.ekmar.id] = {
-        { color = {0, 0, 1, 0.5}, lineWidth = 5, radius = 750 },
+	[UnitDefNames.cloakingtower.id] = {
+        { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 200 },
     },
 }
 

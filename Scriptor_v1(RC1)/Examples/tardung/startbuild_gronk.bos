@@ -1,0 +1,46 @@
+// MotionEd generated script file for animation
+
+startbuild_gronk()
+{
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [1.950003] speed [6.055909];
+		turn CreatureMiddleC to z-axis <5.472973> speed <16.996810>;
+		turn CreatureMiddleA to z-axis <-6.081081> speed <18.885345>;
+		sleep 322;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [5.200000] speed [8.953161];
+		turn CreatureLowerA to z-axis <-8.526316> speed <23.488473>;
+		turn CreatureLowerC to z-axis <5.684211> speed <15.658982>;
+		turn CreatureMiddleC to z-axis <9.947368> speed <12.326158>;
+		turn CreatureMiddleA to z-axis <0.000000> speed <16.752289>;
+		sleep 363;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [13.150000] speed [27.226027];
+		turn CreatureMiddleD to x-axis <11.554054> speed <39.568678>;
+		turn CreatureMiddleC to z-axis <31.839260> speed <74.972233>;
+		turn CreatureMiddleB to x-axis <-20.067568> speed <68.724546>;
+		turn CreatureMiddleA to z-axis <-24.932432> speed <85.385043>;
+		sleep 292;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [15.800000] speed [9.075341];
+		turn CreatureLowerB to x-axis <-4.263158> speed <14.599856>;
+		turn CreatureLowerC to z-axis <9.947368> speed <14.599856>;
+		turn CreatureLowerD to x-axis <5.684211> speed <19.466474>;
+		turn CreatureMiddleD to x-axis <18.473684> speed <23.697364>;
+		turn CreatureUpperD to x-axis <30.789474> speed <105.443403>;
+		turn CreatureMiddleC to z-axis <9.153627> speed <77.690524>;
+		turn CreatureUpperC to z-axis <8.526316> speed <29.199712>;
+		turn CreatureMiddleB to x-axis <-19.421053> speed <2.214092>;
+		turn CreatureUpperB to x-axis <-29.368421> speed <100.576784>;
+		turn CreatureMiddleA to z-axis <-12.315789> speed <43.207681>;
+		sleep 292;
+	}
+	sleep 405;
+}

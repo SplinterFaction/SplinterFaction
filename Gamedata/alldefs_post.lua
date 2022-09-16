@@ -183,7 +183,7 @@ function UnitDef_Post(name, uDef)
 
 	--Override groundplate used
 	if uDef.usegrounddecal == true and uDef.customparams and uDef.customparams.customgrounddecal ~= true then
-		if uDef.customparams and uDef.customparams.factionname == "ateran" or
+		if uDef.customparams and uDef.customparams.factionname == "Neutral" or
 				uDef.customparams and uDef.customparams.factionname == "Federation of Kala" or
 				uDef.customparams and uDef.customparams.factionname == "Loz Alliance" then
 			uDef.buildinggrounddecaltype = "groundplate.dds"
@@ -556,8 +556,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 		for id,unitDef in pairs(UnitDefs) do
 
 			if unitDef.customparams and unitDef.customparams.unitdefbuildtime == nil then
-				-- Set Rules for Ateran race
-				if unitDef.customparams and unitDef.customparams.factionname == "ateran"
+				-- Set Rules for Neutral race
+				if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
 				or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
 				or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
 				or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
@@ -610,11 +610,39 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			--------------------------------------------------------------------------------
+			-- Radar Negation and Sight Distance Maximums -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
+			--------------------------------------------------------------------------------
+
+			if unitDef.customparams and unitDef.sightdistance then
+				-- Maximum Sightdistance for all units barring exceptions
+				if unitDef.sightdistance >= 500 and unitDef.customparams.sightdistanceoverride ~= true then
+					unitDef.sightdistance = 500
+				end
+
+				-- Minimum Sightdistance for buildings
+				if unitDef.sightdistance >= 350 and unitDef.customparams.unittype == "building" and unitDef.customparams.sightdistanceoverride ~= true then
+					unitDef.sightdistance = 350
+				end
+			end
+
+			if unitDef.customparams and unitDef.sonardistance then
+				if unitDef.sonardistance >= 1 and  unitDef.customparams.sonardistanceoverride ~= true then
+					unitDef.sonardistance = 0
+				end
+			end
+
+			if unitDef.customparams and unitDef.radardistance then
+				if unitDef.radardistance >= 1 and  unitDef.customparams.radardistanceoverride ~= true then
+					unitDef.radardistance = 0
+				end
+			end
+
+			--------------------------------------------------------------------------------
 			-- Metal and Role Based Finalized HP -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
 			--------------------------------------------------------------------------------
 
 			-- Set Base Unit Hitpoints
-			if unitDef.customparams and unitDef.customparams.factionname == "ateran"
+			if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
 					or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
 					or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 				if unitDef.customparams then
@@ -631,25 +659,31 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			-- Add a modifier for unit HP based upon role
-			if unitDef.customparams.unitrole == "mbt" then
+			if unitDef.customparams.unitrole == "Commander" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
-			if unitDef.customparams.unitrole == "scout" then
+			if unitDef.customparams.unitrole == "Builder" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+			if unitDef.customparams.unitrole == "Main Battle Tank" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+			if unitDef.customparams.unitrole == "Scout" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.2
 			end
-			if unitDef.customparams.unitrole == "artillery" then
+			if unitDef.customparams.unitrole == "Artillery" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.3
 			end
-			if unitDef.customparams.unitrole == "aa" then
+			if unitDef.customparams.unitrole == "Anti-Air" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.5
 			end
-			if unitDef.customparams.unitrole == "directfiresupport" then
+			if unitDef.customparams.unitrole == "Direct Fire Support" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.5
 			end
-			if unitDef.customparams.unitrole == "indirectfiresupport" then
+			if unitDef.customparams.unitrole == "Indirect Fire Support" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.6
 			end
-			if unitDef.customparams.unitrole == "assault" then
+			if unitDef.customparams.unitrole == "Assault" then
 				unitDef.maxdamage = unitDef.maxdamage * 2
 			end
 			-- Turrets
@@ -662,8 +696,17 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Heavy Turret" then
 				unitDef.maxdamage = unitDef.maxdamage * 1.2
 			end
+			if unitDef.customparams.unitrole == "Artillery Turret" then
+				unitDef.maxdamage = unitDef.maxdamage * 1.2
+			end
 			if unitDef.customparams.unitrole == "Mine" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.1
+			end
+			if unitDef.customparams.unitrole == "Shield" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.2
+			end
+			if unitDef.customparams.unitrole == "Support Building" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.2
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

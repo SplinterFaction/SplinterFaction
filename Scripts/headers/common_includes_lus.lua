@@ -12,6 +12,11 @@ common = {
 		--Spring.Echo("Bruh I lift")
 	end,
 
+	shieldBallSpinSmall = function ()
+		Spring.UnitScript.Spin(ball,y_axis,math.rad(20))
+		Spring.UnitScript.Spin(ball,z_axis,math.rad(30))
+	end,
+
 	shieldBallSpin = function ()
 		Spring.UnitScript.Spin(ball,y_axis,math.rad(20))
 		Spring.UnitScript.Spin(ball,z_axis,math.rad(30))
