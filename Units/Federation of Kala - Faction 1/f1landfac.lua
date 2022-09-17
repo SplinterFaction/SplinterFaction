@@ -5,7 +5,7 @@ unitName = "f1landfac"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 200
+buildCostMetal = 300
 
 humanName = [[Land Factory]]
 

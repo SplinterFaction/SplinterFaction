@@ -1,5 +1,5 @@
 
-base, nuketurret1, nukebarrel1, wheels1, wheels2, wheels3, wheels4, wheels5, wheels6 = piece('base', 'nuketurret1', 'nukebarrel1', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'wheels5', 'wheels6')
+base, nuketurret1, nukebarrel1, nukefirepoint1, wheels1, wheels2, wheels3, wheels4, wheels5, wheels6 = piece('base', 'nuketurret1', 'nukebarrel1', 'nukefirepoint1', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'wheels5', 'wheels6')
 
 local SIG_AIM = {}
 

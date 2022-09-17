@@ -23,6 +23,7 @@ footprintx = 7
 footprintz = 7
 
 buildlist = Shared.buildListLozt4
+areamexdef = [[metalextractor_up3]]
 
 weapon1 = [[heavybeamweapon]]
 

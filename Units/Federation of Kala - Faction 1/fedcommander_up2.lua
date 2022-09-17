@@ -23,6 +23,7 @@ footprintx = 5
 footprintz = 5
 
 buildlist = Shared.buildListFedt2
+areamexdef = [[metalextractor_up2]]
 
 weapon1 = [[machinegun_up2]]
 

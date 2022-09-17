@@ -691,7 +691,7 @@ effectUnitDefs = {
     {class='ShieldJitter', options={delay=0,life=math.huge, pos={0,20,0.0}, size=405, precision=0, strength   = 0.001, repeatEffect=true}},
   },
   
-	megapowerplant = {
+	blackholepowerplant = {
 		{class='Bursts',options=cafusBursts},
 		{class='StaticParticles',options=cafusCorona},
 		{class='ShieldSphere',options=cafusShieldSphere},

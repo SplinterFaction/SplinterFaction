@@ -5,7 +5,7 @@ unitName = "f2landfac"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 60
+buildCostMetal = 300
 maxDamage = buildCostMetal * 12.5
 
 humanName = [[Land Factory]]

@@ -72,11 +72,11 @@ end
 function script.AimWeapon(WeaponID, heading, pitch)
 	-- Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5}) -- Only use this if the turret is glitchy
 
-	Turn(railturret1, y_axis, heading, 10)
-	Turn(burstturret1, y_axis, heading, 10)
-	Turn(burstturret2, y_axis, heading, 10)
-	Turn(missileturret1, y_axis, heading, 10)
-	Turn(missileturret2, y_axis, heading, 10)
+	Turn(railturret1, y_axis, heading, 2)
+	Turn(burstturret1, y_axis, heading, 2)
+	Turn(burstturret2, y_axis, heading, 2)
+	Turn(missileturret1, y_axis, heading, 2)
+	Turn(missileturret2, y_axis, heading, 2)
 
 	WaitForTurn(railturret1, y_axis)
 	WaitForTurn(burstturret1, y_axis)

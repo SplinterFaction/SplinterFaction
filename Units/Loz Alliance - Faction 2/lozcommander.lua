@@ -23,6 +23,7 @@ footprintx = 3
 footprintz = 3
 
 buildlist = Shared.buildListLozt0
+areamexdef = [[metalextractor]]
 
 weapon1 = [[machinegun]]
 

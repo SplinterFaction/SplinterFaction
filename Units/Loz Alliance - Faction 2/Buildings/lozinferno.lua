@@ -1,0 +1,21 @@
+--------------------------------------------------------------------------------
+
+unitName = [[lozinferno]]
+
+--------------------------------------------------------------------------------
+
+humanName = [[Inferno]]
+
+objectName = [[lozinferno.s3o]]
+script = [[lozinferno_lus.lua]]
+
+tech = [[tech2]]
+
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/buildings/lozinferno_basedef.lua")
+
+unitDef.weaponDefs = weaponDefs
+--------------------------------------------------------------------------------
+
+return lowerkeys({ [unitName]    = unitDef })
+
+--------------------------------------------------------------------------------

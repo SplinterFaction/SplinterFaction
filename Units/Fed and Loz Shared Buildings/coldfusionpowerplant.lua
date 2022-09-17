@@ -35,6 +35,7 @@ local unitDef                     = {
 	metalStorage                  = 0,
 	name                          = "Cold Fusion Energy Generator",
 	objectName                    = "efusion2-huge.s3o",
+	script						  = "efusion2.cob",
 	onoffable 		              = false,
 	radarDistance                 = 0,
 	repairable		              = false,

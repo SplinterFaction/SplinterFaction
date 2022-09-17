@@ -25,6 +25,7 @@ footprintz = 7
 buildlist = Shared.buildListFedt4
 
 weapon1 = [[heavybeamweapon]]
+areamexdef = [[metalextractor_up3]]
 
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedcommander_basedef.lua")
 
