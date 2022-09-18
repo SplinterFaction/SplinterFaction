@@ -8,11 +8,12 @@ local armortype					 = [[building]]
 
 local techrequired				 = [[tech3]]
 
-local shield1Power               = 8000
-local shield1PowerRegen          = 100
+local shield1Power               = 10000
+local shield1PowerRegen          = 300
 local shield1PowerRegenEnergy    = 0
 local buildCostMetal 			  = 7000
 local maxDamage					  = buildCostMetal * 12.5
+local shieldRechargeDelay		 = 25
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -113,6 +114,7 @@ local weaponDefs                  = {
 		Shieldpower               = shield1Power,
 		Shieldpowerregen          = shield1PowerRegen,
 		Shieldpowerregenenergy    = shield1PowerRegenEnergy,
+		rechargeDelay		  	  = shieldRechargeDelay,
 		Shieldintercepttype       = 4,
 		Shieldgoodcolor           = "0.0 0.2 1.0",
 		Shieldbadcolor            = "1.0 0 0",

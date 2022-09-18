@@ -14,8 +14,9 @@ tech = [[tech3]]
 explodeAs = [[largeexplosiongenericred]]
 
 shield1Power               = 10000
-shield1PowerRegen          = 25
+shield1PowerRegen          = 100
 shield1PowerRegenEnergy    = 0
+shieldRechargeDelay        = 10
 
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/Tier 3/lozsilverback_basedef.lua")
 	

@@ -10,8 +10,8 @@ buildpicture = [[lozcommander.png]]
 techprovided = [[tech0, tech1, tech2, -overseer]]
 techrequired = [[0 overseer]]
 
-buildCostMetal = 12000
-maxvelocity = 3
+buildCostMetal = 7500
+maxvelocity = 2.3
 workertime = 3
 
 movementclass = [[WHEELEDTANK5]]
@@ -25,9 +25,7 @@ footprintz = 5
 buildlist = Shared.buildListLozt2
 areamexdef = [[metalextractor_up2]]
 
-weapon1 = [[machinegun_up2]]
-
-VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_up2_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

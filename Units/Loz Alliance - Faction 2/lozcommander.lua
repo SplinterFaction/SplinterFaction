@@ -11,7 +11,7 @@ techprovided = [[tech0, -overseer]]
 techrequired = [[0 overseer]]
 
 buildCostMetal = 3000
-maxvelocity = 3
+maxvelocity = 2.4
 workertime = 1
 
 movementclass = [[WHEELEDTANK3]]
@@ -24,8 +24,6 @@ footprintz = 3
 
 buildlist = Shared.buildListLozt0
 areamexdef = [[metalextractor]]
-
-weapon1 = [[machinegun]]
 
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")
 

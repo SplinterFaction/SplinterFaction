@@ -95,12 +95,11 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = [[railgun]],
+			def                  = [[railgun_up4]],
 		},
 		[2]                      = {
-			def                  = [[shield]],
+			def                  = [[shield_up4]],
 		},
-
 	},
 	customParams                 = {
 		unittype				  = "mobile",
@@ -123,13 +122,14 @@ unitDef                    = {
 --------------------------------------------------------------------------------
 
 weaponDefs                 = {
-
-	railgun               = {
+	railgun_up4               = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
 		cegTag                 = "railgun",
+		burst				   = 6,
+		burstrate			   = 0.2,
 		rgbColor               = "0.133 0 0.4",
 		rgbColor2              = "0.75 0.75 0.75",
 		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
@@ -139,8 +139,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 550,
-		reloadtime             = 1,
+		range                  = 650,
+		reloadtime             = 3,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/plasma3c.wav",
@@ -155,11 +155,11 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 50,
+			default              = 400,
 		},
 	},
 
-	shield                        = {
+	shield_up4                        = {
 
 		Smartshield               = true,
 		Exteriorshield            = true,
@@ -167,11 +167,11 @@ weaponDefs                 = {
 		Visibleshieldrepulse      = false,
 		ShieldStartingPower       = 0,
 		Shieldenergyuse           = 0,
-		Shieldradius              = 50,
-		Shieldpower               = 500,
-		Shieldpowerregen          = 20,
+		Shieldradius              = 90,
+		Shieldpower               = 6000,
+		Shieldpowerregen          = 240,
 		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 3,
+		rechargeDelay		  	  = 8,
 		Shieldintercepttype       = 4,
 		Shieldgoodcolor           = "0.0 0.2 1.0",
 		Shieldbadcolor            = "1.0 0 0",

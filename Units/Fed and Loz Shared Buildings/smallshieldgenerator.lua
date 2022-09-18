@@ -13,6 +13,7 @@ local shield1PowerRegen          = 25
 local shield1PowerRegenEnergy    = 0
 local buildCostMetal 			  = 350
 local maxDamage					  = buildCostMetal * 12.5
+local shieldRechargeDelay		 = 8
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -113,6 +114,7 @@ local weaponDefs                  = {
 		Shieldpower               = shield1Power,
 		Shieldpowerregen          = shield1PowerRegen,
 		Shieldpowerregenenergy    = shield1PowerRegenEnergy,
+		rechargeDelay		  	  = shieldRechargeDelay,
 		Shieldintercepttype       = 4,
 		Shieldgoodcolor           = "0.0 0.2 1.0",
 		Shieldbadcolor            = "1.0 0 0",

@@ -1,18 +1,21 @@
 
 
-base, nano1, wheels1, wheels2, wheels3, wheels4, wheels5, laserturret1, laserbarrel1, laserfirepoint1 = piece('base', 'nano1', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'wheels5', 'laserturret1', 'laserbarrel1', 'laserfirepoint1')
-
-local SIG_AIM = {}
-local nanoPieces = {[0] = nano1}
+base, nano1, wheels1, wheels2, wheels3, wheels4, wheels5, laserturret1, laserbarrel1, laserfirepoint1, emitter1, emitterfirepoint1 = piece('base', 'nano1', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'wheels5', 'laserturret1', 'laserbarrel1', 'laserfirepoint1', 'emitter1', 'emitterfirepoint1')
 
 common = include("headers/common_includes_lus.lua")
+
+local SIG_AIM1 = {}
+local SIG_AIM2 = {}
+
+
+local nanoPieces = {[0] = nano1}
 
 -- state variables
 isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-    StartThread(common.SmokeUnit, {base, nano1, wheels1, wheels2, wheels3, wheels4, wheels5, laserturret1, laserbarrel1, laserfirepoint1})
+    StartThread(common.SmokeUnit, {base, nano1, wheels1, wheels2, wheels3, wheels4, wheels5, laserturret1, laserbarrel1, laserfirepoint1, emitter1, emitterfirepoint1})
     building = false
 end
 
@@ -33,37 +36,40 @@ local function RestoreAfterDelay()
     Turn(laserbarrel1, x_axis, 0, 5)
 end
 
-function script.AimFromWeapon(weaponID)
+function script.AimFromWeapon(WeaponID)
     --Spring.Echo("AimFromWeapon: FireWeapon")
     return laserturret1
 end
 
-function script.QueryWeapon(weaponID)
-    --Spring.Echo("QueryWeapon: FireWeapon")
-    return laserfirepoint1
+function script.QueryWeapon(WeaponID)
+    if WeaponID == 1 then
+        return laserfirepoint1
+    elseif WeaponID == 2 then
+        return emitterfirepoint1
+    end
 end
 
-function script.AimWeapon(weaponID, heading, pitch)
-    Signal(SIG_AIM)
-    SetSignalMask(SIG_AIM)
-    Turn(laserturret1, y_axis, heading, 100)
-    Turn(laserbarrel1, x_axis, -pitch, 100)
-    WaitForTurn(laserturret1, y_axis)
-    WaitForTurn(laserbarrel1, x_axis)
-    StartThread(RestoreAfterDelay)
-    --Spring.Echo("AimWeapon: FireWeapon")
-    return true
+function script.FireWeapon(WeaponID)
+    if WeaponID == 1 then
+        EmitSfx (laserfirepoint1, 1024)
+    end
 end
 
-function script.FireWeapon(weaponID)
-    --Spring.Echo("FireWeapon: FireWeapon")
-    EmitSfx (laserfirepoint1, 1027)
-end
+function script.AimWeapon(WeaponID, heading, pitch)
+    -- Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5}) -- Only use this if the turret is glitchy
 
-function BuildFX()
-    while(building == true) do
-        EmitSfx (nano1, 1024)
-        Sleep(550)
+    if WeaponID == 1 then
+        Signal(SIG_AIM1)
+        SetSignalMask(SIG_AIM1)
+        Turn(laserturret1, y_axis, heading, 2)
+        WaitForTurn(laserturret1, y_axis)
+        Turn(laserbarrel1, x_axis, pitch, 2)
+        WaitForTurn(laserbarrel1, x_axis)
+        --Spring.Echo("AimWeapon: FireWeapon")
+        StartThread(RestoreAfterDelay)
+        return true
+    elseif WeaponID == 2 then
+
     end
 end
 
@@ -71,20 +77,21 @@ function script.StopBuilding()
     SetUnitValue(COB.INBUILDSTANCE, 0)
     building = false
     StartThread(RestoreAfterDelay)
-    Signal(SIG_AIM)
-    SetSignalMask(SIG_AIM)
+    Signal(SIG_AIM2)
+    SetSignalMask(SIG_AIM2)
 end
 
 function script.StartBuilding(heading, pitch)
-    Signal(SIG_AIM)
+    Signal(SIG_AIM2)
+    SetSignalMask(SIG_AIM2)
     SetUnitValue(COB.INBUILDSTANCE, 1)
     building = true
-    StartThread(BuildFX)
+    --StartThread(BuildFX)
 end
 
 function script.QueryNanoPiece()
     local nano = nanoPieces[nanoNum]
-    return nano
+    return nano1
 end
 
 function script.Killed()

@@ -95,12 +95,11 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = [[railgun]],
+			def                  = [[railgun_up1]],
 		},
 		[2]                      = {
-			def                  = [[shield]],
+			def                  = [[shield_up1]],
 		},
-
 	},
 	customParams                 = {
 		unittype				  = "mobile",
@@ -123,8 +122,7 @@ unitDef                    = {
 --------------------------------------------------------------------------------
 
 weaponDefs                 = {
-
-	railgun               = {
+	railgun_up1               = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -139,8 +137,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 550,
-		reloadtime             = 1,
+		range                  = 575,
+		reloadtime             = 2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/plasma3c.wav",
@@ -155,11 +153,11 @@ weaponDefs                 = {
 		customparams             = {
 		},
 		damage                   = {
-			default              = 50,
+			default              = 200,
 		},
 	},
 
-	shield                        = {
+	shield_up1                        = {
 
 		Smartshield               = true,
 		Exteriorshield            = true,
@@ -167,11 +165,11 @@ weaponDefs                 = {
 		Visibleshieldrepulse      = false,
 		ShieldStartingPower       = 0,
 		Shieldenergyuse           = 0,
-		Shieldradius              = 50,
-		Shieldpower               = 500,
-		Shieldpowerregen          = 20,
+		Shieldradius              = 60,
+		Shieldpower               = 1000,
+		Shieldpowerregen          = 40,
 		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 3,
+		rechargeDelay		  	  = 5,
 		Shieldintercepttype       = 4,
 		Shieldgoodcolor           = "0.0 0.2 1.0",
 		Shieldbadcolor            = "1.0 0 0",
