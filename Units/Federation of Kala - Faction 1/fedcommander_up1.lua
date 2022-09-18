@@ -11,7 +11,7 @@ buildcostmetal = 6200
 techprovided = [[tech0, tech1, -overseer]]
 techrequired = [[0 overseer]]
 
-maxvelocity = 3
+maxvelocity = 2.4
 workertime = 2
 
 movementclass = [[WALKERTANK4]]
@@ -25,7 +25,7 @@ footprintz = 4
 buildlist = Shared.buildListFedt1
 areamexdef = [[metalextractor_up1]]
 
-weapon1 = [[machinegun_up1]]
+weapon1 = [[particlebeamcannon_up1]]
 
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedcommander_basedef.lua")
 

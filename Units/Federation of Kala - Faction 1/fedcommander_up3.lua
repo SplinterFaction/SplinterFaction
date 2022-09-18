@@ -6,12 +6,12 @@ unitName = [[fedcommander_up3]]
 
 humanname = [[Federation of Kala Command Unit]]
 buildpicture = [[ecommander.png]]
-buildcostmetal = 24000
+buildcostmetal = 9000
 
 techprovided = [[tech0, tech1, tech2, tech3, -overseer]]
 techrequired = [[0 overseer]]
 
-maxvelocity = 3
+maxvelocity = 2.3
 workertime = 4
 
 movementclass = [[WALKERTANK6]]
@@ -25,7 +25,7 @@ footprintz = 6
 buildlist = Shared.buildListFedt3
 areamexdef = [[metalextractor_up3]]
 
-weapon1 = [[machinegun_up3]]
+weapon1 = [[particlebeamcannon_up3]]
 
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedcommander_basedef.lua")
 
