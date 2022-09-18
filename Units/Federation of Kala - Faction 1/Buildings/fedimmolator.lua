@@ -4,7 +4,7 @@ unitName = [[fedimmolator]]
 
 --------------------------------------------------------------------------------
 
-humanName = [[Menlo]]
+humanName = [[Immolator]]
 
 objectName = [[fedimmolator.s3o]]
 script = [[fedimmolator_lus.lua]]

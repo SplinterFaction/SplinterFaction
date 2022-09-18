@@ -609,6 +609,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
+			--[[
 			--------------------------------------------------------------------------------
 			-- Radar Negation and Sight Distance Maximums -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
 			--------------------------------------------------------------------------------
@@ -636,6 +637,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					unitDef.radardistance = 0
 				end
 			end
+			]]--
 
 			--------------------------------------------------------------------------------
 			-- Metal and Role Based Finalized HP -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
