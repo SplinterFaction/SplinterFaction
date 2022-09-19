@@ -103,7 +103,7 @@ weaponDefs                 = {
 		collideFriendly           = false,
 		coreThickness             = 0.5,
 		-- cegtag					  = "burnblack",
-		beamtime				  = 0.5,
+		beamtime				  = 0.1,
 		largebeamlaser			  = true,
 		sweepfire				  = true,
 		duration                  = 0.8,
@@ -117,7 +117,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "Laser",
 		range                     = 400,
-		reloadtime                = 1.8,
+		reloadtime                = 0.1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = "0.5 0.25 0",
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -135,7 +135,7 @@ weaponDefs                 = {
 		customparams              = {
 		},
 		damage                    = {
-			default               = 15,
+			default               = 1.4,
 		},
 	},
 }

@@ -5,7 +5,7 @@ local unitName                    = "supplydepot"
 --------------------------------------------------------------------------------
 
 local armortype					 = [[building]]
-local storage					  = 25
+local storage					  = 100
 local supplygranted				  = 5
 
 local buildCostMetal 			  = 50
