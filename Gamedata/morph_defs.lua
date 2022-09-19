@@ -98,14 +98,14 @@ local timeToBuild_lozengineer_up3 = energyCost_lozengineer_up3 / 100
 
 --
 
-local energyCost_metalextractor_up1  = 60 * 25
-local timeToBuild_metalextractor_up1 = energyCost_metalextractor_up1 / 25
+local energyCost_metalextractor_up1  = 20 * 35
+local timeToBuild_metalextractor_up1 = energyCost_metalextractor_up1 / 35
 
-local energyCost_metalextractor_up2  = 300 * 50
-local timeToBuild_metalextractor_up2 = energyCost_metalextractor_up2 / 50
+local energyCost_metalextractor_up2  = 40 * 75
+local timeToBuild_metalextractor_up2 = energyCost_metalextractor_up2 / 75
 
-local energyCost_metalextractor_up3  = 480 * 100
-local timeToBuild_metalextractor_up3 = energyCost_metalextractor_up3 / 100
+local energyCost_metalextractor_up3  = 60 * 150
+local timeToBuild_metalextractor_up3 = energyCost_metalextractor_up3 / 150
 
 local morphDefs = {
 
