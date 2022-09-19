@@ -172,7 +172,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 750,
-		reloadtime               = 0.1,
+		reloadtime               = 0.2,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -182,11 +182,11 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
-		sprayangle				 = 500,
+		sprayangle				 = 150,
 		customparams             = {
 		},
 		damage                   = {
-			default              = 2.4,
+			default              = 4.8,
 		},
 	},
 }
