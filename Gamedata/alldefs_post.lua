@@ -699,7 +699,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 1.2
 			end
 			if unitDef.customparams.unitrole == "Artillery Turret" then
-				unitDef.maxdamage = unitDef.maxdamage * 1.2
+				unitDef.maxdamage = unitDef.maxdamage * 0.1
+			end
+			if unitDef.customparams.unitrole == "Special Turret" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.4
 			end
 			if unitDef.customparams.unitrole == "Mine" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.1

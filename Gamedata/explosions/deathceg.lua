@@ -2,7 +2,7 @@
 -- deathceg0
 
 return {
-  ["deathceg1"] = {
+  ["deathceg2"] = {
     searingflame = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
@@ -61,7 +61,7 @@ return {
     },
   },
 
-  ["deathceg0"] = {
+  ["deathceg1"] = {
     searingflame = {
       air                = true,
       class              = [[CSimpleParticleSystem]],

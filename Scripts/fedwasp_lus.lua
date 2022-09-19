@@ -3,11 +3,11 @@ base, phalanxturret1, phalanxbarrel1, phalanxfirepoint1, phalanxfirepoint2, phal
 
 local SIG_AIM = {}
 
+common = include("headers/common_includes_lus.lua")
+
 function script.Create()
     StartThread(common.SmokeUnit, {base, phalanxturret1, phalanxbarrel1, phalanxfirepoint1, phalanxfirepoint2, phalanxfirepoint3, phalanxfirepoint4})
 end
-
-common = include("headers/common_includes_lus.lua")
 
 local function RestoreAfterDelay()
     Sleep(2000)

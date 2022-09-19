@@ -76,17 +76,15 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		isupgraded			  	 = isUpgraded,
 		RequireTech				 = tech,
 		unittype				  = "building",
 		canbetransported 		 = "false",
 		needed_cover             = 2,
 		death_sounds             = "generic",
 		energycorecollect        = true,
-		armortype                = armortype,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	             = "ateran",   
+		factionname	             = "Neutral",
 		retreatRangeDAI			 = buildDistance*2,
 		
 		-- groundtexselectimg    = ":nc:bitmaps/icons/repairzone.png",

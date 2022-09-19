@@ -38,7 +38,7 @@ unitDef                     = {
 	smoothAnim                    = true,
 	unitName                      = unitName,
 	workerTime                    = 0,
-	yardMap                       = "ooooooooooooo",
+	yardMap                       = "yyyyyyyyyyyyy yyyyyyyyyyyyy yyyyyyyyyyyyy yyyyyyyyyyyyy yyyyyyyyyyyyy yyyyyoooyyyyy yyyyyoooyyyyy yyyyyoooyyyyy yyyyyyyyyyyyy yyyyyyyyyyyyy yyyyyyyyyyyyy yyyyyyyyyyyyy yyyyyyyyyyyyy",
 	sfxtypes                      = { 
 		pieceExplosionGenerators  = { 
 			"deathceg3", 
