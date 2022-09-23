@@ -26,6 +26,17 @@ common = {
 		Spring.UnitScript.Spin(topring,z_axis,math.rad(60))
 	end,
 
+	techRingsSpin = function ()
+		Spring.UnitScript.Spin(ball,y_axis,math.rad(20))
+		Spring.UnitScript.Spin(ball,z_axis,math.rad(30))
+		Spring.UnitScript.Spin(tech1ring,y_axis,math.rad(20))
+		Spring.UnitScript.Spin(tech1ring,z_axis,math.rad(-30))
+		Spring.UnitScript.Spin(tech2ring,y_axis,math.rad(-90))
+		Spring.UnitScript.Spin(tech2ring,z_axis,math.rad(-60))
+		Spring.UnitScript.Spin(tech3ring,y_axis,math.rad(90))
+		Spring.UnitScript.Spin(tech3ring,z_axis,math.rad(60))
+	end,
+
 	setSFXoccupy = function (setSFXoccupy_argument)
 		--Spring.Echo(type(setSFXoccupy_argument))
 		--Spring.Echo("common.setSFXoccupy is being called", setSFXoccupy_argument)

@@ -69,6 +69,7 @@ local unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
+		unitrole				  = "Economy",
 		iseco                     = 1,
 		needed_cover              = 2,
 		death_sounds              = "generic",

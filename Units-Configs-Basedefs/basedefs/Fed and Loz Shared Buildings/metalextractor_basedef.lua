@@ -62,6 +62,7 @@ unitDef                     = {
 	customParams                  = {
 		RequireTech				  = tech,
 		unittype				  = "building",
+		unitrole				  = "Economy",
 		metal_extractor			  = metalMultiplier,
 		iseco                     = 1,
 		needed_cover              = 3,

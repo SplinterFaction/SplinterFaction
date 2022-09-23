@@ -92,6 +92,7 @@ unitDef                    = {
 		unitrole		 = "Builder",
 		area_mex_def     = areamexdef,
 		requiretech      = requiretech,
+		supply_cost      = 1,
 		canbetransported = "true",
 		death_sounds     = "generic",
 		nofriendlyfire   = "1",

@@ -20,7 +20,7 @@ humanName = [[Architect MkIV]]
 
 footprintx = 6
 footprintz = 6
-movementclass = "WHEELEDTANK5"
+movementclass = "WHEELEDTANK6"
 
 objectName = [[lozengineer_up3.s3o]]
 script = [[lozengineer_up3_lus.lua]]
