@@ -662,7 +662,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Add a modifier for unit HP based upon role
 			if unitDef.customparams.unitrole == "Commander" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.5
+				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Builder" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
