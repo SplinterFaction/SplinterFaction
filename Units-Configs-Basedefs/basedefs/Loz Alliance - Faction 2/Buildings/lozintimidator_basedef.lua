@@ -15,6 +15,7 @@ unitDef                     = {
 	footprintX                    = 16,
 	footprintZ                    = 16,
 	floater			              = true,
+	fireState					  = 0,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	iconType                      = "turret_lit",
