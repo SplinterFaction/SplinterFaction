@@ -57,14 +57,13 @@ end
 
 function script.AimWeapon(WeaponID, heading, pitch)
     -- Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5}) -- Only use this if the turret is glitchy
-
+    Turn(laserturret1, y_axis, heading, 50)
+    Turn(laserbarrel1, x_axis, pitch, 50)
+    WaitForTurn(laserturret1, y_axis)
+    WaitForTurn(laserbarrel1, x_axis)
     if WeaponID == 1 then
         Signal(SIG_AIM1)
         SetSignalMask(SIG_AIM1)
-        Turn(laserturret1, y_axis, heading, 2)
-        WaitForTurn(laserturret1, y_axis)
-        Turn(laserbarrel1, x_axis, pitch, 2)
-        WaitForTurn(laserbarrel1, x_axis)
         --Spring.Echo("AimWeapon: FireWeapon")
         StartThread(RestoreAfterDelay)
         return true
