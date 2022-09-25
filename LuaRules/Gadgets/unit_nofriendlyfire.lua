@@ -65,7 +65,7 @@ local spGetUnitHealth       = Spring.GetUnitHealth
 local spSetUnitHealth       = Spring.SetUnitHealth
 
 local DefensiveManeuverDefs = {
-	[UnitDefNames["esolar2"].id] = true
+	-- [UnitDefNames["esolar2"].id] = true
 }
 
 --------------------------------------------------------------------------------

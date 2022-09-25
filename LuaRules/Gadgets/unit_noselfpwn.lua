@@ -32,12 +32,6 @@ if (not gadgetHandler:IsSyncedCode()) then
   return false  --  silent removal
 end
 
-  
-local exceptionMap  = {}
-for _, unitName in pairs(exceptionList) do
-  exceptionMap[UnitDefNames[unitName].id] = true
-end
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
