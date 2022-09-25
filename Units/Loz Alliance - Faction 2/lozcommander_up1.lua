@@ -25,6 +25,7 @@ footprintz = 4
 buildlist = Shared.buildListLozt1
 areamexdef = [[metalextractor_up1]]
 
+VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_up1_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs

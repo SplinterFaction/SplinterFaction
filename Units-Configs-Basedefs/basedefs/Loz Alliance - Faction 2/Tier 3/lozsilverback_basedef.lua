@@ -132,6 +132,10 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 4000,
 		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		}, 
 		damage                   = {
 			default              = 3000,
@@ -170,6 +174,10 @@ weaponDefs                 = {
 		weaponVelocity         = 2000,
 		customparams             = {
 			single_hit		 	 = true,
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 200,
@@ -212,6 +220,10 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = true,
 		customparams              = {
+			expl_light_color	= yellow, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
 			default               = 20,

@@ -27,6 +27,7 @@ areamexdef = [[metalextractor_up3]]
 
 weapon1 = [[particlebeamcannon_up3]]
 
+VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedcommander_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs

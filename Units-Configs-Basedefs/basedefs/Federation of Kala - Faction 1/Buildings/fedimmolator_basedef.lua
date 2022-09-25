@@ -110,8 +110,12 @@ weaponDefs = {
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 1000,
+		weaponVelocity         = 2000,
 		customparams             = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 150,

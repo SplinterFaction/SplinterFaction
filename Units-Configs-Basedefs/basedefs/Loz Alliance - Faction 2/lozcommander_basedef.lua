@@ -153,6 +153,10 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 2000,
 		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 50,
@@ -201,31 +205,31 @@ weaponDefs                 = {
 		explosionGenerator        = "custom:NUKEDATBEWMSMALL",
 		fireStarter               = 100,
 		flightTime                = 400,
-		
+
 		id                        = 124,
 		impulseBoost              = 0,
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,
-		
+
 		metalpershot              = 0,
 		model                     = "enuke.s3o",
 		name                      = "Nuke",
 		range                     = 32000,
 		reloadtime                = 60,
 		weaponType		          = "MissileLauncher",
-		
-		
+
+
 		smokeTrail                = false,
 		soundHit                  = "explosions/explosion_enormous.wav",
 		soundStart                = "weapons/nukelaunch.wav",
-		
+
 --		stockpile                 = true,
 --		stockpileTime             = stockpiletime,
 		startVelocity             = 10,
 		tracks                    = true,
 		turnRate                  = 3000,
 		targetable			      = 1,
-		
+
 		weaponAcceleration        = 30,
 		weaponTimer               = 15,
 		weaponType                = "StarburstLauncher",
@@ -233,7 +237,11 @@ weaponDefs                 = {
 		customparams              = {
 			death_sounds 		  = "nuke",
 			nocosttofire		  = true,
-		},      
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= 10000, -- In Elmos
+			expl_light_life		= 600, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
 		damage                    = {
 			default               = 1000,
 		},

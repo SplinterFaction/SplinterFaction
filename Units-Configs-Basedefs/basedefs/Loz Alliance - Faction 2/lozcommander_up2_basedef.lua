@@ -153,6 +153,10 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 2000,
 		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 77,
@@ -233,6 +237,10 @@ weaponDefs                 = {
 		customparams              = {
 			death_sounds 		  = "nuke",
 			nocosttofire		  = true,
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= 10000, -- In Elmos
+			expl_light_life		= 600, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},      
 		damage                    = {
 			default               = 1000,

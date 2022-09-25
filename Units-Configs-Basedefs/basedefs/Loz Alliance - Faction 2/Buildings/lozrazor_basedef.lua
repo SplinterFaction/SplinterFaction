@@ -118,7 +118,10 @@ weaponDefs = {
 		weaponVelocity           = 1000,
 		waterweapon		         = true,
 		customparams              = {
-
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
 			default               = 7,

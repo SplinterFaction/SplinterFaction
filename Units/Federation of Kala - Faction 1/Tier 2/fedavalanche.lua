@@ -12,6 +12,7 @@ tech = [[tech2]]
 
 explodeAs = [[mediumexplosiongenericred]]
 
+VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedavalanche_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs

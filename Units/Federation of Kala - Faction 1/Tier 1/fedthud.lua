@@ -12,6 +12,7 @@ tech = [[tech1]]
 
 explodeAs = [[smallexplosiongenericblue]]
 
+VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/Tier 1/fedthud_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs

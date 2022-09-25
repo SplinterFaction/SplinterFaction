@@ -147,6 +147,10 @@ weaponDefs                 = {
 		weaponVelocity         = 2000,
 		customparams             = {
 			single_hit		 	 = true,
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 1000,
@@ -184,6 +188,10 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 800,
 		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 10,
@@ -222,6 +230,10 @@ weaponDefs                 = {
 		weaponVelocity           = 300,
 		sprayangle				 = 5000,
 		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 250,

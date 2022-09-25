@@ -129,7 +129,7 @@ return {
       ground             = true,
       properties = {
         airdrag            = 0.7,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[0.9 0.9 0.0 0.01	1.0 0.5 0.0 0.01	0.5 0.4 0.3 1.0		0 0 0 0.0]],
         directional        = true,
         emitrot            = 90,
@@ -157,7 +157,7 @@ return {
       water              = true,
       properties = {
         airdrag            = 0.9,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[0.9 0.9 0.9 1.0	0.5 0.5 0.9 0.0]],
         directional        = true,
         emitrot            = 90,
@@ -180,7 +180,7 @@ return {
     },
     groundflash = {
       air                = true,
-      alwaysvisible      = true,
+      alwaysvisible      = false,
       circlealpha        = 0.0,
       circlegrowth       = 6,
       flashalpha         = 0.9,
@@ -202,7 +202,7 @@ return {
       ground             = true,
       properties = {
         airdrag            = 0.8,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[0.9 0.9 0.0 0.04	1.0 0.5 0.0 0.01	1.0 0.5 0.0 0.00]],
         directional        = true,
         emitrot            = 35,
@@ -246,7 +246,7 @@ return {
       water              = true,
       properties = {
         airdrag            = 0.8,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[0.9 0.5 0.4 0.04   0.9 0.4 0.1 0.01  0.5 0.1 0.1 0.01]],
         directional        = true,
         emitrot            = 45,
@@ -273,7 +273,7 @@ return {
       ground             = true,
       properties = {
         airdrag            = 0.70,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[0.1 0.1 0.1 0.01    0.5 0.3 0.0 0.05    0.5 0.1 0.1 1.0    0.1 0.1 0.1 1.0    0.5 0.5 0.5 1.0   0 0 0 0.01]],
         directional        = true,
         emitrot            = 90,
@@ -304,7 +304,7 @@ return {
       ground             = true,
       properties = {
         airdrag            = 0.87,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[1 0.5 0.0 0.2	0 0 0 0.2 0	0 0 0.01]],
         directional        = false,
         emitrot            = 90,
@@ -334,7 +334,7 @@ return {
       ground             = true,
       properties = {
         airdrag            = 0.87,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[1 0.5 0.0 0.2	0 0 0 0.2 0	0 0 0.01]],
         directional        = false,
         emitrot            = 90,
@@ -377,7 +377,7 @@ return {
       water              = true,
       properties = {
         airdrag            = 0.8,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[0.4 0.9 0.4 0.04   0.4 0.9 0.1 0.01  0.1 0.5 0.1 0.01]],
         directional        = true,
         emitrot            = 45,
@@ -404,7 +404,7 @@ return {
       ground             = true,
       properties = {
         airdrag            = 0.70,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[0.1 0.1 0.1 0.01    0.0 0.5 0.0 0.05    0.1 0.5 0.1 1.0    0.1 0.1 0.1 1.0    0.5 0.5 0.5 1.0   0 0 0 0.01]],
         directional        = true,
         emitrot            = 90,

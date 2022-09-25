@@ -111,6 +111,10 @@ weaponDefs = {
 		weaponTimer            = 1,
 		weaponVelocity         = 1200,
 		customparams             = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 3000,

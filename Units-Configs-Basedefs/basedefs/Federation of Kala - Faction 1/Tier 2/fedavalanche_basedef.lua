@@ -151,6 +151,10 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 600,
 		customparams             = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 15.625,
@@ -195,6 +199,10 @@ weaponDefs                 = {
 		weaponType               = "StarburstLauncher",
 		weaponVelocity           = 400,
 		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 400,
