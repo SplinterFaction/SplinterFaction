@@ -648,7 +648,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				if unitDef.customparams then
 					if unitDef.customparams.unittype == "mobile" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
+						unitDef.maxdamage = unitDef.buildcostmetal * 3
 					end
 					if unitDef.customparams.unittype == "air" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 1.5
@@ -663,7 +663,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 				if unitDef.customparams then
 					if unitDef.customparams.unittype == "mobile" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 3
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 1.5
