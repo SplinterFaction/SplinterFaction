@@ -357,45 +357,65 @@ local function GetMorphToolTip(unitID, unitDefID, teamID, morphDef, teamTech, un
   local ud = UnitDefs[morphDef.into]
   local tt = ''
   if (morphDef.text ~= nil) then
-	tt = tt .. WhiteStr  .. morphDef.text .. '\n'
+    tt = tt .. WhiteStr  .. morphDef.text .. '\n'
   else
-  	--tt = tt .. WhiteStr  .. 'Upgrade into a ' .. ud.humanName .. '\n'
-  	tt = tt .. 'Upgrade into a ' .. ud.humanName .. '\n'
+    --tt = tt .. WhiteStr  .. 'Upgrade into a ' .. ud.humanName .. '\n'
+    tt = tt .. 'Upgrade into a ' .. ud.humanName .. '\n'
   end
+
   if (morphDef.time > 0) then
-  	tt = tt .. GreenStr  .. 'time: '   .. morphDef.time     .. '\n'
-  end	
+    tt = tt .. GreenStr  .. 'time: '   .. morphDef.time     .. '\n'
+  end
   if (morphDef.metal > 0) then
-  	tt = tt .. CyanStr   .. 'metal: '  .. morphDef.metal    .. '\n'
+    tt = tt .. CyanStr   .. 'metal: '  .. morphDef.metal    .. '\n'
   end
   if (morphDef.energy > 0) then
     tt = tt .. YellowStr .. 'energy: ' .. morphDef.energy   .. '\n'
   end
-  if (morphDef.tech > teamTech) or
-     (morphDef.xp > unitXP) or
-     (morphDef.rank > unitRank) or
-     (unreachedTechs and #unreachedTechs >= 1)
-  then
-    tt = tt .. RedStr .. 'needs'
-    if (morphDef.tech>teamTech) then tt = tt .. ' level: ' .. morphDef.tech end
-    if (morphDef.xp>unitXP)     then tt = tt .. ' xp: '    .. string.format('%.2f',morphDef.xp) end
-    if (morphDef.rank>unitRank) then tt = tt .. ' rank: '  .. morphDef.rank .. ' (' .. string.format('%.2f',RankToXp(unitDefID,morphDef.rank)) .. 'xp)' end
-    -- if (not teamOwnsReqUnit)	then tt = tt .. ' unit: '  .. UnitDefs[morphDef.require].humanName end
-    -- Refactored to show unreached+required tech
-    --tt = tt .. ' unit: '  .. reqTech[x]
-      -- // Loop all unreachedTechs and add to the tooltip
-    if (unreachedTechs and #unreachedTechs >= 1)	then
-      local str = ' tech(s): '  .. unreachedTechs[1]
-      if #unreachedTechs > 1 then
-        for i = 2, #unreachedTechs do
-          str = str .. ', '..unreachedTechs[i]
-        end
-      end
-      tt = tt..str
+  local metalCost = morphDef.metal
+  local energyCost = morphDef.energy
+  local timeCost = morphDef.time
+  local metalCostPerSecond
+  local energyCostPerSecond
+  if timeCost ~= nil and timeCost ~= 0 then
+    if metalCost ~= nil and metalCost ~= 0 then
+      metalCostPerSecond = metalCost / timeCost
+    else
+      metalCostPerSecond = 0
     end
+    if energyCost ~= nil and energyCost ~= 0 then
+      energyCostPerSecond = energyCost / timeCost
+    else
+      energyCostPerSecond = 0
+    end
+      tt = tt .. CyanStr .. 'metal' .. WhiteStr .. ' / ' .. YellowStr .. 'energy' .. WhiteStr .. ' cost per second: ' .. CyanStr .. metalCostPerSecond .. WhiteStr .. " / " .. YellowStr .. energyCostPerSecond  .. '\n'
+    end
+
+  if (morphDef.tech > teamTech) or
+  (morphDef.xp > unitXP) or
+  (morphDef.rank > unitRank) or
+  (unreachedTechs and #unreachedTechs >= 1)
+  then
+  tt = tt .. RedStr .. 'needs'
+  if (morphDef.tech>teamTech) then tt = tt .. ' level: ' .. morphDef.tech end
+  if (morphDef.xp>unitXP)     then tt = tt .. ' xp: '    .. string.format('%.2f',morphDef.xp) end
+  if (morphDef.rank>unitRank) then tt = tt .. ' rank: '  .. morphDef.rank .. ' (' .. string.format('%.2f',RankToXp(unitDefID,morphDef.rank)) .. 'xp)' end
+  -- if (not teamOwnsReqUnit)	then tt = tt .. ' unit: '  .. UnitDefs[morphDef.require].humanName end
+  -- Refactored to show unreached+required tech
+  --tt = tt .. ' unit: '  .. reqTech[x]
+  -- // Loop all unreachedTechs and add to the tooltip
+  if (unreachedTechs and #unreachedTechs >= 1)	then
+  local str = ' tech(s): '  .. unreachedTechs[1]
+  if #unreachedTechs > 1 then
+  for i = 2, #unreachedTechs do
+  str = str .. ', '..unreachedTechs[i]
+  end
+  end
+  tt = tt..str
+  end
   end
   return tt
-end
+  end
 
 local function MorphRequirementsFulfilled(unitID, morphDef, techLevel, unreachedTechs)
 	return morphDef.tech <= techLevel

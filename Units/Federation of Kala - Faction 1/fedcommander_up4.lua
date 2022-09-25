@@ -4,7 +4,7 @@ unitName = [[fedcommander_up4]]
 
 --------------------------------------------------------------------------------
 
-humanname = [[Federation of Kala BattleMech Command Unit]]
+humanname = [[Federation of Kala BattleMech Command Unit - Tech 4]]
 buildpicture = [[ecommander.png]]
 buildcostmetal = 11000
 

@@ -74,26 +74,26 @@ local timeToBuild_lozcommander_up4 = energyCost_lozcommander_up4 / 400
 
 --Fed Engineer Upgrades
 
-local energyCost_fedengineer_up1  = 48 * 25
+local energyCost_fedengineer_up1  = 20 * 25
 local timeToBuild_fedengineer_up1 = energyCost_fedengineer_up1 / 25
 
-local energyCost_fedengineer_up2  = 76 * 50
+local energyCost_fedengineer_up2  = 40 * 50
 local timeToBuild_fedengineer_up2 = energyCost_fedengineer_up2 / 50
 
-local energyCost_fedengineer_up3  = 154 * 100
+local energyCost_fedengineer_up3  = 60 * 100
 local timeToBuild_fedengineer_up3 = energyCost_fedengineer_up3 / 100
 
 --
 
 --Loz Engineer Upgrades
 
-local energyCost_lozengineer_up1  = 48 * 25
+local energyCost_lozengineer_up1  = 20 * 25
 local timeToBuild_lozengineer_up1 = energyCost_lozengineer_up1 / 25
 
-local energyCost_lozengineer_up2  = 76 * 50
+local energyCost_lozengineer_up2  = 40 * 50
 local timeToBuild_lozengineer_up2 = energyCost_lozengineer_up2 / 50
 
-local energyCost_lozengineer_up3  = 154 * 100
+local energyCost_lozengineer_up3  = 60 * 100
 local timeToBuild_lozengineer_up3 = energyCost_lozengineer_up3 / 100
 
 --
