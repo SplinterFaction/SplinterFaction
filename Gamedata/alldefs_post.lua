@@ -645,11 +645,25 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Set Base Unit Hitpoints
 			if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
-					or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
-					or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
+					or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				if unitDef.customparams then
 					if unitDef.customparams.unittype == "mobile" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
+					end
+					if unitDef.customparams.unittype == "air" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 1.5
+					end
+					if unitDef.customparams.unittype == "building" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 5
+					end
+				end
+			end
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
+					or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
+				if unitDef.customparams then
+					if unitDef.customparams.unittype == "mobile" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 3
 					end
 					if unitDef.customparams.unittype == "air" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 1.5
