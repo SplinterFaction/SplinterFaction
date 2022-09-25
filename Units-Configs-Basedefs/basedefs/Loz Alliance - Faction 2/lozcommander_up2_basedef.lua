@@ -159,7 +159,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 77,
+			default              = 170,
 		},
 	},
 
