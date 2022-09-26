@@ -50,25 +50,14 @@ for name, fd in pairs(FeatureDefs) do
 	end
 
 	if tonumber(fd["metal"]) == nil then
-		fd.metal = 1
+		fd.metal = 0
 	end
 
 	if tonumber(fd["energy"]) == nil then
-		fd.energy = 1
+		fd.energy = 0
 	end
 	
-	if tonumber(fd["metal"]) >= tonumber(fd["energy"]) then
-		fd.reclaimtime = fd.metal * 0.25
-		-- Spring.Echo("Based off of metal")
-		-- Spring.Echo(fd.name)
-		-- Spring.Echo(fd.reclaimtime)
-
-	else
-		fd.reclaimtime = fd.energy * 0.25
-		-- Spring.Echo("Based off of energy")
-		-- Spring.Echo(fd.name)
-		-- Spring.Echo(fd.reclaimtime)
-	end
+	fd.reclaimtime = fd.metal * 0.25
 	
 	
 	-- Reset maximum feature values
