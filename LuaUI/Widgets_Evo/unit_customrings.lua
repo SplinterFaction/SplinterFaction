@@ -31,13 +31,62 @@ local ringsDefs = {
 	[UnitDefNames.healstation.id] = {
         --{ color = {1,0.5,0,0.8}, lineWidth = 2, radius = 800 },
         --{ color = {0.5,0,1,0.2}, lineWidth = 5, radius = 500 },
-		{ color = {0,1,0,0.6}, lineWidth = 10, radius = 500, divs = 128 },
+		{ color = {0,1,0,0.25}, lineWidth = 10, radius = 500, divs = 128 },
     },
 	
 	-- Shield Units
 	[UnitDefNames.cloakingtower.id] = {
-        { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 200 },
+        { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 200, divs = 128  },
     },
+
+
+    -- Defense Turrets
+    [UnitDefNames.fedmenlo.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 630, divs = 128  },
+    },
+
+    [UnitDefNames.fedwasp.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
+    },
+
+    [UnitDefNames.fedimmolator.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
+    },
+
+    [UnitDefNames.fedguardian.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
+    },
+
+    [UnitDefNames.fedbertha.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 8000, divs = 128  },
+    },
+
+    [UnitDefNames.fedearthquakemine.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 100, divs = 128  },
+    },
+
+
+    [UnitDefNames.lozjericho.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 630, divs = 128  },
+    },
+
+    [UnitDefNames.lozrazor.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 550, divs = 128  },
+    },
+
+    [UnitDefNames.lozinferno.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
+    },
+
+    [UnitDefNames.lozannihilator.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1500, divs = 128  },
+    },
+
+    [UnitDefNames.lozintimidator.id] = {
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 8000, divs = 128  },
+    },
+
+
 }
 
 local ringedUnits = {}
