@@ -270,7 +270,7 @@ function UnitDef_Post(name, uDef)
 		uDef.acceleration = 60000
 		uDef.turnrate = 1000
 		uDef.turninplacespeedlimit = 10
-		uDef.turninplace = false
+		uDef.turninplace = true
 	end
 
 end
