@@ -12,7 +12,7 @@ techrequired = [[0 overseer]]
 
 buildCostMetal = 11000
 maxvelocity = 2
-workertime = 5
+workertime = 16
 
 movementclass = [[WHEELEDTANK7]]
 

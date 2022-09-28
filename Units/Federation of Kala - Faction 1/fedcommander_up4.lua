@@ -7,12 +7,13 @@ unitName = [[fedcommander_up4]]
 humanname = [[Federation of Kala BattleMech Command Unit - Tech 4]]
 buildpicture = [[ecommander.png]]
 buildcostmetal = 11000
+builddistance = 450
 
 techprovided = [[tech0, tech1, tech2, tech3, tech4, -overseer]]
 techrequired = [[0 overseer]]
 
 maxvelocity = 2.3
-workertime = 5
+workertime = 16
 
 movementclass = [[WALKERTANK7]]
 

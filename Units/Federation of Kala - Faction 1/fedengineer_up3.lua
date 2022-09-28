@@ -6,7 +6,7 @@ unitName = "fedengineer_up3"
 --------------------------------------------------------------------------------
 
 buildCostMetal = 320
-buildDistance = 350
+buildDistance = 450
 
 buildpic = [[fedengineer_up3.png]]
 
