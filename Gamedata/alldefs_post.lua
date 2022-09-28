@@ -270,7 +270,7 @@ function UnitDef_Post(name, uDef)
 		uDef.acceleration = 60000
 		uDef.turnrate = 1000
 		uDef.turninplacespeedlimit = 10
-		uDef.turninplace = true
+		uDef.turninplace = false
 	end
 
 end
@@ -726,6 +726,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 			if unitDef.customparams.unitrole == "Support Building" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.2
+			end
+
+			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then
+				unitDef.maxdamage = unitDef.maxdamage * unitDef.customparams.hpmodifieroverridepercentage
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

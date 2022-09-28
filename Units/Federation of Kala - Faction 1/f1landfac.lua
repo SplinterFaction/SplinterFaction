@@ -9,7 +9,7 @@ buildCostMetal = 300
 
 humanName = [[Land Factory]]
 
-objectName = "eallterrfac2.s3o"
+objectName = "f1landfac.s3o"
 script = "eallterrfac2.cob"
 
 tech = [[tech1]]

@@ -14,11 +14,6 @@ unitDef                      = {
 	canstop                        = true,
 	category                       = "BUILDING NOTAIR",
 
-	collisionVolumeOffsets         = "0 60 0",
-	collisionVolumeScales          = "298 142 168",
-	collisionVolumeTest            = 1,
-	collisionVolumeType            = "box",
-
 	description                    = [[Build a Tech Facility to unlock units. Build Supply Depots to increase your army size.]],
 	energyStorage                  = 0,
 	energyUse                      = 0,
