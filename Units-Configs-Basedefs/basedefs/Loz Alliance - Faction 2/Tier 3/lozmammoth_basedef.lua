@@ -19,7 +19,7 @@ unitDef                    = {
 	explodeAs                    = explodeAs,
 	footprintX                   = 7,
 	footprintZ                   = 7,
-	iconType                     = "mbt",
+	iconType                     = "assault",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
@@ -101,7 +101,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "Main Battle Tank",
+		unitrole				 = "Assault",
 		canbetransported 		 = "true",
 		needed_cover             = 3,
 		death_sounds             = "generic",
