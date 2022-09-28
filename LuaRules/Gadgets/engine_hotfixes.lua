@@ -31,7 +31,7 @@ if gadgetHandler:IsSyncedCode() then
 		if (md.type ~= nil) then -- all non-flying units
 			Spring.MoveCtrl.SetGroundMoveTypeData(uID, "turnAccel", uDef.turnRate)
 		end
-		
+
 		--Instagibb any features that are unlucky enough to be in the build radius of new construction projects
 		if uDef.isBuilding or uDef.isFactory then
 			--Spring.Echo("Wheee it spins!")
@@ -42,16 +42,16 @@ if gadgetHandler:IsSyncedCode() then
  			else
  				xr, zr = 5 * uDef.zsize, 5 * uDef.xsize
 			end
-		
+
 			local features = Spring.GetFeaturesInRectangle(ux-xr, uz-zr, ux+xr, uz+zr)
 			for i = 1, #features do
 				local fID = features[i]
 				local fDefID = Spring.GetFeatureDefID(fID)
 				local fDef = FeatureDefs[fDefID]
-			
-				if (not fDef.geoThermal) and (fDef.name ~= 'geovent') 
-				and (fDef.name ~= 'xelnotgawatchtower') 
-				and (fDef.name ~= 'crystalring') 
+
+				if (not fDef.geoThermal) and (fDef.name ~= 'geovent')
+				and (fDef.name ~= 'xelnotgawatchtower')
+				and (fDef.name ~= 'crystalring')
 				then
 					local fx, fy, fz = Spring.GetFeaturePosition(fID)
 					Spring.DestroyFeature(fID)
