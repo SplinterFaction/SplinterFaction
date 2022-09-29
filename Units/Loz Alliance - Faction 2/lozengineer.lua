@@ -6,7 +6,7 @@ unitName = "lozengineer"
 --------------------------------------------------------------------------------
 
 buildCostMetal = 40
-buildDistance = 350
+buildDistance = 250
 
 buildpic = [[lozengineer.png]]
 
@@ -16,7 +16,7 @@ lozt1buildlist = Shared.buildListLozt0
 
 workertime = 1
 
-humanName = [[Architect]]
+humanName = [[Architect - Tech 0]]
 
 footprintx = 2
 footprintz = 2

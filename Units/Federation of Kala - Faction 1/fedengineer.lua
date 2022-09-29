@@ -6,7 +6,7 @@ unitName = "fedengineer"
 --------------------------------------------------------------------------------
 
 buildCostMetal = 40
-buildDistance = 350
+buildDistance = 250
 
 buildpic = [[fedengineer.png]]
 
@@ -16,7 +16,7 @@ fedbuildlists = Shared.buildListFedt0
 
 workertime = 1
 
-humanName = [[Lifter]]
+humanName = [[Lifter - Tech 0]]
 
 footprintx = 2
 footprintz = 2

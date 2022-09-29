@@ -16,7 +16,7 @@ fedbuildlists = Shared.buildListFedt1
 
 workertime = 2
 
-humanName = [[Lifter MkII]]
+humanName = [[Lifter - Tech 1]]
 
 footprintx = 2
 footprintz = 2

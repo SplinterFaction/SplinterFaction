@@ -11,7 +11,7 @@ energyUse = 25
 
 primaryCEG = "custom:fusionreactionnuclear-2color"
 
-humanName = [[Metal Extractor Mk II]]
+humanName = [[Metal Extractor - Tech 1]]
 
 objectName = [[emetalextractor2_up1.s3o]]
 script = [[emetalextractor.cob]]
