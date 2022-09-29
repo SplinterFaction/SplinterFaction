@@ -748,7 +748,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				if unitDef.customparams.unittype == "mobile" then
 					if fedCostModifier ~= 1 then
 						unitDef.buildcostmetal = unitDef.buildcostmetal * fedCostModifier
-						unitDef.buildcostenergy = unitDef.buildcostenergy * fedCostModifier
+						-- unitDef.buildcostenergy = unitDef.buildcostenergy * fedCostModifier
 					end
 				end
 			end
@@ -757,7 +757,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				if unitDef.customparams.unittype == "mobile" then
 					if lozCostModifier ~= 1 then
 						unitDef.buildcostmetal = unitDef.buildcostmetal * lozCostModifier
-						unitDef.buildcostenergy = unitDef.buildcostenergy * lozCostModifier
+						-- unitDef.buildcostenergy = unitDef.buildcostenergy * lozCostModifier
 					end
 				end
 			end
