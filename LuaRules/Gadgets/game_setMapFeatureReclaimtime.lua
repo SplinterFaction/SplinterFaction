@@ -25,6 +25,7 @@ if (gadgetHandler:IsSyncedCode()) then
                 local metalAsModifiedBySpringboard, metalInTheDef, energyAsModifiedBySpringboard, energyInTheDef = Spring.GetFeatureResources(featureID)
                 local reclaimTime = metalAsModifiedBySpringboard * 0.2 + energyAsModifiedBySpringboard * 0.25
                 Spring.SetFeatureResources(featureID, metalAsModifiedBySpringboard, energyAsModifiedBySpringboard, reclaimTime)
+                Spring.SetFeatureBlocking(featureID, false)
             end
             gadgetHandler:RemoveGadget()
         end
