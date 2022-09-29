@@ -232,7 +232,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 750,
+			default              = 835,
 		},
 	},
 	clusterrockets             = {
@@ -296,7 +296,7 @@ weaponDefs                 = {
 		model                    = "missilesmallvlaunch.s3o",
 		name                     = "Rocket",
 		range                    = 1000,
-		reloadtime               = 1,
+		reloadtime               = 0.5,
 		weaponType		         = "MissileLauncher",
 
 
@@ -319,7 +319,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 150,
+			default              = 100,
 		},
 	},
 }

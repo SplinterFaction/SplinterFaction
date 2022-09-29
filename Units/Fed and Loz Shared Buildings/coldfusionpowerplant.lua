@@ -6,9 +6,9 @@ local unitName                    = "coldfusionpowerplant"
 
 local armortype					 = [[building]]
 local techrequired				 = [[tech3]]
-local energyproduced			 = [[100]]
+local energyproduced			 = [[250]]
 
-local buildCostMetal 			  = 750
+local buildCostMetal 			  = 1750
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
