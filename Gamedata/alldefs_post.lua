@@ -644,8 +644,16 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			--------------------------------------------------------------------------------
 
 			-- Set Base Unit Hitpoints
-			if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
-					or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Neutral" then
+				if unitDef.customparams then
+					if unitDef.customparams.unittype == "building" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 5
+					end
+				end
+			end
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				if unitDef.customparams then
 					if unitDef.customparams.unittype == "mobile" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
@@ -659,8 +667,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
-			if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
-					or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
+			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 				if unitDef.customparams then
 					if unitDef.customparams.unittype == "mobile" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
@@ -732,14 +739,36 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * unitDef.customparams.hpmodifieroverridepercentage
 			end
 
-			-- Allow Hitpoints to be globally Controlled via Modotions
-			if unitDef.maxdamage then
-				--Spring.Echo(uDef.name)
-				--Spring.Echo(uDef.maxdamage)
-				unitDef.maxdamage = unitDef.maxdamage * unitHealthModifier --Look in the top of this file for default health modifier
-				--Spring.Echo(uDef.name)
-				--Spring.Echo(uDef.maxdamage)
+
+			-- Cost override so that cost can be adjusted without effective health
+			local fedCostModifier = 0.75
+			local lozCostModifier = 1
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
+				if unitDef.customparams.unittype == "mobile" then
+					if fedCostModifier ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * fedCostModifier
+						unitDef.buildcostenergy = unitDef.buildcostenergy * fedCostModifier
+					end
+				end
 			end
-		end
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
+				if unitDef.customparams.unittype == "mobile" then
+					if lozCostModifier ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * lozCostModifier
+						unitDef.buildcostenergy = unitDef.buildcostenergy * lozCostModifier
+					end
+				end
+			end
+				-- Allow Hitpoints to be globally Controlled via Modotions
+				if unitDef.maxdamage then
+					--Spring.Echo(uDef.name)
+					--Spring.Echo(uDef.maxdamage)
+					unitDef.maxdamage = unitDef.maxdamage * unitHealthModifier --Look in the top of this file for default health modifier
+					--Spring.Echo(uDef.name)
+					--Spring.Echo(uDef.maxdamage)
+				end
+			end
 	end
 end
