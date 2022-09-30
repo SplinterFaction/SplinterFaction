@@ -90,7 +90,7 @@ weaponDefs = {
 		--burst				   = burst,
 		--burstrate			   = 0.1,
 		edgeEffectiveness	   = 0,
-		explosionGenerator     = "custom:genericshellexplosion-small",
+		explosionGenerator     = "custom:genericshellexplosion-medium",
 		energypershot          = 0,
 		--duration			   = 0.25,
 		highTrajectory		   = 2,
@@ -100,10 +100,10 @@ weaponDefs = {
 		--noExplode			   = true,
 		range                  = 1200,
 		reloadtime             = 2,
-		size					 = 8,
+		size					 = 12,
 		--projectiles			   = projectiles,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/bruisercannon.wav",
+		soundStart             = "weapons/medallterrweapon.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		--sprayAngle             = 1000,
@@ -113,8 +113,8 @@ weaponDefs = {
 		weaponVelocity         = 2000,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
