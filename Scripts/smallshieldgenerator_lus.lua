@@ -4,12 +4,14 @@ local SIG_AIM = {}
 -- state variables
 terrainType = "terrainType"
 
+common = include("headers/common_includes_lus.lua")
+
 function script.Create()
 	StartThread(common.SmokeUnit, {base, ball})
 	StartThread(common.shieldBallSpinSmall)
 end
 
-common = include("headers/common_includes_lus.lua")
+
 
 
 function script.AimFromWeapon(weaponID)

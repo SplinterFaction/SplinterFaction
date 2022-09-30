@@ -1,7 +1,7 @@
 function gadget:GetInfo()
     return {
-        name = "Set Map Feature Reclaimtime",
-        desc = "Resets reclaimtime of all map features based upon their value",
+        name = "Set Map Feature Reclaimtime and NonBlocking",
+        desc = "Resets reclaimtime of all map features based upon their value. Also sets map features to be nonblocking.",
         author = "Sprung",
         date = "2022",
         license = "GPL",
