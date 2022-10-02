@@ -123,7 +123,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 850,
-		reloadtime             = 8,
+		reloadtime             = 4,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/reaperrailgun.wav",
@@ -143,7 +143,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 300,
+			default              = 150,
 		},
 	},
 	lasercannon                = {
