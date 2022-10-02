@@ -741,23 +741,29 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 
 			-- Cost override so that cost can be adjusted without effective health
-			local fedCostModifier = 0.75
-			local lozCostModifier = 1
+			local fedMetalCostModifier = 0.75
+			local fedEnergyCostModifier = 1.25
+			local lozMetalCostModifier = 1
+			local lozEnergyCostModifier = 1
 
 			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				if unitDef.customparams.unittype == "mobile" then
-					if fedCostModifier ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * fedCostModifier
-						-- unitDef.buildcostenergy = unitDef.buildcostenergy * fedCostModifier
+					if fedMetalCostModifier ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * fedMetalCostModifier
+					end
+					if fedEnergyCostModifier ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostenergy * fedEnergyCostModifier
 					end
 				end
 			end
 
 			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 				if unitDef.customparams.unittype == "mobile" then
-					if lozCostModifier ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * lozCostModifier
-						-- unitDef.buildcostenergy = unitDef.buildcostenergy * lozCostModifier
+					if lozMetalCostModifier ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * lozMetalCostModifier
+					end
+					if lozEnergyCostModifier ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostenergy * lozEnergyCostModifier
 					end
 				end
 			end
