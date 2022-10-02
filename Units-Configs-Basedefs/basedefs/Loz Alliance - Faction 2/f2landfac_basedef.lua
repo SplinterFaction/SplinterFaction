@@ -31,6 +31,7 @@ unitDef                     = {
 	maxWaterDepth                 = 99999999999,
 	metalStorage                  = 0,
 	metalMake                     = 0,
+	moveState					  = 0,
 	name                          = humanName,
 	objectName                    = objectName,
 	script						  = script,
