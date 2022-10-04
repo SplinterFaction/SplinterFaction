@@ -8,7 +8,7 @@ function widget:GetInfo()
     author    = "jK",
     date      = "@2009",
     license   = "GPLv2",
-    layer     = 1000,
+    layer     = -999999,
     enabled   = true,  --  loaded by default?
   }
 end
