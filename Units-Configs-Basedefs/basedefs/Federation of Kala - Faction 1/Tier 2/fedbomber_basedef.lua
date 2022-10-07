@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 5,
 	airStrafe                    = false,
 	airHoverFactor				 = -1.0,
-	brakeRate                    = 5,
+	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 300,
 	builder                      = false,
@@ -10,13 +10,37 @@ unitDef                    = {
 	buildpic					 = "ebomber.png",
 	canAttack                    = true,
 	canFly                       = true,
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Fix Spring's Awful Defaults for Planes
+-- Flight Characteristics Settings
+
+	wingDrag            = 0.07,
+	wingAngle           = 0.08,
+	frontToSpeed        = 0,    -- New Default
+	speedToFront        = 0.1,  -- New Default
+	crashDrag           = 0.005,
+	maxBank             = 0.7,  -- New Default
+	maxPitch            = 0.65, -- New Default
+	turnRadius          = 20.0,  -- New Default
+	verticalSpeed       = 3.0,
+	maxAileron          = 0.025, -- New Default
+	maxElevator         = 0.01,
+	maxRudder           = 0.004, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxAcc          	= 1.2,    -- OG Default was 0.065
+	attackSafetyDistance = 0, --Exists only in version 99.0
+
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+	
 	canGuard                     = true,
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = true,
 	category                     = "AIRARMORED VTOL",
 	collide                      = true,
-	cruiseAlt                    = 300,
+	cruiseAlt                    = 100,
 	description                  = [[Bomber]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -45,7 +69,7 @@ unitDef                    = {
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
-	turnRate                     = 5000,
+	turnRate                     = 5,
 	unitname                     = unitName,
 	upright						 = true,
 	workerTime                   = 0,

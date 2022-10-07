@@ -113,35 +113,6 @@ function UnitDef_Post(name, uDef)
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	-- Fix Spring's Awful Defaults for Planes
-	--
-
-	if uDef.canfly == true then
-
-		uDef.wingDrag            = 0.07
-		uDef.wingAngle           = 0.08
-		uDef.frontToSpeed        = 0     -- New Default
-		uDef.speedToFront        = 0.1   -- New Default
-		uDef.crashDrag           = 0.005
-		uDef.maxBank             = 0.7   -- New Default
-		uDef.maxPitch            = 0.65  -- New Default
-		uDef.turnRadius          = 20.0  -- New Default
-		uDef.verticalSpeed       = 3.0
-		uDef.maxAileron          = 0.025 -- New Default
-		uDef.maxElevator         = 0.01
-		uDef.maxRudder           = 0.01  -- New Default
-		if uDef.hoverattack == false or uDef.hoverattack == nil then
-			uDef.maxAcc          = 1.2     -- OG Default
-		else
-			uDef.maxAcc          = 0.065   -- OG Default
-		end
-		if uDef.attackSafetyDistance then
-			uDef.attackSafetyDistance = 0 --Exists only in version 99.0
-		end
-	end
-
-	--------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------
 	-- Set building start sound for all builders
 	--
 
@@ -170,7 +141,7 @@ function UnitDef_Post(name, uDef)
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Spring Kludge Removal
-	-- 
+	--
 	uDef.activateWhenBuilt  = true
 
 	--------------------------------------------------------------------------------
@@ -264,7 +235,7 @@ function UnitDef_Post(name, uDef)
 	-- I'm using this to save myself a boatload of time
 	uDef.usePieceCollisionVolumes = false
 
-	if uDef.turnrate ~= nil then
+	if uDef.canfly == false and uDef.turnrate ~= nil then
 		-- Spring.Echo(uDef.name)
 		-- Spring.Echo(uDef.turnrate)
 		uDef.acceleration = 60000
@@ -279,13 +250,13 @@ end
 --------------------------------------------------------------------------------
 -- process weapondef
 function WeaponDef_Post(name, wDef)
-	
+
 	-- Cylinder Targeting and infinite vertical range for everything
 	--wDef.cylindertargeting = 128
 	--wDef.heightmod = 1
-	
+
 	wDef.name = wDef.weapontype
-	
+
 	--Use targetborderoverride in weapondef customparams to override this global setting
 	--Controls whether the weapon aims for the center or the edge of its target's collision volume. Clamped between -1.0 - target the far border, and 1.0 - target the near border.
 	if wDef.customparams and wDef.customparams.targetborderoverride == nil then
@@ -293,17 +264,17 @@ function WeaponDef_Post(name, wDef)
 	elseif wDef.customparams and wDef.customparams.targetborderoverride ~= nil then
 		wDef.targetborder = tonumber(wDef.customparams.targetborderoverride)
 	end
-	
+
 	-- weapon reloadTime and stockpileTime were separated in 77b1
 	if (tobool(wDef.stockpile) and (wDef.stockpiletime==nil)) then
 		wDef.stockpiletime = wDef.reloadtime
 		--wDef.reloadtime    = 2             -- 2 seconds
 	end
-	
+
 	if (tobool(wDef.ballistic) or tobool(wDef.dropped)) then
 		wDef.gravityaffected = true
 	end
-	
+
 	--Potentially fix times when weapons explode without doing damage
 	if tonumber(wDef.areaofeffect) ~= nil and tonumber(wDef.areaofeffect) <= 10 then
 		if wDef.customparams and wDef.customparams.aoeoverride == true then
@@ -319,10 +290,10 @@ function WeaponDef_Post(name, wDef)
 			wDef.edgeeffectiveness = 1
 		end
 	end
-	
+
 	--Override map gravity for all weapons
 	wDef.mygravity = 0.14
-	
+
 	--------------------------------------------------------------------------------
 	-------------------------------------------------------------------------------- Turn off waterweapons
 	if wDef.waterweapon then
@@ -334,12 +305,12 @@ function WeaponDef_Post(name, wDef)
 	if wDef.customparams and wDef.customparams.friendlyfireexception == nil then
 		wDef.customparams.nofriendlyfire = 1
 	end
-	
+
 	if string.find(name, '_scav') then
 		VFS.Include("gamedata/scavengers/weapondef_post.lua")
 		wDef = scav_Wdef_Post(name, wDef)
 	end
-	
+
 end
 
 
@@ -350,15 +321,15 @@ end
 -- process modoptions (last, because they should not get baked)
 function ModOptions_Post (UnitDefs, WeaponDefs)
 	if (Spring.GetModOptions) then
-	local modOptions = Spring.GetModOptions()
-	
+		local modOptions = Spring.GetModOptions()
+
 		for id,unitDef in pairs(UnitDefs) do
-			
+
 			--Disabled due to boxcollector cpu costs
 			-- if unitDef.customparams.corpse == "energycore" then
-				-- unitDef.corpse = "ammobox"
+			-- unitDef.corpse = "ammobox"
 			-- end
-			
+
 			--Shield handling
 			if unitDef.weapondefs then
 				for _, weaponDef in pairs(unitDef.weapondefs) do
@@ -374,18 +345,18 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 		-- Make sure that land based defense weapons and turrets are scaled up to match
 		-- for id,wDef in pairs(WeaponDefs) do
-			-- if wDef.customparams and wDef.customparams.effectedbyunithealthmodifier == true then
-				-- if wDef.damage.default then
-					-- wDef.damage.default = wDef.damage.default * (unitHealthModifier * 0.33)
-				-- end
-				-- --Spring.Echo(wDef.damage.default)
-			-- end
+		-- if wDef.customparams and wDef.customparams.effectedbyunithealthmodifier == true then
+		-- if wDef.damage.default then
+		-- wDef.damage.default = wDef.damage.default * (unitHealthModifier * 0.33)
 		-- end
-	
+		-- --Spring.Echo(wDef.damage.default)
+		-- end
+		-- end
+
 		--------------------------------------------------------------------------------
 		-- Process Upgrades --
 		--------------------------------------------------------------------------------
-	--
+		--
 		-- for id,uDef in pairs(UnitDefs) do
 		-- 	-- Handle upgraded units HP and Max Speed
 		-- 	if uDef.customparams and uDef.customparams.isupgraded == "1" then
@@ -413,79 +384,79 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 		-- 		end
 		-- 	end
 		-- end
-	--
-		for id,wDef in pairs(WeaponDefs) do
-		-- 	-- Handle upgraded units weapon reload times
-		-- 	if wDef.customparams and wDef.customparams.isupgraded == "1" then
-		-- 		if wDef.reloadtime then
-		-- 			wDef.reloadtime = wDef.reloadtime * 0.85
-		-- 		end
-		-- 		wDef.damage.default = wDef.damage.default * 1.20
-		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-		-- 			wDef.shieldpower = wDef.shieldpower * 1.20
-		-- 		end
-		-- 	end
-		-- 	if wDef.customparams and wDef.customparams.isupgraded == "2" then
-		-- 		if wDef.reloadtime then
-		-- 			wDef.reloadtime = wDef.reloadtime * 0.70
-		-- 		end
-		-- 		wDef.damage.default = wDef.damage.default * 1.35
-		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-		-- 			wDef.shieldpower = wDef.shieldpower * 1.35
-		-- 		end
-		-- 	end
-		-- 	if wDef.customparams and wDef.customparams.isupgraded == "3" then
-		-- 		if wDef.reloadtime then
-		-- 			wDef.reloadtime = wDef.reloadtime * 0.65
-		-- 		end
-		-- 		wDef.damage.default = wDef.damage.default * 1.50
-		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-		-- 			wDef.shieldpower = wDef.shieldpower * 1.50
-		-- 		end
-		-- 	end
-		-- 	if wDef.customparams and wDef.customparams.isupgraded == "boss" then
-		-- 		if wDef.reloadtime then
-		-- 			wDef.reloadtime = wDef.reloadtime * 0.5
-		-- 		end
-		-- 		wDef.damage.default = wDef.damage.default * 10
-		-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
-		-- 			wDef.shieldpower = wDef.shieldpower * 2.50
-		-- 		end
-		-- 	end
 		--
-		-- 	--Handle Shields
-		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "1" then
-		-- 		if wDef.exteriorshield == true then
-		-- 			wDef.shieldpower = wDef.shieldpower * 1.20
-		-- 		end
-		-- 	end
-		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "2" then
-		-- 		if wDef.exteriorshield == true then
-		-- 			wDef.shieldpower = wDef.shieldpower * 1.35
-		-- 		end
-		-- 	end
-		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "3" then
-		-- 		if wDef.exteriorshield == true then
-		-- 			wDef.shieldpower = wDef.shieldpower * 1.50
-		-- 		end
-		-- 	end
-		-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "boss" then
-		-- 		if wDef.exteriorshield == true then
-		-- 			wDef.shieldpower = wDef.shieldpower * 2.50
-		-- 		end
-		-- 	end
-	
-		--------------------------------------------------------------------------------
-		--------------------------------------------------------------------------------
-		
-		--------------------------------------------------------------------------------
-		-- Process Armortypes --
-		--------------------------------------------------------------------------------
-		
+		for id,wDef in pairs(WeaponDefs) do
+			-- 	-- Handle upgraded units weapon reload times
+			-- 	if wDef.customparams and wDef.customparams.isupgraded == "1" then
+			-- 		if wDef.reloadtime then
+			-- 			wDef.reloadtime = wDef.reloadtime * 0.85
+			-- 		end
+			-- 		wDef.damage.default = wDef.damage.default * 1.20
+			-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+			-- 			wDef.shieldpower = wDef.shieldpower * 1.20
+			-- 		end
+			-- 	end
+			-- 	if wDef.customparams and wDef.customparams.isupgraded == "2" then
+			-- 		if wDef.reloadtime then
+			-- 			wDef.reloadtime = wDef.reloadtime * 0.70
+			-- 		end
+			-- 		wDef.damage.default = wDef.damage.default * 1.35
+			-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+			-- 			wDef.shieldpower = wDef.shieldpower * 1.35
+			-- 		end
+			-- 	end
+			-- 	if wDef.customparams and wDef.customparams.isupgraded == "3" then
+			-- 		if wDef.reloadtime then
+			-- 			wDef.reloadtime = wDef.reloadtime * 0.65
+			-- 		end
+			-- 		wDef.damage.default = wDef.damage.default * 1.50
+			-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+			-- 			wDef.shieldpower = wDef.shieldpower * 1.50
+			-- 		end
+			-- 	end
+			-- 	if wDef.customparams and wDef.customparams.isupgraded == "boss" then
+			-- 		if wDef.reloadtime then
+			-- 			wDef.reloadtime = wDef.reloadtime * 0.5
+			-- 		end
+			-- 		wDef.damage.default = wDef.damage.default * 10
+			-- 		if wDef.exteriorshield == true and wDef.shieldpower < 0 then
+			-- 			wDef.shieldpower = wDef.shieldpower * 2.50
+			-- 		end
+			-- 	end
+			--
+			-- 	--Handle Shields
+			-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "1" then
+			-- 		if wDef.exteriorshield == true then
+			-- 			wDef.shieldpower = wDef.shieldpower * 1.20
+			-- 		end
+			-- 	end
+			-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "2" then
+			-- 		if wDef.exteriorshield == true then
+			-- 			wDef.shieldpower = wDef.shieldpower * 1.35
+			-- 		end
+			-- 	end
+			-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "3" then
+			-- 		if wDef.exteriorshield == true then
+			-- 			wDef.shieldpower = wDef.shieldpower * 1.50
+			-- 		end
+			-- 	end
+			-- 	if wDef.customparams and wDef.customparams.isshieldupgraded == "boss" then
+			-- 		if wDef.exteriorshield == true then
+			-- 			wDef.shieldpower = wDef.shieldpower * 2.50
+			-- 		end
+			-- 	end
+
+			--------------------------------------------------------------------------------
+			--------------------------------------------------------------------------------
+
+			--------------------------------------------------------------------------------
+			-- Process Armortypes --
+			--------------------------------------------------------------------------------
+
 			local damageClasses		= VFS.Include("gamedata/configs/damageTypes.lua")
 			local damageTypes		= damageClasses.damageTypes
 			local defaultClass		= damageClasses.default
-			
+
 			weapondamage = tonumber(wDef.damage.default)
 			if (weapondamage > 0) then
 				if (wDef.customparams) then
@@ -499,16 +470,16 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					--Spring.Echo(damagetypelower)	
 					--Spring.Echo(" ")	
 					if damageTypes[damagetypelower]	then
-						for armorClass, armorMultiplier in pairs(damageTypes[damagetypelower]) do	
+						for armorClass, armorMultiplier in pairs(damageTypes[damagetypelower]) do
 							--Spring.Echo(wd.name, armorClass, weapondamage*armorMultiplier )
 							wDef.damage[armorClass] = weapondamage*armorMultiplier
 						end
 					else
-						Spring.Echo("!!WARNING!! Invalid damagetype: " .. damagetypelower)	
+						Spring.Echo("!!WARNING!! Invalid damagetype: " .. damagetypelower)
 					end
 				end
 			end
-			
+
 			--------------------------------------------------------------------------------
 			--------------------------------------------------------------------------------
 			-- Set energy cost to fire automatically
@@ -525,30 +496,30 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- else
 			-- 	wDef.energypershot = 0
 			-- end
-			
+
 			--Here is the rest of the function for units using energy to fire their weapons
---[[			elseif wDef.customparams and wDef.customparams.oldcosttofireforumula == true then
-				local energycosttofire = math.floor(weaponDefaultDamage * 0.1 * weaponProjectiles * ((weaponAreaOfEffect * 0.001) + 1)*10 + 0.5)*0.1
-				wDef.energypershot = energycosttofire * weaponBurst
-			else
-			--energycosttofire = weaponDefaultDamage * 0.05 * weaponProjectiles * ((weaponAreaOfEffect * 0.001)  + 1) * weaponRange^0.5 * 0.1
-				local energycosttofire = math.floor(weaponDefaultDamage * 0.05 * weaponProjectiles * ((weaponAreaOfEffect * 0.001)  + 1) * weaponRange^0.25 * 0.5*10 + 0.5)*0.1
-				wDef.energypershot = energycosttofire * weaponBurst
-			end
-]]--			
+			--[[			elseif wDef.customparams and wDef.customparams.oldcosttofireforumula == true then
+                            local energycosttofire = math.floor(weaponDefaultDamage * 0.1 * weaponProjectiles * ((weaponAreaOfEffect * 0.001) + 1)*10 + 0.5)*0.1
+                            wDef.energypershot = energycosttofire * weaponBurst
+                        else
+                        --energycosttofire = weaponDefaultDamage * 0.05 * weaponProjectiles * ((weaponAreaOfEffect * 0.001)  + 1) * weaponRange^0.5 * 0.1
+                            local energycosttofire = math.floor(weaponDefaultDamage * 0.05 * weaponProjectiles * ((weaponAreaOfEffect * 0.001)  + 1) * weaponRange^0.25 * 0.5*10 + 0.5)*0.1
+                            wDef.energypershot = energycosttofire * weaponBurst
+                        end
+            ]]--
 			--Set shield energy cost to recharge
---[[			if wDef.exteriorshield == true then
-				if wDef.customparams and wDef.customparams.nocosttofire == true then
-					wDef.shieldpowerregenenergy = 0
-				else
-					--wDef.shieldpowerregenenergy = math.floor(wDef.shieldpowerregen * 0.05 * wDef.shieldradius^0.25 * 0.5 * 10 + 0.5) * 0.1
-					--Spring.Echo("Energy usage is " .. wDef.shieldpowerregenenergy)
-					wDef.shieldpowerregenenergy = wDef.shieldpowerregen / 10
-				end		
-			end
-]]--
+			--[[			if wDef.exteriorshield == true then
+                            if wDef.customparams and wDef.customparams.nocosttofire == true then
+                                wDef.shieldpowerregenenergy = 0
+                            else
+                                --wDef.shieldpowerregenenergy = math.floor(wDef.shieldpowerregen * 0.05 * wDef.shieldradius^0.25 * 0.5 * 10 + 0.5) * 0.1
+                                --Spring.Echo("Energy usage is " .. wDef.shieldpowerregenenergy)
+                                wDef.shieldpowerregenenergy = wDef.shieldpowerregen / 10
+                            end
+                        end
+            ]]--
 		end
-		
+
 		--------------------------------------------------------------------------------
 		-- Gameplay Costs --
 		--------------------------------------------------------------------------------
@@ -558,9 +529,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams and unitDef.customparams.unitdefbuildtime == nil then
 				-- Set Rules for Neutral race
 				if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
-				or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
-				or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
-				or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
+						or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
+						or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
+						or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
 					unitDef.buildtime = unitDef.buildcostmetal / 4
 					unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
 					if unitDef.customparams and unitDef.customparams.requiretech == "tech1" or unitDef.customparams and unitDef.customparams.isupgraded == "1" then
@@ -603,7 +574,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				if unitDef.canreclaim == true then
 					unitDef.canreclaim = false
 				end
-				else
+			else
 				if unitDef.canreclaim == false then
 					unitDef.canreclaim = true
 				end
@@ -767,14 +738,14 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					end
 				end
 			end
-				-- Allow Hitpoints to be globally Controlled via Modotions
-				if unitDef.maxdamage then
-					--Spring.Echo(uDef.name)
-					--Spring.Echo(uDef.maxdamage)
-					unitDef.maxdamage = unitDef.maxdamage * unitHealthModifier --Look in the top of this file for default health modifier
-					--Spring.Echo(uDef.name)
-					--Spring.Echo(uDef.maxdamage)
-				end
+			-- Allow Hitpoints to be globally Controlled via Modotions
+			if unitDef.maxdamage then
+				--Spring.Echo(uDef.name)
+				--Spring.Echo(uDef.maxdamage)
+				unitDef.maxdamage = unitDef.maxdamage * unitHealthModifier --Look in the top of this file for default health modifier
+				--Spring.Echo(uDef.name)
+				--Spring.Echo(uDef.maxdamage)
 			end
+		end
 	end
 end
