@@ -107,7 +107,7 @@ function UnitDef_Post(name, uDef)
 	-- turn off unit collision check for planes
 	--
 
-	if uDef.canfly and not uDef.istransport then
+	if uDef.canfly then
 		uDef.collide = false
 	end
 
@@ -630,7 +630,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 1.5
+						unitDef.maxdamage = unitDef.buildcostmetal * 4
 					end
 					if unitDef.customparams.unittype == "building" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
@@ -644,7 +644,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 1.5
+						unitDef.maxdamage = unitDef.buildcostmetal * 4
 					end
 					if unitDef.customparams.unittype == "building" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
@@ -711,33 +711,63 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 
-			-- Cost override so that cost can be adjusted without effective health
-			local fedMetalCostModifier = 0.75
-			local fedEnergyCostModifier = 1.25
-			local lozMetalCostModifier = 1
-			local lozEnergyCostModifier = 1
+			-- Cost override so that cost can be adjusted without effecting health
+			local fedMetalCostModifierMobile = 0.75
+			local fedEnergyCostModifierMobile = 1.25
+			local lozMetalCostModifierMobile = 1
+			local lozEnergyCostModifierMobile = 1
 
+			local fedMetalCostModifierAir = 1
+			local fedEnergyCostModifierAir = 30
+			local lozMetalCostModifierAir = 1
+			local lozEnergyCostModifierAir = 30
+
+			-- Mobile Ground Units
 			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				if unitDef.customparams.unittype == "mobile" then
-					if fedMetalCostModifier ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * fedMetalCostModifier
+					if fedMetalCostModifierMobile ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * fedMetalCostModifierMobile
 					end
-					if fedEnergyCostModifier ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostenergy * fedEnergyCostModifier
+					if fedEnergyCostModifierMobile ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostenergy * fedEnergyCostModifierMobile
 					end
 				end
 			end
 
 			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 				if unitDef.customparams.unittype == "mobile" then
-					if lozMetalCostModifier ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * lozMetalCostModifier
+					if lozMetalCostModifierMobile ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * lozMetalCostModifierMobile
 					end
-					if lozEnergyCostModifier ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostenergy * lozEnergyCostModifier
+					if lozEnergyCostModifierMobile ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostenergy * lozEnergyCostModifierMobile
 					end
 				end
 			end
+
+			-- Air Units
+			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
+				if unitDef.customparams.unittype == "air" then
+					if fedMetalCostModifierAir ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * fedMetalCostModifierAir
+					end
+					if fedEnergyCostModifierAir ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostenergy * fedEnergyCostModifierAir
+					end
+				end
+			end
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
+				if unitDef.customparams.unittype == "air" then
+					if lozMetalCostModifierAir ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * lozMetalCostModifierAir
+					end
+					if lozEnergyCostModifierAir ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostenergy * lozEnergyCostModifierAir
+					end
+				end
+			end
+
 			-- Allow Hitpoints to be globally Controlled via Modotions
 			if unitDef.maxdamage then
 				--Spring.Echo(uDef.name)

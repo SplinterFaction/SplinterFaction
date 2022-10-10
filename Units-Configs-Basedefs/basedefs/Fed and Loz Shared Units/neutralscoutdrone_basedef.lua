@@ -1,21 +1,46 @@
 unitDef                    = {
 	acceleration                 = 0.5,
-	airStrafe                    = true,
-	bankscale                    = "1",
+	airStrafe                    = false,
 	brakeRate                    = 0.7,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 10,
+	buildCostMetal               = 20,
 	buildTime                    = 2.5,
-	buildpic					 = "edrone.png",
-	canAttack                    = true,
+	buildpic					 = "neutralscoutdrone.png",
+	canAttack                    = false,
 	canDropFlare                 = false,
 	canFly                       = true,
+
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+	-- Fix Spring's Awful Defaults for Planes
+	-- Flight Characteristics Settings
+
+	wingDrag            = 0.07,
+	wingAngle           = 0.08,
+	frontToSpeed        = 0,    -- New Default
+	speedToFront        = 0.1,  -- New Default
+	crashDrag           = 0.005,
+	maxBank             = 0.7,  -- New Default
+	maxPitch            = 0.65, -- New Default
+	turnRadius          = 20.0,  -- New Default
+	verticalSpeed       = 3.0,
+	maxAileron          = 0.025, -- New Default
+	maxElevator         = 0.01,
+	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxAcc          	= 1.2,    -- OG Default was 0.065
+	attackSafetyDistance = 0, --Exists only in version 99.0
+
+	useSmoothMesh		= true,
+
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+
 	canGuard                     = true,
 	canLoopbackAttack            = true,
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "AIRLIGHT VTOL DRONE",
+	category                     = "VTOL",
 	collide                      = false,
 	cruiseAlt                    = 75,
 	description                  = [[Scouting Drone]],
@@ -23,13 +48,9 @@ unitDef                    = {
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = "smallExplosionGenericPurple",
-	flareDelay                   = 0.1,
-	flareDropVector              = "0 0 -1",
-	flareefficieny               = "0.3",
-	flareReload                  = 3,
 	footprintX                   = 2,
 	footprintZ                   = 2,
-	hoverAttack                  = true,
+	hoverAttack                  = false,
 	iconType                     = "drone",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
@@ -46,7 +67,6 @@ unitDef                    = {
 	radarDistance                = 0,
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericPurple",
-	side                         = "CORE",
 	sightDistance                = 1000,
 	SonarDistance                = 1000,
 	smoothAnim                   = true,
@@ -74,22 +94,17 @@ unitDef                    = {
 		},
 	},
 	weapons                      = {
-		-- [1]                      = {
-			-- def                  = "droneweapon",
-			-- badTargetCategory    = "LIGHT ARMORED",
-		-- },
+
 	},
 	customParams                 = {
-		unittype				  = "mobile",
-		--isupgraded               = isUpgraded,
+		unittype				  = "air",
+		unitrole				  = "Scout",
 		death_sounds             = "generic",
 		RequireTech              = tech,
-		--supply_cost              = supply,
-		nofriendlyfire	         = "1",
+		supply_cost              = 1,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	             = "ateran",
-		retreatRangeDAI			 = 5000,
+		factionname	             = "Neutral",
 	},
 }
 
