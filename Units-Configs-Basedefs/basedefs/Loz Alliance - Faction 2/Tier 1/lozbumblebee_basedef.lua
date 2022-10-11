@@ -101,7 +101,7 @@ unitDef                    = {
 			maxAngleDif = 200,
 		},
 		[2]                      = {
-			def                  = "particlebeamcannon",
+			def                  = "laser",
 			onlyTargetCategory	 = "VTOL",
 			mainDir = "0 0 -1",
 			maxAngleDif = 200,
@@ -141,50 +141,47 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	particlebeamcannon                 = {
-
-		accuracy                 = 0,
-		AreaOfEffect             = 10,
-		avoidFeature             = false,
-		avoidFriendly            = false,
-		collideFeature           = false,
-		collideFriendly          = false,
-		explosionGenerator       = "custom:burnblacksmall",
-		coreThickness            = 0.1,
-		duration                 = 0.4,
-		energypershot            = 0,
-		fallOffRate              = 0.1,
-		fireStarter              = 50,
+	laser                = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		rgbColor               = "1 0 0",
+		rgbColor2              = "1 1 1",
+		explosionGenerator     = "custom:genericshellexplosion-small-sparks-burn",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.1,
+		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Bio gun Shot 6.wav",
-
-		minintensity             = 1,
-		impulseFactor            = 0,
-		name                     = "Something with Flames",
-		range                    = 800,
-		reloadtime               = 0.25,
-		WeaponType               = [[LaserCannon]],
-		rgbColor                 = "1 0.5 0",
-		rgbColor2                = "1 1 1",
-		thickness                = 2,
-		tolerance                = 1000,
-		turret                   = true,
-		texture1                 = "shot",
-		texture2                 = "empty",
-		weaponVelocity           = 2000,
-		sprayangle				 = 75,
+		name                   = "E.M.G.",
+		range                  = 800,
+		reloadtime             = 0.2,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "weapons/pointdefensefire.wav",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.25,
+		thickness              = 3,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 2000,
 		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
+			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3.75,
+			default              = 2.5,
 		},
 	},
 	bomb  	             = {
-		AreaOfEffect             = 15,
+		AreaOfEffect             = 50,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -199,7 +196,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		minintensity             = "1",
 		name                     = "Cluster Bomb",
-		projectiles				 = 10,
+		-- projectiles				 = 10,
 		range                    = 800,
 		reloadtime               = 7,
 		WeaponType               = "Cannon",
@@ -209,8 +206,8 @@ weaponDefs                 = {
 		soundstart               = "weapons/bombdrop.wav",
 		soundHit                 = "other/18402_inferno_xplo.wav",
 		soundHitWet				 = "explosions/subhitbomb.wav",
-		sprayangle				 = 1000,
-		size					 = 4,
+		-- sprayangle				 = 1000,
+		size					 = 10,
 		--texture1                 = "shot",
 		--texture2                 = "empty",
 		thickness                = 15,
@@ -219,13 +216,13 @@ weaponDefs                 = {
 		weaponVelocity           = 200,
 		customparams             = {
 			nofriendlyfire	     = true,
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= 1000, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.025, -- Use this sparingly
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 55,
+			default              = 500,
 		},
 	},
 }
