@@ -532,7 +532,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
 						or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
 						or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
-					unitDef.buildtime = unitDef.buildcostmetal / 4
+
 					unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
 					if unitDef.customparams and unitDef.customparams.requiretech == "tech1" or unitDef.customparams and unitDef.customparams.isupgraded == "1" then
 						unitDef.buildcostenergy = unitDef.buildcostmetal * 3
@@ -556,15 +556,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 				-- This is a catchall for units that don't have a factionname declared
 				if unitDef.customparams and unitDef.customparams.factionname == nil then
-					unitDef.buildtime = unitDef.buildcostmetal / 4
-					unitDef.buildcostenergy = unitDef.buildcostmetal * 0.25
+					unitDef.buildcostenergy = unitDef.buildcostmetal
 				end
-
-				if unitDef.customparams and unitDef.customparams.supply_cost then
-					local supplycost = unitDef.buildcostmetal * 0.01
-					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
-				end
-
 			end
 
 			-- Set reclaimspeed to be a multiple of workertime. This relies on max defaults set in featuredefs post. Without some max defaults there, this will be a funny result.
@@ -653,6 +646,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			-- Add a modifier for unit HP based upon role
+			-- Mobile Ground Units
 			if unitDef.customparams.unitrole == "Commander" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
@@ -680,6 +674,22 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Assault" then
 				unitDef.maxdamage = unitDef.maxdamage * 2
 			end
+
+			-- Aircraft
+			if unitDef.customparams.unitrole == "Air Scout" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.3
+			end
+			if unitDef.customparams.unitrole == "Interceptor" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+			if unitDef.customparams.unitrole == "Bomber" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.5
+			end
+			if unitDef.customparams.unitrole == "Strike Fighter" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+
+
 			-- Turrets
 			if unitDef.customparams.unitrole == "Light Turret" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.7
@@ -766,6 +776,15 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.buildcostenergy = unitDef.buildcostenergy * lozEnergyCostModifierAir
 					end
 				end
+			end
+
+			-- Time to decide how much energy = 1 metal. I'm going to go with an arbitrary number of 50
+			local totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy * 0.02)
+			unitDef.buildtime = math.floor(totalValueInMetal + 0.5) * 0.25 -- 0.20 is 5 metal equivalent, 0.25 is 4 metal equivalent
+
+			if unitDef.customparams and unitDef.customparams.supply_cost then
+				local supplycost = math.floor(totalValueInMetal + 0.5) * 0.01
+				unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

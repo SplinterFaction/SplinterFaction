@@ -121,7 +121,7 @@ unitDef                    = {
 
 	customParams                 = {
 		unittype				 = "air",
-		unitrole				 = "Interceptor",
+		unitrole				 = "Strike Fighter",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,

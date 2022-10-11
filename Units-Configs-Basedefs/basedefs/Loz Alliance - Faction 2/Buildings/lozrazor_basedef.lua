@@ -29,7 +29,7 @@ unitDef                     = {
 	repairable		              = false,
 	selfDestructAs                = "mediumBuildingExplosionGeneric",
 	side                          = "CORE",
-	sightDistance                 = 550,
+	sightDistance                 = 700,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -101,7 +101,7 @@ weaponDefs = {
 		laserflaresize 	         = 8,
 		minintensity             = 1,
 		name                     = "Laser",
-		range                    = 550,
+		range                    = 700,
 		reloadtime               = 0.2,
 		WeaponType               = "BeamLaser",
 		rgbColor                 = "0.25 0 0.6",
@@ -124,7 +124,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 7,
+			default               = 6,
 		},
 	},
 }

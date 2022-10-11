@@ -4,7 +4,7 @@ unitName = [[fedwasp]]
 
 --------------------------------------------------------------------------------
 
-humanName = [[Wasp]]
+humanName = [[Stinger]]
 
 objectName = [[fedwasp.s3o]]
 script = [[fedwasp_lus.lua]]

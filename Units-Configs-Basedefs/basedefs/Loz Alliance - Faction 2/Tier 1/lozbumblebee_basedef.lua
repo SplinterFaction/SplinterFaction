@@ -48,6 +48,7 @@ unitDef                    = {
 	footprintX                   = 2,
 	footprintZ                   = 2,
 	floater                      = true,
+	firestate					 = 1,
 	hoverAttack                  = false,
 	iconType                     = "air_bomb",
 	idleAutoHeal                 = .5,
@@ -127,7 +128,7 @@ unitDef                    = {
 
 	customParams                 = {
 		unittype				 = "air",
-		unitrole				 = "Interceptor",
+		unitrole				 = "Bomber",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,

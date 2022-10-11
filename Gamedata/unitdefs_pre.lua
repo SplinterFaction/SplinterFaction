@@ -3,10 +3,13 @@
 --Buildlists for factories
 
 Shared.buildListf1landfac = {
+	[[neutralscoutdrone]],
 	[[fedak]],
 	[[fedstorm]],
 	[[fedthud]],
 	[[fedcrasher]],
+	[[fedsparrow]],
+	[[fedcrow]],
 	[[fedbear]],
 	[[fedcobra]],
 	[[fedavalanche]],
@@ -20,10 +23,13 @@ Shared.buildListf1landfac = {
 }
 
 Shared.buildListf2landfac = {
+	[[neutralscoutdrone]],
 	[[lozflea]],
 	[[lozdiamondback]],
 	[[lozroach]],
 	[[lozscorpion]],
+	[[lozwasp]],
+	[[lozbumblebee]],
 	[[lozreaper]],
 	[[lozluger]],
 	[[lozpulverizer]],
