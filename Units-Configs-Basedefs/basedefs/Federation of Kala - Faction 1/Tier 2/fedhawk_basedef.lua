@@ -55,7 +55,7 @@ unitDef                    = {
 	canLoopbackAttack            = true,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 16,
+	maxVelocity                  = 14,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -64,7 +64,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 800,
+	sightDistance                = 1000,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -95,16 +95,10 @@ unitDef                    = {
 
 	weapons                      = {
 		[1]                      = {
-			def                  = "laser",
+			def                  = "sniper",
 			onlyTargetCategory	 = "VTOL",
-			mainDir = "0 1 1",
-			maxAngleDif = 180,
-		},
-		[2]                      = {
-			def                  = "railgun",
-			onlyTargetCategory	 = "VTOL",
-			mainDir = "0 1 0",
-			maxAngleDif = 180,
+			mainDir = "0 0 1",
+			maxAngleDif = 200,
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
@@ -135,89 +129,51 @@ unitDef                    = {
 		supply_cost              = 1,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	             = "Loz Alliance",
+		factionname	             = "Federation of Kala",
 		corpse                   = "energycore",
 	},
 }
 
 weaponDefs                 = {
-	laser                = {
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "1 0 0",
-		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-small-sparks-burn",
-		edgeEffectiveness	   = 1,
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.1,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "E.M.G.",
-		range                  = 800,
-		reloadtime             = 0.2,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/pointdefensefire.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.25,
-		thickness              = 3,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 2000,
-		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 3,
-		},
-	},
+	sniper           = {
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		--	cegTag                = "mediumcannonweapon3",
+		duration                  = 0.15,
+		energypershot             = 0,
+		explosionGenerator        = "custom:genericshellexplosion-small-sparks-burn",
+		fallOffRate            	  = 0,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
 
-	railgun               = {
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "0.133 0 0.4",
-		rgbColor2              = "0.75 0.75 0.75",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.25,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "Railgun",
-		range                  = 800,
-		reloadtime             = 3,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/roachrailgun.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.2,
-		thickness              = 6,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 2000,
-		customparams             = {
-			single_hit		 	 = true,
+		minintensity              = "1",
+		name                      = "Laser",
+		range                     = 1000,
+		reloadtime                = 1.2,
+		WeaponType                = "LaserCannon",
+		rgbColor                  = "0 0.5 1",
+		rgbColor2                 = "1 1 1",
+		soundTrigger              = true,
+		soundstart                = "weapons/snipershot.wav",
+		soundHit                  = "explosions/explode5.wav",
+		texture1                  = "shot",
+		texture2                  = "empty",
+		thickness                 = 5,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 3000,
+		customparams              = {
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-		damage                   = {
-			default              = 30,
+		damage                    = {
+			default               = 40,
 		},
 	},
 }

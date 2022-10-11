@@ -1,19 +1,19 @@
 --------------------------------------------------------------------------------
 
-unitName = "lozwasp"
+unitName = "lozhornet"
 
 --------------------------------------------------------------------------------
 
-humanName = [[Wasp]]
+humanName = [[Hornet]]
 
-objectName = "lozwasp.s3o"
-script = "lozwasp_lus.lua"
+objectName = "lozhornet.s3o"
+script = "lozhornet_lus.lua"
 
 
-tech = [[tech1]]
+tech = [[tech2]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("Units-Configs-Basedefs/basedefs/Loz Alliance - Faction 2/Tier 1/lozwasp_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Loz Alliance - Faction 2/Tier 2/lozhornet_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 

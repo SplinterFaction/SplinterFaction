@@ -1,13 +1,11 @@
 unitDef                    = {
-	acceleration                 = 5,
+	acceleration                 = 0.1,
 	airStrafe                    = false,
-	airHoverFactor				 = -1.0,
 	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 300,
+	buildCostMetal               = 40,
 	builder                      = false,
 	buildTime                    = 2.5,
-	buildpic					 = "ebomber.png",
 	canAttack                    = true,
 	canFly                       = true,
 
@@ -19,17 +17,18 @@ unitDef                    = {
 	wingDrag            = 0.07,
 	wingAngle           = 0.08,
 	frontToSpeed        = 0,    -- New Default
-	speedToFront        = 0.1,  -- New Default
+	speedToFront        = 0.001,  -- New Default
 	crashDrag           = 0.005,
 	maxBank             = 0.7,  -- New Default
 	maxPitch            = 0.65, -- New Default
-	turnRadius          = 20.0,  -- New Default
+	turnRadius          = 500,  -- New Default
 	verticalSpeed       = 3.0,
 	maxAileron          = 0.025, -- New Default
 	maxElevator         = 0.01,
-	maxRudder           = 0.004, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxRudder           = 0.002, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
-	attackSafetyDistance = 0, --Exists only in version 99.0
+
+	useSmoothMesh		= true,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -38,14 +37,14 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = true,
-	category                     = "AIRARMORED VTOL",
-	collide                      = true,
-	cruiseAlt                    = 100,
+	category                     = "VTOL",
+	collide                      = false,
+	cruiseAlt                    = 200,
 	description                  = [[Bomber]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
-	explodeAs                    = "largeExplosionGeneric",
+	explodeAs                    = "smallExplosionGenericRed",
 	footprintX                   = 2,
 	footprintZ                   = 2,
 	floater                      = true,
@@ -53,19 +52,19 @@ unitDef                    = {
 	iconType                     = "air_bomb",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
-	loopbackattack               = true,
+	canLoopbackAttack            = true,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 6,
+	maxVelocity                  = 12,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
 	objectName                   = objectName,
 	script			             = script,
 	repairable		             = false,
-	selfDestructAs               = "largeExplosionGeneric",
+	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 1000,
+	sightDistance                = 800,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -93,121 +92,140 @@ unitDef                    = {
 			"unitselect",
 		},
 	},
+
 	weapons                      = {
 		[1]                      = {
-			def                  = "missile",
-			-- onlyTargetCategory	 = "BUILDING",
-			noChaseCategory      = "VTOL LIGHT ARMORED",
+			def                  = "bomb",
+			onlyTargetCategory	 = "BUILDING NOTAIR",
+			mainDir = "0 -1 0",
+			maxAngleDif = 200,
 		},
+		[2]                      = {
+			def                  = "particlebeamcannon",
+			onlyTargetCategory	 = "VTOL",
+			mainDir = "0 0 -1",
+			maxAngleDif = 200,
+		},
+		--[[
+			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
+				A vector representing the firing direction of this weapon if it has a limited firing arc. Used in conjunction with maxAngleDif (See Gamedev:WeaponMainDir).
+
+			float maxAngleDif default: 360.0
+				How wide this weapons limited firing arc is in degrees. Symmetrical about mainDir i.e. 180.0 is 90 degree freedom either way (See Gamedev:WeaponMainDir).
+
+			Example:
+			weapons = {
+			  {
+				def = "weapon1",
+				mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
+				maxAngleDif = 90, -- 90° from side to side, or 45° from centre to each direction
+			  },
+			}
+		]]--
 	},
+
+
 	customParams                 = {
-		isupgraded				 = isUpgraded,
-		unittype				 = "mobile",
-		--    needed_cover       = 2,
+		unittype				 = "air",
+		unitrole				 = "Interceptor",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
-		armortype                = armortype,
 		nofriendlyfire	         = "1",
 		supply_cost              = 1,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
 		corpse                   = "energycore",
-		retreatRangeDAI			 = 0,
-		maxammo					 = 1,
 	},
 }
 
 weaponDefs                 = {
+	particlebeamcannon                 = {
 
-	missile                      = {
-		AreaOfEffect             = 300,
-		avoidFriendly            = false,
+		accuracy                 = 0,
+		AreaOfEffect             = 10,
 		avoidFeature             = false,
-		collideFriendly          = false,
+		avoidFriendly            = false,
 		collideFeature           = false,
-		cegTag                   = "bombertrail-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-large-red",
+		collideFriendly          = false,
+		explosionGenerator       = "custom:burnblacksmall",
+		coreThickness            = 0.1,
+		duration                 = 0.4,
 		energypershot            = 0,
-		edgeEffectiveness        = 0.1,
-		fireStarter              = 70,
-		
-		id                       = 136,
-		impulseBoost             = 0,
-		impulseFactor            = 0,
+		fallOffRate              = 0.1,
+		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		
-		metalpershot             = 0,
-		model                    = "missile.s3o",
-		name                     = "Rockets",
-		range                    = 400,
-		reloadtime               = 6,
-		weaponType		         = "MissileLauncher",		
-		
-		smokeTrail               = false,
-		soundHit                 = "other/18402_inferno_xplo.wav",
-		soundHitWet				 = "explosions/subhitbomb.wav",
-		soundHitVolume	         = 10,
-		soundStart               = "weapons/bomberlaunch.wav",
-		soundStartVolume         = 10,
-		
-		startVelocity            = 200,
-		tolerance                = 8000,
-		turnRate                 = 15000,
-		tracks                   = false,
-		turret			         = false,
-		weaponAcceleration       = 50,
-		waterweapon				 = true,
-		flightTime               = 10,
-		weaponVelocity           = 800,
+		soundstart               = "weapons/Bio gun Shot 6.wav",
+
+		minintensity             = 1,
+		impulseFactor            = 0,
+		name                     = "Something with Flames",
+		range                    = 800,
+		reloadtime               = 0.25,
+		WeaponType               = [[LaserCannon]],
+		rgbColor                 = "1 0.5 0",
+		rgbColor2                = "1 1 1",
+		thickness                = 2,
+		tolerance                = 1000,
+		turret                   = true,
+		texture1                 = "shot",
+		texture2                 = "empty",
+		weaponVelocity           = 2000,
+		sprayangle				 = 75,
 		customparams             = {
-			nofriendlyfire	     = 1,
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 500,
+			default              = 3.75,
 		},
 	},
-	
 	bomb  	             = {
-		AreaOfEffect             = 150,
+		AreaOfEffect             = 15,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
 		cylinderTargeting		 = 0,
-		burst					 = 10,
-		burstrate				 = 0.1,
-		cegTag                   = "genericshellexplosion-large-sparks-burn",
+		-- cegTag                   = "genericshellexplosion-small-sparks-burn",
+		edgeeffectiveness		 = 1,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-medium-red",
+		explosionGenerator       = "custom:genericshellexplosion-small-red",
 		fallOffRate              = 1,
 		fireStarter              = 50,
 		impulseFactor            = 0,
 		minintensity             = "1",
 		name                     = "Cluster Bomb",
-		range                    = 1000,
-		reloadtime               = 6,
-		WeaponType               = "Cannon",
+		projectiles				 = 10,
+		range                    = 800,
+		reloadtime               = 7,
+		WeaponType               = "AircraftBomb",
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
 		soundTrigger             = true,
 		soundstart               = "weapons/bombdrop.wav",
 		soundHit                 = "other/18402_inferno_xplo.wav",
 		soundHitWet				 = "explosions/subhitbomb.wav",
-		sprayangle				 = 5000,
+		sprayangle				 = 1000,
 		size					 = 4,
 		--texture1                 = "shot",
 		--texture2                 = "empty",
 		thickness                = 15,
 		tolerance                = 7500,
 		turret                   = false,
-		weaponVelocity           = 150,
+		weaponVelocity           = 0,
 		customparams             = {
 			nofriendlyfire	     = true,
-		}, 
-		damage                   = {
-			default              = 150,
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-	},  
+		damage                   = {
+			default              = 55,
+		},
+	},
 }

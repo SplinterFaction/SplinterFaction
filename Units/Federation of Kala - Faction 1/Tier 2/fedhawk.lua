@@ -1,19 +1,19 @@
 --------------------------------------------------------------------------------
 
-unitName = "lozwasp"
+unitName = "fedhawk"
 
 --------------------------------------------------------------------------------
 
-humanName = [[Wasp]]
+humanName = [[Hawk]]
 
-objectName = "lozwasp.s3o"
-script = "lozwasp_lus.lua"
+objectName = "fedhawk.s3o"
+script = "fedhawk_lus.lua"
 
 
-tech = [[tech1]]
+tech = [[tech2]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("Units-Configs-Basedefs/basedefs/Loz Alliance - Faction 2/Tier 1/lozwasp_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedhawk_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 

@@ -30,11 +30,41 @@ effectUnitDefs = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine4", onActive=true}},
 	},
 
+	fedsparrow = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine4", onActive=true}},
+	},
+
+	fedhawk = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine4", onActive=true}},
+	},
+
+	fedcrow = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine4", onActive=true}},
+	},
+
 	lozwasp = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine3", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine4", onActive=true}},
+	},
+
+	lozhornet = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine4", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine5", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine6", onActive=true}},
 	},
 
 

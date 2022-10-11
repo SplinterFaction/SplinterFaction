@@ -64,7 +64,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 800,
+	sightDistance                = 1000,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -95,16 +95,16 @@ unitDef                    = {
 
 	weapons                      = {
 		[1]                      = {
-			def                  = "laser",
+			def                  = "railgun",
 			onlyTargetCategory	 = "VTOL",
-			mainDir = "0 1 1",
-			maxAngleDif = 180,
+			mainDir = "0 1 0",
+			maxAngleDif = 200,
 		},
 		[2]                      = {
 			def                  = "railgun",
 			onlyTargetCategory	 = "VTOL",
-			mainDir = "0 1 0",
-			maxAngleDif = 180,
+			mainDir = "0 -1 0",
+			maxAngleDif = 200,
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
@@ -141,46 +141,6 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	laser                = {
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "1 0 0",
-		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-small-sparks-burn",
-		edgeEffectiveness	   = 1,
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.1,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "E.M.G.",
-		range                  = 800,
-		reloadtime             = 0.2,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/pointdefensefire.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.25,
-		thickness              = 3,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 2000,
-		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 3,
-		},
-	},
-
 	railgun               = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -196,11 +156,11 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 800,
+		range                  = 1000,
 		reloadtime             = 3,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/roachrailgun.wav",
+		soundStart             = "weapons/reaperrailgun.wav",
 		texture1               = "shot",
 		texture2               = "empty",
 		coreThickness          = 0.2,
