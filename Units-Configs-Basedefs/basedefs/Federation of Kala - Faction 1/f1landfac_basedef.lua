@@ -66,10 +66,10 @@ unitDef                      = {
 		},
 	},
 	customParams                   = {
-		unittype				  = "factory",
+		unittype				  = "building",
+		unitrole 				  = "Factory",
 		RequireTech              = tech,
 		death_sounds               = "generic",
-		armortype                  = "building", 
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                  = "unittextures/lego2skin_explorerbucket.dds",
 		factionname					= "Federation of Kala",

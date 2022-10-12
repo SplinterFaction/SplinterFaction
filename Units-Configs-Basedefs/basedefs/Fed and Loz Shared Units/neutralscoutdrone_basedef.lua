@@ -28,7 +28,6 @@ unitDef                    = {
 	maxElevator         = 0.01,
 	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
-	attackSafetyDistance = 0, --Exists only in version 99.0
 
 	useSmoothMesh		= true,
 
