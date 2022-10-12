@@ -12,7 +12,7 @@ unitDef                      = {
 	canPatrol                      = true,
 	canReclaim		               = false,
 	canstop                        = true,
-	category                       = "BUILDING NOTAIR",
+	category                       = "BUILDING",
 
 	description                    = [[Build a Tech Facility to unlock units. Build Supply Depots to increase your army size.]],
 	energyStorage                  = 0,

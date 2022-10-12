@@ -37,7 +37,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = true,
-	category                     = "VTOL",
+	category                     = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 100,
 	description                  = [[Interceptor]],
@@ -96,13 +96,13 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "laser",
-			onlyTargetCategory	 = "VTOL",
+			onlyTargetCategory	 = "AIR",
 			mainDir = "0 1 1",
 			maxAngleDif = 180,
 		},
 		[2]                      = {
 			def                  = "railgun",
-			onlyTargetCategory	 = "VTOL",
+			onlyTargetCategory	 = "AIR",
 			mainDir = "0 1 0",
 			maxAngleDif = 180,
 		},

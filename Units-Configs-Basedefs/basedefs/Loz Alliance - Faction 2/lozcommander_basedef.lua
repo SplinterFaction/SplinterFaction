@@ -25,7 +25,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canreclaim		             = true,
 	canstop                      = true,
-	category                     = "NOTAIR SUPPORT LIGHT",
+	category                     = "GROUND",
 	description                  = [[Builds Units]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -96,6 +96,8 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = [[railgun]],
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                      = {
 			def                  = [[shield]],

@@ -6,7 +6,7 @@ unitDef                     = {
 	buildTime                     = 5,
 	canAttack                     = true,
 	canstop                       = "1",
-	category                      = "BUILDING NOTAIR",
+	category                      = "BUILDING",
 	collisionVolumeTest           = "1",
 	description                   = [[Light Anti-Air Turret]],
 	energyStorage                 = 0,
@@ -58,7 +58,7 @@ unitDef                     = {
 			def                  = "machinegun",
 			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--			maxAngleDif = 70,
-			onlyTargetCategory	  = "VTOL",
+			onlyTargetCategory	  = "AIR",
 		},
 	},
 	customParams                  = {
@@ -82,6 +82,7 @@ unitDef                     = {
 
 weaponDefs = {
 	machinegun                = {
+		predictboost	       = 0.3,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,

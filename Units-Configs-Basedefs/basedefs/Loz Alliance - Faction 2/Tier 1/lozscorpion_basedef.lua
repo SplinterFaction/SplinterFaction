@@ -13,7 +13,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "LIGHT AMPHIB RIOT NOTAIR",
+	category                     = "GROUND",
 	description                  = [[Artillery Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -76,6 +76,7 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "clusterrockets",
+			onlyTargetCategory    = "GROUND BUILDING AIR",
 		},
 	},
 	customParams                 = {

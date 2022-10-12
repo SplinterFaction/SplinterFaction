@@ -18,7 +18,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "LIGHT NOTAIR RAID",
+	category                     = "GROUND",
 	description                  = [[Main Battle Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -87,13 +87,15 @@ unitDef                    = {
 			def                  = "particlebeamcannon",
 --			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 --			maxAngleDif = 70,
-			badTargetCategory    = "VTOL BUILDING WALL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                      = {
 			def                  = "plasmacannon",
 			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--			maxAngleDif = 70,
-			badTargetCategory    = "VTOL BUILDING WALL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 	},

@@ -6,7 +6,7 @@ unitDef                     = {
 	buildTime                     = 5,
 	canAttack                     = true,
 	canstop                       = "1",
-	category                      = "BUILDING NOTAIR",
+	category                      = "BUILDING",
 	collisionVolumeTest           = "1",
 	description                   = [[Light Anti-Ground Turret]],
 	energyStorage                 = 0,
@@ -62,12 +62,12 @@ unitDef                     = {
 		[1]                       = {
 			def                   = "particlebeamcannon",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "NOTAIR BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                       = {
 			def                   = "particlebeamcannon",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "NOTAIR BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				  = 1,
 		},
 	},

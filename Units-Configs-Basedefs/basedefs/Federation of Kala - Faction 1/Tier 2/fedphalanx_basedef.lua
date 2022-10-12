@@ -18,7 +18,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "LIGHT NOTAIR RAID",
+	category                     = "GROUND",
 	description                  = [[Anti-Air Artillery]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -87,7 +87,7 @@ unitDef                    = {
 			def                  = "machinegun",
 --			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 --			maxAngleDif = 70,
-			onlyTargetCategory	  = "VTOL",
+			onlyTargetCategory	  = "AIR",
 		},
 	},
 	customParams                 = {

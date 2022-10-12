@@ -11,7 +11,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "LIGHT AMPHIB SKIRMISHER NOTAIR",
+	category                     = "GROUND",
 	description                  = [[Main Battle Tank / Direct Fire Support]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -74,7 +74,8 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "railgun",
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                 = {

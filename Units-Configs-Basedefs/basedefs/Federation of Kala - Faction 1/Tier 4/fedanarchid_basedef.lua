@@ -14,7 +14,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	cantBeTransported            = true,
-	category                     = "ARMORED NOTAIR SKIRMISHER",
+	category                     = "GROUND",
 	
 	description                  = [[Endbringer Class Obliteration Strider]],
 	energyMake                   = 0,
@@ -79,12 +79,18 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "heavybeamweapon",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                      = {
 			def                  = "particlebeamcannon",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[3]                      = {
 			def                  = "particlebeamcannon",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                 = {

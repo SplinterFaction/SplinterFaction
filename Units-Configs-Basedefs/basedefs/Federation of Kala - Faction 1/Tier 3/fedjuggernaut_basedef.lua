@@ -18,7 +18,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "LIGHT NOTAIR RAID",
+	category                     = "GROUND",
 	description                  = [[Main Battle Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -87,51 +87,59 @@ unitDef                    = {
 			def                  = "particlebeamcannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                      = {
 			def                  = "particlebeamcannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 		[3]                      = {
 			def                  = "plasmacannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 		[4]                      = {
 			def                  = "plasmacannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 		[5]                      = {
 			def                  = "clusterrockets",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 		[6]                      = {
 			def                  = "clusterrockets",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 		[7]                      = {
 			def                  = "missile",
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 		[8]                      = {
 			def                  = "missile",
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 			slaveto				 = 1,
 		},
 	},

@@ -19,7 +19,7 @@ unitDef                     = {
 
 	-- End Cloaking
 
-	category                      = "BUILDING NOTAIR",
+	category                      = "BUILDING",
 	collisionVolumeTest           = "1",
 	description                   = [[Stealth Mine]],
 	energyStorage                 = 0,
@@ -70,7 +70,7 @@ unitDef                     = {
 		[1]                       = {
 			def                   = "mine",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "NOTAIR",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                  = {

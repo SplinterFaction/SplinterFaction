@@ -11,7 +11,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "ARMORED NOTAIR SKIRMISHER",
+	category                     = "GROUND",
 	description                  = [[Main Battle Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -75,18 +75,18 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "railgun",
-			-- onlyTargetCategory   = "BIO LIGHT ARMORED BUILDING",
-			-- badTargetCategory    = "BUILDING WALL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                      = {
 			def                  = "lasercannon",
-			-- onlyTargetCategory   = "BIO LIGHT ARMORED BUILDING",
-			-- badTargetCategory    = "BUILDING WALL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[3]                      = {
 			def                  = "lasercannon",
-			-- onlyTargetCategory   = "BIO LIGHT ARMORED BUILDING",
-			-- badTargetCategory    = "BUILDING WALL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                 = {

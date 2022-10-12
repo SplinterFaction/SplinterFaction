@@ -11,7 +11,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "LIGHT AMPHIB RAID NOTAIR",
+	category                     = "GROUND",
 	description                  = [[Raider]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -74,7 +74,8 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "flamethrower",
-			onlyTargetCategory    = "NOTAIR",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                 = {

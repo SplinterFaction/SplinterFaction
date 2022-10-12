@@ -11,7 +11,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "ARMORED NOTAIR SKIRMISHER",
+	category                     = "GROUND",
 	description                  = [[Anti-Air Support Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -80,7 +80,8 @@ unitDef                    = {
 		},
 		[2]                      = {
 			def                  = "flakcannon",
-			onlyTargetCategory   = "VTOL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING AIR",
 		},
 	},
 	customParams                 = {

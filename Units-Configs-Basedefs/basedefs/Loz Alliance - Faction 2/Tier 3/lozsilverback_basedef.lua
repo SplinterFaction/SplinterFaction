@@ -11,7 +11,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "ARMORED AMPHIB SKIRMISHER NOTAIR",
+	category                     = "GROUND",
 	description                  = [[Endbringer Class Mobile Target Evaporator]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -71,18 +71,28 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "heavyrailgun",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                      = {
 			def                  = "railgun",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[3]                      = {
 			def                  = "railgun",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[4]                      = {
 			def                  = "flamethrower",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[5]                      = {
 			def                  = "shield",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                 = {

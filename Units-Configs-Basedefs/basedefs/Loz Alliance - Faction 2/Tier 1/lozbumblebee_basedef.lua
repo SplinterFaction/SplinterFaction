@@ -37,7 +37,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = true,
-	category                     = "VTOL",
+	category                     = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 200,
 	description                  = [[Bomber]],
@@ -97,13 +97,13 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "bomb",
-			onlyTargetCategory	 = "BUILDING NOTAIR",
+			onlyTargetCategory	 = "AIR",
 			mainDir = "0 -1 0",
 			maxAngleDif = 200,
 		},
 		[2]                      = {
 			def                  = "laser",
-			onlyTargetCategory	 = "VTOL",
+			onlyTargetCategory	 = "AIR",
 			mainDir = "0 0 -1",
 			maxAngleDif = 200,
 		},

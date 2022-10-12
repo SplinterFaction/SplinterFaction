@@ -6,7 +6,7 @@ unitDef                     = {
 	buildTime                     = 5,
 	canAttack                     = true,
 	canstop                       = "1",
-	category                      = "BUILDING NOTAIR",
+	category                      = "BUILDING",
 	collisionVolumeTest           = "1",
 	description                   = [[Long Range Artillery Turret]],
 	energyStorage                 = 0,
@@ -57,8 +57,8 @@ unitDef                     = {
 	weapons                       = {
 		[1]                       = {
 			def                   = "plasmacannon",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "NOTAIR BUILDING",
+			badTargetCategory     = "GROUND",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                  = {

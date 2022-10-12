@@ -6,7 +6,7 @@ unitDef                     = {
 	buildTime                     = 5,
 	canAttack                     = true,
 	canstop                       = "1",
-	category                      = "BUILDING NOTAIR",
+	category                      = "BUILDING",
 	collisionVolumeTest           = "1",
 	description                   = [[Light Anti-Air Turret]],
 	energyStorage                 = 0,
@@ -56,7 +56,7 @@ unitDef                     = {
 	weapons                       = {
 		[1]                       = {
 			def                   = "beamweapon",
-			onlyTargetCategory    = "VTOL",
+			onlyTargetCategory    = "AIR",
 		},
 	},
 	customParams                  = {
@@ -124,7 +124,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 6,
+			default               = 3,
 		},
 	},
 }

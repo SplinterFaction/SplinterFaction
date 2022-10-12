@@ -6,7 +6,7 @@ unitDef                     = {
 	buildTime                     = 5,
 	canAttack                     = true,
 	canstop                       = "1",
-	category                      = "BUILDING NOTAIR",
+	category                      = "BUILDING",
 	collisionVolumeTest           = "1",
 	description                   = [[Light Anti-Ground Turret]],
 	energyStorage                 = 0,
@@ -62,7 +62,7 @@ unitDef                     = {
 		[1]                       = {
 			def                   = "clusterrockets",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "NOTAIR BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                  = {

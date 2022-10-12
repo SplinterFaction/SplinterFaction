@@ -12,7 +12,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "LIGHT NOTAIR SUPPORT",
+	category                     = "GROUND",
 	description                  = [[Self-Propelled Long-Range Artillery]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -74,7 +74,8 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "Artilleryweapon",
-			badTargetCategory    = "VTOL",
+			badTargetCategory     = "GROUND",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                 = {

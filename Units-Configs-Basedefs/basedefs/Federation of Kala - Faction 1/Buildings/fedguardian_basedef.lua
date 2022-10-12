@@ -7,7 +7,7 @@ unitDef                     = {
 	buildpic					  = "eheavyturret2.png",
 	canAttack                     = true,
 	canstop                       = "1",
-	category                      = "BUILDING NOTAIR",
+	category                      = "BUILDING",
 	description                   = [[Heavy Plasma Battery (Anti-Armor)]],
 	energyStorage                 = 0,
 	energyUse                     = 0,
@@ -56,7 +56,8 @@ unitDef                     = {
 	weapons                       = {
 		[1]                       = {
 			def                   = "plasmacannon",
-			onlyTargetCategory    = "NOTAIR",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                  = {

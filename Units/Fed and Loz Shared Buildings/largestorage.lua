@@ -17,7 +17,7 @@ local unitDef                     = {
 	builder                       = false,
 	buildTime                     = 5,
 	canAttack			          = false,
-	category                      = "BUILDING NOTAIR ECO",
+	category                      = "BUILDING",
 
 	description                   = [[Provides +]] .. storage .. [[ Metal/Energy Storage]],
 	energyStorage                 = storage,

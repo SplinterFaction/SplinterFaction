@@ -13,7 +13,7 @@ unitDef                    = {
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
-	category                     = "ARMORED NOTAIR SUPPORT",
+	category                     = "GROUND",
 	description                  = [[Endbringer Class Nuclear Battle Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -74,6 +74,7 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "nukeartyweapon",
+			onlyTargetCategory    = "GROUND BUILDING",
 		},
 	},
 	customParams                 = {
