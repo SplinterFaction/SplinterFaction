@@ -97,7 +97,8 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "bomb",
-			onlyTargetCategory	 = "AIR",
+			badTargetCategory    = "GROUND",
+			onlyTargetCategory   = "GROUND BUILDING",
 			mainDir = "0 -1 0",
 			maxAngleDif = 200,
 		},
@@ -147,6 +148,7 @@ weaponDefs                 = {
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
+		canAttackGround		   = false,
 		cegTag                 = "railgun",
 		rgbColor               = "1 0 0",
 		rgbColor2              = "1 1 1",

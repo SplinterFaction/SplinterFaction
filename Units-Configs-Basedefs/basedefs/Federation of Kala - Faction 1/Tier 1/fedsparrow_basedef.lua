@@ -149,6 +149,7 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
+		canAttackGround		     = false,
 		explosionGenerator       = "custom:burnblacksmall",
 		coreThickness            = 0.1,
 		duration                 = 0.4,

@@ -75,13 +75,12 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "lasercannon",
-			-- onlyTargetCategory   = "BIO LIGHT ARMORED BUILDING",
-			-- badTargetCategory    = "BUILDING WALL",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING AIR",
 		},
 		[2]                      = {
 			def                  = "flakcannon",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING AIR",
+			onlyTargetCategory    = "AIR",
 		},
 	},
 	customParams                 = {
