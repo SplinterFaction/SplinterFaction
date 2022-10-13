@@ -10,7 +10,7 @@
 -- What happens:
 -- unitdefs_post.lua calls the _Post functions for unitDefs and any weaponDefs that are contained in the unitdef files
 -- unitdefs_post.lua writes the corresponding unitDefs to customparams (if wanted)
--- weapondefs_post.lua fetches any weapondefs from the unitdefs, 
+-- weapondefs_post.lua fetches any weapondefs from the unitdefs,
 -- weapondefs_post.lua fetches the standlaone weapondefs, calls the _post functions for them, writes them to customparams (if wanted)
 -- strictly speaking, alldefs.lua is a misnomer since this file does not handle armordefs, featuredefs or movedefs
 
@@ -467,8 +467,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					if damagetypelower == '' or damagetypelower == nil then
 						damagetypelower = defaultClass
 					end
-					--Spring.Echo(damagetypelower)	
-					--Spring.Echo(" ")	
+					--Spring.Echo(damagetypelower)
+					--Spring.Echo(" ")
 					if damageTypes[damagetypelower]	then
 						for armorClass, armorMultiplier in pairs(damageTypes[damagetypelower]) do
 							--Spring.Echo(wd.name, armorClass, weapondamage*armorMultiplier )

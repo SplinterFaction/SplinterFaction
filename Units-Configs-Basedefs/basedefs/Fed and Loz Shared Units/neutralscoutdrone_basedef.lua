@@ -1,12 +1,12 @@
-unitDef                    = {
-	acceleration                 = 0.5,
-	airStrafe                    = false,
-	brakeRate                    = 0.7,
+unitDef                       = {
+	acceleration                 = 0.25,
+	airStrafe                    = true,
+	brakeRate                    = 0.25,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 20,
 	buildTime                    = 2.5,
-	buildpic					 = "neutralscoutdrone.png",
-	canAttack                    = false,
+	buildpic                     = "neutralscoutdrone.png",
+	canAttack                    = true,
 	canDropFlare                 = false,
 	canFly                       = true,
 
@@ -14,31 +14,31 @@ unitDef                    = {
 	--------------------------------------------------------------------------------
 	-- Fix Spring's Awful Defaults for Planes
 	-- Flight Characteristics Settings
-
-	wingDrag            = 0.07,
-	wingAngle           = 0.08,
-	frontToSpeed        = 0,    -- New Default
-	speedToFront        = 0.1,  -- New Default
-	crashDrag           = 0.005,
-	maxBank             = 0.7,  -- New Default
-	maxPitch            = 0.65, -- New Default
-	turnRadius          = 20.0,  -- New Default
-	verticalSpeed       = 3.0,
-	maxAileron          = 0.025, -- New Default
-	maxElevator         = 0.01,
-	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
-	maxAcc          	= 1.2,    -- OG Default was 0.065
-
-	useSmoothMesh		= true,
+ --[[
+	wingDrag                     = 0.07,
+	wingAngle                    = 0.08,
+	frontToSpeed                 = 0, -- New Default
+	speedToFront                 = 0.1, -- New Default
+	crashDrag                    = 0.005,
+	maxBank                      = 0.7, -- New Default
+	maxPitch                     = 0.65, -- New Default
+	turnRadius                   = 200.0, -- New Default
+	verticalSpeed                = 3.0,
+	maxAileron                   = 0.025, -- New Default
+	maxElevator                  = 0.01,
+	maxRudder                    = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxAcc                       = 1.2, -- OG Default was 0.065
+]]--
+	useSmoothMesh                = true,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 
 	canGuard                     = true,
-	canLoopbackAttack            = true,
+	canLoopbackAttack            = false,
 	canMove                      = true,
 	canPatrol                    = true,
-	canstop                      = "1",
+	canstop                      = true,
 	category                     = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 75,
@@ -55,60 +55,55 @@ unitDef                    = {
 	idleTime                     = 2200,
 	maxDamage                    = 220,
 	maxSlope                     = 90,
-	maxVelocity                  = 15,
-	--verticalSpeed		         = 15,
+	maxVelocity                  = 10,
+	--verticalSpeed              = 15,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
-	moverate1                    = "8",
 	name                         = humanName,
 	objectName                   = objectName,
-	script			             = script,
+	script                       = script,
 	radarDistance                = 0,
-	repairable		             = false,
+	repairable                   = false,
 	selfDestructAs               = "smallExplosionGenericPurple",
-	sightDistance                = 1000,
-	SonarDistance                = 1000,
+	sightDistance                = 500,
 	smoothAnim                   = true,
 	stealth                      = true,
-	turnRate                     = 5000,
+	turnRate                     = 200,
 	unitname                     = unitName,
-	sfxtypes                     = { 
-		pieceExplosionGenerators = { 
-			"deathceg3", 
-			"deathceg4", 
-		}, 
+	sfxtypes                     = {
+		pieceExplosionGenerators    = {
+			"deathceg3",
+			"deathceg4",
+		},
 
-		explosiongenerators      = {
+		explosiongenerators         = {
 			"custom:jetstrail",
 			"custom:blacksmoke",
 		},
 	},
 	sounds                       = {
-		underattack              = "other/unitsunderattack1",
-		ok                       = {
+		underattack                 = "other/unitsunderattack1",
+		ok                          = {
 			"ack",
 		},
-		select                   = {
+		select                      = {
 			"unitselect",
 		},
 	},
-	weapons                      = {
-
-	},
 	customParams                 = {
-		unittype				  = "air",
-		unitrole				  = "Scout",
-		death_sounds             = "generic",
-		RequireTech              = tech,
-		supply_cost              = 1,
-		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
-		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	             = "Neutral",
+		unittype                    = "air",
+		unitrole                    = "Scout",
+		death_sounds                = "generic",
+		RequireTech                 = tech,
+		supply_cost                 = 1,
+		normaltex                   = "unittextures/lego2skin_explorernormal.dds",
+		buckettex                   = "unittextures/lego2skin_explorerbucket.dds",
+		factionname                 = "Neutral",
 	},
 }
 
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName]    = unitDef })
+return lowerkeys({ [unitName] = unitDef })
 
 --------------------------------------------------------------------------------
