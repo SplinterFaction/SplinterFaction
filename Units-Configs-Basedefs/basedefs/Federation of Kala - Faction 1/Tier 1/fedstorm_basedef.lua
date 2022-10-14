@@ -7,7 +7,7 @@ unitDef                    = {
 	acceleration                 = 1,
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 100,
+	buildCostMetal               = 95,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedstorm.png]],
@@ -146,7 +146,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		}, 
 		damage                    = {
-			default               = 45,
+			default               = 60,
 		},
 	},
 }

@@ -13,7 +13,7 @@ return {
 	name='SplinterFaction',
 	description='SplinterFaction',
 	shortname='SF',
-	version='git:ff1a2f2',
+	version='git:a204f17',
 	mutator='Official',
 	game='SplinterFaction',
 	shortGame='SF',
