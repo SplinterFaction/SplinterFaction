@@ -145,7 +145,7 @@ weaponDefs                 = {
 		reloadtime             = 1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/plasma3c.wav",
+		soundStart             = "weapons/roachrailgun.wav",
 		texture1               = "shot",
 		texture2               = "empty",
 		coreThickness          = 0.4,
@@ -193,7 +193,7 @@ weaponDefs                 = {
 	},
 
 	commnuke                   = {
-		AreaOfEffect              = 500,
+		AreaOfEffect              = 1000,
 		avoidFriendly             = false,
 		avoidFeature              = false,
 		cegTag                    = "NUKETRAIL",
@@ -245,7 +245,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 1000,
+			default               = 10000,
 		},
 	},
 }

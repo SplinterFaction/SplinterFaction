@@ -57,8 +57,8 @@ local featureReclaimVisibility  = true      -- draw feature bars for reclaimed f
 
 local minPercentageDistance     = 500000     -- always show health percentage text below this distance
 local infoDistance              = 800000
-local maxFeatureInfoDistance    = 300000    --max squared distance at which text it drawn for features 
-local maxFeatureDistance        = 550000    --max squared distance at which any info is drawn for features 
+local maxFeatureInfoDistance    = 300000    --max squared distance at which text it drawn for features
+local maxFeatureDistance        = 550000    --max squared distance at which any info is drawn for features
 local maxUnitDistance           = 11000000  --max squared distance at which any info is drawn for units  MUST BE LARGER THAN FOR FEATURES!
 
 local minReloadTime             = 4 --// in seconds
@@ -1099,10 +1099,10 @@ do
 	  local morph = UnitMorphs[unitID]
 	  if morph then
         local infotext = ''
-        if (fullText and (drawBarPercentage > 0 or dist < minPercentageDistance)) then
+       -- if (fullText and (drawBarPercentage > 0 or dist < minPercentageDistance)) then
             infotext = floor(morph.progress*100)..'%'
             AddBar("Upgrading",morph.progress,"build",infotext or '')
-        end
+        -- end
 	  end
 
       --// PARALYZE
@@ -1538,7 +1538,7 @@ function MorphFinished(unitID)
 		if resourcePrompts == 1 then
 			Spring.PlaySoundFile("sounds/ui/evolutionfinished.wav", 1)
 		end
-		Spring.Echo("Your unit(s) have finished Evolving")
+		Spring.Echo("Your unit(s) have finished Upgrading")
 		notificationTimeout = 10
 		UnitMorphs[unitID] = nil
 	end

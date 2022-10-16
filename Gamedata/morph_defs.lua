@@ -115,7 +115,8 @@ local morphDefs = {
 		{
 		into    = 'fedcommander_up1',
 		time    = timeToBuild_fedcommander_up1,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 1
+Upgrade]],
 		energy  = energyCost_fedcommander_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 with upgraded weapons and armor',
@@ -126,7 +127,8 @@ local morphDefs = {
 		{
 		into    = 'fedcommander_up2',
 		time    = timeToBuild_fedcommander_up2,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 2
+Upgrade]],
 		energy  = energyCost_fedcommander_up2,
 		metal   = 0,
 		text    = 'Upgrade to Tech 2 with upgraded weapons and armor',
@@ -138,7 +140,8 @@ local morphDefs = {
 		{
 		into    = 'fedcommander_up3',
 		time    = timeToBuild_fedcommander_up3,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 3
+Upgrade]],
 		energy  = energyCost_fedcommander_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 with upgraded weapons and armor',
@@ -150,7 +153,8 @@ local morphDefs = {
 		{
 		into    = 'fedcommander_up4',
 		time    = timeToBuild_fedcommander_up4,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 4
+Upgrade]],
 		energy  = energyCost_fedcommander_up4,
 		metal   = 0,
 		text    = 'Upgrade into a Tech 4 BattleMech with Devestating weapons and armor',
@@ -166,42 +170,46 @@ local morphDefs = {
 		{
 		into    = 'lozcommander_up1',
 		time    = timeToBuild_lozcommander_up1,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 1
+Upgrade]],
 		energy  = energyCost_lozcommander_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 with upgraded weapons and armor',
 		},
 	},
-	
+
 	lozcommander_up1 = {
 		{
 		into    = 'lozcommander_up2',
 		time    = timeToBuild_lozcommander_up2,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 2
+Upgrade]],
 		energy  = energyCost_lozcommander_up2,
 		metal   = 0,
 		text    = 'Upgrade to Tech 2 with upgraded weapons and armor',
 		require = [[tech1]],
 		},
 	},
-		
+
 	lozcommander_up2 = {
 		{
 		into    = 'lozcommander_up3',
 		time    = timeToBuild_lozcommander_up3,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 3
+Upgrade]],
 		energy  = energyCost_lozcommander_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 with upgraded weapons and armor',
 		require = [[tech2]],
 		},
 	},
-		
+
 	lozcommander_up3 = {
 		{
 		into    = 'lozcommander_up4',
 		time    = timeToBuild_lozcommander_up4,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 4
+Upgrade]],
 		energy  = energyCost_lozcommander_up4,
 		metal   = 0,
 		text    = 'Upgrade to a Tech 4 BattleMech with Devestating weapons and armor',
@@ -215,7 +223,8 @@ local morphDefs = {
 		{
 		into    = 'lozengineer_up1',
 		time    = timeToBuild_lozengineer_up1,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 1
+Upgrade]],
 		energy  = energyCost_lozengineer_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 Engineer',
@@ -227,7 +236,8 @@ local morphDefs = {
 		{
 		into    = 'lozengineer_up2',
 		time    = timeToBuild_lozengineer_up2,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 2
+Upgrade]],
 		energy  = energyCost_lozengineer_up2,
 		metal   = 0,
 		text    = 'Upgrade to Tech 2 Engineer',
@@ -239,7 +249,8 @@ local morphDefs = {
 		{
 		into    = 'lozengineer_up3',
 		time    = timeToBuild_lozengineer_up3,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 3
+Upgrade]],
 		energy  = energyCost_lozengineer_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 Engineer',
@@ -252,7 +263,8 @@ local morphDefs = {
 		{
 		into    = 'fedengineer_up1',
 		time    = timeToBuild_fedengineer_up1,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 1
+Upgrade]],
 		energy  = energyCost_fedengineer_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 Engineer',
@@ -264,7 +276,8 @@ local morphDefs = {
 		{
 		into    = 'fedengineer_up2',
 		time    = timeToBuild_fedengineer_up2,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 2
+Upgrade]],
 		energy  = energyCost_fedengineer_up2,
 		metal   = 0,
 		text    = 'Upgrade to Tech 2 Engineer',
@@ -276,7 +289,8 @@ local morphDefs = {
 		{
 		into    = 'fedengineer_up3',
 		time    = timeToBuild_fedengineer_up3,
-		cmdname = [[Upgrade]],
+		cmdname = [[Tech 3
+Upgrade]],
 		energy  = energyCost_fedengineer_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 Engineer',
@@ -293,7 +307,8 @@ local morphDefs = {
 			into      = 'metalextractor_up1',
 			--require = 'etech2',
 			time      = timeToBuild_metalextractor_up1,
-			cmdname   = [[Upgrade]],
+			cmdname   = [[Tech 1
+			Upgrade]],
 			energy    = energyCost_metalextractor_up1,
 			metal     = 0,
 			text      = [[x2 Metal Extraction rate]],
@@ -305,7 +320,8 @@ local morphDefs = {
 			into      = 'metalextractor_up2',
 			--require = 'etech2',
 			time      = timeToBuild_metalextractor_up2,
-			cmdname   = [[Upgrade]],
+			cmdname   = [[Tech 2
+			Upgrade]],
 			energy    = energyCost_metalextractor_up2,
 			metal     = 0,
 			text      = [[x4 Metal Extraction rate]],
@@ -317,7 +333,8 @@ local morphDefs = {
 			into      = 'metalextractor_up3',
 			--require = 'etech2',
 			time      = timeToBuild_metalextractor_up3,
-			cmdname   = [[Upgrade]],
+			cmdname   = [[Tech 3
+			Upgrade]],
 			energy    = energyCost_metalextractor_up3,
 			metal     = 0,
 			text      = [[x8 Metal Extraction rate]],

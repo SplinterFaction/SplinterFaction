@@ -328,7 +328,7 @@ weaponDefs                 = {
 	},
 
 	commnuke                   = {
-		AreaOfEffect              = 500,
+		AreaOfEffect              = 1000,
 		avoidFriendly             = false,
 		avoidFeature              = false,
 		cegTag                    = "NUKETRAIL",
@@ -380,7 +380,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 1000,
+			default               = 10000,
 		},
 	},
 }

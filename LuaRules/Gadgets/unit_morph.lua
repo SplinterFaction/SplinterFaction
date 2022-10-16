@@ -131,7 +131,7 @@ if (gadgetHandler:IsSyncedCode()) then
 
 include("LuaRules/colors.h.lua")
 
-local stopPenalty  = 0.667
+local stopPenalty  = 1
 local morphPenalty = 1.6
 local upgradingBuildSpeed = 250   -- Commander workertime = 300
 local XpScale = 1.0
@@ -563,8 +563,8 @@ local function StopMorph(unitID, morphData)
   -- Spring.GiveOrderToUnit(unitID, CMD.ONOFF, { 1 }, { "alt" })
   local usedMetal  = morphData.def.metal  * scale
   Spring.AddUnitResource(unitID, 'metal',  usedMetal)
-  --local usedEnergy = morphData.def.energy * scale
-  --Spring.AddUnitResource(unitID, 'energy', usedEnergy)
+  local usedEnergy = morphData.def.energy * scale
+  Spring.AddUnitResource(unitID, 'energy', usedEnergy)
 
   SendToUnsynced("unit_morph_stop", unitID)
 

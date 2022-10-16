@@ -145,7 +145,7 @@ weaponDefs                 = {
 		reloadtime             = 2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/plasma3c.wav",
+		soundStart             = "weapons/mammothrailgun.wav",
 		texture1               = "shot",
 		texture2               = "empty",
 		coreThickness          = 0.4,
@@ -193,7 +193,7 @@ weaponDefs                 = {
 	},
 
 	commnuke                   = {
-		AreaOfEffect              = 500,
+		AreaOfEffect              = 1000,
 		avoidFriendly             = false,
 		avoidFeature              = false,
 		cegTag                    = "NUKETRAIL",
@@ -207,31 +207,31 @@ weaponDefs                 = {
 		explosionGenerator        = "custom:NUKEDATBEWMSMALL",
 		fireStarter               = 100,
 		flightTime                = 400,
-		
+
 		id                        = 124,
 		impulseBoost              = 0,
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,
-		
+
 		metalpershot              = 0,
 		model                     = "enuke.s3o",
 		name                      = "Nuke",
 		range                     = 32000,
 		reloadtime                = 60,
 		weaponType		          = "MissileLauncher",
-		
-		
+
+
 		smokeTrail                = false,
 		soundHit                  = "explosions/explosion_enormous.wav",
 		soundStart                = "weapons/nukelaunch.wav",
-		
---		stockpile                 = true,
---		stockpileTime             = stockpiletime,
+
+		--		stockpile                 = true,
+		--		stockpileTime             = stockpiletime,
 		startVelocity             = 10,
 		tracks                    = true,
 		turnRate                  = 3000,
 		targetable			      = 1,
-		
+
 		weaponAcceleration        = 30,
 		weaponTimer               = 15,
 		weaponType                = "StarburstLauncher",
@@ -243,9 +243,9 @@ weaponDefs                 = {
 			expl_light_radius	= 10000, -- In Elmos
 			expl_light_life		= 600, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
-		},      
+		},
 		damage                    = {
-			default               = 1000,
+			default               = 10000,
 		},
 	},
 }
