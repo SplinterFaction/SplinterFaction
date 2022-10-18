@@ -3,7 +3,7 @@
 --Buildlists for factories
 
 Shared.buildListf1landfac = {
-	[[neutralscoutdrone]],
+	[[airscout]],
 	[[fedak]],
 	[[fedstorm]],
 	[[fedthud]],
@@ -23,7 +23,7 @@ Shared.buildListf1landfac = {
 }
 
 Shared.buildListf2landfac = {
-	[[neutralscoutdrone]],
+	[[airscout]],
 	[[lozflea]],
 	[[lozdiamondback]],
 	[[lozroach]],

@@ -628,6 +628,12 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			if unitDef.customparams and unitDef.customparams.factionname == "Neutral" then
 				if unitDef.customparams then
+					if unitDef.customparams.unittype == "mobile" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
+					end
+					if unitDef.customparams.unittype == "air" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 4
+					end
 					if unitDef.customparams.unittype == "building" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
 					end
