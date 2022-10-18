@@ -610,6 +610,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unittype == "mobile" or unitDef.customparams.unittype == "building" then
 				unitDef.losemitheight = 300
 				unitDef.seismicsignature = 1
+				unitDef.seismicdistance = 1
 				if unitDef.sightdistance <= 850 then
 					unitDef.seismicdistance = unitDef.sightdistance + 150
 				end
