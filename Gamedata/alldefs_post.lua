@@ -604,6 +604,22 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			]]--
 
 			--------------------------------------------------------------------------------
+			-- Raise emitheight for all ground units and add seismic sensors to everything
+			--------------------------------------------------------------------------------
+
+			if unitDef.customparams.unittype == "mobile" or unitDef.customparams.unittype == "building" then
+				unitDef.losemitheight = 300
+				unitDef.seismicsignature = 1
+				if unitDef.sightdistance <= 850 then
+					unitDef.seismicdistance = unitDef.sightdistance + 150
+				end
+				if unitDef.seismicdistance > 1000 then
+					unitDef.seismicdistance = 1000
+				end
+			end
+
+
+			--------------------------------------------------------------------------------
 			-- Metal and Role Based Finalized HP -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
 			--------------------------------------------------------------------------------
 
