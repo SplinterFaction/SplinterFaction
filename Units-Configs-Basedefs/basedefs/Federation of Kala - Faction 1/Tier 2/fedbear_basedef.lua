@@ -137,6 +137,8 @@ weaponDefs                 = {
 		range                  = 750,
 		reloadtime             = 1.6,
 		size					 = 8,
+		stages                 = 20,
+		alphaDecay             = 0.1,
 		--projectiles			   = projectiles,
 		weaponType		       = "Cannon",
 		soundStart             = "weapons/bruisercannon.wav",
@@ -178,7 +180,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 750,
-		reloadtime               = 0.2,
+		reloadtime               = 0.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -196,7 +198,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 6,
+			default              = 15,
 		},
 	},
 }
