@@ -32,6 +32,7 @@ if gadgetHandler:IsSyncedCode() then
 		"techpylon",
 		"wheelassembly",
 		"wings",
+		"randomdeadtank1",
 	}
 
 	function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
