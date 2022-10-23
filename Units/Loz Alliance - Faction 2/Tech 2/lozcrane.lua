@@ -1,22 +1,19 @@
--- UNITDEF --FEDBOMBER --
 --------------------------------------------------------------------------------
 
-unitName = "fedbomber"
+unitName = "lozcrane"
 
 --------------------------------------------------------------------------------
 
-isUpgraded = [[0]]
+humanName = [[Crane]]
 
-humanName = [[Broadsword]]
-
-objectName = "fedbomber.s3o"
-script = "fedbomber.cob"
+objectName = "lozcrane.s3o"
+script = "lozcrane_lus.lua"
 
 
 tech = [[tech2]]
-armortype = [[air]]
 
-VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedbomber_basedef.lua")
+VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Loz Alliance - Faction 2/Tier 2/lozcrane_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 

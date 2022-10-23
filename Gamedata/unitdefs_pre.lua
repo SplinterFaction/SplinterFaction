@@ -3,13 +3,10 @@
 --Buildlists for factories
 
 Shared.buildListf1landfac = {
-	[[airscout]],
 	[[fedak]],
 	[[fedstorm]],
 	[[fedthud]],
 	[[fedcrasher]],
-	[[fedsparrow]],
-	[[fedcrow]],
 	[[fedbear]],
 	[[fedcobra]],
 	[[fedavalanche]],
@@ -20,16 +17,18 @@ Shared.buildListf1landfac = {
 	[[fedengineer_up1]],
 	[[fedengineer_up2]],
 	[[fedengineer_up3]],
+	[[airscout]],
+	[[fedsparrow]],
+	[[fedcrow]],
+	[[fedhawk]],
+	[[fedcondor]],
 }
 
 Shared.buildListf2landfac = {
-	[[airscout]],
 	[[lozflea]],
 	[[lozdiamondback]],
 	[[lozroach]],
 	[[lozscorpion]],
-	[[lozwasp]],
-	[[lozbumblebee]],
 	[[lozreaper]],
 	[[lozluger]],
 	[[lozpulverizer]],
@@ -39,6 +38,11 @@ Shared.buildListf2landfac = {
 	[[lozengineer_up1]],
 	[[lozengineer_up2]],
 	[[lozengineer_up3]],
+	[[airscout]],
+	[[lozwasp]],
+	[[lozhornet]],
+	[[lozcrane]],
+	[[lozbumblebee]],
 }
 
 -----------------------------

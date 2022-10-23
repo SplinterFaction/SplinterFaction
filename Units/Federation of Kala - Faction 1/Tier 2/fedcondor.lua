@@ -1,24 +1,19 @@
--- UNITDEF -- FEDGUNSHIP --
 --------------------------------------------------------------------------------
 
-unitName = "FEDGUNSHIP"
+unitName = "fedcondor"
 
 --------------------------------------------------------------------------------
 
-isUpgraded = [[0]]
+humanName = [[Condor]]
 
-humanName = [[Scimitar]]
-
-objectName = "fedgunship.s3o"
-script = "fedgunship.cob"
+objectName = "fedcondor.s3o"
+script = "fedcondor_lus.lua"
 
 
 tech = [[tech2]]
-armortype = [[air]]
-supply = [[2]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/tier 2/fedgunship_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 2/fedcondor_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 

@@ -40,7 +40,7 @@ for unitDefID = 1, #UnitDefs do
 	
 	if ud.customParams.shield_radius then
 		local radius = tonumber(ud.customParams.shield_radius)
-		Spring.Echo(ud.name, radius)
+		-- Spring.Echo("[LUPS Shield FX] " .. ud.name, radius)
 		if not searchSizes[radius] then
 			local searchType = (radius > 250 and SEARCH_LARGE) or SEARCH_SMALL
 			local search = {}

@@ -69,8 +69,6 @@ end
 function script.Killed()
     Explode(base, SFX.EXPLODE_ON_HIT)
     Explode(turretball1, SFX.EXPLODE_ON_HIT)
-    Explode(turretball2, SFX.EXPLODE_ON_HIT)
     Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
-    Explode(gatlingspins2, SFX.EXPLODE_ON_HIT)
     return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

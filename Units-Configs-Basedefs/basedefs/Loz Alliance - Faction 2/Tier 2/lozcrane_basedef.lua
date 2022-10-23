@@ -1,9 +1,10 @@
 unitDef                    = {
-	acceleration                 = 0.1,
-	airStrafe                    = false,
-	brakeRate                    = 0.1,
+	acceleration                 = 0.8,
+	airStrafe                    = true,
+	bankingAllowed               = true,
+	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 200,
+	buildCostMetal               = 80,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -14,6 +15,7 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
+	--[[
 	wingDrag            = 0.07,
 	wingAngle           = 0.08,
 	frontToSpeed        = 0,    -- New Default
@@ -26,7 +28,8 @@ unitDef                    = {
 	maxAileron          = 0.025, -- New Default
 	maxElevator         = 0.01,
 	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
-	maxAcc          	= 1.2,    -- OG Default was 0.065
+	]]--
+	maxAcc          	= 0.000001,    -- OG Default was 0.065
 
 	useSmoothMesh		= true,
 
@@ -40,7 +43,7 @@ unitDef                    = {
 	category                     = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 100,
-	description                  = [[Interceptor]],
+	description                  = [[Transport]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -48,14 +51,14 @@ unitDef                    = {
 	footprintX                   = 5,
 	footprintZ                   = 5,
 	floater                      = true,
-	hoverAttack                  = false,
+	hoverAttack                  = true,
 	iconType                     = "air_bomb",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
-	canLoopbackAttack            = true,
+	canLoopbackAttack            = false,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 12,
+	maxVelocity                  = 10,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -64,7 +67,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 680,
+	sightDistance                = 500,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -72,6 +75,78 @@ unitDef                    = {
 	unitname                     = unitName,
 	upright						 = true,
 	workerTime                   = 0,
+
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+	-- Transport specific tags
+
+	transportSize			= 4,
+	-- minTransportSize			=
+	transportCapacity		= 1,
+	-- transportMass			=
+	-- minTransportMass			=
+	-- loadingRadius			=
+	-- unloadSpread				=
+	-- isFirePlatform			= false,
+	-- holdSteady				=
+	releaseHeld				= false,
+	-- cantBeTransported		=
+	-- transportByEnemy			=
+	transportUnloadMethod	= 0,
+	-- fallSpeed				=
+	-- unitFallSpeed			=
+
+	--[[
+	int transportSize default: 0
+		The size of units that the transport can pick up, in terms of the passengers footprintX.
+
+	int minTransportSize default: 0
+		The smallest size of unit that the transport can pick up, in terms of the passengers footprintX.
+
+	int transportCapacity default: 0
+		The total number of units that the transport can pick up, with each unit multiplied by it's footprintX size. Prior to 101.0 if this tag is not present, then any Script.AttachUnit and Script.DropUnit call in the animation script will be ignored (See Animation-LuaCallouts#Other), in successive versions all units can use Spring.UnitAttach et al regardless of this tag.
+
+	float transportMass default: 100000.0
+		The total cumulative mass of passengers the transport can carry.
+
+	float minTransportMass default: 0.0
+		The minimum mass passenger the transport can carry.
+
+	float loadingRadius default: 220.0
+		How far away in elmos can the transporter pick up and drop units?
+
+	float unloadSpread default: 5.0
+		How spread out the passengers are when unloaded. Is multiplied by the passengers radius.
+
+	bool isFirePlatform default: false
+		Can transported units still aim and shoot while loaded by this transport?
+
+	bool holdSteady default: false
+		If true - passengers are slaved to orientation of transporter attachment piece, if false - passengers are slaved to orientation of transporter body.
+
+	bool releaseHeld default: false
+		Does the transporter unload it's passengers when it dies?
+
+	bool cantBeTransported default: false for mobile units, true for structures
+		Controls if a unit is transportable at all or not. If false it is overridden by Modrules.lua transportability subtable tags.
+
+	bool transportByEnemy default: true
+		Controls if a unit can be transported by an enemy transport. i.e. can it be kidnapped.
+
+	int transportUnloadMethod default: 0
+		For air transports. Can be 0 - Land to unload individually, 1 - Flyover drop (i.e. Parachute), or 2 - Land and flood unload all passengers. Can be used on ground transports with mixed results.
+
+	float fallSpeed default: 0.2
+		For air transports with transportUnloadMethod = 1. The speed in elmos per second which units will fall at when released from the transport.
+
+	float unitFallSpeed default: 0.0
+
+		Allows you to override fallSpeed for an individual passenger.
+	]]--
+
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+
 	sfxtypes                     = { 
 		pieceExplosionGenerators = { 
 			"deathceg3", 
@@ -79,7 +154,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:jetstrail",
+			"custom:gdhcannon",
 			"custom:blacksmoke",
 		},
 	},
@@ -96,16 +171,9 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "railgun",
-			onlyTargetCategory	 = "AIR",
-			mainDir = "0 1 0",
-			maxAngleDif = 200,
-		},
-		[2]                      = {
-			def                  = "burstrailgun",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory	 = "GROUND BUILDING",
 			mainDir = "0 -1 0",
-			maxAngleDif = 200,
+			maxAngleDif = 180,
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
@@ -128,7 +196,7 @@ unitDef                    = {
 
 	customParams                 = {
 		unittype				 = "air",
-		unitrole				 = "Strike Fighter",
+		unitrole				 = "Combat Transport",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
@@ -143,11 +211,11 @@ unitDef                    = {
 
 weaponDefs                 = {
 	railgun               = {
+		areaofeffect		   = 70,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
-		canfireatground        = false,
 		cegTag                 = "railgun",
 		rgbColor               = "0.133 0 0.4",
 		rgbColor2              = "0.75 0.75 0.75",
@@ -158,57 +226,14 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 680,
+		range                  = 500,
 		reloadtime             = 1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/reaperrailgun.wav",
+		soundStart             = "weapons/cranerailgun.wav",
 		texture1               = "shot",
 		texture2               = "empty",
-		coreThickness          = 0.2,
-		thickness              = 6,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 3000,
-		customparams             = {
-			single_hit		 	 = true,
-			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 40,
-		},
-	},
-
-	burstrailgun               = {
-		areaofeffect           = 30,
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		burst                  = 3,
-		burstrate              = 0.2,
-		rgbColor               = "0.133 0 0.4",
-		rgbColor2              = "0.75 0.75 0.75",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.25,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "Railgun",
-		range                  = 680,
-		reloadtime             = 2,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/reaperrailgun.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.2,
+		coreThickness          = 0.4,
 		thickness              = 6,
 		tolerance              = 10000,
 		turret                 = true,
@@ -217,8 +242,8 @@ weaponDefs                 = {
 		customparams             = {
 			single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {

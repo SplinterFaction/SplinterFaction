@@ -66,6 +66,10 @@ end
 function script.FireWeapon(WeaponID)
 	if WeaponID == 1 then
 		EmitSfx (railfirepoint1, 1024)
+	elseif WeaponID == 2 then
+		EmitSfx (burstfirepoint1, 1024)
+	elseif WeaponID == 3 then
+		EmitSfx (burstfirepoint2, 1024)
 	end
 end
 

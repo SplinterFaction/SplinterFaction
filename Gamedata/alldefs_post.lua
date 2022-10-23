@@ -133,9 +133,9 @@ function UnitDef_Post(name, uDef)
 	if uDef.customparams and uDef.customparams.decloakradiusmodifier then
 		uDef.mincloakdistance = (radius * uDef.customparams.decloakradiusmodifier)
 	elseif uDef.customparams and uDef.customparams.decloakradiushalved then
-		uDef.mincloakdistance = (radius * 3)
+		uDef.mincloakdistance = (radius * 1.5)
 	else
-		uDef.mincloakdistance = (radius * 6)
+		uDef.mincloakdistance = (radius * 2)
 	end
 
 	--------------------------------------------------------------------------------
@@ -714,6 +714,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Strike Fighter" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
+			if unitDef.customparams.unitrole == "Combat Transport" then
+				unitDef.maxdamage = unitDef.maxdamage * 1.5
+			end
 
 
 			-- Turrets
@@ -821,6 +824,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				--Spring.Echo(uDef.name)
 				--Spring.Echo(uDef.maxdamage)
 			end
+
 		end
 	end
 end
