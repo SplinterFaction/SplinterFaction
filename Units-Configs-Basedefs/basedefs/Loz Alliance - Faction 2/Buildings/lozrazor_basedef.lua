@@ -85,6 +85,7 @@ weaponDefs = {
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		beamTime                 = 0.1,
+		beamttl                  = 4,
 		collideFeature           = false,
 		collideFriendly          = false,
 		canAttackGround 		 = false,
