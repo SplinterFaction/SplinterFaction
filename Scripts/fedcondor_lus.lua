@@ -171,10 +171,6 @@ function script.BeginTransport(passengerID)
     -- Spring.UnitAttach(transporterID, passengerID, link)
 end
 
-function script.QueryTransport(link)
-
-end
-
 function script.EndTransport()
    -- Spring.UnitDetachFromAir(passenger)
 end
