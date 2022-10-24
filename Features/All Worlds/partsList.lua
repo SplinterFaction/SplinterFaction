@@ -18,6 +18,7 @@ local partsList = {
 	"techpylon",
 	"wheelassembly",
 	"wings",
+	"randomdeadtank1",
 }
 
 local parts = {}
