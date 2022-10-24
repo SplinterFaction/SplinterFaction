@@ -96,7 +96,8 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "sniper",
-			onlyTargetCategory	 = "AIR",
+			badTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory	 = "AIR GROUND BUILDING",
 			mainDir = "0 0 1",
 			maxAngleDif = 200,
 		},

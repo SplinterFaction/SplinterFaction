@@ -29,7 +29,7 @@ unitDef                     = {
 	repairable		              = false,
 	selfDestructAs                = "largeBuildingExplosionGenericRed",
 	side                          = "CORE",
-	sightDistance                 = 1500,
+	sightDistance                 = 1000,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -56,8 +56,8 @@ unitDef                     = {
 	weapons                       = {
 		[1]                       = {
 			def                   = "railgun",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			badTargetCategory     = "BUILDING GROUND",
+			onlyTargetCategory    = "MASSIVE GROUND BUILDING",
 		},
 	},
 	customParams                  = {
@@ -96,7 +96,7 @@ weaponDefs                  = {
 		minintensity             = 1,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 1500,
+		range                  = 1000,
 		reloadtime             = 8,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
@@ -116,7 +116,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 2000,
+			default              = 4500,
 		},
 	},
 }
