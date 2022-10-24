@@ -30,12 +30,53 @@ end
 function widget:UnitCreated(unitID, unitDefID, unitTeam)
   local ud = UnitDefs[unitDefID]
   if ((ud ~= nil) and (unitTeam == Spring.GetMyTeamID())) then
-    if (ud.name == "esilo" or ud.name == "eshieldgen") then
-		-- give stockpilers 5 units to build
-		Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "shift" })
-    elseif (ud.name == "ecruisesilo") then
+    if (ud.name == "fedjavelin") then
 	-- give stockpilers 5 units to build
-		Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
+      Spring.GiveOrderToUnit(unitID, CMD.STOCKPILE, {}, { "ctrl" })
 	end
   end
 end
