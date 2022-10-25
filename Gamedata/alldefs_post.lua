@@ -235,13 +235,37 @@ function UnitDef_Post(name, uDef)
 	-- I'm using this to save myself a boatload of time
 	uDef.usePieceCollisionVolumes = false
 
-	if uDef.turnrate ~= nil then
+	if uDef.turnrate ~= nil and uDef.canfly ~= true then
 		-- Spring.Echo(uDef.name)
 		-- Spring.Echo(uDef.turnrate)
 		uDef.acceleration = 60000
 		uDef.turnrate = 1000
 		uDef.turninplacespeedlimit = 10
 		uDef.turninplace = false
+	elseif uDef.canfly == true and uDef.hoverattack == true then
+		uDef.turnrate = 250
+	end
+
+	if uDef.name == "Crane" then
+		Spring.Echo(uDef.name)
+
+		Spring.Echo("AirHoverfactor " .. tostring(uDef.airhoverfactor))
+		Spring.Echo("BankingAllowed " .. tostring(uDef.bankingallowed))
+		Spring.Echo("WingDrag " .. tostring(uDef.wingdrag))
+		Spring.Echo("WingAngle " .. tostring(uDef.wingangle))
+		Spring.Echo("FrontToSpeed " .. tostring(uDef.fronttospeed))
+		Spring.Echo("SpeedToFront " .. tostring(uDef.speedtofront))
+		Spring.Echo("CrashDrag " .. tostring(uDef.crashdrag))
+		Spring.Echo("MaxBank " .. tostring(uDef.maxbank))
+		Spring.Echo("MaxPitch " .. tostring(uDef.maxpitch))
+		Spring.Echo("TurnRadius " .. tostring(uDef.turnradius))
+		Spring.Echo("VerticalSpeed " .. tostring(uDef.verticalspeed))
+		Spring.Echo("MaxAileron " .. tostring(uDef.maxaileron))
+		Spring.Echo("MaxElevator " .. tostring(uDef.maxelevator))
+		Spring.Echo("MaxRudder " .. tostring(uDef.maxrudder))
+		Spring.Echo("MaxACC " .. tostring(uDef.maxacc))
+		Spring.Echo("AttackSafetyDistance " .. tostring(uDef.attacksafetydistance))
+		Spring.Echo("TurnRate " .. tostring(uDef.turnrate))
 	end
 
 end

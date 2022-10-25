@@ -180,7 +180,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 750,
-		reloadtime               = 0.5,
+		reloadtime               = 0.25,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -198,7 +198,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 15,
+			default              = 7.5,
 		},
 	},
 }

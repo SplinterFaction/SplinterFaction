@@ -161,8 +161,6 @@ weaponDefs                 = {
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
-		burst				   = 3,
-		burstrate			   = 0.3,
 		cegTag                 = "railgun",
 		rgbColor               = "1 0 0",
 		rgbColor2              = "1 1 1",
@@ -175,7 +173,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "E.M.G.",
 		range                  = 800,
-		reloadtime             = 2,
+		reloadtime             = 0.25,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/pointdefensefire.wav",
@@ -194,7 +192,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 10,
+			default              = 1.25,
 		},
 	},
 	clusterrockets             = {

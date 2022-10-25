@@ -163,20 +163,17 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 ]]--
 
-local passenger
-local transporter
 function script.BeginTransport(passengerID)
-    transporter = transporterID
-    passenger = passengerID
-    -- Spring.UnitAttach(transporterID, passengerID, link)
+    local unitHeight = Spring.GetUnitHeight(passengerID)
+    Move(link, y_axis, -unitHeight, 500)
 end
 
-function script.EndTransport()
-   -- Spring.UnitDetachFromAir(passenger)
-end
-
-function script.QueryTransport(passengerID)
+function script.QueryTransport()
     return link
+end
+
+function script.EndTransport(passengerID)
+    Move(link, y_axis, 0, 500)
 end
 
 function script.Killed()

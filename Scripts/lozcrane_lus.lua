@@ -15,8 +15,6 @@ terrainType = "terrainType"
 function script.Create()
     StartThread(common.SmokeUnit, {base, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, turretball1, railgunbarrel1, railgunfirepoint1, turretball2, railgunbarrel2, railgunfirepoint2, turretball3, railgunbarrel3, railgunfirepoint3, turretball4, railgunbarrel4, railgunfirepoint4, link})
 
-     Move(link, y_axis, 0, -500)
-
 --[[
     local engineRotate = 270
     Turn(engine1, x_axis, engineRotate, 100)
@@ -179,13 +177,16 @@ end
 
 
 function script.BeginTransport(passengerID)
+    local unitHeight = Spring.GetUnitHeight(passengerID)
+    Move(link, y_axis, -unitHeight, 500)
 end
 
-function script.QueryTransport(passengerID)
+function script.QueryTransport()
     return link
 end
 
 function script.EndTransport(passengerID)
+    Move(link, y_axis, 0, 500)
 end
 
 function script.Killed()

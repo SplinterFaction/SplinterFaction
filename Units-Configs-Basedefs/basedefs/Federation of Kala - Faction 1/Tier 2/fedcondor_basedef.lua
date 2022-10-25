@@ -1,37 +1,46 @@
 unitDef                    = {
 	acceleration                 = 0.8,
-	airStrafe                    = true,
-	bankingAllowed               = true,
 	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 80,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
-	canFly                       = true,
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Fix Spring's Awful Defaults for Planes
--- Flight Characteristics Settings
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+	-- Fix Spring's Awful Defaults for Planes
+	-- Flight Characteristics Settings
 
-	--[[
-	wingDrag            = 0.07,
-	wingAngle           = 0.08,
-	frontToSpeed        = 0,    -- New Default
-	speedToFront        = 0.001,  -- New Default
-	crashDrag           = 0.005,
-	maxBank             = 0.7,  -- New Default
-	maxPitch            = 0.65, -- New Default
-	turnRadius          = 20.0,  -- New Default
-	verticalSpeed       = 3.0,
-	maxAileron          = 0.025, -- New Default
-	maxElevator         = 0.01,
-	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
-	]]--
-	maxAcc          	= 0.000001,    -- OG Default was 0.065
+	-- Generic Air Tags
+	canFly                = true,
+	canSubmerge           = false,
+	factoryHeadingTakeoff = true,
+	collide               = false,
+	hoverAttack           = true,
+	airStrafe             = true,
+	cruiseAlt             = 100,
+	airHoverFactor        = -1.0,
+	bankingAllowed        = true,
+	useSmoothMesh         = true,
+	canLoopbackAttack     = false,
 
-	useSmoothMesh		= true,
+	-- Advanced Air Tags
+	wingDrag              = 0.07,
+	wingAngle             = 0.08,
+	frontToSpeed          = 0.1,
+	speedToFront          = 0.07,
+	crashDrag             = 0.005,
+	maxBank               = 0.8,
+	maxPitch              = 0.45,
+	turnRadius            = 500.0,
+	verticalSpeed         = 10.0,
+	maxAileron            = 0.015,
+	maxElevator           = 0.01,
+	maxRudder             = 0.004,
+	maxAcc                = 0.065,
+
+	useSmoothMesh		= false,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -41,8 +50,6 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = true,
 	category                     = "AIR",
-	collide                      = false,
-	cruiseAlt                    = 100,
 	description                  = [[Transport]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -50,12 +57,9 @@ unitDef                    = {
 	explodeAs                    = "smallExplosionGenericRed",
 	footprintX                   = 5,
 	footprintZ                   = 5,
-	floater                      = true,
-	hoverAttack                  = true,
 	iconType                     = "air_bomb",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
-	canLoopbackAttack            = false,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
 	maxVelocity                  = 10,

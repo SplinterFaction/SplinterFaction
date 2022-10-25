@@ -88,7 +88,7 @@ return {
         sidetexture        = [[shotgunside]],
         size               = 18,
         sizegrowth         = -1,
-        ttl                = 1,
+        ttl                = 15,
       },
     },
     exhaustsmoke = {
