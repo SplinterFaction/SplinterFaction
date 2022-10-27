@@ -157,7 +157,7 @@ weaponDefs                 = {
 		alphaDecay             = 0.1,
 		projectiles			   = 16,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/bruisercannon.wav",
+		soundStart             = "weapons/Shotgun Boom 101.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		sprayAngle             = 1250,
@@ -190,7 +190,7 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Bio gun Shot 6.wav",
+		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
 
 		minintensity             = 1,
 		impulseFactor            = 0,

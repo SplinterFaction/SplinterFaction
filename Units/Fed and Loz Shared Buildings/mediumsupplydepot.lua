@@ -1,15 +1,11 @@
 --------------------------------------------------------------------------------
 
-local unitName                    = "supplydepot"
+local unitName                    = "mediumsupplydepot"
 
 --------------------------------------------------------------------------------
 
-local armortype					 = [[building]]
-local storage					  = 100
-local supplygranted				  = 5
-
-local buildCostMetal 			  = 50
-local maxDamage					  = buildCostMetal * 12.5
+local supplygranted				  = 25
+local buildCostMetal 			  = 100
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -21,32 +17,31 @@ local unitDef                     = {
 	canAttack			          = false,
 	category                      = "BUILDING",
 
-	description                   = [[Provides +]] .. supplygranted .. [[ Supply • Provides +]] .. storage .. [[ Metal/Energy Storage]],
-	energyStorage                 = storage,
-	metalStorage                 = storage,
+	description                   = [[Provides +]] .. supplygranted .. [[ Supply]],
+	energyStorage                 = 0,
+	metalStorage                  = 0,
 	energyUse                     = 0,
-	explodeAs                     = "smallBuildingExplosionGenericPurple",
-	footprintX                    = 3,
-	footprintZ                    = 3,
+	explodeAs                     = "mediumBuildingExplosionGenericPurple",
+	footprintX                    = 4,
+	footprintZ                    = 4,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	icontype                      = "supportbuilding",
-	maxDamage                     = maxDamage,
+	maxDamage                     = 1,
 	maxSlope                      = 50,
 	maxWaterDepth                 = 5000,
 	--metalStorage                  = storage,
-	name                          = "Basic Supply/Storage Depot",
-	objectName                    = "storage.s3o",
-	script			              = "estorage3.cob",
+	name                          = "Medium Supply Depot",
+	objectName                    = "mediumsupplydepot.s3o",
+	script			              = "mediumsupplydepot_lus.lua",
 	radarDistance                 = 0,
 	repairable		              = false,
-	selfDestructAs                = "smallBuildingExplosionGenericPurple",
-	side                          = "CORE",
+	selfDestructAs                = "mediumBuildingExplosionGenericPurple",
 	sightDistance                 = 100,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
-	yardMap                       = "ooo ooo ooo",
+	yardMap                       = "oooo oooo oooo oooo",
 
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {
@@ -56,7 +51,7 @@ local unitDef                     = {
 		
 		explosiongenerators       = {
 			"custom:blacksmoke",
-			"custom:skyhatelasert0",
+			"custom:skyhatelasert2",
 		},
 	},
 
