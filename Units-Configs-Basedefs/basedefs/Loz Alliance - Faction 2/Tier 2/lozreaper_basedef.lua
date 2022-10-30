@@ -144,7 +144,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 75,
+			default              = 150,
 		},
 	},
 	lasercannon                = {
@@ -164,7 +164,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "E.M.G.",
 		range                  = 850,
-		reloadtime             = 0.25,
+		reloadtime             = 0.5,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/pointdefensefire.wav",
@@ -183,7 +183,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3.6,
+			default              = 7.5,
 		},
 	},
 }

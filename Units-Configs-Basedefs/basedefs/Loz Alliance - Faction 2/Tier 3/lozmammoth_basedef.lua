@@ -173,7 +173,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "E.M.G.",
 		range                  = 800,
-		reloadtime             = 0.25,
+		reloadtime             = 1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/pointdefensefire.wav",
@@ -192,7 +192,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 1.25,
+			default              = 30,
 		},
 	},
 	clusterrockets             = {
