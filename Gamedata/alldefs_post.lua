@@ -559,24 +559,26 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
 						or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
 
-					unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
-					if unitDef.customparams and unitDef.customparams.requiretech == "tech1" or unitDef.customparams and unitDef.customparams.isupgraded == "1" then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 3
-					end
-					if unitDef.customparams and unitDef.customparams.requiretech == "tech2" or unitDef.customparams and unitDef.customparams.isupgraded == "2" then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 6
-					end
-					if unitDef.customparams and unitDef.customparams.requiretech == "tech3" or unitDef.customparams and unitDef.customparams.isupgraded == "3" then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 12
-					end
-					if unitDef.customparams and unitDef.customparams.requiretech == "tech4" or unitDef.customparams and unitDef.customparams.isupgraded == "4" then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 15
-					end
-					if unitDef.customparams and unitDef.customparams.noenergycost == true then
-						unitDef.buildcostenergy = 0
-					end
-					if unitDef.customparams and unitDef.customparams.buildcostenergyoverride ~= nil then
-						unitDef.buildcostenergy = unitDef.customparams.buildcostenergyoverride
+					if unitDef.customparams and unitDef.customparams.unittype ~= "air" then -- Disable energy being automatically calculated for air units
+						unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
+							unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+						end
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
+							unitDef.buildcostenergy = unitDef.buildcostmetal * 6
+						end
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
+							unitDef.buildcostenergy = unitDef.buildcostmetal * 12
+						end
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
+							unitDef.buildcostenergy = unitDef.buildcostmetal * 15
+						end
+						if unitDef.customparams and unitDef.customparams.noenergycost == true then
+							unitDef.buildcostenergy = 0
+						end
+						if unitDef.customparams and unitDef.customparams.buildcostenergyoverride ~= nil then
+							unitDef.buildcostenergy = unitDef.customparams.buildcostenergyoverride
+						end
 					end
 				end
 
@@ -817,7 +819,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.buildcostmetal = unitDef.buildcostmetal * fedMetalCostModifierAir
 					end
 					if fedEnergyCostModifierAir ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostenergy * fedEnergyCostModifierAir
+						unitDef.buildcostenergy = unitDef.buildcostmetal * fedEnergyCostModifierAir
 					end
 				end
 			end
@@ -828,7 +830,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.buildcostmetal = unitDef.buildcostmetal * lozMetalCostModifierAir
 					end
 					if lozEnergyCostModifierAir ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostenergy * lozEnergyCostModifierAir
+						unitDef.buildcostenergy = unitDef.buildcostmetal * lozEnergyCostModifierAir
 					end
 				end
 			end

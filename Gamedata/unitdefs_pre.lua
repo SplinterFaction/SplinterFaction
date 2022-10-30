@@ -40,9 +40,9 @@ Shared.buildListf2landfac = {
 	[[lozengineer_up3]],
 	[[airscout]],
 	[[lozwasp]],
+	[[lozbumblebee]],
 	[[lozhornet]],
 	[[lozcrane]],
-	[[lozbumblebee]],
 }
 
 -----------------------------
