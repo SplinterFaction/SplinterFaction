@@ -113,6 +113,7 @@ weaponDefs                 = {
 		collideFriendly        = false,
 		collideFeature         = false,
 		cegTag                 = "railgun",
+		edgeEffectiveness	   = 1,
 		rgbColor               = "0.133 0 0.4",
 		rgbColor2              = "0.75 0.75 0.75",
 		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
@@ -143,7 +144,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 150,
+			default              = 75,
 		},
 	},
 	lasercannon                = {
@@ -182,7 +183,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 1.25,
+			default              = 3.6,
 		},
 	},
 }
