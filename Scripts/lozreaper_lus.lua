@@ -43,13 +43,14 @@ function script.AimFromWeapon(WeaponID)
 	return railgunturret1
 end
 
+local firepoints = {laserfirepoint1, laserfirepoint2}
+local currentFirepoint = 1
+
 function script.QueryWeapon(WeaponID)
 	if WeaponID == 1 then
 		return railgunfirepoint1
 	elseif WeaponID == 2 then
-		return laserfirepoint1
-	elseif WeaponID == 3 then
-		return laserfirepoint2
+		return firepoints[currentFirepoint]
 	end
 end
 
@@ -57,9 +58,8 @@ function script.FireWeapon(WeaponID)
 	if WeaponID == 1 then
 		EmitSfx (railgunfirepoint1, 1024)
 	elseif WeaponID == 2 then
-		EmitSfx (laserfirepoint1, 1024)
-	elseif WeaponID == 3 then
-		EmitSfx (laserfirepoint2, 1024)
+		currentFirepoint = 3 - currentFirepoint
+		EmitSfx (firepoints[currentFirepoint], 1024)
 	end
 end
 
@@ -87,14 +87,9 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		SetSignalMask(SIG_AIM2)
 		Turn(laserbarrel1, x_axis, -pitch, 10)
 		WaitForTurn(laserbarrel1, x_axis)
-		--Spring.Echo("AimWeapon: FireWeapon")
-		StartThread(RestoreAfterDelay)
-		return true
-	elseif WeaponID == 3 then
-		Signal(SIG_AIM3)
-		SetSignalMask(SIG_AIM3)
 		Turn(laserbarrel2, x_axis, -pitch, 10)
 		WaitForTurn(laserbarrel2, x_axis)
+		--Spring.Echo("AimWeapon: FireWeapon")
 		StartThread(RestoreAfterDelay)
 		return true
 	end

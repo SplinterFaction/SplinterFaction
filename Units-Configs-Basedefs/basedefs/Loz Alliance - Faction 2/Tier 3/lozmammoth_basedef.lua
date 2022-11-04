@@ -84,16 +84,11 @@ unitDef                    = {
 			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[3]                      = {
-			def                  = "lasercannon",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-		},
-		[4]                      = {
 			def                  = "clusterrockets",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING",
 		},
-		[5]                      = {
+		[4]                      = {
 			def                  = "clusterrockets",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING",
@@ -173,10 +168,10 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "E.M.G.",
 		range                  = 800,
-		reloadtime             = 1,
+		reloadtime             = 0.5,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/pointdefensefire.wav",
+		soundStart             = "weapons/Sci Fi Blaster 1.wav",
 		texture1               = "shot",
 		texture2               = "empty",
 		coreThickness          = 0.25,

@@ -64,12 +64,6 @@ unitDef                     = {
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING",
 		},
-		[2]                       = {
-			def                   = "particlebeamcannon",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				  = 1,
-		},
 	},
 	customParams                  = {
 		unittype				  = "building",
@@ -129,7 +123,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 20,
+			default              = 40,
 		},
 	},
 }

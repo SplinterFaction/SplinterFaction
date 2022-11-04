@@ -13,6 +13,7 @@ local function RestoreAfterDelay()
     Sleep(2000)
     Turn(gatlingturret1, y_axis, 0, 1)
     Turn(gatlingbarrel1, x_axis, 0, 1)
+    Turn(gatlingbarrel2, x_axis, 0, 1)
 end
 
 function script.AimFromWeapon(WeaponID)
@@ -20,42 +21,30 @@ function script.AimFromWeapon(WeaponID)
     return gatlingturret1
 end
 
-function script.QueryWeapon(WeaponID)
-    if WeaponID == 1 then
-        return gatlingfirepoint1
-    elseif WeaponID == 2 then
-        return gatlingfirepoint2
-    end
+local firepoints = {gatlingfirepoint1, gatlingfirepoint2}
+local currentFirepoint = 1
+
+function script.QueryWeapon(weaponID)
+    return firepoints[currentFirepoint]
 end
 
-function script.FireWeapon(WeaponID)
-    if WeaponID == 1 then
-        EmitSfx (gatlingfirepoint1, 1024)
-    elseif WeaponID == 2 then
-        EmitSfx (gatlingfirepoint2, 1024)
-    end
+function script.FireWeapon(weaponID)
+    currentFirepoint = 3 - currentFirepoint
+    EmitSfx (firepoints[currentFirepoint], 1024)
 end
 
 function script.AimWeapon(WeaponID, heading, pitch)
     -- Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5}) -- Only use this if the turret is glitchy
-
+    Signal(SIG_AIM)
+    SetSignalMask(SIG_AIM)
     Turn(gatlingturret1, y_axis, heading, 10)
     WaitForTurn(gatlingturret1, y_axis)
-
-    if WeaponID == 1 then
-        Signal(SIG_AIM)
-        SetSignalMask(SIG_AIM)
-        Turn(gatlingbarrel1, x_axis, -pitch, 10)
-        WaitForTurn(gatlingbarrel1, x_axis)
-        --Spring.Echo("AimWeapon: FireWeapon")
-        StartThread(RestoreAfterDelay)
-        return true
-    elseif WeaponID == 2 then
-        Turn(gatlingbarrel2, x_axis, -pitch, 10)
-        WaitForTurn(gatlingbarrel2, x_axis)
-        --Spring.Echo("AimWeapon: FireWeapon")
-        return true
-    end
+    Turn(gatlingbarrel1, x_axis, -pitch, 10)
+    WaitForTurn(gatlingbarrel1, x_axis)
+    Turn(gatlingbarrel2, x_axis, -pitch, 10)
+    WaitForTurn(gatlingbarrel2, x_axis)
+    StartThread(RestoreAfterDelay)
+    return true
 end
 
 function script.Killed()

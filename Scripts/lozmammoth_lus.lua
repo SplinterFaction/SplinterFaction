@@ -49,16 +49,17 @@ function script.AimFromWeapon(WeaponID)
 	return railturret1
 end
 
+local firepoints = {burstfirepoint1, burstfirepoint2}
+local currentFirepoint = 1
+
 function script.QueryWeapon(WeaponID)
 	if WeaponID == 1 then
 		return railfirepoint1
 	elseif WeaponID == 2 then
-		return burstfirepoint1
+		return firepoints[currentFirepoint]
 	elseif WeaponID == 3 then
-		return burstfirepoint2
-	elseif WeaponID == 4 then
 		return missilefirepoint1
-	elseif WeaponID == 5 then
+	elseif WeaponID == 4 then
 		return missilefirepoint2
 	end
 end
@@ -67,9 +68,8 @@ function script.FireWeapon(WeaponID)
 	if WeaponID == 1 then
 		EmitSfx (railfirepoint1, 1024)
 	elseif WeaponID == 2 then
-		EmitSfx (burstfirepoint1, 1024)
-	elseif WeaponID == 3 then
-		EmitSfx (burstfirepoint2, 1024)
+		currentFirepoint = 3 - currentFirepoint
+		EmitSfx (firepoints[currentFirepoint], 1024)
 	end
 end
 
@@ -101,17 +101,12 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		SetSignalMask(SIG_AIM2)
 		Turn(burstbarrel1, x_axis, -pitch, 10)
 		WaitForTurn(burstbarrel1, x_axis)
+		Turn(burstbarrel2, x_axis, -pitch, 10)
+		WaitForTurn(burstbarrel2, x_axis)
 		--Spring.Echo("AimWeapon: FireWeapon")
 		StartThread(RestoreAfterDelay)
 		return true
 	elseif WeaponID == 3 then
-		Signal(SIG_AIM3)
-		SetSignalMask(SIG_AIM3)
-		Turn(burstbarrel2, x_axis, -pitch, 10)
-		WaitForTurn(burstbarrel2, x_axis)
-		StartThread(RestoreAfterDelay)
-		return true
-	elseif WeaponID == 4 then
 		Signal(SIG_AIM4)
 		SetSignalMask(SIG_AIM4)
 		Turn(missilebarrel1, x_axis, -pitch, 10)
@@ -119,7 +114,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		--Spring.Echo("AimWeapon: FireWeapon")
 		StartThread(RestoreAfterDelay)
 		return true
-	elseif WeaponID == 5 then
+	elseif WeaponID == 4 then
 		Signal(SIG_AIM5)
 		SetSignalMask(SIG_AIM5)
 		Turn(missilebarrel2, x_axis, -pitch, 10)
