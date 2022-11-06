@@ -106,6 +106,7 @@ weaponDefs = {
 		startVelocity            = 100,
 		tolerance                = 8000,
 		turnrate                 = 100000,
+		dance                    = 150,
 		turret                   = true,
 		tracks                   = true,
 		weaponAcceleration       = 2000,
