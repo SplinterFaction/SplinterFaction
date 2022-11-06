@@ -780,7 +780,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Cost override so that cost can be adjusted without effecting health
 			local fedMetalCostModifierMobile = 0.75
-			local fedEnergyCostModifierMobile = 1.25
+			local fedEnergyCostModifierMobile = 1.50
 			local lozMetalCostModifierMobile = 1
 			local lozEnergyCostModifierMobile = 1
 
