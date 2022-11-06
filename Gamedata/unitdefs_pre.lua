@@ -44,6 +44,7 @@ Shared.buildListf2landfac = {
 	[[lozdragonfly]],
 	[[lozhornet]],
 	[[lozcrane]],
+	[[loztitan]],
 }
 
 -----------------------------

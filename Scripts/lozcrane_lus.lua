@@ -1,5 +1,5 @@
 
-base, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, turretball1, railgunbarrel1, railgunfirepoint1, turretball2, railgunbarrel2, railgunfirepoint2, turretball3, railgunbarrel3, railgunfirepoint3, turretball4, railgunbarrel4, railgunfirepoint4, link = piece ('base', 'engine1', 'engine2', 'engine3', 'engine4', 'engine5', 'engine6', 'engine7', 'engine8', 'turretball1', 'railgunbarrel1', 'railgunfirepoint1', 'turretball2', 'railgunbarrel2', 'railgunfirepoint2', 'turretball3', 'railgunbarrel3', 'railgunfirepoint3', 'turretball4', 'railgunbarrel4', 'railgunfirepoint4', 'link')
+base, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, turretball1, turretball2, turretball3, turretball4, link = piece ('base', 'engine1', 'engine2', 'engine3', 'engine4', 'engine5', 'engine6', 'engine7', 'engine8', 'turretball1', 'turretball2', 'turretball3', 'turretball4', 'link')
 
 common = include("headers/common_includes_lus.lua")
 
@@ -13,7 +13,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-    StartThread(common.SmokeUnit, {base, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, turretball1, railgunbarrel1, railgunfirepoint1, turretball2, railgunbarrel2, railgunfirepoint2, turretball3, railgunbarrel3, railgunfirepoint3, turretball4, railgunbarrel4, railgunfirepoint4, link})
+    StartThread(common.SmokeUnit, {base, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, turretball1, turretball2, turretball3, turretball4, link})
 
 --[[
     local engineRotate = 270
@@ -53,7 +53,7 @@ function script.AimFromWeapon(weaponID)
     return base
 end
 
-local firepoints = {railgunfirepoint1, railgunfirepoint2, railgunfirepoint3, railgunfirepoint4}
+local firepoints = {turretball1, turretball2, turretball3, turretball4}
 local currentFirepoint = 1
 
 function script.QueryWeapon(weaponID)
@@ -195,10 +195,6 @@ function script.Killed()
     Explode(turretball2, SFX.EXPLODE_ON_HIT)
     Explode(turretball3, SFX.EXPLODE_ON_HIT)
     Explode(turretball4, SFX.EXPLODE_ON_HIT)
-    Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT)
-    Explode(railgunbarrel2, SFX.EXPLODE_ON_HIT)
-    Explode(railgunbarrel3, SFX.EXPLODE_ON_HIT)
-    Explode(railgunbarrel4, SFX.EXPLODE_ON_HIT)
 
     return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end
