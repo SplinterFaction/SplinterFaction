@@ -4,7 +4,7 @@ unitName = [[lozannihilator]]
 
 --------------------------------------------------------------------------------
 
-humanName = [[annihilator]]
+humanName = [[Annihilator]]
 
 objectName = [[lozannihilator.s3o]]
 script = [[lozannihilator_lus.lua]]

@@ -4,7 +4,7 @@ unitName = "lozdragonfly"
 
 --------------------------------------------------------------------------------
 
-humanName = [[dragonfly]]
+humanName = [[Dragonfly]]
 
 objectName = "lozdragonfly.s3o"
 script = "lozdragonfly_lus.lua"

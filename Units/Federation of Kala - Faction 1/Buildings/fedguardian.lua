@@ -4,7 +4,7 @@ unitName = [[fedguardian]]
 
 --------------------------------------------------------------------------------
 
-humanName = [[guardian]]
+humanName = [[Guardian]]
 
 objectName = [[fedguardian.s3o]]
 script = [[fedguardian_lus.lua]]
