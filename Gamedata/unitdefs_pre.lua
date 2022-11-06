@@ -22,6 +22,7 @@ Shared.buildListf1landfac = {
 	[[fedcrow]],
 	[[fedhawk]],
 	[[fedcondor]],
+	[[fedeagle]],
 }
 
 Shared.buildListf2landfac = {

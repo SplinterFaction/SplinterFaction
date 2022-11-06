@@ -58,6 +58,13 @@ effectUnitDefs = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  3, length=30, piece="engine4", onActive=true}},
 	},
 
+	fedeagle = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=40, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=40, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, 	width =  4, length=40, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},    width =  4, length=40, piece="engine4", onActive=true}},
+	},
+
 	lozwasp = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},
