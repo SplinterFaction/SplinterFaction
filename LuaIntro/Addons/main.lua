@@ -27,9 +27,11 @@ end
 ------------------------------------------
 
 local showTips = true
+--[[
 if (Spring.GetConfigInt("LoadscreenTips",1) or 1) == 0 then
 	showTips = false
 end
+]]--
 
 local lastLoadMessage = ""
 
@@ -43,19 +45,8 @@ end
 local titleColor = "\255\215\255\215"
 local contentColor = "\255\255\255\255"
 local tips = {
-	
-	-- Zopto
-	"loadingpics/theenigmatng.png "..titleColor.."The Enigma TNG\n"..contentColor.."He is the creator of most of the music in the game, so go check him out!",
-	
-	-- Suppy Boi
-	
-	
-	-- Damgam
-	"loadingpics/dreamstatelogic.png "..titleColor.."Dreamstate Logic\n"..contentColor.."Composer of a many ambient tracks used ingame, check out his music on Soundcloud!",
+	"loadingpics/dreamstatelogic.dds "..titleColor.."Dreamstate Logic\n"..contentColor.."Composer of a many ambient tracks used ingame, check out his music on Soundcloud!",
 	"Press Enter to Chat, Use Alt+Enter to Team Chat, Use Ctrl+Enter to Global Chat",
-	
-	-- Koyote
-	
 }
 
 -- Random unit descriptions we can show
@@ -63,43 +54,12 @@ local titleColor = "\255\215\255\215"
 local contentColor = "\255\255\255\255"
 local unit_descs = {
 
-	"elightturret2.png "..titleColor.."Pincushion\n"..contentColor.."Only you can prevent tech rushes (by building a Pincushion in your base)!",
-	"ehbotpeewee.png "..titleColor.."A.K. (H-Bot Raider)\n"..contentColor.."H-Bots can traverse any terrain, but they have two giant weaknesses... They are terrible in close quarter combat, and they are extremely vulnerable to artillery. Use cloaked All-Terrains to get in close, or use artillery to zone them out.",
-	"elighttank3.png "..titleColor.."Kite (Hovertank Raider)\n"..contentColor.."Hovertanks are all around good units with a lot of excellent variety, however, they lack some of the more specialized abilities of the other techs.",
-	"eallterrlight.png "..titleColor.."Recluse (All-Terrain Raider)\n"..contentColor.."All-Terrains have some of the most specialized units in the game. All All-Terrain units can cloak. Cloaking is ESSENTIAL to ensure that your units get the first shot. This can be the difference between winning or losing a battle.",
-	"eamphibbuggy.png "..titleColor.."Snake (Amphibious Raider\n"..contentColor.."Amphibious units are fast (even faster underwater!), extremely high damage, but suffer in terms of armor and range. Use them to hit fast and hard. Then back away before your opponent can do any real damage and hit is undefended flank!",
-	"emetalextractor.png "..titleColor.."Metal Extractor\n"..contentColor.."Make sure to evolve your Metal Extractors so that you can continually increase your income",
-	"esolar2.png "..titleColor.."Fission Energy Generator\n"..contentColor.."Make sure to keep building energy production as your tech progresses. At each tech, the energy cost for units and buildings increases.",
-
-	-- Zopto
-	"ecommander.png "..titleColor.."Overseer\n"..contentColor.."Don't forget to evolve your overseer, different upgrades can be helpful!", 
-	"ehbotpeewee.png "..titleColor.."H-Bots\n"..contentColor.."While h-bots have long range, no h-bot units are armored.", 
-	"eallterrlight.png "..titleColor.."All Terrain Units\n"..contentColor.."Despite the designation 'All-terrain', All-Terrain units cannot traverse deep water.", 
-	"emetalextractor.png "..titleColor.."Metal\n"..contentColor.."Don't forget to evolve your metal extractors to get more metal!", 
-	"estorage.png "..titleColor.."Supply\n"..contentColor.."In order to increase your army supply cap, build more supply depots.", 
-	"ehbotengineer.png "..titleColor.."Lifter\n"..contentColor.."Just like normal h-bots, the lifter can deploy as well.", 
-	"eorb.png "..titleColor.."O.R.B.\n"..contentColor.."If you have a surplus of metal and can't find a way to use it, evolve your orbs or build more of them.", 
-	"ebasefactory.png "..titleColor.."Factories\n"..contentColor.."Evolve your factories, upgraded units will give you the upper hand in battle.", 
-	"ekrow.png "..titleColor.."Endbringers\n"..contentColor.."While Endbringers are strong, don't send them out on their own to fight entire armies.", 
-	"eartyturret.png "..titleColor.."Lobster\n"..contentColor.."If you really want to make your opponent hate you, evolve the lobster.", 
-	"eallterrshield.png "..titleColor.."Widow\n"..contentColor.."Even though widows have a shield, don't expect them to soak up all the damage for you.", 
-	"emine.png "..titleColor.."Mines\n"..contentColor.."In the early game, mines can be used as a simple and cheap defense.", 
-	"eshieldgen.png "..titleColor.."Anti-Nuke\n"..contentColor.."Don't forget to build an anti-nuke platform before it's too late.", 
-	"esilo.png "..titleColor.."Nuke Silo\n"..contentColor.."Remember that if a nuclear missile silo is destroyed, the nuclear core inside it will detonate as well. Take care to place them well away from anything important.", 
-	
-	-- Suppy Boi
-	"eartytank.png "..titleColor.."Artillery\n"..contentColor.."Always try to include some of artillery units into your army. The sight distance can be a huge help.",  
-	"eartytank.png "..titleColor.."Artillery\n"..contentColor.."Try to keep your artillery behind your main battle tanks.",  
-	"emetalextractor.png "..titleColor.."Metal\n"..contentColor.."Evolved metal extractors use energy, so when evolving to a higher tier, be sure to plan ahead for the increased energy consumption.",  
-	"eamphibmedtank.png "..titleColor.."Amphibious Units\n"..contentColor.."While Amphibious units are fast, nimble, and deal great damage, this comes at the cost of having little to no armor.",
+	"fedmenlo.dds "..titleColor.."Menlo\n"..contentColor.."The penultimate in defense matricies.",
+	"loadingpics/defensematrix.dds "..titleColor.."Menlo\n"..contentColor.."The penultimate in defense matricies.",
 }
 
 local quotes = {
 	{"Zopto is to lol as carbon is to life", "Dr.Hamster"},
-	{"Build 1 more Mex than the other guy.", "KoyoteKamper"},
-	{"...As Chobby will come after Half Life 3...", "Damgam"},
-	{"Damgam: Can you remind me why we disabled Communism?\n Forboding Angel: Because people don't like to share? lol xD\n Damgam: Tfw my question and your answer works for both ingame communism and real communism", "Damgam & Forboding Angel"},
-	
 }
 
 
@@ -342,7 +302,7 @@ function addon.DrawLoadScreen()
 		if random_tip_or_desc[2] then
 			text_to_show = random_tip_or_desc[1]
 		else
-			i, j = string.find(random_tip_or_desc, ".png")
+			i, j = string.find(random_tip_or_desc, ".dds")
 		end
 		local numLines = 1
 		local image_text = nil
