@@ -742,6 +742,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Strike Fighter" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
+			if unitDef.customparams.unitrole == "Basic Transport" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.5
+			end
 			if unitDef.customparams.unitrole == "Combat Transport" then
 				unitDef.maxdamage = unitDef.maxdamage * 1.5
 			end

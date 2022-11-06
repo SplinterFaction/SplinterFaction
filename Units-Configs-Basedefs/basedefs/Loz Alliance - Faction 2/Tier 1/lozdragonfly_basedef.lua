@@ -63,7 +63,7 @@ unitDef                    = {
 	idleTime                     = 2200,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 10,
+	maxVelocity                  = 6,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -87,7 +87,7 @@ unitDef                    = {
 
 	transportSize			= 2,
 	-- minTransportSize			=
-	transportCapacity		= 6,
+	transportCapacity		= 4,
 	-- transportMass			=
 	-- minTransportMass			=
 	-- loadingRadius			=
@@ -174,7 +174,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "air",
-		unitrole				 = "Combat Transport",
+		unitrole				 = "Basic Transport",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
