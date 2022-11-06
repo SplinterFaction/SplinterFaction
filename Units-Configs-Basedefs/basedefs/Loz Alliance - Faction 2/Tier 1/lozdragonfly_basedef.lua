@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 80,
+	buildCostMetal               = 50,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -19,7 +19,7 @@ unitDef                    = {
 	collide               = false,
 	hoverAttack           = true,
 	airStrafe             = true,
-	cruiseAlt             = 100,
+	cruiseAlt             = 75,
 	airHoverFactor        = -1.0,
 	bankingAllowed        = true,
 	useSmoothMesh         = true,
@@ -51,13 +51,13 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "AIR",
 	collide                      = false,
-	description                  = [[Combat Transport]],
+	description                  = [[Basic Transport]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = "smallExplosionGenericRed",
-	footprintX                   = 5,
-	footprintZ                   = 5,
+	footprintX                   = 3,
+	footprintZ                   = 3,
 	iconType                     = "air_bomb",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
@@ -85,9 +85,9 @@ unitDef                    = {
 	--------------------------------------------------------------------------------
 	-- Transport specific tags
 
-	transportSize			= 4,
+	transportSize			= 2,
 	-- minTransportSize			=
-	transportCapacity		= 1,
+	transportCapacity		= 6,
 	-- transportMass			=
 	-- minTransportMass			=
 	-- loadingRadius			=
@@ -172,33 +172,6 @@ unitDef                    = {
 			"unitselect",
 		},
 	},
-
-	weapons                      = {
-		[1]                      = {
-			def                  = "railgun",
-			onlyTargetCategory	 = "GROUND BUILDING",
-			mainDir = "0 -1 0",
-			maxAngleDif = 180,
-		},
-		--[[
-			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
-				A vector representing the firing direction of this weapon if it has a limited firing arc. Used in conjunction with maxAngleDif (See Gamedev:WeaponMainDir).
-
-			float maxAngleDif default: 360.0
-				How wide this weapons limited firing arc is in degrees. Symmetrical about mainDir i.e. 180.0 is 90 degree freedom either way (See Gamedev:WeaponMainDir).
-
-			Example:
-			weapons = {
-			  {
-				def = "weapon1",
-				mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-				maxAngleDif = 90, -- 90° from side to side, or 45° from centre to each direction
-			  },
-			}
-		]]--
-	},
-
-
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Combat Transport",
@@ -211,48 +184,5 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Loz Alliance",
 		corpse                   = "energycore",
-	},
-}
-
-weaponDefs                 = {
-	railgun               = {
-		areaofeffect		   = 70,
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "0.133 0 0.4",
-		rgbColor2              = "0.75 0.75 0.75",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.25,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "Railgun",
-		range                  = 500,
-		reloadtime             = 1,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/cranerailgun.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.4,
-		thickness              = 6,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 2000,
-		customparams             = {
-			single_hit		 	 = true,
-			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 30,
-		},
 	},
 }
