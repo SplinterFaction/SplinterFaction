@@ -189,14 +189,6 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
-	-------------------------------------------------------------------------------- Make units unable to be built in the water
-	if uDef.maxwaterdepth then
-		uDef.maxwaterdepth = 25
-	end
-	if uDef.floater then
-		uDef.floater = false
-	end
-	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Turn off Chicken Egg drops
 	if uDef.corpse == "chicken_egg" then
