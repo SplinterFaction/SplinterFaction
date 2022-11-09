@@ -1,0 +1,88 @@
+// MotionEd generated script file for animation
+
+endsail()
+{
+	if (ANIM_VARIABLE)
+	{
+		move EmitJim to y-axis [-4.225104] now;
+		move EmitJim to z-axis [-12.890869] now;
+		turn Sail1 to x-axis <-11.953125> now;
+		turn Sail2 to x-axis <2.812500> now;
+		turn Sail3 to x-axis <3.515625> now;
+		turn Sail4 to x-axis <8.437500> now;
+		turn Sail5 to x-axis <21.796875> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <-10.458984> now;
+		turn Sail2 to x-axis <2.460938> now;
+		turn Sail3 to x-axis <3.076172> now;
+		turn Sail4 to x-axis <7.382812> now;
+		turn Sail5 to x-axis <19.072266> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <-8.964844> now;
+		turn Sail2 to x-axis <2.109375> now;
+		turn Sail3 to x-axis <2.636719> now;
+		turn Sail4 to x-axis <6.328125> now;
+		turn Sail5 to x-axis <16.347656> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <-7.470703> now;
+		turn Sail2 to x-axis <1.757813> now;
+		turn Sail3 to x-axis <2.197266> now;
+		turn Sail4 to x-axis <5.273437> now;
+		turn Sail5 to x-axis <13.623047> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <-5.976563> now;
+		turn Sail2 to x-axis <1.406250> now;
+		turn Sail3 to x-axis <1.757812> now;
+		turn Sail4 to x-axis <4.218750> now;
+		turn Sail5 to x-axis <10.898438> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <-4.482422> now;
+		turn Sail2 to x-axis <1.054688> now;
+		turn Sail3 to x-axis <1.318359> now;
+		turn Sail4 to x-axis <3.164062> now;
+		turn Sail5 to x-axis <8.173828> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <-2.988281> now;
+		turn Sail2 to x-axis <0.703125> now;
+		turn Sail3 to x-axis <0.878906> now;
+		turn Sail4 to x-axis <2.109375> now;
+		turn Sail5 to x-axis <5.449219> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <-1.494141> now;
+		turn Sail2 to x-axis <0.351563> now;
+		turn Sail3 to x-axis <0.439453> now;
+		turn Sail4 to x-axis <1.054687> now;
+		turn Sail5 to x-axis <2.724609> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Sail1 to x-axis <0.000000> now;
+		turn Sail2 to x-axis <0.000000> now;
+		turn Sail3 to x-axis <0.000000> now;
+		turn Sail4 to x-axis <0.000000> now;
+		turn Sail5 to x-axis <0.000000> now;
+		sleep 10;
+	}
+}

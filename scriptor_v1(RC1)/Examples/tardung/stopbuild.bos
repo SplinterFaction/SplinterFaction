@@ -1,0 +1,321 @@
+// MotionEd generated script file for animation
+
+stopbuild()
+{
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [15.800000] now;
+		move CreatureLowerA to y-axis [0.000006] now;
+		move CreatureLowerB to y-axis [0.000006] now;
+		move CreatureLowerC to y-axis [0.000006] now;
+		move CreatureLowerD to y-axis [0.000006] now;
+		turn CreatureLowerA to z-axis <-8.526316> now;
+		turn CreatureLowerB to x-axis <-4.263158> now;
+		turn CreatureLowerC to z-axis <9.947368> now;
+		turn CreatureLowerD to x-axis <5.684211> now;
+		turn CreatureMiddleD to x-axis <18.473684> now;
+		turn CreatureUpperD to x-axis <30.789474> now;
+		turn CreatureMiddleC to z-axis <9.153627> now;
+		turn CreatureUpperC to z-axis <8.526316> now;
+		turn CreatureMiddleB to x-axis <-19.421053> now;
+		turn CreatureUpperB to x-axis <-29.368421> now;
+		turn CreatureMiddleA to z-axis <-12.315789> now;
+		sleep 131;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [13.699999] now;
+		turn CreatureLowerB to x-axis <-2.153783> now;
+		turn CreatureLowerC to z-axis <8.189556> now;
+		turn CreatureLowerD to x-axis <3.926398> now;
+		turn CreatureMiddleD to x-axis <14.606497> now;
+		turn CreatureUpperD to x-axis <14.969161> now;
+		turn CreatureMiddleC to z-axis <4.583315> now;
+		turn CreatureUpperC to z-axis <-8.348684> now;
+		turn CreatureMiddleB to x-axis <-16.256990> now;
+		turn CreatureUpperB to x-axis <-14.251234> now;
+		turn CreatureMiddleA to z-axis <-5.987664> now;
+		turn CreatureUpperA to z-axis <5.976563> now;
+		sleep 131;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [12.600000] now;
+		turn CreatureLowerB to x-axis <0.000000> now;
+		turn CreatureLowerC to z-axis <7.578947> now;
+		turn CreatureLowerD to x-axis <2.368421> now;
+		turn CreatureMiddleD to x-axis <10.264225> now;
+		turn CreatureUpperD to x-axis <-3.264580> now;
+		turn CreatureMiddleC to z-axis <1.248222> now;
+		turn CreatureUpperC to z-axis <-18.230441> now;
+		turn CreatureMiddleB to x-axis <-13.339972> now;
+		turn CreatureUpperB to x-axis <1.341038> now;
+		turn CreatureMiddleA to z-axis <-0.761735> now;
+		turn CreatureUpperA to z-axis <13.682432> now;
+		sleep 120;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [11.937500] now;
+		turn CreatureLowerA to z-axis <-8.881579> now;
+		turn CreatureLowerC to z-axis <8.644737> now;
+		turn CreatureMiddleD to x-axis <8.251067> now;
+		turn CreatureMiddleC to z-axis <3.971906> now;
+		turn CreatureUpperC to z-axis <-14.677809> now;
+		turn CreatureMiddleB to x-axis <-9.905761> now;
+		turn CreatureMiddleA to z-axis <-1.827525> now;
+		turn CreatureUpperA to z-axis <7.642959> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [11.274999] now;
+		turn CreatureLowerA to z-axis <-9.236842> now;
+		turn CreatureLowerC to z-axis <9.710526> now;
+		turn CreatureMiddleD to x-axis <6.237909> now;
+		turn CreatureMiddleC to z-axis <6.695590> now;
+		turn CreatureUpperC to z-axis <-11.125178> now;
+		turn CreatureMiddleB to x-axis <-6.471550> now;
+		turn CreatureMiddleA to z-axis <-2.893314> now;
+		turn CreatureUpperA to z-axis <1.603485> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [10.612499] now;
+		turn CreatureLowerA to z-axis <-9.592105> now;
+		turn CreatureLowerC to z-axis <10.776316> now;
+		turn CreatureMiddleD to x-axis <4.224751> now;
+		turn CreatureMiddleC to z-axis <9.419275> now;
+		turn CreatureUpperC to z-axis <-7.572546> now;
+		turn CreatureMiddleB to x-axis <-3.037340> now;
+		turn CreatureMiddleA to z-axis <-3.959104> now;
+		turn CreatureUpperA to z-axis <-4.435989> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [9.949999] now;
+		turn CreatureLowerA to z-axis <-9.947368> now;
+		turn CreatureLowerC to z-axis <11.842105> now;
+		turn CreatureMiddleD to x-axis <2.211593> now;
+		turn CreatureMiddleC to z-axis <12.142959> now;
+		turn CreatureUpperC to z-axis <-4.019915> now;
+		turn CreatureMiddleB to x-axis <0.396871> now;
+		turn CreatureMiddleA to z-axis <-5.024893> now;
+		turn CreatureUpperA to z-axis <-10.475462> now;
+		sleep 120;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [8.962499] now;
+		turn CreatureMiddleD to x-axis <5.172119> now;
+		turn CreatureUpperD to x-axis <0.761735> now;
+		turn CreatureMiddleC to z-axis <7.524538> now;
+		turn CreatureUpperC to z-axis <-2.362020> now;
+		turn CreatureMiddleB to x-axis <-3.629445> now;
+		turn CreatureUpperB to x-axis <-3.395804> now;
+		turn CreatureMiddleA to z-axis <-1.116999> now;
+		turn CreatureUpperA to z-axis <-12.843883> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [7.974999] now;
+		turn CreatureMiddleD to x-axis <8.132646> now;
+		turn CreatureUpperD to x-axis <4.788051> now;
+		turn CreatureMiddleC to z-axis <2.906117> now;
+		turn CreatureUpperC to z-axis <-0.704125> now;
+		turn CreatureMiddleB to x-axis <-7.655761> now;
+		turn CreatureUpperB to x-axis <-8.132646> now;
+		turn CreatureMiddleA to z-axis <2.790896> now;
+		turn CreatureUpperA to z-axis <-15.212304> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [6.987499] now;
+		turn CreatureMiddleD to x-axis <11.093172> now;
+		turn CreatureUpperD to x-axis <8.814367> now;
+		turn CreatureMiddleC to z-axis <-1.712304> now;
+		turn CreatureUpperC to z-axis <0.953770> now;
+		turn CreatureMiddleB to x-axis <-11.682077> now;
+		turn CreatureUpperB to x-axis <-12.869488> now;
+		turn CreatureMiddleA to z-axis <6.698791> now;
+		turn CreatureUpperA to z-axis <-17.580725> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [6.000000] now;
+		turn CreatureMiddleD to x-axis <14.053698> now;
+		turn CreatureUpperD to x-axis <12.840683> now;
+		turn CreatureMiddleC to z-axis <-6.330725> now;
+		turn CreatureUpperC to z-axis <2.611664> now;
+		turn CreatureMiddleB to x-axis <-15.708393> now;
+		turn CreatureUpperB to x-axis <-17.606330> now;
+		turn CreatureMiddleA to z-axis <10.606686> now;
+		turn CreatureUpperA to z-axis <-19.949147> now;
+		sleep 120;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [5.599999] now;
+		turn CreatureLowerA to z-axis <-8.171053> now;
+		turn CreatureLowerD to x-axis <4.026316> now;
+		turn CreatureMiddleD to x-axis <8.961593> now;
+		turn CreatureUpperD to x-axis <5.024893> now;
+		turn CreatureMiddleC to z-axis <-9.291252> now;
+		turn CreatureMiddleB to x-axis <-12.629445> now;
+		turn CreatureUpperB to x-axis <-15.001067> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [5.199999] now;
+		turn CreatureLowerA to z-axis <-6.394737> now;
+		turn CreatureLowerD to x-axis <5.684211> now;
+		turn CreatureMiddleD to x-axis <3.869488> now;
+		turn CreatureUpperD to x-axis <-2.790896> now;
+		turn CreatureMiddleC to z-axis <-12.251778> now;
+		turn CreatureMiddleB to x-axis <-9.550498> now;
+		turn CreatureUpperB to x-axis <-12.395804> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [4.799999] now;
+		turn CreatureLowerA to z-axis <-4.618421> now;
+		turn CreatureLowerD to x-axis <7.342105> now;
+		turn CreatureMiddleD to x-axis <-1.222617> now;
+		turn CreatureUpperD to x-axis <-10.606686> now;
+		turn CreatureMiddleC to z-axis <-15.212304> now;
+		turn CreatureMiddleB to x-axis <-6.471550> now;
+		turn CreatureUpperB to x-axis <-9.790541> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [4.399999] now;
+		turn CreatureLowerA to z-axis <-2.842105> now;
+		turn CreatureLowerD to x-axis <9.000000> now;
+		turn CreatureMiddleD to x-axis <-6.314723> now;
+		turn CreatureUpperD to x-axis <-18.422475> now;
+		turn CreatureMiddleC to z-axis <-18.172831> now;
+		turn CreatureMiddleB to x-axis <-3.392603> now;
+		turn CreatureUpperB to x-axis <-7.185277> now;
+		sleep 120;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [3.612499] now;
+		turn CreatureLowerA to z-axis <-2.842105> now;
+		turn CreatureLowerD to x-axis <9.000000> now;
+		turn CreatureMiddleD to x-axis <-7.854196> now;
+		turn CreatureUpperD to x-axis <-16.409317> now;
+		turn CreatureMiddleC to z-axis <-19.120199> now;
+		turn CreatureUpperC to z-axis <1.664296> now;
+		turn CreatureMiddleB to x-axis <-1.971550> now;
+		turn CreatureMiddleA to z-axis <11.790896> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [2.824999] now;
+		turn CreatureMiddleD to x-axis <-9.393670> now;
+		turn CreatureUpperD to x-axis <-14.396159> now;
+		turn CreatureMiddleC to z-axis <-20.067568> now;
+		turn CreatureUpperC to z-axis <0.716927> now;
+		turn CreatureMiddleB to x-axis <-0.550498> now;
+		turn CreatureMiddleA to z-axis <12.975107> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [2.037498] now;
+		turn CreatureMiddleD to x-axis <-10.933144> now;
+		turn CreatureUpperD to x-axis <-12.383001> now;
+		turn CreatureMiddleC to z-axis <-21.014936> now;
+		turn CreatureUpperC to z-axis <-0.230441> now;
+		turn CreatureMiddleB to x-axis <0.870555> now;
+		turn CreatureMiddleA to z-axis <14.159317> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [1.249999] now;
+		turn CreatureLowerA to z-axis <-2.842105> now;
+		turn CreatureLowerD to x-axis <9.000000> now;
+		turn CreatureMiddleD to x-axis <-12.472617> now;
+		turn CreatureUpperD to x-axis <-10.369844> now;
+		turn CreatureMiddleC to z-axis <-21.962304> now;
+		turn CreatureUpperC to z-axis <-1.177809> now;
+		turn CreatureMiddleB to x-axis <2.291607> now;
+		turn CreatureMiddleA to z-axis <15.343528> now;
+		sleep 120;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [0.937500] now;
+		turn CreatureLowerA to z-axis <-2.131579> now;
+		turn CreatureLowerC to z-axis <8.881579> now;
+		turn CreatureLowerD to x-axis <6.750000> now;
+		turn CreatureMiddleD to x-axis <-9.354463> now;
+		turn CreatureUpperD to x-axis <-7.777383> now;
+		turn CreatureMiddleC to z-axis <-16.471728> now;
+		turn CreatureUpperC to z-axis <-0.883357> now;
+		turn CreatureMiddleB to x-axis <1.718706> now;
+		turn CreatureUpperB to x-axis <-5.388958> now;
+		turn CreatureMiddleA to z-axis <11.507646> now;
+		turn CreatureUpperA to z-axis <-14.961860> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [0.625000] now;
+		turn CreatureLowerA to z-axis <-1.421053> now;
+		turn CreatureLowerC to z-axis <5.921053> now;
+		turn CreatureLowerD to x-axis <4.500000> now;
+		turn CreatureMiddleD to x-axis <-6.236309> now;
+		turn CreatureUpperD to x-axis <-5.184922> now;
+		turn CreatureMiddleC to z-axis <-10.981152> now;
+		turn CreatureUpperC to z-axis <-0.588905> now;
+		turn CreatureMiddleB to x-axis <1.145804> now;
+		turn CreatureUpperB to x-axis <-3.592639> now;
+		turn CreatureMiddleA to z-axis <7.671764> now;
+		turn CreatureUpperA to z-axis <-9.974573> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [0.312500] now;
+		turn CreatureLowerA to z-axis <-0.710526> now;
+		turn CreatureLowerC to z-axis <2.960526> now;
+		turn CreatureLowerD to x-axis <2.250000> now;
+		turn CreatureMiddleD to x-axis <-3.118154> now;
+		turn CreatureUpperD to x-axis <-2.592461> now;
+		turn CreatureMiddleC to z-axis <-5.490576> now;
+		turn CreatureUpperC to z-axis <-0.294452> now;
+		turn CreatureMiddleB to x-axis <0.572902> now;
+		turn CreatureUpperB to x-axis <-1.796319> now;
+		turn CreatureMiddleA to z-axis <3.835882> now;
+		turn CreatureUpperA to z-axis <-4.987287> now;
+		sleep 121;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [0.000000] now;
+		turn CreatureLowerA to z-axis <0.000000> now;
+		turn CreatureLowerC to z-axis <0.000000> now;
+		turn CreatureLowerD to x-axis <0.000000> now;
+		turn CreatureMiddleD to x-axis <0.000000> now;
+		turn CreatureUpperD to x-axis <0.000000> now;
+		turn CreatureMiddleC to z-axis <0.000000> now;
+		turn CreatureUpperC to z-axis <0.000000> now;
+		turn CreatureMiddleB to x-axis <0.000000> now;
+		turn CreatureUpperB to x-axis <0.000000> now;
+		turn CreatureMiddleA to z-axis <0.000000> now;
+		turn CreatureUpperA to z-axis <0.000000> now;
+		sleep 120;
+	}
+}

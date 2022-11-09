@@ -1,0 +1,169 @@
+// MotionEd generated script file for animation
+
+attack1_gronk()
+{
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [3.300001] speed [16.500006];
+		turn CreatureUpperD to x-axis <-23.210526> speed <116.052632>;
+		turn CreatureUpperC to z-axis <-16.105263> speed <80.526316>;
+		turn CreatureUpperB to x-axis <9.000000> speed <45.000000>;
+		turn CreatureUpperA to z-axis <9.473684> speed <47.368421>;
+		sleep 200;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [9.100000] speed [14.499997];
+		turn CreatureMiddleD to x-axis <-1.421053> speed <3.552632>;
+		turn CreatureMiddleC to z-axis <-1.421053> speed <3.552632>;
+		turn CreatureMiddleB to x-axis <1.894737> speed <4.736842>;
+		turn CreatureMiddleA to z-axis <2.368421> speed <5.921053>;
+		sleep 400;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [19.050000] speed [66.333335];
+		turn CreatureLowerA to z-axis <-1.894737> speed <12.631579>;
+		turn CreatureLowerC to z-axis <3.789474> speed <25.263158>;
+		turn CreatureMiddleC to z-axis <3.315789> speed <31.578947>;
+		turn CreatureMiddleA to z-axis <-8.526316> speed <72.631579>;
+		sleep 150;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [19.049999] speed [0.000012];
+		turn CreatureLowerA to z-axis <-14.665007> speed <159.628378>;
+		turn CreatureLowerB to x-axis <-4.864865> speed <60.810811>;
+		turn CreatureLowerC to z-axis <23.857041> speed <250.844595>;
+		turn CreatureLowerD to x-axis <9.121622> speed <114.020270>;
+		turn CreatureMiddleC to z-axis <22.167141> speed <235.641892>;
+		turn CreatureUpperC to z-axis <-0.294452> speed <197.635135>;
+		turn CreatureMiddleB to x-axis <-12.699858> speed <182.432432>;
+		turn CreatureMiddleA to z-axis <-26.161451> speed <220.439189>;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn CreatureLowerA to z-axis <-20.137980> speed <91.216216>;
+		turn CreatureLowerB to x-axis <-20.067568> speed <253.378378>;
+		turn CreatureLowerC to z-axis <27.505690> speed <60.810811>;
+		turn CreatureLowerD to x-axis <26.756757> speed <293.918919>;
+		turn CreatureMiddleD to x-axis <24.119488> speed <425.675676>;
+		turn CreatureUpperD to x-axis <7.802987> speed <516.891892>;
+		turn CreatureMiddleC to z-axis <27.640114> speed <91.216216>;
+		turn CreatureMiddleB to x-axis <-0.537696> speed <202.702703>;
+		turn CreatureUpperB to x-axis <-4.986486> speed <233.108108>;
+		turn CreatureMiddleA to z-axis <-35.891181> speed <162.162162>;
+		sleep 60;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn CreatureLowerA to z-axis <-36.556899> speed <234.555985>;
+		turn CreatureLowerC to z-axis <36.627312> speed <130.308880>;
+		turn CreatureLowerD to x-axis <37.094595> speed <147.683398>;
+		turn CreatureMiddleD to x-axis <48.443812> speed <347.490347>;
+		turn CreatureUpperD to x-axis <30.302987> speed <321.428571>;
+		turn CreatureMiddleC to z-axis <37.977952> speed <147.683398>;
+		turn CreatureUpperC to z-axis <28.894737> speed <416.988417>;
+		turn CreatureMiddleB to x-axis <6.113087> speed <95.011177>;
+		turn CreatureUpperB to x-axis <17.513514> speed <321.428571>;
+		turn CreatureMiddleA to z-axis <-44.404694> speed <121.621622>;
+		turn CreatureUpperA to z-axis <-11.810100> speed <304.054054>;
+		sleep 70;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn CreatureLowerA to z-axis <-38.314712> speed <17.578125>;
+		turn CreatureLowerB to x-axis <-21.122255> speed <10.546875>;
+		turn CreatureMiddleD to x-axis <74.107875> speed <256.640625>;
+		turn CreatureMiddleC to z-axis <49.579514> speed <116.015625>;
+		turn CreatureUpperC to z-axis <50.691612> speed <217.968750>;
+		turn CreatureMiddleB to x-axis <21.896393> speed <157.833059>;
+		turn CreatureUpperB to x-axis <6.263514> speed <112.500000>;
+		turn CreatureMiddleA to z-axis <-61.631257> speed <172.265625>;
+		turn CreatureUpperA to z-axis <-32.200725> speed <203.906250>;
+		sleep 100;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn CreatureLowerA to z-axis <-33.787157> speed <15.091850>;
+		turn CreatureLowerB to x-axis <-16.946263> speed <13.919975>;
+		turn CreatureLowerC to z-axis <32.370555> speed <14.189189>;
+		turn CreatureLowerD to x-axis <29.797297> speed <24.324324>;
+		turn CreatureMiddleD to x-axis <52.762330> speed <71.151816>;
+		turn CreatureUpperD to x-axis <8.107041> speed <73.986486>;
+		turn CreatureMiddleC to z-axis <40.434138> speed <30.484586>;
+		turn CreatureUpperC to z-axis <24.286418> speed <88.017314>;
+		turn CreatureMiddleB to x-axis <12.324441> speed <31.906506>;
+		turn CreatureUpperB to x-axis <19.793919> speed <45.101351>;
+		turn CreatureMiddleA to z-axis <-51.193651> speed <34.792019>;
+		turn CreatureUpperA to z-axis <-5.890547> speed <87.700591>;
+		sleep 300;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [15.299999] speed [9.868421];
+		turn CreatureLowerA to z-axis <-29.259602> speed <11.914618>;
+		turn CreatureLowerB to x-axis <-12.770270> speed <10.989454>;
+		turn CreatureLowerC to z-axis <28.113798> speed <11.201991>;
+		turn CreatureLowerD to x-axis <22.500000> speed <19.203414>;
+		turn CreatureMiddleD to x-axis <47.522048> speed <13.790215>;
+		turn CreatureUpperD to x-axis <-12.194168> speed <53.424234>;
+		turn CreatureMiddleC to z-axis <31.288762> speed <24.066779>;
+		turn CreatureUpperC to z-axis <-2.118777> speed <69.487353>;
+		turn CreatureMiddleB to x-axis <-11.931721> speed <63.832006>;
+		turn CreatureUpperB to x-axis <33.324324> speed <35.606330>;
+		turn CreatureMiddleA to z-axis <-40.756046> speed <27.467383>;
+		turn CreatureUpperA to z-axis <20.419630> speed <69.237309>;
+		sleep 380;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [12.900000] speed [11.999997];
+		turn CreatureLowerA to z-axis <-19.312233> speed <49.736842>;
+		turn CreatureLowerB to x-axis <-8.980797> speed <18.947368>;
+		turn CreatureLowerC to z-axis <17.219061> speed <54.473684>;
+		turn CreatureLowerD to x-axis <16.815789> speed <28.421053>;
+		turn CreatureMiddleD to x-axis <28.920341> speed <93.008535>;
+		turn CreatureUpperD to x-axis <-30.667852> speed <92.368421>;
+		turn CreatureMiddleC to z-axis <36.454481> speed <25.828592>;
+		turn CreatureUpperC to z-axis <-14.280939> speed <60.810811>;
+		turn CreatureMiddleB to x-axis <-52.918208> speed <204.932432>;
+		turn CreatureMiddleA to z-axis <-37.139403> speed <18.083215>;
+		sleep 200;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [9.500000] speed [17.000001];
+		turn CreatureLowerA to z-axis <-7.975818> speed <56.682077>;
+		turn CreatureLowerB to x-axis <-9.729730> speed <3.744666>;
+		turn CreatureLowerC to z-axis <11.086771> speed <30.661451>;
+		turn CreatureLowerD to x-axis <9.729730> speed <35.430299>;
+		turn CreatureMiddleD to x-axis <17.539118> speed <56.906117>;
+		turn CreatureUpperD to x-axis <-14.088905> speed <82.894737>;
+		turn CreatureMiddleC to z-axis <11.182788> speed <126.358464>;
+		turn CreatureUpperC to z-axis <13.666430> speed <139.736842>;
+		turn CreatureMiddleB to x-axis <-41.754623> speed <55.817923>;
+		turn CreatureMiddleA to z-axis <-17.206259> speed <99.665718>;
+		turn CreatureUpperA to z-axis <-6.580370> speed <135.000000>;
+		sleep 200;
+	}
+	if (ANIM_VARIABLE)
+	{
+		move CreatureRotate to y-axis [0.000000] speed [47.499998];
+		turn CreatureLowerA to z-axis <0.000000> speed <39.879090>;
+		turn CreatureLowerB to x-axis <0.000000> speed <48.648649>;
+		turn CreatureLowerC to z-axis <0.000000> speed <55.433855>;
+		turn CreatureLowerD to x-axis <0.000000> speed <48.648649>;
+		turn CreatureMiddleD to x-axis <0.000000> speed <87.695590>;
+		turn CreatureUpperD to x-axis <0.000000> speed <70.444523>;
+		turn CreatureMiddleC to z-axis <0.000000> speed <55.913940>;
+		turn CreatureUpperC to z-axis <0.000000> speed <68.332148>;
+		turn CreatureMiddleB to x-axis <0.000000> speed <208.773115>;
+		turn CreatureUpperB to x-axis <0.000000> speed <166.621622>;
+		turn CreatureMiddleA to z-axis <0.000000> speed <86.031294>;
+		turn CreatureUpperA to z-axis <0.000000> speed <32.901849>;
+		sleep 200;
+	}
+	sleep 200;
+}

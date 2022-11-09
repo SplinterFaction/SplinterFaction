@@ -1,0 +1,13 @@
+// MotionEd generated script file for animation
+
+default()
+{
+	if (ANIM_VARIABLE)
+	{
+		turn ArmLL to x-axis <-88.945313> speed <1010.742188>;
+		turn ArmLL to z-axis <33.000000> speed <375.000000>;
+		turn HandL to z-axis <10.000000> speed <113.636364>;
+		sleep 88;
+	}
+	sleep 88;
+}

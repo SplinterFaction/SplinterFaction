@@ -1,0 +1,263 @@
+walk_water()
+{
+	if (ANIM_VARIABLE)
+	{
+		turn LegUL to x-axis <1.757813> now;
+		turn LegUR to x-axis <-21.445312> now;
+		turn LegLR to x-axis <33.046875> now;
+		turn LegLL to x-axis <-2.109375> now;
+		turn ArmUL to x-axis <-4.218750> now;
+		turn ArmUL to y-axis <-1.000000> now;
+		turn ArmUL to z-axis <-9.000000> now;
+		turn ArmUR to x-axis <-3.515625> now;
+		turn ArmUR to y-axis <-2.000000> now;
+		turn ArmLR to x-axis <3.867188> now;
+		turn HandR to x-axis <9.843750> now;
+		turn ArmLL to x-axis <-88.945313> now;
+		turn ArmLL to z-axis <33.000000> now;
+		turn HandL to z-axis <10.000000> now;
+		sleep 114;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-2.000000> now;
+		turn LegUL to x-axis <15.468750> now;
+		turn LegUR to x-axis <-24.257812> now;
+		turn LegLR to x-axis <15.820313> now;
+		turn FootR to x-axis <6.679687> now;
+		turn LegLL to x-axis <-6.328125> now;
+		turn FootL to x-axis <-8.789063> now;
+		turn Head to y-axis <1.000000> now;
+		turn ArmUL to x-axis <-7.734375> now;
+		turn ArmUL to y-axis <-2.500000> now;
+		turn ArmUR to x-axis <3.515625> now;
+		turn ArmUR to y-axis <-5.000000> now;
+		turn ArmLR to x-axis <3.515625> now;
+		turn HandR to x-axis <5.625000> now;
+		turn ArmLL to x-axis <-87.187500> now;
+		sleep 123;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <1.000000> now;
+		turn Torso to y-axis <-4.000000> now;
+		turn LegUL to x-axis <23.906250> now;
+		turn LegUR to x-axis <-22.500000> now;
+		turn LegLR to x-axis <-3.515625> now;
+		turn FootR to x-axis <4.921875> now;
+		turn LegLL to x-axis <-5.625000> now;
+		turn FootL to x-axis <-4.570312> now;
+		turn Head to y-axis <3.000000> now;
+		turn ArmUL to x-axis <-10.195313> now;
+		turn ArmUL to y-axis <-5.000000> now;
+		turn ArmUR to x-axis <4.921875> now;
+		turn ArmUR to y-axis <-10.000000> now;
+		turn ArmLR to x-axis <5.273437> now;
+		turn HandR to x-axis <3.164063> now;
+		turn ArmLL to x-axis <-86.835938> now;
+		sleep 130;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <3.000000> now;
+		turn Torso to y-axis <-8.000000> now;
+		turn LegUL to x-axis <21.445313> now;
+		turn LegUR to x-axis <-26.015625> now;
+		turn LegLR to x-axis <12.656250> now;
+		turn FootR to x-axis <10.898437> now;
+		turn LegLL to x-axis <4.218750> now;
+		turn FootL to x-axis <-3.164062> now;
+		turn Head to x-axis <-1.500000> now;
+		turn Head to y-axis <7.000000> now;
+		turn ArmUL to x-axis <-6.679688> now;
+		turn ArmUL to y-axis <-2.500000> now;
+		turn ArmUR to x-axis <3.164063> now;
+		turn ArmUR to y-axis <-5.000000> now;
+		turn ArmLR to x-axis <2.109375> now;
+		turn HandR to x-axis <2.109375> now;
+		turn ArmLL to x-axis <-83.671875> now;
+
+		emit-sfx SFXTYPE_WAKE1 from waker;
+
+		sleep 126;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <8.000000> now;
+		turn Torso to y-axis <-4.000000> now;
+		turn LegUL to x-axis <9.492188> now;
+		turn LegUR to x-axis <-21.093750> now;
+		turn LegLR to x-axis <18.281250> now;
+		turn FootR to x-axis <4.921875> now;
+		turn LegLL to x-axis <29.882812> now;
+		turn FootL to x-axis <12.304688> now;
+		turn Head to x-axis <-5.000000> now;
+		turn Head to y-axis <3.000000> now;
+		turn ArmUL to x-axis <-2.812500> now;
+		turn ArmUL to y-axis <-1.000000> now;
+		turn ArmUR to x-axis <0.000000> now;
+		turn ArmUR to y-axis <-2.000000> now;
+		turn ArmLR to x-axis <-1.406250> now;
+		turn HandR to x-axis <1.406250> now;
+		turn ArmLL to x-axis <-86.132813> now;
+
+		emit-sfx SFXTYPE_WAKE1 from waker;
+
+		sleep 126;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <3.500000> now;
+		turn Torso to y-axis <-2.000000> now;
+		turn LegUL to x-axis <-4.921875> now;
+		turn LegUR to x-axis <-10.546875> now;
+		turn LegLR to x-axis <6.328125> now;
+		turn FootR to x-axis <4.218750> now;
+		turn LegLL to x-axis <47.460937> now;
+		turn FootL to x-axis <21.093750> now;
+		turn Head to x-axis <-1.500000> now;
+		turn Head to y-axis <1.000000> now;
+		turn ArmUL to x-axis <2.109375> now;
+		turn ArmUL to y-axis <0.000000> now;
+		turn ArmUR to x-axis <-4.570312> now;
+		turn ArmUR to y-axis <0.000000> now;
+		turn ArmLR to x-axis <-2.460938> now;
+		turn HandR to x-axis <3.515625> now;
+		turn ArmLL to x-axis <-90.000000> now;
+
+		emit-sfx SFXTYPE_WAKE1 from waker;
+
+		sleep 127;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <0.000000> now;
+		turn Torso to y-axis <0.000000> now;
+		turn LegUL to x-axis <-18.984375> now;
+		turn LegUR to x-axis <1.750000> now;
+		turn LegLR to x-axis <-2.100000> now;
+		turn FootR to x-axis <0.000000> now;
+		turn LegLL to x-axis <45.000000> now;
+		turn FootL to x-axis <9.843750> now;
+		turn Head to x-axis <0.000000> now;
+		turn Head to y-axis <0.000000> now;
+		turn ArmUL to x-axis <5.976563> now;
+		turn ArmUL to y-axis <1.000000> now;
+		turn ArmUR to x-axis <-11.601563> now;
+		turn ArmUR to y-axis <2.000000> now;
+		turn ArmLR to x-axis <-5.273438> now;
+		turn HandR to x-axis <8.085938> now;
+		turn ArmLL to x-axis <-94.218750> now;
+		sleep 128;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <2.000000> now;
+		turn LegUL to x-axis <-24.250000> now;
+		turn LegUR to x-axis <15.460000> now;
+		turn LegLR to x-axis <-6.300000> now;
+		turn FootR to x-axis <-8.700000> now;
+		turn LegLL to x-axis <15.800000> now;
+		turn FootL to x-axis <6.670000> now;
+		turn Head to y-axis <-1.000000> now;
+		turn ArmUL to x-axis <10.195313> now;
+		turn ArmUL to y-axis <2.500000> now;
+		turn ArmUR to x-axis <-19.687500> now;
+		turn ArmUR to y-axis <5.000000> now;
+		turn ArmLR to x-axis <-10.195312> now;
+		turn HandR to x-axis <9.492188> now;
+		turn ArmLL to x-axis <-98.437500> now;
+		sleep 122;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <1.000000> now;
+		turn Torso to y-axis <4.000000> now;
+		turn LegUL to x-axis <-22.500000> now;
+		turn LegUR to x-axis <23.900000> now;
+		turn LegLR to x-axis <-5.620000> now;
+		turn FootR to x-axis <-4.570000> now;
+		turn LegLL to x-axis <-3.510000> now;
+		turn FootL to x-axis <4.900000> now;
+		turn Head to y-axis <-3.000000> now;
+		turn ArmUL to x-axis <8.085938> now;
+		turn ArmUL to y-axis <5.000000> now;
+		turn ArmUR to x-axis <-28.125000> now;
+		turn ArmUR to y-axis <10.000000> now;
+		turn ArmLR to x-axis <-14.414062> now;
+		turn HandR to x-axis <3.164063> now;
+		turn ArmLL to x-axis <-94.570312> now;
+		sleep 132;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <3.000000> now;
+		turn Torso to y-axis <8.000000> now;
+		turn LegUL to x-axis <-26.010000> now;
+		turn LegUR to x-axis <21.440000> now;
+		turn LegLR to x-axis <4.210000> now;
+		turn FootR to x-axis <-3.160000> now;
+		turn LegLL to x-axis <12.650000> now;
+		turn FootL to x-axis <10.890000> now;
+		turn Head to x-axis <-1.500000> now;
+		turn Head to y-axis <-7.000000> now;
+		turn ArmUL to x-axis <3.164063> now;
+		turn ArmUL to y-axis <2.500000> now;
+		turn ArmUR to x-axis <-19.335938> now;
+		turn ArmUR to y-axis <5.000000> now;
+		turn ArmLR to x-axis <-18.632812> now;
+		turn HandR to x-axis <-2.812500> now;
+		turn ArmLL to x-axis <-90.000000> now;
+
+		emit-sfx SFXTYPE_WAKE1 from wakel;
+
+		sleep 122;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <8.000000> now;
+		turn Torso to y-axis <4.000000> now;
+		turn LegUL to x-axis <-23.200000> now;
+		turn LegUR to x-axis <9.490000> now;
+		turn LegLR to x-axis <29.880000> now;
+		turn FootR to x-axis <12.300000> now;
+		turn LegLL to x-axis <18.280000> now;
+		turn FootL to x-axis <4.900000> now;
+		turn Head to x-axis <-5.000000> now;
+		turn Head to y-axis <-3.000000> now;
+		turn ArmUL to x-axis <0.000000> now;
+		turn ArmUL to y-axis <1.000000> now;
+		turn ArmUR to x-axis <-10.546875> now;
+		turn ArmUR to y-axis <2.000000> now;
+		turn ArmLR to x-axis <-10.546875> now;
+		turn HandR to x-axis <0.000000> now;
+
+		emit-sfx SFXTYPE_WAKE1 from wakel;
+
+		sleep 129;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <1.750000> now;
+		turn Torso to y-axis <1.000000> now;
+		turn LegUL to x-axis <-4.391094> now;
+		turn LegUR to x-axis <-13.172656> now;
+		turn LegLR to x-axis <40.223438> now;
+		turn FootR to x-axis <10.545000> now;
+		turn LegLL to x-axis <2.105313> now;
+		turn FootL to x-axis <2.105000> now;
+		turn Head to x-axis <-0.750000> now;
+		turn Head to y-axis <-0.500000> now;
+		turn ArmUL to x-axis <-3.339844> now;
+		turn ArmUL to y-axis <-0.500000> now;
+		turn ArmUR to x-axis <-4.218750> now;
+		turn ArmUR to y-axis <-1.000000> now;
+		turn ArmLR to x-axis <1.230469> now;
+		turn HandR to x-axis <6.855469> now;
+		turn ArmLL to x-axis <-89.472656> now;
+
+		emit-sfx SFXTYPE_WAKE1 from wakel;
+
+		sleep 123;
+	}
+}

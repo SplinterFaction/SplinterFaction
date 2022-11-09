@@ -1,0 +1,733 @@
+turnleft()
+{
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <40.000000> now;
+		turn Oar1 to y-axis <45.818156> now;
+		turn Oar1 to z-axis <-19.877301> now;
+		turn Oar2 to x-axis <40.000000> now;
+		turn Oar2 to y-axis <45.818156> now;
+		turn Oar2 to z-axis <-19.877301> now;
+		turn Oar3 to x-axis <40.000000> now;
+		turn Oar3 to y-axis <45.818156> now;
+		turn Oar3 to z-axis <-19.877301> now;
+		turn Oar4 to x-axis <40.000000> now;
+		turn Oar4 to y-axis <-13.474406> now;
+		turn Oar4 to z-axis <19.877301> now;
+		turn Oar5 to x-axis <40.000000> now;
+		turn Oar5 to y-axis <-13.474406> now;
+		turn Oar5 to z-axis <19.877301> now;
+		turn Oar6 to x-axis <40.000000> now;
+		turn Oar6 to y-axis <-13.474406> now;
+		turn Oar6 to z-axis <19.877301> now;
+
+		oarsdown = TRUE;
+
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <41.250000> now;
+		turn Oar1 to y-axis <42.630368> now;
+		turn Oar1 to z-axis <-21.257669> now;
+		turn Oar2 to x-axis <41.250000> now;
+		turn Oar2 to y-axis <42.630368> now;
+		turn Oar2 to z-axis <-21.257669> now;
+		turn Oar3 to x-axis <41.250000> now;
+		turn Oar3 to y-axis <42.630368> now;
+		turn Oar3 to z-axis <-21.257669> now;
+		turn Oar4 to x-axis <41.250000> now;
+		turn Oar4 to y-axis <-12.571775> now;
+		turn Oar4 to z-axis <21.257669> now;
+		turn Oar5 to x-axis <41.250000> now;
+		turn Oar5 to y-axis <-12.571775> now;
+		turn Oar5 to z-axis <21.257669> now;
+		turn Oar6 to x-axis <41.250000> now;
+		turn Oar6 to y-axis <-12.571775> now;
+		turn Oar6 to z-axis <21.257669> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <42.500000> now;
+		turn Oar1 to y-axis <39.442581> now;
+		turn Oar1 to z-axis <-22.638037> now;
+		turn Oar2 to x-axis <42.500000> now;
+		turn Oar2 to y-axis <39.442581> now;
+		turn Oar2 to z-axis <-22.638037> now;
+		turn Oar3 to x-axis <42.500000> now;
+		turn Oar3 to y-axis <39.442581> now;
+		turn Oar3 to z-axis <-22.638037> now;
+		turn Oar4 to x-axis <42.500000> now;
+		turn Oar4 to y-axis <-11.669143> now;
+		turn Oar4 to z-axis <22.638037> now;
+		turn Oar5 to x-axis <42.500000> now;
+		turn Oar5 to y-axis <-11.669143> now;
+		turn Oar5 to z-axis <22.638037> now;
+		turn Oar6 to x-axis <42.500000> now;
+		turn Oar6 to y-axis <-11.669143> now;
+		turn Oar6 to z-axis <22.638037> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <43.750000> now;
+		turn Oar1 to y-axis <36.254793> now;
+		turn Oar1 to z-axis <-24.018405> now;
+		turn Oar2 to x-axis <43.750000> now;
+		turn Oar2 to y-axis <36.254793> now;
+		turn Oar2 to z-axis <-24.018405> now;
+		turn Oar3 to x-axis <43.750000> now;
+		turn Oar3 to y-axis <36.254793> now;
+		turn Oar3 to z-axis <-24.018405> now;
+		turn Oar4 to x-axis <43.750000> now;
+		turn Oar4 to y-axis <-10.766512> now;
+		turn Oar4 to z-axis <24.018405> now;
+		turn Oar5 to x-axis <43.750000> now;
+		turn Oar5 to y-axis <-10.766512> now;
+		turn Oar5 to z-axis <24.018405> now;
+		turn Oar6 to x-axis <43.750000> now;
+		turn Oar6 to y-axis <-10.766512> now;
+		turn Oar6 to z-axis <24.018405> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <45.000000> now;
+		turn Oar1 to y-axis <33.067005> now;
+		turn Oar1 to z-axis <-25.398773> now;
+		turn Oar2 to x-axis <45.000000> now;
+		turn Oar2 to y-axis <33.067005> now;
+		turn Oar2 to z-axis <-25.398773> now;
+		turn Oar3 to x-axis <45.000000> now;
+		turn Oar3 to y-axis <33.067005> now;
+		turn Oar3 to z-axis <-25.398773> now;
+		turn Oar4 to x-axis <45.000000> now;
+		turn Oar4 to y-axis <-9.863880> now;
+		turn Oar4 to z-axis <25.398773> now;
+		turn Oar5 to x-axis <45.000000> now;
+		turn Oar5 to y-axis <-9.863880> now;
+		turn Oar5 to z-axis <25.398773> now;
+		turn Oar6 to x-axis <45.000000> now;
+		turn Oar6 to y-axis <-9.863880> now;
+		turn Oar6 to z-axis <25.398773> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <46.250000> now;
+		turn Oar1 to y-axis <28.824530> now;
+		turn Oar1 to z-axis <-26.779141> now;
+		turn Oar2 to x-axis <46.250000> now;
+		turn Oar2 to y-axis <28.824530> now;
+		turn Oar2 to z-axis <-26.779141> now;
+		turn Oar3 to x-axis <46.250000> now;
+		turn Oar3 to y-axis <28.824530> now;
+		turn Oar3 to z-axis <-26.779141> now;
+		turn Oar4 to x-axis <46.250000> now;
+		turn Oar4 to y-axis <-9.664374> now;
+		turn Oar4 to z-axis <26.779141> now;
+		turn Oar5 to x-axis <46.250000> now;
+		turn Oar5 to y-axis <-9.664374> now;
+		turn Oar5 to z-axis <26.779141> now;
+		turn Oar6 to x-axis <46.250000> now;
+		turn Oar6 to y-axis <-9.664374> now;
+		turn Oar6 to z-axis <26.779141> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <47.500000> now;
+		turn Oar1 to y-axis <24.582055> now;
+		turn Oar1 to z-axis <-28.159509> now;
+		turn Oar2 to x-axis <47.500000> now;
+		turn Oar2 to y-axis <24.582055> now;
+		turn Oar2 to z-axis <-28.159509> now;
+		turn Oar3 to x-axis <47.500000> now;
+		turn Oar3 to y-axis <24.582055> now;
+		turn Oar3 to z-axis <-28.159509> now;
+		turn Oar4 to x-axis <47.500000> now;
+		turn Oar4 to y-axis <-9.464868> now;
+		turn Oar4 to z-axis <28.159509> now;
+		turn Oar5 to x-axis <47.500000> now;
+		turn Oar5 to y-axis <-9.464868> now;
+		turn Oar5 to z-axis <28.159509> now;
+		turn Oar6 to x-axis <47.500000> now;
+		turn Oar6 to y-axis <-9.464868> now;
+		turn Oar6 to z-axis <28.159509> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <48.750000> now;
+		turn Oar1 to y-axis <20.339580> now;
+		turn Oar1 to z-axis <-29.539877> now;
+		turn Oar2 to x-axis <48.750000> now;
+		turn Oar2 to y-axis <20.339580> now;
+		turn Oar2 to z-axis <-29.539877> now;
+		turn Oar3 to x-axis <48.750000> now;
+		turn Oar3 to y-axis <20.339580> now;
+		turn Oar3 to z-axis <-29.539877> now;
+		turn Oar4 to x-axis <48.750000> now;
+		turn Oar4 to y-axis <-9.265361> now;
+		turn Oar4 to z-axis <29.539877> now;
+		turn Oar5 to x-axis <48.750000> now;
+		turn Oar5 to y-axis <-9.265361> now;
+		turn Oar5 to z-axis <29.539877> now;
+		turn Oar6 to x-axis <48.750000> now;
+		turn Oar6 to y-axis <-9.265361> now;
+		turn Oar6 to z-axis <29.539877> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <50.000000> now;
+		turn Oar1 to y-axis <16.097105> now;
+		turn Oar1 to z-axis <-30.920245> now;
+		turn Oar2 to x-axis <50.000000> now;
+		turn Oar2 to y-axis <16.097105> now;
+		turn Oar2 to z-axis <-30.920245> now;
+		turn Oar3 to x-axis <50.000000> now;
+		turn Oar3 to y-axis <16.097105> now;
+		turn Oar3 to z-axis <-30.920245> now;
+		turn Oar4 to x-axis <50.000000> now;
+		turn Oar4 to y-axis <-9.065855> now;
+		turn Oar4 to z-axis <30.920245> now;
+		turn Oar5 to x-axis <50.000000> now;
+		turn Oar5 to y-axis <-9.065855> now;
+		turn Oar5 to z-axis <30.920245> now;
+		turn Oar6 to x-axis <50.000000> now;
+		turn Oar6 to y-axis <-9.065855> now;
+		turn Oar6 to z-axis <30.920245> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <50.559816> now;
+		turn Oar1 to y-axis <12.482266> now;
+		turn Oar1 to z-axis <-30.527344> now;
+		turn Oar2 to x-axis <50.559816> now;
+		turn Oar2 to y-axis <12.482266> now;
+		turn Oar2 to z-axis <-30.527344> now;
+		turn Oar3 to x-axis <50.559816> now;
+		turn Oar3 to y-axis <12.482266> now;
+		turn Oar3 to z-axis <-30.527344> now;
+		turn Oar4 to x-axis <50.559816> now;
+		turn Oar4 to y-axis <-7.911954> now;
+		turn Oar4 to z-axis <30.000000> now;
+		turn Oar5 to x-axis <50.559816> now;
+		turn Oar5 to y-axis <-7.911954> now;
+		turn Oar5 to z-axis <30.000000> now;
+		turn Oar6 to x-axis <50.559816> now;
+		turn Oar6 to y-axis <-7.911954> now;
+		turn Oar6 to z-axis <30.000000> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <51.119632> now;
+		turn Oar1 to y-axis <8.867427> now;
+		turn Oar1 to z-axis <-30.134442> now;
+		turn Oar2 to x-axis <51.119632> now;
+		turn Oar2 to y-axis <8.867427> now;
+		turn Oar2 to z-axis <-30.134442> now;
+		turn Oar3 to x-axis <51.119632> now;
+		turn Oar3 to y-axis <8.867427> now;
+		turn Oar3 to z-axis <-30.134442> now;
+		turn Oar4 to x-axis <51.119632> now;
+		turn Oar4 to y-axis <-6.758052> now;
+		turn Oar4 to z-axis <29.079754> now;
+		turn Oar5 to x-axis <51.119632> now;
+		turn Oar5 to y-axis <-6.758052> now;
+		turn Oar5 to z-axis <29.079754> now;
+		turn Oar6 to x-axis <51.119632> now;
+		turn Oar6 to y-axis <-6.758052> now;
+		turn Oar6 to z-axis <29.079754> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <51.679448> now;
+		turn Oar1 to y-axis <5.252588> now;
+		turn Oar1 to z-axis <-29.741541> now;
+		turn Oar2 to x-axis <51.679448> now;
+		turn Oar2 to y-axis <5.252588> now;
+		turn Oar2 to z-axis <-29.741541> now;
+		turn Oar3 to x-axis <51.679448> now;
+		turn Oar3 to y-axis <5.252588> now;
+		turn Oar3 to z-axis <-29.741541> now;
+		turn Oar4 to x-axis <51.679448> now;
+		turn Oar4 to y-axis <-5.604151> now;
+		turn Oar4 to z-axis <28.159509> now;
+		turn Oar5 to x-axis <51.679448> now;
+		turn Oar5 to y-axis <-5.604151> now;
+		turn Oar5 to z-axis <28.159509> now;
+		turn Oar6 to x-axis <51.679448> now;
+		turn Oar6 to y-axis <-5.604151> now;
+		turn Oar6 to z-axis <28.159509> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <52.239264> now;
+		turn Oar1 to y-axis <1.637749> now;
+		turn Oar1 to z-axis <-29.348639> now;
+		turn Oar2 to x-axis <52.239264> now;
+		turn Oar2 to y-axis <1.637749> now;
+		turn Oar2 to z-axis <-29.348639> now;
+		turn Oar3 to x-axis <52.239264> now;
+		turn Oar3 to y-axis <1.637749> now;
+		turn Oar3 to z-axis <-29.348639> now;
+		turn Oar4 to x-axis <52.239264> now;
+		turn Oar4 to y-axis <-4.450249> now;
+		turn Oar4 to z-axis <27.239264> now;
+		turn Oar5 to x-axis <52.239264> now;
+		turn Oar5 to y-axis <-4.450249> now;
+		turn Oar5 to z-axis <27.239264> now;
+		turn Oar6 to x-axis <52.239264> now;
+		turn Oar6 to y-axis <-4.450249> now;
+		turn Oar6 to z-axis <27.239264> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <52.799080> now;
+		turn Oar1 to y-axis <-1.713418> now;
+		turn Oar1 to z-axis <-27.901050> now;
+		turn Oar2 to x-axis <52.799080> now;
+		turn Oar2 to y-axis <-1.713418> now;
+		turn Oar2 to z-axis <-27.901050> now;
+		turn Oar3 to x-axis <52.799080> now;
+		turn Oar3 to y-axis <-1.713418> now;
+		turn Oar3 to z-axis <-27.901050> now;
+		turn Oar4 to x-axis <52.799080> now;
+		turn Oar4 to y-axis <-3.384238> now;
+		turn Oar4 to z-axis <26.319018> now;
+		turn Oar5 to x-axis <52.799080> now;
+		turn Oar5 to y-axis <-3.384238> now;
+		turn Oar5 to z-axis <26.319018> now;
+		turn Oar6 to x-axis <52.799080> now;
+		turn Oar6 to y-axis <-3.384238> now;
+		turn Oar6 to z-axis <26.319018> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <53.358896> now;
+		turn Oar1 to y-axis <-5.064585> now;
+		turn Oar1 to z-axis <-26.453460> now;
+		turn Oar2 to x-axis <53.358896> now;
+		turn Oar2 to y-axis <-5.064585> now;
+		turn Oar2 to z-axis <-26.453460> now;
+		turn Oar3 to x-axis <53.358896> now;
+		turn Oar3 to y-axis <-5.064585> now;
+		turn Oar3 to z-axis <-26.453460> now;
+		turn Oar4 to x-axis <53.358896> now;
+		turn Oar4 to y-axis <-2.318228> now;
+		turn Oar4 to z-axis <25.398773> now;
+		turn Oar5 to x-axis <53.358896> now;
+		turn Oar5 to y-axis <-2.318228> now;
+		turn Oar5 to z-axis <25.398773> now;
+		turn Oar6 to x-axis <53.358896> now;
+		turn Oar6 to y-axis <-2.318228> now;
+		turn Oar6 to z-axis <25.398773> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <53.918712> now;
+		turn Oar1 to y-axis <-8.415752> now;
+		turn Oar1 to z-axis <-25.005871> now;
+		turn Oar2 to x-axis <53.918712> now;
+		turn Oar2 to y-axis <-8.415752> now;
+		turn Oar2 to z-axis <-25.005871> now;
+		turn Oar3 to x-axis <53.918712> now;
+		turn Oar3 to y-axis <-8.415752> now;
+		turn Oar3 to z-axis <-25.005871> now;
+		turn Oar4 to x-axis <53.918712> now;
+		turn Oar4 to y-axis <-1.252217> now;
+		turn Oar4 to z-axis <24.478527> now;
+		turn Oar5 to x-axis <53.918712> now;
+		turn Oar5 to y-axis <-1.252217> now;
+		turn Oar5 to z-axis <24.478527> now;
+		turn Oar6 to x-axis <53.918712> now;
+		turn Oar6 to y-axis <-1.252217> now;
+		turn Oar6 to z-axis <24.478527> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <54.478528> now;
+		turn Oar1 to y-axis <-11.766919> now;
+		turn Oar1 to z-axis <-23.558282> now;
+		turn Oar2 to x-axis <54.478528> now;
+		turn Oar2 to y-axis <-11.766919> now;
+		turn Oar2 to z-axis <-23.558282> now;
+		turn Oar3 to x-axis <54.478528> now;
+		turn Oar3 to y-axis <-11.766919> now;
+		turn Oar3 to z-axis <-23.558282> now;
+		turn Oar4 to x-axis <54.478528> now;
+		turn Oar4 to y-axis <-0.186206> now;
+		turn Oar4 to z-axis <23.558282> now;
+		turn Oar5 to x-axis <54.478528> now;
+		turn Oar5 to y-axis <-0.186206> now;
+		turn Oar5 to z-axis <23.558282> now;
+		turn Oar6 to x-axis <54.478528> now;
+		turn Oar6 to y-axis <-0.186206> now;
+		turn Oar6 to z-axis <23.558282> now;
+		sleep 103;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <45.858896> now;
+		turn Oar1 to y-axis <-19.807204> now;
+		turn Oar1 to z-axis <-17.668712> now;
+		turn Oar2 to x-axis <45.858896> now;
+		turn Oar2 to y-axis <-19.807204> now;
+		turn Oar2 to z-axis <-17.668712> now;
+		turn Oar3 to x-axis <45.858896> now;
+		turn Oar3 to y-axis <-19.807204> now;
+		turn Oar3 to z-axis <-17.668712> now;
+		turn Oar4 to x-axis <45.858896> now;
+		turn Oar4 to y-axis <6.799391> now;
+		turn Oar4 to z-axis <17.668712> now;
+		turn Oar5 to x-axis <45.858896> now;
+		turn Oar5 to y-axis <6.799391> now;
+		turn Oar5 to z-axis <17.668712> now;
+		turn Oar6 to x-axis <45.858896> now;
+		turn Oar6 to y-axis <6.799391> now;
+		turn Oar6 to z-axis <17.668712> now;
+
+		oarsdown = FALSE;
+
+		sleep 103;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <37.239264> now;
+		turn Oar1 to y-axis <-27.847488> now;
+		turn Oar1 to z-axis <-11.779141> now;
+		turn Oar2 to x-axis <37.239264> now;
+		turn Oar2 to y-axis <-27.847488> now;
+		turn Oar2 to z-axis <-11.779141> now;
+		turn Oar3 to x-axis <37.239264> now;
+		turn Oar3 to y-axis <-27.847488> now;
+		turn Oar3 to z-axis <-11.779141> now;
+		turn Oar4 to x-axis <37.239264> now;
+		turn Oar4 to y-axis <13.784988> now;
+		turn Oar4 to z-axis <11.779141> now;
+		turn Oar5 to x-axis <37.239264> now;
+		turn Oar5 to y-axis <13.784988> now;
+		turn Oar5 to z-axis <11.779141> now;
+		turn Oar6 to x-axis <37.239264> now;
+		turn Oar6 to y-axis <13.784988> now;
+		turn Oar6 to z-axis <11.779141> now;
+		sleep 103;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <28.619632> now;
+		turn Oar1 to y-axis <-28.856523> now;
+		turn Oar1 to z-axis <-5.889570> now;
+		turn Oar2 to x-axis <28.619632> now;
+		turn Oar2 to y-axis <-28.856523> now;
+		turn Oar2 to z-axis <-5.889570> now;
+		turn Oar3 to x-axis <28.619632> now;
+		turn Oar3 to y-axis <-28.856523> now;
+		turn Oar3 to z-axis <-5.889570> now;
+		turn Oar4 to x-axis <28.619632> now;
+		turn Oar4 to y-axis <16.551835> now;
+		turn Oar4 to z-axis <5.889570> now;
+		turn Oar5 to x-axis <28.619632> now;
+		turn Oar5 to y-axis <16.551835> now;
+		turn Oar5 to z-axis <5.889570> now;
+		turn Oar6 to x-axis <28.619632> now;
+		turn Oar6 to y-axis <16.551835> now;
+		turn Oar6 to z-axis <5.889570> now;
+		sleep 104;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <20.000000> now;
+		turn Oar1 to y-axis <-29.865558> now;
+		turn Oar1 to z-axis <0.000000> now;
+		turn Oar2 to x-axis <20.000000> now;
+		turn Oar2 to y-axis <-29.865558> now;
+		turn Oar2 to z-axis <0.000000> now;
+		turn Oar3 to x-axis <20.000000> now;
+		turn Oar3 to y-axis <-29.865558> now;
+		turn Oar3 to z-axis <0.000000> now;
+		turn Oar4 to x-axis <20.000000> now;
+		turn Oar4 to y-axis <19.318683> now;
+		turn Oar4 to z-axis <0.000000> now;
+		turn Oar5 to x-axis <20.000000> now;
+		turn Oar5 to y-axis <19.318683> now;
+		turn Oar5 to z-axis <0.000000> now;
+		turn Oar6 to x-axis <20.000000> now;
+		turn Oar6 to y-axis <19.318683> now;
+		turn Oar6 to z-axis <0.000000> now;
+		sleep 69;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to y-axis <-28.547199> now;
+		turn Oar1 to z-axis <3.515625> now;
+		turn Oar2 to y-axis <-28.547199> now;
+		turn Oar2 to z-axis <3.515625> now;
+		turn Oar3 to y-axis <-28.547199> now;
+		turn Oar3 to z-axis <3.515625> now;
+		turn Oar4 to y-axis <19.055011> now;
+		turn Oar4 to z-axis <-3.515625> now;
+		turn Oar5 to y-axis <19.055011> now;
+		turn Oar5 to z-axis <-3.515625> now;
+		turn Oar6 to y-axis <19.055011> now;
+		turn Oar6 to z-axis <-3.515625> now;
+		sleep 69;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to y-axis <-27.228839> now;
+		turn Oar1 to z-axis <7.031250> now;
+		turn Oar2 to y-axis <-27.228839> now;
+		turn Oar2 to z-axis <7.031250> now;
+		turn Oar3 to y-axis <-27.228839> now;
+		turn Oar3 to z-axis <7.031250> now;
+		turn Oar4 to y-axis <18.791339> now;
+		turn Oar4 to z-axis <-7.031250> now;
+		turn Oar5 to y-axis <18.791339> now;
+		turn Oar5 to z-axis <-7.031250> now;
+		turn Oar6 to y-axis <18.791339> now;
+		turn Oar6 to z-axis <-7.031250> now;
+		sleep 69;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to y-axis <-26.086261> now;
+		turn Oar1 to z-axis <10.546875> now;
+		turn Oar2 to y-axis <-26.086261> now;
+		turn Oar2 to z-axis <10.546875> now;
+		turn Oar3 to y-axis <-26.086261> now;
+		turn Oar3 to z-axis <10.546875> now;
+		turn Oar4 to y-axis <19.055011> now;
+		turn Oar4 to z-axis <-10.546875> now;
+		turn Oar5 to y-axis <19.055011> now;
+		turn Oar5 to z-axis <-10.546875> now;
+		turn Oar6 to y-axis <19.055011> now;
+		turn Oar6 to z-axis <-10.546875> now;
+		sleep 70;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to y-axis <-24.943683> now;
+		turn Oar1 to z-axis <14.062500> now;
+		turn Oar2 to y-axis <-24.943683> now;
+		turn Oar2 to z-axis <14.062500> now;
+		turn Oar3 to y-axis <-24.943683> now;
+		turn Oar3 to z-axis <14.062500> now;
+		turn Oar4 to y-axis <19.318683> now;
+		turn Oar4 to z-axis <-14.062500> now;
+		turn Oar5 to y-axis <19.318683> now;
+		turn Oar5 to z-axis <-14.062500> now;
+		turn Oar6 to y-axis <19.318683> now;
+		turn Oar6 to z-axis <-14.062500> now;
+		sleep 66;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <15.000000> now;
+		turn Oar1 to y-axis <-20.347669> now;
+		turn Oar1 to z-axis <16.521281> now;
+		turn Oar2 to x-axis <15.000000> now;
+		turn Oar2 to y-axis <-20.347669> now;
+		turn Oar2 to z-axis <16.521281> now;
+		turn Oar3 to x-axis <15.000000> now;
+		turn Oar3 to y-axis <-20.347669> now;
+		turn Oar3 to z-axis <16.521281> now;
+		turn Oar4 to x-axis <15.000000> now;
+		turn Oar4 to y-axis <16.832044> now;
+		turn Oar4 to z-axis <-16.521281> now;
+		turn Oar5 to x-axis <15.000000> now;
+		turn Oar5 to y-axis <16.832044> now;
+		turn Oar5 to z-axis <-16.521281> now;
+		turn Oar6 to x-axis <15.000000> now;
+		turn Oar6 to y-axis <16.832044> now;
+		turn Oar6 to z-axis <-16.521281> now;
+		sleep 67;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <10.000000> now;
+		turn Oar1 to y-axis <-15.751654> now;
+		turn Oar1 to z-axis <18.980061> now;
+		turn Oar2 to x-axis <10.000000> now;
+		turn Oar2 to y-axis <-15.751654> now;
+		turn Oar2 to z-axis <18.980061> now;
+		turn Oar3 to x-axis <10.000000> now;
+		turn Oar3 to y-axis <-15.751654> now;
+		turn Oar3 to z-axis <18.980061> now;
+		turn Oar4 to x-axis <10.000000> now;
+		turn Oar4 to y-axis <14.345404> now;
+		turn Oar4 to z-axis <-18.980061> now;
+		turn Oar5 to x-axis <10.000000> now;
+		turn Oar5 to y-axis <14.345404> now;
+		turn Oar5 to z-axis <-18.980061> now;
+		turn Oar6 to x-axis <10.000000> now;
+		turn Oar6 to y-axis <14.345404> now;
+		turn Oar6 to z-axis <-18.980061> now;
+		sleep 67;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <5.000000> now;
+		turn Oar1 to y-axis <-8.343139> now;
+		turn Oar1 to z-axis <21.438842> now;
+		turn Oar2 to x-axis <5.000000> now;
+		turn Oar2 to y-axis <-8.343139> now;
+		turn Oar2 to z-axis <21.438842> now;
+		turn Oar3 to x-axis <5.000000> now;
+		turn Oar3 to y-axis <-8.343139> now;
+		turn Oar3 to z-axis <21.438842> now;
+		turn Oar4 to x-axis <5.000000> now;
+		turn Oar4 to y-axis <12.210327> now;
+		turn Oar4 to z-axis <-19.681030> now;
+		turn Oar5 to x-axis <5.000000> now;
+		turn Oar5 to y-axis <12.210327> now;
+		turn Oar5 to z-axis <-19.681030> now;
+		turn Oar6 to x-axis <5.000000> now;
+		turn Oar6 to y-axis <12.210327> now;
+		turn Oar6 to z-axis <-19.681030> now;
+		sleep 67;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <0.000000> now;
+		turn Oar1 to y-axis <-0.934624> now;
+		turn Oar1 to z-axis <23.897623> now;
+		turn Oar2 to x-axis <0.000000> now;
+		turn Oar2 to y-axis <-0.934624> now;
+		turn Oar2 to z-axis <23.897623> now;
+		turn Oar3 to x-axis <0.000000> now;
+		turn Oar3 to y-axis <-0.934624> now;
+		turn Oar3 to z-axis <23.897623> now;
+		turn Oar4 to x-axis <0.000000> now;
+		turn Oar4 to y-axis <10.075249> now;
+		turn Oar4 to z-axis <-20.381998> now;
+		turn Oar5 to x-axis <0.000000> now;
+		turn Oar5 to y-axis <10.075249> now;
+		turn Oar5 to z-axis <-20.381998> now;
+		turn Oar6 to x-axis <0.000000> now;
+		turn Oar6 to y-axis <10.075249> now;
+		turn Oar6 to z-axis <-20.381998> now;
+		sleep 68;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <5.000000> now;
+		turn Oar1 to y-axis <5.273438> now;
+		turn Oar1 to z-axis <18.475365> now;
+		turn Oar2 to x-axis <5.000000> now;
+		turn Oar2 to y-axis <5.273438> now;
+		turn Oar2 to z-axis <18.475365> now;
+		turn Oar3 to x-axis <5.000000> now;
+		turn Oar3 to y-axis <5.273438> now;
+		turn Oar3 to z-axis <18.475365> now;
+		turn Oar4 to x-axis <5.000000> now;
+		turn Oar4 to y-axis <7.382813> now;
+		turn Oar4 to z-axis <-18.826927> now;
+		turn Oar5 to x-axis <5.000000> now;
+		turn Oar5 to y-axis <7.382813> now;
+		turn Oar5 to z-axis <-18.826927> now;
+		turn Oar6 to x-axis <5.000000> now;
+		turn Oar6 to y-axis <7.382813> now;
+		turn Oar6 to z-axis <-18.826927> now;
+		sleep 69;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <10.000000> now;
+		turn Oar1 to y-axis <11.481499> now;
+		turn Oar1 to z-axis <13.053106> now;
+		turn Oar2 to x-axis <10.000000> now;
+		turn Oar2 to y-axis <11.481499> now;
+		turn Oar2 to z-axis <13.053106> now;
+		turn Oar3 to x-axis <10.000000> now;
+		turn Oar3 to y-axis <11.481499> now;
+		turn Oar3 to z-axis <13.053106> now;
+		turn Oar4 to x-axis <10.000000> now;
+		turn Oar4 to y-axis <4.690376> now;
+		turn Oar4 to z-axis <-17.271856> now;
+		turn Oar5 to x-axis <10.000000> now;
+		turn Oar5 to y-axis <4.690376> now;
+		turn Oar5 to z-axis <-17.271856> now;
+		turn Oar6 to x-axis <10.000000> now;
+		turn Oar6 to y-axis <4.690376> now;
+		turn Oar6 to z-axis <-17.271856> now;
+		sleep 69;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <15.000000> now;
+		turn Oar1 to y-axis <20.150498> now;
+		turn Oar1 to z-axis <7.630848> now;
+		turn Oar2 to x-axis <15.000000> now;
+		turn Oar2 to y-axis <20.150498> now;
+		turn Oar2 to z-axis <7.630848> now;
+		turn Oar3 to x-axis <15.000000> now;
+		turn Oar3 to y-axis <20.150498> now;
+		turn Oar3 to z-axis <7.630848> now;
+		turn Oar4 to x-axis <15.000000> now;
+		turn Oar4 to y-axis <1.997939> now;
+		turn Oar4 to z-axis <-11.498035> now;
+		turn Oar5 to x-axis <15.000000> now;
+		turn Oar5 to y-axis <1.997939> now;
+		turn Oar5 to z-axis <-11.498035> now;
+		turn Oar6 to x-axis <15.000000> now;
+		turn Oar6 to y-axis <1.997939> now;
+		turn Oar6 to z-axis <-11.498035> now;
+		sleep 69;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <20.000000> now;
+		turn Oar1 to y-axis <28.819498> now;
+		turn Oar1 to z-axis <2.208589> now;
+		turn Oar2 to x-axis <20.000000> now;
+		turn Oar2 to y-axis <28.819498> now;
+		turn Oar2 to z-axis <2.208589> now;
+		turn Oar3 to x-axis <20.000000> now;
+		turn Oar3 to y-axis <28.819498> now;
+		turn Oar3 to z-axis <2.208589> now;
+		turn Oar4 to x-axis <20.000000> now;
+		turn Oar4 to y-axis <-0.694498> now;
+		turn Oar4 to z-axis <-5.724214> now;
+		turn Oar5 to x-axis <20.000000> now;
+		turn Oar5 to y-axis <-0.694498> now;
+		turn Oar5 to z-axis <-5.724214> now;
+		turn Oar6 to x-axis <20.000000> now;
+		turn Oar6 to y-axis <-0.694498> now;
+		turn Oar6 to z-axis <-5.724214> now;
+		sleep 71;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Oar1 to x-axis <30.000000> now;
+		turn Oar1 to y-axis <35.912577> now;
+		turn Oar1 to z-axis <-8.834356> now;
+		turn Oar2 to x-axis <30.000000> now;
+		turn Oar2 to y-axis <35.912577> now;
+		turn Oar2 to z-axis <-8.834356> now;
+		turn Oar3 to x-axis <30.000000> now;
+		turn Oar3 to y-axis <35.912577> now;
+		turn Oar3 to z-axis <-8.834356> now;
+		turn Oar4 to x-axis <30.000000> now;
+		turn Oar4 to y-axis <-7.084452> now;
+		turn Oar4 to z-axis <6.724981> now;
+		turn Oar5 to x-axis <30.000000> now;
+		turn Oar5 to y-axis <-7.084452> now;
+		turn Oar5 to z-axis <6.724981> now;
+		turn Oar6 to x-axis <30.000000> now;
+		turn Oar6 to y-axis <-7.084452> now;
+		turn Oar6 to z-axis <6.724981> now;
+		sleep 72;
+	}
+}

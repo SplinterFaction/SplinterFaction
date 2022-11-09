@@ -1,0 +1,361 @@
+// MotionEd generated script file for animation
+
+startbuild()
+{
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <4.218750> now;
+		turn ArmUL to y-axis <7.000000> now;
+		turn ArmUR to x-axis <1.406250> now;
+		turn ArmLR to x-axis <-38.671875> now;
+		turn SleaveR to x-axis <31.640625> now;
+		turn HandR to x-axis <-41.484375> now;
+		turn ArmLL to x-axis <-10.195313> now;
+		sleep 55;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-6.000000> now;
+		turn ArmUL to x-axis <-2.109375> now;
+		turn ArmUR to x-axis <-64.511719> now;
+		turn ArmUR to y-axis <-15.468750> now;
+		turn Head to x-axis <-3.691406> now;
+		turn ArmLR to x-axis <-40.605469> now;
+		turn ArmLR to y-axis <0.175781> now;
+		turn SleaveR to x-axis <94.746094> now;
+		turn HandR to x-axis <-16.875000> now;
+		turn HandR to y-axis <5.625000> now;
+		turn ArmLL to x-axis <-14.941406> now;
+		turn SleaveL to x-axis <7.382813> now;
+		sleep 52;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-12.000000> now;
+		turn ArmUL to x-axis <-9.140625> now;
+		turn ArmUR to x-axis <-130.429688> now;
+		turn ArmUR to y-axis <-30.937500> now;
+		turn Head to x-axis <-7.382813> now;
+		turn ArmLR to x-axis <-42.539063> now;
+		turn ArmLR to y-axis <0.351562> now;
+		turn SleaveR to x-axis <148.359375> now;
+		turn HandR to x-axis <7.734375> now;
+		turn HandR to y-axis <11.250000> now;
+		turn ArmLL to x-axis <-19.335938> now;
+		turn SleaveL to x-axis <18.632813> now;
+		sleep 53;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-9.000000> now;
+		turn ArmUL to x-axis <-3.515625> now;
+		turn ArmUR to x-axis <-105.996094> now;
+		turn ArmUR to y-axis <-10.898437> now;
+		turn ArmUR to z-axis <2.460937> now;
+		turn Head to x-axis <-3.691406> now;
+		turn ArmLR to x-axis <-46.582031> now;
+		turn ArmLR to y-axis <0.175781> now;
+		turn SleaveR to x-axis <144.316406> now;
+		turn HandR to x-axis <4.394531> now;
+		turn HandR to y-axis <13.359375> now;
+		turn ArmLL to x-axis <-15.996094> now;
+		turn SleaveL to x-axis <9.843750> now;
+		sleep 50;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-6.000000> now;
+		turn ArmUL to x-axis <4.218750> now;
+		turn ArmUR to x-axis <-81.562500> now;
+		turn ArmUR to y-axis <9.140625> now;
+		turn ArmUR to z-axis <4.921875> now;
+		turn Head to x-axis <0.000000> now;
+		turn ArmLR to x-axis <-50.625000> now;
+		turn ArmLR to y-axis <0.000000> now;
+		turn SleaveR to x-axis <122.695312> now;
+		turn HandR to x-axis <1.054688> now;
+		turn HandR to y-axis <15.468750> now;
+		turn ArmLL to x-axis <-10.195313> now;
+		turn SleaveL to x-axis <-1.054688> now;
+		sleep 54;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <4.218750> now;
+		turn Torso to y-axis <-3.000000> now;
+		turn ArmUR to x-axis <-65.742187> now;
+		turn ArmUR to y-axis <12.128906> now;
+		turn ArmUR to z-axis <2.460937> now;
+		turn Head to x-axis <1.933594> now;
+		turn ArmLR to x-axis <-46.054687> now;
+		turn ArmLR to y-axis <-3.867188> now;
+		turn SleaveR to x-axis <96.503906> now;
+		turn HandR to x-axis <-1.406250> now;
+		turn HandR to y-axis <11.074219> now;
+		turn SleaveL to x-axis <-5.273438> now;
+		sleep 49;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <8.437500> now;
+		turn Torso to y-axis <0.000000> now;
+		turn ArmUR to x-axis <-49.921875> now;
+		turn ArmUR to y-axis <15.117188> now;
+		turn ArmUR to z-axis <0.000000> now;
+		turn Head to x-axis <3.867187> now;
+		turn ArmLR to x-axis <-41.484375> now;
+		turn ArmLR to y-axis <-7.734375> now;
+		turn SleaveR to x-axis <69.960938> now;
+		turn HandR to x-axis <-3.867188> now;
+		turn HandR to y-axis <6.679688> now;
+		turn SleaveL to x-axis <-8.789063> now;
+		sleep 51;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <4.218750> now;
+		turn Torso to y-axis <3.339844> now;
+		turn ArmUL to x-axis <-4.218750> now;
+		turn ArmUR to x-axis <-45.000000> now;
+		turn ArmUR to y-axis <12.304688> now;
+		turn Head to x-axis <1.933594> now;
+		turn Head to y-axis <4.218750> now;
+		turn SleaveR to x-axis <65.390625> now;
+		turn HandR to x-axis <-5.097656> now;
+		turn HandR to y-axis <5.449219> now;
+		turn ArmLL to x-axis <-71.367188> now;
+		turn SleaveL to x-axis <66.445313> now;
+		turn HandL to x-axis <32.871094> now;
+		turn HandL to y-axis <61.171875> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <2.109375> now;
+		turn Torso to y-axis <5.009766> now;
+		turn ArmUL to x-axis <-8.437500> now;
+		turn ArmUR to x-axis <-42.539062> now;
+		turn ArmUR to y-axis <10.898438> now;
+		turn Head to x-axis <0.966797> now;
+		turn Head to y-axis <6.328125> now;
+		turn SleaveR to x-axis <66.621094> now;
+		turn HandR to x-axis <-5.712891> now;
+		turn HandR to y-axis <4.833984> now;
+		turn ArmLL to x-axis <-114.257813> now;
+		turn SleaveL to x-axis <99.667969> now;
+		turn HandL to x-axis <49.306641> now;
+		turn HandL to y-axis <91.757813> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <0.000000> now;
+		turn Torso to y-axis <6.679688> now;
+		turn ArmUL to x-axis <-12.656250> now;
+		turn ArmUR to x-axis <-40.078125> now;
+		turn ArmUR to y-axis <9.492188> now;
+		turn Head to x-axis <0.000000> now;
+		turn Head to y-axis <8.437500> now;
+		turn SleaveR to x-axis <67.851562> now;
+		turn HandR to x-axis <-6.328125> now;
+		turn HandR to y-axis <4.218750> now;
+		turn ArmLL to x-axis <-132.539063> now;
+		turn SleaveL to x-axis <132.890625> now;
+		turn HandL to x-axis <65.742187> now;
+		turn HandL to y-axis <122.343750> now;
+		sleep 108;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <2.285156> now;
+		turn Torso to y-axis <3.339844> now;
+		turn ArmUL to x-axis <-19.863281> now;
+		turn ArmUL to y-axis <1.550781> now;
+		turn ArmUL to z-axis <4.921875> now;
+		turn ArmUR to x-axis <-41.484375> now;
+		turn ArmUR to y-axis <11.425781> now;
+		turn Head to y-axis <4.218750> now;
+		turn SleaveR to x-axis <68.554687> now;
+		turn HandR to x-axis <-7.734375> now;
+		turn ArmLL to x-axis <-72.773438> now;
+		turn ArmLL to y-axis <-15.292969> now;
+		turn ArmLL to z-axis <30.585938> now;
+		turn SleaveL to x-axis <80.507813> now;
+		turn HandL to x-axis <41.308594> now;
+		turn HandL to y-axis <88.242188> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <3.427734> now;
+		turn Torso to y-axis <1.669922> now;
+		turn ArmUL to x-axis <-23.466797> now;
+		turn ArmUL to y-axis <-1.173828> now;
+		turn ArmUL to z-axis <7.382813> now;
+		turn ArmUR to x-axis <-42.187500> now;
+		turn ArmUR to y-axis <12.392578> now;
+		turn Head to y-axis <2.109375> now;
+		turn SleaveR to x-axis <68.378906> now;
+		turn HandR to x-axis <-8.437500> now;
+		turn ArmLL to x-axis <-30.234375> now;
+		turn ArmLL to y-axis <-22.939453> now;
+		turn ArmLL to z-axis <22.675781> now;
+		turn SleaveL to x-axis <44.824219> now;
+		turn HandL to x-axis <29.091797> now;
+		turn HandL to y-axis <71.191406> now;
+		sleep 80;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <4.570312> now;
+		turn Torso to y-axis <0.000000> now;
+		turn ArmUL to x-axis <-27.070313> now;
+		turn ArmUL to y-axis <-3.898437> now;
+		turn ArmUL to z-axis <9.843750> now;
+		turn ArmUR to x-axis <-42.890625> now;
+		turn ArmUR to y-axis <13.359375> now;
+		turn Head to y-axis <0.000000> now;
+		turn SleaveR to x-axis <68.203125> now;
+		turn HandR to x-axis <-9.140625> now;
+		turn ArmLL to x-axis <-13.007813> now;
+		turn ArmLL to y-axis <-30.585938> now;
+		turn ArmLL to z-axis <14.765625> now;
+		turn SleaveL to x-axis <26.718750> now;
+		turn HandL to x-axis <16.875000> now;
+		turn HandL to y-axis <54.140625> now;
+		sleep 107;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <2.285156> now;
+		turn Torso to y-axis <-3.339844> now;
+		turn ArmUL to x-axis <-51.679687> now;
+		turn ArmUL to y-axis <-0.207031> now;
+		turn ArmUL to z-axis <21.972656> now;
+		turn ArmUR to x-axis <-40.253906> now;
+		turn ArmUR to y-axis <14.765625> now;
+		turn Head to y-axis <-2.109375> now;
+		turn ArmLR to x-axis <-44.121094> now;
+		turn ArmLR to y-axis <-3.867188> now;
+		turn ArmLR to z-axis <-0.527344> now;
+		turn SleaveR to x-axis <69.609375> now;
+		turn HandR to x-axis <-8.261719> now;
+		turn HandR to y-axis <1.582031> now;
+		turn ArmLL to x-axis <-11.601563> now;
+		turn ArmLL to y-axis <-15.292969> now;
+		turn ArmLL to z-axis <48.515625> now;
+		turn SleaveL to x-axis <63.808594> now;
+		turn HandL to x-axis <26.367188> now;
+		turn HandL to y-axis <68.203125> now;
+		sleep 79;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <1.142578> now;
+		turn Torso to y-axis <-5.009766> now;
+		turn ArmUL to x-axis <-63.984375> now;
+		turn ArmUL to y-axis <1.638672> now;
+		turn ArmUL to z-axis <28.037109> now;
+		turn ArmUR to x-axis <-38.935547> now;
+		turn ArmUR to y-axis <15.468750> now;
+		turn Head to y-axis <-3.164063> now;
+		turn ArmLR to x-axis <-45.439453> now;
+		turn ArmLR to y-axis <-1.933594> now;
+		turn ArmLR to z-axis <-0.791016> now;
+		turn SleaveR to x-axis <70.839844> now;
+		turn HandR to x-axis <-7.822266> now;
+		turn HandR to y-axis <0.263672> now;
+		turn ArmLL to x-axis <-10.898438> now;
+		turn ArmLL to y-axis <-7.646484> now;
+		turn ArmLL to z-axis <62.929687> now;
+		turn SleaveL to x-axis <78.310547> now;
+		turn HandL to x-axis <31.113281> now;
+		turn HandL to y-axis <75.234375> now;
+		sleep 81;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to x-axis <0.000000> now;
+		turn Torso to y-axis <-6.679688> now;
+		turn ArmUL to x-axis <-76.289062> now;
+		turn ArmUL to y-axis <3.484375> now;
+		turn ArmUL to z-axis <34.101562> now;
+		turn ArmUR to x-axis <-37.617187> now;
+		turn ArmUR to y-axis <16.171875> now;
+		turn Head to y-axis <-4.218750> now;
+		turn ArmLR to x-axis <-46.757813> now;
+		turn ArmLR to y-axis <0.000000> now;
+		turn ArmLR to z-axis <-1.054688> now;
+		turn SleaveR to x-axis <72.070312> now;
+		turn HandR to x-axis <-7.382813> now;
+		turn HandR to y-axis <-1.054688> now;
+		turn ArmLL to x-axis <-10.195313> now;
+		turn ArmLL to y-axis <0.000000> now;
+		turn ArmLL to z-axis <64.687500> now;
+		turn SleaveL to x-axis <84.375000> now;
+		turn HandL to x-axis <35.859375> now;
+		turn HandL to y-axis <82.265625> now;
+		sleep 106;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-3.339844> now;
+		turn ArmUL to x-axis <-79.804687> now;
+		turn ArmUL to y-axis <1.742188> now;
+		turn ArmUL to z-axis <17.050781> now;
+		turn ArmUR to x-axis <-34.980469> now;
+		turn ArmUR to y-axis <14.062500> now;
+		turn Head to y-axis <-2.109375> now;
+		turn ArmLR to x-axis <-50.449219> now;
+		turn ArmLR to z-axis <-0.527344> now;
+		turn SleaveR to x-axis <74.531250> now;
+		turn HandR to x-axis <-5.800781> now;
+		turn HandR to y-axis <-1.054688> now;
+		turn ArmLL to x-axis <-9.140625> now;
+		turn ArmLL to z-axis <29.882813> now;
+		turn SleaveL to x-axis <84.375000> now;
+		turn HandL to x-axis <-15.820312> now;
+		turn HandL to y-axis <41.132813> now;
+		sleep 108;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <-1.669922> now;
+		turn ArmUL to x-axis <-81.562500> now;
+		turn ArmUL to y-axis <0.871094> now;
+		turn ArmUL to z-axis <3.525391> now;
+		turn ArmUR to x-axis <-33.662109> now;
+		turn ArmUR to y-axis <13.007813> now;
+		turn Head to y-axis <-1.054688> now;
+		turn ArmLR to x-axis <-52.294922> now;
+		turn ArmLR to z-axis <-0.263672> now;
+		turn SleaveR to x-axis <74.355469> now;
+		turn HandR to x-axis <-5.009766> now;
+		turn ArmLL to x-axis <-8.613281> now;
+		turn ArmLL to z-axis <14.941406> now;
+		turn SleaveL to x-axis <81.738281> now;
+		turn HandL to x-axis <-41.660156> now;
+		turn HandL to y-axis <20.566406> now;
+		sleep 108;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn Torso to y-axis <0.000000> now;
+		turn ArmUL to x-axis <-83.320312> now;
+		turn ArmUL to y-axis <0.000000> now;
+		turn ArmUL to z-axis <-10.000000> now;
+		turn ArmUR to x-axis <-32.343750> now;
+		turn ArmUR to y-axis <11.953125> now;
+		turn Head to y-axis <0.000000> now;
+		turn ArmLR to x-axis <-54.140625> now;
+		turn ArmLR to z-axis <0.000000> now;
+		turn SleaveR to x-axis <84.023437> now;
+		turn HandR to x-axis <-4.218750> now;
+		turn ArmLL to x-axis <-8.085938> now;
+		turn ArmLL to z-axis <0.000000> now;
+		turn SleaveL to x-axis <81.210937> now;
+		turn HandL to x-axis <-67.500000> now;
+		turn HandL to y-axis <0.000000> now;
+		sleep 3;
+	}
+}

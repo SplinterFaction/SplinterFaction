@@ -1,0 +1,126 @@
+// MotionEd generated script file for animation
+
+default()
+{
+	while (ANIM_VARIABLE)
+	{
+		if (ANIM_VARIABLE)
+		{
+			turn blkbody to x-axis <0.000000> now;
+			turn blklegl1 to x-axis <0.000000> now;
+			turn blklegl1 to y-axis <0.000000> now;
+			turn blklegl1 to z-axis <0.000000> now;
+			turn blklegr1 to x-axis <0.000000> now;
+			turn blklegr1 to y-axis <0.000000> now;
+			turn blklegr1 to z-axis <0.000000> now;
+			turn blkneck1 to x-axis <0.000000> now;
+			turn blktail1 to x-axis <0.000000> now;
+			turn blktail1 to y-axis <0.000000> now;
+			turn blkwingl1 to x-axis <0.000000> now;
+			turn blkwingl1 to y-axis <0.000000> now;
+			turn blkwingl1 to z-axis <0.000000> now;
+			turn blkwingr1 to x-axis <0.000000> now;
+			turn blkwingr1 to y-axis <0.000000> now;
+			turn blkwingr1 to z-axis <0.000000> now;
+			turn blkwingr2 to x-axis <0.000000> now;
+			turn blkwingr2 to y-axis <0.000000> now;
+			turn blkwingr2 to z-axis <0.000000> now;
+			turn blkwingr3 to y-axis <0.000000> now;
+			turn blkwingr3 to z-axis <0.000000> now;
+			turn blkwingr4 to y-axis <0.000000> now;
+			turn blkwingr4 to z-axis <0.000000> now;
+			turn blkwingl2 to x-axis <0.000000> now;
+			turn blkwingl2 to y-axis <0.000000> now;
+			turn blkwingl2 to z-axis <0.000000> now;
+			turn blkwingl3 to y-axis <0.000000> now;
+			turn blkwingl3 to z-axis <0.000000> now;
+			turn blkwingl4 to y-axis <0.000000> now;
+			turn blkwingl4 to z-axis <0.000000> now;
+			turn blktail2 to x-axis <0.000000> now;
+			turn blktail2 to y-axis <0.000000> now;
+			turn blktail3 to x-axis <0.000000> now;
+			turn blktail3 to y-axis <0.000000> now;
+			turn blkneck2 to x-axis <0.000000> now;
+			turn blkhead to x-axis <0.000000> now;
+			turn blklegr2 to x-axis <0.000000> now;
+			turn blklegr2 to y-axis <0.000000> now;
+			turn blklegr2 to z-axis <0.000000> now;
+			turn blklegr3 to x-axis <0.000000> now;
+			turn blklegr3 to y-axis <0.000000> now;
+			turn blklegr3 to z-axis <0.000000> now;
+			turn blklegr4a to x-axis <0.000000> now;
+			turn blklegr4b to x-axis <0.000000> now;
+			turn blklegr4b to y-axis <0.000000> now;
+			turn blklegr4c to x-axis <0.000000> now;
+			turn blklegl2 to x-axis <0.000000> now;
+			turn blklegl2 to y-axis <0.000000> now;
+			turn blklegl2 to z-axis <0.000000> now;
+			turn blklegl3 to x-axis <0.000000> now;
+			turn blklegl3 to y-axis <0.000000> now;
+			turn blklegl3 to z-axis <0.000000> now;
+			turn blklegl4a to x-axis <0.000000> now;
+			turn blklegl4b to x-axis <0.000000> now;
+			turn blklegl4c to x-axis <0.000000> now;
+			sleep 200;
+		}
+		if (ANIM_VARIABLE)
+		{
+			turn blkbody to x-axis <-9.328378> now;
+			turn blklegl1 to x-axis <-5.850000> now;
+			turn blklegl1 to y-axis <-11.700000> now;
+			turn blklegl1 to z-axis <-13.050000> now;
+			turn blklegr1 to x-axis <-5.850000> now;
+			turn blklegr1 to y-axis <11.700000> now;
+			turn blklegr1 to z-axis <13.050000> now;
+			turn blkneck1 to x-axis <-26.100000> now;
+			turn blktail1 to x-axis <-18.450000> now;
+			turn blktail1 to y-axis <3.040541> now;
+			turn blkwingl1 to x-axis <11.700000> now;
+			turn blkwingl1 to y-axis <-14.157185> now;
+			turn blkwingl1 to z-axis <35.039189> now;
+			turn blkwingr1 to x-axis <11.700000> now;
+			turn blkwingr1 to y-axis <32.104399> now;
+			turn blkwingr1 to z-axis <-30.782432> now;
+			turn blkwingr2 to x-axis <-5.850000> now;
+			turn blkwingr2 to y-axis <13.500000> now;
+			turn blkwingr2 to z-axis <-16.662162> now;
+			turn blkwingr3 to y-axis <-35.598649> now;
+			turn blkwingr3 to z-axis <-4.500000> now;
+			turn blkwingr4 to y-axis <-25.650000> now;
+			turn blkwingr4 to z-axis <0.900000> now;
+			turn blkwingl2 to x-axis <-5.850000> now;
+			turn blkwingl2 to y-axis <-13.500000> now;
+			turn blkwingl2 to z-axis <12.405405> now;
+			turn blkwingl3 to y-axis <27.085135> now;
+			turn blkwingl3 to z-axis <4.500000> now;
+			turn blkwingl4 to y-axis <25.650000> now;
+			turn blkwingl4 to z-axis <-0.900000> now;
+			turn blktail2 to x-axis <11.700000> now;
+			turn blktail2 to y-axis <6.081081> now;
+			turn blktail3 to x-axis <5.850000> now;
+			turn blktail3 to y-axis <4.864865> now;
+			turn blkneck2 to x-axis <1.252703> now;
+			turn blkhead to x-axis <54.121622> now;
+			turn blklegr2 to x-axis <-11.250000> now;
+			turn blklegr2 to y-axis <-31.000000> now;
+			turn blklegr2 to z-axis <-8.550000> now;
+			turn blklegr3 to x-axis <-11.116216> now;
+			turn blklegr3 to y-axis <9.632432> now;
+			turn blklegr3 to z-axis <-5.327027> now;
+			turn blklegr4a to x-axis <40.317568> now;
+			turn blklegr4b to x-axis <46.094595> now;
+			turn blklegr4b to y-axis <-7.905405> now;
+			turn blklegr4c to x-axis <42.786486> now;
+			turn blklegl2 to x-axis <-11.250000> now;
+			turn blklegl2 to y-axis <31.500000> now;
+			turn blklegl2 to z-axis <8.550000> now;
+			turn blklegl3 to x-axis <-14.764865> now;
+			turn blklegl3 to y-axis <-13.281081> now;
+			turn blklegl3 to z-axis <1.070270> now;
+			turn blklegl4a to x-axis <38.444595> now;
+			turn blklegl4b to x-axis <52.418919> now;
+			turn blklegl4c to x-axis <47.712162> now;
+			sleep 150;
+		}
+	}
+}

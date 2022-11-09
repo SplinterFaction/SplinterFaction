@@ -1,0 +1,177 @@
+// MotionEd generated script file for animation
+
+stopbuild()
+{
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-84.375000> now;
+		turn ArmUL to y-axis <1.828125> now;
+		turn ArmUL to z-axis <-10.000000> now;
+		turn ArmUR to x-axis <-32.343750> now;
+		turn ArmUR to y-axis <11.953125> now;
+		turn ArmLR to x-axis <-54.140625> now;
+		turn SleaveR to x-axis <84.023437> now;
+		turn HandR to x-axis <-4.218750> now;
+		turn HandR to y-axis <-1.054688> now;
+		turn ArmLL to x-axis <-8.085938> now;
+		turn SleaveL to x-axis <82.661133> now;
+		turn HandL to x-axis <-67.500000> now;
+		sleep 98;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-76.926270> now;
+		turn ArmUL to y-axis <-1.494141> now;
+		turn ArmUL to z-axis <-5.830078> now;
+		turn ArmUR to x-axis <-33.046875> now;
+		turn ArmUR to y-axis <11.206055> now;
+		turn ArmLR to x-axis <-57.480469> now;
+		turn SleaveR to x-axis <85.715332> now;
+		turn HandR to x-axis <-0.263672> now;
+		turn HandR to y-axis <-0.988770> now;
+		turn ArmLL to x-axis <-12.172852> now;
+		turn ArmLL to z-axis <1.757813> now;
+		turn SleaveL to x-axis <78.991699> now;
+		turn HandL to x-axis <-59.414062> now;
+		turn HandL to y-axis <-9.580078> now;
+		sleep 96;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-64.138184> now;
+		turn ArmUL to y-axis <-4.482422> now;
+		turn ArmUL to z-axis <2.509766> now;
+		turn ArmUR to x-axis <-34.453125> now;
+		turn ArmUR to y-axis <9.711914> now;
+		turn ArmLR to x-axis <-64.160156> now;
+		turn SleaveR to x-axis <89.099121> now;
+		turn HandR to x-axis <7.646484> now;
+		turn HandR to y-axis <-0.856934> now;
+		turn ArmLL to x-axis <-20.346680> now;
+		turn ArmLL to z-axis <5.273438> now;
+		turn SleaveL to x-axis <74.553223> now;
+		turn HandL to x-axis <-43.242187> now;
+		turn HandL to y-axis <-28.740234> now;
+		sleep 102;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-51.350098> now;
+		turn ArmUL to y-axis <-7.734375> now;
+		turn ArmUL to z-axis <5.009766> now;
+		turn ArmUR to x-axis <-34.101562> now;
+		turn ArmUR to y-axis <8.217773> now;
+		turn ArmLR to x-axis <-69.785156> now;
+		turn SleaveR to x-axis <92.482910> now;
+		turn HandR to x-axis <14.677734> now;
+		turn HandR to y-axis <-0.725098> now;
+		turn ArmLL to x-axis <-24.301758> now;
+		turn ArmLL to z-axis <16.347656> now;
+		turn SleaveL to x-axis <70.114746> now;
+		turn HandL to x-axis <-34.804687> now;
+		sleep 95;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-38.562012> now;
+		turn ArmUL to y-axis <-11.250000> now;
+		turn ArmUL to z-axis <1.669922> now;
+		turn ArmUR to x-axis <-31.992187> now;
+		turn ArmUR to y-axis <6.723633> now;
+		turn ArmLR to x-axis <-74.355469> now;
+		turn SleaveR to x-axis <95.866699> now;
+		turn HandR to x-axis <20.830078> now;
+		turn HandR to y-axis <-0.593262> now;
+		turn ArmLL to x-axis <-24.038086> now;
+		turn ArmLL to z-axis <34.980469> now;
+		turn SleaveL to x-axis <65.676270> now;
+		turn HandL to x-axis <-34.101562> now;
+		turn HandL to y-axis <-9.580078> now;
+		sleep 97;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-27.619629> now;
+		turn ArmUL to y-axis <-8.443359> now;
+		turn ArmUL to z-axis <-0.625000> now;
+		turn ArmUR to x-axis <-28.212891> now;
+		turn ArmUR to y-axis <5.229492> now;
+		turn ArmLR to x-axis <-71.279297> now;
+		turn SleaveR to x-axis <89.318848> now;
+		turn HandR to x-axis <18.457031> now;
+		turn HandR to y-axis <-0.461426> now;
+		turn ArmLL to x-axis <-24.301758> now;
+		turn ArmLL to z-axis <41.660156> now;
+		turn SleaveL to x-axis <55.524902> now;
+		turn HandL to x-axis <-29.531250> now;
+		turn HandL to y-axis <0.000000> now;
+		sleep 101;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-18.522949> now;
+		turn ArmUL to y-axis <0.685547> now;
+		turn ArmUL to z-axis <-1.875000> now;
+		turn ArmUR to x-axis <-22.763672> now;
+		turn ArmUR to y-axis <3.735352> now;
+		turn ArmLR to x-axis <-60.556641> now;
+		turn SleaveR to x-axis <72.839355> now;
+		turn HandR to x-axis <7.558594> now;
+		turn HandR to y-axis <-0.329590> now;
+		turn ArmLL to x-axis <-25.092773> now;
+		turn ArmLL to z-axis <36.386719> now;
+		turn SleaveL to x-axis <39.660645> now;
+		turn HandL to x-axis <-21.093750> now;
+		sleep 94;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-9.426270> now;
+		turn ArmUL to y-axis <5.687500> now;
+		turn ArmUR to x-axis <-14.677734> now;
+		turn ArmUR to y-axis <2.241211> now;
+		turn ArmLR to x-axis <-51.064453> now;
+		turn SleaveR to x-axis <56.359863> now;
+		turn HandR to x-axis <-8.789062> now;
+		turn HandR to y-axis <-0.197754> now;
+		turn ArmLL to x-axis <-21.665039> now;
+		turn ArmLL to z-axis <25.312500> now;
+		turn SleaveL to x-axis <23.796387> now;
+		turn HandL to x-axis <-12.656250> now;
+		sleep 94;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <-0.329590> now;
+		turn ArmUL to y-axis <6.562500> now;
+		turn ArmUL to z-axis <-0.625000> now;
+		turn ArmUR to x-axis <-3.955078> now;
+		turn ArmUR to y-axis <0.747070> now;
+		turn ArmLR to x-axis <-42.802734> now;
+		turn SleaveR to x-axis <39.880371> now;
+		turn HandR to x-axis <-30.585937> now;
+		turn HandR to y-axis <-0.065918> now;
+		turn ArmLL to x-axis <-14.018555> now;
+		turn ArmLL to z-axis <8.437500> now;
+		turn SleaveL to x-axis <7.932129> now;
+		turn HandL to x-axis <-4.218750> now;
+		sleep 97;
+	}
+	if (ANIM_VARIABLE)
+	{
+		turn ArmUL to x-axis <4.218750> now;
+		turn ArmUL to y-axis <7.000000> now;
+		turn ArmUL to z-axis <0.000000> now;
+		turn ArmUR to x-axis <1.406250> now;
+		turn ArmUR to y-axis <0.000000> now;
+		turn ArmLR to x-axis <-38.671875> now;
+		turn SleaveR to x-axis <31.640625> now;
+		turn HandR to x-axis <-41.484375> now;
+		turn HandR to y-axis <0.000000> now;
+		turn ArmLL to x-axis <-10.195313> now;
+		turn ArmLL to z-axis <0.000000> now;
+		turn SleaveL to x-axis <0.000000> now;
+		turn HandL to x-axis <0.000000> now;
+		sleep 7;
+	}
+}
