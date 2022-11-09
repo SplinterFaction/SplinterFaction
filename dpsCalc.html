@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPS Calculator</title>
+
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <script>
+        function docReady(fn) {
+            if (document.readyState === "complete" || document.readyState === "interactive") setTimeout(fn, 1);
+            else document.addEventListener("DOMContentLoaded", fn);
+        }
+        function makeTurret() {
+            if (!turretsRef || !turretsRef.length) return {
+                dps: 10,
+                damagePerShot: 10,
+                shotsPerSecond: 1,
+                delayBetweenShots: 1,
+                shotsPerBurst: 1,
+                delayBetweenBursts: 1,
+                dpsStr: '10',
+                damagePerShotStr: '10',
+                shotsPerSecondStr: '1',
+                delayBetweenShotsStr: '1',
+                shotsPerBurstStr: '1',
+                delayBetweenBurstsStr: '1',
+                burst: false,
+            };
+            const v = turretsRef[turretsRef.length - 1];
+            return {
+                dps: v.dps,
+                damagePerShot: v.damagePerShot,
+                shotsPerSecond: v.shotsPerSecond,
+                delayBetweenShots: v.delayBetweenShots,
+                shotsPerBurst: v.shotsPerBurst,
+                delayBetweenBursts: v.delayBetweenBursts,
+                dpsStr: v.dpsStr,
+                damagePerShotStr: v.damagePerShotStr,
+                shotsPerSecondStr: v.shotsPerSecondStr,
+                delayBetweenShotsStr: v.delayBetweenShotsStr,
+                shotsPerBurstStr: v.shotsPerBurstStr,
+                delayBetweenBurstsStr: v.delayBetweenBurstsStr,
+                burst: v.burst,
+            };
+        }
+        let turretsRef = undefined;
+        const myToFixed = (v) => parseFloat(v.toFixed(3));
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('unit', () => ({
+                dpsColActive: false,
+                damagePerShotColActive: false,
+                shotsPerSecondColActive: false,
+                delayBetweenShotsColActive: false,
+                shotsPerBurstColActive: false,
+                delayBetweenBurstsColActive: false,
+                dpsColWillBeAffected: false,
+                damagePerShotColWillBeAffected: false,
+                shotsPerSecondColWillBeAffected: false,
+                delayBetweenShotsColWillBeAffected: false,
+                shotsPerBurstColWillBeAffected: false,
+                delayBetweenBurstsColWillBeAffected: false,
+                totalDps: 0,
+                turrets: [
+                    makeTurret(),
+                ],
+
+                calculate(i, type) {
+                    const v = this.turrets[i];
+                    switch (type) {
+                        case 'dps':
+                            v.dps = parseFloat(v.dpsStr);
+                            v.damagePerShot = v.dps / v.shotsPerSecond;
+
+                            v.damagePerShotStr = myToFixed(v.damagePerShot);
+                            break;
+                        case 'damagePerShot':
+                            v.damagePerShot = parseFloat(v.damagePerShotStr);
+                            v.dps = v.damagePerShot / v.delayBetweenShots;
+
+                            v.dpsStr = myToFixed(v.dps);
+                            break;
+                        case 'shotsPerSecond':
+                            v.shotsPerSecond = parseFloat(v.shotsPerSecondStr);
+                            if (v.shotsPerSecond > 0) {
+                                // v.delayBetweenShots = v.burst ? (v.shotsPerBurst / v.shotsPerSecond - v.delayBetweenBursts) / (v.shotsPerBurst - 1) : 1. / v.shotsPerSecond;
+                                v.delayBetweenShots = 1. / v.shotsPerSecond;
+                                v.dps = v.damagePerShot * v.shotsPerSecond;
+
+                                v.delayBetweenShotsStr = myToFixed(v.delayBetweenShots);
+                                v.dpsStr = myToFixed(v.dps);
+                            }
+                            break;
+                        case 'delayBetweenShots':
+                            v.delayBetweenShots = parseFloat(v.delayBetweenShotsStr);
+                            if (v.delayBetweenShots > 0) {
+                                v.shotsPerSecond = v.burst ? v.shotsPerBurst / (v.delayBetweenShots * (v.shotsPerBurst - 1) + v.delayBetweenBursts) : 1. / v.delayBetweenShots;
+                                v.dps = v.damagePerShot * v.shotsPerSecond;
+
+                                v.shotsPerSecondStr = myToFixed(v.shotsPerSecond);
+                                v.dpsStr = myToFixed(v.dps);
+                            }
+                            break;
+                        case 'shotsPerBurst':
+                            v.shotsPerBurst = Math.max(1, parseFloat(v.shotsPerBurstStr));
+                            v.shotsPerSecond = v.shotsPerBurst / (v.delayBetweenShots * (v.shotsPerBurst - 1) + v.delayBetweenBursts);
+                            v.dps = v.damagePerShot * v.shotsPerSecond;
+
+                            v.shotsPerSecondStr = myToFixed(v.shotsPerSecond);
+                            v.dpsStr = myToFixed(v.dps);
+                            break;
+                        case 'delayBetweenBursts':
+                            v.delayBetweenBursts = parseFloat(v.delayBetweenBurstsStr);
+                            if (v.delayBetweenBursts > 0) {
+                                v.shotsPerSecond = v.shotsPerBurst / (v.delayBetweenShots * (v.shotsPerBurst - 1) + v.delayBetweenBursts);
+                                v.dps = v.damagePerShot * v.shotsPerSecond;
+
+                                v.shotsPerSecondStr = myToFixed(v.shotsPerSecond);
+                                v.dpsStr = myToFixed(v.dps);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    this.getTotalDps();
+                },
+
+                clearHighlights() {
+                    this.dpsColActive = false;
+                    this.damagePerShotColActive = false;
+                    this.shotsPerSecondColActive = false;
+                    this.delayBetweenShotsColActive = false;
+                    this.shotsPerBurstColActive = false;
+                    this.delayBetweenBurstsColActive = false;
+                    this.dpsColWillBeAffected = false;
+                    this.damagePerShotColWillBeAffected = false;
+                    this.shotsPerSecondColWillBeAffected = false;
+                    this.delayBetweenShotsColWillBeAffected = false;
+                    this.shotsPerBurstColWillBeAffected = false;
+                    this.delayBetweenBurstsColWillBeAffected = false;
+                },
+                highlightAffectedFields(type) {
+                    this.clearHighlights();
+                    switch (type) {
+                        case 'dps':
+                            this.dpsColActive = true;
+                            this.damagePerShotColWillBeAffected = true;
+                            break;
+                        case 'damagePerShot':
+                            this.damagePerShotColActive = true;
+                            this.dpsColWillBeAffected = true;
+                            break;
+                        case 'shotsPerSecond':
+                            this.shotsPerSecondColActive = true;
+                            this.delayBetweenShotsColWillBeAffected = true;
+                            this.dpsColWillBeAffected = true;
+                            break;
+                        case 'delayBetweenShots':
+                            this.delayBetweenShotsColActive = true;
+                            this.shotsPerSecondColWillBeAffected = true;
+                            this.dpsColWillBeAffected = true;
+                            break;
+                        case 'shotsPerBurst':
+                            this.shotsPerBurstColActive = true;
+                            this.shotsPerSecondColWillBeAffected = true;
+                            this.dpsColWillBeAffected = true;
+                            break;
+                        case 'delayBetweenBursts':
+                            this.delayBetweenBurstsColActive = true;
+                            this.shotsPerSecondColWillBeAffected = true;
+                            this.dpsColWillBeAffected = true;
+                            break;
+                        default:
+                            break;
+                    }
+                },
+
+                getTotalDps() {
+                    this.totalDps = 0.;
+                    for (let j = 0; j < this.turrets.length; j++) {
+                        const v = this.turrets[j];
+                        this.totalDps += v.dps;
+                    }
+                },
+
+                toggleBurst(i) {
+                    const v = this.turrets[i];
+                    if (v.burst) {
+                        v.burst = false;
+                        v.shotsPerBurstStr = '1';
+                        v.delayBetweenBurstsStr = '1';
+                        this.calculate(i, 'shotsPerSecond');
+                    } else {
+                        v.burst = true;
+                        v.shotsPerBurstStr = myToFixed(v.shotsPerBurst);
+                        v.delayBetweenBurstsStr = myToFixed(v.delayBetweenBursts);
+                        this.calculate(i, 'shotsPerBurst');
+                    }
+                },
+
+                addTurret() {
+                    this.turrets.push(makeTurret());
+                    this.getTotalDps();
+                },
+                importCsv() {
+                    document.getElementById('inputCsv').click();
+                },
+                handleInputCsv(e) {
+                    const fr = new FileReader();
+                    fr.onload = () => {
+                        const lines = fr.result.split('\n');
+                        lines.shift();
+                        lines.pop();
+                        if (this.turrets.length > lines.length) this.turrets.splice(lines.length);
+                        else if (this.turrets.length < lines.length) {
+                            for (let i = this.turrets.length; i < lines.length; i++) this.turrets.push(makeTurret());
+                        }
+                        for (let i = 0; i < lines.length; i++) {
+                            const v = this.turrets[i];
+                            const lineItems = lines[i].split(',');
+                            v.dps = parseFloat(lineItems[0]);
+                            v.damagePerShot = parseFloat(lineItems[1]);
+                            v.shotsPerSecond = parseFloat(lineItems[2]);
+                            v.delayBetweenShots = parseFloat(lineItems[3]);
+                            v.shotsPerBurst = parseFloat(lineItems[4]);
+                            v.delayBetweenBursts = parseFloat(lineItems[5]);
+                            v.dpsStr = lineItems[0];
+                            v.damagePerShotStr = lineItems[1];
+                            v.shotsPerSecondStr = lineItems[2];
+                            v.delayBetweenShotsStr = lineItems[3];
+                            v.shotsPerBurstStr = lineItems[4];
+                            v.delayBetweenBurstsStr = lineItems[5];
+                            v.burst = lineItems[6] == 'true';
+                        }
+                        this.getTotalDps();
+                    };
+                    fr.readAsText(e.target.files[0]);
+                },
+                exportCsv() {
+                    let sb = 'data:text/csv;charset=utf-8,dps,damagePerShot,shotsPerSecond,delayBetweenShots,shotsPerBurst,delayBetweenBursts,burst\n';
+                    for (let i = 0; i < this.turrets.length; i++) {
+                        const v = this.turrets[i];
+                        sb += `${v.dpsStr},${v.damagePerShotStr},${v.shotsPerSecondStr},${v.delayBetweenShotsStr},${v.shotsPerBurstStr},${v.delayBetweenBurstsStr},${v.burst}\n`;
+                    }
+                    const encodedUri = encodeURI(sb);
+                    window.open(encodedUri);
+                },
+                removeTurret(i) {
+                    this.turrets.splice(i, 1);
+                    this.getTotalDps();
+                },
+
+                init() {
+                    this.getTotalDps();
+                    turretsRef = this.turrets;
+                },
+            }));
+            // let startTime = 0;
+            // let id = undefined;
+            Alpine.data('simulator', () => ({
+                enemyHealth: 100,
+                enemyCount: 0,
+                simDuration: 10,
+                totalDamageDealt: 0,
+                overDamage: 0,
+                overDamageLog: [],
+                efficiency: 0,
+                clampEnemyCount() {
+                    this.enemyCount = this.enemyCount > 10 ? 10 : this.enemyCount;
+                },
+                clampSimDuration() {
+                    this.simDuration = this.simDuration > 120 ? 120 : this.simDuration;
+                },
+                simulate() {
+                    // startTime = Date.now();
+                    // if (id) cancelAnimationFrame(id);
+                    // id = requestAnimationFrame(function nextFrame() {
+                        // const t = Date.now() - startTime;
+                    const shotTimings = [];
+                    for (let i = 0; i < turretsRef.length; i++) {
+                        shotTimings.push({ nextShotTime: 0., ammo: turretsRef[i].shotsPerBurst });
+                    }
+                    const data = [];
+                    const enemyHealth = parseFloat(this.enemyHealth);
+                    let t = 0.;
+                    let enemyRemaining = this.enemyCount == 0 ? 9e9 : this.enemyCount;
+                    let failSafe = 0;
+                    this.totalDamageDealt = 0;
+                    this.overDamage = 0;
+                    this.overDamageLog = [];
+                    let currEnemyHealth = enemyHealth;
+                    while (t < this.simDuration && enemyRemaining > 0) {
+                        let first = true;
+                        for (let i = 0; i < turretsRef.length; i++) {
+                            const turret = turretsRef[i];
+                            if (t >= shotTimings[i].nextShotTime) {
+                                if (!turret.burst || --shotTimings[i].ammo > 0) {
+                                    shotTimings[i].nextShotTime += turret.delayBetweenShots;
+                                } else {
+                                    shotTimings[i].ammo = turret.shotsPerBurst;
+                                    shotTimings[i].nextShotTime += turret.delayBetweenBursts;
+                                }
+                                let damageDealt = turret.damagePerShot;
+                                currEnemyHealth -= turret.damagePerShot;
+                                if (currEnemyHealth <= 0) {
+                                    damageDealt += currEnemyHealth;
+                                    this.overDamage -= currEnemyHealth;
+                                    if (currEnemyHealth < 0) this.overDamageLog.push(`Turret ${i + 1} dealt overkill damage: ${-currEnemyHealth}`);
+                                    currEnemyHealth = enemyHealth;
+                                    --enemyRemaining;
+                                }
+                                this.totalDamageDealt += damageDealt;
+                                if (first) {
+                                    first = false;
+                                    const prevDamage = data.length > 0 ? data[data.length - 1].y : 0.;
+                                    data.push({ x: t, y: prevDamage });
+                                    data.push({ x: t, y: prevDamage + damageDealt });
+                                } else data[data.length - 1].y += damageDealt;
+                            }
+                        }
+                        let min = 9e9;
+                        for (let i = 0; i < turretsRef.length; i++) {
+                            min = Math.min(min, shotTimings[i].nextShotTime);
+                        }
+                        t = min;
+                        if (++failSafe > 10000) {
+                            console.log('broke');
+                            break;
+                        }
+                    }
+                    const prevTime = data.length > 0 ? data[data.length - 1].x : 1.;
+                    const prevDamage = data.length > 0 ? data[data.length - 1].y : 0.;
+                    data.push({ x: prevTime, y: prevDamage });
+                    this.efficiency = Math.floor(this.totalDamageDealt / (this.totalDamageDealt + this.overDamage) * 10000) * 0.01;
+                    const widthPerSecond = WIDTH / prevTime;
+
+                    console.log(data);
+
+                    plotCtx.clearRect(0, 0, plot.width, plot.height);
+
+                    plotCtx.strokeStyle = '#000000';
+                    plotCtx.beginPath();
+                    plotCtx.moveTo(plot.width - MARGIN, plot.height - MARGIN);
+                    plotCtx.lineTo(MARGIN, plot.height - MARGIN);
+                    plotCtx.lineTo(MARGIN, MARGIN);
+                    plotCtx.stroke();
+
+                    plotCtx.font = '12px sans-serif';
+                    plotCtx.textAlign = 'left';
+                    plotCtx.textBaseline = 'middle';
+                    plotCtx.fillText('Damage dealt', MARGIN - 10, MARGIN - 15);
+                    plotCtx.textAlign = 'right';
+                    const lastY = data[data.length - 1].y;
+                    const yMul = HEIGHT / lastY;
+                    const damageScale = Math.floor(lastY / 5 / 10) * 10;
+                    plotCtx.strokeStyle = '#d0d0d0';
+                    if (damageScale > 5) {
+                        plotCtx.beginPath();
+                        for (let i = 0; i <= lastY; i += damageScale) {
+                            const y = plot.height - MARGIN - i * yMul;
+                            plotCtx.fillText(i, MARGIN - 5, y);
+                            plotCtx.moveTo(MARGIN, y);
+                            plotCtx.lineTo(MARGIN + WIDTH, y);
+                        }
+                        plotCtx.stroke();
+                    }
+                    plotCtx.strokeStyle = '#ffd0d0';
+                    plotCtx.beginPath();
+                    for (let i = enemyHealth; i <= lastY; i += enemyHealth) {
+                        const y = plot.height - MARGIN - i * yMul;
+                        plotCtx.moveTo(MARGIN, y);
+                        plotCtx.lineTo(MARGIN + WIDTH, y);
+                    }
+                    plotCtx.stroke();
+                    plotCtx.textAlign = 'left';
+                    plotCtx.textBaseline = 'middle';
+                    plotCtx.fillText('seconds', plot.width - MARGIN - 10, plot.height - MARGIN + 30);
+                    plotCtx.textAlign = 'center';
+                    const lastX = data[data.length - 1].x;
+                    const timeScale = Math.round(lastX / 5);
+                    plotCtx.strokeStyle = '#d0d0d0';
+                    if (timeScale >= 1) {
+                        plotCtx.beginPath();
+                        for (let i = 0; i <= lastX; i += timeScale) {
+                            const x = MARGIN + widthPerSecond * i;
+                            plotCtx.fillText(i, x, plot.height - MARGIN + 15);
+                            plotCtx.moveTo(x, MARGIN);
+                            plotCtx.lineTo(x, MARGIN + HEIGHT);
+                        }
+                        plotCtx.stroke();
+                    }
+                    plotCtx.stroke();
+
+                    plotCtx.strokeStyle = '#008000';
+                    plotCtx.beginPath();
+                    plotCtx.moveTo(MARGIN, plot.height - MARGIN);
+                    for (let i = 0; i < data.length; i++) {
+                        const v = data[i];
+                        plotCtx.lineTo(MARGIN + widthPerSecond * v.x, plot.height - MARGIN - v.y * yMul);
+                    }
+                    plotCtx.stroke();
+                    //     if (t <= 10000) id = requestAnimationFrame(nextFrame);
+                    // });
+                },
+            }));
+        });
+        const MARGIN = 40;
+        const WIDTH = 400 - MARGIN * 2;
+        const HEIGHT = 400 - MARGIN * 2;
+        let plot = undefined;
+        let plotCtx = undefined;
+        docReady(() => {
+            plot = document.querySelector('#plot');
+            plotCtx = plot.getContext('2d');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h3 class="mt-3">DPS Calculator</h3>
+        <div x-data="unit">
+            <h4 class="mt-3" x-text="'Total DPS = ' + totalDps"></h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Actions</th>
+                        <th :class="{ 'table-success': dpsColActive, 'table-primary': dpsColWillBeAffected }" scope="col">Damage / second</th>
+                        <th :class="{ 'table-success': damagePerShotColActive, 'table-primary': damagePerShotColWillBeAffected }" scope="col">Damage / shot</th>
+                        <th :class="{ 'table-success': shotsPerSecondColActive, 'table-primary': shotsPerSecondColWillBeAffected }" scope="col">Shots / second</th>
+                        <th :class="{ 'table-success': delayBetweenShotsColActive, 'table-primary': delayBetweenShotsColWillBeAffected }" scope="col">Delay between shots (seconds)</th>
+                        <th :class="{ 'table-success': shotsPerBurstColActive, 'table-primary': shotsPerBurstColWillBeAffected }" scope="col">Shots / burst</th>
+                        <th :class="{ 'table-success': delayBetweenBurstsColActive, 'table-primary': delayBetweenBurstsColWillBeAffected }" scope="col">Delay between bursts (seconds)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template x-for="(v, i) in turrets" :key="'turret_' + i">
+                        <tr>
+                            <th scope="row" x-text="i + 1"></th>
+                            <td style="min-width: 110px;">
+                                <button class="btn btn-secondary btn-sm" @click="toggleBurst(i)">Burst</button>
+                                <button class="btn btn-danger btn-sm ms-1" @click="removeTurret(i)"><i class="bi bi-trash"></i></button>
+                            </td>
+                            <td>
+                                <input type="number" id="dps" class="form-control" x-model="v.dpsStr" @keyup="calculate(i, 'dps')" @change="calculate(i, 'dps')" @focusin="highlightAffectedFields('dps')" @focusout="clearHighlights()">
+                            </td>
+                            <td>
+                                <input type="number" id="damagePerShot" class="form-control" x-model="v.damagePerShotStr" @keyup="calculate(i, 'damagePerShot')" @change="calculate(i, 'damagePerShot')" @focusin="highlightAffectedFields('damagePerShot')" @focusout="clearHighlights()">
+                            </td>
+                            <td>
+                                <input type="number" id="shotsPerSecond" class="form-control" x-bind:disabled="v.burst" x-model="v.shotsPerSecondStr" @keyup="calculate(i, 'shotsPerSecond')" @change="calculate(i, 'shotsPerSecond')" @focusin="highlightAffectedFields('shotsPerSecond')" @focusout="clearHighlights()">
+                            </td>
+                            <td>
+                                <input type="number" id="delayBetweenShots" class="form-control" x-model="v.delayBetweenShotsStr" @keyup="calculate(i, 'delayBetweenShots')" @change="calculate(i, 'delayBetweenShots')" @focusin="highlightAffectedFields('delayBetweenShots')" @focusout="clearHighlights()">
+                            </td>
+                            <td>
+                                <input type="number" id="shotsPerBurst" class="form-control" x-bind:disabled="!v.burst" x-model="v.shotsPerBurstStr" @keyup="calculate(i, 'shotsPerBurst')" @change="calculate(i, 'shotsPerBurst')" @focusin="highlightAffectedFields('shotsPerBurst')" @focusout="clearHighlights()">
+                            </td>
+                            <td>
+                                <input type="number" id="delayBetweenBursts" class="form-control" x-bind:disabled="!v.burst" x-model="v.delayBetweenBurstsStr" @keyup="calculate(i, 'delayBetweenBursts')" @change="calculate(i, 'delayBetweenBursts')" @focusin="highlightAffectedFields('delayBetweenBursts')" @focusout="clearHighlights()">
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <button class="btn btn-primary mt-3" @click="addTurret"><i class="bi bi-plus"></i> Add a turret</button>
+            <button class="btn btn-secondary mt-3" @click="importCsv"><i class="bi bi-upload"></i> Import CSV</button>
+            <input type="file" name="inputCsv" class="d-none" id="inputCsv" @change="handleInputCsv">
+            <button class="btn btn-secondary mt-3" @click="exportCsv"><i class="bi bi-download"></i> Export CSV</button>
+        </div>
+
+        <div x-data="simulator">
+            <h4 class="mt-3">Simulator</h4>
+            <canvas width="400" height="400" class="mt-3" id="plot" style="box-shadow: 0 0 5px black;"></canvas><br>
+            <div class="mt-3 row">
+                <label for="enemyHealth" class="col-4 col-form-label">Enemy HP</label>
+                <div class="col-8">
+                    <input type="number" class="form-control" id="enemyHealth" x-model="enemyHealth" value="100">
+                </div>
+            </div>
+            <div class="mt-3 row">
+                <label for="enemyCount" class="col-4 col-form-label">Enemy Count</label>
+                <div class="col-8">
+                    <input type="number" class="form-control" id="enemyCount" x-model="enemyCount" value="10" @change="clampEnemyCount">
+                </div>
+            </div>
+            <div class="mt-3 row">
+                <label for="simDuration" class="col-4 col-form-label">Duration</label>
+                <div class="col-8">
+                    <input type="number" class="form-control" id="simDuration" x-model="simDuration" value="10" @change="clampSimDuration">
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" @click="simulate">Simulate</button>
+            <div class="my-3">
+                <p x-text="'Total damage dealt: ' + totalDamageDealt"></p>
+                <p x-text="'Overdamage: ' + overDamage"></p>
+                <p x-text="'Efficiency: ' + efficiency + '%'"></p>
+                <template x-for="(v, i) in overDamageLog" :key="'overDamageLog_' + i">
+                    <p class="text-primary" x-text="v"></p>
+                </template>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
