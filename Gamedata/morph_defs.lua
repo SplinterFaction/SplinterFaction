@@ -47,28 +47,28 @@ local devolution = (-1 > 0)
 local energyCost_fedcommander_up1  = 60 * 50
 local timeToBuild_fedcommander_up1 = energyCost_fedcommander_up1 / 50
 
-local energyCost_fedcommander_up2  = 180 * 100
-local timeToBuild_fedcommander_up2 = energyCost_fedcommander_up2 / 100
+local energyCost_fedcommander_up2  = 180 * 500
+local timeToBuild_fedcommander_up2 = energyCost_fedcommander_up2 / 500
 
-local energyCost_fedcommander_up3  = 300 * 200
-local timeToBuild_fedcommander_up3 = energyCost_fedcommander_up3 / 200
+local energyCost_fedcommander_up3  = 300 * 1500
+local timeToBuild_fedcommander_up3 = energyCost_fedcommander_up3 / 1500
 
-local energyCost_fedcommander_up4  = 480 * 400
-local timeToBuild_fedcommander_up4 = energyCost_fedcommander_up4 / 400
+local energyCost_fedcommander_up4  = 120 * 5000
+local timeToBuild_fedcommander_up4 = energyCost_fedcommander_up4 / 5000
 
 --Loz Commander Upgrades
 
 local energyCost_lozcommander_up1  = 60 * 50
 local timeToBuild_lozcommander_up1 = energyCost_lozcommander_up1 / 50
 
-local energyCost_lozcommander_up2  = 180 * 100
-local timeToBuild_lozcommander_up2 = energyCost_lozcommander_up2 / 100
+local energyCost_lozcommander_up2  = 180 * 500
+local timeToBuild_lozcommander_up2 = energyCost_lozcommander_up2 / 500
 
-local energyCost_lozcommander_up3  = 300 * 200
-local timeToBuild_lozcommander_up3 = energyCost_lozcommander_up3 / 200
+local energyCost_lozcommander_up3  = 300 * 1500
+local timeToBuild_lozcommander_up3 = energyCost_lozcommander_up3 / 1500
 
-local energyCost_lozcommander_up4  = 480 * 400
-local timeToBuild_lozcommander_up4 = energyCost_lozcommander_up4 / 400
+local energyCost_lozcommander_up4  = 480 * 5000
+local timeToBuild_lozcommander_up4 = energyCost_lozcommander_up4 / 5000
 
 --
 

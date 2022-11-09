@@ -5,9 +5,9 @@ local unitName                    = "fissionpowerplant"
 --------------------------------------------------------------------------------
 
 local armortype					 = [[building]]
-local energyproduced			 = [[10]]
+local energyproduced			 = [[25]]
 
-local buildCostMetal 			  = 50
+local buildCostMetal 			  = 125
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
