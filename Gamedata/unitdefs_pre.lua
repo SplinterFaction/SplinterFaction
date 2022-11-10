@@ -17,6 +17,9 @@ Shared.buildListf1landfac = {
 	[[fedengineer_up1]],
 	[[fedengineer_up2]],
 	[[fedengineer_up3]],
+}
+
+Shared.buildListFedAirPlant = {
 	[[airscout]],
 	[[fedsparrow]],
 	[[fedcrow]],
@@ -39,6 +42,9 @@ Shared.buildListf2landfac = {
 	[[lozengineer_up1]],
 	[[lozengineer_up2]],
 	[[lozengineer_up3]],
+}
+
+Shared.buildListLozAirPlant = {
 	[[airscout]],
 	[[lozwasp]],
 	[[lozbumblebee]],
@@ -53,6 +59,7 @@ Shared.buildListf2landfac = {
 --Buildlists for mobile builders
 
 Shared.buildListFedt0 = {
+	-- [[fedairplant]],
 	-- [[f1landfac]],
 	[[metalextractor]],
 	[[fissionpowerplant]],
@@ -79,6 +86,7 @@ Shared.buildListFedt0 = {
 }
 
 Shared.buildListFedt1 = {
+	[[fedairplant]],
 	[[f1landfac]],
 	[[metalextractor_up1]],
 	[[fissionpowerplant]],
@@ -105,6 +113,7 @@ Shared.buildListFedt1 = {
 }
 
 Shared.buildListFedt2 = {
+	[[fedairplant]],
 	[[f1landfac]],
 	[[metalextractor_up2]],
 	[[fissionpowerplant]],
@@ -131,6 +140,7 @@ Shared.buildListFedt2 = {
 }
 
 Shared.buildListFedt3 = {
+	[[fedairplant]],
 	[[f1landfac]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],
@@ -157,6 +167,7 @@ Shared.buildListFedt3 = {
 }
 
 Shared.buildListFedt4 = {
+	[[fedairplant]],
 	[[f1landfac]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],
@@ -182,16 +193,11 @@ Shared.buildListFedt4 = {
 	[[fedengineer_up3]],
 }
 
-Shared.fedAirPlantBuildList = {
-	[[fedgunship]],
-	[[fedbomber]],
-
-}
-
 Shared.buildListLoz = {
 }
 
 Shared.buildListLozt0 = {
+	-- [[lozairplant]],
 	-- [[f2landfac]],
 	[[metalextractor]],
 	[[fissionpowerplant]],
@@ -217,6 +223,7 @@ Shared.buildListLozt0 = {
 }
 
 Shared.buildListLozt1 = {
+	[[lozairplant]],
 	[[f2landfac]],
 	[[metalextractor_up1]],
 	[[fissionpowerplant]],
@@ -242,6 +249,7 @@ Shared.buildListLozt1 = {
 }
 
 Shared.buildListLozt2 = {
+	[[lozairplant]],
 	[[f2landfac]],
 	[[metalextractor_up2]],
 	[[fissionpowerplant]],
@@ -267,6 +275,7 @@ Shared.buildListLozt2 = {
 }
 
 Shared.buildListLozt3 = {
+	[[lozairplant]],
 	[[f2landfac]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],
@@ -292,6 +301,7 @@ Shared.buildListLozt3 = {
 }
 
 Shared.buildListLozt4 = {
+	[[lozairplant]],
 	[[f2landfac]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],

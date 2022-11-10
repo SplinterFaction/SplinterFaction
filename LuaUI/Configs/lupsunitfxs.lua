@@ -2,25 +2,25 @@ effectUnitDefs = {
 ------------------
 ------------------
 	fedairplant = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine1", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine2", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine3", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine4", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine5", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine6", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine7", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine8", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine1", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine2", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine3", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine4", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine5", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine6", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine7", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine8", onActive=false, emitVector = {0, 0, 1}}},
 	},
 
 	lozairplant = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine1", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine2", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine3", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine4", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine5", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine6", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine7", onActive=false, emitVector = {0, 0, 1}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  16, length=60, piece="engine8", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine1", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine2", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine3", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine4", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine5", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine6", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine7", onActive=false, emitVector = {0, 0, 1}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=60, piece="engine8", onActive=false, emitVector = {0, 0, 1}}},
 	},
 
 	airscout = {

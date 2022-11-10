@@ -22,7 +22,7 @@ script = [[metalextractor_lus.lua]]
 
 tech = [[tech0]]
 
-noenergycost = true
+noenergycost = false
 
 skyhateceg = [[custom:skyhatelasert0]]
 

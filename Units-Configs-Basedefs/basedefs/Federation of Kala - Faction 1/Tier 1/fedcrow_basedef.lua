@@ -48,7 +48,6 @@ unitDef                    = {
 	footprintX                   = 2,
 	footprintZ                   = 2,
 	floater                      = true,
-	firestate					 = 1,
 	hoverAttack                  = false,
 	iconType                     = "air_bomb",
 	idleAutoHeal                 = .5,
