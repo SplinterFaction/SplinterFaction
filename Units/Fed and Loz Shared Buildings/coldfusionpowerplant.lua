@@ -8,7 +8,7 @@ local armortype					 = [[building]]
 local techrequired				 = [[tech3]]
 local energyproduced			 = [[250]]
 
-local buildCostMetal 			  = 1750
+local buildCostMetal 			  = 1000
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -74,7 +74,7 @@ local unitDef                     = {
 		death_sounds              = "generic",
 		RequireTech				 = techrequired,
 		armortype                 = armortype,
-		noenergycost			  = true,
+		noenergycost			  = false,
 --		supply_granted            = supplygranted,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",

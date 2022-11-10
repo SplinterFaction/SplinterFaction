@@ -8,7 +8,7 @@ local armortype					 = [[building]]
 local energyproduced			 = [[1000]]
 local techrequired				 = [[tech4]]
 
-local buildCostMetal 			  = 7500
+local buildCostMetal 			  = 4500
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -77,7 +77,7 @@ local unitDef                     = {
 --		ProvideTechRange          = powerradius,
 		RequireTech				 = techrequired,
 		armortype                 = armortype,
-		noenergycost			  = true,
+		noenergycost			  = false,
 --		supply_granted            = supplygranted,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",

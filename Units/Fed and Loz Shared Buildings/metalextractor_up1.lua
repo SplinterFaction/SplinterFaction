@@ -20,6 +20,8 @@ script = [[metalextractor_up1_lus.lua]]
 
 tech = [[tech1]]
 
+noenergycost = false
+
 skyhateceg = [[custom:skyhatelasert1]]
 
 VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_basedef.lua")
