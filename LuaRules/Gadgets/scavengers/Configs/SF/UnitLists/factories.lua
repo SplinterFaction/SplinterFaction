@@ -1,6 +1,8 @@
 local factories = {
 	"f1landfac",
 	"f2landfac",
+	"fedairplant",
+	"lozairplant",
 }
 
 local scavFactories = {}

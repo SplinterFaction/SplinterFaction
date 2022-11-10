@@ -1,23 +1,43 @@
 return {
 	T0 = {
-		"escoutdrone_scav",
+		[[airscout_scav]],
 	},
 
 	T1 = {
-		"escoutdrone_scav",
+		[[lozwasp_scav]],
+		[[lozbumblebee_scav]],
+		[[fedsparrow_scav]],
+		[[fedcrow_scav]],
 	},
 
 	T2 = {
-		"fedgunship_scav",
-		"fedbomber_scav",
+		[[lozhornet_scav]],
+		[[lozcrane_scav]],
+		[[fedhawk_scav]],
+		[[fedcondor_scav]],
 	},
 
 	T3 = {
-		"fedgunship_scav",
-		"fedbomber_scav",
+		[[loztitan_scav]],
+		[[fedeagle_scav]],
 	},
 
 	T4 = {
-		"ekrow_scav",
+		[[lozhornet_scav]],
+		[[lozcrane_scav]],
+		[[fedhawk_scav]],
+		[[fedcondor_scav]],
+		[[loztitan_scav]],
+		[[fedeagle_scav]],
 	},
 }
+
+
+
+
+
+
+
+
+
+

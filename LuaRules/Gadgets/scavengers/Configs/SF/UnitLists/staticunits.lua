@@ -31,8 +31,8 @@ local stockpilers = {
 }
 
 local nukes = {
-	"esilo_scav",
-	"esiloplanetcracker_scav",
+	"fedbertha_scav",
+	"lozintimidator_scav",
 }
 
 local beaconCaptureExclusions = {
@@ -41,55 +41,58 @@ local beaconCaptureExclusions = {
 local beaconDefencesLand = {
 	T0 = {
 		-- T0
-		"elightturret2_scav",
-		"elaserbattery_scav",
+		[[fedmenlo_scav]],
+		[[lozjericho_scav]],
+		[[fedwasp_scav]],
+		[[lozrazor_scav]],
 	},
 
 	T1 = {
 		-- T0
-		"elightturret2_scav",
-		"elaserbattery_scav",
+		[[fedmenlo_scav]],
+		[[lozjericho_scav]],
+		[[fedwasp_scav]],
+		[[lozrazor_scav]],
 	},
 
 	T2 = {
 		-- T0
-		"eheavyturret2_scav",
-		"eflakturret_scav",
-		"ekmar_scav",
+		[[fedimmolator_scav]],
+		[[lozinferno_scav]],
+		[[fedjavelin_scav]],
+		[[lozrattlesnake_scav]],
 	},
 
 	T3 = {
-		"eheavyturret2_scav",
-		"eflakturret_scav",
-		"ekmar_scav",
+		[[fedguardian_scav]],
+		[[lozannihilator_scav]],
 	},
 
 	T4 = {
-		"eartyturret_scav",
-		"eartyturretvulcan_scav",
-		"esilo_scav",
+		[[fedbertha_scav]],
+		[[lozannihilator_scav]],
 	},
 }
 
 local beaconDefencesSea = {
 	T0 = {
-		"escoutdrone_scav",
+		[[airscout_scav]],
 	},
 
 	T1 = {
-		"escoutdrone_scav",
+		[[airscout_scav]],
 	},
 
 	T2 = {
-		"escoutdrone_scav",
+		[[airscout_scav]],
 	},
   
 	T3 = {
-		"escoutdrone_scav",
+		[[airscout_scav]],
 	},
 
 	T4 = {
-		"escoutdrone_scav",
+		[[airscout_scav]],
 	},
 }
 

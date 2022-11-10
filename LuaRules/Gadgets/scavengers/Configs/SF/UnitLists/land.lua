@@ -1,9 +1,8 @@
 return {
 	T0 = {
 		[[fedak_scav]],
-		[[fedstorm_scav]],
-		[[fedthud_scav]],
-		[[fedcrasher_scav]],
+		[[lozflea_scav]],
+		[[lozdiamondback_scav]],
 	},
 
 	T1 = {
@@ -11,31 +10,29 @@ return {
 		[[fedstorm_scav]],
 		[[fedthud_scav]],
 		[[fedcrasher_scav]],
+		[[lozroach_scav]],
+		[[lozscorpion_scav]],
 	},
 
 	T2 = {
-		[[fedrecluse_scav]],
-		[[fedbasher_scav]],
-		[[fedstreetsweeper_scav]],
-		[[fedsledge_scav]],
-		[[fedanvil_scav]],
-		[[federaser_scav]],
-
+		[[fedbear_scav]],
+		[[fedcobra_scav]],
+		[[fedavalanche_scav]],
+		[[fedphalanx_scav]],
+		[[lozreaper_scav]],
+		[[lozluger_scav]],
+		[[lozpulverizer_scav]],
 	},
 
 	T3 = {
-		[[fedrecluse_scav]],
-		[[fedbasher_scav]],
-		[[fedstreetsweeper_scav]],
-		[[fedsledge_scav]],
-		[[fedanvil_scav]],
-		[[federaser_scav]],
-		[[fedakm2_scav]],
+		[[fedgoliath_scav]],
+		[[fedjuggernaut_scav]],
+		[[lozmammoth_scav]],
+		[[lozsilverback_scav]],
 	},
 
 	T4 = {
-		[[fedakm2_scav]],
-		[[fedrazorback_scav]],
 		[[fedanarchid_scav]],
+		[[lozeurypterid_scav]],
 	},
 }

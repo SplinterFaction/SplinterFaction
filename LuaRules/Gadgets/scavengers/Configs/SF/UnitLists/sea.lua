@@ -1,25 +1,21 @@
 return {
 	T0 = {
-		"escoutdrone_scav",
+		[[airscout_scav]],
 	},
 
 	T1 = {
-		"efighter_scav",
+		[[airscout_scav]],
 	},
 
 	T2 = {
-		"efighter_scav",
-		"egunship2_scav",
+		[[airscout_scav]],
 	},
 
 	T3 = {
-		"efighter_scav",
-		"egunship2_scav",
-		"ebomber_scav",
-		"eairemp_scav",
+		[[airscout_scav]],
 	},
 
 	T4 = {
-		"ekrow_scav",
+		[[airscout_scav]],
 	},
 }
