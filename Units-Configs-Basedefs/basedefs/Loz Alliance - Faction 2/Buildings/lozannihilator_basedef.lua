@@ -96,7 +96,7 @@ weaponDefs                  = {
 		minintensity             = 1,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 1000,
+		range                  = 1200,
 		reloadtime             = 8,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
@@ -116,7 +116,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 4500,
+			default              = 4700,
 		},
 	},
 }

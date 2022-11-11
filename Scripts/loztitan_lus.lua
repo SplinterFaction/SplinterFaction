@@ -25,42 +25,24 @@ function script.AimFromWeapon(weaponID)
     return base
 end
 
-
+local firepoints = {turretball1, turretball2, turretball3, turretball4, turretball5, turretball6, turretball7, turretball8, turretball9, turretball10}
+local currentFirepoint = 1
+local totalNumberofFirepoints = 10
 
 function script.QueryWeapon(weaponID)
-    if weaponID == 1 then
-        return turretball1
-    elseif weaponID == 2 then
-        return turretball2
-    elseif weaponID == 3 then
-        return turretball3
-    elseif weaponID == 4 then
-        return turretball4
-    elseif weaponID == 5 then
-        return turretball5
-    elseif weaponID == 6 then
-        return turretball6
-    elseif weaponID == 7 then
-        return turretball7
-    elseif weaponID == 8 then
-        return turretball8
-    elseif weaponID == 9 then
-        return turretball9
-    elseif weaponID == 10 then
-        return turretball10
-    end
+    return firepoints[currentFirepoint]
 end
 
 function script.FireWeapon(weaponID)
-    if WeaponID == 9 then
-        EmitSfx (turretball9, 1024)
-    elseif WeaponID == 10 then
-        EmitSfx (turretball10, 1024)
+    currentFirepoint = currentFirepoint + 1
+    if currentFirepoint == (totalNumberofFirepoints + 1) then -- when currentFirepoint gets to one more than the total number of firepoints, reset it to 1
+        currentFirepoint = 1
     end
+    -- Spring.Echo(currentFirepoint)
+    -- EmitSfx (firepoints[currentFirepoint], 1024)
 end
 
 function script.AimWeapon(weaponID, heading, pitch)
-
     --Spring.Echo("AimWeapon: FireWeapon")
     return true
 end

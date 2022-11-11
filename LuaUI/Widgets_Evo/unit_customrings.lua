@@ -79,13 +79,17 @@ local ringsDefs = {
     },
 
     [UnitDefNames.lozannihilator.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1500, divs = 128  },
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
     },
 
     [UnitDefNames.lozintimidator.id] = {
         { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 8000, divs = 128  },
     },
 
+
+	[UnitDefNames.fedanarchid.id] = {
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
+	},
 
 }
 

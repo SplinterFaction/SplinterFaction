@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 80,
+	buildCostMetal               = 150,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -63,7 +63,7 @@ unitDef                    = {
 	idleTime                     = 2200,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 10,
+	maxVelocity                  = 5.5,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -72,7 +72,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 500,
+	sightDistance                = 575,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -231,7 +231,7 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 500,
+		range                  = 575,
 		reloadtime             = 1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
@@ -252,7 +252,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              = 50,
 		},
 	},
 }

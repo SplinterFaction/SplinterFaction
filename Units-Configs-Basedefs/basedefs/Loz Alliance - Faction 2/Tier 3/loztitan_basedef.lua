@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 500,
+	buildCostMetal               = 1000,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -63,7 +63,7 @@ unitDef                    = {
 	idleTime                     = 2200,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 4,
+	maxVelocity                  = 3,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -85,9 +85,9 @@ unitDef                    = {
 	--------------------------------------------------------------------------------
 	-- Transport specific tags
 
-	transportSize			= 12,
+	transportSize			= 16,
 	-- minTransportSize			=
-	transportCapacity		= 1,
+	transportCapacity		= 8,
 	-- transportMass			=
 	-- minTransportMass			=
 	-- loadingRadius			=
@@ -177,58 +177,6 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "heatray",
 			onlyTargetCategory	 = "GROUND BUILDING",
-			mainDir = "0 -1 0",
-			maxAngleDif = 180,
-		},
-		[2]                      = {
-			def                  = "heatray",
-			onlyTargetCategory	 = "GROUND BUILDING",
-			mainDir = "0 -1 0",
-			maxAngleDif = 180,
-		},
-		[3]                      = {
-			def                  = "heatray",
-			onlyTargetCategory	 = "GROUND BUILDING",
-			mainDir = "0 -1 0",
-			maxAngleDif = 180,
-		},
-		[4]                      = {
-			def                  = "heatray",
-			onlyTargetCategory	 = "GROUND BUILDING",
-			mainDir = "0 -1 0",
-			maxAngleDif = 180,
-		},
-		[5]                      = {
-			def                  = "beamlaser",
-			onlyTargetCategory	 = "AIR",
-			mainDir = "0 1 0",
-			maxAngleDif = 180,
-		},
-		[6]                      = {
-			def                  = "beamlaser",
-			onlyTargetCategory	 = "AIR",
-			mainDir = "0 1 0",
-			maxAngleDif = 180,
-		},
-		[7]                      = {
-			def                  = "beamlaser",
-			onlyTargetCategory	 = "AIR",
-			mainDir = "0 1 0",
-			maxAngleDif = 180,
-		},
-		[8]                      = {
-			def                  = "beamlaser",
-			onlyTargetCategory	 = "AIR",
-			mainDir = "0 1 0",
-			maxAngleDif = 180,
-		},
-		[9]                      = {
-			def                  = "railgun",
-			onlyTargetCategory	 = "GROUND BUILDING AIR",
-		},
-		[10]                      = {
-			def                  = "railgun",
-			onlyTargetCategory	 = "GROUND BUILDING AIR",
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
@@ -272,7 +220,7 @@ weaponDefs                 = {
 		collideFriendly           = false,
 		coreThickness             = 0.5,
 		-- cegtag					  = "burnblack",
-		beamtime				  = 0.5,
+		beamtime				  = 0.1,
 		largebeamlaser			  = true,
 		laserFlareSize            = 5,
 		duration                  = 0.8,
@@ -283,10 +231,10 @@ weaponDefs                 = {
 		fireStarter               = 100,
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,
-		minintensity              = 0.5,
+		minintensity              = 1,
 		name                      = "Laser",
 		range                     = 500,
-		reloadtime                = 0.5,
+		reloadtime                = 0.1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = "0.5 0.25 0",
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -302,13 +250,13 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = true,
 		customparams              = {
-			expl_light_color	= yellow, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 10,
+			default               = 21.6,
 		},
 	},
 

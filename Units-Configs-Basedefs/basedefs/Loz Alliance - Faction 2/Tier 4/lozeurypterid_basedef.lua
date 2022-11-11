@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.18,
 	brakeRate                    = 0.2,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 45000,
+	buildCostMetal               = 27000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozjaguar.png",
@@ -17,7 +17,7 @@ unitDef                    = {
 	description                  = [[Endbringer Class Nuclear Battle Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
-	energyUse                    = 0,
+	energyUse                    = 400,
 	explodeAs                    = explodeAs,
 	footprintX                   = 6,
 	footprintZ                   = 6,
@@ -26,8 +26,8 @@ unitDef                    = {
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
-	maxDamage                    = 20000,
-	maxVelocity                  = 1.3,
+	maxDamage                    = 15000,
+	maxVelocity                  = 1.5,
 	maxReverseVelocity           = 0.25,
 	maxWaterDepth                = 20,
 	metalStorage                 = 0,
@@ -41,7 +41,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 3500,
+	sightDistance                = 1600,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 4,
@@ -80,6 +80,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				  = "mobile",
 		unitrole				 = "Assault",
+		hpoverride               = 15000,
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -91,7 +92,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	nukeartyweapon               = {
-		AreaOfEffect             = 1250,
+		AreaOfEffect             = 800,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
@@ -99,14 +100,14 @@ weaponDefs                 = {
 		
 		cegTag                   = "nukeartyshot",
 		explosionGenerator       = "custom:NUKEDATBEWMSMALL",
-		edgeEffectiveness        = 0.1,
+		edgeEffectiveness        = 1,
 		energypershot            = 0,
 		highTrajectory			 = 0,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		name                     = "Light Cannon",
-		range                    = 3500,
-		reloadtime               = 15,
+		range                    = 1600,
+		reloadtime               = 1.2,
 		size					 = 16,
 		weaponType		         = "Cannon",
 		soundHit                 = "deathsounds/nuke/nuke1.wav",
@@ -118,11 +119,11 @@ weaponDefs                 = {
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= 10000, -- In Elmos
-			expl_light_life		= 600, -- In frames I.E. 30 frames = 1 second
+			expl_light_life		= 200, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		}, 
 		damage                   = {
-			default              = 30000,
+			default              = 850,
 		},
 	},
 }

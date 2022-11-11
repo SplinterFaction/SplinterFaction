@@ -738,7 +738,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 0.5
 			end
 			if unitDef.customparams.unitrole == "Combat Transport" then
-				unitDef.maxdamage = unitDef.maxdamage * 1.5
+				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
 
 
@@ -770,6 +770,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then
 				unitDef.maxdamage = unitDef.maxdamage * unitDef.customparams.hpmodifieroverridepercentage
+			elseif unitDef.customparams and unitDef.customparams.hpoverride then
+				unitDef.maxdamage = unitDef.customparams.hpoverride
 			end
 
 

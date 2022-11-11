@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 500,
+	buildCostMetal               = 800,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -72,7 +72,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 500,
+	sightDistance                = 600,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -85,9 +85,9 @@ unitDef                    = {
 	--------------------------------------------------------------------------------
 	-- Transport specific tags
 
-	transportSize			= 12,
+	transportSize			= 20,
 	-- minTransportSize			=
-	transportCapacity		= 1,
+	transportCapacity		= 10,
 	-- transportMass			=
 	-- minTransportMass			=
 	-- loadingRadius			=
@@ -176,7 +176,7 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "rockets",
-			onlyTargetCategory	 = "GROUND BUILDING AIR",
+			onlyTargetCategory	 = "GROUND BUILDING",
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
@@ -229,7 +229,7 @@ weaponDefs                 = {
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rockets",
 		range                    = 500,
-		reloadtime               = 2.5,
+		reloadtime               = 1.3,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "weapons/emediumtankfire2.wav",
