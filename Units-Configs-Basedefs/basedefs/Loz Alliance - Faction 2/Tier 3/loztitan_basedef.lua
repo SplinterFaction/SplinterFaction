@@ -85,9 +85,9 @@ unitDef                    = {
 	--------------------------------------------------------------------------------
 	-- Transport specific tags
 
-	transportSize			= 16,
+	transportSize			= 12,
 	-- minTransportSize			=
-	transportCapacity		= 8,
+	transportCapacity		= 16,
 	-- transportMass			=
 	-- minTransportMass			=
 	-- loadingRadius			=

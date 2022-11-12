@@ -75,7 +75,7 @@ unitDef                    = {
 	sightDistance                = 600,
 	smoothAnim                   = true,
 	stealth                      = false,
-	transportbyenemy             = false;
+	transportbyenemy             = false,
 	turnRate                     = 250,
 	unitname                     = unitName,
 	upright						 = true,
@@ -85,9 +85,9 @@ unitDef                    = {
 	--------------------------------------------------------------------------------
 	-- Transport specific tags
 
-	transportSize			= 20,
+	transportSize			= 12,
 	-- minTransportSize			=
-	transportCapacity		= 10,
+	transportCapacity		= 20,
 	-- transportMass			=
 	-- minTransportMass			=
 	-- loadingRadius			=
@@ -219,7 +219,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		collideFeature           = false,
 		cegTag                   = "gunshiptrail-optimized-longlasting",
-		explosionGenerator       = "custom:genericshellexplosion-small-purple",
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		energypershot            = 0,
 		burst                    = 10,
 		burstrate                = 0.1,
@@ -228,11 +228,11 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rockets",
-		range                    = 500,
+		range                    = 600,
 		reloadtime               = 1.3,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
-		soundStart               = "weapons/emediumtankfire2.wav",
+		soundStart               = "weapons/sabotlaunch.wav",
 		soundHit                 = "explosions/explode5.wav",
 		-- stockpile                = true,
 		-- stockpiletime            = 2,
@@ -246,10 +246,10 @@ weaponDefs                 = {
 		flightTime               = 0.5,
 		weaponVelocity           = 2000,
 		customparams             = {
-			expl_light_color	= purple, -- As a string, RGB
+			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.1, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 20,
