@@ -29,12 +29,7 @@ local function IsGround(ud)
 end
 
 -- Exceptions
-local unitArray = { 
-
-  "corap",
-  "armap",
-  "coraap",
-  "armaap",
+local unitArray = {
   
 }
 

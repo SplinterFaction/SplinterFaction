@@ -29,18 +29,14 @@ local hmsz = Game.mapSizeZ/2
 --------------------------------------------------------------------------------
 
 local targetUnits = {
-	eorb                 = true,
-	eorb_up1             = true,
-	eorb_up2             = true,
-	eorb_up3             = true,
-	ehbotengineer        = true,
-	ehbotengineer_turret = true,
-	zarm                 = true,
-	ztenticle            = true,
 	fedengineer          = true,
+	fedengineer_up1      = true,
+	fedengineer_up2      = true,
+	fedengineer_up3      = true,
 	lozengineer          = true,
-	fedorb               = true,
-	lozorb               = true,
+	lozengineer_up1      = true,
+	lozengineer_up2      = true,
+	lozengineer_up3      = true,
 	fedcommander         = true,
 	fedcommander_up1     = true,
 	fedcommander_up2     = true,
@@ -72,6 +68,7 @@ local function SetupUnit(unitID)
 	      z = z + 1
 	    end	
 		-- meta enables reclaim enemy units, alt autoresurrect ( if available )
+		spGiveOrderToUnit(unitID, CMD.MOVE_STATE, { 0 }, {})
 		spGiveOrderToUnit(unitID, CMD_FIGHT, { x, y, z }, {"meta"})
 	end
 end
