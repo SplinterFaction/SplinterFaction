@@ -869,11 +869,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams and unitDef.customparams.supply_cost then
 				local supplycost
 				if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
-					supplycost = math.floor(totalValueInMetal + 0.5) * 0.04
+					supplycost = math.floor(totalValueInMetal + 0.5) * 0.01
 					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
 				end
 				if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
-					supplycost = math.floor(totalValueInMetal + 0.5) * 0.025
+					supplycost = math.floor(totalValueInMetal + 0.5) * 0.01
 					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
 				end
 				if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
