@@ -129,28 +129,27 @@ weaponDefs                 = {
 		collideFriendly        = false,
 		collideFeature         = false,
 		--cegTag			   = "thudshot",
-		burst				   = 4,
+		burst				   = 8,
 		burstrate			   = 0.1,
 		edgeEffectiveness	   = 1,
 		explosionGenerator     = "custom:genericshellexplosion-small",
 		energypershot          = 0,
-		--duration			   = 0.25,
+		-- duration			   = 0.25,
 		highTrajectory		   = 1,
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1300,
-		reloadtime             = 10,
+		reloadtime             = 20,
 		size				   = 2,
 		stages                 = 20,
 		alphaDecay             = 0.1,
-		projectiles			   = 4,
 		weaponType		       = "Cannon",
 		soundStart             = "weapons/Shotgun Boom 101.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
-		sprayAngle             = 200,
+		sprayAngle             = 100,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
@@ -162,13 +161,11 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 15.625,
+			default              = 62.5,
 		},
 	},
 
 	missile            = {
-
-		AreaOfEffect             = 70,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
@@ -187,7 +184,7 @@ weaponDefs                 = {
 		model                    = "missilesmallvlaunch.s3o",
 		name                     = "Rocket",
 		range                    = 1300,
-		reloadtime               = 4,
+		reloadtime               = 6,
 		weaponType		         = "MissileLauncher",
 
 
@@ -210,7 +207,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 400,
+			default              = 600,
 		},
 	},
 }
