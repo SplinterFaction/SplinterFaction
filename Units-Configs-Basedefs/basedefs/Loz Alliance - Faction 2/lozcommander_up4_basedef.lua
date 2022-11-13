@@ -13,12 +13,13 @@ unitDef                    = {
 	buildTime                    = 2.5,
 	buildpic					 = buildpicture,
 	capturable		             = false,
+
 	CanAttack			         = true,
 	CanAssist			         = true,
 	canBeAssisted                = true,
 	CanCapture                   = false,
 	CanRepair			         = true,
-	canRestore					 = false,
+	canRestore					 = true,
 	
 	canGuard                     = true,
 	canMove                      = true,

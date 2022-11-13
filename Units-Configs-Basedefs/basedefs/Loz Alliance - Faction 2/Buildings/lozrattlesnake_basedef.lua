@@ -101,7 +101,7 @@ weaponDefs                  = {
 		impulseFactor            = 0,
 		minintensity             = "1",
 		name                     = "Laser",
-		range                    = 500,
+		range                    = 630,
 		reloadtime               = 5,
 		WeaponType               = "Cannon",
 		rgbColor                 = "1 0.5 0",
@@ -125,7 +125,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 35,
+			default              = 45,
 		},
 	},
 }

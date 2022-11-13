@@ -867,8 +867,23 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			unitDef.buildtime = math.floor(totalValueInMetal + 0.5) * 0.25 -- 0.20 is 5 metal equivalent, 0.25 is 4 metal equivalent
 
 			if unitDef.customparams and unitDef.customparams.supply_cost then
-				local supplycost = math.floor(totalValueInMetal + 0.5) * 0.01
-				unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				local supplycost
+				if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
+					supplycost = math.floor(totalValueInMetal + 0.5) * 0.04
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
+				if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
+					supplycost = math.floor(totalValueInMetal + 0.5) * 0.025
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
+				if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
+					supplycost = math.floor(totalValueInMetal + 0.5) * 0.0065
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
+				if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
+					supplycost = math.floor(totalValueInMetal + 0.5) * 0.005
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

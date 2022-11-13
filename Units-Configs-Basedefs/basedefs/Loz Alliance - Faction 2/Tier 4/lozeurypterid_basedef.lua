@@ -119,8 +119,8 @@ weaponDefs                 = {
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= 10000, -- In Elmos
-			expl_light_life		= 200, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_life		= 100, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.1, -- Use this sparingly
 		}, 
 		damage                   = {
 			default              = 850,

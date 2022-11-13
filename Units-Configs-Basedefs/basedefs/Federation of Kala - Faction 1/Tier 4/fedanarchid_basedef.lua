@@ -96,7 +96,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				  = "mobile",
 		unitrole				 = "Assault",
-		hpoverride               = 40000,
+		hpoverride               = 80000,
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -149,7 +149,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 6000,
+			default              = 800,
 		},
 	},
 	

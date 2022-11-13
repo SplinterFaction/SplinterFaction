@@ -18,7 +18,7 @@ unitDef                    = {
 	canBeAssisted                = true,
 	CanCapture                   = false,
 	CanRepair			         = true,
-	canRestore					 = false,
+	canRestore					 = true,
 	
 	canGuard                     = true,
 	canMove                      = true,

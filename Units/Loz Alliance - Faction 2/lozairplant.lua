@@ -11,7 +11,7 @@ humanName = [[VTOL Factory]]
 objectName = "lozairplant.s3o"
 script = "lozairplant.cob"
 
-airPlantBuildList = Shared.buildListFedAirPlant
+airPlantBuildList = Shared.buildListLozAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
