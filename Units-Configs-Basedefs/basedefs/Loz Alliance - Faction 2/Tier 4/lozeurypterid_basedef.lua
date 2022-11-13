@@ -100,7 +100,7 @@ weaponDefs                 = {
 		
 		cegTag                   = "nukeartyshot",
 		explosionGenerator       = "custom:NUKEDATBEWMSMALL",
-		edgeEffectiveness        = 1,
+		edgeEffectiveness        = 0.5,
 		energypershot            = 0,
 		highTrajectory			 = 0,
 		impulseFactor            = 0,

@@ -8,8 +8,8 @@ buildCostMetal = 150
 
 humanName = [[VTOL Factory]]
 
-objectName = "sharedairplant.s3o"
-script = "sharedairplant.cob"
+objectName = "fedairplant.s3o"
+script = "fedairplant.cob"
 
 airPlantBuildList = Shared.buildListFedAirPlant
 

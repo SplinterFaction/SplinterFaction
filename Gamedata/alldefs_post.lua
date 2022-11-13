@@ -238,6 +238,7 @@ function UnitDef_Post(name, uDef)
 		uDef.turnrate = 250
 	end
 
+--[[
 	if uDef.name == "Crane" then
 		Spring.Echo(uDef.name)
 
@@ -259,6 +260,7 @@ function UnitDef_Post(name, uDef)
 		Spring.Echo("AttackSafetyDistance " .. tostring(uDef.attacksafetydistance))
 		Spring.Echo("TurnRate " .. tostring(uDef.turnrate))
 	end
+]]--
 
 end
 
@@ -776,17 +778,33 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 
 			-- Cost override so that cost can be adjusted without effecting health
+			local neutralMetalCostModifierMobile = 1
+			local neutralEnergyCostModifierMobile = 1
 			local fedMetalCostModifierMobile = 1
 			local fedEnergyCostModifierMobile = 1
 			local lozMetalCostModifierMobile = 1
 			local lozEnergyCostModifierMobile = 1
 
+			local neutralMetalCostModifierAir = 1
+			local neutralEnergyCostModifierAir = 30
 			local fedMetalCostModifierAir = 1
 			local fedEnergyCostModifierAir = 30
 			local lozMetalCostModifierAir = 1
 			local lozEnergyCostModifierAir = 30
 
 			-- Mobile Ground Units
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Neutral" then
+				if unitDef.customparams.unittype == "mobile" then
+					if neutralMetalCostModifierMobile ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * neutralMetalCostModifierMobile
+					end
+					if neutralEnergyCostModifierMobile ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostenergy * neutralEnergyCostModifierMobile
+					end
+				end
+			end
+
 			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				if unitDef.customparams.unittype == "mobile" then
 					if fedMetalCostModifierMobile ~= 1 then
@@ -810,6 +828,18 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			-- Air Units
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Neutral" then
+				if unitDef.customparams.unittype == "air" then
+					if neutralMetalCostModifierAir ~= 1 then
+						unitDef.buildcostmetal = unitDef.buildcostmetal * neutralMetalCostModifierAir
+					end
+					if neutralEnergyCostModifierAir ~= 1 then
+						unitDef.buildcostenergy = unitDef.buildcostmetal * neutralEnergyCostModifierAir
+					end
+				end
+			end
+
 			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				if unitDef.customparams.unittype == "air" then
 					if fedMetalCostModifierAir ~= 1 then
