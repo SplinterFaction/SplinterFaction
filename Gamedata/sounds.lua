@@ -11,7 +11,7 @@ local Sounds = {
 			pitchmod = 0.05,
 			--pitch = 0.7,
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		buildmechanical = {
 			--- new since 89.0
@@ -21,7 +21,7 @@ local Sounds = {
 			pitchmod = 0.05,
 			--pitch = 0.7,
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		buildmechanical1 = {
 			--- new since 89.0
@@ -31,7 +31,7 @@ local Sounds = {
 			--pitchmod = 0.05,
 			--pitch = 0.7,
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 	
 		airraider = {
@@ -86,7 +86,7 @@ local Sounds = {
 			pitchmod = 0.05,
 			--pitch = 0.7,
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		nukeartyweaponhit = {
@@ -97,14 +97,14 @@ local Sounds = {
 			pitchmod = 0.05,
 			--pitch = 0.7,
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 	
 		ack = {
 			--- always play on the front speaker(s)
 			file = "sounds/ui/ack.wav",
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 			gainmod = 0,
 			pitchmod = 0,
 		},
@@ -113,7 +113,7 @@ local Sounds = {
 			--- always play on the front speaker(s)
 			file = "sounds/acknowledgements/dothis.wav",
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 			gainmod = 0,
 			pitchmod = 0,
 		},
@@ -122,7 +122,7 @@ local Sounds = {
 			--- always play on the front speaker(s)
 			file = "sounds/ui/beep4.wav",
 			in3d = "false",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 ---------------------------------------------------
@@ -133,14 +133,14 @@ local Sounds = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/unitselect.wav",
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		EngineIdle = {
 			--- always play on the front speaker(s)
 			file = "sounds/unitselections/engineidle.wav",
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		
@@ -149,14 +149,14 @@ local Sounds = {
 			--- always play on the front speaker(s)
 			file = "sounds/ui/zaal/bugselect.wav",
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		MultiSelect = {
 			--- always play on the front speaker(s)
 			file = "sounds/ui/button9.wav",
 			in3d = true,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 			gain = 0.25,
 		},
 		
@@ -166,56 +166,56 @@ local Sounds = {
 			file = "sounds/ui/beep6.wav",
 			rolloff = 0,
 			dopplerscale = 0,
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		factory = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/gdfactoryselect.wav",
 			in3d = "false",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		energy = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/gdenergy.wav",
 			in3d = "false",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		mex = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/gdmex.wav",
 			in3d = "false",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		radar = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/unitselect.wav",
 			in3d = "false",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		mobileunit = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/unitselect.wav",
 			in3d = "false",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		turret = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/turretselect.wav",
 			in3d = "false",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		healing = {
 			--- always play on the front speaker(s)
 			file = "sounds/miscfx/heal.wav",
 			in3d = "true",
-			maxconcurrent = 1,
+			maxconcurrent = 8,
 		},
 		
 		--ExampleSound = {

@@ -287,12 +287,14 @@ if mexRandomLayout == "standard" then
 		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end	
 
+	pointsPerSideModifier = 1.5 ^ (( teamIDCount - 2 ) / 2)
 	randomMirrored = true
 	padding = 100
 	pointRadius = 100 -- TODO: change this into how big a metal circle is
 	extraSeparationBetweenPoints = 50
 	howManyTriesBeforeGiveUp = 100
-	numPointsPerSide = mexSpotsPerSide * (mexSpotsPerSideMultiplier * 0.01)
+	numPointsPerSide = (mexSpotsPerSide * (mexSpotsPerSideMultiplier * 0.01)) * pointsPerSideModifier
+	numPointsPerSide = math.floor(numPointsPerSide + 0.5)
 	includeCentre = false
 	method = 6
 	allowWater = allowMexesInWater

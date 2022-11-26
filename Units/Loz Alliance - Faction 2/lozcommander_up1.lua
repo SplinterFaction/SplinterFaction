@@ -10,7 +10,7 @@ buildpicture = [[lozcommander.png]]
 techprovided = [[tech0, tech1, -overseer]]
 techrequired = [[0 overseer]]
 
-buildCostMetal = 6200
+buildCostMetal = 3100
 maxvelocity = 3
 workertime = 2
 

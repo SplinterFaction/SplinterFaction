@@ -220,8 +220,8 @@ weaponDefs                 = {
 		customparams             = {
 			nofriendlyfire	     = true,
 			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= hugeExplosion, -- In Elmos
-			expl_light_life		= 1000, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {

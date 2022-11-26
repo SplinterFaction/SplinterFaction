@@ -154,7 +154,7 @@ local presets = {
 		bloom = false,
 		bloomhighlights = false,
 		ssao = false,
-		water = 2,
+		water = 4,
 		mapedgeextension = false,
 		lighteffects = false,
 		lups = true,
@@ -180,7 +180,7 @@ local presets = {
 		bloom = true,
 		bloomhighlights = false,
 		ssao = false,
-		water = 3,
+		water = 4,
 		mapedgeextension = true,
 		lighteffects = true,
 		lups = true,
@@ -206,7 +206,7 @@ local presets = {
 		bloom = true,
 		bloomhighlights = false,
 		ssao = true,
-		water = 3,
+		water = 4,
 		mapedgeextension = true,
 		lighteffects = true,
 		lups = true,
@@ -232,7 +232,7 @@ local presets = {
 		bloom = true,
 		bloomhighlights = true,
 		ssao = true,
-		water = 3,
+		water = 4,
 		mapedgeextension = true,
 		lighteffects = true,
 		lups = true,
@@ -2214,7 +2214,7 @@ function init()
 
 		{id="decals", group="gfx", name="Ground decals", type="slider", min=0, max=5, step=1, value=tonumber(Spring.GetConfigInt("GroundDecals",1) or 1), description='Set how long map decals will stay.\n\nDecals are ground scars, footsteps/tracks and shading under buildings'},
 		{id="grounddetail", group="gfx", name="Ground detail", type="slider", min=32, max=200, step=1, value=tonumber(Spring.GetConfigInt("GroundDetail",1) or 1), description='Set how detailed the map mesh/model is. Note that detail over 120 is largely unnoticeable.\n64 is a good default amount for playing that will not cost unnecessary fps.'},
-		{id="water", group="gfx", name="Water type", type="select", options={'basic','reflective','dynamic','reflective&refractive','bump-mapped'}, value=(tonumber(Spring.GetConfigInt("Water",1) or 1)+1)},
+		{id="water", group="gfx", name="Water type", type="select", options={'basic','reflective','dynamic','reflective&refractive','bump-mapped'}, value=(tonumber(Spring.GetConfigInt("Water",4) or 1)+1)},
 
 		{id="bloomdeferred", group="gfx", widget="Bloom Shader Deferred", name="Bloom (unit)", type="bool", value=GetWidgetToggleValue("Bloom Shader Deferred"), description='Unit highlights and lights will glow.\n\n(via deferred rendering = less lag)'},
 		{id="bloomdeferredbrightness", group="gfx", name=widgetOptionColor.."   brightness", type="slider", min=0.4, max=1.1, step=0.05, value=1, description=''},
@@ -2984,7 +2984,7 @@ function widget:GetConfigData(data)
     savedTable.customMapSunPos = customMapSunPos
 	savedTable.savedConfig = {
 		vsync = {'VSync', tonumber(Spring.GetConfigInt("VSync",1) or 1)},
-		water = {'Water', tonumber(Spring.GetConfigInt("Water",1) or 1)},
+		water = {'Water', tonumber(Spring.GetConfigInt("Water",4) or 4)},
 		disticon = {'UnitIconDist', tonumber(Spring.GetConfigInt("UnitIconDist",1) or 400)},
 		particles = {'MaxParticles', tonumber(Spring.GetConfigInt("MaxParticles",1) or 10000)},
 		nanoparticles = {'MaxNanoParticles', tonumber(Spring.GetConfigInt("MaxNanoParticles",1) or 500)},
@@ -3002,7 +3002,7 @@ function widget:GetConfigData(data)
 		sndvolmaster = {'snd_volmaster', tonumber(Spring.GetConfigInt("snd_volmaster",1) or 50)},
 		sndvolbattle = {'snd_volbattle', tonumber(Spring.GetConfigInt("snd_volbattle",1) or 50)},
 		sndvolunitreply = {'snd_volunitreply', tonumber(Spring.GetConfigInt("snd_volunitreply",1) or 50)},
-		sndvolmusic = {'snd_volmusic', tonumber(Spring.GetConfigInt("snd_volmusic",1) or 50)},
+		sndvolmusic = {'snd_volmusic', tonumber(Spring.GetConfigInt("snd_volmusic",1) or 20)},
 	}
 	return savedTable
 end
