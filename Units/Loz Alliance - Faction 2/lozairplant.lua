@@ -15,6 +15,8 @@ airPlantBuildList = Shared.buildListLozAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
+workerTime = 10
+
 factionname = "Loz Alliance"
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")

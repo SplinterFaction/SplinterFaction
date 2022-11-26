@@ -15,6 +15,8 @@ airPlantBuildList = Shared.buildListFedAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
+workerTime = 10
+
 factionname = "Federation of Kala"
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")

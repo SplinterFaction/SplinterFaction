@@ -43,7 +43,7 @@ unitDef                         = {
 	unitname                          = unitName,
 	--  unitRestricted	              = 1,
 	unitnumber                        = "83",
-	workerTime                        = 1,
+	workerTime                        = workerTime,
 	yardMap                           = "oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo oooooooooooooooooo",
 	--  usePieceCollisionVolumes      = true,
 
