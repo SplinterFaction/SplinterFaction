@@ -136,13 +136,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
+		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 500,
-		reloadtime               = 0.8,
+		burst                    = 5,
+		burstrate                = 0.2,
+		reloadtime               = 10,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -160,7 +162,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 10,
+			default              = 50,
 		},
 	},
 
@@ -177,13 +179,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
+		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 645,
-		reloadtime               = 0.7,
+		burst                    = 10,
+		burstrate                = 0.1,
+		reloadtime               = 10,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -201,7 +205,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 15,
+			default              = 50,
 		},
 	},
 
@@ -218,13 +222,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
+		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 900,
-		reloadtime               = 0.6,
+		burst                    = 15,
+		burstrate                = 0.1,
+		reloadtime               = 12,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -242,7 +248,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 20,
+			default              = 60,
 		},
 	},
 
@@ -259,13 +265,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
+		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 900,
-		reloadtime               = 0.5,
+		burst                    = 15,
+		burstrate                = 0.1,
+		reloadtime               = 15,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -283,7 +291,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 25,
+			default              = 200,
 		},
 	},
 
@@ -300,13 +308,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
+		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 1100,
-		reloadtime               = 0.4,
+		burst                    = 20,
+		burstrate                = 0.1,
+		reloadtime               = 20,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -324,7 +334,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              = 200,
 		},
 	},
 }

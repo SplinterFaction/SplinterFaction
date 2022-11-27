@@ -142,7 +142,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 500,
-		reloadtime             = 2,
+		reloadtime             = 10,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/roachrailgun.wav",
@@ -161,7 +161,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 20,
+			default              = 250,
 		},
 	},
 
@@ -208,7 +208,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 645,
-		reloadtime             = 2.3,
+		reloadtime             = 10,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/reaperrailgun.wav",
@@ -227,7 +227,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 45,
+			default              = 500,
 		},
 	},
 
@@ -276,7 +276,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 900,
-		reloadtime             = 5.6,
+		reloadtime             = 12,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/mammothrailgun.wav",
@@ -295,7 +295,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 50,
+			default              = 900,
 		},
 	},
 
@@ -344,7 +344,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 900,
-		reloadtime             = 5.6,
+		reloadtime             = 15,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/silverbacksmallrailguns.wav",
@@ -363,7 +363,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 60,
+			default              = 3000,
 		},
 	},
 
@@ -412,7 +412,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 1100,
-		reloadtime             = 5.6,
+		reloadtime             = 20,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/silverbackrailgun.wav",
@@ -431,7 +431,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 80,
+			default              = 4000,
 		},
 	},
 
