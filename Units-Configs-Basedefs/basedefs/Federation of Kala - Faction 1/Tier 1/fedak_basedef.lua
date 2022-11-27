@@ -116,8 +116,6 @@ weaponDefs                 = {
 		collideFeature           = false,
 		collideFriendly          = false,
 		explosionGenerator       = "custom:burnblacksmall",
-		burst					 = 3,
-		burstrate				 = 0.1,
 		coreThickness            = 0.1,
 		duration                 = 0.8,
 		energypershot            = 0,
@@ -130,7 +128,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 400,
-		reloadtime               = 2,
+		reloadtime               = 0.25,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -148,7 +146,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 4,
+			default              = 1.5,
 		},
 	},
 }
