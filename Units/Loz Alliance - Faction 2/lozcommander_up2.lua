@@ -16,7 +16,7 @@ builddistance = 550
 maxvelocity = 2
 workertime = 4
 
-shieldradius = 70
+shieldradius = 95
 
 movementclass = [[WHEELEDTANK5]]
 
