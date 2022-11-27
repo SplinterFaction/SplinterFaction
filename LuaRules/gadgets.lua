@@ -89,7 +89,6 @@ gadgetHandler = {
   actionHandler = actionHandler,	-- FIXME: not in base
 }
 
-
 -- these call-ins are set to 'nil' if not used
 -- they are setup in UpdateCallIns()
 local callInLists = {
@@ -1538,12 +1537,14 @@ function gadgetHandler:UnitPreDamaged(unitID, unitDefID, unitTeam,
 		local g
 		for i = 1, gadgets.count do
 			g = data[i]
+			-- Spring.Echo("input damage is ", rDam)
 			local dam, imp = g:UnitPreDamaged(unitID, unitDefID, unitTeam,
 					  rDam, paralyzer, weaponDefID,
 					  attackerID, attackerDefID, attackerTeam,
 					  projectileID)
 			if (dam ~= nil) then
 				rDam = dam
+				-- Spring.Echo("modified by gadget", g:GetInfo().name, "new value", rDam)
 			end
 			if (imp ~= nil) then
 				rImp = math.min(imp, rImp)

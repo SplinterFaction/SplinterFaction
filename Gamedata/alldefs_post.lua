@@ -273,6 +273,19 @@ function WeaponDef_Post(name, wDef)
 	--wDef.cylindertargeting = 128
 	--wDef.heightmod = 1
 
+	--[[
+	if wDef.weapontype then
+		if wDef.areaofeffect then
+			if wDef.name == nil then
+				wDef.name = wDef.weapontype
+				Spring.Echo(wDef.name .. " " .. wDef.areaofeffect)
+			else
+				Spring.Echo(wDef.name .. " " .. wDef.areaofeffect)
+			end
+		end
+	end
+	]]--
+
 	wDef.name = wDef.weapontype
 
 	--Use targetborderoverride in weapondef customparams to override this global setting
@@ -323,7 +336,7 @@ function WeaponDef_Post(name, wDef)
 	--------------------------------------------------------------------------------
 	-- Disable Friendly Fire Completely
 	if wDef.customparams and wDef.customparams.friendlyfireexception == nil then
-		wDef.customparams.nofriendlyfire = 1
+		wDef.customparams.nofriendlyfire = true
 	end
 
 	if string.find(name, '_scav') then
@@ -894,7 +907,6 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				--Spring.Echo(uDef.name)
 				--Spring.Echo(uDef.maxdamage)
 			end
-
 		end
 	end
 end

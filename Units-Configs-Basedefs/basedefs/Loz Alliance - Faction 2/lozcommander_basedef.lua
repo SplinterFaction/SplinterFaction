@@ -8,7 +8,7 @@ unitDef                    = {
 	brakeRate                    = 1,
 	buildCostEnergy              = 0,
 	buildCostMetal               = buildCostMetal,
-	buildDistance                = 350,
+	buildDistance                = builddistance,
 	builder                      = true,
 	buildTime                    = 2.5,
 	buildpic					 = buildpicture,
@@ -30,7 +30,7 @@ unitDef                    = {
 	energyMake                   = 10,
 	energyStorage                = 0,
 	energyUse                    = 0,
-	explodeAs                    = "commnuke",
+	explodeAs                    = explodeas,
 	footprintX                   = footprintx,
 	footprintZ                   = footprintz,
 	
@@ -53,7 +53,7 @@ unitDef                    = {
 	script			             = script,
 	radarDistance                = 0,
 	repairable		             = false,
-	selfDestructAs               = "commnuke",
+	selfDestructAs               = selfdestructas,
 	showPlayerName	             = true,
 	showNanoSpray                = true,
 	sightDistance                = 500,
@@ -95,23 +95,24 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = [[railgun]],
+			def                  = weapon1,
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING",
 		},
 		[2]                      = {
-			def                  = [[shield]],
+			def                  = weapon2,
 		},
 
 	},
 	customParams                 = {
-		unittype				  = "mobile",
+		unittype				 = "mobile",
 		unitrole				 = "Commander",
 		area_mex_def			 = areamexdef,
 		ProvideTech              = techprovided,
 		RequireTech				 = techrequired,
 		canbetransported 		 = "true",
 		iscommander              = true,
+		hpoverride               = hp,
 		needed_cover             = 2,
 		death_sounds             = "generic",
 		factionname	             = "Loz Alliance",
@@ -125,8 +126,7 @@ unitDef                    = {
 --------------------------------------------------------------------------------
 
 weaponDefs                 = {
-
-	railgun               = {
+	commrailgun               = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -141,8 +141,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 550,
-		reloadtime             = 1,
+		range                  = 500,
+		reloadtime             = 2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/roachrailgun.wav",
@@ -161,11 +161,11 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 25,
+			default              = 20,
 		},
 	},
 
-	shield                        = {
+	commshield                        = {
 
 		Smartshield               = true,
 		Exteriorshield            = true,
@@ -173,11 +173,11 @@ weaponDefs                 = {
 		Visibleshieldrepulse      = false,
 		ShieldStartingPower       = 0,
 		Shieldenergyuse           = 0,
-		Shieldradius              = 50,
-		Shieldpower               = 500,
-		Shieldpowerregen          = 20,
+		Shieldradius              = shieldradius,
+		Shieldpower               = 8250,
+		Shieldpowerregen          = 150,
 		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 20,
+		rechargeDelay		  	  = 80,
 		Shieldintercepttype       = 4,
 		Shieldgoodcolor           = "0.0 0.2 1.0",
 		Shieldbadcolor            = "1.0 0 0",
@@ -192,60 +192,273 @@ weaponDefs                 = {
 		},
 	},
 
-	commnuke                   = {
-		AreaOfEffect              = 1000,
-		avoidFriendly             = false,
-		avoidFeature              = false,
-		cegTag                    = "NUKETRAIL",
-		collideFriendly           = false,
-		collideFeature            = false,
-		commandfire               = true,
-		craterBoost               = 0,
-		craterMult                = 0,
-		edgeeffectiveness		  = 0.1,
-		energypershot             = 0,
-		explosionGenerator        = "custom:NUKEDATBEWMSMALL",
-		fireStarter               = 100,
-		flightTime                = 400,
-
-		id                        = 124,
-		impulseBoost              = 0,
-		impulseFactor             = 0,
-		interceptedByShieldType   = 4,
-
-		metalpershot              = 0,
-		model                     = "enuke.s3o",
-		name                      = "Nuke",
-		range                     = 32000,
-		reloadtime                = 60,
-		weaponType		          = "MissileLauncher",
-
-
-		smokeTrail                = false,
-		soundHit                  = "explosions/explosion_enormous.wav",
-		soundStart                = "weapons/nukelaunch.wav",
-
---		stockpile                 = true,
---		stockpileTime             = stockpiletime,
-		startVelocity             = 10,
-		tracks                    = true,
-		turnRate                  = 3000,
-		targetable			      = 1,
-
-		weaponAcceleration        = 30,
-		weaponTimer               = 15,
-		weaponType                = "StarburstLauncher",
-		weaponVelocity            = 1000,
-		customparams              = {
-			death_sounds 		  = "nuke",
-			nocosttofire		  = true,
-			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= 10000, -- In Elmos
-			expl_light_life		= 600, -- In frames I.E. 30 frames = 1 second
+	commrailgun_up1               = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		rgbColor               = "0.133 0 0.4",
+		rgbColor2              = "0.75 0.75 0.75",
+		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.25,
+		impulseFactor          = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Railgun",
+		range                  = 645,
+		reloadtime             = 2.3,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "weapons/reaperrailgun.wav",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.4,
+		thickness              = 6,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 2000,
+		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
+		damage                   = {
+			default              = 45,
+		},
+	},
+
+	commshield_up1                        = {
+
+		Smartshield               = true,
+		Exteriorshield            = true,
+		Visibleshield             = false,
+		Visibleshieldrepulse      = false,
+		ShieldStartingPower       = 0,
+		Shieldenergyuse           = 0,
+		Shieldradius              = shieldradius,
+		Shieldpower               = 14000,
+		Shieldpowerregen          = 200,
+		Shieldpowerregenenergy    = 0,
+		rechargeDelay		  	  = 60,
+		Shieldintercepttype       = 4,
+		Shieldgoodcolor           = "0.0 0.2 1.0",
+		Shieldbadcolor            = "1.0 0 0",
+		Shieldalpha              = 0.2,
+
+		texture1		          = "shield4",
+
+		visibleShieldHitFrames    = 1,
+		weaponType                = [[Shield]],
 		damage                    = {
-			default               = 10000,
+			default               = 1,
+		},
+	},
+
+	commrailgun_up2               = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		burst				   = 3,
+		burstrate			   = 0.3,
+		rgbColor               = "0.133 0 0.4",
+		rgbColor2              = "0.75 0.75 0.75",
+		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.25,
+		impulseFactor          = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Railgun",
+		range                  = 900,
+		reloadtime             = 5.6,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "weapons/mammothrailgun.wav",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.4,
+		thickness              = 6,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 2000,
+		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 50,
+		},
+	},
+
+	commshield_up2                        = {
+
+		Smartshield               = true,
+		Exteriorshield            = true,
+		Visibleshield             = false,
+		Visibleshieldrepulse      = false,
+		ShieldStartingPower       = 0,
+		Shieldenergyuse           = 0,
+		Shieldradius              = shieldradius,
+		Shieldpower               = 23000,
+		Shieldpowerregen          = 325,
+		Shieldpowerregenenergy    = 0,
+		rechargeDelay		  	  = 60,
+		Shieldintercepttype       = 4,
+		Shieldgoodcolor           = "0.0 0.2 1.0",
+		Shieldbadcolor            = "1.0 0 0",
+		Shieldalpha              = 0.2,
+
+		texture1		          = "shield4",
+
+		visibleShieldHitFrames    = 1,
+		weaponType                = [[Shield]],
+		damage                    = {
+			default               = 1,
+		},
+	},
+
+	commrailgun_up3               = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		burst				   = 4,
+		burstrate			   = 0.25,
+		rgbColor               = "0.133 0 0.4",
+		rgbColor2              = "0.75 0.75 0.75",
+		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.25,
+		impulseFactor          = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Railgun",
+		range                  = 900,
+		reloadtime             = 5.6,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "weapons/silverbacksmallrailguns.wav",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.4,
+		thickness              = 6,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 2000,
+		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 60,
+		},
+	},
+
+	commshield_up3                        = {
+
+		Smartshield               = true,
+		Exteriorshield            = true,
+		Visibleshield             = false,
+		Visibleshieldrepulse      = false,
+		ShieldStartingPower       = 0,
+		Shieldenergyuse           = 0,
+		Shieldradius              = shieldradius,
+		Shieldpower               = 28500,
+		Shieldpowerregen          = 500,
+		Shieldpowerregenenergy    = 0,
+		rechargeDelay		  	  = 40,
+		Shieldintercepttype       = 4,
+		Shieldgoodcolor           = "0.0 0.2 1.0",
+		Shieldbadcolor            = "1.0 0 0",
+		Shieldalpha              = 0.2,
+
+		texture1		          = "shield4",
+
+		visibleShieldHitFrames    = 1,
+		weaponType                = [[Shield]],
+		damage                    = {
+			default               = 1,
+		},
+	},
+
+	commrailgun_up4               = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		burst				   = 5,
+		burstrate			   = 0.2,
+		rgbColor               = "0.133 0 0.4",
+		rgbColor2              = "0.75 0.75 0.75",
+		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.25,
+		impulseFactor          = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Railgun",
+		range                  = 1100,
+		reloadtime             = 5.6,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "weapons/silverbackrailgun.wav",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.4,
+		thickness              = 6,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 2000,
+		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 80,
+		},
+	},
+
+	commshield_up4                        = {
+
+		Smartshield               = true,
+		Exteriorshield            = true,
+		Visibleshield             = false,
+		Visibleshieldrepulse      = false,
+		ShieldStartingPower       = 0,
+		Shieldenergyuse           = 0,
+		Shieldradius              = shieldradius,
+		Shieldpower               = 42000,
+		Shieldpowerregen          = 1000,
+		Shieldpowerregenenergy    = 0,
+		rechargeDelay		  	  = 20,
+		Shieldintercepttype       = 4,
+		Shieldgoodcolor           = "0.0 0.2 1.0",
+		Shieldbadcolor            = "1.0 0 0",
+		Shieldalpha              = 0.2,
+
+		texture1		          = "shield4",
+
+		visibleShieldHitFrames    = 1,
+		weaponType                = [[Shield]],
+		damage                    = {
+			default               = 1,
 		},
 	},
 }

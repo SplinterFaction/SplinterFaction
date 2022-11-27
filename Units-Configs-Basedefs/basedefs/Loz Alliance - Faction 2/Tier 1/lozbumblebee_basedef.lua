@@ -52,7 +52,7 @@ unitDef                    = {
 	iconType                     = "air_bomb",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
-	canLoopbackAttack            = true,
+	canLoopbackAttack            = false,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
 	maxVelocity                  = 12,
@@ -218,7 +218,6 @@ weaponDefs                 = {
 		turret                   = false,
 		weaponVelocity           = 200,
 		customparams             = {
-			nofriendlyfire	     = true,
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

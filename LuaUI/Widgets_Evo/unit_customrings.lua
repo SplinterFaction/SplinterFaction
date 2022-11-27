@@ -91,6 +91,29 @@ local ringsDefs = {
 		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
 	},
 
+	[UnitDefNames.atm.id] = {
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 250, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 500, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 750, divs = 128  },
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1000, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1250, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1500, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1750, divs = 128  },
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 2000, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 2250, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 2500, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 2750, divs = 128  },
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 3000, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 3250, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 3500, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 3750, divs = 128  },
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 4000, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 4250, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 4500, divs = 128  },
+		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 4750, divs = 128  },
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 5000, divs = 128  },
+	},
+
 }
 
 local ringedUnits = {}

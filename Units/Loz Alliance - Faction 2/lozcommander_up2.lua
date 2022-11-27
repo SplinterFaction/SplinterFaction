@@ -10,9 +10,13 @@ buildpicture = [[lozcommander.png]]
 techprovided = [[tech0, tech1, tech2, -overseer]]
 techrequired = [[0 overseer]]
 
-buildCostMetal = 7500
-maxvelocity = 2.3
+buildCostMetal = 10000
+hp = 2000
+builddistance = 550
+maxvelocity = 2
 workertime = 4
+
+shieldradius = 70
 
 movementclass = [[WHEELEDTANK5]]
 
@@ -22,11 +26,17 @@ script = [[lozcommander_lus.lua]]
 footprintx = 5
 footprintz = 5
 
+weapon1 = [[commrailgun_up2]]
+weapon2 = [[commshield_up2]]
+
+explodeas = [[commnuke_up2]]
+selfdestructas = [[commnuke_up2]]
+
 buildlist = Shared.buildListLozt2
 areamexdef = [[metalextractor_up2]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_up2_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

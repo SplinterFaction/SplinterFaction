@@ -30,13 +30,14 @@ unitDef                    = {
 	energyMake                   = 10,
 	energyStorage                = 0,
 	energyUse                    = 0,
-	explodeAs                    = "commnuke",
+	explodeAs                    = explodeas,
 	footprintX                   = footprintx,
 	footprintZ                   = footprintz,
 	
 	iconType                     = "commander",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
+	autoHeal                     = 15,
 	levelground                  = true,
 	maxDamage                    = 1,
 	maxSlope                     = 180,
@@ -53,7 +54,7 @@ unitDef                    = {
 	script			             = script,
 	radarDistance                = 0,
 	repairable		             = false,
-	selfDestructAs               = "commnuke",
+	selfDestructAs               = selfdestructas,
 	showPlayerName	             = true,
 	showNanoSpray                = true,
 	sightDistance                = 500,
@@ -140,8 +141,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 550,
-		reloadtime               = 0.5,
+		range                    = 500,
+		reloadtime               = 0.8,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -159,7 +160,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 25,
+			default              = 10,
 		},
 	},
 
@@ -181,8 +182,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 550,
-		reloadtime               = 0.4,
+		range                    = 645,
+		reloadtime               = 0.7,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -200,7 +201,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 40,
+			default              = 15,
 		},
 	},
 
@@ -222,8 +223,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 575,
-		reloadtime               = 0.3,
+		range                    = 900,
+		reloadtime               = 0.6,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -241,7 +242,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 45,
+			default              = 20,
 		},
 	},
 
@@ -263,8 +264,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 600,
-		reloadtime               = 0.2,
+		range                    = 900,
+		reloadtime               = 0.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -282,7 +283,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 60,
+			default              = 25,
 		},
 	},
 
@@ -304,8 +305,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 600,
-		reloadtime               = 0.1,
+		range                    = 1100,
+		reloadtime               = 0.4,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -323,64 +324,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 100,
-		},
-	},
-
-	commnuke                   = {
-		AreaOfEffect              = 1000,
-		avoidFriendly             = false,
-		avoidFeature              = false,
-		cegTag                    = "NUKETRAIL",
-		collideFriendly           = false,
-		collideFeature            = false,
-		commandfire               = true,
-		craterBoost               = 0,
-		craterMult                = 0,
-		edgeeffectiveness		  = 0.1,
-		energypershot             = 0,
-		explosionGenerator        = "custom:NUKEDATBEWMSMALL",
-		fireStarter               = 100,
-		flightTime                = 400,
-
-		id                        = 124,
-		impulseBoost              = 0,
-		impulseFactor             = 0,
-		interceptedByShieldType   = 4,
-
-		metalpershot              = 0,
-		model                     = "enuke.s3o",
-		name                      = "Nuke",
-		range                     = 32000,
-		reloadtime                = 60,
-		weaponType		          = "MissileLauncher",
-
-
-		smokeTrail                = false,
-		soundHit                  = "explosions/explosion_enormous.wav",
-		soundStart                = "weapons/nukelaunch.wav",
-
-		--		stockpile                 = true,
-		--		stockpileTime             = stockpiletime,
-		startVelocity             = 10,
-		tracks                    = true,
-		turnRate                  = 3000,
-		targetable			      = 1,
-
-		weaponAcceleration        = 30,
-		weaponTimer               = 15,
-		weaponType                = "StarburstLauncher",
-		weaponVelocity            = 1000,
-		customparams              = {
-			death_sounds 		  = "nuke",
-			nocosttofire		  = true,
-			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= 10000, -- In Elmos
-			expl_light_life		= 600, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                    = {
-			default               = 10000,
+			default              = 30,
 		},
 	},
 }

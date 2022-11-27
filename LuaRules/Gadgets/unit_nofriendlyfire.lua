@@ -9,7 +9,7 @@ function gadget:GetInfo()
     author    = "quantum",
     date      = "June 24, 2008",
     license   = "GNU GPL, v2 or later",
-    layer     = -999,
+    layer     = 1,
     enabled   = true  --  loaded by default?
   }
 end
@@ -109,7 +109,7 @@ function gadget:UnitPreDamaged_GetWantedWeaponDef()
 	return wantedWeaponList
 end
 
-function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, 
+function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
                             weaponID, attackerID, attackerDefID, attackerTeam, projectileID)
 	if weaponID and noFFWeaponDefs[weaponID] then
 		attackerTeam = attackerTeam or haxProjectiles[projectileID]
@@ -126,7 +126,7 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 			end
 		end
 	end
-  
+
 	return damage
 end
 
