@@ -102,7 +102,7 @@ weaponDefs                 = {
 		avoidFriendly             = false,
 		collideFeature            = false,
 		collideFriendly           = false,
-		coreThickness             = 0.5,
+		coreThickness             = 0.3,
 		-- cegtag					  = "burnblack",
 		beamtime				  = 0.1,
 		largebeamlaser			  = true,
@@ -118,7 +118,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "Laser",
 		range                     = 400,
-		reloadtime                = 0.1,
+		reloadtime                = 0.25,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = "0.5 0.25 0",
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -128,7 +128,7 @@ weaponDefs                 = {
 		-- sprayangle				  = 500,
 		texture1                  = "flashside3",
 		texture2                  = "empty",
-		thickness                 = 7,
+		thickness                 = 4,
 		tolerance                 = 1000,
 		turret                    = true,
 		weaponVelocity            = 750,
@@ -140,7 +140,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 1.4,
+			default               = 7.5,
 		},
 	},
 }

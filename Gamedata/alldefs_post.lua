@@ -718,7 +718,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Scout" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.2
+				unitDef.maxdamage = unitDef.maxdamage * 0.4
 			end
 			if unitDef.customparams.unitrole == "Artillery" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.3
