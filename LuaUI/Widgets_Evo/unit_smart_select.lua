@@ -30,9 +30,9 @@ end
 
 -- whether to select buildings when mobile units are inside selection rectangle
 local selectBuildingsWithMobile = false
-local includeNanosAsMobile = true
+local includeNanosAsMobile = false
 
-local includeBuilders = true
+local includeBuilders = false
 
 -- only select new units identical to those already selected
 local sameSelectKey = 'z'

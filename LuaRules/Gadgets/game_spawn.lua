@@ -110,7 +110,7 @@ local function SpawnStartUnit(teamID)
 	local startUnit = GetStartUnit(teamID)
 
 	if (startUnit and startUnit ~= "") then
-	
+
 		if startUnit == "fedcommander" then
 			playerFaction = "Federation of Kala"
 		elseif startUnit == "lozcommander" then
@@ -122,11 +122,11 @@ local function SpawnStartUnit(teamID)
 			Spring.Echo("[Game Spawn] If you're seeing this message that means that the code which sets the player's faction is absolutely fucked somewhere. On the next line I will echo the playerFaction variable. If it says anything other than the factions listed above, at least it will provide a clue.")
 			Spring.Echo(playerFaction)
 		end
-		
-		
+
+
 		Spring.Echo("[Game Spawn] My starting faction is " .. playerFaction)
 		Spring.SetTeamRulesParam(teamID, "faction", playerFaction)
-	
+
 		-- spawn the specified start unit
 		local x,y,z = Spring.GetTeamStartPosition(teamID)
 		if IsTeamAI(teamID) then
@@ -145,19 +145,44 @@ local function SpawnStartUnit(teamID)
 		y = Spring.GetGroundHeight(x, z)
 		-- facing toward map center
 		local facing=math.abs(Game.mapSizeX/2 - x) > math.abs(Game.mapSizeZ/2 - z)
-			and ((x>Game.mapSizeX/2) and "west" or "east")
-			or ((z>Game.mapSizeZ/2) and "north" or "south")
-		local unitID = Spring.CreateUnit(startUnit, x, y, z, facing, teamID)
--- Fun times
+				and ((x>Game.mapSizeX/2) and "west" or "east")
+				or ((z>Game.mapSizeZ/2) and "north" or "south")
+
+		--------------------------------------------------------------------------------
+		--------------------------------------------------------------------------------
+		-- I'm hijacking the start unit here so that the player can start and various tech levels
+
+		-- Spring.Echo([[[Game Spawn] startUnit is ]] .. startUnit)
+		local startingTechLevel = modOptions.t0ort1
+		-- Spring.Echo([[[Game Spawn] Starting Tech level is ]] .. startingTechLevel )
+		local newStartUnit
+		if startingTechLevel == [[t0]] then
+		end
+		if startingTechLevel == [[t1]] then
+			-- Spring.Echo([[[Game Spawn] 1.. ]])
+			if startUnit == "fedcommander" then
+				-- Spring.Echo([[[Game Spawn] 2.. ]])
+				newStartUnit = "fedcommander_up1"
+			end
+			if startUnit == "lozcommander" then
+				-- Spring.Echo([[[Game Spawn] 3.. ]])
+				newStartUnit = "lozcommander_up1"
+			end
+		end
+		-- Spring.Echo([[[Game Spawn] startUnit is now ]] .. newStartUnit)
+
+		local unitID = Spring.CreateUnit(newStartUnit, x, y, z, facing, teamID)
+
+		-- Fun times
 		-- if startUnit == "ecommander" then
-			--id1=Spring.CreateUnit("eorb", x+100, y+200, z, facing, teamID)
-			--id1=Spring.CreateUnit("eorb", x-100, y-200, z, facing, teamID)
-			--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
+		--id1=Spring.CreateUnit("eorb", x+100, y+200, z, facing, teamID)
+		--id1=Spring.CreateUnit("eorb", x-100, y-200, z, facing, teamID)
+		--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
 		-- end
 		-- if startUnit == "zarm" then
 		--	id1=Spring.CreateUnit("ztumor", x+100, y+200, z, facing, teamID)
 		--	id1=Spring.CreateUnit("ztumor", x-100, y-200, z, facing, teamID)
-			--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
+		--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
 		-- end
 	end
 
