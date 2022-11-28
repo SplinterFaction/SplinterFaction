@@ -157,6 +157,7 @@ local function SpawnStartUnit(teamID)
 		-- Spring.Echo([[[Game Spawn] Starting Tech level is ]] .. startingTechLevel )
 		local newStartUnit
 		if startingTechLevel == [[t0]] then
+			newStartUnit = startUnit
 		end
 		if startingTechLevel == [[t1]] then
 			-- Spring.Echo([[[Game Spawn] 1.. ]])

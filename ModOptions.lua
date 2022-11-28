@@ -10,7 +10,7 @@ local options= {
 		name   = 'Start at Tech 0 or Tech 1',
 		desc   = 'Allows the option to start the game at Tech 0 or Tech 1',
 		type="list",
-		def="t1",
+		def="t0",
 		section= "startingtechlevel",
 		items={
 			{key="t0", name="Tech 0", desc="Start the game at Tech 0"},
