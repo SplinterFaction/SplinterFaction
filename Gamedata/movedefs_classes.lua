@@ -33,6 +33,15 @@ local amphibDepthmodParams = {
 		constantCoeff  = 2,
 }
 
+local submarineDepthmodParams = {
+    minHeight      = 0,
+    maxHeight      = 5000,
+    maxScale       = 1.5,
+    quadraticCoeff = 0,
+    linearCoeff    = 0, -- deprecates "depthMod"
+    constantCoeff  = 2,
+}
+
 local moveDefs = {
 
 -- Walkers
@@ -491,6 +500,24 @@ local moveDefs = {
         allowRawMovement=allowRawMovement,
         flowMapping=flowMappingToggle,
     },
+
+-- Submarines
+    SUBMARINE5 = {
+        submarine = true,
+        speedModClass=3,
+        footprintx=5,
+        footprintz=5,
+        maxslope=60,
+        maxwaterslope=60,
+        badwaterslope=0,
+        crushstrength=20,
+        minwaterdepth=40,
+        heatmod=unitHeat,
+        slopemod=0,
+        allowRawMovement=allowRawMovement,
+        flowMapping=flowMappingToggle,
+    },
+
 }
 
 --------------------------------------------------------------------------------
