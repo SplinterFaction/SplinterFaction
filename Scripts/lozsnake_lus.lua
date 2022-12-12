@@ -1,5 +1,4 @@
 base, firepoint1 = piece('base', 'firepoint1')
-local SIG_AIM = {}
 
 -- state variables
 isMoving = "isMoving"
@@ -24,8 +23,6 @@ function script.QueryWeapon(weaponID)
 end
 
 function script.AimWeapon(weaponID, heading, pitch)
-	Signal(SIG_AIM)
-	SetSignalMask(SIG_AIM)
 	Spring.Echo("AimWeapon")
 	return true
 end
