@@ -1,5 +1,7 @@
 base, firepoint1 = piece('base', 'firepoint1')
 
+local SIG_AIM = {}
+
 -- state variables
 isMoving = "isMoving"
 terrainType = "terrainType"
@@ -10,26 +12,30 @@ function script.Create()
 	StartThread(common.SmokeUnit, {base, firepoint1})
 end
 
-
-
-function script.AimFromWeapon(weaponID)
-	Spring.Echo("AimFromWeapon")
-	return firepoint1
+function script.AimFromWeapon(WeaponID)
+	--Spring.Echo("AimFromWeapon: FireWeapon")
+	return base
 end
 
-function script.QueryWeapon(weaponID)
-	Spring.Echo("QueryWeapon")
-	return firepoint1
+function script.QueryWeapon(WeaponID)
+	if WeaponID == 1 then
+		return firepoint1
+	end
 end
 
-function script.AimWeapon(weaponID, heading, pitch)
-	Spring.Echo("AimWeapon")
-	return true
+function script.FireWeapon(WeaponID)
+
 end
 
-function script.FireWeapon(weaponID)
-	Spring.Echo("FireWeapon")
-	-- EmitSfx (firepoint1, 1024)
+function script.AimWeapon(WeaponID, heading, pitch)
+	-- Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5}) -- Only use this if the turret is glitchy
+
+	if WeaponID == 1 then
+		Signal(SIG_AIM)
+		SetSignalMask(SIG_AIM)
+		--Spring.Echo("AimWeapon: FireWeapon")
+		return true
+	end
 end
 
 function script.Killed()
