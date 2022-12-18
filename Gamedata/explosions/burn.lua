@@ -302,6 +302,7 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
       properties = {
         airdrag            = 0.87,
         alwaysvisible      = false,
@@ -332,6 +333,7 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
       properties = {
         airdrag            = 0.87,
         alwaysvisible      = false,
@@ -402,6 +404,7 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
       properties = {
         airdrag            = 0.70,
         alwaysvisible      = false,

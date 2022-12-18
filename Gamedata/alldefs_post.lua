@@ -764,6 +764,22 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
 
+			--Naval Units
+			if unitDef.customparams.unitrole == "Submarine" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.3
+			end
+			if unitDef.customparams.unitrole == "Frigate" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.3
+			end
+			if unitDef.customparams.unitrole == "Destroyer" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.5
+			end
+			if unitDef.customparams.unitrole == "Light Cruiser" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.6
+			end
+			if unitDef.customparams.unitrole == "Heavy Cruiser" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.7
+			end
 
 			-- Turrets
 			if unitDef.customparams.unitrole == "Light Turret" then

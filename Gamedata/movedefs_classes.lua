@@ -502,6 +502,22 @@ local moveDefs = {
     },
 
 -- Submarines
+    SUBMARINE4 = {
+        submarine = true,
+        speedModClass=3,
+        footprintx=4,
+        footprintz=4,
+        maxslope=60,
+        maxwaterslope=60,
+        badwaterslope=0,
+        crushstrength=20,
+        minwaterdepth=40,
+        heatmod=unitHeat,
+        slopemod=0,
+        allowRawMovement=allowRawMovement,
+        flowMapping=flowMappingToggle,
+    },
+
     SUBMARINE5 = {
         submarine = true,
         speedModClass=3,
