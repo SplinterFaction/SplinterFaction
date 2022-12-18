@@ -1,0 +1,193 @@
+
+base, railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, torpedofirepoint1, cannonturret1, cannonbarrel1, cannonfirepoint1, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2 = piece('base', 'railgunturret1', 'railgunbarrel1', 'railgunfirepoint1', 'railgunturret2', 'railgunbarrel2', 'railgunfirepoint2', 'railgunturret3', 'railgunbarrel3', 'railgunfirepoint3', 'railgunturret4', 'railgunbarrel4', 'railgunfirepoint4', 'torpedofirepoint1', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'laserturret1', 'laserbarrel1', 'laserfirepoint1', 'laserturret2', 'laserbarrel2', 'laserfirepoint2')
+
+common = include("headers/common_includes_lus.lua")
+
+local SIG_AIM = {}
+local SIG_AIM2 = {}
+local SIG_AIM3 = {}
+local SIG_AIM4 = {}
+local SIG_AIM5 = {}
+local SIG_AIM6 = {}
+local SIG_AIM7 = {}
+local SIG_AIM8 = {}
+
+-- state variables
+isMoving = "isMoving"
+terrainType = "terrainType"
+
+function script.StartMoving()
+	isMoving = true
+end
+
+function script.StopMoving()
+	isMoving = false
+end
+
+function script.Create()
+	StartThread(common.SmokeUnit, {base, railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, torpedofirepoint1, cannonturret1, cannonbarrel1, cannonfirepoint1, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2})
+end
+
+
+function RestoreAfterDelay()
+	Sleep(5000)
+	-- Reset Turret and Barrels
+	Turn(railgunturret1, y_axis, 0, 1)
+	Turn(railgunbarrel1, x_axis, 0, 1)
+
+	Turn(railgunturret2, y_axis, 0, 1)
+	Turn(railgunbarrel2, x_axis, 0, 1)
+
+	Turn(railgunturret3, y_axis, 0, 1)
+	Turn(railgunbarrel3, x_axis, 0, 1)
+
+	Turn(railgunturret4, y_axis, 0, 1)
+	Turn(railgunbarrel4, x_axis, 0, 1)
+
+	Turn(cannonturret1, y_axis, 0, 1)
+	Turn(cannonbarrel1, x_axis, 0, 1)
+
+	Turn(laserturret1, y_axis, 0, 1)
+	Turn(laserbarrel1, x_axis, 0, 1)
+
+	Turn(laserturret2, y_axis, 0, 1)
+	Turn(laserbarrel2, x_axis, 0, 1)
+end
+
+function script.AimFromWeapon(WeaponID)
+	--Spring.Echo("AimFromWeapon: FireWeapon")
+	return cannonturret1
+end
+
+function script.QueryWeapon(WeaponID)
+	if WeaponID == 1 then
+		return railgunfirepoint1
+	elseif WeaponID == 2 then
+		return railgunfirepoint2
+	elseif WeaponID == 3 then
+		return railgunfirepoint3
+	elseif WeaponID == 4 then
+		return railgunfirepoint4
+	elseif WeaponID == 5 then
+		return cannonfirepoint1
+	elseif WeaponID == 6 then
+		return laserfirepoint1
+	elseif WeaponID == 7 then
+		return laserfirepoint2
+	elseif WeaponID == 8 then
+		return torpedofirepoint1
+	end
+end
+
+function script.FireWeapon(WeaponID)
+	if WeaponID == 1 then
+		EmitSfx (railgunfirepoint1, 1024)
+	elseif WeaponID == 2 then
+		EmitSfx (railgunfirepoint2, 1024)
+	elseif WeaponID == 3 then
+		EmitSfx (railgunfirepoint3, 1024)
+	elseif WeaponID == 4 then
+		EmitSfx (railgunfirepoint4, 1024)
+	elseif WeaponID == 5 then
+		EmitSfx (cannonfirepoint1, 1024)
+	elseif WeaponID == 6 then
+		-- EmitSfx (laserfirepoint1, 1024)
+	elseif WeaponID == 7 then
+		-- EmitSfx (laserfirepoint2, 1024)
+	elseif WeaponID == 8 then
+		-- EmitSfx (torpedofirepoint1, 1024)
+	end
+end
+
+function script.AimWeapon(WeaponID, heading, pitch)
+	if WeaponID == 1 then
+		Signal(SIG_AIM)
+		SetSignalMask(SIG_AIM)
+		Turn(railgunturret1, y_axis, heading, 10)
+		Turn(railgunbarrel1, x_axis, -pitch, 10)
+		WaitForTurn(railgunturret1, y_axis)
+		WaitForTurn(railgunbarrel1, x_axis)
+		StartThread(RestoreAfterDelay)
+		--Spring.Echo("AimWeapon: FireWeapon")
+		return true
+	elseif WeaponID == 2 then
+		Signal(SIG_AIM2)
+		SetSignalMask(SIG_AIM2)
+		Turn(railgunturret2, y_axis, heading, 10)
+		Turn(railgunbarrel2, x_axis, -pitch, 10)
+		WaitForTurn(railgunturret2, y_axis)
+		WaitForTurn(railgunbarrel2, x_axis)
+		StartThread(RestoreAfterDelay)
+		--Spring.Echo("AimWeapon: FireWeapon")
+		return true
+	elseif WeaponID == 3 then
+		Signal(SIG_AIM3)
+		SetSignalMask(SIG_AIM3)
+		Turn(railgunturret3, y_axis, heading, 10)
+		Turn(railgunbarrel3, x_axis, -pitch, 10)
+		WaitForTurn(railgunturret3, y_axis)
+		WaitForTurn(railgunbarrel3, x_axis)
+		StartThread(RestoreAfterDelay)
+		return true
+	elseif WeaponID == 4 then
+		Signal(SIG_AIM4)
+		SetSignalMask(SIG_AIM4)
+		Turn(railgunturret4, y_axis, heading, 10)
+		Turn(railgunbarrel4, x_axis, -pitch, 10)
+		WaitForTurn(railgunturret4, y_axis)
+		WaitForTurn(railgunbarrel4, x_axis)
+		StartThread(RestoreAfterDelay)
+		return true
+	elseif WeaponID == 5 then
+		Signal(SIG_AIM5)
+		SetSignalMask(SIG_AIM5)
+		Turn(cannonturret1, y_axis, heading, 10)
+		Turn(cannonbarrel1, x_axis, -pitch, 10)
+		WaitForTurn(cannonturret1, y_axis)
+		WaitForTurn(cannonbarrel1, x_axis)
+		StartThread(RestoreAfterDelay)
+		return true
+	elseif WeaponID == 6 then
+		Signal(SIG_AIM6)
+		SetSignalMask(SIG_AIM6)
+		Turn(laserturret1, y_axis, heading, 10)
+		Turn(laserbarrel1, x_axis, -pitch, 10)
+		WaitForTurn(laserturret1, y_axis)
+		WaitForTurn(laserbarrel1, x_axis)
+		StartThread(RestoreAfterDelay)
+		return true
+	elseif WeaponID == 7 then
+		Signal(SIG_AIM7)
+		SetSignalMask(SIG_AIM7)
+		Turn(laserturret2, y_axis, heading, 10)
+		Turn(laserbarrel2, x_axis, -pitch, 10)
+		WaitForTurn(laserturret2, y_axis)
+		WaitForTurn(laserbarrel2, x_axis)
+		StartThread(RestoreAfterDelay)
+		return true
+	elseif WeaponID == 8 then
+		Signal(SIG_AIM8)
+		SetSignalMask(SIG_AIM8)
+
+		return true
+	end
+end
+
+function script.Killed()
+	Explode(railgunturret1, SFX.EXPLODE_ON_HIT)
+	Explode(railgunturret2, SFX.EXPLODE_ON_HIT)
+	Explode(railgunturret3, SFX.EXPLODE_ON_HIT)
+	Explode(railgunturret4, SFX.EXPLODE_ON_HIT)
+	Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT)
+	Explode(railgunbarrel2, SFX.EXPLODE_ON_HIT)
+	Explode(railgunbarrel3, SFX.EXPLODE_ON_HIT)
+	Explode(railgunbarrel4, SFX.EXPLODE_ON_HIT)
+	Explode(cannonturret1, SFX.EXPLODE_ON_HIT)
+	Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT)
+	Explode(laserturret1, SFX.EXPLODE_ON_HIT)
+	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
+	Explode(laserturret2, SFX.EXPLODE_ON_HIT)
+	Explode(laserbarrel2, SFX.EXPLODE_ON_HIT)
+
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+end

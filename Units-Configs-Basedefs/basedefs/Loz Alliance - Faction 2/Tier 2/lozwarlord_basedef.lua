@@ -2,35 +2,35 @@ unitDef                    = {
 	acceleration                 = 1,
 	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 260,
+	buildCostMetal               = 3000,
 	builder                      = false,
 	buildTime                    = 5,
-	buildpic					 = "lozenforcer.png",
+	buildpic					 = "lozwarlord.png",
 	canAttack                    = true,
 	canGuard                     = true,
 	canMove                      = true,
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "SHIP",
-	description                  = [[Attack Boat]],
+	description                  = [[Heavy Cruiser]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = explodeAs,
-	footprintX                   = 3,
-	footprintZ                   = 3,
+	footprintX                   = 8,
+	footprintZ                   = 8,
 	iconType                     = "mbt",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 4.5,
+	maxVelocity                  = 1.6,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
-	movementClass                = "SHIP3",
+	movementClass                = "SHIP8",
 	name                         = humanName,
 	noChaseCategory              = "AIR GROUND",
 	objectName                   = objectName,
@@ -39,8 +39,8 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 700,
-	waterline                    = 3,
+	sightDistance                = 1700,
+	waterline                    = 5,
 	floater                      = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -76,11 +76,25 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "railgun",
-			badTargetCategory     = "BUILDING",
+			def                  = "plasmacannon",
+			badTargetCategory     = "SHIP GROUND",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[2]                      = {
+			def                  = "plasmacannon",
+			badTargetCategory     = "SHIP GROUND",
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
+		},
+		[3]                      = {
+			def                  = "plasmacannon",
+			badTargetCategory     = "SHIP GROUND",
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
+		},
+		[4]                      = {
+			def                  = "lasercannon",
+			onlyTargetCategory    = "AIR",
+		},
+		[5]                      = {
 			def                  = "lasercannon",
 			onlyTargetCategory    = "AIR",
 		},
@@ -88,7 +102,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitsubtype              = "ship",
-		unitrole				 = "Frigate",
+		unitrole				 = "Heavy Cruiser",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",
@@ -103,6 +117,45 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
+	plasmacannon              = {
+		AreaOfEffect             = 30,
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+
+		--cegTag                   = "artyshot2",
+		avoidNeutral	         = false,
+		explosionGenerator       = "custom:genericshellexplosion-medium",
+		energypershot            = 0,
+
+		burst                    = 2,
+		burstrate                = 0.3,
+
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		highTrajectory	         = 0,
+		name                     = "Plasma Cannon",
+		range                    = 1700,
+		reloadtime               = 7,
+		size					 = 8,
+		weaponType		         = "Cannon",
+		soundHit                 = "explosions/artyhit.wav",
+		soundStart               = "weapons/arty2.wav",
+
+		turret                   = true,
+		weaponVelocity           = 500,
+		customparams             = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 114,
+		},
+	},
+
 	lasercannon                  = {
 		predictboost	         = 0.3,
 		avoidFeature             = false,
@@ -125,8 +178,8 @@ weaponDefs                 = {
 		laserflaresize 	         = 8,
 		minintensity             = 1,
 		name                     = "Laser",
-		range                    = 700,
-		reloadtime               = 0.3,
+		range                    = 1700,
+		reloadtime               = 0.4,
 		WeaponType               = "BeamLaser",
 		rgbColor                 = "0.1 0 0.3",
 		rgbColor2                = "1 1 1",
@@ -148,46 +201,6 @@ weaponDefs                 = {
 		},
 		damage                    = {
 			default               = 2,
-		},
-	},
-
-	railgun               = {
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "0.133 0 0.4",
-		rgbColor2              = "0.75 0.75 0.75",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.25,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "Railgun",
-		range                  = 700,
-		reloadtime             = 2,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/roachrailgun.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.2,
-		thickness              = 6,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 1500,
-		customparams             = {
-			single_hit		 	 = true,
-			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 100,
 		},
 	},
 }

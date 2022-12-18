@@ -11,7 +11,7 @@ script = "lozsnake_lus.lua"
 
 tech = [[tech1]]
 
-explodeAs = [[smallexplosiongeneric]]
+explodeAs = [[mediumexplosiongeneric]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/Tier 1/lozsnake_basedef.lua")

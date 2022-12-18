@@ -230,12 +230,18 @@ function UnitDef_Post(name, uDef)
 	if uDef.turnrate ~= nil and uDef.canfly ~= true then
 		-- Spring.Echo(uDef.name)
 		-- Spring.Echo(uDef.turnrate)
-		uDef.acceleration = 60000
+		-- uDef.acceleration = 60000
 		uDef.turnrate = 1000
-		uDef.turninplacespeedlimit = 10
+
 		uDef.turninplace = false
 	elseif uDef.canfly == true and uDef.hoverattack == true then
 		uDef.turnrate = 250
+	end
+
+	if uDef.customparams and uDef.customparams.unitsubtype == "ship" then
+		uDef.turnrate = 250
+		uDef.turninplace = false
+		uDef.turninplacespeedlimit = 10
 	end
 
 --[[
@@ -329,9 +335,11 @@ function WeaponDef_Post(name, wDef)
 
 	--------------------------------------------------------------------------------
 	-------------------------------------------------------------------------------- Turn off waterweapons
+	--[[
 	if wDef.waterweapon then
 		wDef.waterweapon = false
 	end
+	]]--
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Disable Friendly Fire Completely

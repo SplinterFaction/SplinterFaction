@@ -26,7 +26,7 @@ function widget:GetInfo()
 end
 
 local drawFeatureHighlight	= false
-local unitAlpha				= 0.2
+local unitAlpha				= 0.1
 local featureAlpha			= 0.14
 
 local useShader = true
