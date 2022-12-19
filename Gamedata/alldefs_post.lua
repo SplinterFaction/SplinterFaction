@@ -230,7 +230,9 @@ function UnitDef_Post(name, uDef)
 	if uDef.turnrate ~= nil and uDef.canfly ~= true then
 		-- Spring.Echo(uDef.name)
 		-- Spring.Echo(uDef.turnrate)
-		-- uDef.acceleration = 60000
+		uDef.turninplace = false
+		uDef.acceleration = 60000
+		uDef.turninplacespeedlimit = 10
 		uDef.turnrate = 1000
 
 		uDef.turninplace = false

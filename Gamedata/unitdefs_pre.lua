@@ -28,6 +28,13 @@ Shared.buildListFedAirPlant = {
 	[[fedeagle]],
 }
 
+Shared.buildListFedSeaPlant = {
+	[[fedcrusader]],
+	[[fedpiranha]],
+	[[fedcolossus]],
+	[[fedconqueror]],
+}
+
 Shared.buildListf2landfac = {
 	[[lozflea]],
 	[[lozdiamondback]],
@@ -54,13 +61,21 @@ Shared.buildListLozAirPlant = {
 	[[loztitan]],
 }
 
+Shared.buildListLozSeaPlant = {
+	[[lozenforcer]],
+	[[lozsnake]],
+	[[lozexecutioner]],
+	[[lozwarlord]],
+}
+
 -----------------------------
 -----------------------------
 --Buildlists for mobile builders
 
 Shared.buildListFedt0 = {
-	-- [[fedairplant]],
 	-- [[f1landfac]],
+	-- [[fedairplant]],
+	-- [[fedseaplant]],
 	[[metalextractor]],
 	[[fissionpowerplant]],
 	-- [[fusionpowerplant]],
@@ -86,8 +101,9 @@ Shared.buildListFedt0 = {
 }
 
 Shared.buildListFedt1 = {
-	[[fedairplant]],
 	[[f1landfac]],
+	[[fedairplant]],
+	[[fedseaplant]],
 	[[metalextractor_up1]],
 	[[fissionpowerplant]],
 	-- [[fusionpowerplant]],
@@ -113,8 +129,9 @@ Shared.buildListFedt1 = {
 }
 
 Shared.buildListFedt2 = {
-	[[fedairplant]],
 	[[f1landfac]],
+	[[fedairplant]],
+	[[fedseaplant]],
 	[[metalextractor_up2]],
 	[[fissionpowerplant]],
 	[[fusionpowerplant]],
@@ -140,8 +157,9 @@ Shared.buildListFedt2 = {
 }
 
 Shared.buildListFedt3 = {
-	[[fedairplant]],
 	[[f1landfac]],
+	[[fedairplant]],
+	[[fedseaplant]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],
 	[[fusionpowerplant]],
@@ -167,8 +185,9 @@ Shared.buildListFedt3 = {
 }
 
 Shared.buildListFedt4 = {
-	[[fedairplant]],
 	[[f1landfac]],
+	[[fedairplant]],
+	[[fedseaplant]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],
 	[[fusionpowerplant]],
@@ -197,8 +216,9 @@ Shared.buildListLoz = {
 }
 
 Shared.buildListLozt0 = {
-	-- [[lozairplant]],
 	-- [[f2landfac]],
+	-- [[lozairplant]],
+	-- [[lozseaplant]],
 	[[metalextractor]],
 	[[fissionpowerplant]],
 	-- [[fusionpowerplant]],
@@ -223,8 +243,9 @@ Shared.buildListLozt0 = {
 }
 
 Shared.buildListLozt1 = {
-	[[lozairplant]],
 	[[f2landfac]],
+	[[lozairplant]],
+	[[lozseaplant]],
 	[[metalextractor_up1]],
 	[[fissionpowerplant]],
 	-- [[fusionpowerplant]],
@@ -249,8 +270,9 @@ Shared.buildListLozt1 = {
 }
 
 Shared.buildListLozt2 = {
-	[[lozairplant]],
 	[[f2landfac]],
+	[[lozairplant]],
+	[[lozseaplant]],
 	[[metalextractor_up2]],
 	[[fissionpowerplant]],
 	[[fusionpowerplant]],
@@ -275,8 +297,9 @@ Shared.buildListLozt2 = {
 }
 
 Shared.buildListLozt3 = {
-	[[lozairplant]],
 	[[f2landfac]],
+	[[lozairplant]],
+	[[lozseaplant]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],
 	[[fusionpowerplant]],
@@ -301,8 +324,9 @@ Shared.buildListLozt3 = {
 }
 
 Shared.buildListLozt4 = {
-	[[lozairplant]],
 	[[f2landfac]],
+	[[lozairplant]],
+	[[lozseaplant]],
 	[[metalextractor_up3]],
 	[[fissionpowerplant]],
 	[[fusionpowerplant]],

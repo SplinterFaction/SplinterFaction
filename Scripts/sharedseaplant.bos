@@ -79,8 +79,8 @@ fx()
 	{
 //		if (tech)
 //		{
-			emit-sfx 1027 from sfxpoint1;
-			emit-sfx 1027 from sfxpoint2;
+//			emit-sfx 1027 from sfxpoint1;
+//			emit-sfx 1027 from sfxpoint2;
 //		}
 	sleep 500;
 	}
