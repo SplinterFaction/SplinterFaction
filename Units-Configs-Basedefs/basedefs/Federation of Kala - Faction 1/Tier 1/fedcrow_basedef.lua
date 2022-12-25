@@ -209,6 +209,7 @@ weaponDefs                 = {
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
 		soundTrigger             = true,
+		model                    = "missilesmalllauncher.s3o",
 		soundstart               = "weapons/bombdrop.wav",
 		soundHit                 = "other/18402_inferno_xplo.wav",
 		soundHitWet				 = "explosions/subhitbomb.wav",

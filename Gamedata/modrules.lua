@@ -63,7 +63,7 @@ local modrules  = {
 
 
   sensors = {
-    requireSonarUnderWater = false,  -- defaults to true
+    requireSonarUnderWater = true,  -- defaults to true
 
     los = {
       losMipLevel = 1,  -- defaults to 1
