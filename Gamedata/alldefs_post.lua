@@ -228,22 +228,13 @@ function UnitDef_Post(name, uDef)
 	uDef.usePieceCollisionVolumes = false
 
 	if uDef.turnrate ~= nil and uDef.canfly ~= true then
-		-- Spring.Echo(uDef.name)
-		-- Spring.Echo(uDef.turnrate)
-		uDef.turninplace = false
-		uDef.acceleration = 60000
-		uDef.turninplacespeedlimit = 10
-		uDef.turnrate = 1000
 
-		uDef.turninplace = false
 	elseif uDef.canfly == true and uDef.hoverattack == true then
 		uDef.turnrate = 250
 	end
 
 	if uDef.customparams and uDef.customparams.unitsubtype == "ship" then
-		uDef.turnrate = 250
-		uDef.turninplace = false
-		uDef.turninplacespeedlimit = 10
+
 	end
 
 --[[

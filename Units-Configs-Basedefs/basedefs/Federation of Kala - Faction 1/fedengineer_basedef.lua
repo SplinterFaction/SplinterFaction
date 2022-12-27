@@ -1,6 +1,4 @@
 unitDef                    = {
-	acceleration            = 1,
-	brakeRate               = 0.2,
 	buildCostEnergy         = 0,
 	buildCostMetal          = buildCostMetal,
 	buildDistance           = buildDistance,
@@ -54,17 +52,23 @@ unitDef                    = {
 	stealth                 = true,
 	seismicSignature        = 2,
 	transportbyenemy        = false;
-	--turnInPlace           = false,
-	--turnInPlaceSpeedLimit = 2.3,
-	turnInPlace             = true,
-	turnRate                = 5000,
-	--turnrate              = 250,
 	unitname                = unitName,
 	workerTime              = workertime,
 	capturespeed            = 1,
 	TerraformSpeed          = 2147000,
 	ReclaimSpeed            = 0,
 	repairspeed             = 0.5,
+	--------------
+	-- Movement --
+	--------------
+	acceleration 				 = 2,
+	brakeRate                    = 0.1,
+	turninplace 				 = false,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 90,
+	turnrate 				 	 = 1000,
+	--------------
+	--------------
 	sfxtypes                = { 
 		pieceExplosionGenerators = { 
 			"deathceg3", 

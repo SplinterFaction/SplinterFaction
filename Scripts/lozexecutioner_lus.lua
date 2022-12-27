@@ -18,10 +18,18 @@ terrainType = "terrainType"
 
 function script.StartMoving()
 	isMoving = true
+	StartThread(script.Bubbles)
 end
 
 function script.StopMoving()
 	isMoving = false
+end
+
+function script.Bubbles()
+	while isMoving do
+		common.CustomEmitter(base, "bubbles")
+		Sleep(100)
+	end
 end
 
 function script.Create()

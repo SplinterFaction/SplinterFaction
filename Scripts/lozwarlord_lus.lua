@@ -10,22 +10,29 @@ local SIG_AIM3 = {}
 local SIG_AIM4 = {}
 local SIG_AIM5 = {}
 
+function script.Create()
+	StartThread(common.SmokeUnit, {base, cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2})
+end
+
 -- state variables
 isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.StartMoving()
 	isMoving = true
+	StartThread(script.Bubbles)
 end
 
 function script.StopMoving()
 	isMoving = false
 end
 
-function script.Create()
-	StartThread(common.SmokeUnit, {base, cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2})
+function script.Bubbles()
+	while isMoving do
+		common.CustomEmitter(base, "bubbles")
+		Sleep(100)
+	end
 end
-
 
 function RestoreAfterDelay()
 	Sleep(5000)

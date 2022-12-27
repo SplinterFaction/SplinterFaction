@@ -3,9 +3,6 @@ unitDef                    = {
 	--mobileunit 
 	transportbyenemy             = false; 
 	--**
-
-	acceleration                 = 0.2,
-	brakeRate                    = 1,
 	buildCostEnergy              = 0,
 	buildCostMetal               = buildcostmetal,
 	buildDistance                = builddistance,
@@ -61,8 +58,6 @@ unitDef                    = {
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
-	turnInPlace                  = true,
-	turnRate                     = 5000,
 	unitname                     = unitName,
 	upright                      = false,
 	workerTime                   = workertime,
@@ -70,6 +65,17 @@ unitDef                    = {
 	TerraformSpeed               = 2147000,
 	ReclaimSpeed                 = 1,	-- 0.03125 =  1 hp per second
 	repairspeed                  = 0.5,
+	--------------
+	-- Movement --
+	--------------
+	acceleration 				 = 2,
+	brakeRate                    = 0.1,
+	turninplace 				 = false,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 90,
+	turnrate 				 	 = 1000,
+	--------------
+	--------------
 	sfxtypes                     = {
 		pieceExplosionGenerators = { 
 			"deathceg3", 

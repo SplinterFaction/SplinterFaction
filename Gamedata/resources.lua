@@ -19,6 +19,7 @@ local resources = {
             seismic     = 'default/circles.tga',
          },
          projectiletextures = {
+            bubbletexture       = 'default/wake.tga',
             circularthingy		= 'default/circularthingy.tga',
             laserend			= 'default/laserend.tga',
             laserfalloff		= 'default/laserfalloff.tga',

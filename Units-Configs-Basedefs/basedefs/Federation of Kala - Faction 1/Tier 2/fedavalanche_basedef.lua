@@ -3,9 +3,6 @@ unitDef                    = {
 	--mobileunit 
 	transportbyenemy             = false;
 	--**
-
-	acceleration                 = 1,
-	brakeRate                    = 1,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 280,
 	builder                      = false,
@@ -50,15 +47,21 @@ unitDef                    = {
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
-	--  turnInPlace              = false,
-	--  turnInPlaceSpeedLimit    = 5.5,
-	turnInPlace                  = true,
-	turnRate                     = 1000,
-	--  turnrate                 = 475,
 	unitname                     = unitName,
 	upright                      = true,
 	--usePieceCollisionVolumes	 = true,
 	workerTime                   = 0,
+	--------------
+	-- Movement --
+	--------------
+	acceleration 				 = 2,
+	brakeRate                    = 0.1,
+	turninplace 				 = false,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 90,
+	turnrate 				 	 = 1000,
+	--------------
+	--------------
 
 	sfxtypes                     = {
 		explosiongenerators      = {

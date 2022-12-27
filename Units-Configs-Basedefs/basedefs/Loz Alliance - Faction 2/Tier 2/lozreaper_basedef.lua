@@ -1,6 +1,4 @@
 unitDef                    = {
-	acceleration                 = 1,
-	brakeRate                    = 0.2,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 300,
 	builder                      = false,
@@ -43,14 +41,20 @@ unitDef                    = {
 	stealth			             = true,
 	seismicSignature             = 2,
 	transportbyenemy             = false;
-	--  turnInPlace              = false,
-	--  turnInPlaceSpeedLimit    = 2.8,
-	turnInPlace                  = true,
-	turnRate                     = 5000,
-	--  turnrate                 = 350,
 	unitname                     = unitName,
 	upright                      = false,
 	workerTime                   = 0,
+	--------------
+	-- Movement --
+	--------------
+	acceleration 				 = 2,
+	brakeRate                    = 0.1,
+	turninplace 				 = false,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 90,
+	turnrate 				 	 = 1000,
+	--------------
+	--------------
 	sfxtypes                     = { 
 		pieceExplosionGenerators = { 
 			"deathceg3", 

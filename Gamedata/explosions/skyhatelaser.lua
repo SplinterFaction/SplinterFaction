@@ -7,6 +7,8 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
+      underwater         = true,
       properties = {
         airdrag            = 0.8,
         --alwaysvisible      = true,
@@ -38,6 +40,8 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
+      underwater         = true,
       properties = {
         airdrag            = 0.8,
         --alwaysvisible      = true,
@@ -68,6 +72,8 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
+      underwater         = true,
       properties = {
         airdrag            = 0.8,
         --alwaysvisible      = true,
@@ -98,6 +104,8 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
+      underwater         = true,
       properties = {
         airdrag            = 0.8,
         --alwaysvisible      = true,
@@ -129,6 +137,8 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
+      underwater         = true,
       properties = {
         airdrag            = 0.8,
         --alwaysvisible      = true,
@@ -160,6 +170,8 @@ return {
       class              = [[CSimpleParticleSystem]],
       count              = 1,
       ground             = true,
+      water              = true,
+      underwater         = true,
       properties = {
         airdrag            = 0.8,
         --alwaysvisible      = true,

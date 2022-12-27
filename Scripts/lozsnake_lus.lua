@@ -12,6 +12,22 @@ function script.Create()
 	StartThread(common.SmokeUnit, {base, firepoint1})
 end
 
+function script.StartMoving()
+	isMoving = true
+	StartThread(script.Bubbles)
+end
+
+function script.StopMoving()
+	isMoving = false
+end
+
+function script.Bubbles()
+	while isMoving do
+		common.CustomEmitter(base, "bubbles")
+		Sleep(100)
+	end
+end
+
 function script.AimFromWeapon(WeaponID)
 	--Spring.Echo("AimFromWeapon: FireWeapon")
 	return base

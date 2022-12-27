@@ -1,6 +1,4 @@
 unitDef                    = {
-	acceleration                 = 1,
-	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
 	buildCostMetal               = 65,
 	builder                      = false,
@@ -42,14 +40,19 @@ unitDef                    = {
 	seismicSignature             = 1,
 	smoothAnim                   = true,
 	transportbyenemy             = false,
-	--  This stuff is set in alldefs post --
-	--  turnInPlace              = false,
-	--  turnInPlaceSpeedLimit    = 6.0,
-	  turnInPlace                  = true,
-	  turnRate                     = 5000,
-	--  turnrate                 = 475,
 	unitname                     = unitName,
 	workerTime                   = 0,
+	--------------
+	-- Movement --
+	--------------
+	acceleration 				 = 2,
+	brakeRate                    = 0.1,
+	turninplace 				 = false,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 90,
+	turnrate 				 	 = 1000,
+	--------------
+	--------------
 
 	sfxtypes                     = { 
 		pieceExplosionGenerators = { 

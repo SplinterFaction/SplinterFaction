@@ -2,14 +2,30 @@ base, firepoint1 = piece('base', 'firepoint1')
 
 local SIG_AIM = {}
 
--- state variables
-isMoving = "isMoving"
-terrainType = "terrainType"
-
 common = include("headers/common_includes_lus.lua")
 
 function script.Create()
 	StartThread(common.SmokeUnit, {base, firepoint1})
+end
+
+-- state variables
+isMoving = "isMoving"
+terrainType = "terrainType"
+
+function script.StartMoving()
+	isMoving = true
+	StartThread(script.Bubbles)
+end
+
+function script.StopMoving()
+	isMoving = false
+end
+
+function script.Bubbles()
+	while isMoving do
+		common.CustomEmitter(base, "bubbles")
+		Sleep(100)
+	end
 end
 
 function script.AimFromWeapon(WeaponID)

@@ -44,6 +44,7 @@ end
 function script.FireWeapon(WeaponID)
     if WeaponID == 1 then
         EmitSfx (gatlingfirepoint1, 1024)
+       -- EmitSfx (gatlingbarrel, 1025)
     else
         EmitSfx (cannonfirepoint1, 1024)
     end
