@@ -49,7 +49,7 @@ local function ExtractWeaponDefs(udName, ud)
       WeaponDefs[fullName] = wd
         
       WeaponDef_Post(fullName, wd)
-
+      SaveDefsToCustomParams = false
       if SaveDefsToCustomParams then
         MarkDefOmittedInCustomParams("WeaponDefs", fullName, wd)
       end

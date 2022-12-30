@@ -447,7 +447,7 @@ function widget:CommandNotify(cmdID, params, options)
                 local unit = GetNearestMex (x, z)
                 if unit then
                     if Spring.GetUnitDefID(unit) ~= mexType then
-                        commandArrayToIssue[#commandArrayToIssue+1] = {CMD.RECLAIM, {unit}, {"shift"}}
+                        -- commandArrayToIssue[#commandArrayToIssue+1] = {CMD.RECLAIM, {unit}, {"shift"}}
                         commandArrayToIssue[#commandArrayToIssue+1] = {CMD.INSERT, {-1, -mexType, CMD.OPT_INTERNAL, x,y,z,0}, {"alt"}}
                     elseif select (5, Spring.GetUnitHealth (unit)) < 1 then
                         commandArrayToIssue[#commandArrayToIssue+1] = {CMD.REPAIR, {unit}, {"shift"}}
@@ -473,7 +473,7 @@ function widget:CommandNotify(cmdID, params, options)
             if foundUnit then
 
                 if Spring.GetUnitDefID(foundUnit) ~= mexType then
-                    spGiveOrder(CMD.RECLAIM, {foundUnit}, CMD.OPT_INTERNAL)
+                    -- spGiveOrder(CMD.RECLAIM, {foundUnit}, CMD.OPT_INTERNAL)
                     spGiveOrder(CMD.INSERT, {-1, cmdID, options.coded, closestSpot.x, commandHeight, closestSpot.z, params[4]} , {"alt"})
                 elseif select (5, Spring.GetUnitHealth (foundUnit)) < 1 then
                     spGiveOrder(CMD.REPAIR, {foundUnit}, options.coded)
