@@ -136,6 +136,19 @@ return {
         useairlos          = false,
       },
     },
+    electricstorm = {
+      air                = true,
+      class              = [[CExpGenSpawner]],
+      count              = 5,
+      ground             = true,
+      water              = true,
+      underwater         = true,
+      properties = {
+        delay              = [[10 r200]],
+        explosiongenerator = [[custom:railgun_static]],
+        pos                = [[-100 r200, 1, -100 r200]],
+      },
+    },
   },
 
   ["genericshellexplosion-medium-sparks-burn"] = {
@@ -268,6 +281,19 @@ return {
         sizemod            = 0.25,
         texture            = [[wake]],
         useairlos          = false,
+      },
+    },
+    electricstorm = {
+      air                = true,
+      class              = [[CExpGenSpawner]],
+      count              = 5,
+      ground             = true,
+      water              = true,
+      underwater         = true,
+      properties = {
+        delay              = [[10 r200]],
+        explosiongenerator = [[custom:railgun_static]],
+        pos                = [[-100 r200, 1, -100 r200]],
       },
     },
   },
@@ -404,6 +430,19 @@ return {
         useairlos          = false,
       },
     },
+    electricstorm = {
+      air                = true,
+      class              = [[CExpGenSpawner]],
+      count              = 5,
+      ground             = true,
+      water              = true,
+      underwater         = true,
+      properties = {
+        delay              = [[10 r200]],
+        explosiongenerator = [[custom:railgun_static]],
+        pos                = [[-100 r200, 1, -100 r200]],
+      },
+    },
   },
   
   
@@ -537,6 +576,19 @@ return {
         sizemod            = 0.25,
         texture            = [[wake]],
         useairlos          = false,
+      },
+    },
+    electricstorm = {
+      air                = true,
+      class              = [[CExpGenSpawner]],
+      count              = 5,
+      ground             = true,
+      water              = true,
+      underwater         = true,
+      properties = {
+        delay              = [[10 r200]],
+        explosiongenerator = [[custom:railgun_static]],
+        pos                = [[-100 r200, 1, -100 r200]],
       },
     },
   },

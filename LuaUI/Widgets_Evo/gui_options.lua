@@ -1435,8 +1435,8 @@ function applyOptionValue(i, skipRedrawWindow)
 				Spring.SetConfigInt("MaxNanoParticles",value)
 			end
 
-		-- elseif id == 'grassdetail' then
-		--	Spring.SetConfigInt("GrassDetail",value)
+		elseif id == 'grassdetail' then
+			Spring.SetConfigInt("GrassDetail",value)
 		elseif id == 'grounddetail' then
 			Spring.SetConfigInt("GroundDetail", value)
 			Spring.SendCommands("GroundDetail "..value)
@@ -2227,7 +2227,7 @@ function init()
 		--{id="bloomquality", group="gfx", name=widgetOptionColor.."   quality", type="select", options={'low','medium'}, value=1, description='Render quality'},
 
 		{id="mapedgeextension", group="gfx", widget="Map Edge Extension", name="Map edge extension", type="bool", value=GetWidgetToggleValue("Map Edge Extension"), description='Mirrors the map at screen edges and darkens and decolorizes them\n\nEnable shaders for best result'},
-		{id="grassdetail", group="gfx", name="Grass", type="slider", min=0, max=10, step=1, value=tonumber(Spring.GetConfigInt("GrassDetail",1) or 5), description='Amount of grass rendered\n\nChanges will be applied next game'},
+		--{id="grassdetail", group="gfx", name="Grass", type="slider", min=0, max=10, step=1, value=tonumber(Spring.GetConfigInt("GrassDetail",0) or 5), description='Amount of grass rendered\n\nChanges will be applied next game'},
 
 		{id="darkenmap", group="gfx", name="Darken map", min=0, max=0.5, step=0.01, type="slider", value=0, description='Darkens the whole map (not the units)\n\nRemembers setting per map\nUse /resetmapdarkness if you want to reset all stored map settings'},
 		{id="darkenmap_darkenfeatures", group="gfx", name=widgetOptionColor.."   darken features", type="bool", value=false, description='Darkens features (trees, wrecks, ect..) along with darken map slider above\n\nNOTE: Can be CPU intensive: it cycles through all visible features \nand renders them another time.'},
@@ -2352,7 +2352,7 @@ function init()
 		{id="buildmenubigtooltip", group="ui", name=widgetOptionColor.."   extensive unit info", type="bool", value=(WG['red_buildmenu']~=nil and WG['red_buildmenu'].getConfigUnitBigTooltip~=nil and WG['red_buildmenu'].getConfigUnitBigTooltip()), description='Displays elaborative unit description when availible'},
 
 		{id="resourceprompts", group="ui", name="Audio/Visual Helper Prompts", type="bool", value=tonumber(Spring.GetConfigInt("evo_resourceprompts",1) or 1) == 1, description="If enabled, messages will be sent to the chat as well as\naudio cues when your resources need attention"},
-		{id="simplifiedresourcebar", group="ui", name="Simplified Resource Bar", type="bool", value=tonumber(Spring.GetConfigInt("evo_simplifiedresourcebar",0) or 0) == 1, description="Removes extra information from the resource bar"},
+		{id="simplifiedresourcebar", group="ui", name="Simplified Resource Bar", type="bool", value=tonumber(Spring.GetConfigInt("evo_simplifiedresourcebar",1) or 1) == 1, description="Removes extra information from the resource bar"},
 
 		--{id="fancyselunits", group="gfx", widget="Fancy Selected Units", name="Fancy Selected Units", type="bool", value=GetWidgetToggleValue("Fancy Selected Units"), description=''},
 
@@ -2994,7 +2994,7 @@ function widget:GetConfigData(data)
 		nanoparticles = {'MaxNanoParticles', tonumber(Spring.GetConfigInt("MaxNanoParticles",1) or 500)},
 		decals = {'GroundDecals', tonumber(Spring.GetConfigInt("GroundDecals",1) or 1)},
 		grounddetail = {'GroundDetail', tonumber(Spring.GetConfigInt("GroundDetail",1) or 1)},
-		grassdetail = {'GrassDetail', tonumber(Spring.GetConfigInt("GrassDetail",1) or 5)},
+		grassdetail = {'GrassDetail', tonumber(Spring.GetConfigInt("GrassDetail",0) or 5)},
 		shadows = {'Shadows', tonumber(Spring.GetConfigInt("Shadows",1) or 1)},
 		advsky = {'AdvSky', tonumber(Spring.GetConfigInt("AdvSky",1) or 1)},
 		camera = {'CamMode', tonumber(Spring.GetConfigInt("CamMode",1) or 1)},

@@ -218,7 +218,7 @@ function widget:GameFrame(n)
 					if resourcePrompts == 1 then
 						if energyNotificationTimeout <= 0 then
 							if metalNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
-								energyNotificationTimeout = 30
+								energyNotificationTimeout = 60
 								Spring.PlaySoundFile("sounds/ui/additionalgenerators.wav", 1)
 								Spring.Echo([[You must construct additional energy generators so you can build and upgrade at full speed!]])
 							end
@@ -230,7 +230,7 @@ function widget:GameFrame(n)
 					if resourcePrompts == 1 then
 						if metalNotificationTimeout <= 0 then
 							if energyNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
-								metalNotificationTimeout = 30
+								metalNotificationTimeout = 60
 								Spring.PlaySoundFile("sounds/ui/useyourmetal.wav", 1)
 								Spring.Echo([[You are excessing metal!]])
 							end
@@ -242,7 +242,7 @@ function widget:GameFrame(n)
 					if resourcePrompts == 1 then
 						if supplyNotificationTimeout <= 0 then
 							if energyNotificationTimeout <= 20 and metalNotificationTimeout <= 20 then
-								supplyNotificationTimeout = 30
+								supplyNotificationTimeout = 60
 								Spring.PlaySoundFile("sounds/ui/constructadditionalpylons.wav", 1)
 								Spring.Echo([[You have no more available supply, build supply depots in order to increase the size of your army!]])
 							end
