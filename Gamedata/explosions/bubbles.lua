@@ -11,7 +11,7 @@ return {
       air                = true,
       properties = {
         airdrag            = 0.7,
-        alwaysvisible      = true,
+        alwaysvisible      = false,
         colormap           = [[1 1 1 0.5	0.5 0.5 1 0.8	0 0 0 0.0]],
         directional        = true,
         emitrot            = 0,
