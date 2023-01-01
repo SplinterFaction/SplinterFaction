@@ -220,7 +220,7 @@ function widget:GameFrame(n)
 							if metalNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
 								energyNotificationTimeout = 30
 								Spring.PlaySoundFile("sounds/ui/additionalgenerators.wav", 1)
-								Spring.Echo([[You must construct additional generators so you can build and upgrade at full speed!]])
+								Spring.Echo([[You must construct additional energy generators so you can build and upgrade at full speed!]])
 							end
 						end
 					end
@@ -232,7 +232,7 @@ function widget:GameFrame(n)
 							if energyNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
 								metalNotificationTimeout = 30
 								Spring.PlaySoundFile("sounds/ui/useyourmetal.wav", 1)
-								Spring.Echo([[You are excessing metal! Consider using O.R.B.s to build units faster and spend metal more effectively!]])
+								Spring.Echo([[You are excessing metal!]])
 							end
 						end
 					end

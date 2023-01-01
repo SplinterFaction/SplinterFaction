@@ -216,7 +216,7 @@ local presets = {
 		nanoparticles = 2000,
 		grassdetail = 0,
 		treeradius = 800,
-		advsky = true,
+		advsky = false,
 		outline = true,
 		guishader = true,
 		shadows = true,
@@ -242,7 +242,7 @@ local presets = {
 		nanoparticles = 5000,
 		grassdetail = 0,
 		treeradius = 800,
-		advsky = true,
+		advsky = false,
 		outline = true,
 		guishader = true,
 		shadows = true,
@@ -1435,8 +1435,8 @@ function applyOptionValue(i, skipRedrawWindow)
 				Spring.SetConfigInt("MaxNanoParticles",value)
 			end
 
-		elseif id == 'grassdetail' then
-			Spring.SetConfigInt("GrassDetail",value)
+		-- elseif id == 'grassdetail' then
+		--	Spring.SetConfigInt("GrassDetail",value)
 		elseif id == 'grounddetail' then
 			Spring.SetConfigInt("GroundDetail", value)
 			Spring.SendCommands("GroundDetail "..value)
@@ -2227,7 +2227,7 @@ function init()
 		--{id="bloomquality", group="gfx", name=widgetOptionColor.."   quality", type="select", options={'low','medium'}, value=1, description='Render quality'},
 
 		{id="mapedgeextension", group="gfx", widget="Map Edge Extension", name="Map edge extension", type="bool", value=GetWidgetToggleValue("Map Edge Extension"), description='Mirrors the map at screen edges and darkens and decolorizes them\n\nEnable shaders for best result'},
-		--{id="grassdetail", group="gfx", name="Grass", type="slider", min=0, max=10, step=1, value=tonumber(Spring.GetConfigInt("GrassDetail",1) or 5), description='Amount of grass rendered\n\nChanges will be applied next game'},
+		{id="grassdetail", group="gfx", name="Grass", type="slider", min=0, max=10, step=1, value=tonumber(Spring.GetConfigInt("GrassDetail",1) or 5), description='Amount of grass rendered\n\nChanges will be applied next game'},
 
 		{id="darkenmap", group="gfx", name="Darken map", min=0, max=0.5, step=0.01, type="slider", value=0, description='Darkens the whole map (not the units)\n\nRemembers setting per map\nUse /resetmapdarkness if you want to reset all stored map settings'},
 		{id="darkenmap_darkenfeatures", group="gfx", name=widgetOptionColor.."   darken features", type="bool", value=false, description='Darkens features (trees, wrecks, ect..) along with darken map slider above\n\nNOTE: Can be CPU intensive: it cycles through all visible features \nand renders them another time.'},
@@ -2826,6 +2826,10 @@ function widget:Initialize()
 		if Spring.GetConfigInt("GrassDetail",0) ~= 0 then
 			Spring.SetConfigInt("GrassDetail",0)
 		end
+
+		-- Force Enable High Res Textures
+		Spring.SetConfigFloat("MaxTextureAtlasSizeX",8192)
+		Spring.SetConfigFloat("MaxTextureAtlasSizeZ",8192)
 
 		--if Platform ~= nil and Platform.gpuVendor ~= 'Nvidia' then	-- because UsePBO displays tiled map texture bug for ATI/AMD cards
 		--Spring.SetConfigInt("UsePBO",0)
