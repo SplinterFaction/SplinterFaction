@@ -64,7 +64,7 @@ end
 function script.AimWeapon(WeaponID, heading, pitch)
     --Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5})
 
-    Turn(turret, y_axis, heading, 1)
+    Turn(turret, y_axis, heading, 20)
 
     if WeaponID == 1 then
         Signal(SIG_AIM)
