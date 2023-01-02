@@ -149,7 +149,7 @@ function UnitDef_Post(name, uDef)
 
 	--Set reverse velocity automatically
 	if uDef.maxvelocity then
-		uDef.maxreversevelocity = uDef.maxvelocity * 0.75
+		uDef.maxreversevelocity = uDef.maxvelocity * 0.5
 	end
 
 	--Override groundplate used
