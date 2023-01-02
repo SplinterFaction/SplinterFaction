@@ -60,7 +60,7 @@ unitDef                    = {
 	turninplace 				 = false,
 	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 90,
-	turnrate 				 	 = 750,
+	turnrate 				 	 = 500,
 	--------------
 	--------------
 

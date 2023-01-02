@@ -52,7 +52,7 @@ unitDef                    = {
 	turninplace 				 = false,
 	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 90,
-	turnrate 				 	 = 500,
+	turnrate 				 	 = 250,
 	--------------
 	--------------
 	sfxtypes                     = { 
