@@ -97,7 +97,7 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "bomb",
 			badTargetCategory    = "GROUND",
-			onlyTargetCategory   = "GROUND BUILDING",
+			onlyTargetCategory   = "GROUND BUILDING SHIP SUBMARINE",
 			mainDir = "0 -1 0",
 			maxAngleDif = 200,
 		},
@@ -217,6 +217,7 @@ weaponDefs                 = {
 		thickness                = 15,
 		tolerance                = 7500,
 		turret                   = false,
+		waterweapon              = true,
 		weaponVelocity           = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
