@@ -92,59 +92,40 @@ unitDef                    = {
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[2]                      = {
-			def                  = "particlebeamcannon",
+			def                  = "plasmacannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				 = 1,
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[3]                      = {
 			def                  = "plasmacannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				 = 1,
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[4]                      = {
-			def                  = "plasmacannon",
+			def                  = "clusterrockets",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				 = 1,
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[5]                      = {
 			def                  = "clusterrockets",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				 = 1,
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[6]                      = {
-			def                  = "clusterrockets",
-			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--maxAngleDif = 180,
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				 = 1,
-		},
-		[7]                      = {
 			def                  = "missile",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				 = 1,
-		},
-		[8]                      = {
-			def                  = "missile",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
-			slaveto				 = 1,
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 	},
 	customParams                 = {
@@ -185,7 +166,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 1000,
-		reloadtime               = 0.2,
+		reloadtime               = 0.1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -333,7 +314,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 100,
+			default              = 200,
 		},
 	},
 }

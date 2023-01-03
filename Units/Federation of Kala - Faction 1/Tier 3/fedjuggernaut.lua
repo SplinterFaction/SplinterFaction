@@ -5,7 +5,7 @@ unitName = "fedjuggernaut"
 --------------------------------------------------------------------------------
 humanName = [[Juggernaut]]
 
-objectName = "fedjuggernaut.s3o"
+objectName = "fedjuggernaut2.s3o"
 script = "/fed/hbot/fedjuggernaut_lus.lua"
 
 tech = [[tech3]]
