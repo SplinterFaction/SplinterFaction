@@ -69,8 +69,8 @@ unitDef                     = {
 	weapons                       = {
 		[1]                       = {
 			def                   = "mine",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			badTargetCategory     = "BUILDING SHIP",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                  = {

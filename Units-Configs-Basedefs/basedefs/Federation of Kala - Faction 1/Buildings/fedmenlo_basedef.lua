@@ -62,7 +62,7 @@ unitDef                     = {
 		[1]                       = {
 			def                   = "particlebeamcannon",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                  = {

@@ -57,7 +57,7 @@ unitDef                     = {
 		[1]                       = {
 			def                   = "plasmacannon",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                  = {

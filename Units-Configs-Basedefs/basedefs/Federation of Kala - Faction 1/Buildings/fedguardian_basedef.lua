@@ -56,8 +56,8 @@ unitDef                     = {
 	weapons                       = {
 		[1]                       = {
 			def                   = "plasmacannon",
-			badTargetCategory     = "BUILDING GROUND",
-			onlyTargetCategory    = "MASSIVE GROUND BUILDING",
+			badTargetCategory     = "BUILDING GROUND SHIP",
+			onlyTargetCategory    = "MASSIVE GROUND BUILDING SHIP",
 		},
 	},
 	customParams                  = {
