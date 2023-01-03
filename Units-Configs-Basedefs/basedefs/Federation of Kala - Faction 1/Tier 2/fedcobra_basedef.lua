@@ -91,14 +91,14 @@ unitDef                    = {
 --			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 --			maxAngleDif = 70,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
 			def                  = "clusterrockets",
 			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--			maxAngleDif = 70,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 			slaveto				 = 1,
 		},
 	},

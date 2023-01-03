@@ -79,27 +79,27 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "heavyrailgun",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
 			def                  = "railgun",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[3]                      = {
 			def                  = "railgun",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[4]                      = {
 			def                  = "flamethrower",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[5]                      = {
 			def                  = "shield",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			-- badTargetCategory     = "BUILDING",
+			-- onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                 = {

@@ -79,7 +79,7 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "Artilleryweapon",
 			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                 = {

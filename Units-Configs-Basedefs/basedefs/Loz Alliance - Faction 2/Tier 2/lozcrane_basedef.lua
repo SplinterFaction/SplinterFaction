@@ -176,7 +176,7 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "railgun",
-			onlyTargetCategory	 = "GROUND BUILDING",
+			onlyTargetCategory	 = "GROUND BUILDING SHIP",
 			mainDir = "0 -1 0",
 			maxAngleDif = 180,
 		},

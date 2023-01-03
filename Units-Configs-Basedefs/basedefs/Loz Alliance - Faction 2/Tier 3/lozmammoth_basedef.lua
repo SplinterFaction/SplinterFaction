@@ -80,22 +80,22 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "railgun",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
 			def                  = "lasercannon",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[3]                      = {
 			def                  = "clusterrockets",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[4]                      = {
 			def                  = "clusterrockets",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                 = {

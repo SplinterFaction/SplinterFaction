@@ -103,7 +103,7 @@ unitDef                    = {
 		[2]                      = {
 			def                  = "burstrailgun",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 			mainDir = "0 -1 0",
 			maxAngleDif = 200,
 		},

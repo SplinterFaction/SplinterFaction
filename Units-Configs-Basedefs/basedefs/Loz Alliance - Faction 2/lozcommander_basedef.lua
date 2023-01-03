@@ -100,7 +100,7 @@ unitDef                    = {
 		[1]                      = {
 			def                  = weapon1,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
 			def                  = weapon2,

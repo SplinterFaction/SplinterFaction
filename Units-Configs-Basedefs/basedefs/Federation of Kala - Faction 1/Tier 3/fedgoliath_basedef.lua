@@ -91,14 +91,14 @@ unitDef                    = {
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
 			def                  = "particlebeamcannon",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 			slaveto				 = 1,
 		},
 		[3]                      = {
@@ -106,7 +106,7 @@ unitDef                    = {
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 			slaveto				 = 1,
 		},
 		[4]                      = {
@@ -114,7 +114,7 @@ unitDef                    = {
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 			slaveto				 = 1,
 		},
 	},

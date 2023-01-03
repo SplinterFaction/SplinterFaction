@@ -80,7 +80,7 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "lasercannon",
 			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING AIR",
+			onlyTargetCategory    = "GROUND BUILDING AIR SHIP",
 		},
 		[2]                      = {
 			def                  = "flakcannon",

@@ -176,7 +176,7 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "rockets",
-			onlyTargetCategory	 = "GROUND BUILDING",
+			onlyTargetCategory	 = "GROUND BUILDING SHIP",
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards

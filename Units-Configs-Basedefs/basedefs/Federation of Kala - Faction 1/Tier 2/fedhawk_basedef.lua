@@ -97,7 +97,7 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "sniper",
 			badTargetCategory    = "GROUND BUILDING",
-			onlyTargetCategory	 = "AIR GROUND BUILDING",
+			onlyTargetCategory	 = "AIR GROUND BUILDING SHIP",
 			mainDir = "0 0 1",
 			maxAngleDif = 200,
 		},

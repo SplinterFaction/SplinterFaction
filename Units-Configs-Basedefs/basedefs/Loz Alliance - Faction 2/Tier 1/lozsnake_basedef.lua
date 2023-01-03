@@ -47,6 +47,21 @@ unitDef                    = {
 	transportbyenemy             = false;
 	unitname                     = unitName,
 	workerTime                   = 0,
+
+	--------------
+	-- Cloaking --
+	--------------
+	cancloak		             = true,
+	cloakCost		             = 0,
+	cloakCostMoving	             = 0,
+	minCloakDistance             = 425,
+	decloakOnFire	             = true,
+	decloakSpherical             = true,
+	initCloaked		             = true,
+	--------------
+	--------------
+
+
 	--------------
 	-- Movement --
 	--------------

@@ -124,7 +124,7 @@ function UnitDef_Post(name, uDef)
 	--------------------------------------------------------------------------------
 	-- Calculate mincloakdistance based on unit footprint size
 	--
-
+	--[[
 	local sqrt = math.sqrt
 
 	local fx = uDef.footprintx and tonumber(uDef.footprintx) or 1
@@ -137,7 +137,7 @@ function UnitDef_Post(name, uDef)
 	else
 		uDef.mincloakdistance = (radius * 2)
 	end
-
+	]]--
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 	-- Spring Kludge Removal

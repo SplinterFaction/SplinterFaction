@@ -80,7 +80,7 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "clusterrockets",
-			onlyTargetCategory    = "GROUND BUILDING AIR",
+			onlyTargetCategory    = "GROUND BUILDING AIR SHIP",
 		},
 	},
 	customParams                 = {
