@@ -54,12 +54,7 @@ local decloak1 = "sounds/miscfx/cloak.wav"
 local cloak2 = "sounds/miscfx/cloak.wav"
 local decloak2 = "sounds/miscfx/cloak.wav"
 
-local CD1 = "sounds/selfdcountdown/count1.wav"
-local CD2 = "sounds/selfdcountdown/count2.wav"
-local CD3 = "sounds/selfdcountdown/count3.wav"
-local CD4 = "sounds/selfdcountdown/count4.wav"
-local CD5 = "sounds/selfdcountdown/count5.wav"
-local CD6 = "sounds/selfdcountdown/count6.wav"
+local alert = "sounds/selfdcountdown/alert sounds 3.wav"
 local cancel = "sounds/ui/cancel2.wav"
 local movefailed = "sounds/ui/cantdo4.wav"
 
@@ -128,16 +123,51 @@ end
 function widget:GameFrame(gameFrame)
 	for unitID, startFrame in pairs(ADUnits) do
 		if GetUnitTeam(unitID) == myTeamID and not GetUnitIsDead(unitID) then
-			if (gameFrame - startFrame) == 20 then -- adjust timing to be 10 frames before actual message, so it syncs better with engine timing
-				PlaySoundFile(CD2)
-			elseif (gameFrame - startFrame) == 50 then
-				PlaySoundFile(CD3)
-			elseif (gameFrame - startFrame) == 80 then
-				PlaySoundFile(CD4)
-			elseif (gameFrame - startFrame) == 110 then
-				PlaySoundFile(CD5)
-			elseif (gameFrame - startFrame) == 140 then
-				PlaySoundFile(CD6)
+			if (gameFrame - startFrame) == 30 then -- adjust timing to be 10 frames before actual message, so it syncs better with engine timing
+				-- Spring.Echo('30')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 60 then
+				-- Spring.Echo('60')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 90 then
+				-- Spring.Echo('90')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 120 then
+				-- Spring.Echo('120')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 150 then
+				-- Spring.Echo('150')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 180 then
+				-- Spring.Echo('180')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 210 then
+				-- Spring.Echo('210')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 240 then
+				-- Spring.Echo('240')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 270 then
+				-- Spring.Echo('270')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 300 then
+				-- Spring.Echo('300')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 330 then
+				-- Spring.Echo('330')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 360 then
+				-- Spring.Echo('360')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 390 then
+				-- Spring.Echo('390')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 420 then
+				-- Spring.Echo('420')
+				PlaySoundFile(alert)
+			elseif (gameFrame - startFrame) == 450 then
+				-- Spring.Echo('450')
+				PlaySoundFile(alert)
 			end
 		end
 	end

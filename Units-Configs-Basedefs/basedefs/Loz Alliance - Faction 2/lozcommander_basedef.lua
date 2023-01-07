@@ -48,6 +48,7 @@ unitDef                    = {
 	radarDistance                = 0,
 	repairable		             = false,
 	selfDestructAs               = selfdestructas,
+	selfDestructCountdown         = 15,
 	showPlayerName	             = true,
 	showNanoSpray                = true,
 	sightDistance                = 500,
