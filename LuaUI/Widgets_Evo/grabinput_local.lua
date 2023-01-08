@@ -15,8 +15,8 @@ function widget:Initialize()
 end
 
 function widget:GameFrame(n)
--- send grabinput every 30 seconds
-	if n%960 == 1 then
+-- send grabinput every 5 seconds
+	if n%150 == 1 then
 		Spring.SendCommands("grabinput 1")
 	end
 end

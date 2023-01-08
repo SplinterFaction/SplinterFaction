@@ -105,6 +105,7 @@ local SimpleExtractorDefs = {}
 local SimpleGeneratorDefs = {}
 local SimpleConverterDefs = {}
 local SimpleTurretDefs = {}
+local SimpleStorageDefs = {}
 local SimpleUndefinedBuildingDefs = {}
 local SimpleUndefinedUnitDefs = {}
 
@@ -133,6 +134,9 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 			SimpleConverterDefs[#SimpleConverterDefs + 1] = unitDefID
 		elseif unitDef.isBuilding and #unitDef.weapons > 0 then
 			SimpleTurretDefs[#SimpleTurretDefs + 1] = unitDefID
+		elseif unitDef.customParams.simpleaitype == "storage" then
+			SimpleStorageDefs[#SimpleStorageDefs + 1] = unitDefID
+
 
 
 		elseif not unitDef.canMove then
@@ -260,7 +264,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif ecurrent < estorage * 0.75 or r == 0 then
+			elseif ecurrent < estorage * 0.50 or r == 0 then
 				local project = SimpleGeneratorDefs[math.random(1, #SimpleGeneratorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -270,7 +274,18 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			
+
+			elseif ecurrent > estorage * 0.90 or r == 0 then
+				local project = SimpleStorageDefs[math.random(1, #SimpleStorageDefs)]
+				for i2 = 1,#buildOptions do
+					if buildOptions[i2] == project then
+						SimpleBuildOrder(unitID, project)
+						--Spring.Echo("Success! Project Type: Storage.")
+						success = true
+						break
+					end
+				end
+
 			elseif mcurrent < mstorage * 0.30 or r == 1 then
 				-- if type == "Commander" then
 				-- 	for t = 1,10 do
@@ -283,17 +298,22 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 				-- 		end
 				-- 	end
 				-- elseif
-				if (not mexspotpos) and (ecurrent > estorage * 0.85 or r == 1) then
-					local project = SimpleConverterDefs[math.random(1, #SimpleConverterDefs)]
-					for i2 = 1,#buildOptions do
-						if buildOptions[i2] == project then
-							SimpleBuildOrder(unitID, project)
-							--Spring.Echo("Success! Project Type: Converter.")
-							success = true
-							break
-						end
-					end
-				elseif mexspotpos then
+
+				-- Removed because SF doesn't have metal makers
+				-- if (not mexspotpos) and (ecurrent > estorage * 0.85 or r == 1) then
+				--					-- local project = SimpleConverterDefs[math.random(1, #SimpleConverterDefs)]
+				--					-- for i2 = 1,#buildOptions do
+				--						-- if buildOptions[i2] == project then
+				--							-- SimpleBuildOrder(unitID, project)
+				--							-- Spring.Echo("Success! Project Type: Converter.")
+				--							-- success = true
+				--							-- break
+				--						-- end
+				--					-- end
+				--				-- else
+				--
+
+				if mexspotpos then
 					local project = SimpleExtractorDefs[math.random(1, #SimpleExtractorDefs)]
 					for i2 = 1,#buildOptions do
 						if buildOptions[i2] == project then
@@ -361,6 +381,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 					end
 					
 				end
+
 			elseif r == 2 or r == 3 or r == 4 or r == 5 then
 				local project = SimpleTurretDefs[math.random(1, #SimpleTurretDefs)]
 				for i2 = 1,#buildOptions do

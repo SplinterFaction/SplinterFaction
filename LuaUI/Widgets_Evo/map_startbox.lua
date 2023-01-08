@@ -65,7 +65,7 @@ local fontSize				= 18
 local fontShadow			= true		-- only shows if font has a white outline
 local shadowOpacity			= 0.35
 
-local infotext = "Pick a startspot within the green area, and click the Ready button. (F4 shows metal spots)"
+local infotext = "Pick a startspot within the green area, and click the Ready button."
 local infotextFontsize = 13
 
 local comnameList = {}
@@ -229,7 +229,7 @@ function createInfotextList()
   end
   infotextList = gl.CreateList(function()
     font:Begin()
-    font:SetTextColor(0.75,0.75,0.75,1)
+    font:SetTextColor(0.9,0.9,0.9,1)
     font:Print(infotext, 0,0, infotextFontsize*widgetScale, "cno")
     font:End()
   end)

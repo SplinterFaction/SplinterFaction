@@ -69,6 +69,7 @@ local unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole				  = "Economy",
+		simpleaitype              = "storage",
 		iseco                     = 1,
 		RequireTech				  = [[tech3]],
 		needed_cover              = 2,

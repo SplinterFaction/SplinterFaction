@@ -345,6 +345,17 @@ function WeaponDef_Post(name, wDef)
 		wDef = scav_Wdef_Post(name, wDef)
 	end
 
+	if wDef.weapontype == "Cannon" then
+		if wDef.stages == nil then
+			wDef.stages = 20
+			if wDef.damage ~= nil and wDef.damage.default ~= nil and wDef.areaofeffect ~= nil then
+				wDef.stages = math.floor(7.5 + math.min(wDef.damage.default * 0.0033, wDef.areaofeffect * 0.13))
+				wDef.alphadecay = 1 - ((1/wDef.stages)/1.5)
+				wDef.sizedecay = 0.4 / wDef.stages
+			end
+		end
+	end
+
 end
 
 

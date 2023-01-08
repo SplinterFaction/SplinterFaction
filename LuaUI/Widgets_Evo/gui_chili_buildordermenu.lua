@@ -71,13 +71,13 @@ local chiliCache = {}
 local vsx, vsy = sGetWindowGeometry()
 
 local sGetConfigInt = Spring.GetConfigInt
-local buildOrderUI = sGetConfigInt("evo_buildorderui", 2)
+local buildOrderUI = sGetConfigInt("evo_buildorderui", 6)
 local showCost = sGetConfigInt("evo_showcost", 1) == 1
 local showTechReq = sGetConfigInt("evo_showtechreq", 1) == 1
 local showHotkeys = sGetConfigInt("evo_showhotkeys", 1) == 1
 WG.buildOrderUI = {updateConfigInt = false}
 
-local fontSize =  18 * widgetScale
+local fontSize =  14 * widgetScale
 
 
 --Horizontal
@@ -282,9 +282,9 @@ if buildOrderUI == 6 then
     Config = {
         ordermenu = {
             name = 'ordermenu',
-            rows = 4, columns = 4,
+            rows = 6, columns = 4,
             x = '0%', y = '24%',
-            width = '50%', height = '25%',
+            width = '100%', height = '25%',
             orientation = 'horizontal',
             maxWidth = 390,
             padding = {5, 5, 5, 5},     -- outer panel
