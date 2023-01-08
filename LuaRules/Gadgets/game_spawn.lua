@@ -36,10 +36,10 @@ end
 
 local aiStartUnits = {
 	["fedcommander"] = {
-		"fedcommander",
+		"fedcommander_ai",
 	},
 	["lozcommander"] = {
-		"fedcommander",
+		"fedcommander_ai",
 	},
 }
 

@@ -106,6 +106,7 @@ local SimpleGeneratorDefs = {}
 local SimpleConverterDefs = {}
 local SimpleTurretDefs = {}
 local SimpleStorageDefs = {}
+local SimpleSupplyDefs = {}
 local SimpleUndefinedBuildingDefs = {}
 local SimpleUndefinedUnitDefs = {}
 
@@ -124,18 +125,20 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 			SimpleCommanderDefs[#SimpleCommanderDefs + 1] = unitDefID
 		elseif unitDef.isFactory and #unitDef.buildOptions > 0 then
 			SimpleFactoriesDefs[#SimpleFactoriesDefs + 1] = unitDefID
-		elseif unitDef.canMove and unitDef.isBuilder and #unitDef.buildOptions > 0 then
+		elseif unitDef.canMove and unitDef.isBuilder and #unitDef.buildOptions > 0 or unitDef.customParams.unittype == "mobile" and unitDef.customParams.unitrole == "Builder" then
 			SimpleConstructorDefs[#SimpleConstructorDefs + 1] = unitDefID
 		elseif unitDef.extractsMetal > 0 or (unitDef.customParams and unitDef.customParams.metal_extractor) then
 			SimpleExtractorDefs[#SimpleExtractorDefs + 1] = unitDefID
-		elseif (unitDef.energyMake > 19 and (not unitDef.energyUpkeep or unitDef.energyUpkeep < 10)) or (unitDef.windGenerator > 0 and wind > 10) or unitDef.tidalGenerator > 0 or (unitDef.customParams and unitDef.customParams.solar) then
+		elseif (unitDef.energyMake > 19 and (not unitDef.energyUpkeep or unitDef.energyUpkeep < 10)) or (unitDef.windGenerator > 0 and wind > 10) or unitDef.tidalGenerator > 0 or (unitDef.customParams and unitDef.customParams.solar) or unitDef.customParams.simpleaiunittype == "energygenerator" then
 			SimpleGeneratorDefs[#SimpleGeneratorDefs + 1] = unitDefID
 		elseif unitDef.customParams and unitDef.customParams.energyconv_capacity and unitDef.customParams.energyconv_efficiency then
 			SimpleConverterDefs[#SimpleConverterDefs + 1] = unitDefID
 		elseif unitDef.isBuilding and #unitDef.weapons > 0 then
 			SimpleTurretDefs[#SimpleTurretDefs + 1] = unitDefID
-		elseif unitDef.customParams.simpleaitype == "storage" then
+		elseif unitDef.customParams.simpleaiunittype == "storage" then
 			SimpleStorageDefs[#SimpleStorageDefs + 1] = unitDefID
+		elseif unitDef.customParams.simpleaiunittype == "t0storagesupply" or unitDef.customParams.simpleaiunittype == "supplydepot" then
+			SimpleSupplyDefs[#SimpleSupplyDefs + 1] = unitDefID
 
 
 
@@ -242,6 +245,7 @@ end
 local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, unitTeam, allyTeamID, units, allunits, type)
 	success = false
 
+	local supplyUsed, supplyMax = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyUsed") or 0), math.round(Spring.GetTeamRulesParam(unitTeam, "supplyMax") or 0)
 	local mcurrent, mstorage, _, mincome, mexpense = Spring.GetTeamResources(unitTeam, "metal")
 	local ecurrent, estorage, _, eincome, eexpense = Spring.GetTeamResources(unitTeam, "energy")
 	local unitposx, unitposy, unitposz = Spring.GetUnitPosition(unitID)
@@ -259,28 +263,39 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
 						Spring.GiveOrderToUnit(unitID, -project, { mexspotpos.x, mexspotpos.y, mexspotpos.z, 0 }, { "shift" })
-						--Spring.Echo("Success! Project Type: Extractor.")
+						Spring.Echo("Success! Project Type: Extractor.")
 						success = true
 						break
 					end
 				end
-			elseif ecurrent < estorage * 0.50 or r == 0 then
+			elseif eincome < eexpense or r == 0 then
 				local project = SimpleGeneratorDefs[math.random(1, #SimpleGeneratorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
 						SimpleBuildOrder(unitID, project)
-						--Spring.Echo("Success! Project Type: Generator.")
+						Spring.Echo("Success! Project Type: Generator.")
 						success = true
 						break
 					end
 				end
 
-			elseif ecurrent > estorage * 0.90 or r == 0 then
+			elseif ecurrent > estorage * 0.99 or r == 0 then
 				local project = SimpleStorageDefs[math.random(1, #SimpleStorageDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
 						SimpleBuildOrder(unitID, project)
-						--Spring.Echo("Success! Project Type: Storage.")
+						Spring.Echo("Success! Project Type: Storage.")
+						success = true
+						break
+					end
+				end
+
+			elseif supplyUsed > supplyMax * 0.80 and supplyMax < 1000 or r == 0 then
+				local project = SimpleSupplyDefs[math.random(1, #SimpleSupplyDefs)]
+				for i2 = 1,#buildOptions do
+					if buildOptions[i2] == project then
+						SimpleBuildOrder(unitID, project)
+						Spring.Echo("Success! Project Type: Supply Depot.")
 						success = true
 						break
 					end
@@ -318,7 +333,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 					for i2 = 1,#buildOptions do
 						if buildOptions[i2] == project then
 							Spring.GiveOrderToUnit(unitID, -project, { mexspotpos.x, mexspotpos.y, mexspotpos.z, 0 }, { "shift" })
-							--Spring.Echo("Success! Project Type: Extractor.")
+							Spring.Echo("Success! Project Type: Extractor.")
 							for i3 = 1,50 do
 								local projectturret = SimpleTurretDefs[math.random(1, #SimpleTurretDefs)]
 								if buildOptions[i3] == projectturret then
@@ -387,18 +402,18 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
 						SimpleBuildOrder(unitID, project)
-						--Spring.Echo("Success! Project Type: Turret.")
+						Spring.Echo("Success! Project Type: Turret.")
 						success = true
 						break
 					end
 				end
-			elseif SimpleFactoriesCount[unitTeam] < 1 or ((mcurrent > mstorage * 0.75 and ecurrent > estorage * 0.75) and SimpleFactoryDelay[unitTeam] <= 0) then
+			elseif SimpleFactoriesCount[unitTeam] < 4 or ((mcurrent > mstorage * 0.75 and ecurrent > estorage * 0.75) and SimpleFactoryDelay[unitTeam] <= 0) then
 				local project = SimpleFactoriesDefs[math.random(1, #SimpleFactoriesDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project and (not SimpleFactories[unitTeam][project]) then
 						SimpleBuildOrder(unitID, project)
 						SimpleFactoryDelay[unitTeam] = 30
-						--Spring.Echo("Success! Project Type: Factory.")
+						Spring.Echo("Success! Project Type: Factory.")
 						success = true
 						break
 					end
@@ -434,7 +449,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 					for i2 = 1,#buildOptions do
 						if buildOptions[i2] == project then
 							SimpleBuildOrder(unitID, project)
-							--Spring.Echo("Success! Project Type: Other.")
+							Spring.Echo("Success! Project Type: Other.")
 							success = true
 							break
 						end
@@ -444,7 +459,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 					for i2 = 1,#buildOptions do
 						if buildOptions[i2] == project then
 							SimpleBuildOrder(unitID, project)
-							--Spring.Echo("Success! Project Type: Turret.")
+							Spring.Echo("Success! Project Type: Turret.")
 							success = true
 							break
 						end
@@ -461,7 +476,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						if buildOptions[i2] == project then
 							local x, y, z = Spring.GetUnitPosition(unitID)
 							Spring.GiveOrderToUnit(unitID, -project, { x, y, z, 0 }, 0)
-							--Spring.Echo("Success! Project Type: Constructor.")
+							Spring.Echo("Success! Project Type: Constructor.")
 							success = true
 							break
 						end
@@ -472,7 +487,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						if buildOptions[i2] == project then
 							local x, y, z = Spring.GetUnitPosition(unitID)
 							Spring.GiveOrderToUnit(unitID, -project, { x, y, z, 0 }, 0)
-							--Spring.Echo("Success! Project Type: Unit.")
+							Spring.Echo("Success! Project Type: Unit.")
 							success = true
 							break
 						end
