@@ -38,6 +38,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = true,
 	category                     = "AIR",
+	nochasecategory              = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 200,
 	description                  = [[Bomber]],
@@ -105,7 +106,7 @@ unitDef                    = {
 			def                  = "laser",
 			onlyTargetCategory	 = "AIR",
 			mainDir = "0 0 -1",
-			maxAngleDif = 200,
+			maxAngleDif = 135,
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
@@ -143,6 +144,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	laser                = {
+		accuracy               = 5000,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -166,8 +168,8 @@ weaponDefs                 = {
 		soundStart             = "weapons/Sci Fi Blaster 1.wav",
 		texture1               = "shot",
 		texture2               = "empty",
-		coreThickness          = 0.25,
-		thickness              = 3,
+		coreThickness          = 0.5,
+		thickness              = 5,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
@@ -179,7 +181,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 2.5,
+			default              = 0.5,
 		}, 
 	},
 	bomb  	             = {

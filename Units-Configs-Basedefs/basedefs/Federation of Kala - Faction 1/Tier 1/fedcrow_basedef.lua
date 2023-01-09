@@ -38,6 +38,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = true,
 	category                     = "AIR",
+	nochasecategory              = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 200,
 	description                  = [[Bomber]],
@@ -102,10 +103,10 @@ unitDef                    = {
 			maxAngleDif = 200,
 		},
 		[2]                      = {
-			def                  = "particlebeamcannon",
+			def                  = "machinegun",
 			onlyTargetCategory	 = "AIR",
 			mainDir = "0 0 -1",
-			maxAngleDif = 200,
+			maxAngleDif = 135,
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
@@ -142,47 +143,45 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	particlebeamcannon                 = {
-
-		accuracy                 = 0,
-		AreaOfEffect             = 10,
-		avoidFeature             = false,
-		avoidFriendly            = false,
-		collideFeature           = false,
-		collideFriendly          = false,
-		canAttackGround		     = false,
-		explosionGenerator       = "custom:burnblacksmall",
-		coreThickness            = 0.1,
-		duration                 = 0.4,
-		energypershot            = 0,
-		fallOffRate              = 0.1,
-		fireStarter              = 50,
+	machinegun                = {
+		accuracy               = 5000,
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		canattackground		   = false,
+		-- cegTag                 = "railgun",
+		rgbColor               = "1 0.5 0",
+		rgbColor2              = "1 1 1",
+		explosionGenerator     = "custom:genericshellexplosion-small-sparks-burn",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.025,
+		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
-
-		minintensity             = 1,
-		impulseFactor            = 0,
-		name                     = "Something with Flames",
-		range                    = 800,
-		reloadtime               = 0.25,
-		WeaponType               = [[LaserCannon]],
-		rgbColor                 = "1 0.5 0",
-		rgbColor2                = "1 1 1",
-		thickness                = 2,
-		tolerance                = 1000,
-		turret                   = true,
-		texture1                 = "shot",
-		texture2                 = "empty",
-		weaponVelocity           = 2000,
-		sprayangle				 = 75,
+		name                   = "MachineGun",
+		range                  = 800,
+		reloadtime             = 0.2,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "weapons/Shotgun Shot 5.wav",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.5,
+		thickness              = 5,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 6000,
 		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
+			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3.75,
+			default              = 0.5,
 		},
 	},
 	bomb  	             = {
