@@ -95,7 +95,7 @@ function widget:Initialize()
 	
 	VOLUI = 0.015*Spring.GetConfigInt('snd_volui') or 1.0 					-- snd_volui = [0,200]
 	VOLBATTLE = 0.015*Spring.GetConfigInt('snd_volbattle') or 1.0	 		-- snd_volbattle = [0,200]
-	Echo("Unit sounds (EvoRTS) loaded. Volumes (battle,ui,[0,200]):", VOLBATTLE/0.015,VOLUI/0.015)
+	Echo("Unit sounds loaded. Volumes (battle,ui,[0,200]):", VOLBATTLE/0.015,VOLUI/0.015)
 end
 
 function widget:UnitCloaked(unitID, unitDefID, teamID) 
@@ -125,49 +125,49 @@ function widget:GameFrame(gameFrame)
 		if GetUnitTeam(unitID) == myTeamID and not GetUnitIsDead(unitID) then
 			if (gameFrame - startFrame) == 30 then -- adjust timing to be 10 frames before actual message, so it syncs better with engine timing
 				-- Spring.Echo('30')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 60 then
 				-- Spring.Echo('60')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 90 then
 				-- Spring.Echo('90')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 120 then
 				-- Spring.Echo('120')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 150 then
 				-- Spring.Echo('150')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 180 then
 				-- Spring.Echo('180')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 210 then
 				-- Spring.Echo('210')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 240 then
 				-- Spring.Echo('240')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 270 then
 				-- Spring.Echo('270')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 300 then
 				-- Spring.Echo('300')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 330 then
 				-- Spring.Echo('330')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 360 then
 				-- Spring.Echo('360')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 390 then
 				-- Spring.Echo('390')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 420 then
 				-- Spring.Echo('420')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			elseif (gameFrame - startFrame) == 450 then
 				-- Spring.Echo('450')
-				PlaySoundFile(alert)
+				PlaySoundFile(alert,VOLBATTLE,x,y,z,0,0,0,'battle')
 			end
 		end
 	end
