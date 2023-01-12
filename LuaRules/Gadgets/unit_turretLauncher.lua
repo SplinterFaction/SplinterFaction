@@ -10,24 +10,27 @@ function gadget:GetInfo()
 	}
 end
 
---[[if (gadgetHandler:IsSyncedCode()) then
+if (gadgetHandler:IsSyncedCode()) then
 
 --SYNCED
 
-local tlWeapon
+local Weapon
 local createList = {}
 
 function gadget:Initialize()
     for _,def in pairs(WeaponDefs) do
-	    if def.name == "eartillarytank_artilleryweapon" then
-            tlWeapon = def.id
+	    if def.customParams.turretlauncherweapon == "true" then
+            Weapon = def.id
+		    Spring.Echo("[TurretLauncher] Watched weapon is: " .. Weapon)
 	    end
     end
-	Script.SetWatchWeapon(tlWeapon, true)
+	if Weapon ~= nil then
+		Script.SetWatchWeapon(Weapon, true)
+	end
 end
 
 function gadget:Explosion(w, x, y, z, owner)
-	if w == tlWeapon and owner then
+	if w == Weapon and owner then
 		if not Spring.GetGroundBlocked(x,z) then
 			table.insert(createList, {owner = owner, x=x,y=y,z=z})
 			return true
@@ -38,9 +41,9 @@ end
 
 function gadget:GameFrame(f)
 	for i,c in pairs(createList) do
-		Spring.CreateUnit("edrone", c.x, c.y, c.z, 0, Spring.GetUnitTeam(c.owner))
+		Spring.CreateUnit("sensortower", c.x, c.y, c.z, 0, Spring.GetUnitTeam(c.owner))
 		createList[i]=nil
 	end
 end
 
-end]]
+end

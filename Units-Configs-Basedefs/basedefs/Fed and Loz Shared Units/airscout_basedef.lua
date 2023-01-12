@@ -6,7 +6,7 @@ unitDef                    = {
 	buildCostMetal               = 20,
 	builder                      = false,
 	buildTime                    = 2.5,
-	canAttack                    = false,
+	canAttack                    = true,
 	canFly                       = true,
 
 --------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ unitDef                    = {
 	category                     = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 75,
-	description                  = [[Air Scout]],
+	description                  = [[Can drop tiny Seismic Sensors via Stockpile]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -96,9 +96,15 @@ unitDef                    = {
 	-- This weapon is lolfake. Spring Sucks. Fite me.
 	weapons                      = {
 		[1]                      = {
+			def                  = "SeismicSensor",
+			onlyTargetCategory	 = "NOTHING",
+		},
+		--[[
+		[2]                      = {
 			def                  = "fakelaser",
 			onlyTargetCategory	 = "NOTHING",
 		},
+		]]--
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
 				A vector representing the firing direction of this weapon if it has a limited firing arc. Used in conjunction with maxAngleDif (See Gamedev:WeaponMainDir).
@@ -134,6 +140,62 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
+	SeismicSensor  	             = {
+		commandfire              = true,
+		AreaOfEffect             = 50,
+		avoidFeature             = false,
+		avoidFriendly            = false,
+		collideFeature           = false,
+		collideFriendly          = false,
+		cylinderTargeting		 = 0,
+		-- cegTag                   = "genericshellexplosion-small-sparks-burn",
+		edgeeffectiveness		 = 1,
+		energypershot            = 0,
+		explosionGenerator       = "custom:genericshellexplosion-small-red",
+		fallOffRate              = 1,
+		fireStarter              = 50,
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		minintensity             = "1",
+		name                     = "SeismicSensor",
+		projectiles				 = 5,
+		range                    = 800,
+		reloadtime               = 60,
+		WeaponType               = "Cannon",
+		rgbColor                 = "1 0.5 0",
+		rgbColor2                = "1 1 1",
+		soundTrigger             = true,
+		model                    = "sensortower.s3o",
+		soundstart               = "other/dronespawner.wav",
+
+		-----
+		stockpile                = true,
+		stockpiletime            = 60,
+		metalpershot             = 250,
+		energypershot            = 1000,
+		-----
+
+		sprayangle				 = 5000,
+		size					 = 0,
+		--texture1                 = "shot",
+		--texture2                 = "empty",
+		thickness                = 15,
+		tolerance                = 7500,
+		turret                   = false,
+		waterweapon              = true,
+		weaponVelocity           = 500,
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+			turretlauncherweapon= "true",
+		},
+		damage                   = {
+			default              = 0,
+		},
+	},
+
 	fakelaser                = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -169,6 +231,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+
 		},
 		damage                   = {
 			default              = 0,

@@ -13,7 +13,7 @@
 
 function widget:GetInfo()
   return {
-    name      = "Stockpiler (Evolution RTS)",
+    name      = "Stockpiler",
     desc      = "Automatically adds stockpile builds to new units",
     author    = "trepan",
     date      = "Jan 8, 2007",

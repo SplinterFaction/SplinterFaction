@@ -2,15 +2,15 @@
 --------------------------------------------------------------------------------
 
 function gadget:GetInfo()
-  return {
-    name      = "Decloak when damaged",
-    desc      = "Decloaks units when they are damged",
-    author    = "Google Frog",
-    date      = "Nov 25, 2009", -- Major rework 12 Feb 2014
-    license   = "GNU GPL, v2 or later",
-    layer     = 0,
-    enabled   = true  --  loaded by default?
-  }
+	return {
+		name      = "Decloak Ruleset",
+		desc      = "Defines rulesets for when a unit should decloak",
+		author    = "Google Frog",
+		date      = "Nov 25, 2009", -- Major rework 12 Feb 2014
+		license   = "GNU GPL, v2 or later",
+		layer     = 0,
+		enabled   = true  --  loaded by default?
+	}
 end
 
 --------------------------------------------------------------------------------
@@ -33,20 +33,19 @@ local unitWantCloakCommandDesc = {
 --------------------------------------------------------------------------------
 
 if (not gadgetHandler:IsSyncedCode()) then
-  return false  --  silent removal
+	return false  --  silent removal
 end
 
 local alliedTrueTable = {allied = true}
 
-local Spring = Spring
-local spAreTeamsAllied = Spring.AreTeamsAllied
-
-local spSetUnitCloak = Spring.SetUnitCloak
-local spGetUnitIsCloaked = Spring.GetUnitIsCloaked
-local spGetUnitRulesParam = Spring.GetUnitRulesParam
-local spSetUnitRulesParam = Spring.SetUnitRulesParam
-local spGetUnitDefID = Spring.GetUnitDefID
-local spGetUnitIsDead = Spring.GetUnitIsDead
+local spAreTeamsAllied           = Spring.AreTeamsAllied
+local spSetUnitCloak             = Spring.SetUnitCloak
+local spGetUnitIsCloaked         = Spring.GetUnitIsCloaked
+local spGetUnitRulesParam        = Spring.GetUnitRulesParam
+local spSetUnitRulesParam        = Spring.SetUnitRulesParam
+local spGetUnitDefID             = Spring.GetUnitDefID
+local spGetUnitIsDead            = Spring.GetUnitIsDead
+local spIsWeaponPureStatusEffect = Spring.Utilities.IsWeaponPureStatusEffect
 
 local recloakUnit = {}
 local recloakFrame = {}
@@ -59,98 +58,65 @@ for i = 1, #WeaponDefs do
 	end
 end
 
-local DEFAULT_DECLOAK_TIME = 60
+local DEFAULT_DECLOAK_TIME = 240
+local PERSONAL_DECLOAK_TIME = 90
+
+local DEFAULT_PROXIMITY_DECLOAK_TIME = 90
+local PERSONAL_PROXIMITY_DECLOAK_TIME = 45
+
 local UPDATE_FREQUENCY = 10
 local CLOAK_MOVE_THRESHOLD = math.sqrt(0.2)
 
 local currentFrame = 0
 
 local cloakUnitDefID = {}
+local commDefID = {}
 for i = 1, #UnitDefs do
 	local ud = UnitDefs[i]
 	if ud.canCloak and not ud.customParams.dynamic_comm then
 		cloakUnitDefID[i] = true
 	end
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Water handling
-
-local waterUnitCount = 0
-local waterUnitMap = {}
-local waterUnits = {}
-local waterUnitCloakBlocked = {}
-
-local function AddWaterUnit(unitID)
-	if waterUnitMap[unitID] then
-		return
+	if ud.customParams.dynamic_comm then
+		commDefID[i] = true
 	end
-	waterUnitCount = waterUnitCount + 1
-	waterUnitMap[unitID] = waterUnitCount
-	waterUnits[waterUnitCount] = unitID
 end
 
-local function RemoveWaterUnit(unitID)
-	if not waterUnitMap[unitID] then
-		return
+local function GetProximityDecloakTime(unitID, unitDefID)
+	unitDefID = unitDefID or spGetUnitDefID(unitID)
+	if commDefID[unitDefID] then
+		return PERSONAL_PROXIMITY_DECLOAK_TIME
 	end
-	waterUnits[waterUnitMap[unitID]] = waterUnits[waterUnitCount]
-	waterUnitMap[waterUnits[waterUnitCount]] = waterUnitMap[unitID]
-	waterUnits[waterUnitCount] = nil
-	waterUnitMap[unitID] = nil
-	waterUnitCount = waterUnitCount - 1
-	
-	waterUnitCloakBlocked[unitID] = nil
+	return (cloakUnitDefID[unitDefID] and PERSONAL_PROXIMITY_DECLOAK_TIME) or DEFAULT_PROXIMITY_DECLOAK_TIME
 end
 
-function gadget:UnitEnteredWater(unitID)
-	AddWaterUnit(unitID)
+local function GetActionDecloakTime(unitID, unitDefID)
+	unitDefID = unitDefID or spGetUnitDefID(unitID)
+	if commDefID[unitDefID] then
+		return PERSONAL_DECLOAK_TIME
+	end
+	return (cloakUnitDefID[unitDefID] and PERSONAL_DECLOAK_TIME) or DEFAULT_DECLOAK_TIME
 end
 
-function gadget:UnitLeftWater(unitID)
-	RemoveWaterUnit(unitID)
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-
-function PokeDecloakUnit(unitID, duration)
-	if recloakUnit[unitID] then
-		recloakUnit[unitID] = duration or DEFAULT_DECLOAK_TIME
-	else
+local function PokeDecloakUnit(unitID, unitDefID)
+	if not recloakUnit[unitID] then
 		spSetUnitRulesParam(unitID, "cannotcloak", 1, alliedTrueTable)
 		spSetUnitCloak(unitID, 0)
-		recloakUnit[unitID] = duration or DEFAULT_DECLOAK_TIME
 	end
-
+	recloakUnit[unitID] = GetActionDecloakTime(unitID, unitDefID)
 end
 
 GG.PokeDecloakUnit = PokeDecloakUnit
 
-function gadget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, 
+function gadget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
                             weaponID, attackerID, attackerDefID, attackerTeam)
-	if damage > 0 and
-		not (attackerTeam and
-		weaponID and
-		noFFWeaponDefs[weaponID] and
-		attackerID ~= unitID and
-		spAreTeamsAllied(unitTeam, attackerTeam)) then
-		PokeDecloakUnit(unitID)
+	if  (damage > 0 or spIsWeaponPureStatusEffect(weaponID)) and
+			not (attackerTeam and
+					weaponID and
+					noFFWeaponDefs[weaponID] and
+					attackerID ~= unitID and
+					spAreTeamsAllied(unitTeam, attackerTeam)) then
+		PokeDecloakUnit(unitID, unitDefID)
 	end
-end
-
-local function CheckWaterBlockCloak(unitID, pos)
-	local radius = Spring.GetUnitRadius(unitID)
-	if radius + pos < 0 then
-		if not waterUnitCloakBlocked[unitID] then
-			PokeDecloakUnit(unitID)
-			spSetUnitRulesParam(unitID, "cannotcloak", 1, alliedTrueTable)
-			waterUnitCloakBlocked[unitID] = true
-		end
-		return true
-	end
-	return false
 end
 
 function gadget:GameFrame(n)
@@ -158,7 +124,7 @@ function gadget:GameFrame(n)
 	if n%UPDATE_FREQUENCY == 2 then
 		for unitID, frames in pairs(recloakUnit) do
 			if frames <= UPDATE_FREQUENCY then
-				if not ((spGetUnitRulesParam(unitID,"on_fire") == 1) or (spGetUnitRulesParam(unitID,"disarmed") == 1) or waterUnitCloakBlocked[unitID]) then
+				if not ((spGetUnitRulesParam(unitID,"on_fire") == 1) or (spGetUnitRulesParam(unitID,"disarmed") == 1)) then
 					local wantCloakState = spGetUnitRulesParam(unitID, "wantcloak")
 					local areaCloaked = spGetUnitRulesParam(unitID, "areacloaked")
 					spSetUnitRulesParam(unitID, "cannotcloak", 0, alliedTrueTable)
@@ -171,28 +137,6 @@ function gadget:GameFrame(n)
 				recloakUnit[unitID] = frames - UPDATE_FREQUENCY
 			end
 		end
-		
-		local i = 1
-		while i <= waterUnitCount do
-			local unitID = waterUnits[i]
-			if Spring.ValidUnitID(unitID) then
-				local pos = select(5, Spring.GetUnitPosition(unitID, true))
-				if pos < 0 then
-					if (not CheckWaterBlockCloak(unitID, pos)) and waterUnitCloakBlocked[unitID] then
-						spSetUnitRulesParam(unitID, "cannotcloak", 0, alliedTrueTable)
-						waterUnitCloakBlocked[unitID] = false
-					end
-				else
-					if waterUnitCloakBlocked[unitID] then
-						spSetUnitRulesParam(unitID, "cannotcloak", 0, alliedTrueTable)
-						waterUnitCloakBlocked[unitID] = false
-					end
-				end
-				i = i + 1
-			else
-				RemoveWaterUnit(unitID)
-			end
-		end
 	end
 end
 
@@ -202,45 +146,46 @@ function gadget:AllowUnitCloak(unitID, enemyID)
 		local transID = Spring.GetUnitTransporter(unitID)
 		if transID then
 			-- For some reason enemyID indicates that the unit is being transported.
-			return Spring.GetUnitIsCloaked(transID)
+			return spGetUnitIsCloaked(transID)
 		end
+		recloakFrame[unitID] = currentFrame + GetProximityDecloakTime(unitID)
 		return false
 	end
-	
+
 	if recloakFrame[unitID] then
 		if recloakFrame[unitID] > currentFrame then
 			return false
 		end
 		recloakFrame[unitID] = nil
 	end
-	
+
 	local stunnedOrInbuild = Spring.GetUnitIsStunned(unitID)
 	if stunnedOrInbuild then
 		return false
 	end
-	
+
 	local unitDefID = unitID and Spring.GetUnitDefID(unitID)
 	local ud = unitDefID and UnitDefs[unitDefID]
 	if not ud then
 		return false
 	end
-	
+
 	local areaCloaked = (Spring.GetUnitRulesParam(unitID, "areacloaked") == 1) and ((Spring.GetUnitRulesParam(unitID, "cloak_shield") or 0) == 0)
 	if not areaCloaked then
 		local speed = select(4, Spring.GetUnitVelocity(unitID))
 		local moving = speed and speed > CLOAK_MOVE_THRESHOLD
 		local cost = moving and ud.cloakCostMoving or ud.cloakCost
-		
+
 		if not Spring.UseUnitResource(unitID, "e", cost/2) then -- SlowUpdate happens twice a second.
 			return false
 		end
 	end
-	
+
 	return true
 end
 
 function gadget:AllowUnitDecloak(unitID, objectID, weaponID)
-	recloakFrame[unitID] = currentFrame + DEFAULT_DECLOAK_TIME
+	recloakFrame[unitID] = currentFrame + GetActionDecloakTime(unitID)
 end
 
 --------------------------------------------------------------------------------
@@ -248,15 +193,15 @@ end
 
 local function SetWantedCloaked(unitID, state)
 	if (not unitID) or spGetUnitIsDead(unitID) then
-		return 
+		return
 	end
-	
+
 	local wantCloakState = spGetUnitRulesParam(unitID, "wantcloak")
 	local cmdDescID = Spring.FindUnitCmdDesc(unitID, CMD_WANT_CLOAK)
 	if (cmdDescID) then
 		Spring.EditUnitCmdDesc(unitID, cmdDescID, { params = {state, 'Decloaked', 'Cloaked'}})
 	end
-	
+
 	if state == 1 and wantCloakState ~= 1 then
 		local cannotCloak = spGetUnitRulesParam(unitID, "cannotcloak")
 		local areaCloaked = spGetUnitRulesParam(unitID, "areacloaked")
@@ -275,11 +220,11 @@ end
 
 GG.SetWantedCloaked = SetWantedCloaked
 
-function gadget:AllowCommand_GetWantedCommand()	
+function gadget:AllowCommand_GetWantedCommand()
 	return {[CMD_CLOAK] = true, [CMD_WANT_CLOAK] = true}
 end
 
-function gadget:AllowCommand_GetWantedUnitDefID()	
+function gadget:AllowCommand_GetWantedUnitDefID()
 	return true
 end
 
@@ -324,8 +269,22 @@ function gadget:Initialize()
 		local unitDefID = spGetUnitDefID(unitID)
 		gadget:UnitCreated(unitID, unitDefID)
 		local pos = select(2, Spring.GetUnitPosition(unitID))
-		if pos <= 0 then
-			gadget:UnitEnteredWater(unitID)
+	end
+end
+
+function gadget:Load(zip)
+	for _, unitID in ipairs(Spring.GetAllUnits()) do
+		-- restore cloak for dyncomms during a loaded savegame
+		-- the CMD_CLOAK cmd desc ID was already removed during the UnitCreated() call, so we can't use the detection method used there
+		-- instead we do this
+		Spring.InsertUnitCmdDesc(unitID, unitWantCloakCommandDesc)
+		local wantedState = spGetUnitRulesParam(unitID, "wantcloak")
+		spSetUnitRulesParam(unitID, "wantcloak", 0, alliedTrueTable)
+		SetWantedCloaked(unitID, wantedState)
+		-- unit_commander_upgrade runs after us and decloaks us while setting our decloak radius,
+		-- so reset at earliest opportunity
+		if wantedState == 1 then
+			recloakUnit[unitID] = 0
 		end
 	end
 end

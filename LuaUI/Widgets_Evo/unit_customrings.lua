@@ -39,6 +39,10 @@ local ringsDefs = {
         { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 200, divs = 128  },
     },
 
+	[UnitDefNames.sensortower.id] = {
+		{ color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 100, divs = 128  },
+	},
+
 
     -- Defense Turrets
     [UnitDefNames.fedmenlo.id] = {
