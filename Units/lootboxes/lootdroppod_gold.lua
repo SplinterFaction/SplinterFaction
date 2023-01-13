@@ -55,7 +55,7 @@ return {
 		featuredefs = {},
 		sfxtypes = {
 			explosiongenerators = {
-				[1] = "custom:dirtpoof",
+				-- [1] = "custom:dirtpoof",
 			},
 		},
 		weapondefs = {
@@ -68,7 +68,7 @@ return {
 				craterboost = 0,
 				cratermult = 0,
 				edgeeffectiveness = 0.3,
-				explosiongenerator = "custom:dirtpoof",
+				-- explosiongenerator = "custom:dirtpoof",
 				firestarter = 70,
 				flighttime = 800,
 				impulsefactor = 0.1,

@@ -68,7 +68,7 @@ return {
 		featuredefs = {},
 		sfxtypes = {
 			explosiongenerators = {
-				[1] = "custom:PurpleLight",
+				-- [1] = "custom:PurpleLight",
 			},
 		},
 		weapondefs = {

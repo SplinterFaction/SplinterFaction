@@ -286,8 +286,6 @@ function WeaponDef_Post(name, wDef)
 	end
 	]]--
 
-	wDef.name = wDef.weapontype
-
 	--Use targetborderoverride in weapondef customparams to override this global setting
 	--Controls whether the weapon aims for the center or the edge of its target's collision volume. Clamped between -1.0 - target the far border, and 1.0 - target the near border.
 	if wDef.customparams and wDef.customparams.targetborderoverride == nil then
@@ -347,12 +345,19 @@ function WeaponDef_Post(name, wDef)
 	end
 
 	if wDef.weapontype == "Cannon" then
+		if wDef.cegtag == nil then
+			wDef.cegTag = "plasmacannontrail"
+		end
 		if wDef.stages == nil then
 			wDef.stages = 20
 			wDef.alphadecay = 1 - ((1/wDef.stages)/1.5)
 			wDef.sizedecay = 0.4 / wDef.stages
-			wDef.separation = 2
+			wDef.separation = 1
 		end
+	end
+
+	if wDef.name == nil then
+		wDef.name = wDef.weapontype .. [[ <-- Weapontype - Damage --> ]] .. wDef.damage.default
 	end
 
 end
