@@ -10,6 +10,8 @@ function widget:GetInfo()
 	}
 end
 
+local config = VFS.Include('LuaRules/Configs/chicken_spawn_defs.lua')
+
 local customScale = 1
 local widgetScale = customScale
 local font, font2, chobbyInterface
@@ -206,7 +208,7 @@ local function getMarqueeMessage(chickenEventArgs)
 	elseif chickenEventArgs.type == "queen" then
 		messages[1] = textColor .. 'ui.chickens.queenIsAngry1'
 		messages[2] = textColor .. 'ui.chickens.queenIsAngry2'
-	else
+	elseif chickenEventArgs.type == "wave" then
 		messages[1] = textColor .. "Wave " .. chickenEventArgs.waveCount
 	end
 

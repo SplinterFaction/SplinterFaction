@@ -25,7 +25,7 @@ local chickenTurrets = {
 		"fedmenlo",
 		"lozjericho",
 		"fedstinger",
-		"lozwasp",
+		"lozrazor",
 	},
 	heavyTurrets = { 					-- Spawn from 20% queen anger
 		"fedimmolator",
@@ -37,7 +37,7 @@ local chickenTurrets = {
 		"fedmenlo",
 		"lozjericho",
 		"fedstinger",
-		"lozwasp",
+		"lozrazor",
 	},
 	specialHeavyTurrets = { 			-- Spawn from 60% queen anger alongside heavyTurrets
 		"fedimmolator",
@@ -119,13 +119,13 @@ chickenBehaviours = {
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
 		"lozengineer",
-		"lozengineer_up1",
-		"lozengineer_up2",
-		"lozengineer_up3",
+		--"lozengineer_up1",
+		--"lozengineer_up2",
+		--"lozengineer_up3",
 		"fedengineer",
-		"fedengineer_up1",
-		"fedengineer_up2",
-		"fedengineer_up3",
+		--"fedengineer_up1",
+		--"fedengineer_up2",
+		--"fedengineer_up3",
 
 	},
 	ARTILLERY = { -- Long lifetime and no regrouping, always uses Fight command to keep distance
@@ -140,7 +140,7 @@ chickenBehaviours = {
 
 local optionValues = {
 	-- [difficulties.veryeasy] = {
-	-- 	chickenMaxSpawnRate  = 120,
+	-- 	chickenSpawnRate  = 120,
 	-- 	burrowSpawnRate   = 105,
 	-- 	turretSpawnRate   = 210,
 	-- 	queenSpawnMult    = 0,
@@ -155,7 +155,7 @@ local optionValues = {
 	-- 	queenResistanceMult   = 0.25,
 	-- },
 	-- [difficulties.easy] = {
-	-- 	chickenMaxSpawnRate  = 120,
+	-- 	chickenSpawnRate  = 120,
 	-- 	burrowSpawnRate   = 90,
 	-- 	turretSpawnRate   = 180,
 	-- 	queenSpawnMult    = 0,
@@ -171,7 +171,7 @@ local optionValues = {
 	-- },
 
 	[difficulties.normal] = {
-		chickenMaxSpawnRate  = 30, -- Time between Waves
+		chickenSpawnRate  = 30, -- Time between Waves
 		burrowSpawnRate   = 75, -- Time inbetween burrow spawns
 		turretSpawnRate   = 150, -- Time inbetween turret spawns
 		queenSpawnMult    = 1, -- Unused, don't touch (just in case)
@@ -187,7 +187,7 @@ local optionValues = {
 	},
 
 	[difficulties.hard] = {
-		chickenMaxSpawnRate  = 30,
+		chickenSpawnRate  = 30,
 		burrowSpawnRate   = 60,
 		turretSpawnRate   = 120,
 		queenSpawnMult    = 1,
@@ -202,7 +202,7 @@ local optionValues = {
 		queenResistanceMult   = 1.5,
 	},
 	[difficulties.veryhard] = {
-		chickenMaxSpawnRate  = 30,
+		chickenSpawnRate  = 30,
 		burrowSpawnRate   = 45,
 		turretSpawnRate   = 90,
 		queenSpawnMult    = 3,
@@ -217,7 +217,7 @@ local optionValues = {
 		queenResistanceMult   = 2,
 	},
 	[difficulties.insane] = {
-		chickenMaxSpawnRate  = 30,
+		chickenSpawnRate  = 30,
 		burrowSpawnRate   = 30,
 		turretSpawnRate   = 60,
 		queenSpawnMult    = 3,
@@ -232,7 +232,7 @@ local optionValues = {
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.epic] = {
-		chickenMaxSpawnRate  = 30,
+		chickenSpawnRate  = 30,
 		burrowSpawnRate   = 20,
 		turretSpawnRate   = 40,
 		queenSpawnMult    = 3,
@@ -247,7 +247,7 @@ local optionValues = {
 		queenResistanceMult   = 3,
 	},
 	[difficulties.unbeatable] = {
-		chickenMaxSpawnRate  = 30,
+		chickenSpawnRate  = 30,
 		burrowSpawnRate   = 10,
 		turretSpawnRate   = 20,
 		queenSpawnMult    = 3,
@@ -263,7 +263,7 @@ local optionValues = {
 	},
 
 	[difficulties.survival] = {
-		chickenMaxSpawnRate  = 30,
+		chickenSpawnRate  = 30,
 		burrowSpawnRate   = 75,
 		turretSpawnRate   = 150,
 		queenSpawnMult    = 1,
@@ -480,6 +480,7 @@ end
 -- Settings -- Adjust these
 local useEggs = false -- Drop eggs (requires egg features from Beyond All Reason)
 local useScum = false -- Use scum as space where turrets can spawn (requires scum gadget from Beyond All Reason)
+local useWaveMsg = true -- Show dropdown message whenever new wave is spawning
 local spawnSquare = 90 -- size of the chicken spawn square centered on the burrow
 local spawnSquareIncrement = 2 -- square size increase for each unit spawned
 local minBaseDistance = 750 -- Minimum distance of new burrows from players and other burrows
@@ -512,6 +513,7 @@ local config = { -- Don't touch this! ------------------------------------------
 	chickenMinions			= chickenMinions,
 	chickenBehaviours 		= chickenBehaviours,
 	difficultyParameters   	= optionValues,
+	useWaveMsg				= useWaveMsg,
 }
 
 for key, value in pairs(optionValues[difficulty]) do
