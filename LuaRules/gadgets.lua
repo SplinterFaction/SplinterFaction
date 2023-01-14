@@ -1538,10 +1538,7 @@ function gadgetHandler:UnitPreDamaged(unitID, unitDefID, unitTeam,
 		for i = 1, gadgets.count do
 			g = data[i]
 			-- Spring.Echo("input damage is ", rDam)
-			local dam, imp = g:UnitPreDamaged(unitID, unitDefID, unitTeam,
-					  rDam, paralyzer, weaponDefID,
-					  attackerID, attackerDefID, attackerTeam,
-					  projectileID)
+			local dam, imp = g:UnitPreDamaged(unitID, unitDefID, unitTeam, rDam, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 			if (dam ~= nil) then
 				rDam = dam
 				-- Spring.Echo("modified by gadget", g:GetInfo().name, "new value", rDam)

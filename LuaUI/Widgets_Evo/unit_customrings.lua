@@ -49,7 +49,7 @@ local ringsDefs = {
         { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 630, divs = 128  },
     },
 
-    [UnitDefNames.fedwasp.id] = {
+    [UnitDefNames.fedstinger.id] = {
         { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
     },
 

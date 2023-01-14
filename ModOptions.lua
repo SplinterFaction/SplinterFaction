@@ -804,6 +804,111 @@ local options= {
 		step   = 0.01,
 		hidden = true,
 	},
+
+-- Chickens
+	{
+		key 	= 'chicken_defense_options',
+		name 	= 'Raptors',
+		desc 	= 'Various gameplay options that will change how the Raptor Defense is played.',
+		type 	= 'section',
+	},
+	{
+		key="chicken_difficulty",
+		name="Difficulty",
+		desc="Raptors difficulty",
+		type="list",
+		def="normal",
+		section="chicken_defense_options",
+		items={
+			-- {key="veryeasy", name="Very Easy", desc="Very Easy"},
+			-- {key="easy", name="Easy", desc="Easy"},
+			{key="normal", name="Normal", desc="Normal"},
+			{key="hard", name="Hard", desc="Hard"},
+			{key="veryhard", name="Very Hard", desc="Very Hard"},
+			{key="insane", name="Insane", desc="Insane"},
+			{key="epic", name="Epic", desc="Epic"},
+			{key="unbeatable", name="Unbeatable", desc="Unbeatable"},
+
+			{key="survival", name="Endless", desc="Endless Mode"}
+		}
+	},
+	{
+		key="chicken_chickenstart",
+		name="Burrow Placement",
+		desc="Control where burrows spawn",
+		type="list",
+		def="initialbox",
+		section="chicken_defense_options",
+		items={
+			--{key="anywhere", name="Anywhere", desc="Burrows can spawn anywhere"},
+			{key="avoid", name="Avoid Players", desc="Burrows do not spawn on player units"},
+			{key="initialbox", name="Initial Start Box", desc="First wave spawns in chicken start box, following burrows avoid players"},
+			{key="alwaysbox", name="Always Start Box", desc="Burrows always spawn in chicken start box"},
+		}
+	},
+	{
+		key    = "chicken_queentime",
+		name   = "Max Queen Hatching Time (Minutes)",
+		desc   = "",
+		type   = "number",
+		def    = 40,
+		min    = 1,
+		max    = 120,
+		step   = 1,
+		section= "chicken_defense_options",
+	},
+	{
+		key    = "chicken_maxchicken",
+		name   = "Chicken Limit",
+		desc   = "Maximum number of chickens on map.",
+		type   = "number",
+		def    = 300,
+		min    = 50,
+		max    = 5000,
+		step   = 25,
+		section= "chicken_defense_options",
+		hidden = true,
+	},
+	{
+		key    = "chicken_spawncountmult",
+		name   = "Raptor Spawn Multiplier",
+		desc   = "How many times more raptors spawn than normal.",
+		type   = "number",
+		def    = 1,
+		min    = 1,
+		max    = 20,
+		step   = 1,
+		section= "chicken_defense_options",
+	},
+	{
+		key    = "chicken_swarmmode",
+		name   = "Swarm Mode",
+		desc   = "10 times bigger waves that spawn 10 times less often",
+		type   = "bool",
+		def    = false,
+		section= "chicken_defense_options",
+	},
+	{
+		key    = "chicken_graceperiod",
+		name   = "Grace Period (Minutes)",
+		desc   = "Time before Raptors become active.",
+		type   = "number",
+		def    = 5,
+		min    = 1,
+		max    = 20,
+		step   = 1,
+		section= "chicken_defense_options",
+	},
+	{
+		key    = "chicken_queenanger",
+		name   = "Killing burrows delays queen hatching.",
+		desc   = "Killing burrows delays queen hatching.",
+		type   = "bool",
+		def    = true,
+		section= "chicken_defense_options",
+		hidden = true,
+	},
+
 }
 
 return options

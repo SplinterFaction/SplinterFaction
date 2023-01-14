@@ -24,7 +24,7 @@ local GetUnitHealth = Spring.GetUnitHealth
 local SetUnitHealth = Spring.SetUnitHealth
 
 local exceptionList = {
-  "esilo",
+  [UnitDefNames.atm.id] = true,
 }
   
   
@@ -36,8 +36,7 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, 
-                            projID, weaponID, attackerID, attackerDefID, attackerTeam)
+function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 	
   if (unitID == attackerID and not exceptionMap[unitDefID]) then
 	return 0

@@ -45,7 +45,6 @@ local spGetUnitRulesParam        = Spring.GetUnitRulesParam
 local spSetUnitRulesParam        = Spring.SetUnitRulesParam
 local spGetUnitDefID             = Spring.GetUnitDefID
 local spGetUnitIsDead            = Spring.GetUnitIsDead
-local spIsWeaponPureStatusEffect = Spring.Utilities.IsWeaponPureStatusEffect
 
 local recloakUnit = {}
 local recloakFrame = {}
@@ -109,7 +108,7 @@ GG.PokeDecloakUnit = PokeDecloakUnit
 
 function gadget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
                             weaponID, attackerID, attackerDefID, attackerTeam)
-	if  (damage > 0 or spIsWeaponPureStatusEffect(weaponID)) and
+	if  (damage > 0) and
 			not (attackerTeam and
 					weaponID and
 					noFFWeaponDefs[weaponID] and

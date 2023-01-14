@@ -36,6 +36,10 @@ return {
 		name = 'SimpleConstructorAI',
 		desc = 'EasyAI (Constructor)',
 	},
+	{
+		name = 'ChickensAI',
+		desc = 'Chicken Defence'
+	},
 }
 
 

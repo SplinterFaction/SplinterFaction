@@ -261,6 +261,10 @@ function UnitDef_Post(name, uDef)
 		Spring.Echo("TurnRate " .. tostring(uDef.turnrate))
 	end
 ]]--
+	if uDef.name == nil then
+		uDef.name = uDef.unitname
+		Spring.Echo("[AllDefs Post] Unit " .. uDef.name .. " Does not have a human name defined")
+	end
 
 end
 
@@ -358,6 +362,11 @@ function WeaponDef_Post(name, wDef)
 
 	if wDef.name == nil then
 		wDef.name = wDef.weapontype .. [[ <-- Weapontype - Damage --> ]] .. wDef.damage.default
+	end
+
+	-- True will prevent a unit's own weapon from hurting itself
+	if wDef.noselfdamage == nil then
+		wDef.noselfdamage = true
 	end
 
 end
