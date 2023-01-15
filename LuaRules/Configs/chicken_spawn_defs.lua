@@ -398,11 +398,11 @@ local chickenMinions = { -- Units spawning other units
 	addSpecialSquad(8, { "2 fedgoliath" })
 	addSpecialSquad(8, { "2 lozmammoth" })
 
-	addSpecialSquad(9, { "2 fedgoliath", "2 fedjuggernaut" })
-	addSpecialSquad(9, { "2 lozmammoth", "2 lozsilverback" })
+	addSpecialSquad(9, { "1 fedgoliath", "1 fedjuggernaut" })
+	addSpecialSquad(9, { "1 lozmammoth", "1 lozsilverback" })
 
-	addSpecialSquad(10, { "3 fedjuggernaut" })
-	addSpecialSquad(10, { "3 lozsilverback" })
+	addSpecialSquad(10, { "1 fedjuggernaut" })
+	addSpecialSquad(10, { "1 lozsilverback" })
 
 --[[
 if difficulty >= 3 then
@@ -449,8 +449,7 @@ for i = 1,wavesAmount do
 		addBasicSquad(i, { i ..  " lozreaper"}, 5)
 	end
 	if i >= 7 then -- Apex Swarmer and  Apex Brawler
-		addBasicSquad(i, { "2 fedgoliath" , "2 fedjuggernaut" }, 5)
-		addBasicSquad(i, { "2 lozmammoth" , "2 lozsilverback" }, 5)
+		addBasicSquad(i, { "2 lozreaper" , "2 fedbear" }, 5)
 	end
 end
 
