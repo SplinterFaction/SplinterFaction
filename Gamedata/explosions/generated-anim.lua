@@ -7,7 +7,7 @@ return {
 			ground     = true,
 			properties = {
 				airdrag             = 0.97,
-				colormap            = [[0.8 0.78 0.6 0.9   1.0 0.97 0.7 1  0.8 0.7 0.55 0.88   0.22 0.13 0.1 0.066   0.023 0.022 0.022 0.025   0 0 0 0.01]],
+				colormap            = [[0.4 0.2 0.5 0.9   0.5 0.2 0.6 1  0.8 0.7 0.55 0.88   0.22 0.13 0.1 0.066   0.023 0.022 0.022 0.025   0 0 0 0.01]],
 				directional         = false,
 				emitrot             = 70,
 				emitrotspread       = 40,
@@ -25,10 +25,11 @@ return {
 				pos                 = [[0,0,0]],
 				sizegrowth          = 0.5,
 				sizemod             = 1,
-				texture             = [[generated-anim2]],
+				texture             = [[generated-anim3]],
 				drawOrder           = 0,
 				castShadow          = true,
 			},
+
 		},
 	},
 }

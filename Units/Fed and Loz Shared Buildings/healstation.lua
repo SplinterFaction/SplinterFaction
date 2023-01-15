@@ -9,6 +9,8 @@ humanName = [[Healstation]]
 objectName = [[healstation.s3o]]
 script = [[healstation.cob]]
 
+buildCostMetal = 1000
+
 workerTime = 1
 buildDistance = 350
 
