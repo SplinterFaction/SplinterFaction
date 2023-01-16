@@ -73,9 +73,9 @@ function script.AimWeapon(WeaponID, heading, pitch)
     if WeaponID == 1 then
         Signal(SIG_AIM)
         SetSignalMask(SIG_AIM)
-        Turn(gatlingbarrel1, y_axis, heading, 10)
+        Turn(gatlingbarrel1, y_axis, heading, 2)
         WaitForTurn(gatlingbarrel1, y_axis)
-        Turn(gatlingbarrel1, x_axis, -pitch, 10)
+        Turn(gatlingbarrel1, x_axis, -pitch, 2)
         WaitForTurn(gatlingbarrel1, x_axis)
 
         --Spring.Echo("AimWeapon: FireWeapon")
@@ -84,26 +84,26 @@ function script.AimWeapon(WeaponID, heading, pitch)
     elseif WeaponID == 2 then
         Signal(SIG_AIM2)
         SetSignalMask(SIG_AIM2)
-        Turn(gatlingbarrel2, y_axis, heading, 10)
+        Turn(gatlingbarrel2, y_axis, heading, 2)
         WaitForTurn(gatlingbarrel2, y_axis)
-        Turn(gatlingbarrel2, x_axis, -pitch, 10)
+        Turn(gatlingbarrel2, x_axis, -pitch, 2)
         WaitForTurn(gatlingbarrel2, x_axis)
         --Spring.Echo("AimWeapon: FireWeapon")
         return true
     elseif WeaponID == 3 then
         Signal(SIG_AIM3)
         SetSignalMask(SIG_AIM3)
-        Turn(cannonturret1, y_axis, heading, 10)
+        Turn(cannonturret1, y_axis, heading, 2)
         WaitForTurn(cannonturret1, y_axis)
-        Turn(cannonbarrel1, x_axis, -pitch, 10)
+        Turn(cannonbarrel1, x_axis, -pitch, 2)
         WaitForTurn(cannonbarrel1, x_axis)
         return true
     elseif WeaponID == 4 then
         Signal(SIG_AIM4)
         SetSignalMask(SIG_AIM4)
-        Turn(cannonturret2, y_axis, heading, 10)
+        Turn(cannonturret2, y_axis, heading, 2)
         WaitForTurn(cannonturret2, y_axis)
-        Turn(cannonbarrel2, x_axis, -pitch, 10)
+        Turn(cannonbarrel2, x_axis, -pitch, 2)
         WaitForTurn(cannonbarrel2, x_axis)
         return true
     end

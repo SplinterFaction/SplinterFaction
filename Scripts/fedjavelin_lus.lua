@@ -40,8 +40,8 @@ end
 function script.AimWeapon(weaponID, heading, pitch)
     Signal(SIG_AIM)
     SetSignalMask(SIG_AIM)
-    Turn(missileturret1, y_axis, heading, 100)
-    Turn(missilebarrel1, x_axis, -pitch, 100)
+    Turn(missileturret1, y_axis, heading, 5)
+    Turn(missilebarrel1, x_axis, -pitch, 5)
 
     WaitForTurn(missileturret1, y_axis)
     WaitForTurn(missilebarrel1, x_axis)

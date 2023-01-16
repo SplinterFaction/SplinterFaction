@@ -55,7 +55,7 @@ unitDef                     = {
 	},
 	weapons                       = {
 		[1]                       = {
-			def                   = "railgun",
+			def                   = "flame",
 			badTargetCategory     = "BUILDING GROUND SHIP",
 			onlyTargetCategory    = "MASSIVE GROUND BUILDING SHIP",
 		},
@@ -80,43 +80,51 @@ unitDef                     = {
 }
 
 weaponDefs                  = {
-	railgun               = {
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "0 0 1",
-		rgbColor2              = "0.75 0.75 0.75",
-		explosionGenerator     = "custom:genericshellexplosion-medium-purple",
-		energypershot          = 0,
-		fallOffRate            = 0.1,
-		duration			   = 0.75,
-		impulseFactor          = 0,
-		minintensity             = 1,
-		interceptedByShieldType  = 4,
-		name                   = "Railgun",
-		range                  = 1200,
-		reloadtime             = 8,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/heavyturretshot.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.75,
-		thickness              = 12,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 3000,
-		customparams             = {
-			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= largeExplosion, -- In Elmos
-			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+	flame           = {
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.3,
+		-- cegtag					  = "burnblack",
+		beamttl                   = 4,
+		beamtime				  = 0.5,
+		largebeamlaser			  = true,
+		sweepfire				  = false,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Laser",
+		range                     = 1200,
+		reloadtime                = 2,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = "0.4 0.1 5",
+		rgbColor2                 = "0.25 0.25 0.25",
+		soundTrigger              = true,
+		soundstart                = "weapons/Sci Fi Shotgun 3.wav",
+		-- soundHit                  = "explosions/explode5.wav",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 4,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			expl_light_color	= yellow, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-		damage                   = {
-			default              = 4700,
+		damage                    = {
+			default               = 1175,
 		},
 	},
 }
