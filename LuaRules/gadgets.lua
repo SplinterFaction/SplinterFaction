@@ -1121,12 +1121,9 @@ function gadgetHandler:CommandFallback(unitID, unitDefID, unitTeam,
 end
 
 
-function gadgetHandler:AllowCommand(unitID, unitDefID, unitTeam,
-                                    cmdID, cmdParams, cmdOptions, cmdTag, synced)
-  for _,g in ipairs(self.AllowCommandList) do
-
-	if (not g:AllowCommand(unitID, unitDefID, unitTeam,
-                           cmdID, cmdParams, cmdOptions, cmdTag, synced)) then
+function gadgetHandler:AllowCommand(unitID, unitDefID, unitTeam,cmdID, cmdParams, cmdOptions, cmdTag, playerID, fromSynced, fromLua)
+  for _, g in ipairs(self.AllowCommandList) do
+    if not g:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag, playerID, fromSynced, fromLua) then
       return false
     end
   end
@@ -2095,7 +2092,7 @@ function gadgetHandler:GetViewSizes()
   return gl.GetViewSizes()	-- ours
   --return self.xViewSize, self.yViewSize	-- base
 end
-
+--[[
 local AllowCommand_WantedCommand = {}
 local AllowCommand_WantedUnitDefID = {}
 
@@ -2123,7 +2120,7 @@ function gadgetHandler:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParam
   end
   return true
 end
-
+]]--
 -- ours
 function gadgetHandler:RecvFromSynced(cmd,...)
   if (cmd == "proxy_ChatMsg") then

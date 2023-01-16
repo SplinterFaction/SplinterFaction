@@ -7,7 +7,7 @@ function gadget:GetInfo()
         date      = '23/04/2013',
 		license   = "GNU GPL, v2 or later",
         layer     = 0,
-        enabled   = false
+        enabled   = true
     }
 end
 
@@ -85,7 +85,7 @@ if gadgetHandler:IsSyncedCode() then -- SYNCED --
 		end
 	end
 
-	function UpdateStockpile(unitID, unitDefID)
+	local function UpdateStockpile(unitID, unitDefID)
 		local MaxStockpile = math.min(isStockpilingUnit[unitDefID] or defaultStockpileLimit, StockpileDesiredTarget[unitID])
 
 		local stock,queued = GetUnitStockpile(unitID)
@@ -145,6 +145,8 @@ if gadgetHandler:IsSyncedCode() then -- SYNCED --
 				if cmdOptions.right then
 					addQ = -addQ
 				end
+				Spring.Echo("FromLua: ", fromLua)
+				Spring.Echo("FromSynced: ", fromSynced)
 				if fromLua == true then 	-- fromLua is *true* if command is sent from a gadget and *false* if it's sent by a player
 					if pile+pileQ+addQ <= pilelimit then
 						return true
