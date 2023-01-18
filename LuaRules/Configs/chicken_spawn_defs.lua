@@ -34,22 +34,24 @@ local chickenTurrets = {
 		"lozrattlesnake",
 	},
 	specialLightTurrets = { 			-- Spawn from 40% queen anger alongside lightTurrets
-		"fedmenlo",
-		"lozjericho",
-		"fedstinger",
-		"lozrazor",
-	},
-	specialHeavyTurrets = { 			-- Spawn from 60% queen anger alongside heavyTurrets
 		"fedimmolator",
 		"lozinferno",
 		"fedjavelin",
 		"lozrattlesnake",
+	},
+	specialHeavyTurrets = { 			-- Spawn from 60% queen anger alongside heavyTurrets
+		"fedguardian",
+		"lozannihilator",
 	},
 	burrowDefenders = {					-- Spawns connected to burrow
 		"fedmenlo",
 		"lozjericho",
 		"fedstinger",
 		"lozrazor",
+		"fedimmolator",
+		"lozinferno",
+		"fedjavelin",
+		"lozrattlesnake",
 	},
 }
 
@@ -118,11 +120,11 @@ chickenBehaviours = {
 		[UnitDefNames["fedanarchid"].id] = { distance = 270, chance = 0.5 },
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
-		"lozengineer",
+		"lozengineer_ai",
 		--"lozengineer_up1",
 		--"lozengineer_up2",
 		--"lozengineer_up3",
-		"fedengineer",
+		"fedengineer_ai",
 		--"fedengineer_up1",
 		--"fedengineer_up2",
 		--"fedengineer_up3",
@@ -182,7 +184,7 @@ local optionValues = {
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
 		maxChickens		  = 25, -- Number og ai units spawned in the end stages of the game per wave
-		queenName         = 'fedanarchid',
+		queenName         = 'fedanarchid_normal',
 		queenResistanceMult   = 1, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 
@@ -198,7 +200,7 @@ local optionValues = {
 		maxBurrows        = 1000,
 		minChickens		  = 10,
 		maxChickens		  = 50,
-		queenName         = 'fedanarchid',
+		queenName         = 'fedanarchid_hard',
 		queenResistanceMult   = 1.5,
 	},
 	[difficulties.veryhard] = {
@@ -213,7 +215,7 @@ local optionValues = {
 		maxBurrows        = 1000,
 		minChickens		  = 10,
 		maxChickens		  = 75,
-		queenName         = 'fedanarchid',
+		queenName         = 'fedanarchid_veryhard',
 		queenResistanceMult   = 2,
 	},
 	[difficulties.insane] = {
@@ -228,7 +230,7 @@ local optionValues = {
 		maxBurrows        = 1000,
 		minChickens		  = 10,
 		maxChickens		  = 100,
-		queenName         = 'fedanarchid',
+		queenName         = 'fedanarchid_insane',
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.epic] = {
@@ -243,7 +245,7 @@ local optionValues = {
 		maxBurrows        = 1000,
 		minChickens		  = 10,
 		maxChickens		  = 125,
-		queenName         = 'fedanarchid',
+		queenName         = 'fedanarchid_epic',
 		queenResistanceMult   = 3,
 	},
 	[difficulties.unbeatable] = {
@@ -258,7 +260,7 @@ local optionValues = {
 		maxBurrows        = 1000,
 		minChickens		  = 10,
 		maxChickens		  = 150,
-		queenName         = 'fedanarchid',
+		queenName         = 'fedanarchid_unbeatable',
 		queenResistanceMult   = 3,
 	},
 
@@ -274,7 +276,7 @@ local optionValues = {
 		maxBurrows        = 1000,
 		minChickens		  = 10,
 		maxChickens		  = 25,
-		queenName         = 'fedanarchid',
+		queenName         = 'fedanarchid_unbeatable',
 		queenResistanceMult   = 1,
 	},
 }

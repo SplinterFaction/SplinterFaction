@@ -145,8 +145,8 @@ if gadgetHandler:IsSyncedCode() then -- SYNCED --
 				if cmdOptions.right then
 					addQ = -addQ
 				end
-				Spring.Echo("FromLua: ", fromLua)
-				Spring.Echo("FromSynced: ", fromSynced)
+				-- Spring.Echo("[Unit Stockpile Limit] FromLua: ", fromLua)
+				-- Spring.Echo("[Unit Stockpile Limit] FromSynced: ", fromSynced)
 				if fromLua == true then 	-- fromLua is *true* if command is sent from a gadget and *false* if it's sent by a player
 					if pile+pileQ+addQ <= pilelimit then
 						return true

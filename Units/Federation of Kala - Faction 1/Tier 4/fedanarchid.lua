@@ -9,6 +9,8 @@ humanName = [[Anarchid]]
 objectName = "fedanarchid.s3o"
 script = "fedanarchid.cob"
 
+hitPoints = 80000
+
 tech = [[tech4]]
 
 explodeAs = [[hugeexplosiongeneric]]

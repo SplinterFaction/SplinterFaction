@@ -19,6 +19,8 @@ local messageArgs, marqueeMessage
 local refreshMarqueeMessage = false
 local showMarqueeMessage = false
 
+local VOLUI = 0.015*Spring.GetConfigInt('snd_volui') or 1.0
+
 if not Spring.Utilities.Gametype.IsChickens() then
 	return false
 end
@@ -302,7 +304,7 @@ function ChickenEvent(chickenEventArgs)
 	end
 
 	if chickenEventArgs.type == "queenResistance" then
-		Spring.Echo("[Chicken Panel] This is the AttackerDefId sent from the gadget " .. chickenEventArgs.number)
+		-- Spring.Echo("[Chicken Panel] This is the AttackerDefId sent from the gadget " .. chickenEventArgs.number)
 		if chickenEventArgs.number then
 			if not currentlyResistantTo[chickenEventArgs.number] then
 				table.insert(resistancesTable, chickenEventArgs.number)
@@ -337,6 +339,8 @@ end
 
 function widget:Initialize()
 	widget:ViewResize()
+
+	Spring.PlaySoundFile("sounds/corrupted/briefing.wav", VOLUI)
 
 	displayList = gl.CreateList(function()
 		gl.Blending(true)

@@ -39,6 +39,9 @@ local repairUnits= {
 	-- [UnitDefNames.eorb_up3.id] = {radius=1000,strength=4.0},
 	-- [UnitDefNames.ehbotengineer_turret.id] = {radius=1000,strength=2.0},
 	[UnitDefNames.healstation.id] = {radius=750,strength=10.0},
+	[UnitDefNames.healstation_ai.id] = {radius=750,strength=10.0},
+	[UnitDefNames.fedengineer_ai.id] = {radius=750,strength=10.0},
+	[UnitDefNames.lozengineer_ai.id] = {radius=750,strength=10.0},
 	-- [UnitDefNames.zarm.id] = {radius=1000,strength=10.0},
 }
 

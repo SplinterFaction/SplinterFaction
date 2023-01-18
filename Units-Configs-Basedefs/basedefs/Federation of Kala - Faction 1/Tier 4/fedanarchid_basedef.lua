@@ -103,7 +103,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				  = "mobile",
 		unitrole				 = "Assault",
-		hpoverride               = 80000,
+		hpoverride               = hitPoints,
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -120,7 +120,8 @@ weaponDefs                 = {
 		avoidFeature             = false,
 		collideFriendly          = false,
 		collideFeature           = false,
-		beamTime                 = 1,
+		beamTime                 = 0.5,
+		beamttl                  = 4,
 		largebeamlaser			 = true,
 		cameraShake		         = 1,
 		coreThickness            = 0.2,
@@ -134,7 +135,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		minintensity             = "1",
 		name                     = "Laser",
-		range                    = 600,
+		range                    = 1000,
 		reloadtime               = 1,
 		WeaponType               = "BeamLaser",
 		rgbColor                 = "1 0 0",
@@ -148,7 +149,7 @@ weaponDefs                 = {
 		thickness                = 12,
 		tolerance                = 1000,
 		turret                   = true,
-		weaponVelocity           = 800,
+		weaponVelocity           = 2000,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -156,7 +157,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 800,
+			default              = 400,
 		},
 	},
 	

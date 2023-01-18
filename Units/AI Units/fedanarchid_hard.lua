@@ -1,22 +1,22 @@
 --------------------------------------------------------------------------------
 
-unitName = [[healstation]]
+unitName = "fedanarchid_hard"
 
 --------------------------------------------------------------------------------
 
-humanName = [[Healstation]]
+humanName = [[Corrupted Anarchid (Hard Boss)]]
 
-objectName = [[healstation.s3o]]
-script = [[healstation.cob]]
+objectName = "fedanarchid.s3o"
+script = "fedanarchid.cob"
 
-buildCostMetal = 250
+hitPoints = 120000
 
-workerTime = 1
-buildDistance = 350
+tech = [[tech4]]
 
-tech = [[tech2]]
+explodeAs = [[commnuke_up4]]
 
-VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/healstation_basedef.lua")
+VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 4/fedanarchid_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
