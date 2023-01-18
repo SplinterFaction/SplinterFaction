@@ -306,6 +306,7 @@ local function addSuperSquad(wave, unitList, weight)
 	if not weight then weight = 1 end
     for i = 1, weight do 
 		for j = wave,wavesAmount do
+			wave = math.max(math.min(wave+math.random(-1,1), wavesAmount), 1)
 			if not superWaves[j] then
 				superWaves[j] = {}
 			end
@@ -319,6 +320,7 @@ local function addSpecialSquad(wave, unitList, weight)
 	addSuperSquad(math.max(wave-3, 1), unitList, weight)
     for i = 1, weight do 
 		for j = wave,wavesAmount do
+			wave = math.max(math.min(wave+math.random(-1,1), wavesAmount), 1)
 			if not specialWaves[j] then
 				specialWaves[j] = {}
 			end
@@ -343,6 +345,7 @@ local function addAirSquad(wave, unitList, weight)
 	if not weight then weight = 1 end
     for i = 1, weight do 
 		for j = wave,wavesAmount do
+			wave = math.max(math.min(wave+math.random(-1,1), wavesAmount), 1)
 			if not airWaves[j] then
 				airWaves[j] = {}
 			end
@@ -361,27 +364,45 @@ local miniBosses = { -- Units that spawn alongside queen
 }
 
 local chickenMinions = { -- Units spawning other units
-
-	--[[
-	["chicken_miniqueen_electric"] = {
-		"chickene1",
-		"chickene2",
-		"chickenearty1",
-		"chickenelectricallterrain",
-		"chickenelectricallterrainassault",
+	["fedanarchid_normal"] = {
+		"fedgoliath",
+		"lozmammoth",
 	},
-	]]--
+	["fedanarchid_hard"] = {
+		"fedgoliath",
+		"lozmammoth",
+	},
+	["fedanarchid_veryhard"] = {
+		"fedjuggernaut",
+		"lozsilverback",
+		"fedgoliath",
+		"lozmammoth",
+	},
+	["fedanarchid_insane"] = {
+		"fedjuggernaut",
+		"lozsilverback",
+		"fedgoliath",
+		"lozmammoth",
+	},
+	["fedanarchid_epic"] = {
+		"fedjuggernaut",
+		"lozsilverback",
+	},
+	["fedanarchid_unbeatable"] = {
+		"fedjuggernaut",
+		"lozsilverback",
+	},
 }
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	addSpecialSquad(3, { "5 fedstorm"}, 5)
+	addSpecialSquad(3, { "5 fedstorm"})
 	addSpecialSquad(3, { "10 lozroach"})
 	addSpecialSquad(3, { "8 lozscorpion"})
 
-	addSpecialSquad(4, { "5 fedak" }, 5)
+	addSpecialSquad(4, { "5 fedak" })
 	addSpecialSquad(4, { "15 fedstorm" })
 	addSpecialSquad(4, { "4 fedthud" })
 
