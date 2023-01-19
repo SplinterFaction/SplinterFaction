@@ -1535,13 +1535,14 @@ function MorphFinished(unitID)
   if notificationTimeout > 0 then
     UnitMorphs[unitID] = nil
   else
+  
   if Spring.GetUnitTeam(unitID) == Spring.GetMyTeamID() then
     if resourcePrompts == 1 then
       Spring.PlaySoundFile("sounds/ui/evolutionfinished.wav", 1)
     end
       Spring.Echo("Your unit(s) have finished Upgrading")
     end
-    notificationTimeout = 10
-    UnitMorphs[unitID] = nil
   end
+  notificationTimeout = 10
+  UnitMorphs[unitID] = nil
 end
