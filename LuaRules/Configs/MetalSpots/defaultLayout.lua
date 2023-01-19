@@ -7,6 +7,7 @@ local mapx, mapz = Game.mapSizeX * 0.5, Game.mapSizeZ * 0.5
 local mapWidthX = (Game.mapSizeX * 2) / 1024
 local mapLengthZ = (Game.mapSizeZ * 2) / 1024
 local mapSQRT = mapWidthX * mapLengthZ
+local geoCounter = 0
 
 -- Params
 local size = math.max(mapx, mapz)
@@ -188,8 +189,8 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 			end
 		end
 		if numIterations == howManyTriesBeforeGiveUp then logFailures = logFailures + 1 end
-		local geoRandom = math.random(1, 10)
-		if geoRandom > 1 then
+		geoCounter = geoCounter + 1 or 1
+		if geoCounter < 10 then
 			positions[#positions + 1] = {x = newPoint[1], z = newPoint[2]}
 			positions[#positions + 1] = {x = newPoint[3], z = newPoint[4]}
 			if newPoint[5] then
@@ -198,6 +199,7 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 			if newPoint[7] then
 				positions[#positions + 1] = {x = newPoint[7], z = newPoint[8]}
 			end
+			geoCounter = geoCounter + 1
 		else
 			Spring.CreateFeature('geovent', newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], 1, Spring.GetGaiaTeamID())
 			Spring.MarkerAddPoint ( newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], "GeoVent")
@@ -211,6 +213,7 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 				Spring.CreateFeature('geovent', newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], 1, Spring.GetGaiaTeamID())
 				Spring.MarkerAddPoint ( newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], "GeoVent")
 			end
+			geoCounter = 0
 		end
 	end
 	--table.remove(positions, 1)
