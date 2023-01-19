@@ -317,7 +317,7 @@ end
 
 local function addSpecialSquad(tier, unitList, weight)
 	if not weight then weight = 1 end
-	addSuperSquad(math.max(wave-3, 1), unitList, weight)
+	addSuperSquad(math.max(tier-3, 1), unitList, weight)
     for i = 1, weight do 
 		for j = tier,wavesAmount do
 			tier = math.max(math.min(tier+math.random(-1,1), wavesAmount), 1)
