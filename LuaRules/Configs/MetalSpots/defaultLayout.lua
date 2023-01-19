@@ -96,6 +96,19 @@ local function f(x)
 	end
 end
 local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, extraSeparationBetweenPoints, howManyTriesBeforeGiveUp, numPointsPerSide, includeCentre, method, allowWater)
+	-- Delete vanilla geothermal positions
+	local featureList = Spring.GetAllFeatures()
+	for i = 1, #featureList do
+		local fID = featureList[i]
+		local fDefID = Spring.GetFeatureDefID(fID)
+		local fDef = FeatureDefs[fDefID]
+
+		if fDef.geoThermal and (fDef.name ~= 'geovent') then
+			Spring.DestroyFeature(fID)
+		end
+	end
+	
+	
 	--[[
 	method 1: object rotated 180 degrees around centre to produce image
 	method 2: object mirrored around horizontal line passing through centre to produce image
@@ -175,13 +188,29 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 			end
 		end
 		if numIterations == howManyTriesBeforeGiveUp then logFailures = logFailures + 1 end
-		positions[#positions + 1] = {x = newPoint[1], z = newPoint[2]}
-		positions[#positions + 1] = {x = newPoint[3], z = newPoint[4]}
-		if newPoint[5] then
-			positions[#positions + 1] = {x = newPoint[5], z = newPoint[6]}
-		end
-		if newPoint[7] then
-			positions[#positions + 1] = {x = newPoint[7], z = newPoint[8]}
+		local geoRandom = math.random(1, 10)
+		if geoRandom > 1 then
+			positions[#positions + 1] = {x = newPoint[1], z = newPoint[2]}
+			positions[#positions + 1] = {x = newPoint[3], z = newPoint[4]}
+			if newPoint[5] then
+				positions[#positions + 1] = {x = newPoint[5], z = newPoint[6]}
+			end
+			if newPoint[7] then
+				positions[#positions + 1] = {x = newPoint[7], z = newPoint[8]}
+			end
+		else
+			Spring.CreateFeature('geovent', newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], 1, Spring.GetGaiaTeamID())
+			Spring.MarkerAddPoint ( newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], "GeoVent")
+			Spring.CreateFeature('geovent', newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], 1, Spring.GetGaiaTeamID())
+			Spring.MarkerAddPoint ( newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], "GeoVent")
+			if newPoint[5] then
+				Spring.CreateFeature('geovent', newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], 1, Spring.GetGaiaTeamID())
+				Spring.MarkerAddPoint ( newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], "GeoVent")
+			end
+			if newPoint[7] then
+				Spring.CreateFeature('geovent', newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], 1, Spring.GetGaiaTeamID())
+				Spring.MarkerAddPoint ( newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], "GeoVent")
+			end
 		end
 	end
 	--table.remove(positions, 1)
@@ -255,7 +284,7 @@ end
 
 if mexRandomLayout == "standard" then
 	
-	mexSpotsPerSide = 12
+	mexSpotsPerSide = 15
 		
 	if mapSQRT <= 144 then -- An exception for 12x12 and smaller maps
 		mexSpotsPerSide = mexSpotsPerSide * 0.5
