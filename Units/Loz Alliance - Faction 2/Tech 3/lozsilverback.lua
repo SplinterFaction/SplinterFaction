@@ -14,6 +14,7 @@ tech = [[tech3]]
 explodeAs = [[largeexplosiongenericred]]
 
 shield1Power               = 36000
+shield1StartingPower       = 18000
 shield1PowerRegen          = 250
 shield1PowerRegenEnergy    = 0
 shieldRechargeDelay        = 45
