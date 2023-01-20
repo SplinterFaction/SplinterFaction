@@ -6,9 +6,9 @@ local unitName                    = "fusionpowerplant"
 
 local armortype					 = [[building]]
 local techrequired				 = [[tech2]]
-local energyproduced			 = [[50]]
+local energyproduced			 = [[200]]
 
-local buildCostMetal 			  = 200
+local buildCostMetal 			  = 800
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -25,8 +25,8 @@ local unitDef                     = {
 	energyMake                    = energyproduced,
 	energyStorage                 = 0,
 	explodeAs                     = "largeBuildingExplosionGenericBlueEMP",
-	footprintX                    = 4,
-	footprintZ                    = 4,
+	footprintX                    = 9,
+	footprintZ                    = 9,
 	iconType                      = "economy",
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
@@ -35,8 +35,8 @@ local unitDef                     = {
 	maxWaterDepth                 = 0,
 	metalStorage                  = 0,
 	name                          = "Fusion Energy Generator",
-	objectName                    = "egeothermal2.s3o",
-	script						  = "egeothermal.cob",
+	objectName                    = "fusionpowerplant.s3o",
+	script						  = "fusionpowerplant_lus.lua",
 	onoffable			          = false,
 	radarDistance                 = 0,
 	repairable		              = false,

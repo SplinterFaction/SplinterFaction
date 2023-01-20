@@ -5,9 +5,9 @@ local unitName                    = "fissionpowerplant"
 --------------------------------------------------------------------------------
 
 local armortype					 = [[building]]
-local energyproduced			 = [[10]]
+local energyproduced			 = [[40]]
 
-local buildCostMetal 			  = 50
+local buildCostMetal 			  = 200
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -24,8 +24,8 @@ local unitDef                     = {
 	energyStorage                 = 0,
 	energyMake                    = energyproduced,
 	explodeAs                     = "mediumBuildingExplosionGenericBlueEMP",
-	footprintX                    = 2,
-	footprintZ                    = 2,
+	footprintX                    = 5,
+	footprintZ                    = 5,
 	icontype                      = "economy",
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
@@ -34,8 +34,8 @@ local unitDef                     = {
 	maxWaterDepth                 = 0,
 	metalStorage                  = 0,
 	name                          = "Fission Energy Generator",
-	objectName                    = "2x2powerplant.s3o",
-	script						  = "esolar2.cob",
+	objectName                    = "fissionpowerplant.s3o",
+	script						  = "fissionpowerplant_lus.lua",
 	onoffable                     = false,
 	radarDistance                 = 0,
 	repairable		              = false,

@@ -5,10 +5,10 @@ local unitName                    = "blackholepowerplant"
 --------------------------------------------------------------------------------
 
 local armortype					 = [[building]]
-local energyproduced			 = [[1000]]
+local energyproduced			 = [[4000]]
 local techrequired				 = [[tech4]]
 
-local buildCostMetal 			  = 4500
+local buildCostMetal 			  = 18000
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {

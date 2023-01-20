@@ -6,9 +6,9 @@ local unitName                    = "coldfusionpowerplant"
 
 local armortype					 = [[building]]
 local techrequired				 = [[tech3]]
-local energyproduced			 = [[250]]
+local energyproduced			 = [[1000]]
 
-local buildCostMetal 			  = 1000
+local buildCostMetal 			  = 4000
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -24,8 +24,8 @@ local unitDef                     = {
 	energyStorage                 = 0,
 	energyMake                    = energyproduced,
 	explodeAs                     = "hugeBuildingExplosionGenericBlueEMP",
-	footprintX                    = 12,
-	footprintZ                    = 12,
+	footprintX                    = 17,
+	footprintZ                    = 17,
 	iconType                      = "economy",
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
@@ -34,8 +34,8 @@ local unitDef                     = {
 	maxWaterDepth                 = 0,
 	metalStorage                  = 0,
 	name                          = "Cold Fusion Energy Generator",
-	objectName                    = "efusion2-huge.s3o",
-	script						  = "efusion2.cob",
+	objectName                    = "coldfusionpowerplant.s3o",
+	script						  = "coldfusionpowerplant_lus.lua",
 	onoffable 		              = false,
 	radarDistance                 = 0,
 	repairable		              = false,
