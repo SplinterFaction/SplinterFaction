@@ -202,16 +202,16 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 			geoCounter = geoCounter + 1
 		else
 			Spring.CreateFeature('geovent', newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], 1, Spring.GetGaiaTeamID())
-			Spring.MarkerAddPoint ( newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], "GeoVent")
+			-- Spring.MarkerAddPoint ( newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], "GeoVent")
 			Spring.CreateFeature('geovent', newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], 1, Spring.GetGaiaTeamID())
-			Spring.MarkerAddPoint ( newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], "GeoVent")
+			-- Spring.MarkerAddPoint ( newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], "GeoVent")
 			if newPoint[5] then
 				Spring.CreateFeature('geovent', newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], 1, Spring.GetGaiaTeamID())
-				Spring.MarkerAddPoint ( newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], "GeoVent")
+				-- Spring.MarkerAddPoint ( newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], "GeoVent")
 			end
 			if newPoint[7] then
 				Spring.CreateFeature('geovent', newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], 1, Spring.GetGaiaTeamID())
-				Spring.MarkerAddPoint ( newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], "GeoVent")
+				-- Spring.MarkerAddPoint ( newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], "GeoVent")
 			end
 			geoCounter = 0
 		end

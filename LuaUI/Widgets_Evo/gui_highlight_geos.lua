@@ -28,7 +28,7 @@ local spGetActiveCommand = Spring.GetActiveCommand
 local spGetGameFrame        = Spring.GetGameFrame
 
 
-local geoDefID = UnitDefNames["egeothermal"].id
+--local geoDefID = UnitDefNames["egeothermal"].id
 
 local mapX = Game.mapSizeX
 local mapZ = Game.mapSizeZ
@@ -44,7 +44,7 @@ local function PillarVerts(x, y, z)
 	gl.Color(1, 1, 0, 1)
 	gl.Vertex(x, y, z)
 	gl.Color(1, 1, 0, 0)
-	gl.Vertex(x, y + 500, z)
+	gl.Vertex(x, y + 300, z)
 end
 
 local geos = {}
@@ -83,7 +83,7 @@ function widget:DrawWorld()
 	if Spring.IsGUIHidden() then return end
 	
 	local _, cmdID = spGetActiveCommand()
-	drawGeos = spGetMapDrawMode() == 'metal' or -geoDefID == cmdID or spGetGameFrame() < 1 or (WG.GetWidgetOption and WG.GetWidgetOption('Chili Minimap','Settings/Interface/Map','alwaysDisplayMexes').value)
+	drawGeos = spGetMapDrawMode() == 'metal' or (WG.GetWidgetOption and WG.GetWidgetOption('Chili Minimap','Settings/Interface/Map','alwaysDisplayMexes').value)
 	
 	--if drawGeos then
 		
@@ -97,7 +97,7 @@ function widget:DrawWorld()
 		glLineWidth(1)
 	--end
 end
-
+--[[
 local function drawMinimapGeos(x,z)
 	gl.Vertex(x - size,0,z - size)
 	gl.Vertex(x + size,0,z + size)
@@ -107,8 +107,6 @@ end
 
 function widget:DrawInMiniMap()
 
-	--if drawGeos then
-	
 		gl.LoadIdentity()
 		gl.Translate(0,1,0)
 		gl.Scale(mapXinv , -mapZinv, 1)
@@ -123,5 +121,5 @@ function widget:DrawInMiniMap()
 		
 		gl.LineWidth(0.00000000001)
 		gl.Color(1,1,1,1)
-	--end
 end
+]]--
