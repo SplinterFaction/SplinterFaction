@@ -6,7 +6,7 @@ local unitName                    = "supplydepot"
 
 local armortype					  = [[building]]
 local storage					  = 400
-local supplygranted				  = 5
+local supplygranted				  = 20
 
 local buildCostMetal 			  = 200
 local maxDamage					  = buildCostMetal * 12.5

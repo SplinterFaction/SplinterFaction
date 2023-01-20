@@ -4,8 +4,8 @@ local unitName                    = "mediumstorage"
 
 --------------------------------------------------------------------------------
 
-local storage					  = 500
-local buildCostMetal 			  = 100
+local storage					  = 2000
+local buildCostMetal 			  = 400
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -22,8 +22,8 @@ local unitDef                     = {
 	metalStorage                  = storage,
 	energyUse                     = 0,
 	explodeAs                     = "mediumBuildingExplosionGenericPurple",
-	footprintX                    = 4,
-	footprintZ                    = 4,
+	footprintX                    = 9,
+	footprintZ                    = 9,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	icontype                      = "supportbuilding",
@@ -32,8 +32,8 @@ local unitDef                     = {
 	maxWaterDepth                 = 0,
 	--metalStorage                  = storage,
 	name                          = "Medium Resource Storage Facility",
-	objectName                    = "mediumstorage.s3o",
-	script			              = "mediumstorage_lus.lua",
+	objectName                    = "mediumstorage2.s3o",
+	script			              = "mediumstorage2_lus.lua",
 	radarDistance                 = 0,
 	repairable		              = false,
 	selfDestructAs                = "mediumBuildingExplosionGenericPurple",

@@ -4,9 +4,9 @@ local unitName                    = "largestorage"
 
 --------------------------------------------------------------------------------
 
-local storage					  = 5000
+local storage					  = 20000
 
-local buildCostMetal 			  = 500
+local buildCostMetal 			  = 2000
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -21,11 +21,11 @@ local unitDef                     = {
 
 	description                   = [[Provides +]] .. storage .. [[ Metal/Energy Storage]],
 	energyStorage                 = storage,
-	metalStorage                 = storage,
+	metalStorage                  = storage,
 	energyUse                     = 0,
 	explodeAs                     = "largeBuildingExplosionGenericPurple",
-	footprintX                    = 8,
-	footprintZ                    = 8,
+	footprintX                    = 17,
+	footprintZ                    = 17,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	icontype                      = "supportbuilding",
@@ -34,8 +34,8 @@ local unitDef                     = {
 	maxWaterDepth                 = 0,
 	--metalStorage                  = storage,
 	name                          = "Large Resource Storage Facility",
-	objectName                    = "largestorage.s3o",
-	script			              = "largestorage_lus.lua",
+	objectName                    = "largestorage2.s3o",
+	script			              = "largestorage2_lus.lua",
 	radarDistance                 = 0,
 	repairable		              = false,
 	selfDestructAs                = "largeBuildingExplosionGenericPurple",
