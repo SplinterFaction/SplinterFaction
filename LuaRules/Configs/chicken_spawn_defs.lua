@@ -182,8 +182,9 @@ local optionValues = {
 		spawnChance       = 0.2, -- What are the chances that a burrow will spawn units each wave (this check is performed on each burrow)
 		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
+		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
-		maxChickens		  = 50, -- Number og ai units spawned in the end stages of the game per wave
+		maxChickens		  = 25, -- Number og ai units spawned in the end stages of the game per wave
 		queenName         = 'fedanarchid_normal',
 		queenResistanceMult   = 1, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
@@ -317,7 +318,7 @@ end
 
 local function addSpecialSquad(tier, unitList, weight)
 	if not weight then weight = 1 end
-	addSuperSquad(math.max(tier-3, 1), unitList, weight)
+	-- addSuperSquad(math.max(tier-3, 1), unitList, weight)
     for i = 1, weight do 
 		for j = tier,wavesAmount do
 			tier = math.max(math.min(tier+math.random(-1,1), wavesAmount), 1)
@@ -455,15 +456,15 @@ local chickenMinions = { -- Units spawning other units
 	addSpecialSquad(8, {"1 lozsilverback", "10 lozreaper", "5 lozpulverizer"}, 3)
 	addSpecialSquad(8, {"1 fedjuggernaut", "10 fedbear", "5 fedcobra"}, 3)
 
-	addSpecialSquad(9, {"1 lozsilverback", "10 lozreaper", "5 lozpulverizer"}, 1)
-	addSpecialSquad(9, {"1 fedjuggernaut", "10 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(9, {"1 lozsilverback", "2 lozmammoth", "10 lozreaper", "5 lozpulverizer", "10 lozluger"}, 2)
-	addSpecialSquad(9, {"1 fedjuggernaut", "2 fedgoliath", "10 fedbear", "5 fedcobra", "10 fedavalanche"}, 2)
+	addSpecialSquad(9, {"2 lozsilverback", "10 lozreaper", "5 lozpulverizer"}, 1)
+	addSpecialSquad(9, {"2 fedjuggernaut", "10 fedbear", "5 fedcobra"}, 1)
+	addSpecialSquad(9, {"2 lozsilverback", "3 lozmammoth", "10 lozreaper", "5 lozpulverizer", "10 lozluger"}, 2)
+	addSpecialSquad(9, {"2 fedjuggernaut", "3 fedgoliath", "10 fedbear", "5 fedcobra", "10 fedavalanche"}, 2)
 
-	addSpecialSquad(10, {"1 lozsilverback", "10 lozreaper", "5 lozpulverizer"}, 1)
-	addSpecialSquad(10, {"1 fedjuggernaut", "10 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(10, {"1 lozsilverback", "2 lozmammoth", "10 lozreaper", "5 lozpulverizer"}, 4)
-	addSpecialSquad(10, {"1 fedjuggernaut", "2 fedgoliath", "10 fedbear", "5 fedcobra"}, 4)
+	addSpecialSquad(10, {"2 lozsilverback", "10 lozreaper", "5 lozpulverizer"}, 1)
+	addSpecialSquad(10, {"2 fedjuggernaut", "10 fedbear", "5 fedcobra"}, 1)
+	addSpecialSquad(10, {"2 lozsilverback", "4 lozmammoth", "10 lozreaper", "5 lozpulverizer"}, 4)
+	addSpecialSquad(10, {"2 fedjuggernaut", "4 fedgoliath", "10 fedbear", "5 fedcobra"}, 4)
 
 --[[
 if difficulty >= 3 then
@@ -507,18 +508,18 @@ for i = 1,wavesAmount do
 	elseif i <= 6 then
 		addBasicSquad(i, {"5 fedstorm"}, 1)
 		addBasicSquad(i, {"5 fedthud"}, 1)
-		addBasicSquad(i, {"5 fedbear"}, 3)
+		addBasicSquad(i, {"10 fedbear"}, 3)
 		addBasicSquad(i, {"5 lozroach"}, 1)
 		addBasicSquad(i, {"5 lozscorpion"}, 1)
-		addBasicSquad(i, {"5 lozreaper"}, 3)
+		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer"}, 3)
 	elseif i <= 8 then
 		addBasicSquad(i, {"5 fedbear", "5 fedcobra"}, 1)
-		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer" }, 1)
+		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer"}, 1)
 	elseif i <= 10 then
-		addBasicSquad(i, {"5 fedbear", "5 fedcobra"}, 2)
-		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer" }, 2)
-		addBasicSquad(i, {"2 fedgoliath"}, 1)
-		addBasicSquad(i, {"2 lozmammoth"}, 1)
+		addBasicSquad(i, {"5 fedbear", "5 fedcobra"}, 1)
+		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer" }, 1)
+		addBasicSquad(i, {"2 fedgoliath"}, 2)
+		addBasicSquad(i, {"2 lozmammoth"}, 2)
 	end
 end
 
@@ -526,16 +527,74 @@ end
 -- Air Squads ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-addAirSquad(5, { "2 fedsparrow", "2 fedcrow", "2 lozwasp", "2 lozbumblebee" })
+addAirSquad(1, {"5 fedcrow"})
+addAirSquad(1, {"5 lozbumblebee"})
 
-addAirSquad(7, { "2 fedcondor" })
-addAirSquad(7, { "2 lozcrane" })
+addAirSquad(2, {"5 fedsparrow"})
+addAirSquad(2, {"5 lozwasp"})
+addAirSquad(2, {"5 fedcrow"})
+addAirSquad(2, {"5 lozbumblebee"})
 
-addAirSquad(8, { "2 fedhawk", "2 lozhornet" })
+addAirSquad(3, {"5 fedsparrow"})
+addAirSquad(3, {"5 lozwasp"})
+addAirSquad(3, {"5 fedcrow"})
+addAirSquad(3, {"5 lozbumblebee"})
 
-addAirSquad(9, { "2 fedcondor", "2 lozcrane", "2 fedhawk", "2 lozhornet"})
+addAirSquad(3, {"5 fedsparrow"})
+addAirSquad(3, {"5 lozwasp"})
+addAirSquad(3, {"5 fedhawk", "5 lozhornet" })
+addAirSquad(3, {"5 fedcrow"})
+addAirSquad(3, {"5 lozbumblebee"})
+addAirSquad(3, {"5 fedcondor" })
+addAirSquad(3, {"5 lozcrane" })
 
-addAirSquad(10, { "4 fedeagle", "4 loztitan" })
+addAirSquad(4, {"8 fedsparrow"})
+addAirSquad(4, {"8 lozwasp"})
+addAirSquad(4, {"8 fedhawk", "8 lozhornet" })
+addAirSquad(4, {"10 fedcrow"})
+addAirSquad(4, {"10 lozbumblebee"})
+addAirSquad(4, {"5 fedcondor" })
+addAirSquad(4, {"5 lozcrane" })
+
+addAirSquad(5, {"8 fedsparrow"})
+addAirSquad(5, {"8 lozwasp"})
+addAirSquad(5, {"8 fedhawk", "8 lozhornet" })
+addAirSquad(5, {"10 fedcrow"})
+addAirSquad(5, {"5 fedhawk", "10 lozbumblebee"})
+addAirSquad(5, {"5 fedcondor" })
+addAirSquad(5, {"5 lozcrane" })
+
+addAirSquad(5, {"5 fedhawk", "7 lozhornet" })
+addAirSquad(5, {"5 lozhornet", "10 fedcrow"})
+addAirSquad(5, {"5 fedhawk", "10 lozbumblebee"})
+addAirSquad(5, {"5 fedcondor", "10 lozcrane"})
+
+addAirSquad(6, {"7 fedhawk", "7 lozhornet" })
+addAirSquad(6, {"7 lozhornet", "10 fedcrow"})
+addAirSquad(6, {"7 fedhawk", "10 lozbumblebee"})
+addAirSquad(6, {"7 fedcondor", "7 lozcrane"})
+addAirSquad(6, { "1 fedeagle", "1 loztitan" })
+
+addAirSquad(7, {"12 fedhawk", "12 lozhornet" })
+addAirSquad(7, {"10 lozhornet", "20 fedcrow"})
+addAirSquad(7, {"10 fedhawk", "20 lozbumblebee"})
+addAirSquad(7, {"7 fedcondor", "7 lozcrane"})
+addAirSquad(7, { "2 fedeagle", "2 loztitan" })
+
+addAirSquad(8, {"12 fedhawk", "20 lozbumblebee", "12 lozhornet", "20 fedcrow"})
+addAirSquad(8, {"7 fedcondor", "7 lozcrane"})
+addAirSquad(8, { "3 fedeagle", "3 loztitan" })
+
+addAirSquad(9, {"12 fedhawk", "20 lozbumblebee", "10 lozhornet", "20 fedcrow"})
+addAirSquad(9, {"7 fedcondor", "7 lozcrane"})
+addAirSquad(9, {"5 fedeagle", "5 loztitan" })
+
+addAirSquad(9, {"12 fedhawk", "20 lozbumblebee", "10 lozhornet", "20 fedcrow"})
+addAirSquad(9, {"20 fedhawk", "20 lozhornet"})
+addAirSquad(9, {"10 fedeagle", "10 loztitan" })
+
+
+
 
 if difficulty >= 3 then
 	for i = 11,wavesAmount do
@@ -552,6 +611,7 @@ local useWaveMsg = true -- Show dropdown message whenever new wave is spawning
 local spawnSquare = 90 -- size of the chicken spawn square centered on the burrow
 local spawnSquareIncrement = 2 -- square size increase for each unit spawned
 local minBaseDistance = 750 -- Minimum distance of new burrows from players and other burrows
+local burrowTurretSpawnRadius = 100
 
 local config = { -- Don't touch this! ---------------------------------------------------------------------------------------------------------------------------------------------
 	useEggs 				= useEggs,
@@ -561,6 +621,7 @@ local config = { -- Don't touch this! ------------------------------------------
 	chickenEggs			   	= table.copy(chickenEggs),
 	burrowName             	= burrowName,   -- burrow unit name
 	burrowDef              	= UnitDefNames[burrowName].id,
+	burrowTurretSpawnRadius = burrowTurretSpawnRadius,
 	chickenSpawnMultiplier 	= Spring.GetModOptions().chicken_spawncountmult,
 	gracePeriod            	= Spring.GetModOptions().chicken_graceperiod * 60,  -- no chicken spawn in this period, frames
 	queenTime              	= Spring.GetModOptions().chicken_queentime * 60, -- time at which the queen appears, frames
