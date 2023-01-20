@@ -4,11 +4,11 @@ local unitName                    = "supplydepot"
 
 --------------------------------------------------------------------------------
 
-local armortype					 = [[building]]
-local storage					  = 100
+local armortype					  = [[building]]
+local storage					  = 400
 local supplygranted				  = 5
 
-local buildCostMetal 			  = 50
+local buildCostMetal 			  = 200
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -23,11 +23,11 @@ local unitDef                     = {
 
 	description                   = [[Provides +]] .. supplygranted .. [[ Supply • Provides +]] .. storage .. [[ Metal/Energy Storage]],
 	energyStorage                 = storage,
-	metalStorage                 = storage,
+	metalStorage                  = storage,
 	energyUse                     = 0,
 	explodeAs                     = "smallBuildingExplosionGenericPurple",
-	footprintX                    = 3,
-	footprintZ                    = 3,
+	footprintX                    = 6,
+	footprintZ                    = 6,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	icontype                      = "supportbuilding",
@@ -36,8 +36,8 @@ local unitDef                     = {
 	maxWaterDepth                 = 0,
 	--metalStorage                  = storage,
 	name                          = "Basic Supply/Storage Depot",
-	objectName                    = "storage.s3o",
-	script			              = "estorage3.cob",
+	objectName                    = "supplydepot.s3o",
+	script			              = "supplydepot_lus.lua",
 	radarDistance                 = 0,
 	repairable		              = false,
 	selfDestructAs                = "smallBuildingExplosionGenericPurple",

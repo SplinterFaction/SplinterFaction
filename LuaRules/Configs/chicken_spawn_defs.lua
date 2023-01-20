@@ -183,7 +183,7 @@ local optionValues = {
 		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
-		maxChickens		  = 25, -- Number og ai units spawned in the end stages of the game per wave
+		maxChickens		  = 50, -- Number og ai units spawned in the end stages of the game per wave
 		queenName         = 'fedanarchid_normal',
 		queenResistanceMult   = 1, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
@@ -415,43 +415,43 @@ local chickenMinions = { -- Units spawning other units
 	addSpecialSquad(2, {"10 fedstorm", "4 fedthud"}, 1)
 	addSpecialSquad(2, {"10 lozroach", "8 lozscorpion"}, 1)
 	addSpecialSquad(2, {"10 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(2, {"10 lozreaper", "5 lozpulverizer"}, 1)
+	addSpecialSquad(2, {"5 lozreaper", "2 lozpulverizer"}, 1)
 
 	addSpecialSquad(3, {"10 fedstorm", "4 fedthud"}, 1 )
 	addSpecialSquad(3, {"10 lozroach", "8 lozscorpion"}, 1)
-	addSpecialSquad(3, {"10 fedbear", "5 fedcobra"}, 2)
-	addSpecialSquad(3, {"10 lozreaper", "5 lozpulverizer"}, 2)
+	addSpecialSquad(3, {"5 fedbear", "2 fedcobra"}, 2)
+	addSpecialSquad(3, {"5 lozreaper", "2 lozpulverizer"}, 2)
 
 	addSpecialSquad(4, {"10 fedstorm", "4 fedthud"}, 1)
 	addSpecialSquad(4, {"10 lozroach", "8 lozscorpion"}, 1)
-	addSpecialSquad(4, {"10 fedbear", "5 fedcobra"}, 4)
-	addSpecialSquad(4, {"10 lozreaper", "5 lozpulverizer"}, 4)
+	addSpecialSquad(4, {"15 fedbear", "8 fedcobra"}, 4)
+	addSpecialSquad(4, {"15 lozreaper", "8 lozpulverizer"}, 4)
 	addSpecialSquad(4, {"1 lozmammoth"}, 1)
 	addSpecialSquad(4, {"1 fedgoliath"}, 1)
 
-	addSpecialSquad(5, {"10 fedbear", "5 fedcobra"}, 3)
-	addSpecialSquad(5, {"10 lozreaper", "5 lozpulverizer"}, 3)
+	addSpecialSquad(5, {"15 fedbear", "8 fedcobra"}, 3)
+	addSpecialSquad(5, {"15 lozreaper", "8 lozpulverizer"}, 3)
 	addSpecialSquad(5, {"2 lozmammoth"}, 2)
 	addSpecialSquad(5, {"2 fedgoliath"}, 2)
 
 	addSpecialSquad(6, {"10 fedavalanche"}, 1)
 	addSpecialSquad(6, {"10 lozluger"}, 1)
-	addSpecialSquad(6, {"3 lozmammoth"}, 1)
-	addSpecialSquad(6, {"3 fedgoliath"}, 1)
+	addSpecialSquad(6, {"4 lozmammoth"}, 1)
+	addSpecialSquad(6, {"4 fedgoliath"}, 1)
 
-	addSpecialSquad(7, {"10 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(7, {"10 lozreaper", "5 lozpulverizer"}, 1)
+	addSpecialSquad(7, {"15 fedbear", "8 fedcobra"}, 1)
+	addSpecialSquad(7, {"15 lozreaper", "8 lozpulverizer"}, 1)
 	addSpecialSquad(7, {"10 fedavalanche"}, 1)
 	addSpecialSquad(7, {"10 lozluger"}, 1)
-	addSpecialSquad(7, {"2 lozmammoth"}, 2)
-	addSpecialSquad(7, {"2 fedgoliath"}, 2)
+	addSpecialSquad(7, {"4 lozmammoth"}, 2)
+	addSpecialSquad(7, {"4 fedgoliath"}, 2)
 
-	addSpecialSquad(8, {"10 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(8, {"10 lozreaper", "5 lozpulverizer"}, 1)
+	addSpecialSquad(8, {"15 fedbear", "8 fedcobra"}, 1)
+	addSpecialSquad(8, {"15 lozreaper", "8 lozpulverizer"}, 1)
 	addSpecialSquad(8, {"10 fedavalanche"}, 1)
 	addSpecialSquad(8, {"10 lozluger"}, 1)
-	addSpecialSquad(8, {"2 lozmammoth"}, 2)
-	addSpecialSquad(8, {"2 fedgoliath"}, 2)
+	addSpecialSquad(8, {"3 lozmammoth"}, 2)
+	addSpecialSquad(8, {"3 fedgoliath"}, 2)
 	addSpecialSquad(8, {"1 lozsilverback", "10 lozreaper", "5 lozpulverizer"}, 3)
 	addSpecialSquad(8, {"1 fedjuggernaut", "10 fedbear", "5 fedcobra"}, 3)
 

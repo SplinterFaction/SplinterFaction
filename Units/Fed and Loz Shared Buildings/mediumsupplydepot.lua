@@ -4,8 +4,8 @@ local unitName                    = "mediumsupplydepot"
 
 --------------------------------------------------------------------------------
 
-local supplygranted				  = 25
-local buildCostMetal 			  = 100
+local supplygranted				  = 100
+local buildCostMetal 			  = 400
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -22,8 +22,8 @@ local unitDef                     = {
 	metalStorage                  = 0,
 	energyUse                     = 0,
 	explodeAs                     = "mediumBuildingExplosionGenericPurple",
-	footprintX                    = 4,
-	footprintZ                    = 4,
+	footprintX                    = 9,
+	footprintZ                    = 9,
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	icontype                      = "supportbuilding",
