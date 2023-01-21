@@ -1,372 +1,541 @@
-if gadgetHandler:IsSyncedCode() then
-    return
-end
-
 function gadget:GetInfo()
 	return {
 		name = "AutoColorPicker",
 		desc = "Automatically assigns colors to teams",
-		author = "Damgam",
+		author = "Damgam, Born2Crawl (color palette)",
 		date = "2021",
+		license = "GNU GPL, v2 or later",
 		layer = -100,
 		enabled = true,
 	}
 end
 
-local spGetTeamInfo = Spring.GetTeamInfo
-local spGetTeamList = Spring.GetTeamList
-local spGetAllyTeamList= Spring.GetAllyTeamList
-local spGetMyTeamID = Spring.GetMyTeamID
-local spGetMyAllyTeamID = Spring.GetMyAllyTeamID
-local spSetTeamColor = Spring.SetTeamColor
-local spGetTeamLuaAI = Spring.GetTeamLuaAI
-local spGetGaiaTeamID = Spring.GetGaiaTeamID
-local spGetSpectatingState = Spring.GetSpectatingState
-local spGetConfigInt = Spring.GetConfigInt
-local spGetLastUpdateSeconds = Spring.GetLastUpdateSeconds
-
-local myPlayerID = Spring.GetMyPlayerID()
-
-
-
-local ffaCounter = 0
-local allyCounter = 0
-local enemyCounter = 0
-local simpleColorsUpdateCounter = 0
-
-SimpleColorsEnabled = Spring.GetConfigInt("simple_auto_colors", 0) -- Floris plz add option here
-local DynamicTeamColorsEnabledModoption = (Spring.GetModOptions and Spring.GetModOptions().teamcolors_dynamic) or "enabled"
-if DynamicTeamColorsEnabledModoption == "enabled" then
-    DynamicTeamColorsEnabled = true
-else
-    DynamicTeamColorsEnabled = false
-end
-local AnonymousModeEnabledModoption = (Spring.GetModOptions and Spring.GetModOptions().teamcolors_anonymous_mode) or "disabled"
-if AnonymousModeEnabledModoption == "enabled" then
-    AnonymousModeEnabled = true
-else
-    AnonymousModeEnabled = false
-end
-local IconDevModeEnabledModoption = (Spring.GetModOptions and Spring.GetModOptions().teamcolors_icon_dev_mode) or "disabled"
-if IconDevModeEnabledModoption == "disabled" then
-    IconDevModeEnabled = false
-else
-    if IconDevModeEnabledModoption == "armblue" then
-        IconDevModeColor = {0, 80, 255}
-    elseif IconDevModeEnabledModoption == "corred" then
-        IconDevModeColor = {255, 16, 5}
-    elseif IconDevModeEnabledModoption == "scavpurp" then
-        IconDevModeColor = {97, 36, 97}
-    elseif IconDevModeEnabledModoption == "chickenorange" then
-        IconDevModeColor = {255, 125, 32}
-    elseif IconDevModeEnabledModoption == "gaiagray" then
-        IconDevModeColor = {127, 127, 127}
-    end
-    IconDevModeEnabled = true
+local function hex2RGB(hex)
+    hex = hex:gsub("#","")
+    return {tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))}
 end
 
-SimplePlayerColor = {0, 80, 255} -- Armada Blue
-SimpleAllyColor = {0,255,0} -- Full Green
-SimpleEnemyColor = {255, 16, 5} -- Cortex Red
+-- Special colors
+local armBlueColor       = "#004DFF" -- Armada Blue
+local corRedColor        = "#FF1005" -- Cortex Red
+local scavPurpColor      = "#6809A1" -- Scav Purple
+local chickenOrangeColor = "#CC8914" -- Chicken Orange
+local gaiaGrayColor      = "#7F7F7F" -- Gaia Grey
 
--- FFA
-FFAColors = {
-    [1] = {82,      151,    255 },      -- Blue
-    [2] = {255,     0,      0   },      -- Red
-    [3] = {10,      232,    18  },      -- Green
-    [4] = {255,     232,    22  },      -- Yellow
-    [5] = {94,      9,      178 },      -- Purple
-    [6] = {255,     125,    32  },      -- Orange
-    [7] = {47,      66,     238 },      -- Darker Blue
-    [8] = {229,     18,     120 },      -- Pink
-    [9] = {191,     169,    255 },      -- Lavender
-    [10] ={255,     243,    135 },      -- Bleached Yellow
-    [11] ={0,       170,    99  },      -- Grass
-    [12] ={166,     14,     5   },      -- Blood
-    [13] ={178,     255,    227 },      -- Aqua
-    [14] ={251,     167,    120 },      -- Skin? lol
-    [15] ={8,       37,     190 },      -- Dark Blue
-    [16] ={118,     39,     6   },      -- Brown
-}
+if gadgetHandler:IsSyncedCode() then
+
+	-- NEW IceXuick Colors V6
+	local ffaColors = {
+		"#004DFF", -- 1
+		"#FF1005", -- 2
+		"#0CE908", -- 3
+		"#FFD200", -- 4
+		"#F80889", -- 5
+		"#09F5F5", -- 6
+		"#FF6107", -- 7
+		"#F190B3", -- 8
+		"#097E1C", -- 9
+		"#C88B2F", -- 10
+		"#7CA1FF", -- 11
+		"#9F0D05", -- 12
+		"#3EFFA2", -- 13
+		"#F5A200", -- 14
+		"#C4A9FF", -- 15
+		"#0B849B", -- 16
+		"#B4FF39", -- 17
+		"#FF68EA", -- 18
+		"#D8EEFF", -- 19
+		"#689E3D", -- 20
+		"#B04523", -- 21
+		"#FFBB7C", -- 22
+		"#3475FF", -- 23
+		"#DD783F", -- 24
+		"#FFAAF3", -- 25
+		"#4A4376", -- 26
+		"#773A01", -- 27
+		"#B7EA63", -- 28
+		"#9F0D05", -- 29
+		"#7EB900", -- 30
+	}
+
+	local survivalColors = {
+		"#0B3EF3", -- 1
+		"#FF1005", -- 2
+		"#0CE908", -- 3
+		"#F80889", -- 4
+		"#09F5F5", -- 5
+		"#FCEEA4", -- 6
+		"#097E1C", -- 7
+		"#F190B3", -- 8
+		"#2C32AC", -- 9
+		"#3EFFA2", -- 10
+		"#FF6058", -- 11
+		"#7CA1FF", -- 12
+		"#A35274", -- 13
+		"#B04523", -- 14
+		"#B4FF39", -- 15
+		"#773A01", -- 16
+		"#D8EEFF", -- 17
+		"#689E3D", -- 18
+		"#0B849B", -- 19
+		"#FFD200", -- 20
+		"#971C48", -- 21
+		"#4A4376", -- 22
+		"#764A4A", -- 23
+		"#4F2684", -- 24
+	}
+
+	local teamColors = {
+		{ -- One Team (not possible)
+			{ -- First Team
+				"#004DFF", -- Armada Blue
+			},
+		},
+
+		{ -- Two Teams
+			{ -- First Team (Cool)
+				"#0B3EF3", --1
+				"#0CE908", --2
+				"#872DFA", --3
+				"#09F5F5", --4
+				"#097E1C", --5
+				"#7CA1FF", --6
+				"#B4FF39", --7
+				"#3EFFA2", --8
+				"#0B849B", --9
+				"#689E3D", --10
+				"#4F2684", --11
+				"#2C32AC", --12
+				"#6968A0", --13
+				"#D8EEFF", --14
+				"#3475FF", --15
+				"#7EB900", --16
+				"#4A4376", --17
+				"#B7EA63", --18
+				"#C4A9FF", --19
+				"#37713A", --20
+			},
+			{ -- Second Team (Warm)
+				"#FF1005", --1
+				"#FFD200", --2
+				"#FF6107", --3
+				"#F80889", --4
+				"#FCEEA4", --5
+				"#FF6058", --6
+				"#F190B3", --7
+				"#C88B2F", --8
+				"#B04523", --9
+				"#FFBB7C", --10
+				"#A35274", --11
+				"#773A01", --12
+				"#F5A200", --13
+				"#BBA28B", --14
+				"#971C48", --15
+				"#FF68EA", --16
+				"#DD783F", --17
+				"#FFAAF3", --18
+				"#764A4A", --19
+				"#9F0D05", --20
+			},
+		},
+
+		{ -- Three Teams
+			{ -- First Team (Blue)
+				"#004DFF", -- 1
+				"#09F5F5", -- 2
+				"#7CA1FF", -- 3
+				"#2C32AC", -- 4
+				"#D8EEFF", -- 5
+				"#0B849B", -- 6
+				"#3C7AFF", -- 7
+				"#5F6492", -- 8
+			},
+			{ -- Second Team (Red)
+				"#FF1005", -- 1
+				"#FF6107", -- 2
+				"#FFD200", -- 3
+				"#FF6058", -- 4
+				"#FFBB7C", -- 5
+				"#C88B2F", -- 6
+				"#F5A200", -- 7
+				"#9F0D05", -- 8
+			},
+			{ -- Third Team (Green)
+				"#0CE818", -- 1
+				"#B4FF39", -- 2
+				"#097E1C", -- 3
+				"#3EFFA2", -- 4
+				"#689E3D", -- 5
+				"#7EB900", -- 6
+				"#B7EA63", -- 7
+				"#37713A", -- 8
+			},
+		},
+
+		{ -- Four Teams
+			{ -- First Team (Blue)
+				"#004DFF", -- 1
+				"#7CA1FF", -- 2
+				"#D8EEFF", -- 3
+				"#09F5F5", -- 4
+				"#3475FF", -- 5
+				"#0B849B", -- 6
+			},
+			{ -- Second Team (Red)
+				"#FF1005", -- 1
+				"#FF6107", -- 2
+				"#FF6058", -- 3
+				"#B04523", -- 4
+				"#F80889", -- 5
+				"#971C48", -- 6
+			},
+			{ -- Third Team (Green)
+				"#0CE818", -- 1
+				"#B4FF39", -- 2
+				"#097E1C", -- 3
+				"#3EFFA2", -- 4
+				"#689E3D", -- 5
+				"#7EB900", -- 6
+			},
+			{ -- Fourth Team (Yellow)
+				"#FFD200", -- 1
+				"#F5A200", -- 2
+				"#FCEEA4", -- 3
+				"#FFBB7C", -- 4
+				"#BBA28B", -- 5
+				"#C88B2F", -- 6
+			},
+		},
+
+		{ -- Five Teams
+			{ -- First Team (Blue)
+				"#004DFF", -- 1
+				"#7CA1FF", -- 2
+				"#D8EEFF", -- 3
+				"#09F5F5", -- 4
+				"#3475FF", -- 5
+			},
+			{ -- Second Team (Red)
+				"#FF1005", -- 1
+				"#FF6107", -- 2
+				"#FF6058", -- 3
+				"#B04523", -- 4
+				"#9F0D05", -- 5
+			},
+			{ -- Third Team (Green)
+				"#0CE818", -- 1
+				"#B4FF39", -- 2
+				"#097E1C", -- 3
+				"#3EFFA2", -- 4
+				"#689E3D", -- 5
+			},
+			{ -- Fourth Team (Yellow)
+				"#FFD200", -- 1
+				"#F5A200", -- 2
+				"#FCEEA4", -- 3
+				"#FFBB7C", -- 4
+				"#C88B2F", -- 5
+			},
+			{ -- Fifth Team (Fuchsia)
+				"#F80889", -- 1
+				"#FF68EA", -- 2
+				"#FFAAF3", -- 3
+				"#AA0092", -- 4
+				"#701162", -- 5
+			},
+		},
+
+		{ -- Six Teams
+			{ -- First Team (Blue)
+				"#004DFF", -- 1
+				"#7CA1FF", -- 2
+				"#D8EEFF", -- 3
+				"#2C32AC", -- 4
+			},
+			{ -- Second Team (Red)
+				"#FF1005", -- 1
+				"#FF6058", -- 2
+				"#B04523", -- 3
+				"#9F0D05", -- 4
+			},
+			{ -- Third Team (Green)
+				"#0CE818", -- 1
+				"#B4FF39", -- 2
+				"#097E1C", -- 3
+				"#3EFFA2", -- 4
+			},
+			{ -- Fourth Team (Yellow)
+				"#FFD200", -- 1
+				"#F5A200", -- 2
+				"#FCEEA4", -- 3
+				"#9B6408", -- 4
+			},
+			{ -- Fifth Team (Fuchsia)
+				"#F80889", -- 1
+				"#FF68EA", -- 2
+				"#FFAAF3", -- 3
+				"#971C48", -- 4
+			},
+			{ -- Sixth Team (Orange)
+				"#FF6107", -- 1
+				"#FFBB7C", -- 2
+				"#DD783F", -- 3
+				"#773A01", -- 4
+			},
+		},
+
+		{ -- Seven Teams
+			{ -- First Team (Blue)
+				"#004DFF", -- 1
+				"#7CA1FF", -- 2
+				"#2C32AC", -- 3
+			},
+			{ -- Second Team (Red)
+				"#FF1005", -- 1
+				"#FF6058", -- 2
+				"#9F0D05", -- 3
+			},
+			{ -- Third Team (Green)
+				"#0CE818", -- 1
+				"#B4FF39", -- 2
+				"#097E1C", -- 3
+			},
+			{ -- Fourth Team (Yellow)
+				"#FFD200", -- 1
+				"#F5A200", -- 2
+				"#FCEEA4", -- 3
+			},
+			{ -- Fifth Team (Fuchsia)
+				"#F80889", -- 1
+				"#FF68EA", -- 2
+				"#FFAAF3", -- 3
+			},
+			{ -- Sixth Team (Orange)
+				"#FF6107", -- 1
+				"#FFBB7C", -- 2
+				"#DD783F", -- 3
+			},
+			{ -- Seventh Team (Cyan)
+				"#09F5F5", -- 1
+				"#0B849B", -- 2
+				"#D8EEFF", -- 3
+			},
+		},
+
+		{ -- Eight Teams
+			{ -- First Team (Blue)
+				"#004DFF", -- 1
+				"#7CA1FF", -- 2
+				"#2C32AC", -- 3
+			},
+			{ -- Second Team (Red)
+				"#FF1005", -- 1
+				"#FF6058", -- 2
+				"#9F0D05", -- 3
+			},
+			{ -- Third Team (Green)
+				"#0CE818", -- 1
+				"#B4FF39", -- 2
+				"#097E1C", -- 3
+			},
+			{ -- Fourth Team (Yellow)
+				"#FFD200", -- 1
+				"#F5A200", -- 2
+				"#FCEEA4", -- 3
+			},
+			{ -- Fifth Team (Fuchsia)
+				"#F80889", -- 1
+				"#FF68EA", -- 2
+				"#971C48", -- 3
+			},
+			{ -- Sixth Team (Orange)
+				"#FF6107", -- 1
+				"#FFBB7C", -- 2
+				"#DD783F", -- 3
+			},
+			{ -- Seventh Team (Cyan)
+				"#09F5F5", -- 1
+				"#0B849B", -- 2
+				"#D8EEFF", -- 3
+			},
+			{ -- Eigth Team (Purple)
+				"#872DFA", -- 1
+				"#6809A1", -- 2
+				"#C4A9FF", -- 3
+			},
+		},
+
+	}
+
+	local gaiaTeamID = Spring.GetGaiaTeamID()
+	local teamList = Spring.GetTeamList()
+	local allyTeamList = Spring.GetAllyTeamList()
+	local teamCount = #teamList - 1
+	local allyTeamCount = #allyTeamList - 1
+
+	local isFFA = false
+	if #teamList == #allyTeamList and teamCount > 2 then
+		isFFA = true
+	elseif not teamColors[allyTeamCount] then
+		isFFA = true
+	end
+	local isSurvival = Spring.Utilities.Gametype.IsScavengers() or Spring.Utilities.Gametype.IsChickens()
+
+	local survivalColorNum = 1 -- Starting from color #1
+	local survivalColorVariation = 0 -- Current color variation
+	local ffaColorNum = 1 -- Starting from color #1
+	local ffaColorVariation = 0 -- Current color variation
+	local colorVariationDelta = 128 -- Delta for color variation
+	local allyTeamNum = 0
+	local teamSizes = {}
+
+	local function setUpTeamColor(teamID, allyTeamID, isAI)
+		if isAI and string.find(isAI, "Scavenger") then
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorRed", hex2RGB(scavPurpColor)[1])
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorGreen", hex2RGB(scavPurpColor)[2])
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorBlue", hex2RGB(scavPurpColor)[3])
+		elseif isAI and string.find(isAI, "Chicken") then
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorRed", hex2RGB(chickenOrangeColor)[1])
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorGreen", hex2RGB(chickenOrangeColor)[2])
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorBlue", hex2RGB(chickenOrangeColor)[3])
+		elseif teamID == gaiaTeamID then
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorRed", hex2RGB(gaiaGrayColor)[1])
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorGreen", hex2RGB(gaiaGrayColor)[2])
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorBlue", hex2RGB(gaiaGrayColor)[3])
+		elseif isSurvival then
+			if not survivalColors[survivalColorNum] then -- If we have no color for this team anymore
+				survivalColorNum = 1 -- Starting from the first color again..
+				survivalColorVariation = survivalColorVariation + colorVariationDelta -- ..but adding random color variations with increasing amplitude with every cycle
+			end
+
+			-- Assigning R,G,B values with specified color variations
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorRed", hex2RGB(survivalColors[survivalColorNum])[1] + math.random(-survivalColorVariation, survivalColorVariation))
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorGreen", hex2RGB(survivalColors[survivalColorNum])[2] + math.random(-survivalColorVariation, survivalColorVariation))
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorBlue", hex2RGB(survivalColors[survivalColorNum])[3] + math.random(-survivalColorVariation, survivalColorVariation))
+			survivalColorNum = survivalColorNum + 1 -- Will start from the next color next time
+		elseif isFFA then
+			if not ffaColors[ffaColorNum] then -- If we have no color for this team anymore
+				ffaColorNum = 1 -- Starting from the first color again..
+				ffaColorVariation = ffaColorVariation + colorVariationDelta -- ..but adding random color variations with increasing amplitude with every cycle
+			end
+
+			-- Assigning R,G,B values with specified color variations
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorRed", hex2RGB(ffaColors[ffaColorNum])[1] + math.random(-ffaColorVariation, ffaColorVariation))
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorGreen", hex2RGB(ffaColors[ffaColorNum])[2] + math.random(-ffaColorVariation, ffaColorVariation))
+			Spring.SetTeamRulesParam(teamID, "AutoTeamColorBlue", hex2RGB(ffaColors[ffaColorNum])[3] + math.random(-ffaColorVariation, ffaColorVariation))
+			ffaColorNum = ffaColorNum + 1 -- Will start from the next color next time
+
+		else
+			if not teamSizes[allyTeamID] then
+				allyTeamNum = allyTeamNum + 1
+				teamSizes[allyTeamID] = {allyTeamNum, 1, 0} -- Team number, Starting color number, Color variation
+			end
+			if teamColors[allyTeamCount] -- If we have the color set for this number of teams
+				and teamColors[allyTeamCount][teamSizes[allyTeamID][1]] then -- And this team number exists in the color set
+				if not teamColors[allyTeamCount][teamSizes[allyTeamID][1]][teamSizes[allyTeamID][2]] then -- If we have no color for this player anymore
+					teamSizes[allyTeamID][2] = 1 -- Starting from the first color again..
+					teamSizes[allyTeamID][3] = teamSizes[allyTeamID][3] + colorVariationDelta -- ..but adding random color variations with increasing amplitude with every cycle
+				end
+
+				-- Assigning R,G,B values with specified color variations
+				Spring.SetTeamRulesParam(teamID, "AutoTeamColorRed", hex2RGB(teamColors[allyTeamCount][teamSizes[allyTeamID][1]][teamSizes[allyTeamID][2]])[1] + math.random(-teamSizes[allyTeamID][3], teamSizes[allyTeamID][3]))
+				Spring.SetTeamRulesParam(teamID, "AutoTeamColorGreen", hex2RGB(teamColors[allyTeamCount][teamSizes[allyTeamID][1]][teamSizes[allyTeamID][2]])[2] + math.random(-teamSizes[allyTeamID][3], teamSizes[allyTeamID][3]))
+				Spring.SetTeamRulesParam(teamID, "AutoTeamColorBlue", hex2RGB(teamColors[allyTeamCount][teamSizes[allyTeamID][1]][teamSizes[allyTeamID][2]])[3] + math.random(-teamSizes[allyTeamID][3], teamSizes[allyTeamID][3]))
+				teamSizes[allyTeamID][2] = teamSizes[allyTeamID][2] + 1 -- Will start from the next color next time
+			else
+				Spring.Echo("[AUTOCOLORS] Error: Team Colors Table is broken or missing for this allyteam set")
+				Spring.SetTeamRulesParam(teamID, "AutoTeamColorRed", 255)
+				Spring.SetTeamRulesParam(teamID, "AutoTeamColorGreen", 255)
+				Spring.SetTeamRulesParam(teamID, "AutoTeamColorBlue", 255)
+			end
+		end
+	end
+
+	local AutoColors = {}
+	for i = 1,#teamList do
+		local teamID = teamList[i]
+		local allyTeamID = select(6, Spring.GetTeamInfo(teamID))
+		local isAI = Spring.GetTeamLuaAI(teamID)
+		setUpTeamColor(teamID, allyTeamID, isAI)
+
+		local r = Spring.GetTeamRulesParam(teamID, "AutoTeamColorRed")
+		local g = Spring.GetTeamRulesParam(teamID, "AutoTeamColorGreen")
+		local b = Spring.GetTeamRulesParam(teamID, "AutoTeamColorBlue")
+
+		AutoColors[i] = {
+			teamID = teamID,
+			r = r,
+			g = g,
+			b = b,
+		}
+	end
+
+	Spring.SendLuaRulesMsg("AutoColors", Json.encode(AutoColors))
 
 
-AllyColors = {
-    [2] = { -- Two Teams
-        [1] = {0,       80,     255 },      -- Armada Blue
-        [2] = {10,      232,    18  },      -- Green
-        [3] = {147,     226,    251 },      -- Light Blue
-        [4] = {82,      151,    255 },      -- Darker Blue
-        [5] = {191,     169,    255 },      -- Lavender
-        [6] = {0,       170,    99  },      -- Grass
-        [7] = {117,     253,    147 },      -- Aqua Green
-        [8] = {8,       37,     190 },      -- Dark Blue
-    },
-    [3] = { -- Three Teams
-        [1] = {82,      151,    255  },
-        [2] = {47,      66,     238  },
-        [3] = {147,     226,    251  },
-        [4] = {8,       37,     190  },
-        [5] = {35,      11,     129  },
-    },
-    [4] = { -- Four Teams
-        [1] = {82,      151,    255  },
-        [2] = {47,      66,     238  },
-        [3] = {147,     226,    251  },
-        [4] = {8,       37,     190  },
-    },
-    [5] = { -- Five Teams
-        [1] = {82,      151,    255  },
-        [2] = {47,      66,     238  },
-        [3] = {147,     226,    251  },
-    },
-    [6] = { -- Six Teams
-        [1] = {82,      151,    255  },
-        [2] = {47,      66,     238  },
-    },
-}
+else	-- UNSYNCED
 
-EnemyColors = {
-    [2] = { -- Two Teams
-        [1] = {
-            [1] = {200,     16,     5   },      -- Cortex Red
-            [2] = {255,     232,    22  },      -- Yellow
-            [3] = {255,     125,    32  },      -- Orange
-            [4] = {229,     18,     120 },      -- Pink
-            [5] = {255,     243,    135 },      -- Bleached Yellow
-            [6] = {166,     14,     5   },      -- Blood
-            [7] = {251,     167,    120 },      -- Skin? lol
-            [8] = {118,     39,     6   },      -- Brown
-        },
-    },
-    [3] = { -- Three Teams
-        [1] = { -- First Enemy Team
-            [1] = {231,     0,      0   },
-            [2] = {255,     125,    32  },
-            [3] = {255,     232,    22  },
-            [4] = {166,     14,     5   },
-            [5] = {118,     39,     6   },
-        },
-        [2] = { -- Second Enemy Team
-            [1] = {10,      232,    32  },
-            [2] = {10,      142,    7   },
-            [3] = {117,     253,    147 },
-            [4] = {5,       84,     13  },
-            [5] = {45,      57,     9   },
-        },
-    },
-    [4] = { -- Four Teams
-        [1] = { -- First Enemy Team
-            [1] = {231,     0,      0   },
-            [2] = {255,     125,    32  },
-            [3] = {255,     232,    22  },
-            [4] = {166,     14,     5   },
-        },
-        [2] = { -- Second Enemy Team
-            [1] = {10,      232,    32  },
-            [2] = {10,      142,    7   },
-            [3] = {117,     253,    147 },
-            [4] = {5,       84,     13  },
-        },
-        [3] = { -- Third Enemy Team
-            [1] = {200,     102,    246 },
-            [2] = {134,     10,     232 },
-            [3] = {191,     169,    255 },
-            [4] = {94,      9,      178 },
-        },
-    },
-    [5] = { -- Five Teams
-        [1] = { -- First Enemy Team
-            [1] = {231,     0,      0   },
-            [2] = {255,     125,    32  },
-            [3] = {166,     14,     5   },
-        },
-        [2] = { -- Second Enemy Team
-            [1] = {10,      232,    32  },
-            [2] = {10,      142,    7   },
-            [3] = {117,     253,    147 },
-        },
-        [3] = { -- Third Enemy Team
-            [1] = {200,     102,    246 },
-            [2] = {134,     10,     232 },
-            [3] = {191,     169,    255 },
-        },
-        [4] = { -- Fourth Enemy Team
-            [1] = {255,     232,    22  },
-            [2] = {191,     151,    8   },
-            [3] = {255,     243,    135 },
-        },
-    },
-    [6] = { -- Six Teams
-        [1] = { -- First Enemy Team
-            [1] = {231,     0,      0   },
-            [2] = {166,     14,     5   },
-        },
-        [2] = { -- Second Enemy Team
-            [1] = {10,      232,    32  },
-            [2] = {10,      142,    7   },
-        },
-        [3] = { -- Third Enemy Team
-            [1] = {200,     102,    246 },
-            [2] = {134,     10,     232 },
-        },
-        [4] = { -- Fourth Enemy Team
-            [1] = {255,     232,    22  },
-            [2] = {191,     151,    8   },
-        },
-        [5] = { -- Fifth Enemy Team
-            [1] = {255,     161,    73  },
-            [2] = {222,     93,     0   },
-        },
-    },
-}
 
-ScavColor = {97, 36, 97}
-GaiaColor = {127, 127, 127}
+	local anonymousMode = false --Spring.GetModOptions().teamcolors_anonymous_mode
 
-local function MissingColorHandler(teamID, allyTeam)
-    local myTeam = spGetMyTeamID()
-    local myAllyTeam = spGetMyAllyTeamID()
-    if teamID == myTeam then
-        spSetTeamColor(teamID, SimplePlayerColor[1]/255, SimplePlayerColor[2]/255, SimplePlayerColor[3]/255)
-    elseif allyTeam == myAllyTeam then
-        spSetTeamColor(teamID, SimpleAllyColor[1]/255, SimpleAllyColor[2]/255, SimpleAllyColor[3]/255)
-    else
-        spSetTeamColor(teamID, SimpleEnemyColor[1]/255, SimpleEnemyColor[2]/255, SimpleEnemyColor[3]/255)
-    end
+	local iconDevModeColors = {
+		armblue       = armBlueColor,
+		corred        = corRedColor,
+		scavpurp      = scavPurpColor,
+		chickenorange = chickenOrangeColor,
+		gaiagray      = gaiaGrayColor,
+	}
+	local iconDevMode = "no" --Spring.GetModOptions().teamcolors_icon_dev_mode
+	local iconDevModeColor = iconDevModeColors[iconDevMode]
+
+	local gaiaTeamID = Spring.GetGaiaTeamID()
+	local teamList = Spring.GetTeamList()
+
+	local function updateTeamColors()
+		local myTeamID = Spring.GetMyTeamID()
+		local myAllyTeamID = Spring.GetMyAllyTeamID()
+		for i = 1, #teamList do
+			local teamID = teamList[i]
+			local r = Spring.GetTeamRulesParam(teamID, "AutoTeamColorRed")/255
+			local g = Spring.GetTeamRulesParam(teamID, "AutoTeamColorGreen")/255
+			local b = Spring.GetTeamRulesParam(teamID, "AutoTeamColorBlue")/255
+
+			if iconDevModeColor then
+				Spring.SetTeamColor(teamID, hex2RGB(iconDevModeColor)[1]/255, hex2RGB(iconDevModeColor)[2]/255, hex2RGB(iconDevModeColor)[3]/255)
+			elseif Spring.GetConfigInt("SimpleTeamColors", 0) == 1 or (anonymousMode and not Spring.GetSpectatingState()) then
+				local allyTeamID = select(6, Spring.GetTeamInfo(teamID))
+				if teamID == myTeamID then
+					Spring.SetTeamColor(teamID,
+						Spring.GetConfigInt("SimpleTeamColorsPlayerR", 0)/255,
+						Spring.GetConfigInt("SimpleTeamColorsPlayerG", 77)/255,
+						Spring.GetConfigInt("SimpleTeamColorsPlayerB", 255)/255)
+				elseif allyTeamID == myAllyTeamID then
+					Spring.SetTeamColor(teamID,
+						Spring.GetConfigInt("SimpleTeamColorsAllyR", 0)/255,
+						Spring.GetConfigInt("SimpleTeamColorsAllyG", 255)/255,
+						Spring.GetConfigInt("SimpleTeamColorsAllyB", 0)/255)
+				elseif allyTeamID ~= myAllyTeamID and teamID ~= gaiaTeamID then
+					Spring.SetTeamColor(teamID,
+						Spring.GetConfigInt("SimpleTeamColorsEnemyR", 255)/255,
+						Spring.GetConfigInt("SimpleTeamColorsEnemyG", 16)/255,
+						Spring.GetConfigInt("SimpleTeamColorsEnemyB", 5)/255)
+				else
+					Spring.SetTeamColor(teamID, hex2RGB(gaiaGrayColor)[1]/255, hex2RGB(gaiaGrayColor)[2]/255, hex2RGB(gaiaGrayColor)[3]/255)
+				end
+			else
+				Spring.SetTeamColor(teamID, r, g, b)
+			end
+		end
+	end
+	updateTeamColors()
+
+	function gadget:Update()
+		if math.random(0,60) == 0 then
+			updateTeamColors()
+		elseif Spring.GetConfigInt("UpdateTeamColors", 0) == 1 then
+			updateTeamColors()
+			Spring.SetConfigInt("UpdateTeamColors", 0)
+			Spring.SetConfigInt("SimpleTeamColors_Reset", 0)
+		end
+	end
 end
-
-local function EnemyColorHandler(teamID, allyTeam, allyTeamCount, myTeam, myAllyTeam)
-    if not EATeams[allyTeam] then
-        EATeams[allyTeam] = true
-        if EACountNumber then
-            EACount[allyTeam] = EACountNumber + 1
-            EACountNumber = EACountNumber + 1
-        else
-            EACount[allyTeam] = 1
-            EACountNumber = 1
-        end
-        EATeamsCount[allyTeam] = 0
-    end
-    EATeamsCount[allyTeam] = EATeamsCount[allyTeam] + 1
-    --Spring.Echo("allyTeamCount "..allyTeamCount)
-    --Spring.Echo("EACount[allyTeam] "..EACount[allyTeam])
-    --Spring.Echo("EATeams[allyTeam] "..EATeams[allyTeam])
-    --Spring.Echo("EATeamsCount[allyTeam] "..EATeamsCount[allyTeam])
-    if EnemyColors[allyTeamCount] then
-        if EnemyColors[allyTeamCount][EACount[allyTeam]] then
-            if EnemyColors[allyTeamCount][EACount[allyTeam]][EATeamsCount[allyTeam]] then
-                spSetTeamColor(
-                    teamID, 
-                    EnemyColors[allyTeamCount][EACount[allyTeam]][EATeamsCount[allyTeam]][1] /255, 
-                    EnemyColors[allyTeamCount][EACount[allyTeam]][EATeamsCount[allyTeam]][2] /255,
-                    EnemyColors[allyTeamCount][EACount[allyTeam]][EATeamsCount[allyTeam]][3] /255
-                )
-            else
-                MissingColorHandler(teamID, allyTeam)
-            end
-        else
-            MissingColorHandler(teamID, allyTeam)
-        end
-    else
-        MissingColorHandler(teamID, allyTeam)
-    end
-    -- planned
-end
-
-local function UpdatePlayerColors()
-    local teams = spGetTeamList()
-    local allyteams = spGetAllyTeamList()
-    local myTeam = spGetMyTeamID()
-    local myAllyTeam = spGetMyAllyTeamID()
-    local spectator = spGetSpectatingState()
-    EATeams = {}
-    EACount = {}
-    EATeamsCount = {}
-    for i = 1,#teams do
-        local teamID = teams[i]
-        local _, leader, isDead, isAiTeam, side, allyTeam, incomeMultiplier, customTeamKeys = spGetTeamInfo(teamID)
-        local luaAI = spGetTeamLuaAI(teamID)
-        if isAiTeam and (luaAI and (string.find(luaAI, "Scavenger"))) then
-            if string.find(luaAI, "Scavenger") then
-                spSetTeamColor(teamID, ScavColor[1]/255, ScavColor[2]/255, ScavColor[3]/255)
-            end
-        elseif spGetGaiaTeamID() == teamID then
-            spSetTeamColor(teamID, GaiaColor[1]/255, GaiaColor[2]/255, GaiaColor[3]/255)
-        else
-            if SimpleColorsEnabled == 1 then -- SimpleColors
-                MissingColorHandler(teamID, allyTeam)
-            elseif (AnonymousModeEnabled and allyTeam ~= myAllyTeam) and (not spectator) then
-                spSetTeamColor(teamID, SimpleEnemyColor[1]/255, SimpleEnemyColor[2]/255, SimpleEnemyColor[3]/255)
-            elseif #teams == #allyteams then -- FFA
-                ffaCounter = ffaCounter+1
-                if AnonymousModeEnabled and teamID == myTeam and (not spectator) then
-                    spSetTeamColor(teamID, SimplePlayerColor[1]/255, SimplePlayerColor[2]/255, SimplePlayerColor[3]/255)
-                elseif FFAColors[ffaCounter] then
-                    spSetTeamColor(teamID, FFAColors[ffaCounter][1] /255, FFAColors[ffaCounter][2] /255, FFAColors[ffaCounter][3] /255)
-                else
-                    MissingColorHandler(teamID, allyTeam)
-                end
-            else
-                if spectator or (not AnonymousModeEnabled and (not DynamicTeamColorsEnabled)) then
-                    myTeam = 0
-                    myAllyTeam = 0
-                end
-                if allyTeam == myAllyTeam then
-                    allyCounter = allyCounter+1
-                    if AllyColors[#allyteams-1] then
-                        if AllyColors[#allyteams-1][allyCounter] then
-                            spSetTeamColor(teamID, AllyColors[#allyteams-1][allyCounter][1] /255, AllyColors[#allyteams-1][allyCounter][2] /255, AllyColors[#allyteams-1][allyCounter][3] /255)
-                        else
-                            MissingColorHandler(teamID, allyTeam)
-                        end
-                    else
-                        MissingColorHandler(teamID, allyTeam)
-                    end
-                else
-                    EnemyColorHandler(teamID, allyTeam, #allyteams-1, myTeam, myAllyTeam)
-                end
-            end
-        end
-        if IconDevModeEnabled == true then
-            spSetTeamColor(teamID, IconDevModeColor[1] /255, IconDevModeColor[2] /255, IconDevModeColor[3] /255)
-        end
-    end
-    myTeam = nil
-    myAllyTeam = nil
-    ffaCounter = 0
-    allyCounter = 0
-    EATeams = nil
-    EACount = nil
-    EATeamsCount = nil
-    EACountNumber = nil
-end
-
-function gadget:Initialize()
-    UpdatePlayerColors()
-end
-
-function gadget:PlayerChanged(playerID)
-    if playerID == myPlayerID then
-        UpdatePlayerColors()
-    end
-end
-
-function gadget:Update()
-    simpleColorsUpdateCounter = simpleColorsUpdateCounter + spGetLastUpdateSeconds()
-    if simpleColorsUpdateCounter > 1 then
-        simpleColorsUpdateCounter = 0
-        local PreviousSimpleColorsEnabled = SimpleColorsEnabled
-        SimpleColorsEnabled = spGetConfigInt("simple_auto_colors", 0)
-        if PreviousSimpleColorsEnabled ~= SimpleColorsEnabled then
-            UpdatePlayerColors()
-        end
-    end
-
-    if math.random(0,60) == 0 then
-        UpdatePlayerColors()
-    end
-end
-
-
-
-
