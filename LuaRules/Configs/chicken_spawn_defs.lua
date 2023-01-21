@@ -434,28 +434,21 @@ local chickenMinions = { -- Units spawning other units
 	addSpecialSquad(7, {"10 lozreaper", "8 lozpulverizer"}, 1)
 	addSpecialSquad(7, {"10 fedavalanche"}, 1)
 	addSpecialSquad(7, {"10 lozluger"}, 1)
-	addSpecialSquad(7, {"2 lozmammoth"}, 2)
-	addSpecialSquad(7, {"2 fedgoliath"}, 2)
+	addSpecialSquad(7, {"1 lozmammoth"}, 2)
+	addSpecialSquad(7, {"1 fedgoliath"}, 2)
 
 	addSpecialSquad(8, {"10 fedbear", "8 fedcobra"}, 1)
 	addSpecialSquad(8, {"10 lozreaper", "8 lozpulverizer"}, 1)
 	addSpecialSquad(8, {"10 fedavalanche"}, 1)
 	addSpecialSquad(8, {"10 lozluger"}, 1)
-	addSpecialSquad(8, {"2 lozmammoth"}, 2)
-	addSpecialSquad(8, {"2 fedgoliath"}, 2)
-	addSpecialSquad(8, {"1 lozsilverback", "5 lozreaper", "5 lozpulverizer"}, 3)
-	addSpecialSquad(8, {"1 fedjuggernaut", "5 fedbear", "5 fedcobra"}, 3)
+	addSpecialSquad(8, {"1 lozmammoth"}, 2)
+	addSpecialSquad(8, {"1 fedgoliath"}, 2)
 
-	addSpecialSquad(9, {"1 lozsilverback", "5 lozreaper", "5 lozpulverizer"}, 1)
-	addSpecialSquad(9, {"1 fedjuggernaut", "5 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(9, {"1 lozsilverback", "2 lozmammoth", "5 lozreaper", "5 lozpulverizer", "10 lozluger"}, 2)
-	addSpecialSquad(9, {"1 fedjuggernaut", "2 fedgoliath", "5 fedbear", "5 fedcobra", "10 fedavalanche"}, 2)
+	addSpecialSquad(8, {"1 lozmammoth"}, 1)
+	addSpecialSquad(8, {"1 fedgoliath"}, 1)
 
-	addSpecialSquad(10, {"2 lozsilverback", "5 lozreaper", "5 lozpulverizer"}, 1)
-	addSpecialSquad(10, {"2 fedjuggernaut", "5 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(10, {"2 lozsilverback", "4 lozmammoth", "5 lozreaper", "5 lozpulverizer"}, 4)
-	addSpecialSquad(10, {"2 fedjuggernaut", "4 fedgoliath", "5 fedbear", "5 fedcobra"}, 4)
-
+	addSpecialSquad(10, {"1 lozsilverback"}, 1)
+	addSpecialSquad(10, {"1 fedjuggernaut"}, 1)
 --[[
 if difficulty >= 3 then
 	for i = 11,wavesAmount do
@@ -521,52 +514,52 @@ end
 -- Air Squads ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-addAirSquad(5, {"4 fedsparrow"})
-addAirSquad(5, {"4 lozwasp"})
-addAirSquad(5, {"4 fedhawk", "4 lozhornet" })
-addAirSquad(5, {"5 fedcrow"})
-addAirSquad(5, {"3 fedhawk", "5 lozbumblebee"})
-addAirSquad(5, {"2 fedcondor" })
-addAirSquad(5, {"2 lozcrane" })
+addAirSquad(5, {"4 fedsparrow"}, 1)
+addAirSquad(5, {"4 lozwasp"}, 1)
+addAirSquad(5, {"4 fedhawk", "4 lozhornet" }, 1)
+addAirSquad(5, {"5 fedcrow"}, 1)
+addAirSquad(5, {"3 fedhawk", "5 lozbumblebee"}, 1)
+addAirSquad(5, {"2 fedcondor" }, 1)
+addAirSquad(5, {"2 lozcrane" }, 1)
 
-addAirSquad(5, {"3 fedhawk", "4 lozhornet" })
-addAirSquad(5, {"2 lozhornet", "5 fedcrow"})
-addAirSquad(5, {"3 fedhawk", "5 lozbumblebee"})
-addAirSquad(5, {"2 fedcondor", "5 lozcrane"})
+addAirSquad(5, {"3 fedhawk", "4 lozhornet" }, 1)
+addAirSquad(5, {"2 lozhornet", "5 fedcrow"}, 1)
+addAirSquad(5, {"3 fedhawk", "5 lozbumblebee"}, 1)
+addAirSquad(5, {"2 fedcondor", "5 lozcrane"}, 1)
 
-addAirSquad(6, {"3 fedhawk", "3 lozhornet" })
-addAirSquad(6, {"3 lozhornet", "5 fedcrow"})
-addAirSquad(6, {"3 fedhawk", "5 lozbumblebee"})
-addAirSquad(6, {"3 fedcondor", "3 lozcrane"})
-addAirSquad(6, { "1 fedeagle", "1 loztitan" })
+addAirSquad(6, {"3 fedhawk", "3 lozhornet" }, 1)
+addAirSquad(6, {"3 lozhornet", "5 fedcrow"}, 1)
+addAirSquad(6, {"3 fedhawk", "5 lozbumblebee"}, 1)
+addAirSquad(6, {"3 fedcondor", "3 lozcrane"}, 1)
+addAirSquad(6, { "1 fedeagle", "1 loztitan" }, 1)
 
-addAirSquad(7, {"6 fedhawk", "6 lozhornet" })
-addAirSquad(7, {"5 lozhornet", "10 fedcrow"})
-addAirSquad(7, {"5 fedhawk", "10 lozbumblebee"})
-addAirSquad(7, {"3 fedcondor", "3 lozcrane"})
-addAirSquad(7, { "1 fedeagle", "1 loztitan" })
+addAirSquad(7, {"6 fedhawk", "6 lozhornet" }, 1)
+addAirSquad(7, {"5 lozhornet", "10 fedcrow"}, 1)
+addAirSquad(7, {"5 fedhawk", "10 lozbumblebee"}, 1)
+addAirSquad(7, {"3 fedcondor", "3 lozcrane"}, 1)
 
-addAirSquad(8, {"6 fedhawk", "10 lozbumblebee", "6 lozhornet", "10 fedcrow"})
-addAirSquad(8, {"3 fedcondor", "3 lozcrane"})
-addAirSquad(8, { "2 fedeagle", "2 loztitan" })
+addAirSquad(8, {"6 fedhawk", "10 lozbumblebee", "6 lozhornet", "10 fedcrow"}, 1)
+addAirSquad(8, {"3 fedcondor", "3 lozcrane"}, 1)
 
-addAirSquad(9, {"6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow"})
-addAirSquad(9, {"4 fedcondor", "4 lozcrane"})
-addAirSquad(9, {"3 fedeagle", "3 loztitan" })
+addAirSquad(9, {"6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow"}, 1)
+addAirSquad(9, {"4 fedcondor", "4 lozcrane"}, 1)
+addAirSquad(9, {"1 fedeagle", "1 loztitan" }, 1)
 
-addAirSquad(10, {"6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow"})
-addAirSquad(10, {"10 fedhawk", "10 lozhornet"})
-addAirSquad(10, {"5 fedeagle", "5 loztitan" })
+addAirSquad(10, {"6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow"}, 1)
+addAirSquad(10, {"10 fedhawk", "10 lozhornet"}, 1)
+addAirSquad(10, {"2 fedeagle", "2 loztitan" }, 1)
 
 
 
-
+-- Add Fuck You air squad
+--[[
 if difficulty >= 3 then
 	for i = 11,wavesAmount do
 		addAirSquad(i, { "6 fedeagle", "6 loztitan" })
 		addAirSquad(i, { "9 fedcrow", "9 lozbumblebee" })
 	end
 end
+]]--
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Settings -- Adjust these
