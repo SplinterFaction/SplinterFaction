@@ -15,12 +15,14 @@ local gameShortName = Game.gameShortName
 SimpleFactoriesCount = {}
 SimpleFactories = {}
 SimpleT1Mexes = {}
+SimpleConstructorCount = {}
 SimpleFactoryDelay = {}
+SimpleConstructorDelay = {}
 
 for i = 1, #teams do
 	local teamID = teams[i]
 	local luaAI = Spring.GetTeamLuaAI(teamID)
-	if luaAI and luaAI ~= "" and (string.sub(luaAI, 1, 8) == 'SimpleAI' or string.sub(luaAI, 1, 15) == 'SimpleCheaterAI' or string.sub(luaAI, 1, 16) == 'SimpleDefenderAI' or string.sub(luaAI, 1, 19) == 'SimpleConstructorAI') then
+	if luaAI and luaAI ~= "" and (string.sub(luaAI, 1, 8) == 'SimpleAI' or string.sub(luaAI, 1, 16) == 'SimpleDefenderAI' or string.sub(luaAI, 1, 19) == 'SimpleConstructorAI') then
 		enabled = true
 		SimpleAITeamIDsCount = SimpleAITeamIDsCount + 1
 		SimpleAITeamIDs[SimpleAITeamIDsCount] = teamID
@@ -28,12 +30,11 @@ for i = 1, #teams do
 		SimpleFactoriesCount[teamID] = 0
 		SimpleFactories[teamID] = {}
 		SimpleT1Mexes[teamID] = 0
+		SimpleConstructorCount[teamID] = 0
 		SimpleFactoryDelay[teamID] = 0
-
-		if string.sub(luaAI, 1, 15) == 'SimpleCheaterAI' or string.sub(luaAI, 1, 16) == 'SimpleDefenderAI' or string.sub(luaAI, 1, 19) == 'SimpleConstructorAI' then
-			SimpleCheaterAITeamIDsCount = SimpleCheaterAITeamIDsCount + 1
-			SimpleCheaterAITeamIDs[SimpleCheaterAITeamIDsCount] = teamID
-		end
+		SimpleConstructorDelay[teamID] = 0
+		SimpleCheaterAITeamIDsCount = SimpleCheaterAITeamIDsCount + 1
+		SimpleCheaterAITeamIDs[SimpleCheaterAITeamIDsCount] = teamID
 	end
 end
 
@@ -256,9 +257,21 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 	for b1 = 1,10 do
 		if type == "Builder" or type == "Commander" then
 			SimpleFactoryDelay[unitTeam] = SimpleFactoryDelay[unitTeam]-1
-			local r = math.random(0, 20)
+			SimpleConstructorDelay[unitTeam] = SimpleConstructorDelay[unitTeam]-1
+			local r = math.random(0, 20) -- Used: 8
 			local mexspotpos = SimpleGetClosestMexSpot(unitposx, unitposz)
-			if mexspotpos and SimpleT1Mexes[unitTeam] < 2 then
+			if SimpleConstructorCount[unitTeam] < 5 then
+				local project = SimpleConstructorDefs[math.random(1, #SimpleConstructorDefs)]
+				for i2 = 1,#buildOptions do
+					if buildOptions[i2] == project then
+						local x, y, z = Spring.GetUnitPosition(unitID)
+						Spring.GiveOrderToUnit(unitID, -project, { x+math.random(-64,64), y, z+math.random(-64,64), 0 }, 0)
+						Spring.Echo("Success! Project Type: Constructor.")
+						success = true
+						break
+					end
+				end
+			elseif mexspotpos and (SimpleT1Mexes[unitTeam] < 1) then
 				local project = SimpleExtractorDefs[math.random(1, #SimpleExtractorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -268,7 +281,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif eincome < eexpense or r == 0 then
+			elseif ecurrent < estorage*0.50 then
 				local project = SimpleGeneratorDefs[math.random(1, #SimpleGeneratorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -278,19 +291,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-
-			elseif ecurrent > estorage * 0.99 or r == 0 then
-				local project = SimpleStorageDefs[math.random(1, #SimpleStorageDefs)]
-				for i2 = 1,#buildOptions do
-					if buildOptions[i2] == project then
-						SimpleBuildOrder(unitID, project)
-						Spring.Echo("Success! Project Type: Storage.")
-						success = true
-						break
-					end
-				end
-
-			elseif supplyUsed > supplyMax * 0.80 and supplyMax < 1000 or r == 0 then
+			elseif SimpleFactoriesCount[unitTeam] > 0 and ((supplyUsed > supplyMax * 0.50 and supplyMax < 950) or supplyMax < 20) then
 				local project = SimpleSupplyDefs[math.random(1, #SimpleSupplyDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -300,8 +301,58 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-
-			elseif mcurrent < mstorage * 0.30 or r == 1 then
+			elseif (ecurrent > estorage * 0.50 and mcurrent > mstorage * 0.50) and SimpleConstructorDelay[unitTeam] > 0 and SimpleFactoryDelay[unitTeam] <= 0 then
+				local project = SimpleFactoriesDefs[math.random(1, #SimpleFactoriesDefs)]
+				for i2 = 1,#buildOptions do
+					if buildOptions[i2] == project and (SimpleFactories[unitTeam][project] or 0 < 2) then
+						SimpleFactoryDelay[unitTeam] = 60*SimpleFactoriesCount[unitTeam]
+						SimpleBuildOrder(unitID, project)
+						Spring.Echo("Success! Project Type: Factory.")
+						success = true
+						break
+					end
+				end
+			elseif (ecurrent > estorage * 0.50 and mcurrent > mstorage * 0.50) and SimpleConstructorDelay[unitTeam] <= 0 then
+				SimpleConstructorDelay[unitTeam] = 3
+				if type == "Commander" then
+					local project = SimpleCommanderDefs[math.random(1,#SimpleCommanderDefs)]
+					for i2 = 1,#buildOptions do
+						if buildOptions[i2] == project then
+							SimpleConstructorDelay[unitTeam] = 60
+							local x, y, z = Spring.GetUnitPosition(unitID)
+							Spring.GiveOrderToUnit(unitID, -project, { x+math.random(-64,64), y, z+math.random(-64,64), 0 }, 0)
+							Spring.Echo("Success! Project Type: Commander.")
+							success = true
+							break
+						end
+					end
+				end
+				if not success then
+					if SimpleConstructorCount[unitTeam] < 10 and supplyUsed < supplyMax - 5 and math.random(0,1) == 0 then
+						local project = SimpleConstructorDefs[math.random(1, #SimpleConstructorDefs)]
+						for i2 = 1,#buildOptions do
+							if buildOptions[i2] == project then
+								SimpleConstructorDelay[unitTeam] = 10
+								local x, y, z = Spring.GetUnitPosition(unitID)
+								Spring.GiveOrderToUnit(unitID, -project, { x+math.random(-64,64), y, z+math.random(-64,64), 0 }, 0)
+								Spring.Echo("Success! Project Type: Constructor.")
+								success = true
+								break
+							end
+						end
+					end
+				end
+			elseif (ecurrent > estorage * 0.90 and mcurrent > mstorage * 0.90) then
+				local project = SimpleStorageDefs[math.random(1, #SimpleStorageDefs)]
+				for i2 = 1,#buildOptions do
+					if buildOptions[i2] == project then
+						SimpleBuildOrder(unitID, project)
+						Spring.Echo("Success! Project Type: Storage.")
+						success = true
+						break
+					end
+				end
+			elseif mcurrent < mstorage * 0.50 then
 				if mexspotpos and type ~= "Commander" then
 					local project = SimpleExtractorDefs[math.random(1, #SimpleExtractorDefs)]
 					for i2 = 1,#buildOptions do
@@ -371,7 +422,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 					
 				end
 
-			elseif r == 2 or r == 3 or r == 4 or r == 5 then
+			elseif r == 0 or r == 1 or r == 2 or r == 3 or r == 4 or r == 5 then
 				local project = SimpleTurretDefs[math.random(1, #SimpleTurretDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -383,8 +434,9 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 				end
 			elseif (SimpleFactoriesCount[unitTeam] < 6 and SimpleFactoryDelay[unitTeam] <= 0) or ((mcurrent > mstorage * 0.75 and ecurrent > estorage * 0.75) and SimpleFactoryDelay[unitTeam] <= 0) then
 				local project = SimpleFactoriesDefs[math.random(1, #SimpleFactoriesDefs)]
+				SimpleFactoryDelay[unitTeam] = 10
 				for i2 = 1,#buildOptions do
-					if buildOptions[i2] == project and (SimpleFactories[unitTeam][project] or 0 < 3) then
+					if buildOptions[i2] == project and (SimpleFactories[unitTeam][project] or 0 < 2) then
 						SimpleBuildOrder(unitID, project)
 						SimpleFactoryDelay[unitTeam] = 60*SimpleFactoriesCount[unitTeam]
 						Spring.Echo("Success! Project Type: Factory.")
@@ -392,31 +444,21 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif r == 11 then
-				for t = 1,10 do
-					local targetUnit = units[math.random(1,#units)]
-					if UnitDefs[Spring.GetUnitDefID(targetUnit)].isBuilding == true then
-						local tUnitX, tUnitY, tUnitZ = Spring.GetUnitPosition(targetUnit)
-						Spring.GiveOrderToUnit(unitID, CMD.MOVE, { tUnitX + math.random(-100, 100), tUnitY, tUnitZ + math.random(-100, 100) }, { "shift", "alt", "ctrl" })
-						success = true
-						break
-					end
-				end
-			elseif r == 12 and type ~= "Commander" then
+			elseif r == 6 and type ~= "Commander" then
 				local mapcenterX = mapsizeX/2
 				local mapcenterZ = mapsizeZ/2
 				local mapcenterY = Spring.GetGroundHeight(mapcenterX, mapcenterZ)
 				local mapdiagonal = math.ceil(math.sqrt((mapsizeX*mapsizeX)+(mapsizeZ*mapsizeZ)))
 				Spring.GiveOrderToUnit(unitID, CMD.RECLAIM,{mapcenterX+math.random(-100,100),mapcenterY,mapcenterZ+math.random(-100,100),mapdiagonal}, 0)
 				success = true
-			elseif r == 13 and type ~= "Commander" then
+			elseif r == 7 and type ~= "Commander" then
 				local mapcenterX = mapsizeX/2
 				local mapcenterZ = mapsizeZ/2
 				local mapcenterY = Spring.GetGroundHeight(mapcenterX, mapcenterZ)
 				local mapdiagonal = math.ceil(math.sqrt((mapsizeX*mapsizeX)+(mapsizeZ*mapsizeZ)))
 				Spring.GiveOrderToUnit(unitID, CMD.REPAIR,{mapcenterX+math.random(-100,100),mapcenterY,mapcenterZ+math.random(-100,100),mapdiagonal}, 0)
 				success = true
-			elseif r  and type == "Commander" then
+			elseif r == 8 and type == "Commander" then
 				local project = SimpleCommanderDefs[math.random(1,#SimpleCommanderDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -464,10 +506,10 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 				end
 			end
 		elseif type == "Factory" then
-			if #Spring.GetFullBuildQueue(unitID, 0) < 5 then
+			if #Spring.GetFullBuildQueue(unitID, 0) < 10 and supplyUsed < supplyMax*0.95 then
 				local r = math.random(0, 5)
 				local luaAI = Spring.GetTeamLuaAI(unitTeam)
-				if r == 0 or string.sub(luaAI, 1, 19) == 'SimpleConstructorAI' then
+				if r == 0 or string.sub(luaAI, 1, 19) == 'SimpleConstructorAI' or supplyUsed > supplyMax*0.85 then
 					local project = SimpleConstructorDefs[math.random(1, #SimpleConstructorDefs)]
 					for i2 = 1,#buildOptions do
 						if buildOptions[i2] == project then
@@ -678,6 +720,12 @@ if gadgetHandler:IsSyncedCode() then
 						break
 					end
 				end
+				for u = 1, #SimpleConstructorDefs do
+					if unitDefID == SimpleConstructorDefs[u] then
+						SimpleConstructorCount[unitTeam] = SimpleConstructorCount[unitTeam] + 1
+						break
+					end
+				end
 			end
 		end
 	end
@@ -700,6 +748,12 @@ if gadgetHandler:IsSyncedCode() then
 				for u = 1, #SimpleExtractorDefs do
 					if unitDefID == SimpleExtractorDefs[u] then
 						SimpleT1Mexes[unitTeam] = SimpleT1Mexes[unitTeam] - 1
+						break
+					end
+				end
+				for u = 1, #SimpleConstructorDefs do
+					if unitDefID == SimpleConstructorDefs[u] then
+						SimpleConstructorCount[unitTeam] = SimpleConstructorCount[unitTeam] - 1
 						break
 					end
 				end

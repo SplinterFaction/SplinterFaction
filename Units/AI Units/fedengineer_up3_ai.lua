@@ -1,35 +1,35 @@
--- UNITDEF -- fedengineer --
+-- UNITDEF -- fedengineer_up3 --
 --------------------------------------------------------------------------------
 
-unitName = "fedengineer_ai"
+unitName = "fedengineer_up3_ai"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 40
-buildDistance = 250
+buildCostMetal = 320
+buildDistance = 450
 
-buildpic = [[fedengineer.png]]
-fedbuildlists = Shared.buildListFedt0_ai
+buildpic = [[fedengineer_up3.png]]
+fedbuildlists = Shared.buildListFedt3_ai
 
 maxDamage = 500 --This is set automatically
 
-fedbuildlists = Shared.buildListFedt0_ai
+fedbuildlists = Shared.buildListFedt3_ai
 
-workertime = 1
+workertime = 8
 
-humanName = [[Lifter - Tech 0]]
+humanName = [[Lifter - Tech 3]]
 
-footprintx = 2
-footprintz = 2
-movementclass = "WALKERTANK2"
+footprintx = 4
+footprintz = 4
+movementclass = "WALKERTANK4"
 
-objectName = [[fedengineer.s3o]]
-script = [[fedengineer_lus.lua]]
+objectName = [[fedengineer_up3.s3o]]
+script = [[fedengineer_up3_lus.lua]]
 
-areamexdef = [[metalextractor]]
-requiretech = [[tech0]]
+areamexdef = [[metalextractor_up3]]
+requiretech = [[tech3]]
 
-explodeAs = [[smallexplosiongenericgreen]]
+explodeAs = [[hugeexplosiongenericgreen]]
 
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedengineer_basedef.lua")
 

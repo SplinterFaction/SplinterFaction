@@ -12,10 +12,10 @@ return {
     -- name = 'DAI',
     -- desc = 'Shard by AF for Spring Lua',
   -- },
-	{
-		name = 'ScavengersAI',
-		desc = 'scavs',
-	},
+	-- {
+	-- 	name = 'ScavengersAI',
+	-- 	desc = 'scavs',
+	-- },
 	{
 		name = 'Sandbox',
 		desc = 'Does absolutely Nothing',
@@ -23,10 +23,6 @@ return {
 	{
 		name = 'SimpleAI',
 		desc = 'EasyAI (Simple)',
-	},
-	{
-		name = 'SimpleCheaterAI',
-		desc = 'EasyAI (Cheater)',
 	},
 	{
 		name = 'SimpleDefenderAI',

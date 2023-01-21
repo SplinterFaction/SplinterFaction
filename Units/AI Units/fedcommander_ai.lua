@@ -9,11 +9,11 @@ buildpicture = [[fedcommander.png]]
 buildcostmetal = 250
 builddistance = 550
 
-techprovided = [[tech0, -overseer]]
+techprovided = [[tech0, tech1, -overseer, aioverseerup0]]
 techrequired = [[tech0]]
 
 maxvelocity = 2
-workertime = 1
+workertime = 2
 
 movementclass = [[WALKERTANK3]]
 

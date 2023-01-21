@@ -9,11 +9,11 @@ buildpicture = [[ecommander.png]]
 buildcostmetal = 1000
 builddistance = 550
 
-techprovided = [[tech0, tech1, tech2, -overseer]]
-techrequired = [[tech1]]
+techprovided = [[tech0, tech1, tech2, -overseer, -aioverseerup1, aioverseerup2]]
+techrequired = [[aioverseerup1]]
 
 maxvelocity = 2
-workertime = 4
+workertime = 8
 
 movementclass = [[WALKERTANK5]]
 
