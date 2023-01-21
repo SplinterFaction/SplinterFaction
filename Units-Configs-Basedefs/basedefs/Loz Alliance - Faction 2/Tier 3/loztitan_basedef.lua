@@ -221,6 +221,7 @@ weaponDefs                 = {
 		coreThickness             = 0.5,
 		-- cegtag					  = "burnblack",
 		beamtime				  = 0.1,
+		beamttl                   = 4,
 		largebeamlaser			  = true,
 		laserFlareSize            = 5,
 		duration                  = 0.8,
@@ -232,7 +233,7 @@ weaponDefs                 = {
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,
 		minintensity              = 1,
-		name                      = "Laser",
+		name                      = "Microwave Beam",
 		range                     = 500,
 		reloadtime                = 0.1,
 		WeaponType                = "BeamLaser",
@@ -257,94 +258,6 @@ weaponDefs                 = {
 		},
 		damage                    = {
 			default               = 21.6,
-		},
-	},
-
-	beamlaser                  = {
-		predictboost	         = 0.3,
-		avoidFeature             = false,
-		avoidFriendly            = false,
-		beamTime                 = 0.1,
-		beamttl                  = 4,
-		collideFeature           = false,
-		collideFriendly          = false,
-		canattackground          = false,
-		coreThickness            = 0.3,
-		duration                 = 0.1,
-		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small-sparks-burn",
-		fallOffRate              = 1,
-		fireStarter              = 50,
-		interceptedByShieldType  = 4,
-		impulsefactor		     = 0.1,
-
-		largebeamlaser	         = true,
-		laserflaresize 	         = 8,
-		minintensity             = 1,
-		name                     = "Laser",
-		range                    = 500,
-		reloadtime               = 0.3,
-		WeaponType               = "BeamLaser",
-		rgbColor                 = "0.1 0 0.3",
-		rgbColor2                = "1 1 1",
-		soundTrigger             = true,
-		soundstart               = "weapons/aegis.wav",
-		--	soundHit		     = "weapons/amphibmedtankshothit.wav",
-		scrollspeed		         = 5,
-		texture1                 = "lightning",
-		texture2                 = "laserend",
-		thickness                = 4,
-		tolerance                = 3000,
-		turret                   = true,
-		weaponVelocity           = 1000,
-		customparams              = {
-			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                    = {
-			default               = 3.333333333,
-		},
-	},
-
-	railgun               = {
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "0.133 0 0.4",
-		rgbColor2              = "0.75 0.75 0.75",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.25,
-		impulseFactor          = 0,
-		interceptedByShieldType  = 4,
-		name                   = "Railgun",
-		range                  = 500,
-		reloadtime             = 2,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "weapons/cranerailgun.wav",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.4,
-		thickness              = 6,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 2000,
-		customparams             = {
-			single_hit		 	 = true,
-			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 15,
 		},
 	},
 }

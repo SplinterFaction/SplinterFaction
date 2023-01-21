@@ -49,8 +49,8 @@ unitDef                    = {
 	acceleration 				 = 2,
 	brakeRate                    = 0.1,
 	turninplace 				 = true,
-	turninplacespeedlimit 		 = 45,
-	turnInPlaceAngleLimit		 = 90,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 400,
 	--------------
 	--------------
@@ -118,7 +118,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		highTrajectory	         = 1,
-		name                     = "Plasma Cannon",
+		name                     = "High Explosive Plasma Cannon",
 		range                    = 1300,
 		reloadtime               = 10,
 		size					 = 5,

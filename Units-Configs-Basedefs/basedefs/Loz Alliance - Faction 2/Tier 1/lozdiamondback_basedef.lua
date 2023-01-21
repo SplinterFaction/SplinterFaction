@@ -48,8 +48,8 @@ unitDef                    = {
 	acceleration 				 = 2,
 	brakeRate                    = 0.1,
 	turninplace 				 = true,
-	turninplacespeedlimit 		 = 45,
-	turnInPlaceAngleLimit		 = 90,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 600,
 	--------------
 	--------------
@@ -121,7 +121,7 @@ weaponDefs                 = {
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,
 		minintensity              = 1,
-		name                      = "Laser",
+		name                      = "Railgun",
 		range                     = 400,
 		reloadtime                = 0.25,
 		WeaponType                = "BeamLaser",

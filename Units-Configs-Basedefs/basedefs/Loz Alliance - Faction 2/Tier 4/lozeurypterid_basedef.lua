@@ -52,8 +52,8 @@ unitDef                    = {
 	acceleration 				 = 2,
 	brakeRate                    = 0.1,
 	turninplace 				 = true,
-	turninplacespeedlimit 		 = 45,
-	turnInPlaceAngleLimit		 = 90,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 150,
 	--------------
 	--------------
@@ -112,7 +112,7 @@ weaponDefs                 = {
 		highTrajectory			 = 0,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		name                     = "Light Cannon",
+		name                     = "Nuclear Plasma Cannon",
 		range                    = 1600,
 		reloadtime               = 1.2,
 		size					 = 16,

@@ -68,9 +68,9 @@ unitDef                    = {
 	acceleration 				 = 2,
 	brakeRate                    = 0.1,
 	turninplace 				 = true,
-	turninplacespeedlimit 		 = 45,
-	turnInPlaceAngleLimit		 = 90,
-	turnrate 				 	 = 500,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
+	turnrate 				 	 = 600,
 	--------------
 	--------------
 	sfxtypes                     = {

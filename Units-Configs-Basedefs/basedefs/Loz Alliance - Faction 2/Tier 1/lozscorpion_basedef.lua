@@ -51,12 +51,12 @@ unitDef                    = {
 	acceleration 				 = 2,
 	brakeRate                    = 0.1,
 	turninplace 				 = true,
-	turninplacespeedlimit 		 = 45,
-	turnInPlaceAngleLimit		 = 90,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 600,
 	--------------
 	--------------
-	sfxtypes                     = { 
+	sfxtypes                     = {
 		pieceExplosionGenerators = { 
 			"deathceg3", 
 			"deathceg4", 
@@ -114,7 +114,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		model                    = "missilesmalllauncher.s3o",
-		name                     = "Rockets",
+		name                     = "Surface to Air/Ground Guided Missile",
 		range                    = 650,
 		reloadtime               = 7,
 		weaponType		         = "MissileLauncher",
