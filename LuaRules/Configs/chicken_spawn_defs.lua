@@ -44,14 +44,12 @@ local chickenTurrets = {
 		"lozannihilator",
 	},
 	burrowDefenders = {					-- Spawns connected to burrow
-		"fedmenlo",
-		"lozjericho",
-		"fedstinger",
-		"lozrazor",
 		"fedimmolator",
 		"lozinferno",
 		"fedjavelin",
 		"lozrattlesnake",
+		"fedguardian",
+		"lozannihilator",
 	},
 }
 
@@ -175,7 +173,7 @@ local optionValues = {
 	[difficulties.normal] = {
 		chickenSpawnRate  = 30, -- Time between Waves in seconds
 		burrowSpawnRate   = 75, -- Time inbetween burrow spawns in seconds
-		turretSpawnRate   = 150, -- Time inbetween turret spawns in seconds
+		turretSpawnRate   = 60, -- Time inbetween turret spawns in seconds
 		queenSpawnMult    = 1, -- Unused, don't touch (just in case)
 		angerBonus        = 0.2, -- Multiplier for boss anger when you kill a burrow
 		maxXP			  = 0.5, -- Random amount of XP given to spawned units
@@ -183,10 +181,10 @@ local optionValues = {
 		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
-		maxChickens		  = 25, -- Number og ai units spawned in the end stages of the game per wave
-		queenName         = 'fedanarchid_normal',
-		queenResistanceMult   = 1, -- Multipler for how quickly the queen will gain resistances for each weapon
+		minChickens		  = 20, -- Number of ai units spawned in the beginning stages of the game per wave
+		maxChickens		  = 50, -- Number og ai units spawned in the end stages of the game per wave
+		queenName         = 'fedanarchid_insane',
+		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 
 	[difficulties.hard] = {
@@ -415,13 +413,13 @@ local chickenMinions = { -- Units spawning other units
 
 	addSpecialSquad(2, {"10 fedstorm", "4 fedthud"}, 1)
 	addSpecialSquad(2, {"10 lozroach", "8 lozscorpion"}, 1)
-	addSpecialSquad(2, {"10 fedbear", "5 fedcobra"}, 1)
-	addSpecialSquad(2, {"1 lozreaper", "1 lozpulverizer"}, 1)
+	addSpecialSquad(2, {"5 fedbear", "2 fedcobra"}, 2)
+	addSpecialSquad(2, {"5 lozreaper", "2 lozpulverizer"}, 2)
 
 	addSpecialSquad(3, {"10 fedstorm", "4 fedthud"}, 1 )
 	addSpecialSquad(3, {"10 lozroach", "8 lozscorpion"}, 1)
-	addSpecialSquad(3, {"2 fedbear", "1 fedcobra"}, 2)
-	addSpecialSquad(3, {"2 lozreaper", "1 lozpulverizer"}, 2)
+	addSpecialSquad(3, {"5 fedbear", "2 fedcobra"}, 2)
+	addSpecialSquad(3, {"5 lozreaper", "2 lozpulverizer"}, 2)
 
 	addSpecialSquad(4, {"10 fedstorm", "4 fedthud"}, 1)
 	addSpecialSquad(4, {"10 lozroach", "8 lozscorpion"}, 1)
@@ -499,18 +497,22 @@ for i = 1,wavesAmount do
 	elseif i <= 4 then
 		addBasicSquad(i, {"5 fedstorm"}, 1)
 		addBasicSquad(i, {"5 fedthud"}, 1)
+		addBasicSquad(i, {"5 fedbear"}, 2)
 		addBasicSquad(i, {"5 lozroach"}, 1)
 		addBasicSquad(i, {"5 lozscorpion"}, 1)
+		addBasicSquad(i, {"5 lozreaper"}, 2)
 	elseif i <= 6 then
 		addBasicSquad(i, {"5 fedstorm"}, 1)
 		addBasicSquad(i, {"5 fedthud"}, 1)
-		addBasicSquad(i, {"10 fedbear"}, 3)
+		addBasicSquad(i, {"10 fedbear", "5 fedcobra"}, 3)
 		addBasicSquad(i, {"5 lozroach"}, 1)
 		addBasicSquad(i, {"5 lozscorpion"}, 1)
 		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer"}, 3)
 	elseif i <= 8 then
-		addBasicSquad(i, {"5 fedbear", "5 fedcobra"}, 1)
+		addBasicSquad(i, {"10 fedbear", "5 fedcobra"}, 1)
 		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer"}, 1)
+		addBasicSquad(i, {"2 fedgoliath"}, 2)
+		addBasicSquad(i, {"2 lozmammoth"}, 2)
 	elseif i <= 10 then
 		addBasicSquad(i, {"5 fedbear", "5 fedcobra"}, 1)
 		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer" }, 1)
