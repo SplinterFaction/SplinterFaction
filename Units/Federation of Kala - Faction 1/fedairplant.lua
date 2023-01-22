@@ -15,7 +15,7 @@ airPlantBuildList = Shared.buildListFedAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 10
+workerTime = 16
 
 factionname = "Federation of Kala"
 

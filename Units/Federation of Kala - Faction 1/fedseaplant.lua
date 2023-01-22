@@ -17,7 +17,7 @@ fedseaplantbuildlist = Shared.buildListFedSeaPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 10
+workerTime = 16
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedseaplant_basedef.lua")

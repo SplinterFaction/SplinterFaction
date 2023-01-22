@@ -16,7 +16,7 @@ tech = [[tech1]]
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 10
+workerTime = 16
 
 hoverFactoryBuildList = Shared.buildListf2landfac
 

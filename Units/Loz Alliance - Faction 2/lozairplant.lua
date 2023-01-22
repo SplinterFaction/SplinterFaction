@@ -15,7 +15,7 @@ airPlantBuildList = Shared.buildListLozAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 10
+workerTime = 16
 
 factionname = "Loz Alliance"
 
