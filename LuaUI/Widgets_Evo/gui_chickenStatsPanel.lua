@@ -199,19 +199,17 @@ end
 local function getMarqueeMessage(chickenEventArgs)
 	local messages = {}
 	if chickenEventArgs.type == "firstWave" then
-		messages[1] = textColor .. 'ui.chickens.firstWave1'
-		messages[2] = textColor .. 'ui.chickens.firstWave2'
+		messages[1] = textColor .. "They're here!"
+		messages[2] = textColor .. 'Get ready to fight!'
 	elseif chickenEventArgs.type == "airWave" then
-		messages[1] = textColor .. 'ui.chickens.airWave1'
-		messages[2] = textColor .. 'ui.chickens.airWave2'
-	elseif chickenEventArgs.type == "miniQueen" then
-		messages[1] = textColor .. 'ui.chickens.miniBoss1'
-		messages[2] = textColor .. 'ui.chickens.miniBoss2'
+		messages[1] = textColor .. 'Air Wave!'
+		messages[2] = textColor .. chickenEventArgs.number .. ' Aircrafts!'
 	elseif chickenEventArgs.type == "queen" then
-		messages[1] = textColor .. 'ui.chickens.queenIsAngry1'
-		messages[2] = textColor .. 'ui.chickens.queenIsAngry2'
+		messages[1] = textColor .. 'The Boss is here!'
+		messages[2] = textColor .. 'Get ready to fight!'
 	elseif chickenEventArgs.type == "wave" then
 		messages[1] = textColor .. "Wave " .. chickenEventArgs.waveCount
+		messages[2] = textColor .. chickenEventArgs.number .. ' Hostile Units!'
 	end
 
 	refreshMarqueeMessage = false
@@ -221,13 +219,13 @@ end
 
 local function getResistancesMessage()
 	local messages = {}
-	messages[1] = textColor .. 'ui.chickens.resistanceUnits'
+	messages[1] = textColor .. 'The Boss is now resistant to:'
 	for i = 1,#resistancesTable do
 		-- for a, b in pairs(UnitDefs[resistancesTable[i]]) do
 		-- 	Spring.Echo(a,b)
 		-- end
-		local attackerName = UnitDefs[resistancesTable[i]].name
-		messages[i+1] = textColor .. 'units.names.' .. attackerName
+		local attackerName = UnitDefs[resistancesTable[i]].humanName or UnitDefs[resistancesTable[i]].name
+		messages[i+1] = textColor .. " " .. attackerName
 	end
 	resistancesTable = {}
 
