@@ -20,7 +20,7 @@ end
 if gadgetHandler:IsSyncedCode() then
 
 	local sharedDynamicAllianceVictory = Spring.GetModOptions().shareddynamicalliancevictory
-	local fixedallies = true
+	local fixedallies = true -- Spring.GetModOptions().fixedallies  -- This needs to be fixed. Causes an error on 322 if it's false
 
 	local gaiaTeamID = Spring.GetGaiaTeamID()
 	local gaiaAllyTeamID = select(6, Spring.GetTeamInfo(gaiaTeamID))
@@ -33,7 +33,7 @@ if gadgetHandler:IsSyncedCode() then
 	local teamList = Spring.GetTeamList()
 	for i = 1, #teamList do
 		local luaAI = Spring.GetTeamLuaAI(teamList[i])
-		if (luaAI and (luaAI:find("Chickens") or luaAI:find("Scavengers"))) or Spring.GetModOptions().scoremode ~= "disabled" then
+		if (luaAI and (luaAI:find("Chickens") or luaAI:find("Scavengers") or luaAI:find("ScavReduxAI"))) or Spring.GetModOptions().scoremode ~= "disabled" then
 			ignoredTeams[teamList[i]] = true
 
 			-- ignore all other teams in this allyteam as well
@@ -46,12 +46,17 @@ if gadgetHandler:IsSyncedCode() then
 		end
 	end
 
+	local isCommander = {}
 	local unitDecoration = {}
 	for udefID,def in ipairs(UnitDefs) do
+		if def.customParams.iscommander then
+			isCommander[udefID] = true
+		end
 		if def.customParams.decoration then
 			unitDecoration[udefID] = true
 		end
 	end
+
 
 	local KillTeam = Spring.KillTeam
 	local GetTeamList = Spring.GetTeamList
@@ -70,9 +75,13 @@ if gadgetHandler:IsSyncedCode() then
 	local teamToAllyTeam = { [gaiaTeamID] = gaiaAllyTeamID }
 	local playerIDtoAIs = {}
 	local playerList = GetPlayerList()
+	local killTeamQueue = {}
+	local isFFA = Spring.GetModOptions().ffa_mode
 
 	local gameoverFrame
 	local gameoverWinners
+	local gameoverAnimFrame
+	local gameoverAnimUnits
 
 	local allyTeamInfos = {}
 	--allyTeamInfos structure: (excluding gaia)
@@ -124,8 +133,15 @@ if gadgetHandler:IsSyncedCode() then
 		teamInfo.hasLeader = select(2, GetTeamInfo(teamID,false)) >= 0
 
 		if not teamInfo.hasLeader and not teamInfo.dead then
+			if not killTeamQueue[teamID] then
+				killTeamQueue[teamID] = gf + (30 * (isFFA and 180 or 10))	-- add a grace period before killing the team
+			end
+		elseif killTeamQueue[teamID] then
+			killTeamQueue[teamID] = nil
+		end
+		if killTeamQueue[teamID] and gf <= killTeamQueue[teamID] then
 			KillTeam(teamID)
-			-- Script.LuaRules.TeamDeathMessage(teamID)
+			killTeamQueue[teamID] = nil
 		end
 
 		-- if team isn't AI controlled, then we need to check if we have attached players
@@ -300,11 +316,24 @@ if gadgetHandler:IsSyncedCode() then
 		return winnersCorrectFormatCount
 	end
 
-
 	function gadget:GameFrame(gf)
 		if gameoverFrame then
 			if gf == gameoverFrame then
 				GameOver(gameoverWinners)
+			end
+			if gf == gameoverAnimFrame then
+				for unitID, _ in pairs(gameoverAnimUnits) do
+					if Spring.ValidUnitID(unitID) then
+						if Spring.GetCOBScriptID(unitID, 'GameOverAnim') then
+							Spring.CallCOBScript(unitID, 'GameOverAnim', 0, true)
+						else
+							local scriptEnv = Spring.UnitScript.GetScriptEnv(unitID)
+							if scriptEnv and scriptEnv['GameOverAnim'] then
+								Spring.UnitScript.CallAsUnit(unitID, scriptEnv['GameOverAnim'], true)
+							end
+						end
+					end
+				end
 			end
 		else
 			local winners
@@ -328,6 +357,23 @@ if gadgetHandler:IsSyncedCode() then
 				local delay = GG.maxDeathFrame or 250
 				gameoverFrame = gf + delay + 70
 				gameoverWinners = winners
+
+				-- make all winner commanders dance!
+				gameoverAnimFrame = gf + 55		-- delay a bit because walking commanders need to stop walking + a delay look nice
+				gameoverAnimUnits = {}
+				if type(winners) == 'table' then
+					local units = Spring.GetAllUnits()
+					for i, unitID in ipairs(units) do
+						if isCommander[Spring.GetUnitDefID(unitID)] then
+							for u, allyTeamID in pairs(winners) do
+								if Spring.GetUnitAllyTeam(unitID) == allyTeamID then
+									Spring.GiveOrderToUnit(unitID, CMD.STOP, 0, 0)	-- give stop cmd so commanders can animate in place
+									gameoverAnimUnits[unitID] = true
+								end
+							end
+						end
+					end
+				end
 			end
 		end
 	end
@@ -350,7 +396,6 @@ if gadgetHandler:IsSyncedCode() then
 		allyTeamInfo.teams[teamID].dead = true
 		allyTeamInfos[allyTeamID] = allyTeamInfo
 		UpdateAllyTeamIsDead(allyTeamID)
-		-- Script.LuaRules.TeamDeathMessage(teamID)
 		CheckAllPlayers()
 	end
 
@@ -385,9 +430,9 @@ if gadgetHandler:IsSyncedCode() then
 				end
 				allyTeamInfos[allyTeamID] = allyTeamInfo
 				if allyTeamUnitCount <= allyTeamInfo.unitDecorationCount then
-					-- Script.LuaRules.AllyTeamDeathMessage(allyTeamID)
 					for teamID in pairs(allyTeamInfo.teams) do
 						KillTeam(teamID)
+						killTeamQueue[teamID] = nil
 					end
 				end
 			end

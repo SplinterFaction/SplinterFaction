@@ -55,6 +55,14 @@ local options= {
 		type   = 'section',
 	},
 	{
+		key    		= 'fixedallies',
+		name   		= 'Disabled dynamic alliances',
+		desc   		= 'Disables the possibility of players to dynamically change alliances ingame',
+		type   		= 'bool',
+		def    		= false,
+		section		= "restrictions",
+	},
+	{
 		key    = 'maxunits',
 		name   = 'Max units',
 		desc   = 'Maximum number of units (including buildings) for each team allowed at the same time',
