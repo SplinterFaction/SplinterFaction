@@ -4,7 +4,7 @@ function gadget:GetInfo()
 		desc = "blows up a teams units in a gradual/wave like manner",
 		author = "Floris", -- original: KDR_11k (David Becker)",
 		date = "September 2021",
-		license = "",
+		license = "GNU GPL, v2 or later",
 		layer = 1,
 		enabled = true
 	}
@@ -17,9 +17,14 @@ if not gadgetHandler:IsSyncedCode() then
 end
 
 local wavePeriod = 550
+GG.wipeoutWithWreckage = false		-- FFA can enable this
 
+local isCommander = {}
 local unitDecoration = {}
 for udefID,def in ipairs(UnitDefs) do
+	if def.customParams.iscommander then
+		isCommander[udefID] = true
+	end
 	if def.customParams.decoration then
 		unitDecoration[udefID] = true
 	end
@@ -96,13 +101,18 @@ GG.wipeoutAllyTeam = wipeoutAllyTeam
 
 function gadget:GameFrame(gf)
 	if next(destroyUnitQueue) then
+		local selfD = not GG.wipeoutWithWreckage
 		for unitID, defs in pairs(destroyUnitQueue) do
 			if gf > defs.frame then
-                if defs.attackerUnitID then
-					spDestroyUnit(unitID, true, nil, defs.attackerUnitID)
+				if defs.attackerUnitID then
+					spDestroyUnit(unitID, selfD, false, defs.attackerUnitID)
 				else
-					spDestroyUnit(unitID, true) -- if 4th arg is given, it cannot be nil (or engine complains)
-                end
+					if selfD and isCommander[spGetUnitDefID(unitID)]  then
+						spDestroyUnit(unitID, false, false)	-- always leave commander wreckage (ffa reclaims all on early dropped players now)
+					else
+						spDestroyUnit(unitID, selfD, false) -- if 4th arg is given, it cannot be nil (or engine complains)
+					end
+				end
 				destroyUnitQueue[unitID] = nil
 			end
 		end

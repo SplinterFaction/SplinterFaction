@@ -83,23 +83,7 @@ if gadgetHandler:IsSyncedCode() then
 					-- Spring.Echo("[DeathContainer Spawn] Feature direction before normalization is: x: " .. dirx .. ", y: " .. diry .. ", z: " .. dirz)
 					local dirx, diry, dirz = Normalize(dirx,diry,dirz)
 					-- Spring.Echo("[DeathContainer Spawn] Feature direction after normalization is: x: " .. dirx .. ", y: " .. diry .. ", z: " .. dirz)
-					Spring.SetFeatureDirection(featureID, dirx, diry , dirz)
-
-
-
-					local rotx
-					local roty
-					local rotz
-
-					-- Shitty attempt to put it in radians
-					rotx = math.random(1,620)
-					roty = math.random(1,620)
-					rotz = math.random(1,620)
-					rotx = rotx * 0.01
-					roty = roty * 0.01
-					rotz = rotz * 0.01
-					-- Spring.Echo("[DeathContainer Spawn] Feature rotation is: x: " .. rotx .. ", y: " .. roty .. ", z: " .. rotz)
-					Spring.SetFeatureRotation(featureID, rotx, roty , rotz)
+					Spring.SetFeatureDirection(featureID, dirx, diry, dirz)
 				end
 			end
 		end
