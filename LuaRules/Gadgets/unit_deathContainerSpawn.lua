@@ -62,14 +62,22 @@ if gadgetHandler:IsSyncedCode() then
 					Spring.SetFeatureResources(featureID, featureValueMetal, featureValueEnergy, reclaimTime, 1.0, featureValueMetal, featureValueEnergy)
 					Spring.SetFeaturePosition(featureID, posx, posy, posz,  false)
 					
-					dirx = math.random(1,100000)
-					diry = math.random(1,50000)
-					dirz = math.random(1,100000)
+					dirx = math.random(-100,100)
+					diry = math.random(-100,100)
+					dirz = math.random(-100,100)
+					dirx = math.floor(dirx + 0.05) * 0.01
+					diry = math.floor(diry + 0.05) * 0.01
+					dirz = math.floor(dirz + 0.05) * 0.01
+					-- Spring.Echo("[DeathContainer Spawn] Feature direction is: x: " .. dirx .. ", y: " .. diry .. ", z: " .. dirz)
 					Spring.SetFeatureDirection(featureID, dirx, diry , dirz)
 					
-					rotx = math.random(1,50)
-					roty = math.random(1,100)
-					rotz = math.random(1,50)
+					rotx = math.random(1,620)
+					roty = math.random(1,620)
+					rotz = math.random(1,620)
+					rotx = rotx * 0.01
+					roty = roty * 0.01
+					rotz = rotz * 0.01
+					-- Spring.Echo("[DeathContainer Spawn] Feature rotation is: x: " .. rotx .. ", y: " .. roty .. ", z: " .. rotz)
 					Spring.SetFeatureRotation(featureID, rotx, roty , rotz)
 				end
 			end
