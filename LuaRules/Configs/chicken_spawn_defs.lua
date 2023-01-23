@@ -499,7 +499,7 @@ for i = 1,wavesAmount do
 		addBasicSquad(i, {"5 fedbear", "3 fedphalanx"}, 2)
 		addBasicSquad(i, {"5 lozroach"}, 1)
 		addBasicSquad(i, {"5 lozscorpion"}, 1)
-		addBasicSquad(i, {"5 lozreaper", "3 fedpulverizer"}, 2)
+		addBasicSquad(i, {"5 lozreaper", "3 lozpulverizer"}, 2)
 	elseif i <= 6 then
 		addBasicSquad(i, {"5 fedstorm"}, 1)
 		addBasicSquad(i, {"5 fedthud"}, 1)
