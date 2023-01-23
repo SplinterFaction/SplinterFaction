@@ -35,7 +35,7 @@ local spDestroyUnit	= Spring.DestroyUnit
 
 if (gadgetHandler:IsSyncedCode()) then
 --start synced
-	function gadget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, attackerID, attackerDefID, attackerTeam)
+	function gadget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 		local weaponName	= WeaponDefs[weaponDefID].name
 		local unitName		= UnitDefs[unitDefID].name
 		local validtarget	= true

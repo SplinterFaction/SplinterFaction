@@ -1594,7 +1594,7 @@ function gadgetHandler:UnitDamaged(unitID, unitDefID, unitTeam,
 	for i = 1, UnitDamaged_count do
 		g = UnitDamaged_gadgets[i]
 		g:UnitDamaged(unitID, unitDefID, unitTeam,
-				damage, paralyzer, weaponID,
+				damage, paralyzer, weaponID, projectileID,
 				attackerID, attackerDefID, attackerTeam)
 	end
 	return

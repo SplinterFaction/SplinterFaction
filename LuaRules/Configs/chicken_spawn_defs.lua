@@ -55,20 +55,21 @@ local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to 
 
 chickenBehaviours = {
 	SKIRMISH = { -- Run away from target after target gets hit -- This is for fast light units
-		[UnitDefNames["fedak"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedstorm"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedthud"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedcrasher"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozdiamondback"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozroach"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozscorpion"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedbear"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedcobra"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedavalanche"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedphalanx"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozreaper"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozluger"].id] = { distance = 270, chance = 0.5 },
-
+		[UnitDefNames["fedak"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedstorm"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedthud"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedcrasher"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozdiamondback"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozroach"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozscorpion"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedbear"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedcobra"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedavalanche"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozreaper"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedengineer_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozengineer_ai"].id] = { distance = 500, chance = 1 },
 
 		--[[
 		[UnitDefNames["chickens2"].id] = { distance = 250, chance = 0.5 },
@@ -91,27 +92,33 @@ chickenBehaviours = {
 		]]--
 	},
 	COWARD = { -- Run away from target after getting hit by enemy -- This is for fast light units
-		[UnitDefNames["fedak"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedstorm"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedthud"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedcrasher"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozdiamondback"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozroach"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozscorpion"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedbear"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedcobra"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedavalanche"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedphalanx"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozreaper"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozluger"].id] = { distance = 270, chance = 0.5 },
+		[UnitDefNames["fedak"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedstorm"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedthud"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedcrasher"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozdiamondback"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozroach"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozscorpion"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedbear"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedcobra"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedavalanche"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozreaper"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
 
 	},
 	BERSERK = { -- Run towards target after getting hit by enemy or after hitting the target-- This is for heavy slow units
-		[UnitDefNames["fedgoliath"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedjuggernaut"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozmammoth"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["lozsilverback"].id] = { distance = 270, chance = 0.5 },
-		[UnitDefNames["fedanarchid"].id] = { distance = 270, chance = 0.5 },
+		[UnitDefNames["fedgoliath"].id] = { distance = 3000, chance = 0.5 },
+		[UnitDefNames["fedjuggernaut"].id] = { distance = 3000, chance = 0.5 },
+		[UnitDefNames["lozmammoth"].id] = { distance = 3000, chance = 0.5 },
+		[UnitDefNames["lozsilverback"].id] = { distance = 3000, chance = 0.5 },
+		[UnitDefNames["fedanarchid"].id] = { distance = 3000, chance = 0.5 },
+		[UnitDefNames["fedanarchid_normal"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedanarchid_hard"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedanarchid_veryhard"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedanarchid_insane"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedanarchid_epic"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedanarchid_unbeatable"].id] = { distance = 3000, chance = 0.01 },
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
 		"lozengineer_ai",
@@ -568,8 +575,8 @@ local useScum = false -- Use scum as space where turrets can spawn (requires scu
 local useWaveMsg = true -- Show dropdown message whenever new wave is spawning
 local spawnSquare = 90 -- size of the chicken spawn square centered on the burrow
 local spawnSquareIncrement = 2 -- square size increase for each unit spawned
-local minBaseDistance = 750 -- Minimum distance of new burrows from players and other burrows
-local burrowTurretSpawnRadius = 100
+local minBaseDistance = 1000 -- Minimum distance of new burrows from players and other burrows
+local burrowTurretSpawnRadius = 64
 
 local config = { -- Don't touch this! ---------------------------------------------------------------------------------------------------------------------------------------------
 	useEggs 				= useEggs,

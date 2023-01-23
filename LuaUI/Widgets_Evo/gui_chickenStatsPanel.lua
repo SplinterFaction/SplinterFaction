@@ -202,14 +202,15 @@ local function getMarqueeMessage(chickenEventArgs)
 		messages[1] = textColor .. "They're here!"
 		messages[2] = textColor .. 'Get ready to fight!'
 	elseif chickenEventArgs.type == "airWave" then
-		messages[1] = textColor .. 'Air Wave!'
-		messages[2] = textColor .. chickenEventArgs.number .. ' Aircrafts!'
+		messages[1] = textColor .. "Wave " .. chickenEventArgs.waveCount
+		messages[2] = textColor .. 'Air Wave!'
+		messages[3] = textColor .. chickenEventArgs.number .. ' Aircrafts!'
 	elseif chickenEventArgs.type == "queen" then
 		messages[1] = textColor .. 'The Boss is here!'
 		messages[2] = textColor .. 'Get ready to fight!'
 	elseif chickenEventArgs.type == "wave" then
 		messages[1] = textColor .. "Wave " .. chickenEventArgs.waveCount
-		messages[2] = textColor .. chickenEventArgs.number .. ' Hostile Units!'
+		messages[2] = textColor .. chickenEventArgs.number .. ' Units!'
 	end
 
 	refreshMarqueeMessage = false
@@ -294,7 +295,11 @@ local function UpdateRules()
 end
 
 function ChickenEvent(chickenEventArgs)
-	if chickenEventArgs.type == "firstWave" or chickenEventArgs.type == "airWave" or chickenEventArgs.type == "miniQueen" or chickenEventArgs.type == "queen" then
+	if chickenEventArgs.type == "firstWave" or  chickenEventArgs.type == "wave" or chickenEventArgs.type == "airWave" or chickenEventArgs.type == "miniQueen" or chickenEventArgs.type == "queen" then
+		if chickenEventArgs.type == "airWave" or chickenEventArgs.type == "wave" then
+			waveCount = waveCount + 1
+			chickenEventArgs.waveCount = waveCount
+		end
 		showMarqueeMessage = true
 		refreshMarqueeMessage = true
 		messageArgs = chickenEventArgs
@@ -310,29 +315,6 @@ function ChickenEvent(chickenEventArgs)
 			end
 		end
 	end
-
-
-	if chickenEventArgs.type == "wave" then
-		waveCount = waveCount + 1
-		chickenEventArgs.waveCount = waveCount
-		showMarqueeMessage = true
-		refreshMarqueeMessage = true
-		messageArgs = chickenEventArgs
-		waveTime = Spring.GetTimer()
-		--[[
-	elseif chickenEventArgs.type == "burrowSpawn" then
-		UpdateRules()
-	elseif chickenEventArgs.type == "queen" then
-		showMarqueeMessage = true
-		refreshMarqueeMessage = true
-		messageArgs = chickenEventArgs
-		waveTime = Spring.GetTimer()
-	elseif chickenEventArgs.type == "score" .. (Spring.GetMyTeamID()) then
-		gotScore = chickenEventArgs.number
-		]]--
-	end
-
-
 end
 
 function widget:Initialize()
