@@ -17,7 +17,7 @@ green = [[0 1 0]]
 blue = [[0 0 1]]
 orange = [[1 0.5 0]]
 white = [[1 1 1]]
-purple = [[0.50999999940395 0 0.68999999165535]]
+purple = [[0.2 0 1]]
 
 --[[
 -- These go in Weapons CustomParams

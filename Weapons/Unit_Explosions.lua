@@ -20,7 +20,7 @@ local green = [[0 1 0]]
 local blue = [[0 0 1]]
 local orange = [[1 0.5 0]]
 local white = [[1 1 1]]
-local purple = [[0.50999999940395 0 0.68999999165535]]
+local purple = [[0.2 0 1]]
 
 unitDeaths = {
 
