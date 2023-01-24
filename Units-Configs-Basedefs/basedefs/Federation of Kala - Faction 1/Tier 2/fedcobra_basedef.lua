@@ -155,7 +155,7 @@ weaponDefs                 = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 18.75,
@@ -169,7 +169,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		collideFeature           = false,
 		cegTag                   = "amphibrocktrail-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-medium-red",
+		explosionGenerator       = "custom:genericshellexplosion-medium",
 		burst 					 = 4,
 		burstrate 				 = 0.1,
 		energypershot            = 0,
@@ -196,10 +196,10 @@ weaponDefs                 = {
 		weaponVelocity           = 300,
 		sprayangle				 = 2000,
 		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
+			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 24,

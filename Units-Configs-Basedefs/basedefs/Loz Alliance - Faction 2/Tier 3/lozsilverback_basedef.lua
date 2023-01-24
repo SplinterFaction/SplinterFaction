@@ -129,7 +129,7 @@ weaponDefs                 = {
 		beamTime                 = 0.1,
 		coreThickness            = 0.5,
 		duration                 = 0.1,
-		explosionGenerator       = "custom:genericshellexplosion-large-red",
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		fallOffRate              = 0,
 		fireStarter              = 100,
 		interceptedByShieldType  = 4,
@@ -153,7 +153,7 @@ weaponDefs                 = {
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		}, 
 		damage                   = {
 			default              = 3000,
@@ -169,7 +169,7 @@ weaponDefs                 = {
 		cegTag                 = "railgun",
 		rgbColor               = "0.2 0 1",
 		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-medium-purple",
+		explosionGenerator     = "custom:genericshellexplosion-medium",
 		energypershot          = 0,
 		fallOffRate            = 0,
 		duration			   = 0.25,
@@ -195,7 +195,7 @@ weaponDefs                 = {
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 200,
@@ -242,7 +242,7 @@ weaponDefs                 = {
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                    = {
 			default               = 20,

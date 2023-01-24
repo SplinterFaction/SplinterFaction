@@ -115,7 +115,7 @@ weaponDefs                 = {
 		coreThickness            = 0.3,
 		duration                 = 0.1,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small-sparks-burn",
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		fallOffRate              = 1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
@@ -144,7 +144,7 @@ weaponDefs                 = {
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                    = {
 			default               = 6,
@@ -166,7 +166,7 @@ weaponDefs                 = {
 		--cegTag                   = "railgun",
 		duration                 = 0.05,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-medium-purple",
+		explosionGenerator       = "custom:genericshellexplosion-medium",
 		edgeEffectiveness		 = 1,
 		fallOffRate              = 1,
 		fireStarter              = 50,
@@ -189,10 +189,10 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 3000,
 		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
+			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 30,

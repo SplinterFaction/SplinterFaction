@@ -178,7 +178,7 @@ weaponDefs                 = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 130,
@@ -192,7 +192,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		collideFeature           = false,
 		-- cegTag                   = "ehbotrocko-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-small-purple",
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		energypershot            = 0,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
@@ -216,7 +216,7 @@ weaponDefs                 = {
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 15,
@@ -230,7 +230,7 @@ weaponDefs                 = {
 		collideFeature           = false,
 		canAttackGround 		 = false,
 		cegTag                   = "gunshiptrail-optimized-longlasting",
-		explosionGenerator       = "custom:genericshellexplosion-small-purple",
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		energypershot            = 0,
 		burst                    = 2,
 		burstrate                = 0.1,
@@ -260,7 +260,7 @@ weaponDefs                 = {
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 7.5,

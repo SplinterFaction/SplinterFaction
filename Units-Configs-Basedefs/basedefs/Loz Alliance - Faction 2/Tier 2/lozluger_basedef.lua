@@ -112,7 +112,7 @@ weaponDefs                 = {
 		
 		--cegTag                   = "artyshot2",
 		avoidNeutral	         = false,
-		explosionGenerator       = "custom:genericshellexplosion-medium",
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		energypershot            = 0,
 		
 		impulseFactor            = 0,
@@ -132,7 +132,7 @@ weaponDefs                 = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},  
 		damage                   = {
 			default              = 1000,

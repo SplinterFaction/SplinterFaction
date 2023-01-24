@@ -186,7 +186,7 @@ weaponDefs                 = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 17,
@@ -199,7 +199,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		collideFeature           = false,
 		-- cegTag                   = "ehbotrocko-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-small-purple",
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		energypershot            = 0,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
@@ -225,7 +225,7 @@ weaponDefs                 = {
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 100,
@@ -267,7 +267,7 @@ weaponDefs                 = {
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 6,
@@ -281,7 +281,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		collideFeature           = false,
 		cegTag                   = "amphibrocktrail-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-small-red",
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		burst 					 = 4,
 		burstrate 				 = 0.2,
 		energypershot            = 0,
@@ -310,7 +310,7 @@ weaponDefs                 = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 17.5,

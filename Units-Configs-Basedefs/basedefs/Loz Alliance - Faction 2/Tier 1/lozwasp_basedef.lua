@@ -175,7 +175,7 @@ weaponDefs                 = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 3,
@@ -191,7 +191,7 @@ weaponDefs                 = {
 		cegTag                 = "railgun",
 		rgbColor               = "0.133 0 0.4",
 		rgbColor2              = "0.75 0.75 0.75",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		explosionGenerator     = "custom:genericshellexplosion-medium",
 		energypershot          = 0,
 		fallOffRate            = 0,
 		duration			   = 0.25,
@@ -216,7 +216,7 @@ weaponDefs                 = {
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_opacity  = 0.5, -- Use this sparingly
 		},
 		damage                   = {
 			default              = 30,
