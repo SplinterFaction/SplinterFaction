@@ -94,6 +94,6 @@ function script.QueryNanoPiece()
 end
 
 function script.Killed()
-    Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
+    Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
     return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

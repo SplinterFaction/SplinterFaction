@@ -87,9 +87,9 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT)
-	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
-	Explode(railgunturret1, SFX.EXPLODE_ON_HIT)
-	Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT)
+	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(railgunturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

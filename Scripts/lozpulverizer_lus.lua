@@ -83,14 +83,14 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-		Explode(laserturret, SFX.EXPLODE_ON_HIT)
-		Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
-		Explode(flakturret, SFX.EXPLODE_ON_HIT)
-		Explode(flakbarrel1, SFX.EXPLODE_ON_HIT)
-		Explode(wheels1, SFX.EXPLODE_ON_HIT)
-		Explode(wheels2, SFX.EXPLODE_ON_HIT)
-		Explode(wheels3, SFX.EXPLODE_ON_HIT)
-		Explode(wheels4, SFX.EXPLODE_ON_HIT)
-		Explode(wheels5, SFX.EXPLODE_ON_HIT)
+		Explode(laserturret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(flakturret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(flakbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(wheels1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(wheels2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(wheels3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(wheels4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(wheels5, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

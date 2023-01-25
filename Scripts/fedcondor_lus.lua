@@ -177,15 +177,15 @@ function script.EndTransport(passengerID)
 end
 
 function script.Killed()
-    Explode(base, SFX.EXPLODE_ON_HIT)
-    Explode(turretball1, SFX.EXPLODE_ON_HIT)
-    Explode(turretball2, SFX.EXPLODE_ON_HIT)
-    Explode(turretball3, SFX.EXPLODE_ON_HIT)
-    Explode(turretball4, SFX.EXPLODE_ON_HIT)
-    Explode(gatlingspins1, SFX.EXPLODE_ON_HIT)
-    Explode(gatlingspins2, SFX.EXPLODE_ON_HIT)
-    Explode(gatlingspins3, SFX.EXPLODE_ON_HIT)
-    Explode(gatlingspins4, SFX.EXPLODE_ON_HIT)
+    Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(turretball1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(turretball2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(turretball3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(turretball4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(gatlingspins1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(gatlingspins2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(gatlingspins3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    Explode(gatlingspins4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 
     return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

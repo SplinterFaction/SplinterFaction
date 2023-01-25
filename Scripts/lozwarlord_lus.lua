@@ -138,16 +138,16 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(cannonturret1, SFX.EXPLODE_ON_HIT)
-	Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT)
-	Explode(cannonturret2, SFX.EXPLODE_ON_HIT)
-	Explode(cannonbarrel2, SFX.EXPLODE_ON_HIT)
-	Explode(cannonturret3, SFX.EXPLODE_ON_HIT)
-	Explode(cannonbarrel3, SFX.EXPLODE_ON_HIT)
-	Explode(laserturret1, SFX.EXPLODE_ON_HIT)
-	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT)
-	Explode(laserturret2, SFX.EXPLODE_ON_HIT)
-	Explode(laserbarrel2, SFX.EXPLODE_ON_HIT)
+	Explode(cannonturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(cannonturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(cannonbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(cannonturret3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(cannonbarrel3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(laserturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(laserturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(laserbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

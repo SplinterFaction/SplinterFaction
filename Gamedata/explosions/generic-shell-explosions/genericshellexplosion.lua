@@ -6,11 +6,12 @@
 return {
   ["genericshellexplosion-small"] = {
     fireball = {
-      air        = true,
       class      = [[CSimpleParticleSystem]],
       count      = 1,
+      air        = true,
       ground     = true,
       water      = true,
+      underwater = true,
       properties = {
         airdrag             = 0.97,
         colormap            = [[0.7 0.8 0.9 0.03   0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03]],
@@ -37,12 +38,12 @@ return {
       },
     },
     sparks = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
-      water              = true,
-      underwater         = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.8,
         alwaysvisible      = true,
@@ -69,10 +70,12 @@ return {
       },
     },
     smoke = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.87,
         alwaysvisible      = true,
@@ -101,11 +104,12 @@ return {
 
   ["genericshellexplosion"] = {
     fireball = {
-      air        = true,
       class      = [[CSimpleParticleSystem]],
       count      = 1,
+      air        = true,
       ground     = true,
       water      = true,
+      underwater = true,
       properties = {
         airdrag             = 0.97,
         colormap            = [[0.7 0.8 0.9 0.03   0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03]],
@@ -132,12 +136,12 @@ return {
       },
     },
     sparks = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
-      water              = true,
-      underwater         = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.8,
         alwaysvisible      = true,
@@ -164,10 +168,12 @@ return {
       },
     },
     smoke = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.87,
         alwaysvisible      = true,
@@ -196,11 +202,12 @@ return {
 
   ["genericshellexplosion-medium"] = {
     fireball = {
-      air        = true,
       class      = [[CSimpleParticleSystem]],
       count      = 1,
+      air        = true,
       ground     = true,
       water      = true,
+      underwater = true,
       properties = {
         airdrag             = 0.97,
         colormap            = [[0.7 0.8 0.9 0.03   0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03]],
@@ -227,12 +234,12 @@ return {
       },
     },
     sparks = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
-      water              = true,
-      underwater         = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.8,
         alwaysvisible      = true,
@@ -259,10 +266,12 @@ return {
       },
     },
     smoke = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.87,
         alwaysvisible      = true,
@@ -291,11 +300,12 @@ return {
 
   ["genericshellexplosion-large"] = {
     fireball = {
-      air        = true,
       class      = [[CSimpleParticleSystem]],
       count      = 1,
+      air        = true,
       ground     = true,
       water      = true,
+      underwater = true,
       properties = {
         airdrag             = 0.97,
         colormap            = [[0.7 0.8 0.9 0.03   0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03 0.9 0.5 0.2 0.03]],
@@ -322,12 +332,12 @@ return {
       },
     },
     sparks = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
-      water              = true,
-      underwater         = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.8,
         alwaysvisible      = true,
@@ -354,10 +364,12 @@ return {
       },
     },
     smoke = {
-      air                = true,
       class              = [[CSimpleParticleSystem]],
       count              = 1,
-      ground             = true,
+      air        = true,
+      ground     = true,
+      water      = true,
+      underwater = true,
       properties = {
         airdrag            = 0.87,
         alwaysvisible      = true,

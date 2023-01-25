@@ -70,7 +70,7 @@ end
 -------------------------------------------
 
 function script.Killed()
-		Explode(barrel1, SFX.EXPLODE_ON_HIT)
-		Explode(turret, SFX.EXPLODE_ON_HIT)
+		Explode(barrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

@@ -31,11 +31,11 @@ function thrust()
 end	
 
 function script.Killed()
-		Explode(forwarddome, SFX.EXPLODE_ON_HIT)
-		Explode(reardome, SFX.EXPLODE_ON_HIT)
-		Explode(rearleftwing, SFX.EXPLODE_ON_HIT)
-		Explode(frontleftwing, SFX.EXPLODE_ON_HIT)
-		Explode(frontrightwing, SFX.EXPLODE_ON_HIT)
-		Explode(rearrightwing, SFX.EXPLODE_ON_HIT)
+		Explode(forwarddome, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(reardome, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(rearleftwing, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(frontleftwing, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(frontrightwing, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(rearrightwing, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

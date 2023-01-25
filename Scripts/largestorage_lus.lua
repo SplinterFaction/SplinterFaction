@@ -23,11 +23,11 @@ function script.Skyhateceg()
 end
 
 function script.Killed()
-		Explode(base, SFX.EXPLODE_ON_HIT)
-		Explode(topspin, SFX.EXPLODE_ON_HIT)
-		Explode(ball, SFX.EXPLODE_ON_HIT)
-		Explode(tech1ring, SFX.EXPLODE_ON_HIT)
-		Explode(tech2ring, SFX.EXPLODE_ON_HIT)
-		Explode(tech3ring, SFX.EXPLODE_ON_HIT)
+		Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(topspin, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(ball, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(tech1ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(tech2ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(tech3ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end
