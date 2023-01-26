@@ -55,7 +55,7 @@ unitDef                     = {
 	},
 	weapons                       = {
 		[1]                       = {
-			def                   = "flame",
+			def                   = "BeamLaser",
 			badTargetCategory     = "BUILDING GROUND SHIP",
 			onlyTargetCategory    = "MASSIVE GROUND BUILDING SHIP",
 		},
@@ -80,7 +80,7 @@ unitDef                     = {
 }
 
 weaponDefs                  = {
-	flame           = {
+	BeamLaser           = {
 		avoidFeature              = false,
 		avoidFriendly             = false,
 		collideFeature            = false,
@@ -94,7 +94,7 @@ weaponDefs                  = {
 		duration                  = 0.8,
 		energypershot             = 0,
 		edgeeffectiveness		  = 0,
-		explosionGenerator        = "custom:burnblacksmall",
+		explosionGenerator        = "custom:genericshellexplosion-large",
 		fallOffRate               = 0.1,
 		fireStarter               = 100,
 		impulseFactor             = 0,
@@ -103,9 +103,9 @@ weaponDefs                  = {
 		name                      = "High Intensity BeamLaser",
 		range                     = 1200,
 		reloadtime                = 2,
-		WeaponType                = "beamlaser",
-		rgbColor                  = "0.4 0.1 5",
-		rgbColor2                 = "0.25 0.25 0.25",
+		WeaponType                = "BeamLaser",
+		rgbColor                  = purple,
+		rgbColor2                 = "1 1 1",
 		soundTrigger              = true,
 		soundstart                = "weapons/Sci Fi Shotgun 3.wav",
 		-- soundHit                  = "explosions/explode5.wav",
@@ -118,7 +118,7 @@ weaponDefs                  = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
-			expl_light_color	= yellow, -- As a string, RGB
+			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
