@@ -454,10 +454,7 @@ function init()
 	
 	for udid, udef in pairs(UnitDefs) do
 		local mobile = (udef.canMove and udef.speed > 0.000001) or (includeNanosAsMobile and (UnitDefs[udid].name == "armnanotc" or UnitDefs[udid].name == "cornanotc"))
-		local builder = (udef.canReclaim and udef.reclaimSpeed > 0) or
-						--(udef.builder and udef.buildSpeed > 0) or					-- udef.builder = deprecated it seems
-						(udef.canResurrect and udef.resurrectSpeed > 0) or
-						(udef.canRepair and udef.repairSpeed > 0)
+		local builder = (udef.canReclaim and udef.reclaimSpeed > 0) or (udef.builder and udef.buildSpeed > 0) or (udef.canResurrect and udef.resurrectSpeed > 0) or	(udef.canRepair and udef.repairSpeed > 0) or (udef.customParams.unitrole == "Builder")
 		local building = (mobile == false)
 		local combat = (builder == false) and (mobile == true) and (#udef.weapons > 0)
 		
