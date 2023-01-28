@@ -5,7 +5,7 @@ common = include("headers/common_includes_lus.lua")
 
 -- state variables
 terrainType = "terrainType"
-skyhateEffect = "powerplant-fireball-large"
+skyhateEffect = "powerplant-fireball-large-green"
 
 function script.Create()
 	StartThread(common.SmokeUnit, {base, sfxpoint1, sfxpoint2, sfxpoint3, sfxpoint4})

@@ -17,7 +17,7 @@ humanName = [[Metal Extractor - Tech 0]]
 
 explodeAsSelfSAs = [[largeBuildingExplosionGenericBlue]]
 
-objectName = [[metalextractor.s3o]]
+objectName = [[metalextractort0.s3o]]
 script = [[metalextractor_lus.lua]]
 
 tech = [[tech0]]
