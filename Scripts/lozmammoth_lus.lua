@@ -49,18 +49,21 @@ function script.AimFromWeapon(WeaponID)
 	return railturret1
 end
 
-local firepoints = {burstfirepoint1, burstfirepoint2}
-local currentFirepoint = 1
+local firepoints1 = {burstfirepoint1, burstfirepoint2}
+local currentFirepoint1 = 1
+local totalNumberofFirepoints1 = 2
+
+local firepoints2 = {missilefirepoint1, missilefirepoint2}
+local currentFirepoint2 = 1
+local totalNumberofFirepoints2 = 2
 
 function script.QueryWeapon(WeaponID)
 	if WeaponID == 1 then
 		return railfirepoint1
 	elseif WeaponID == 2 then
-		return firepoints[currentFirepoint]
+		return firepoints1[currentFirepoint1]
 	elseif WeaponID == 3 then
-		return missilefirepoint1
-	elseif WeaponID == 4 then
-		return missilefirepoint2
+		return firepoints2[currentFirepoint2]
 	end
 end
 
@@ -68,8 +71,17 @@ function script.FireWeapon(WeaponID)
 	if WeaponID == 1 then
 		EmitSfx (railfirepoint1, 1024)
 	elseif WeaponID == 2 then
-		currentFirepoint = 3 - currentFirepoint
-		EmitSfx (firepoints[currentFirepoint], 1024)
+		currentFirepoint1 = currentFirepoint1 + 1
+		if currentFirepoint1 == (totalNumberofFirepoints1 + 1) then -- when currentFirepoint gets to one more than the total number of firepoints, reset it to 1
+			currentFirepoint1 = 1
+		end
+		-- Spring.Echo(currentFirepoint)
+		EmitSfx (firepoints1[currentFirepoint1], 1024)
+	elseif WeaponID == 3 then
+		currentFirepoint2 = currentFirepoint2 + 1
+		if currentFirepoint2 == (totalNumberofFirepoints2 + 1) then -- when currentFirepoint gets to one more than the total number of firepoints, reset it to 1
+			currentFirepoint2 = 1
+		end
 	end
 end
 
@@ -110,15 +122,10 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		Signal(SIG_AIM4)
 		SetSignalMask(SIG_AIM4)
 		Turn(missilebarrel1, x_axis, -pitch, 10)
-		WaitForTurn(missilebarrel1, x_axis)
-		--Spring.Echo("AimWeapon: FireWeapon")
-		StartThread(RestoreAfterDelay)
-		return true
-	elseif WeaponID == 4 then
-		Signal(SIG_AIM5)
-		SetSignalMask(SIG_AIM5)
 		Turn(missilebarrel2, x_axis, -pitch, 10)
+		WaitForTurn(missilebarrel1, x_axis)
 		WaitForTurn(missilebarrel2, x_axis)
+		--Spring.Echo("AimWeapon: FireWeapon")
 		StartThread(RestoreAfterDelay)
 		return true
 	end
