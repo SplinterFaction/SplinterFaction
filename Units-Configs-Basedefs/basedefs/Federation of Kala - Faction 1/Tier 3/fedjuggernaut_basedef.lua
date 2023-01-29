@@ -155,7 +155,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		explosionGenerator       = "custom:burnblacksmall",
 		coreThickness            = 0.1,
-		duration                 = 0.8,
+		duration                 = 0.4,
 		energypershot            = 0,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
@@ -170,7 +170,7 @@ weaponDefs                 = {
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
-		thickness                = 2,
+		thickness                = 8,
 		tolerance                = 1000,
 		turret                   = true,
 		texture1                 = "shot",
@@ -197,7 +197,7 @@ weaponDefs                 = {
 		--burst				   = burst,
 		--burstrate			   = 0.1,
 		edgeEffectiveness	   = 0,
-		explosionGenerator     = "custom:genericshellexplosion-small",
+		explosionGenerator     = "custom:genericshellexplosion-medium",
 		energypershot          = 0,
 		--duration			   = 0.25,
 		highTrajectory		   = 2,
@@ -236,8 +236,8 @@ weaponDefs                 = {
 		collideFeature           = false,
 		cegTag                   = "amphibrocktrail-optimized",
 		explosionGenerator       = "custom:genericshellexplosion-small",
-		burst 					 = 16,
-		burstrate 				 = 0.1,
+		burst 					 = 4,
+		burstrate 				 = 0.25,
 		energypershot            = 0,
 		fireStarter              = 70,
 		tracks                   = true,
@@ -267,7 +267,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              = 120,
 		},
 	},
 	missile            = {
@@ -289,7 +289,7 @@ weaponDefs                 = {
 		model                    = "missilesmallvlaunch.s3o",
 		name                     = "Rocket",
 		range                    = 1000,
-		reloadtime               = 0.5,
+		reloadtime               = 1,
 		weaponType		         = "MissileLauncher",
 
 
@@ -312,7 +312,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 200,
+			default              = 400,
 		},
 	},
 }

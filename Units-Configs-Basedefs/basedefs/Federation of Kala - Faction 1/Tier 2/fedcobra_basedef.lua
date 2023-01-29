@@ -140,8 +140,8 @@ weaponDefs                 = {
 		--noExplode			   = true,
 		range                  = 950,
 		reloadtime             = 3.7,
-		size				   = 2,
-		projectiles			   = 8,
+		size				   = 4,
+		projectiles			   = 4,
 		weaponType		       = "Cannon",
 		soundStart             = "weapons/Shotgun Boom 101.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
@@ -158,7 +158,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 18.75,
+			default              = 37.5,
 		},
 	},
 

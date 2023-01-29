@@ -16,8 +16,8 @@ end
 
 local function RestoreAfterDelay()
     Sleep(2000)
-    Turn(railgunturret1, y_axis, 0, 5)
-    Turn(railgunbarrel1, x_axis, 0, 5)
+    Turn(railgunturret1, y_axis, 0, 1)
+    Turn(railgunbarrel1, x_axis, 0, 1)
 end
 
 function script.AimFromWeapon(weaponID)
@@ -31,10 +31,11 @@ function script.QueryWeapon(weaponID)
 end
 
 function script.AimWeapon(weaponID, heading, pitch)
+    Spring.SetUnitWeaponState(unitID, weaponID, {reaimTime = 16})
     Signal(SIG_AIM)
     SetSignalMask(SIG_AIM)
-    Turn(railgunturret1, y_axis, heading, 2)
-    Turn(railgunbarrel1, x_axis, -pitch, 2)
+    Turn(railgunturret1, y_axis, heading, 1)
+    Turn(railgunbarrel1, x_axis, -pitch, 1)
     WaitForTurn(railgunturret1, y_axis)
     WaitForTurn(railgunbarrel1, x_axis)
     StartThread(RestoreAfterDelay)

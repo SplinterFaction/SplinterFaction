@@ -300,7 +300,7 @@ return {
     fire = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
-      count              = 2,
+      count              = 1,
       ground             = true,
       water				 = true,
       underwater		 = false,
@@ -333,7 +333,7 @@ return {
     smoke = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
-      count              = 2,
+      count              = 1,
       ground             = true,
       water				 = true,
       underwater		 = false,
@@ -368,7 +368,7 @@ return {
     fire = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
-      count              = 2,
+      count              = 1,
       ground             = true,
       water				 = true,
       underwater		 = false,
@@ -401,7 +401,7 @@ return {
     smoke = {
       air                = true,
       class              = [[CSimpleParticleSystem]],
-      count              = 2,
+      count              = 1,
       ground             = true,
       water				 = true,
       underwater		 = false,

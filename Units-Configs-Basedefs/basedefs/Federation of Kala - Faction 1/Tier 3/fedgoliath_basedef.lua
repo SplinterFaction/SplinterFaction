@@ -156,8 +156,8 @@ weaponDefs                 = {
 		--noExplode			   = true,
 		range                  = 720,
 		reloadtime             = 2.8,
-		size				   = 2,
-		projectiles			   = 16,
+		size				   = 8,
+		projectiles			   = 4,
 		weaponType		       = "Cannon",
 		soundStart             = "weapons/Shotgun Boom 101.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
@@ -174,7 +174,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 32.5,
+			default              =130,
 		},
 	},
 	particlebeamcannon                 = {
@@ -187,7 +187,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		explosionGenerator       = "custom:burnblacksmall",
 		coreThickness            = 0.1,
-		duration                 = 0.8,
+		duration                 = 0.4,
 		energypershot            = 0,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
@@ -202,7 +202,7 @@ weaponDefs                 = {
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
-		thickness                = 2,
+		thickness                = 8,
 		tolerance                = 1000,
 		turret                   = true,
 		texture1                 = "shot",
