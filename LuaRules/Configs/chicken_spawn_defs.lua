@@ -20,33 +20,17 @@ local airWaves = {}
 
 local burrowName = 'healstation_ai'
 
-local chickenTurrets = {
-	lightTurrets = { 					-- Spawn from the start
-		"fedmenlo",
-		"lozjericho",
-		"fedstinger",
-		"lozrazor",
-	},
-	heavyTurrets = { 					-- Spawn from 20% queen anger
-		"fedimmolator",
-		"lozinferno",
-		"fedjavelin",
-		"lozrattlesnake",
-	},
-	specialLightTurrets = { 			-- Spawn from 40% queen anger alongside lightTurrets
-		"fedimmolator",
-		"lozinferno",
-		"fedjavelin",
-		"lozrattlesnake",
-	},
-	specialHeavyTurrets = { 			-- Spawn from 60% queen anger alongside heavyTurrets
-		"fedguardian",
-		"lozannihilator",
-	},
-	burrowDefenders = {					-- Spawns connected to burrow
-		"fedimmolator",
-		"lozinferno",
-	},
+chickenTurrets = {
+	["fedmenlo"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["fedimmolator"] 				= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["lozinferno"] 					= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["fedjavelin"] 					= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["lozrattlesnake"] 				= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = true	},
+	["fedguardian"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["lozannihilator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 }
 
 local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to be true, if some unit is not specified here, it drops random egg colors.
