@@ -132,7 +132,7 @@ weaponDefs                 = {
 		collideFriendly        = false,
 		collideFeature         = false,
 		--cegTag			   = "thudshot",
-		burst				   = 8,
+		burst				   = 4,
 		burstrate			   = 0.1,
 		edgeEffectiveness	   = 1,
 		explosionGenerator     = "custom:genericshellexplosion-small",
@@ -145,9 +145,9 @@ weaponDefs                 = {
 		--noExplode			   = true,
 		range                  = 1300,
 		reloadtime             = 20,
-		size				   = 2,
+		size				   = 4,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/Shotgun Boom 101.wav",
+		soundStart             = "other/artytankshot.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		sprayAngle             = 100,
@@ -162,7 +162,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 62.5,
+			default              = 125,
 		},
 	},
 

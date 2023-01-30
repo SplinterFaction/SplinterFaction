@@ -159,7 +159,7 @@ weaponDefs                 = {
 		size				   = 8,
 		projectiles			   = 4,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/Shotgun Boom 101.wav",
+		soundStart             = "weapons/ShotGun Boom 101 (Suppressed).wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		sprayAngle             = 1250,
@@ -192,7 +192,7 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 4.wav",
+		soundstart               = "weapons/Revolver Single Shot (Suppressed) 2.wav",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
