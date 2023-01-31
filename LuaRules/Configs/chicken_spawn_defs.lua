@@ -105,19 +105,12 @@ chickenBehaviours = {
 		[UnitDefNames["fedanarchid_unbeatable"].id] = { distance = 3000, chance = 0.01 },
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
-		"lozengineer_ai",
-		--"lozengineer_up1",
-		--"lozengineer_up2",
-		--"lozengineer_up3",
-		"fedengineer_ai",
-		--"fedengineer_up1",
-		--"fedengineer_up2",
-		--"fedengineer_up3",
-
+		[UnitDefNames["lozengineer_ai"].id] = true,
+		[UnitDefNames["fedengineer_ai"].id] = true,
 	},
 	ARTILLERY = { -- Long lifetime and no regrouping, always uses Fight command to keep distance
-		"fedavalanche",
-		"lozluger",
+		[UnitDefNames["fedavalanche"].id] = true,
+		[UnitDefNames["lozluger"].id] = true,
 	},
 	KAMIKAZE = { -- Long lifetime and no regrouping, always uses Move command to rush into the enemy
 
@@ -160,7 +153,7 @@ local optionValues = {
 	[difficulties.normal] = {
 		chickenSpawnRate  = 30, -- Time between Waves in seconds
 		burrowSpawnRate   = 75, -- Time inbetween burrow spawns in seconds
-		turretSpawnRate   = 60, -- Time inbetween turret spawns in seconds
+		turretSpawnRate   = 180, -- Time inbetween turret spawns in seconds
 		queenSpawnMult    = 1, -- Unused, don't touch (just in case)
 		angerBonus        = 0.2, -- Multiplier for boss anger when you kill a burrow
 		maxXP			  = 0.5, -- Random amount of XP given to spawned units
@@ -387,6 +380,11 @@ local chickenMinions = { -- Units spawning other units
 	},
 }
 
+local chickenHealers = { -- Spawn indepedently from squads in small numbers
+	"lozengineer_ai",
+	"fedengineer_ai",
+},
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -572,9 +570,9 @@ local config = { -- Don't touch this! ------------------------------------------
 	difficulty             	= difficulty,
 	difficulties           	= difficulties,
 	chickenEggs			   	= table.copy(chickenEggs),
+	chickenHealers			= table.copy(chickenHealers),
 	burrowName             	= burrowName,   -- burrow unit name
 	burrowDef              	= UnitDefNames[burrowName].id,
-	burrowTurretSpawnRadius = burrowTurretSpawnRadius,
 	chickenSpawnMultiplier 	= Spring.GetModOptions().chicken_spawncountmult,
 	gracePeriod            	= Spring.GetModOptions().chicken_graceperiod * 60,  -- no chicken spawn in this period, frames
 	queenTime              	= Spring.GetModOptions().chicken_queentime * 60, -- time at which the queen appears, frames
@@ -595,7 +593,8 @@ local config = { -- Don't touch this! ------------------------------------------
 	chickenMinions			= chickenMinions,
 	chickenBehaviours 		= chickenBehaviours,
 	difficultyParameters   	= optionValues,
-	useWaveMsg				= useWaveMsg,
+	useWaveMsg 				= useWaveMsg,
+	burrowTurretSpawnRadius = burrowTurretSpawnRadius,
 }
 
 for key, value in pairs(optionValues[difficulty]) do
