@@ -21,14 +21,14 @@ local airWaves = {}
 local burrowName = 'healstation_ai'
 
 chickenTurrets = {
-	["fedmenlo"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = true	},
-	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = true	},
-	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = false	},
-	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 4,		spawnOnBurrows = false	},
-	["fedimmolator"] 				= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = true	},
-	["lozinferno"] 					= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = true	},
-	["fedjavelin"] 					= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = false	},
-	["lozrattlesnake"] 				= { minQueenAnger = 30, 	spawnedPerWave = 4,		spawnOnBurrows = false	},
+	["fedmenlo"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = true	},
+	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = true	},
+	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
+	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
+	["fedimmolator"] 				= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
+	["lozinferno"] 					= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
+	["fedjavelin"] 					= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
+	["lozrattlesnake"] 				= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
 	["fedguardian"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["lozannihilator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 }
