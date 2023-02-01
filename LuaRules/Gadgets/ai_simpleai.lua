@@ -556,14 +556,16 @@ if gadgetHandler:IsSyncedCode() then
 					local _, _, isDead, _, faction, allyTeamID = Spring.GetTeamInfo(teamID)
 					local mcurrent, mstorage, _, mincome, mexpense = Spring.GetTeamResources(teamID, "metal")
 					local ecurrent, estorage, _, eincome, eexpense = Spring.GetTeamResources(teamID, "energy")
-					for j = 1, #SimpleCheaterAITeamIDs do
-						if teamID == SimpleCheaterAITeamIDs[j] then
-							-- --cheats
-							if mcurrent < mstorage * 0.20 then
-								Spring.SetTeamResource(teamID, "m", mstorage * 0.25)
-							end
-							if ecurrent < estorage * 0.20 then
-								Spring.SetTeamResource(teamID, "e", estorage * 0.25)
+					if n%1800 == 0 then
+						for j = 1, #SimpleCheaterAITeamIDs do
+							if teamID == SimpleCheaterAITeamIDs[j] then
+								-- --cheats
+								if mcurrent < mstorage * 0.20 then
+									Spring.SetTeamResource(teamID, "m", mstorage * 0.50)
+								end
+								if ecurrent < estorage * 0.20 then
+									Spring.SetTeamResource(teamID, "e", estorage * 0.50)
+								end
 							end
 						end
 					end

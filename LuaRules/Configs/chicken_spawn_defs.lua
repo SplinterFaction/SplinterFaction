@@ -21,16 +21,36 @@ local airWaves = {}
 local burrowName = 'healstation_ai'
 
 chickenTurrets = {
+	-- Weapons
 	["fedmenlo"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = true	},
 	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = true	},
 	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
 	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["fedimmolator"] 				= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
-	["lozinferno"] 					= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
-	["fedjavelin"] 					= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["lozrattlesnake"] 				= { minQueenAnger = 30, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["fedguardian"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["lozannihilator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["fedimmolator"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
+	["lozinferno"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
+	["fedjavelin"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
+	["lozrattlesnake"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
+	["fedguardian"]					= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["lozannihilator"]				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["fedbertha"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["lozintimidator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+
+	-- Utility
+	["cloakingtower"] 				= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
+	["smallshieldgenerator"] 		= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
+	["largeshieldgenerator"] 		= { minQueenAnger = 60, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
+
+	-- Eco Fillers
+	 -- Power
+	["fissionpowerplant"] 			= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["fusionpowerplant"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["coldfusionpowerplant"] 		= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["blackhole"] 					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	 -- Storage
+	["supplydepot"] 				= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["mediumsupplydepot"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["mediumstorage"] 				= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["largestorage"] 				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 }
 
 local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to be true, if some unit is not specified here, it drops random egg colors.
@@ -54,6 +74,8 @@ chickenBehaviours = {
 		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
 		[UnitDefNames["fedengineer_ai"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozengineer_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 1 },
+		
 
 		--[[
 		[UnitDefNames["chickens2"].id] = { distance = 250, chance = 0.5 },
@@ -89,6 +111,9 @@ chickenBehaviours = {
 		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 0.5 },
 		[UnitDefNames["lozreaper"].id] = { distance = 500, chance = 0.5 },
 		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
+		[UnitDefNames["fedengineer_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozengineer_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 0.5 },
 
 	},
 	BERSERK = { -- Run towards target after getting hit by enemy or after hitting the target-- This is for heavy slow units
@@ -338,8 +363,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local miniBosses = { -- Units that spawn alongside queen
-	"fedjuggernaut",
-	"lozsilverback",
+	"fedanarchid",
+	"lozeurypterid",
 }
 
 local chickenMinions = { -- Units spawning other units
