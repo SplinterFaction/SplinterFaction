@@ -6,7 +6,7 @@ unitName = "fedanarchid_normal"
 
 humanName = [[Corrupted Anarchid (Boss)]]
 
-objectName = "fedanarchid.s3o"
+objectName = "fedanarchid_big.s3o"
 script = "fedanarchid.cob"
 
 hitPoints = 80000
