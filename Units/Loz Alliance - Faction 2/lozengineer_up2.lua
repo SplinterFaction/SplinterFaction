@@ -14,7 +14,7 @@ maxDamage = 1500
 
 lozt1buildlist = Shared.buildListLozt2
 
-workertime = 4
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 humanName = [[Architect - Tech 2]]
 

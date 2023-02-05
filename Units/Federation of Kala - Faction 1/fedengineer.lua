@@ -14,7 +14,7 @@ maxDamage = 500 --This is set automatically
 
 fedbuildlists = Shared.buildListFedt0
 
-workertime = 1
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 humanName = [[Lifter - Tech 0]]
 

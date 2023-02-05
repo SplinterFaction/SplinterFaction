@@ -13,7 +13,7 @@ techprovided = [[tech0, tech1, tech2, tech3, tech4, -overseer]]
 techrequired = [[0 overseer]]
 
 maxvelocity = 2
-workertime = 16
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 movementclass = [[WALKERTANK7]]
 
@@ -23,10 +23,10 @@ script = [[ecommander4-battle.cob]]
 footprintx = 7
 footprintz = 7
 
-buildlist = Shared.buildListFedt4
+buildlist = Shared.buildListFedUniversalBuilderCommander
 
 weapon1 = [[particlebeamcannon_up4]]
-areamexdef = [[metalextractor_up3]]
+areamexdef = [[metalextractor]]
 
 explodeas = [[commnuke_up4]]
 selfdestructas = [[commnuke_up4]]

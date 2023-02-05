@@ -12,11 +12,11 @@ buildpic = [[lozengineer_up1.png]]
 
 maxDamage = 1000
 
-lozt1buildlist = Shared.buildListLozt1
+lozt1buildlist = Shared.buildListLozUniversalBuilder
 
-workertime = 2
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
-humanName = [[Architect - Tech 1]]
+humanName = [[Architect]]
 
 footprintx = 3
 footprintz = 3
@@ -25,7 +25,7 @@ movementclass = "WHEELEDTANK3"
 objectName = [[lozengineer_up1.s3o]]
 script = [[lozengineer_up1_lus.lua]]
 
-areamexdef = [[metalextractor_up1]]
+areamexdef = [[metalextractor]]
 requiretech = [[tech1]]
 
 explodeAs = [[mediumexplosiongenericgreen]]

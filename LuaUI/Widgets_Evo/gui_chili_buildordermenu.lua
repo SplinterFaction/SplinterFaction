@@ -80,87 +80,21 @@ WG.buildOrderUI = {updateConfigInt = false}
 local fontSize =  14 * widgetScale
 
 
---Horizontal
+--Traditional with larger pictures
 if buildOrderUI == 0 or buildOrderUI == nil then
-	Config = {
-		ordermenu = {
-			name = 'ordermenu',
-			rows = 13, columns = 2,
-			x = '0%', y = '35%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},     -- outer panel
-		},
-		buildmenu = {
-			name = 'buildmenu',
-			rows = 3, columns = 10,
-			x = '21.2%', y = '57.5%',
-			width = '60%', height = '20%',
-			orientation = 'horizontal',
-			--maxWidth = 420,
-			padding = {5, 5, 5, 5},
-		},
-		labels = {
-			captionFontMaxSize = fontSize,
-			queueFontSize = fontSize, --32 (MaDDoX)
-			costFontSize = fontSize,
-		},
-		hiddenCMDs = {
-			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
-			loadonto = true, selfd = false, settargetnoground = true,
-		},
-	}
-end
-
---Compact Horizontal
-if buildOrderUI == 1 then
-	Config = {
-		ordermenu = {
-			name = 'ordermenu',
-			rows = 13, columns = 2,
-			x = '0%', y = '35%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},     -- outer panel
-		},
-		buildmenu = {
-			name = 'buildmenu',
-			rows = 3, columns = 10,
-			x = '32%', y = '66%',
-			width = '40%', height = '15%',
-			orientation = 'horizontal',
-			--maxWidth = 420,
-			padding = {5, 5, 5, 5},
-		},
-		labels = {
-			captionFontMaxSize = fontSize,
-			queueFontSize = fontSize, --32 (MaDDoX)
-			costFontSize = fontSize,
-		},
-		hiddenCMDs = {
-			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
-			loadonto = true, selfd = false, settargetnoground = true,
-		},
-	}
-end
-
---Traditional
-if buildOrderUI == 2 then
 	Config = {
 		ordermenu = {
 			name = 'ordermenu',
 			rows = 6, columns = 4,
 			x = '0%', y = '24%',
-			width = '50%', height = '25%',
+			width = '100%', height = '25%',
 			orientation = 'horizontal',
 			maxWidth = 390,
 			padding = {5, 5, 5, 5},     -- outer panel
 		},
 		buildmenu = {
 			name = 'buildmenu',
-			rows = 5, columns = 5,
+			rows = 3, columns = 3,
 			x = '0%', y = '50%',
 			width = '50%', height = '50%',
 			orientation = 'horizontal',
@@ -179,106 +113,9 @@ if buildOrderUI == 2 then
 	}
 end
 
---Traditional (SxS)
-if buildOrderUI == 3 then
-	Config = {
-		ordermenu = {
-			name = 'ordermenu',
-			rows = 13, columns = 2,
-			x = '0%', y = '35%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},     -- outer panel
-		},
-		buildmenu = {
-			name = 'buildmenu',
-			rows = 7, columns = 5,
-			x = '21%', y = '35%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},
-		},
-		labels = {
-			captionFontMaxSize = fontSize,
-			queueFontSize = fontSize, --32 (MaDDoX)
-			costFontSize = fontSize,
-		},
-		hiddenCMDs = {
-			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
-			loadonto = true, selfd = false, settargetnoground = true,
-		},
-	}
-end
 
---Right Side
-if buildOrderUI == 4 then
-	Config = {
-		ordermenu = {
-			name = 'ordermenu',
-			rows = 13, columns = 2,
-			x = '0%', y = '35%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},     -- outer panel
-		},
-		buildmenu = {
-			name = 'buildmenu',
-			rows = 7, columns = 5,
-			x = '79.75%', y = '35%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},
-		},
-		labels = {
-			captionFontMaxSize = fontSize,
-			queueFontSize = fontSize, --32 (MaDDoX)
-			costFontSize = fontSize,
-		},
-		hiddenCMDs = {
-			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
-			loadonto = true, selfd = false, settargetnoground = true,
-		},
-	}
-end
-
---Right Side Compact
-if buildOrderUI == 5 then
-	Config = {
-		ordermenu = {
-			name = 'ordermenu',
-			rows = 13, columns = 2,
-			x = '0%', y = '35%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},     -- outer panel
-		},
-		buildmenu = {
-			name = 'buildmenu',
-			rows = 7, columns = 5,
-			x = '85%', y = '35%',
-			width = '15%', height = '30%',
-			orientation = 'horizontal',
-			padding = {5, 5, 5, 5},
-		},
-		labels = {
-			captionFontMaxSize = fontSize,
-			queueFontSize = fontSize, --32 (MaDDoX)
-			costFontSize = fontSize,
-		},
-		hiddenCMDs = {
-			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
-			loadonto = true, selfd = false, settargetnoground = true,
-		},
-	}
-end
-
---Traditional with larger pictures
-if buildOrderUI == 6 then
+--Traditional with smaller pictures
+if buildOrderUI == 1 then
     Config = {
         ordermenu = {
             name = 'ordermenu',
@@ -291,7 +128,7 @@ if buildOrderUI == 6 then
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 3, columns = 3,
+            rows = 4, columns = 4,
             x = '0%', y = '50%',
             width = '50%', height = '50%',
             orientation = 'horizontal',
@@ -308,6 +145,39 @@ if buildOrderUI == 6 then
             loadonto = true, selfd = false, settargetnoground = true,
         },
     }
+end
+
+--Traditional with compact pictures
+if buildOrderUI == 2 then
+	Config = {
+		ordermenu = {
+			name = 'ordermenu',
+			rows = 6, columns = 4,
+			x = '0%', y = '24%',
+			width = '100%', height = '25%',
+			orientation = 'horizontal',
+			maxWidth = 390,
+			padding = {5, 5, 5, 5},     -- outer panel
+		},
+		buildmenu = {
+			name = 'buildmenu',
+			rows = 6, columns = 6,
+			x = '0%', y = '50%',
+			width = '50%', height = '50%',
+			orientation = 'horizontal',
+			maxWidth = 390,
+			padding = {5, 5, 5, 5},
+		},
+		labels = {
+			captionFontMaxSize = fontSize,
+			queueFontSize = fontSize, --32 (MaDDoX)
+			costFontSize = fontSize,
+		},
+		hiddenCMDs = {
+			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
+			loadonto = true, selfd = false, settargetnoground = true,
+		},
+	}
 end
 
 --------------------------------------------------------------------------------
@@ -572,16 +442,16 @@ local function addBuildCommand(cmd)
     local str = ''
     if showCost then
         local s, e = 0, 0
-        local separator = color2incolor(1,1,1) .. '/'
+        local separator = color2incolor(1,1,1) .. '\n'
         s, e = stringfind(cmd.tooltip, 'Uses %+%d* Supply')
         if s then str = str .. color2incolor(1,0.5,0) .. stringsub(cmd.tooltip, s + 6, e - 7) .. " " .. separator end
         s, e = stringfind(cmd.tooltip, 'Metal cost %d*')
         str = str .. color2incolor(0.53,0.77,0.89) .. stringsub(cmd.tooltip, s + 11, e) .. " " .. separator
         s, e = stringfind(cmd.tooltip, 'Energy cost %d*')
-        str = str .. " " .. color2incolor(1,1,0) .. stringsub(cmd.tooltip, s + 12, e) .. " " .. separator
+        str = str .. color2incolor(1,1,0) .. stringsub(cmd.tooltip, s + 12, e) .. " " .. separator
 
     end
-    local techReqColors = {color2incolor(1,0.5,0), color2incolor(0,0.8,1), color2incolor(1,0,1), color2incolor(0,1,0)}
+    local techReqColors = {color2incolor(0,0.8,1), color2incolor(1,0.5,0), color2incolor(1,0,1), color2incolor(0,1,0), color2incolor(1,0,0)}
     if showTechReq and cmd.disabled then
         if stringfind(cmd.tooltip, 'Requires') and not stringfind(cmd.tooltip, 'Provides') then
             local s, e = stringfind(cmd.tooltip, 'tech%d*')
@@ -611,7 +481,7 @@ local function addBuildCommand(cmd)
         chiliCache['costLabel' .. cmd.id]:SetCaption(str)
     end
 
-    if showHotkeys and widgetHandler.orderList["EvoRTS Build Hotkeys"] and widgetHandler.orderList["EvoRTS Build Hotkeys"] ~= 0 then
+    if showHotkeys and widgetHandler.orderList["SplinterFaction Build Hotkeys"] and widgetHandler.orderList["SplinterFaction Build Hotkeys"] ~= 0 then
         if nameToKeySymbols[cmd.name] then
             if not chiliCache['hotkeyLabel' .. cmd.id] then
                 chiliCache['hotkeyLabel' .. cmd.id] = Label:New{

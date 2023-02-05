@@ -13,7 +13,7 @@ techprovided = [[tech0, tech1, tech2, tech3, -overseer, -aioverseerup2, aioverse
 techrequired = [[aioverseerup2]]
 
 maxvelocity = 2
-workertime = 16
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 movementclass = [[WALKERTANK6]]
 

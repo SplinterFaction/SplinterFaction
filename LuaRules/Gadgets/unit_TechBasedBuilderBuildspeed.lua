@@ -4,8 +4,8 @@ end
 
 function gadget:GetInfo()
 	return {
-		name    = "Tech-based Factory buildspeed",
-		desc    = "Factories get better buildspeed with tech",
+		name    = "Tech-based Builder buildspeed",
+		desc    = "Builders get better buildspeed with tech",
 		author  = "Sprung",
 		date    = "2023-02-04",
 		license = "Public Domain",
@@ -23,23 +23,23 @@ end
 --	"fedseaplant",
 --	"lozseaplant",
 --}
---local nominalFactorySpeeds = {} -- [unitDefID] = buildSpeed
+--local nominalBuilderSpeeds = {} -- [unitDefID] = buildSpeed
 --for i = 1, #factoryNames do
 --	local unitDef = UnitDefNames[factoryNames[i]]
---	nominalFactorySpeeds[unitDef.id] = unitDef.buildSpeed
+--	nominalBuilderSpeeds[unitDef.id] = unitDef.buildSpeed
 --end
 
 
 -- FIXME: autogenerate these?
-local nominalFactorySpeeds = {}
+local nominalBuilderSpeeds = {}
 for unitDefID, unitDef in pairs(UnitDefs) do
-	if unitDef.customParams.unitrole == "Factory" then
-		nominalFactorySpeeds[unitDefID] = unitDef.buildSpeed
+	if unitDef.customParams.unitrole == "Builder" or unitDef.customParams.unitrole == "Commander" then
+		nominalBuilderSpeeds[unitDefID] = unitDef.buildSpeed
 	end
 end
 
 
-local factoriesByTeam = {} -- [teamID] = { [unitID] = nominalSpeed }; kept so that we know whom to update on the fly during tech-up
+local buildersByTeam = {} -- [teamID] = { [unitID] = nominalSpeed }; kept so that we know whom to update on the fly during tech-up
 
 local SetBuildSpeed = Spring.SetUnitBuildSpeed -- (unitID, speed). should ideally be a wrapper that sets an attribute instead of raw engine function, so another gadget doesn't override
 
@@ -52,13 +52,13 @@ local function GetTechLevelMultiplier(teamID)
 		return 1
 	end
 	if techCheck("tech4", teamID) then
-		return 34
+		return 16
 	elseif techCheck("tech3", teamID) then
-		return 18
+		return 8
 	elseif techCheck("tech2", teamID) then
-		return 10
+		return 4
 	elseif techCheck("tech1", teamID) then
-		return 6
+		return 2
 	else -- if techCheck("tech0") then -- is that a separate tech level or just baseline? whatever, modify as needed
 		return 1
 	end
@@ -69,7 +69,7 @@ end
      Since the tech gadget doesn't seem to have that, we will just fire it periodically. ]]
 local function TechChangedEvent(teamID)
 	local mult = GetTechLevelMultiplier(teamID) -- this would be a decent place to cache the mult if this was an event
-	for unitID, nominalSpeed in pairs(factoriesByTeam[teamID]) do
+	for unitID, nominalSpeed in pairs(buildersByTeam[teamID]) do
 		SetBuildSpeed(unitID, nominalSpeed * mult)
 	end
 end
@@ -84,25 +84,25 @@ function gadget:GameFrame(f)
 end
 
 function gadget:UnitCreated(unitID, unitDefID, unitTeam)
-	local nominalSpeed = nominalFactorySpeeds[unitDefID]
+	local nominalSpeed = nominalBuilderSpeeds[unitDefID]
 	if not nominalSpeed then
 		return
 	end
 
-	factoriesByTeam[unitTeam][unitID] = nominalSpeed
+	buildersByTeam[unitTeam][unitID] = nominalSpeed
 
 	SetBuildSpeed(unitID, nominalSpeed * GetTechLevelMultiplier(unitTeam))
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
-	factoriesByTeam[unitTeam][unitID] = nil
+	buildersByTeam[unitTeam][unitID] = nil
 end
 
 function gadget:Initialize()
 	local teams = Spring.GetTeamList()
 	for i = 1, #teams do
 		local teamID = teams[i]
-		factoriesByTeam[teamID] = {}
+		buildersByTeam[teamID] = {}
 	end
 
 	for _, unitID in ipairs(Spring.GetAllUnits()) do

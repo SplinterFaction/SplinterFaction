@@ -1,7 +1,7 @@
 function widget:GetInfo()
 	return {
 	version   = "1.0",
-	name      = "EvoRTS Build Hotkeys",
+	name      = "SplinterFaction Build Hotkeys",
 	desc      = "Use hotkeys to build units",
 	author    = "CommonPlayer",
 	date      = "5 Oct 2018",

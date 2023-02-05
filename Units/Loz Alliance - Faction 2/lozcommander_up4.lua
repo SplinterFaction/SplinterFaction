@@ -14,7 +14,7 @@ buildCostMetal = 20000
 hp = 8000
 builddistance = 550
 maxvelocity = 2
-workertime = 16
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 shieldradius = 115
 
@@ -32,8 +32,8 @@ weapon2 = [[commshield_up4]]
 explodeas = [[commnuke_up4]]
 selfdestructas = [[commnuke_up4]]
 
-buildlist = Shared.buildListLozt4
-areamexdef = [[metalextractor_up3]]
+buildlist = Shared.buildListLozUniversalBuilderCommander
+areamexdef = [[metalextractor]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")

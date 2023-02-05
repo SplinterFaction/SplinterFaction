@@ -13,10 +13,10 @@ Shared.buildListf1landfac = {
 	[[fedphalanx]],
 	[[fedgoliath]],
 	[[fedjuggernaut]],
-	[[fedengineer]],
+	-- [[fedengineer]],
 	[[fedengineer_up1]],
-	[[fedengineer_up2]],
-	[[fedengineer_up3]],
+	-- [[fedengineer_up2]],
+	-- [[fedengineer_up3]],
 }
 
 Shared.buildListFedAirPlant = {
@@ -45,10 +45,10 @@ Shared.buildListf2landfac = {
 	[[lozpulverizer]],
 	[[lozmammoth]],
 	[[lozsilverback]],
-	[[lozengineer]],
+	-- [[lozengineer]],
 	[[lozengineer_up1]],
-	[[lozengineer_up2]],
-	[[lozengineer_up3]],
+	-- [[lozengineer_up2]],
+	-- [[lozengineer_up3]],
 }
 
 Shared.buildListLozAirPlant = {
@@ -283,6 +283,68 @@ Shared.buildListFedt4 = {
 	[[fedengineer_up3]],
 }
 
+Shared.buildListFedUniversalBuilder = {
+	[[f1landfac]],
+	[[fedairplant]],
+	[[fedseaplant]],
+	[[metalextractor]],
+	[[metalextractor_up1]],
+	[[metalextractor_up2]],
+	[[metalextractor_up3]],
+	[[fissionpowerplant]],
+	[[fusionpowerplant]],
+	[[coldfusionpowerplant]],
+	-- [[blackholepowerplant]],
+	[[supplydepot]],
+	[[mediumsupplydepot]],
+	[[mediumstorage]],
+	[[largestorage]],
+	[[cloakingtower]],
+	[[smallshieldgenerator]],
+	[[largeshieldgenerator]],
+	[[fedmenlo]],
+	[[fedstinger]],
+	[[fedearthquakemine]],
+	[[fedimmolator]],
+	[[fedjavelin]],
+	[[fedguardian]],
+	[[fedbertha]],
+	[[healstation]],
+	-- [[fedanarchid]],
+	[[fedengineer_up1]],
+}
+
+Shared.buildListFedUniversalBuilderCommander = {
+	[[f1landfac]],
+	[[fedairplant]],
+	[[fedseaplant]],
+	[[metalextractor]],
+	[[metalextractor_up1]],
+	[[metalextractor_up2]],
+	[[metalextractor_up3]],
+	[[fissionpowerplant]],
+	[[fusionpowerplant]],
+	[[coldfusionpowerplant]],
+	[[blackholepowerplant]],
+	[[supplydepot]],
+	[[mediumsupplydepot]],
+	[[mediumstorage]],
+	[[largestorage]],
+	[[cloakingtower]],
+	[[smallshieldgenerator]],
+	[[largeshieldgenerator]],
+	[[fedmenlo]],
+	[[fedstinger]],
+	[[fedearthquakemine]],
+	[[fedimmolator]],
+	[[fedjavelin]],
+	[[fedguardian]],
+	[[fedbertha]],
+	[[healstation]],
+	[[fedanarchid]],
+	[[fedengineer_up1]],
+}
+
 Shared.buildListLoz = {
 }
 
@@ -421,7 +483,73 @@ Shared.buildListLozt4 = {
 	[[lozengineer_up3]],
 }
 
+Shared.buildListLozUniversalBuilder = {
+	[[f2landfac]],
+	[[lozairplant]],
+	[[lozseaplant]],
+	[[metalextractor]],
+	[[metalextractor_up1]],
+	[[metalextractor_up2]],
+	[[metalextractor_up3]],
+	[[fissionpowerplant]],
+	[[fusionpowerplant]],
+	[[coldfusionpowerplant]],
+	-- [[blackholepowerplant]],
+	[[supplydepot]],
+	[[mediumsupplydepot]],
+	[[mediumstorage]],
+	[[largestorage]],
+	[[cloakingtower]],
+	[[smallshieldgenerator]],
+	[[largeshieldgenerator]],
+	[[lozjericho]],
+	[[lozrazor]],
+	[[lozinferno]],
+	[[lozrattlesnake]],
+	[[lozannihilator]],
+	[[lozintimidator]],
+	[[healstation]],
+	-- [[lozeurypterid]],
+	[[lozengineer_up1]],
+}
 
+Shared.buildListLozUniversalBuilderCommander = {
+	[[f2landfac]],
+	[[lozairplant]],
+	[[lozseaplant]],
+	[[metalextractor]],
+	[[metalextractor_up1]],
+	[[metalextractor_up2]],
+	[[metalextractor_up3]],
+	[[fissionpowerplant]],
+	[[fusionpowerplant]],
+	[[coldfusionpowerplant]],
+	[[blackholepowerplant]],
+	[[supplydepot]],
+	[[mediumsupplydepot]],
+	[[mediumstorage]],
+	[[largestorage]],
+	[[cloakingtower]],
+	[[smallshieldgenerator]],
+	[[largeshieldgenerator]],
+	[[lozjericho]],
+	[[lozrazor]],
+	[[lozinferno]],
+	[[lozrattlesnake]],
+	[[lozannihilator]],
+	[[lozintimidator]],
+	[[healstation]],
+	[[lozeurypterid]],
+	[[lozengineer_up1]],
+}
+
+
+-----------------------------
+-----------------------------
+-----------------------------
+-----------------------------
+-----------------------------
+-----------------------------
 -----------------------------
 -----------------------------
 --Buildlists for SimpleAI Commanders
