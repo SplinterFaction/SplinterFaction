@@ -74,6 +74,7 @@ unitDef                         = {
 	customParams                      = {
 		unittype				      = "building",
 		unitrole 				      = "Factory",
+		RequireTech                   = tech,
 		death_sounds                  = "generic",
 		normaltex                     = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                     = "unittextures/lego2skin_explorerbucket.dds",

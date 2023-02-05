@@ -11,11 +11,13 @@ humanName = [[VTOL Factory]]
 objectName = "lozairplant.s3o"
 script = "lozairplant.cob"
 
+tech = [[tech1]]
+
 airPlantBuildList = Shared.buildListLozAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 16
+workerTime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 factionname = "Loz Alliance"
 

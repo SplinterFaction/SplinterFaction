@@ -68,6 +68,77 @@ Shared.buildListLozSeaPlant = {
 	[[lozwarlord]],
 }
 
+
+-----------------------------
+-----------------------------
+--Buildlists for AI factories
+
+Shared.buildListf1landfac_ai = {
+	[[fedak]],
+	[[fedstorm]],
+	[[fedthud]],
+	[[fedcrasher]],
+	[[fedbear]],
+	[[fedcobra]],
+	[[fedavalanche]],
+	[[fedphalanx]],
+	[[fedgoliath]],
+	[[fedjuggernaut]],
+	[[fedengineer_ai]],
+	[[fedengineer_up1_ai]],
+	[[fedengineer_up2_ai]],
+	[[fedengineer_up3_ai]],
+}
+
+Shared.buildListFedAirPlant_ai = {
+	[[airscout]],
+	[[fedsparrow]],
+	[[fedcrow]],
+	[[fedhawk]],
+	[[fedcondor]],
+	[[fedeagle]],
+}
+
+Shared.buildListFedSeaPlant_ai = {
+	[[fedcrusader]],
+	[[fedpiranha]],
+	[[fedcolossus]],
+	[[fedconqueror]],
+}
+
+Shared.buildListf2landfac_ai = {
+	[[lozflea]],
+	[[lozdiamondback]],
+	[[lozroach]],
+	[[lozscorpion]],
+	[[lozreaper]],
+	[[lozluger]],
+	[[lozpulverizer]],
+	[[lozmammoth]],
+	[[lozsilverback]],
+	[[lozengineer_ai]],
+	[[lozengineer_up1_ai]],
+	[[lozengineer_up2_ai]],
+	[[lozengineer_up3_ai]],
+}
+
+Shared.buildListLozAirPlant_ai = {
+	[[airscout]],
+	[[lozwasp]],
+	[[lozbumblebee]],
+	[[lozdragonfly]],
+	[[lozhornet]],
+	[[lozcrane]],
+	[[loztitan]],
+}
+
+Shared.buildListLozSeaPlant_ai = {
+	[[lozenforcer]],
+	[[lozsnake]],
+	[[lozexecutioner_ai]],
+	[[lozwarlord_ai]],
+}
+
 -----------------------------
 -----------------------------
 --Buildlists for mobile builders
@@ -410,8 +481,8 @@ Shared.buildListFedt0_ai = {
 }
 
 Shared.buildListFedt1_ai = {
-	[[f1landfac]],
-	[[fedairplant]],
+	[[f1landfac_ai]],
+	[[fedairplant_ai]],
 	[[fedseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],
@@ -439,8 +510,8 @@ Shared.buildListFedt1_ai = {
 	[[fedcommander_ai]],
 
 	-- Temporary until they get LozAI commander
-	[[f2landfac]],
-	[[lozairplant]],
+	[[f2landfac_ai]],
+	[[lozairplant_ai]],
 	[[lozseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],
@@ -465,8 +536,8 @@ Shared.buildListFedt1_ai = {
 }
 
 Shared.buildListFedt2_ai = {
-	[[f1landfac]],
-	[[fedairplant]],
+	[[f1landfac_ai]],
+	[[fedairplant_ai]],
 	[[fedseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],
@@ -495,8 +566,8 @@ Shared.buildListFedt2_ai = {
 	[[fedcommander_ai]],
 
 	-- Temporary until they get LozAI commander
-	[[f2landfac]],
-	[[lozairplant]],
+	[[f2landfac_ai]],
+	[[lozairplant_ai]],
 	[[lozseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],
@@ -521,8 +592,8 @@ Shared.buildListFedt2_ai = {
 }
 
 Shared.buildListFedt3_ai = {
-	[[f1landfac]],
-	[[fedairplant]],
+	[[f1landfac_ai]],
+	[[fedairplant_ai]],
 	[[fedseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],
@@ -552,8 +623,8 @@ Shared.buildListFedt3_ai = {
 	[[fedcommander_ai]],
 
 	-- Temporary until they get LozAI commander
-	[[f2landfac]],
-	[[lozairplant]],
+	[[f2landfac_ai]],
+	[[lozairplant_ai]],
 	[[lozseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],
@@ -578,8 +649,8 @@ Shared.buildListFedt3_ai = {
 }
 
 Shared.buildListFedt4_ai = {
-	[[f1landfac]],
-	[[fedairplant]],
+	[[f1landfac_ai]],
+	[[fedairplant_ai]],
 	[[fedseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],
@@ -609,8 +680,8 @@ Shared.buildListFedt4_ai = {
 	[[fedcommander_ai]],
 
 	-- Temporary until they get LozAI commander
-	[[f2landfac]],
-	[[lozairplant]],
+	[[f2landfac_ai]],
+	[[lozairplant_ai]],
 	[[lozseaplant]],
 	[[metalextractor_ai]],
 	[[fissionpowerplant]],

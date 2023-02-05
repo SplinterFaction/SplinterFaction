@@ -1,7 +1,6 @@
--- UNITDEF -- f2landfac --
 --------------------------------------------------------------------------------
 
-unitName = "f2landfac"
+unitName = "f1landfac_ai"
 
 --------------------------------------------------------------------------------
 
@@ -9,22 +8,22 @@ buildCostMetal = 300
 
 humanName = [[Land Factory]]
 
-objectName = "f2landfac.s3o"
-script = "f2landfac.cob"
+objectName = "f1landfac.s3o"
+script = "eallterrfac2.cob"
 
 tech = [[tech1]]
+
+F1LandFacBuildList = Shared.buildListf1landfac_ai
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
 workerTime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
-hoverFactoryBuildList = Shared.buildListf2landfac
-
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/f2landfac_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/f1landfac_basedef.lua")
 
 --------------------------------------------------------------------------------
 
-return lowerkeys({ [unitName]     = unitDef })
+return lowerkeys({ [unitName]      = unitDef })
 
 --------------------------------------------------------------------------------

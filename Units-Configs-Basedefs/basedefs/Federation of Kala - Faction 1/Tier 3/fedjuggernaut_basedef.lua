@@ -251,6 +251,7 @@ weaponDefs                 = {
 		smokeTrail               = false,
 		soundStart               = "other/rocket_launcher.wav",
 		soundHit                 = "explosions/explode5.wav",
+		soundTrigger             = true,
 		startVelocity            = 300,
 		tolerance                = 2000,
 		turnrate                 = 2500,

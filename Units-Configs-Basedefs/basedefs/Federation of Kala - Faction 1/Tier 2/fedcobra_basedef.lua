@@ -186,6 +186,7 @@ weaponDefs                 = {
 		smokeTrail               = false,
 		soundStart               = "other/tmissiletankfire.wav",
 		soundHit                 = "explosions/explode5.wav",
+		soundTrigger             = true,
 		startVelocity            = 300,
 		tolerance                = 8000,
 		turnrate                 = 2500,

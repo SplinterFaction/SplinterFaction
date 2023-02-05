@@ -45,7 +45,7 @@ chickenTurrets = {
 	["fissionpowerplant"] 			= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["fusionpowerplant"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["coldfusionpowerplant"] 		= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["blackhole"] 					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["blackholepowerplant"] 					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 	 -- Storage
 	["supplydepot"] 				= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["mediumsupplydepot"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},

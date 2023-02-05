@@ -11,11 +11,13 @@ humanName = [[VTOL Factory]]
 objectName = "fedairplant.s3o"
 script = "fedairplant.cob"
 
+tech = [[tech1]]
+
 airPlantBuildList = Shared.buildListFedAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 16
+workerTime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 factionname = "Federation of Kala"
 

@@ -1,4 +1,3 @@
--- UNITDEF -- f1landfac --
 --------------------------------------------------------------------------------
 
 unitName = "f1landfac"
@@ -18,7 +17,7 @@ F1LandFacBuildList = Shared.buildListf1landfac
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 16
+workerTime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/f1landfac_basedef.lua")
