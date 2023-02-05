@@ -549,6 +549,21 @@ end
 if gadgetHandler:IsSyncedCode() then
 
 	function gadget:GameFrame(n)
+		if n%1800 == 0 then
+			for j = 1, #SimpleCheaterAITeamIDs do
+				if teamID == SimpleCheaterAITeamIDs[j] then
+					local mcurrent, mstorage, _, mincome, mexpense = Spring.GetTeamResources(teamID, "metal")
+					local ecurrent, estorage, _, eincome, eexpense = Spring.GetTeamResources(teamID, "energy")
+					-- --cheats
+					if mcurrent < mstorage * 0.20 then
+						Spring.SetTeamResource(teamID, "m", mstorage * 0.50)
+					end
+					if ecurrent < estorage * 0.20 then
+						Spring.SetTeamResource(teamID, "e", estorage * 0.50)
+					end
+				end
+			end
+		end
 		if n % 15 == 0 then
 			for i = 1, SimpleAITeamIDsCount do
 				if n%(15*SimpleAITeamIDsCount) == 15*(i-1) then
@@ -556,20 +571,6 @@ if gadgetHandler:IsSyncedCode() then
 					local _, _, isDead, _, faction, allyTeamID = Spring.GetTeamInfo(teamID)
 					local mcurrent, mstorage, _, mincome, mexpense = Spring.GetTeamResources(teamID, "metal")
 					local ecurrent, estorage, _, eincome, eexpense = Spring.GetTeamResources(teamID, "energy")
-					if n%1800 == 0 then
-						for j = 1, #SimpleCheaterAITeamIDs do
-							if teamID == SimpleCheaterAITeamIDs[j] then
-								-- --cheats
-								if mcurrent < mstorage * 0.20 then
-									Spring.SetTeamResource(teamID, "m", mstorage * 0.50)
-								end
-								if ecurrent < estorage * 0.20 then
-									Spring.SetTeamResource(teamID, "e", estorage * 0.50)
-								end
-							end
-						end
-					end
-
 					local units = Spring.GetTeamUnits(teamID)
 					local allunits = Spring.GetAllUnits()
 					for k = 1, #units do
