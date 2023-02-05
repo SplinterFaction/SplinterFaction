@@ -266,6 +266,13 @@ function UnitDef_Post(name, uDef)
 		Spring.Echo("[AllDefs Post] Unit " .. uDef.name .. " Does not have a human name defined")
 	end
 
+	--------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
+	-- Limit Commander units to one per team
+	if uDef.customparams and uDef.customparams.unitrole and uDef.customparams.unitrole == "Commander" then
+		uDef.unitrestricted = 1
+	end
+
 end
 
 --------------------------------------------------------------------------------
