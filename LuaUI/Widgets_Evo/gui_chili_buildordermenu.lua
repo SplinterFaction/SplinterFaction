@@ -80,41 +80,6 @@ WG.buildOrderUI = {updateConfigInt = false}
 local fontSize =  14 * widgetScale
 
 
---Traditional with larger pictures
-if buildOrderUI == 0 or buildOrderUI == nil then
-	Config = {
-		ordermenu = {
-			name = 'ordermenu',
-			rows = 6, columns = 4,
-			x = '0%', y = '24%',
-			width = '100%', height = '25%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},     -- outer panel
-		},
-		buildmenu = {
-			name = 'buildmenu',
-			rows = 3, columns = 3,
-			x = '0%', y = '50%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},
-		},
-		labels = {
-			captionFontMaxSize = fontSize,
-			queueFontSize = fontSize, --32 (MaDDoX)
-			costFontSize = fontSize,
-		},
-		hiddenCMDs = {
-			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
-			loadonto = true, selfd = false, settargetnoground = true,
-		},
-	}
-end
-
-
---Traditional with smaller pictures
 if buildOrderUI == 1 then
     Config = {
         ordermenu = {
@@ -145,39 +110,71 @@ if buildOrderUI == 1 then
             loadonto = true, selfd = false, settargetnoground = true,
         },
     }
-end
 
---Traditional with compact pictures
-if buildOrderUI == 2 then
-	Config = {
-		ordermenu = {
-			name = 'ordermenu',
-			rows = 6, columns = 4,
-			x = '0%', y = '24%',
-			width = '100%', height = '25%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},     -- outer panel
-		},
-		buildmenu = {
-			name = 'buildmenu',
-			rows = 6, columns = 6,
-			x = '0%', y = '50%',
-			width = '50%', height = '50%',
-			orientation = 'horizontal',
-			maxWidth = 390,
-			padding = {5, 5, 5, 5},
-		},
-		labels = {
-			captionFontMaxSize = fontSize,
-			queueFontSize = fontSize, --32 (MaDDoX)
-			costFontSize = fontSize,
-		},
-		hiddenCMDs = {
-			timewait = true, deathwait = true, squadwait = true, gatherwait = true,
-			loadonto = true, selfd = false, settargetnoground = true,
-		},
-	}
+    --Traditional with compact pictures
+elseif buildOrderUI == 2 then
+    Config = {
+        ordermenu = {
+            name = 'ordermenu',
+            rows = 6, columns = 4,
+            x = '0%', y = '24%',
+            width = '100%', height = '25%',
+            orientation = 'horizontal',
+            maxWidth = 390,
+            padding = {5, 5, 5, 5},     -- outer panel
+        },
+        buildmenu = {
+            name = 'buildmenu',
+            rows = 6, columns = 6,
+            x = '0%', y = '50%',
+            width = '50%', height = '50%',
+            orientation = 'horizontal',
+            maxWidth = 390,
+            padding = {5, 5, 5, 5},
+        },
+        labels = {
+            captionFontMaxSize = fontSize,
+            queueFontSize = fontSize, --32 (MaDDoX)
+            costFontSize = fontSize,
+        },
+        hiddenCMDs = {
+            timewait = true, deathwait = true, squadwait = true, gatherwait = true,
+            loadonto = true, selfd = false, settargetnoground = true,
+        },
+    }
+else
+    --buildOrderUI == 0
+    --This is the Default
+    --Traditional with larger pictures
+    Config = {
+        ordermenu = {
+            name = 'ordermenu',
+            rows = 6, columns = 4,
+            x = '0%', y = '24%',
+            width = '100%', height = '25%',
+            orientation = 'horizontal',
+            maxWidth = 390,
+            padding = {5, 5, 5, 5},     -- outer panel
+        },
+        buildmenu = {
+            name = 'buildmenu',
+            rows = 3, columns = 3,
+            x = '0%', y = '50%',
+            width = '50%', height = '50%',
+            orientation = 'horizontal',
+            maxWidth = 390,
+            padding = {5, 5, 5, 5},
+        },
+        labels = {
+            captionFontMaxSize = fontSize,
+            queueFontSize = fontSize, --32 (MaDDoX)
+            costFontSize = fontSize,
+        },
+        hiddenCMDs = {
+            timewait = true, deathwait = true, squadwait = true, gatherwait = true,
+            loadonto = true, selfd = false, settargetnoground = true,
+        },
+    }
 end
 
 --------------------------------------------------------------------------------
