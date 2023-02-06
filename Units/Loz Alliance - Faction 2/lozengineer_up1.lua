@@ -26,7 +26,7 @@ objectName = [[lozengineer_up1.s3o]]
 script = [[lozengineer_up1_lus.lua]]
 
 areamexdef = [[metalextractor]]
-requiretech = [[tech1]]
+requiretech = [[tech0]]
 
 explodeAs = [[mediumexplosiongenericgreen]]
 
