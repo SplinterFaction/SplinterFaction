@@ -232,18 +232,18 @@ Upgrade]],
 		},
 	},
 
-	lozengineer_up1 = {
-		{
-		into    = 'lozengineer_up2',
-		time    = timeToBuild_lozengineer_up2,
-		cmdname = [[Tech 2
-Upgrade]],
-		energy  = energyCost_lozengineer_up2,
-		metal   = 0,
-		text    = 'Upgrade to Tech 2 Engineer',
-		require = [[tech2]],
-		},
-	},
+--	lozengineer_up1 = {
+--		{
+--		into    = 'lozengineer_up2',
+--		time    = timeToBuild_lozengineer_up2,
+--		cmdname = [[Tech 2
+--Upgrade]],
+--		energy  = energyCost_lozengineer_up2,
+--		metal   = 0,
+--		text    = 'Upgrade to Tech 2 Engineer',
+--		require = [[tech2]],
+--		},
+--	},
 
 	lozengineer_up2 = {
 		{
@@ -272,18 +272,18 @@ Upgrade]],
 		},
 	},
 
-	fedengineer_up1 = {
-		{
-		into    = 'fedengineer_up2',
-		time    = timeToBuild_fedengineer_up2,
-		cmdname = [[Tech 2
-Upgrade]],
-		energy  = energyCost_fedengineer_up2,
-		metal   = 0,
-		text    = 'Upgrade to Tech 2 Engineer',
-		require = [[tech2]],
-		},
-	},
+--	fedengineer_up1 = {
+--		{
+--		into    = 'fedengineer_up2',
+--		time    = timeToBuild_fedengineer_up2,
+--		cmdname = [[Tech 2
+--Upgrade]],
+--		energy  = energyCost_fedengineer_up2,
+--		metal   = 0,
+--		text    = 'Upgrade to Tech 2 Engineer',
+--		require = [[tech2]],
+--		},
+--	},
 
 	fedengineer_up2 = {
 		{
