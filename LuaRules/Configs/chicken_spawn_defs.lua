@@ -12,12 +12,6 @@ local difficulties = {
 }
 
 local difficulty = difficulties[Spring.GetModOptions().chicken_difficulty]
-local waves = {}
-local basicWaves = {}
-local specialWaves = {}
-local superWaves = {}
-local airWaves = {}
-
 local burrowName = 'healstation_ai'
 
 chickenTurrets = {
@@ -26,17 +20,17 @@ chickenTurrets = {
 	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = true	},
 	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
 	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["fedimmolator"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
-	["lozinferno"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true	},
-	["fedjavelin"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["lozrattlesnake"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["fedguardian"]					= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["lozannihilator"]				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["fedimmolator"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true,	maxQueenAnger = 1000},
+	["lozinferno"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true,	maxQueenAnger = 1000},
+	["fedjavelin"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false,	maxQueenAnger = 1000},
+	["lozrattlesnake"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false,	maxQueenAnger = 1000},
+	["fedguardian"]					= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
+	["lozannihilator"]				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
 	["fedbertha"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["lozintimidator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 
 	-- Utility
-	["cloakingtower"] 				= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
+	["cloakingtower"] 				= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true,	maxQueenAnger = 1000},
 	["smallshieldgenerator"] 		= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
 	["largeshieldgenerator"] 		= { minQueenAnger = 60, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
 
@@ -45,7 +39,7 @@ chickenTurrets = {
 	["fissionpowerplant"] 			= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["fusionpowerplant"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["coldfusionpowerplant"] 		= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["blackholepowerplant"] 					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["blackholepowerplant"] 		= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 	 -- Storage
 	["supplydepot"] 				= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
 	["mediumsupplydepot"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
@@ -144,36 +138,6 @@ chickenBehaviours = {
 }
 
 local optionValues = {
-	-- [difficulties.veryeasy] = {
-	-- 	chickenSpawnRate  = 120,
-	-- 	burrowSpawnRate   = 105,
-	-- 	turretSpawnRate   = 210,
-	-- 	queenSpawnMult    = 0,
-	-- 	angerBonus        = 1,
-	-- 	maxXP			  = 0.1,
-	-- 	spawnChance       = 0.25,
-	-- 	damageMod         = 0.1,
-	-- 	maxBurrows        = 2,
-	-- 	minChickens		  = 5,
-	-- 	maxChickens		  = 75,
-	-- 	queenName         = 've_chickenq',
-	-- 	queenResistanceMult   = 0.25,
-	-- },
-	-- [difficulties.easy] = {
-	-- 	chickenSpawnRate  = 120,
-	-- 	burrowSpawnRate   = 90,
-	-- 	turretSpawnRate   = 180,
-	-- 	queenSpawnMult    = 0,
-	-- 	angerBonus        = 1,
-	-- 	maxXP			  = 0.25,
-	-- 	spawnChance       = 0.33,
-	-- 	damageMod         = 0.2,
-	-- 	maxBurrows        = 3,
-	-- 	minChickens		  = 10,
-	-- 	maxChickens		  = 100,
-	-- 	queenName         = 'e_chickenq',
-	-- 	queenResistanceMult   = 0.5,
-	-- },
 
 	[difficulties.normal] = {
 		chickenSpawnRate  = 30, -- Time between Waves in seconds
@@ -285,78 +249,32 @@ local optionValues = {
 	},
 }
 
-
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
-local wavesAmount = 10
-if difficulty >= 3 then
-	wavesAmount = 12
-end
+local squadSpawnOptionsTable = {
+	basic = {}, -- 67% spawn chance
+	special = {}, -- 33% spawn chance, there's 1% chance of Special squad spawning Super squad, which is specials but 30% anger earlier.
+	air = {}, -- Air waves
+}
 
--- local function addSquad(wave, unitList, weight) -- unused
--- 	if not weight then weight = 1 end
---     for i = 1, weight do 
--- 		for j = wave,wavesAmount do
--- 			if not waves[j] then
--- 				waves[j] = {}
--- 			end
--- 			table.insert(waves[j], unitList)
--- 		end
---     end
--- end
+local function addNewSquad(squadParams) -- params: {type = "basic", minAnger = 0, maxAnger = 100, units = {"1 chicken1"}, weight = 1}
+	if squadParams then -- Just in case
+		if not squadParams.units then return end
+		if not squadParams.minAnger then squadParams.minAnger = 0 end
+		if not squadParams.maxAnger then squadParams.maxAnger = squadParams.minAnger + 50 end -- Eliminate squads 50% after they're introduced by default, can be overwritten
+		if squadParams.maxAnger >= 100 then squadParams.maxAnger = 1000 end -- basically infinite
+		if not squadParams.weight then squadParams.weight = 1 end
 
-local function addSuperSquad(tier, unitList, weight)
-	if not weight then weight = 1 end
-    for i = 1, weight do 
-		for j = tier,wavesAmount do
-			--tier = math.max(math.min(tier+math.random(-1,1), wavesAmount), 1)
-			if not superWaves[j] then
-				superWaves[j] = {}
-			end
-			table.insert(superWaves[j], unitList)
+		for _ = 1,squadParams.weight do
+			table.insert(squadSpawnOptionsTable[squadParams.type], {minAnger = squadParams.minAnger, maxAnger = squadParams.maxAnger, units = squadParams.units, weight = squadParams.weight})
 		end
-    end
+	end
 end
 
-local function addSpecialSquad(tier, unitList, weight)
-	if not weight then weight = 1 end
-	-- addSuperSquad(math.max(tier-3, 1), unitList, weight)
-    for i = 1, weight do 
-		for j = tier,wavesAmount do
-			--tier = math.max(math.min(tier+math.random(-1,1), wavesAmount), 1)
-			if not specialWaves[j] then
-				specialWaves[j] = {}
-			end
-			table.insert(specialWaves[j], unitList)
-		end
-    end
-end
+-- addNewSquad({type = "basic", minAnger = 0, units = {"1 chicken1"}}) -- Minimum
+-- addNewSquad({type = "basic", minAnger = 0, units = {"1 chicken1"}, weight = 1, maxAnger = 100}) -- Full
 
-local function addBasicSquad(tier, unitList, weight)
-	if not weight then weight = 1 end
-    for i = 1, weight do 
-		for j = tier,wavesAmount do
-			if not basicWaves[j] then
-				basicWaves[j] = {}
-			end
-			table.insert(basicWaves[j], unitList)
-		end
-    end
-end
-
-local function addAirSquad(tier, unitList, weight)
-	if not weight then weight = 1 end
-    for i = 1, weight do 
-		for j = tier,wavesAmount do
-			--tier = math.max(math.min(tier+math.random(-1,1), wavesAmount), 1)
-			if not airWaves[j] then
-				airWaves[j] = {}
-			end
-			table.insert(airWaves[j], unitList)
-		end
-    end
-end
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- MiniBoss Squads ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -410,174 +328,143 @@ local chickenHealers = { -- Spawn indepedently from squads in small numbers
 	"fedengineer_ai",
 },
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
--- Each Tier is representative of 10% of Queen Anger. Tier 1 is 0 - 10 queen anger, where tier 10 is 90 - 100 queen anger.
-
-	addSpecialSquad(1, {"15 fedak"}, 1)
-	addSpecialSquad(1, {"15 lozdiamondback"}, 1)
-	addSpecialSquad(1, {"10 fedstorm", "4 fedthud", "6 fedcrasher"}, 1)
-	addSpecialSquad(1, {"10 lozroach", "8 lozscorpion"}, 1)
-
-	addSpecialSquad(2, {"10 fedstorm", "4 fedthud", "6 fedcrasher"}, 1)
-	addSpecialSquad(2, {"10 lozroach", "8 lozscorpion"}, 1)
-	addSpecialSquad(2, {"1 fedbear", "1 fedcobra", "1 fedphalanx"}, 2)
-	addSpecialSquad(2, {"1 lozreaper", "1 lozpulverizer"}, 2)
-
-	addSpecialSquad(3, {"10 fedstorm", "4 fedthud", "6 fedcrasher"}, 1 )
-	addSpecialSquad(3, {"10 lozroach", "8 lozscorpion"}, 1)
-	addSpecialSquad(3, {"3 fedbear", "1 fedcobra", "1 fedphalanx"}, 2)
-	addSpecialSquad(3, {"3 lozreaper", "1 lozpulverizer"}, 2)
-
-	addSpecialSquad(4, {"10 fedstorm", "4 fedthud", "6 fedcrasher"}, 1)
-	addSpecialSquad(4, {"10 lozroach", "8 lozscorpion"}, 1)
-	addSpecialSquad(4, {"5 fedbear", "5 fedcobra", "5 fedphalanx"}, 4)
-	addSpecialSquad(4, {"5 lozreaper", "5 lozpulverizer"}, 4)
-
-	addSpecialSquad(5, {"10 fedbear", "8 fedcobra", "5 fedphalanx"}, 3)
-	addSpecialSquad(5, {"10 lozreaper", "8 lozpulverizer"}, 3)
-
-	addSpecialSquad(6, {"10 fedavalanche"}, 1)
-	addSpecialSquad(6, {"10 lozluger"}, 1)
-	addSpecialSquad(6, {"1 lozmammoth"}, 1)
-	addSpecialSquad(6, {"1 fedgoliath"}, 1)
-
-	addSpecialSquad(7, {"10 fedbear", "8 fedcobra", "5 fedphalanx"}, 1)
-	addSpecialSquad(7, {"10 lozreaper", "8 lozpulverizer"}, 1)
-	addSpecialSquad(7, {"10 fedavalanche"}, 1)
-	addSpecialSquad(7, {"10 lozluger"}, 1)
-	addSpecialSquad(7, {"1 lozmammoth"}, 2)
-	addSpecialSquad(7, {"1 fedgoliath"}, 2)
-
-	addSpecialSquad(8, {"10 fedbear", "8 fedcobra", "5 fedphalanx"}, 1)
-	addSpecialSquad(8, {"10 lozreaper", "8 lozpulverizer"}, 1)
-	addSpecialSquad(8, {"10 fedavalanche"}, 1)
-	addSpecialSquad(8, {"10 lozluger"}, 1)
-	addSpecialSquad(8, {"1 lozmammoth"}, 2)
-	addSpecialSquad(8, {"1 fedgoliath"}, 2)
-
-	addSpecialSquad(8, {"1 lozmammoth"}, 1)
-	addSpecialSquad(8, {"1 fedgoliath"}, 1)
-
-	addSpecialSquad(10, {"1 lozsilverback"}, 1)
-	addSpecialSquad(10, {"1 fedjuggernaut"}, 1)
---[[
-if difficulty >= 3 then
-	for i = 11,wavesAmount do
-	addSpecialSquad(i, { "5 chickenapexallterrainassault", "5 chickenapexallterrainassaultb"			})
-	addSpecialSquad(i, { "10 chickena2_spectre"															})
-	addSpecialSquad(i, { "3 chickenr1", "3 chickenearty1", "3 chickenacidarty" 							})
-	if not Spring.GetModOptions().unit_restrictions_nonukes then
-		addSpecialSquad(i, { "1 chickenr2" 																})
-	end
-	addSpecialSquad(i, { "2 chickenh2" 																	})
-	addSpecialSquad(i, { "3 chickene2" 																    })
-	addSpecialSquad(i, { "3 chickenelectricallterrainassault" 											})
-	addSpecialSquad(i, { "3 chickenacidassault" 														})
-	addSpecialSquad(i, { "3 chickenacidallterrainassault" 												})
-	addSpecialSquad(i, { "25 chicken_dodo2" 															})
-	addSpecialSquad(i, { "10 chickenp2" 																})
-	addSpecialSquad(i, { "10 chickens2" 																}, 2)
-	addSpecialSquad(i, { "10 chickens2_spectre" 														}, 2)
-	end
-end
-]]--
-
-
 ------------------
 -- Basic Squads --
 ------------------
 ------------------
 
-for i = 1,wavesAmount do
-	if i <= 2 then -- Basic Swarmer
-		addBasicSquad(i, {"5 fedak"}, 1)
-		addBasicSquad(i, {"5 fedstorm"}, 1)
-		addBasicSquad(i, {"5 fedcrasher"}, 1)
-		addBasicSquad(i, {"5 lozdiamondback"}, 1)
-		addBasicSquad(i, {"5 lozroach"}, 1)
-		addBasicSquad(i, {"5 lozscorpion"}, 1)
-	elseif i <= 4 then
-		addBasicSquad(i, {"5 fedstorm"}, 1)
-		addBasicSquad(i, {"5 fedthud"}, 1)
-		addBasicSquad(i, {"5 fedcrasher"}, 1)
-		addBasicSquad(i, {"5 fedbear", "3 fedphalanx"}, 2)
-		addBasicSquad(i, {"5 lozroach"}, 1)
-		addBasicSquad(i, {"5 lozscorpion"}, 1)
-		addBasicSquad(i, {"5 lozreaper", "3 lozpulverizer"}, 2)
-	elseif i <= 6 then
-		addBasicSquad(i, {"5 fedstorm"}, 1)
-		addBasicSquad(i, {"5 fedthud"}, 1)
-		addBasicSquad(i, {"5 fedcrasher"}, 1)
-		addBasicSquad(i, {"10 fedbear", "5 fedcobra", "5 fedphalanx"}, 3)
-		addBasicSquad(i, {"5 lozroach"}, 1)
-		addBasicSquad(i, {"5 lozscorpion"}, 1)
-		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer"}, 3)
-	elseif i <= 8 then
-		addBasicSquad(i, {"10 fedbear", "5 fedcobra", "5 fedphalanx"}, 1)
-		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer"}, 1)
-		addBasicSquad(i, {"2 fedgoliath"}, 2)
-		addBasicSquad(i, {"2 lozmammoth"}, 2)
-	elseif i <= 10 then
-		addBasicSquad(i, {"5 fedbear", "5 fedcobra", "5 fedphalanx"}, 1)
-		addBasicSquad(i, {"10 lozreaper", "5 lozpulverizer" }, 1)
-		addBasicSquad(i, {"2 fedgoliath"}, 2)
-		addBasicSquad(i, {"2 lozmammoth"}, 2)
-	end
+addNewSquad({ type = "basic", minAnger = 0, units = { "5 fedak" } })
+addNewSquad({ type = "basic", minAnger = 0, units = { "5 fedstorm" } })
+addNewSquad({ type = "basic", minAnger = 0, units = { "5 fedcrasher" } })
+addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozdiamondback" } })
+addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozroach" } })
+addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozscorpion" } })
+
+addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedstorm" } })
+addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedthud" } })
+addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedcrasher" } })
+addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedbear", "3 fedphalanx" }, weight = 2 })
+addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozroach" } })
+addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozscorpion" } })
+addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozreaper", "3 lozpulverizer" }, weight = 2 })
+
+addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedstorm" } })
+addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedthud" } })
+addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedcrasher" } })
+addNewSquad({ type = "basic", minAnger = 30, units = { "10 fedbear", "5 fedcobra", "5 fedphalanx" }, weight = 3 })
+addNewSquad({ type = "basic", minAnger = 30, units = { "5 lozroach" } })
+addNewSquad({ type = "basic", minAnger = 30, units = { "5 lozscorpion" } })
+addNewSquad({ type = "basic", minAnger = 30, units = { "10 lozreaper", "5 lozpulverizer" }, weight = 3 })
+
+addNewSquad({ type = "basic", minAnger = 50, units = { "10 fedbear", "5 fedcobra", "5 fedphalanx" } })
+addNewSquad({ type = "basic", minAnger = 50, units = { "10 lozreaper", "5 lozpulverizer" } })
+addNewSquad({ type = "basic", minAnger = 50, units = { "2 fedgoliath" }, weight = 2 })
+addNewSquad({ type = "basic", minAnger = 50, units = { "2 lozmammoth" }, weight = 2 })
+
+addNewSquad({ type = "basic", minAnger = 70, units = { "5 fedbear", "5 fedcobra", "5 fedphalanx" } })
+addNewSquad({ type = "basic", minAnger = 70, units = { "10 lozreaper", "5 lozpulverizer" } })
+addNewSquad({ type = "basic", minAnger = 70, units = { "2 fedgoliath" }, weight = 2 })
+addNewSquad({ type = "basic", minAnger = 70, units = { "2 lozmammoth" }, weight = 2 })
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+addNewSquad({ type = "special", minAnger = 0, units = { "15 fedak" } })
+addNewSquad({ type = "special", minAnger = 0, units = { "15 lozdiamondback" } })
+addNewSquad({ type = "special", minAnger = 0, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
+addNewSquad({ type = "special", minAnger = 0, units = { "10 lozroach", "8 lozscorpion" } })
+
+addNewSquad({ type = "special", minAnger = 10, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
+addNewSquad({ type = "special", minAnger = 10, units = { "10 lozroach", "8 lozscorpion" } })
+addNewSquad({ type = "special", minAnger = 10, units = { "1 fedbear", "1 fedcobra", "1 fedphalanx" }, weight = 2 })
+addNewSquad({ type = "special", minAnger = 10, units = { "1 lozreaper", "1 lozpulverizer" }, weight = 2 })
+
+addNewSquad({ type = "special", minAnger = 20, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
+addNewSquad({ type = "special", minAnger = 20, units = { "10 lozroach", "8 lozscorpion" } })
+addNewSquad({ type = "special", minAnger = 20, units = { "3 fedbear", "1 fedcobra", "1 fedphalanx" }, weight = 2 })
+addNewSquad({ type = "special", minAnger = 20, units = { "3 lozreaper", "1 lozpulverizer" }, weight = 2 })
+
+addNewSquad({ type = "special", minAnger = 30, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
+addNewSquad({ type = "special", minAnger = 30, units = { "10 lozroach", "8 lozscorpion" } })
+addNewSquad({ type = "special", minAnger = 30, units = { "5 fedbear", "5 fedcobra", "5 fedphalanx" }, weight = 4 })
+addNewSquad({ type = "special", minAnger = 30, units = { "5 lozreaper", "5 lozpulverizer" }, weight = 4 })
+
+addNewSquad({ type = "special", minAnger = 40, units = { "10 fedbear", "8 fedcobra", "5 fedphalanx" }, weight = 3 })
+addNewSquad({ type = "special", minAnger = 40, units = { "10 lozreaper", "8 lozpulverizer" }, weight = 3 })
+
+addNewSquad({ type = "special", minAnger = 50, units = { "10 fedavalanche" } })
+addNewSquad({ type = "special", minAnger = 50, units = { "10 lozluger" } })
+addNewSquad({ type = "special", minAnger = 50, units = { "1 lozmammoth" } })
+addNewSquad({ type = "special", minAnger = 50, units = { "1 fedgoliath" } })
+
+addNewSquad({ type = "special", minAnger = 60, units = { "10 fedbear", "8 fedcobra", "5 fedphalanx" } })
+addNewSquad({ type = "special", minAnger = 60, units = { "10 lozreaper", "8 lozpulverizer" } })
+addNewSquad({ type = "special", minAnger = 60, units = { "10 fedavalanche" } })
+addNewSquad({ type = "special", minAnger = 60, units = { "10 lozluger" } })
+addNewSquad({ type = "special", minAnger = 60, units = { "1 lozmammoth" }, weight = 2 })
+addNewSquad({ type = "special", minAnger = 60, units = { "1 fedgoliath" }, weight = 2 })
+
+addNewSquad({ type = "special", minAnger = 70, units = { "10 fedbear", "8 fedcobra", "5 fedphalanx" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "10 lozreaper", "8 lozpulverizer" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "10 fedavalanche" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "10 lozluger" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "1 lozmammoth" }, weight = 2 })
+addNewSquad({ type = "special", minAnger = 70, units = { "1 fedgoliath" }, weight = 2 })
+
+addNewSquad({ type = "special", minAnger = 80, units = { "1 lozmammoth" } })
+addNewSquad({ type = "special", minAnger = 80, units = { "1 fedgoliath" } })
+
+addNewSquad({ type = "special", minAnger = 90, units = { "1 lozsilverback" } })
+addNewSquad({ type = "special", minAnger = 90, units = { "1 fedjuggernaut" } })
+
+for j = 1,#miniBosses do
+	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j] }, weight = 3 })
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Air Squads ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-addAirSquad(5, {"4 fedsparrow"}, 1)
-addAirSquad(5, {"4 lozwasp"}, 1)
-addAirSquad(5, {"4 fedhawk", "4 lozhornet" }, 1)
-addAirSquad(5, {"5 fedcrow"}, 1)
-addAirSquad(5, {"3 fedhawk", "5 lozbumblebee"}, 1)
-addAirSquad(5, {"2 fedcondor" }, 1)
-addAirSquad(5, {"2 lozcrane" }, 1)
+local airStartAnger = 30 -- needed for air waves to work correctly.
 
-addAirSquad(5, {"3 fedhawk", "4 lozhornet" }, 1)
-addAirSquad(5, {"2 lozhornet", "5 fedcrow"}, 1)
-addAirSquad(5, {"3 fedhawk", "5 lozbumblebee"}, 1)
-addAirSquad(5, {"2 fedcondor", "5 lozcrane"}, 1)
+addNewSquad({ type = "air", minAnger = 30, units = { "4 fedsparrow" } })
+addNewSquad({ type = "air", minAnger = 30, units = { "4 lozwasp" } })
+addNewSquad({ type = "air", minAnger = 30, units = { "4 fedhawk", "4 lozhornet" } })
+addNewSquad({ type = "air", minAnger = 30, units = { "5 fedcrow" } })
+addNewSquad({ type = "air", minAnger = 30, units = { "3 fedhawk", "5 lozbumblebee" } })
+addNewSquad({ type = "air", minAnger = 30, units = { "2 fedcondor" } })
+addNewSquad({ type = "air", minAnger = 30, units = { "2 lozcrane" } })
 
-addAirSquad(6, {"3 fedhawk", "3 lozhornet" }, 1)
-addAirSquad(6, {"3 lozhornet", "5 fedcrow"}, 1)
-addAirSquad(6, {"3 fedhawk", "5 lozbumblebee"}, 1)
-addAirSquad(6, {"3 fedcondor", "3 lozcrane"}, 1)
-addAirSquad(6, { "1 fedeagle", "1 loztitan" }, 1)
+addNewSquad({ type = "air", minAnger = 40, units = { "3 fedhawk", "4 lozhornet" } })
+addNewSquad({ type = "air", minAnger = 40, units = { "2 lozhornet", "5 fedcrow" } })
+addNewSquad({ type = "air", minAnger = 40, units = { "3 fedhawk", "5 lozbumblebee" } })
+addNewSquad({ type = "air", minAnger = 40, units = { "2 fedcondor", "5 lozcrane" } })
 
-addAirSquad(7, {"6 fedhawk", "6 lozhornet" }, 1)
-addAirSquad(7, {"5 lozhornet", "10 fedcrow"}, 1)
-addAirSquad(7, {"5 fedhawk", "10 lozbumblebee"}, 1)
-addAirSquad(7, {"3 fedcondor", "3 lozcrane"}, 1)
+addNewSquad({ type = "air", minAnger = 50, units = { "3 fedhawk", "3 lozhornet" } })
+addNewSquad({ type = "air", minAnger = 50, units = { "3 lozhornet", "5 fedcrow" } })
+addNewSquad({ type = "air", minAnger = 50, units = { "3 fedhawk", "5 lozbumblebee" } })
+addNewSquad({ type = "air", minAnger = 50, units = { "3 fedcondor", "3 lozcrane" } })
+addNewSquad({ type = "air", minAnger = 50, units = { "1 fedeagle", "1 loztitan" } })
 
-addAirSquad(8, {"6 fedhawk", "10 lozbumblebee", "6 lozhornet", "10 fedcrow"}, 1)
-addAirSquad(8, {"3 fedcondor", "3 lozcrane"}, 1)
+addNewSquad({ type = "air", minAnger = 60, units = { "6 fedhawk", "6 lozhornet" } })
+addNewSquad({ type = "air", minAnger = 60, units = { "5 lozhornet", "10 fedcrow" } })
+addNewSquad({ type = "air", minAnger = 60, units = { "5 fedhawk", "10 lozbumblebee" } })
+addNewSquad({ type = "air", minAnger = 60, units = { "3 fedcondor", "3 lozcrane" } })
 
-addAirSquad(9, {"6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow"}, 1)
-addAirSquad(9, {"4 fedcondor", "4 lozcrane"}, 1)
-addAirSquad(9, {"1 fedeagle", "1 loztitan" }, 1)
+addNewSquad({ type = "air", minAnger = 70, units = { "6 fedhawk", "10 lozbumblebee", "6 lozhornet", "10 fedcrow" } })
+addNewSquad({ type = "air", minAnger = 70, units = { "3 fedcondor", "3 lozcrane" } })
 
-addAirSquad(10, {"6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow"}, 1)
-addAirSquad(10, {"10 fedhawk", "10 lozhornet"}, 1)
-addAirSquad(10, {"2 fedeagle", "2 loztitan" }, 1)
+addNewSquad({ type = "air", minAnger = 80, units = { "6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow" } })
+addNewSquad({ type = "air", minAnger = 80, units = { "4 fedcondor", "4 lozcrane" } })
+addNewSquad({ type = "air", minAnger = 80, units = { "1 fedeagle", "1 loztitan" } })
 
+addNewSquad({ type = "air", minAnger = 90, units = { "6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow" } })
+addNewSquad({ type = "air", minAnger = 90, units = { "10 fedhawk", "10 lozhornet" } })
+addNewSquad({ type = "air", minAnger = 90, units = { "2 fedeagle", "2 loztitan" } })
 
-
--- Add Fuck You air squad
---[[
-if difficulty >= 3 then
-	for i = 11,wavesAmount do
-		addAirSquad(i, { "6 fedeagle", "6 loztitan" })
-		addAirSquad(i, { "9 fedcrow", "9 lozbumblebee" })
-	end
-end
-]]--
+addNewSquad({ type = "air", minAnger = 100, units = { "6 fedeagle", "6 loztitan" } })
+addNewSquad({ type = "air", minAnger = 100, units = { "9 fedcrow", "9 lozbumblebee" } })
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Settings -- Adjust these
@@ -608,18 +495,14 @@ local config = { -- Don't touch this! ------------------------------------------
 	spawnSquareIncrement   	= spawnSquareIncrement,         
 	minBaseDistance        	= minBaseDistance,
 	chickenTurrets			= table.copy(chickenTurrets),
-	waves                  	= waves,
-	wavesAmount            	= wavesAmount,
-	basicWaves		   	   	= basicWaves,
-	specialWaves           	= specialWaves,
-	superWaves             	= superWaves,
-	airWaves			   	= airWaves,
 	miniBosses			   	= miniBosses,
 	chickenMinions			= chickenMinions,
 	chickenBehaviours 		= chickenBehaviours,
 	difficultyParameters   	= optionValues,
 	useWaveMsg 				= useWaveMsg,
 	burrowTurretSpawnRadius = burrowTurretSpawnRadius,
+	squadSpawnOptionsTable	= squadSpawnOptionsTable,
+	airStartAnger			= airStartAnger,
 }
 
 for key, value in pairs(optionValues[difficulty]) do
