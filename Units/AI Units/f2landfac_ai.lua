@@ -1,4 +1,3 @@
-
 --------------------------------------------------------------------------------
 
 unitName = "f2landfac_ai"
@@ -16,7 +15,7 @@ tech = [[tech1]]
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 hoverFactoryBuildList = Shared.buildListf2landfac_ai
 

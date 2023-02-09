@@ -1,34 +1,33 @@
--- UNITDEF -- lozengineer --
 --------------------------------------------------------------------------------
 
-unitName = "lozengineer_ai"
+unitName = "lozengineer_up1_ai"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 40
-buildDistance = 250
+buildCostMetal = 80
+buildDistance = 350
 
-buildpic = [[lozengineer.png]]
+buildpic = [[lozengineer_up1.png]]
 
-maxDamage = 500
+maxDamage = 1000
 
-lozt1buildlist = Shared.buildListLozt0
+lozt1buildlist = Shared.buildListLozUniversalBuilder_ai
 
 workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
-humanName = [[Architect - Tech 0]]
+humanName = [[Architect]]
 
-footprintx = 2
-footprintz = 2
-movementclass = "WHEELEDTANK2"
+footprintx = 3
+footprintz = 3
+movementclass = "WHEELEDTANK3"
 
-objectName = [[lozengineer.s3o]]
-script = [[lozengineer_lus.lua]]
+objectName = [[lozengineer_up1.s3o]]
+script = [[lozengineer_up1_lus.lua]]
 
 areamexdef = [[metalextractor]]
 requiretech = [[tech0]]
 
-explodeAs = [[smallexplosiongenericgreen]]
+explodeAs = [[mediumexplosiongenericgreen]]
 
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozengineer_basedef.lua")
 

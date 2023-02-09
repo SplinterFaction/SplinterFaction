@@ -11,11 +11,11 @@ humanName = [[VTOL Factory]]
 objectName = "fedairplant.s3o"
 script = "fedairplant.cob"
 
+tech = [[tech2]]
+
 airPlantBuildList = Shared.buildListFedAirPlant_ai
 
 explodeAs = [[largebuildingexplosiongeneric]]
-
-tech = [[tech2]]
 
 workerTime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 

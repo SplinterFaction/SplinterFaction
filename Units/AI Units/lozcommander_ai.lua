@@ -1,38 +1,42 @@
 --------------------------------------------------------------------------------
 
-unitName = [[fedcommander_ai]]
+unitName = [[lozcommander_ai]]
 
 --------------------------------------------------------------------------------
 
-humanname = [[Federation of Kala Command Unit - Tech 0 - SimpleAI]]
-buildpicture = [[fedcommander.png]]
-buildcostmetal = 250
+humanname = [[Loz Alliance Command Unit - Tech 0]]
+buildpicture = [[lozcommander.png]]
+
+techprovided = [[tech0, -overseer]]
+techrequired = [[0 overseer]]
+
+buildCostMetal = 3500
+hp = 500
 builddistance = 550
-
-techprovided = [[tech0, tech1, -overseer, aioverseerup0]]
-techrequired = [[tech0]]
-
 maxvelocity = 2
 workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
-movementclass = [[WALKERTANK3]]
+shieldradius = 75
 
-objectname = [[fedcommander.s3o]]
-script = [[ecommander4-battle.cob]]
+movementclass = [[WHEELEDTANK3]]
+
+objectname = [[lozcommander.s3o]]
+script = [[lozcommander_lus.lua]]
 
 footprintx = 3
 footprintz = 3
 
-buildlist = Shared.buildListFedUniversalBuilderCommander_ai
-areamexdef = [[metalextractor]]
-
-weapon1 = [[particlebeamcannon]]
+weapon1 = [[commrailgun]]
+weapon2 = [[commshield]]
 
 explodeas = [[commnuke]]
 selfdestructas = [[commnuke]]
 
+buildlist = Shared.buildListLozUniversalBuilderCommander_ai
+areamexdef = [[metalextractor]]
+
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/fedcommander_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------
