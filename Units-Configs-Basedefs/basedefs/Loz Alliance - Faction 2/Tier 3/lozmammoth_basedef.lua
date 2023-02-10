@@ -225,6 +225,13 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+
+			areadamage_ceg          = "napalm",
+			areadamage_damageCeg    = "burnblack",
+			areadamage_time         = 10,
+			areadamage_damage       = 5,
+			areadamage_range        = 150,
+			-- areadamage_reistance = ,
 		},
 		damage                   = {
 			default              = 200,
