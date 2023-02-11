@@ -32,53 +32,67 @@ areadamage_damageCeg
 areadamage_time
 areadamage_damage
 areadamage_range
-areadamage_reistance
+areadamage_resistance
 
 ]]--
-
 
 local TimedDamageWeapons = {}
 local TimedDamageDyingUnits = {}
 
 for unitDefID, unitDef in pairs(UnitDefs) do
-    if unitDef.customParams.areadamage_ceg then
-        TimedDamageDyingUnits[unitDefID].ceg = unitDef.customParams.areadamage_ceg
+    local customParams = unitDef.customParams
+    local areaDef = {}
+
+    if customParams.areadamage_ceg then
+        areaDef.ceg = customParams.areadamage_ceg
     end
-    if unitDef.customParams.areadamage_damageCeg then
-        TimedDamageDyingUnits[unitDefID].damageCeg = unitDef.customParams.areadamage_damageCeg
+    if customParams.areadamage_damageceg then
+        areaDef.damageCeg = customParams.areadamage_damageceg
     end
-    if unitDef.customParams.areadamage_time then
-        TimedDamageDyingUnits[unitDefID].time = unitDef.customParams.areadamage_time
+    if customParams.areadamage_time then
+        areaDef.time = tonumber(customParams.areadamage_time)
     end
-    if unitDef.customParams.areadamage_damage then
-        TimedDamageDyingUnits[unitDefID].damage = unitDef.customParams.areadamage_damage
+    if customParams.areadamage_damage then
+        areaDef.damage = tonumber(customParams.areadamage_damage)
     end
-    if unitDef.customParams.areadamage_range then
-        TimedDamageDyingUnits[unitDefID].range = unitDef.customParams.areadamage_range
+    if customParams.areadamage_range then
+        areaDef.range = tonumber(customParams.areadamage_range)
     end
-    if unitDef.customParams.areadamage_reistance then
-        TimedDamageDyingUnits[unitDefID].resistance = unitDef.customParams.areadamage_reistance
+    if customParams.areadamage_resistance then
+        areaDef.resistance = customParams.areadamage_resistance
+    end
+
+    if next(areaDef) then
+        TimedDamageDyingUnits[unitDefID] = areaDef
     end
 end
 
+
 for weaponDefID, weaponDef in pairs(WeaponDefs) do
-    if weaponDef.customParams.areadamage_ceg then
-        TimedDamageWeapons[weaponDefID].ceg = weaponDef.customParams.areadamage_ceg
+    local customParams = weaponDef.customParams
+    local areaDef = {}
+
+    if customParams.areadamage_ceg then
+        areaDef.ceg = customParams.areadamage_ceg
     end
-    if weaponDef.customParams.areadamage_damageCeg then
-        TimedDamageWeapons[weaponDefID].damageCeg = weaponDef.customParams.areadamage_damageCeg
+    if customParams.areadamage_damageceg then
+        areaDef.damageCeg = customParams.areadamage_damageceg
     end
-    if weaponDef.customParams.areadamage_time then
-        TimedDamageWeapons[weaponDefID].time = weaponDef.customParams.areadamage_time
+    if customParams.areadamage_time then
+        areaDef.time = tonumber(customParams.areadamage_time)
     end
-    if weaponDef.customParams.areadamage_damage then
-        TimedDamageWeapons[weaponDefID].damage = weaponDef.customParams.areadamage_damage
+    if customParams.areadamage_damage then
+        areaDef.damage = tonumber(customParams.areadamage_damage)
     end
-    if weaponDef.customParams.areadamage_range then
-        TimedDamageWeapons[weaponDefID].range = weaponDef.customParams.areadamage_range
+    if customParams.areadamage_range then
+        areaDef.range = tonumber(customParams.areadamage_range)
     end
-    if weaponDef.customParams.areadamage_reistance then
-        TimedDamageWeapons[weaponDefID].resistance = weaponDef.customParams.areadamage_reistance
+    if customParams.areadamage_resistance then
+        areaDef.resistance = customParams.areadamage_resistance
+    end
+
+    if next(areaDef) then
+        TimedDamageWeapons[weaponDefID] = areaDef
     end
 end
 
@@ -95,6 +109,8 @@ end
 function gadget:Explosion(weaponDefID, px, py, pz, AttackerID, ProjectileID)
     if TimedDamageWeapons[weaponDefID] then
         local currentTime = Spring.GetGameSeconds()
+        -- Spring.Debug.TableEcho(TimedDamageWeapons)
+        -- Spring.Echo("[[Area Timed Damage]] " .. TimedDamageWeapons[weaponDefID].damageCeg)
         aliveExplosions[#aliveExplosions+1] = { 
             x = px, 
             y = math.max(Spring.GetGroundHeight(px, pz), 0), 
@@ -163,6 +179,7 @@ function gadget:GameFrame(frame)
                                 Spring.DestroyUnit(unitID, false, false)
                             end
                             local ux, uy, uz = Spring.GetUnitPosition(unitID)
+                            -- Spring.Echo("[[Area Timed Damage]] " .. aliveExplosions[i].damageCeg)
                             Spring.SpawnCEG(aliveExplosions[i].damageCeg, ux, uy + 8, uz, 0, 0, 0)
                         end
                     end

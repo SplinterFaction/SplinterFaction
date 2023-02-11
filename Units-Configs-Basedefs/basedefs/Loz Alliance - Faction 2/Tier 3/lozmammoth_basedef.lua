@@ -190,7 +190,7 @@ weaponDefs                 = {
 		},
 	},
 	rocket             = {
-		AreaOfEffect             = 25,
+		AreaOfEffect             = 100,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
@@ -199,13 +199,13 @@ weaponDefs                 = {
 		explosionGenerator       = "custom:genericshellexplosion-small",
 		energypershot            = 0,
 		fireStarter              = 70,
-		tracks                   = true,
+		tracks                   = false,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rocket",
 		range                    = 800,
-		reloadtime               = 2,
+		reloadtime               = 10,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "weapons/rocket1.wav",
@@ -213,24 +213,25 @@ weaponDefs                 = {
 		soundTrigger             = true,
 		startVelocity            = 300,
 		tolerance                = 2000,
-		turnrate                 = 2500,
+		turnrate                 = 1000,
 		turret                   = true,
 		trajectoryHeight		 = 1.5,
 		weaponAcceleration       = 300,
 		flightTime               = 10,
 		weaponVelocity           = 300,
+		projectiles              = 5,
 		sprayangle				 = 5000,
 		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= 600, -- In Elmos
+			expl_light_life		= 900, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.1, -- Use this sparingly
 
 			areadamage_ceg          = "napalm",
-			areadamage_damageCeg    = "burnblack",
+			areadamage_damageceg    = "burnblacknapalm",
 			areadamage_time         = 10,
-			areadamage_damage       = 5,
-			areadamage_range        = 150,
+			areadamage_damage       = 25,
+			areadamage_range        = 100,
 			-- areadamage_reistance = ,
 		},
 		damage                   = {
