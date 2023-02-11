@@ -1,5 +1,5 @@
 
-base, sfxpoint1, sfxpoint2, sfxpoint3, sfxpoint4 = piece('base', 'sfxpoint1', 'sfxpoint2', 'sfxpoint3', 'sfxpoint4')
+base, sfxpoint1 = piece('base', 'sfxpoint1')
 
 common = include("headers/common_includes_lus.lua")
 
@@ -8,7 +8,7 @@ terrainType = "terrainType"
 skyhateEffect = "powerplant-fireball-small-orange"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, sfxpoint1, sfxpoint2, sfxpoint3, sfxpoint4})
+	StartThread(common.SmokeUnit, {base, sfxpoint1})
 	StartThread(script.Skyhateceg)
 
 
@@ -17,9 +17,6 @@ end
 function script.Skyhateceg()
 	while true do
 		common.CustomEmitter(sfxpoint1, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
-		common.CustomEmitter(sfxpoint2, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
-		common.CustomEmitter(sfxpoint3, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
-		common.CustomEmitter(sfxpoint4, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
 		Sleep(1000)
 	end
 end
