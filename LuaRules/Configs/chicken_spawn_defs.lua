@@ -66,8 +66,8 @@ chickenBehaviours = {
 		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 0.5 },
 		[UnitDefNames["lozreaper"].id] = { distance = 500, chance = 0.5 },
 		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedengineer_ai"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["lozengineer_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedengineer_up1_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozengineer_up1_ai"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 1 },
 		
 
@@ -105,8 +105,8 @@ chickenBehaviours = {
 		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 0.5 },
 		[UnitDefNames["lozreaper"].id] = { distance = 500, chance = 0.5 },
 		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedengineer_ai"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["lozengineer_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedengineer_up1_ai"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozengineer_up1_ai"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 0.5 },
 
 	},
@@ -124,8 +124,8 @@ chickenBehaviours = {
 		[UnitDefNames["fedanarchid_unbeatable"].id] = { distance = 3000, chance = 0.01 },
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
-		[UnitDefNames["lozengineer_ai"].id] = true,
-		[UnitDefNames["fedengineer_ai"].id] = true,
+		[UnitDefNames["lozengineer_up1_ai"].id] = true,
+		[UnitDefNames["fedengineer_up1_ai"].id] = true,
 	},
 	ARTILLERY = { -- Long lifetime and no regrouping, always uses Fight command to keep distance
 		[UnitDefNames["fedavalanche"].id] = true,
@@ -324,8 +324,8 @@ local chickenMinions = { -- Units spawning other units
 }
 
 local chickenHealers = { -- Spawn indepedently from squads in small numbers
-	"lozengineer_ai",
-	"fedengineer_ai",
+	"lozengineer_up1_ai",
+	"fedengineer_up1_ai",
 },
 
 ------------------
