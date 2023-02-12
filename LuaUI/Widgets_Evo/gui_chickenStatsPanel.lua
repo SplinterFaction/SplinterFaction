@@ -208,6 +208,7 @@ local function getMarqueeMessage(chickenEventArgs)
 	elseif chickenEventArgs.type == "queen" then
 		messages[1] = textColor .. 'The Boss is here!'
 		messages[2] = textColor .. 'Get ready to fight!'
+		queenIsAngry = true
 	elseif chickenEventArgs.type == "wave" then
 		messages[1] = textColor .. "Wave " .. chickenEventArgs.waveCount
 		messages[2] = textColor .. chickenEventArgs.number .. ' Units!'
@@ -295,11 +296,7 @@ local function UpdateRules()
 end
 
 function ChickenEvent(chickenEventArgs)
-	if chickenEventArgs.type == "firstWave" or  chickenEventArgs.type == "wave" or chickenEventArgs.type == "airWave" or chickenEventArgs.type == "miniQueen" or chickenEventArgs.type == "queen" then
-		if chickenEventArgs.type == "airWave" or chickenEventArgs.type == "wave" then
-			waveCount = waveCount + 1
-			chickenEventArgs.waveCount = waveCount
-		end
+	if chickenEventArgs.type == "firstWave" or chickenEventArgs.type == "queen" then
 		showMarqueeMessage = true
 		refreshMarqueeMessage = true
 		messageArgs = chickenEventArgs
@@ -307,13 +304,21 @@ function ChickenEvent(chickenEventArgs)
 	end
 
 	if chickenEventArgs.type == "queenResistance" then
-		-- Spring.Echo("[Chicken Panel] This is the AttackerDefId sent from the gadget " .. chickenEventArgs.number)
 		if chickenEventArgs.number then
 			if not currentlyResistantTo[chickenEventArgs.number] then
 				table.insert(resistancesTable, chickenEventArgs.number)
 				currentlyResistantTo[chickenEventArgs.number] = true
 			end
 		end
+	end
+
+	if (chickenEventArgs.type == "wave" or chickenEventArgs.type == "airWave") and config.useWaveMsg and (not queenIsAngry) then
+		waveCount = waveCount + 1
+		chickenEventArgs.waveCount = waveCount
+		showMarqueeMessage = true
+		refreshMarqueeMessage = true
+		messageArgs = chickenEventArgs
+		waveTime = Spring.GetTimer()
 	end
 end
 

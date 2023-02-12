@@ -82,9 +82,9 @@ if gadgetHandler:IsSyncedCode() then
 	local queenAngerAgressionLevel = 0
 	local difficultyCounter = 0
 	local waveParameters = {
-		baseCooldown = 0,
+		baseCooldown = mRandom(5,10),
 		airWave = {
-			cooldown = 0,
+			cooldown = mRandom(2,4),
 		},
 	}
 	local squadSpawnOptions = config.squadSpawnOptionsTable
@@ -894,7 +894,7 @@ if gadgetHandler:IsSyncedCode() then
 
 		if waveParameters.baseCooldown <= 0 then
 			-- special waves
-			if techAnger > config.airStartAnger then
+			if techAnger > config.airStartAnger and waveParameters.airWave.cooldown <= 0 then
 				waveParameters.airWave.cooldown = mRandom(5,10)
 				waveParameters.baseCooldown = mRandom(2,4)
 				waveType = "air"
@@ -948,8 +948,8 @@ if gadgetHandler:IsSyncedCode() then
 							end
 							cCount = cCount + unitNumber
 						end
-						table.insert(spawnQueue, { burrow = burrowID, unitName = config.chickenHealers[mRandom(1,#config.chickenHealers)], team = chickenTeamID, squadID = 1 })
 						if waveType ~= "air" then
+							table.insert(spawnQueue, { burrow = burrowID, unitName = config.chickenHealers[mRandom(1,#config.chickenHealers)], team = chickenTeamID, squadID = 1 })
 							cCount = cCount + 1
 						end
 					end
