@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 260,
+	buildCostMetal               = 1500,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedbear.png]],
@@ -17,7 +17,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "GROUND",
-	description                  = [[Main Battle Tank]],
+	description                  = [[Assault Mech]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -31,7 +31,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 75,
 	maxSlope                     = 90,
-	maxVelocity                  = 2.3,
+	maxVelocity                  = 2,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -44,7 +44,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 850,
+	sightDistance                = 1100,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
@@ -104,7 +104,7 @@ unitDef                    = {
 	customParams                 = {
 		isupgraded			  	 = isUpgraded,
 		unittype				  = "mobile",
-		unitrole				 = "Main Battle Tank",
+		unitrole				 = "Main Battle Tank - Tech 2",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -136,8 +136,8 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
-		range                  = 750,
-		reloadtime             = 1.6,
+		range                  = 1100,
+		reloadtime             = 2.6,
 		size					 = 8,
 		--projectiles			   = projectiles,
 		weaponType		       = "Cannon",
@@ -148,7 +148,7 @@ weaponDefs                 = {
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 600,
+		weaponVelocity         = 800,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
@@ -156,7 +156,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},      
 		damage                   = {
-			default              = 72,
+			default              = 230,
 		},
 	},
 	particlebeamcannon                 = {
@@ -179,8 +179,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 750,
-		reloadtime               = 0.25,
+		range                    = 1100,
+		reloadtime               = 0.2,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -198,7 +198,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 7.5,
+			default              = 20,
 		},
 	},
 }

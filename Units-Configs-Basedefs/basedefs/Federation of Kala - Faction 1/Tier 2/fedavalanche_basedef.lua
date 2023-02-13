@@ -4,7 +4,7 @@ unitDef                    = {
 	transportbyenemy             = false;
 	--**
 	buildCostEnergy              = 0,
-	buildCostMetal               = 280,
+	buildCostMetal               = 1680,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedavalanche.png]],
@@ -30,7 +30,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 75,
 	maxSlope                     = 90,
-	maxVelocity                  = 2,
+	maxVelocity                  = 1.4,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -43,7 +43,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 650,
+	sightDistance                = 2300,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
@@ -110,7 +110,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				  = "mobile",
-		unitrole				 = "Artillery",
+		unitrole				 = "Artillery - Tech 2",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -143,8 +143,8 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
-		range                  = 1300,
-		reloadtime             = 20,
+		range                  = 2300,
+		reloadtime             = 35,
 		size				   = 4,
 		weaponType		       = "Cannon",
 		soundStart             = "other/artytankshot.wav",
@@ -162,7 +162,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 125,
+			default              = 440,
 		},
 	},
 
@@ -185,7 +185,7 @@ weaponDefs                 = {
 		model                    = "missilesmallvlaunch.s3o",
 		name                     = "Rocket",
 		range                    = 1300,
-		reloadtime               = 6,
+		reloadtime               = 12,
 		weaponType		         = "MissileLauncher",
 
 
@@ -208,7 +208,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 600,
+			default              = 1200,
 		},
 	},
 }

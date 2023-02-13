@@ -75,6 +75,7 @@ local unitDef                     = {
 		iseco                     = 1,
 		needed_cover              = 2,
 		supply_granted            = supplygranted,
+		RequireTech				 = "tech0",
 		death_sounds              = "generic",
 		armortype                 = "building", 
 		noenergycost			  = false,

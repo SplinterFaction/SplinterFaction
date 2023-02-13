@@ -21,15 +21,15 @@ SaveDefsToCustomParams = false
 -------------------------
 -- Process relevant modoptions and gamewide features first
 -------------------------
-unitHealthModifier = tonumber(Spring.GetModOptions().unithealthmodifier)
+local unitHealthModifier = tonumber(Spring.GetModOptions().unithealthmodifier)
 if unitHealthModifier == nil then
 	unitHealthModifier = 100
 end
 
 unitHealthModifier = unitHealthModifier * 0.01
 
-canAnyUnitsReclaim = true
-useDefaultNanospray = true
+local canAnyUnitsReclaim = true
+local useDefaultNanospray = true
 
 -------------------------
 -- DEFS POST PROCESSING
@@ -232,10 +232,6 @@ function UnitDef_Post(name, uDef)
 
 	elseif uDef.canfly == true and uDef.hoverattack == true then
 		uDef.turnrate = 250
-	end
-
-	if uDef.customparams and uDef.customparams.unitsubtype == "ship" then
-
 	end
 
 --[[
@@ -591,6 +587,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 		for id,unitDef in pairs(UnitDefs) do
 
+
 			if unitDef.customparams and unitDef.customparams.unitdefbuildtime == nil then
 				-- Set Rules for Neutral race
 				if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
@@ -598,20 +595,98 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
 						or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
 
-					if unitDef.customparams and unitDef.customparams.unittype ~= "air" then -- Disable energy being automatically calculated for air units
-						unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+					if unitDef.customparams then
+
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech0" then
+							if unitDef.customparams.unittype == "mobile" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+							end
+
+							if unitDef.customparams.unittype == "air" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+							end
+
+							if unitDef.customparams.unittype == "ship" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+							end
+
+							if unitDef.customparams.unittype == "building" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+							end
+						end
+
 						if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
-							unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+							if unitDef.customparams.unittype == "mobile" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+							end
+
+							if unitDef.customparams.unittype == "air" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+							end
+
+							if unitDef.customparams.unittype == "ship" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+							end
+
+							if unitDef.customparams.unittype == "building" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+							end
 						end
+
 						if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
-							unitDef.buildcostenergy = unitDef.buildcostmetal * 6
+							if unitDef.customparams.unittype == "mobile" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 6
+							end
+
+							if unitDef.customparams.unittype == "air" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+							end
+
+							if unitDef.customparams.unittype == "ship" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 6
+							end
+
+							if unitDef.customparams.unittype == "building" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 6
+							end
 						end
+
 						if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
-							unitDef.buildcostenergy = unitDef.buildcostmetal * 12
+							if unitDef.customparams.unittype == "mobile" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 12
+							end
+
+							if unitDef.customparams.unittype == "air" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+							end
+
+							if unitDef.customparams.unittype == "ship" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 12
+							end
+
+							if unitDef.customparams.unittype == "building" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 12
+							end
 						end
+
 						if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
-							unitDef.buildcostenergy = unitDef.buildcostmetal * 15
+							if unitDef.customparams.unittype == "mobile" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 15
+							end
+
+							if unitDef.customparams.unittype == "air" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+							end
+
+							if unitDef.customparams.unittype == "ship" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 15
+							end
+
+							if unitDef.customparams.unittype == "building" then
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 15
+							end
 						end
+
 						if unitDef.customparams and unitDef.customparams.noenergycost == true then
 							unitDef.buildcostenergy = 0
 						end
@@ -626,7 +701,13 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					unitDef.buildcostmetal  = 518181518
 					unitDef.buildcostenergy = 518181518
 				end
+
+				-- Lets remove any funky decimal values
+				unitDef.buildcostmetal  = math.floor(unitDef.buildcostmetal + 0.5)
+				unitDef.buildcostenergy = math.floor(unitDef.buildcostenergy + 0.5)
+
 			end
+
 
 			-- Set reclaimspeed to be a multiple of workertime. This relies on max defaults set in featuredefs post. Without some max defaults there, this will be a funny result.
 			unitDef.reclaimspeed = unitDef.workertime
@@ -702,6 +783,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					if unitDef.customparams.unittype == "air" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
 					end
+					if unitDef.customparams.unittype == "ship" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 10
+					end
 					if unitDef.customparams.unittype == "building" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
 					end
@@ -716,6 +800,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					if unitDef.customparams.unittype == "air" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
 					end
+					if unitDef.customparams.unittype == "ship" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 10
+					end
 					if unitDef.customparams.unittype == "building" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
 					end
@@ -729,6 +816,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					end
 					if unitDef.customparams.unittype == "air" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
+					end
+					if unitDef.customparams.unittype == "ship" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 10
 					end
 					if unitDef.customparams.unittype == "building" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 5
@@ -838,114 +928,38 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.customparams.hpoverride
 			end
 
+			-- Lets get rid of any funky decimal places
+			unitDef.maxdamage = math.floor(unitDef.maxdamage + 0.5)
 
-			-- Cost override so that cost can be adjusted without effecting health
-			local neutralMetalCostModifierMobile = 1
-			local neutralEnergyCostModifierMobile = 1
-			local fedMetalCostModifierMobile = 1
-			local fedEnergyCostModifierMobile = 1
-			local lozMetalCostModifierMobile = 1
-			local lozEnergyCostModifierMobile = 1
 
-			local neutralMetalCostModifierAir = 1
-			local neutralEnergyCostModifierAir = 30
-			local fedMetalCostModifierAir = 1
-			local fedEnergyCostModifierAir = 30
-			local lozMetalCostModifierAir = 1
-			local lozEnergyCostModifierAir = 30
+			-- Set a unified and standardized buildtime
+			-- First we decide how much energy = 1 metal and then we set buildtime to be equivalent to the totalValueInMetal cost
+			--[[
+			This is the reasoning that went into this:
+			A t0 worker would have been able to spend 4 metal per second.
+			An energy building costs 200 metal.
+			For one worker to build that energy building it would take 50 seconds.
+			In 50 seconds that generator would output 40 energy per second, totaling 2000 energy output over a period of 50 seconds.
+			Take the total energy that would have been output over the time spent building it, and divide it by the metal cost of 200 and we get 10.
+			Meaning that 10 energy is worth the equivalent of 1 metal.
 
-			-- Mobile Ground Units
+			It's kinda dubious, but it also makes some sense on some level.
+			]]--
 
-			if unitDef.customparams and unitDef.customparams.factionname == "Neutral" then
-				if unitDef.customparams.unittype == "mobile" then
-					if neutralMetalCostModifierMobile ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * neutralMetalCostModifierMobile
-					end
-					if neutralEnergyCostModifierMobile ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostenergy * neutralEnergyCostModifierMobile
-					end
-				end
+			local totalValueInMetal
+			if unitDef.buildcostenergy ~= nil or unitDef.buildcostenergy < 10 then
+				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 10)
+			else
+				unitDef.buildcostenergy = 10
+				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 10)
 			end
+			unitDef.buildtime = math.floor(totalValueInMetal + 0.5)
 
-			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
-				if unitDef.customparams.unittype == "mobile" then
-					if fedMetalCostModifierMobile ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * fedMetalCostModifierMobile
-					end
-					if fedEnergyCostModifierMobile ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostenergy * fedEnergyCostModifierMobile
-					end
-				end
-			end
 
-			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
-				if unitDef.customparams.unittype == "mobile" then
-					if lozMetalCostModifierMobile ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * lozMetalCostModifierMobile
-					end
-					if lozEnergyCostModifierMobile ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostenergy * lozEnergyCostModifierMobile
-					end
-				end
-			end
-
-			-- Air Units
-
-			if unitDef.customparams and unitDef.customparams.factionname == "Neutral" then
-				if unitDef.customparams.unittype == "air" then
-					if neutralMetalCostModifierAir ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * neutralMetalCostModifierAir
-					end
-					if neutralEnergyCostModifierAir ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * neutralEnergyCostModifierAir
-					end
-				end
-			end
-
-			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
-				if unitDef.customparams.unittype == "air" then
-					if fedMetalCostModifierAir ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * fedMetalCostModifierAir
-					end
-					if fedEnergyCostModifierAir ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * fedEnergyCostModifierAir
-					end
-				end
-			end
-
-			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
-				if unitDef.customparams.unittype == "air" then
-					if lozMetalCostModifierAir ~= 1 then
-						unitDef.buildcostmetal = unitDef.buildcostmetal * lozMetalCostModifierAir
-					end
-					if lozEnergyCostModifierAir ~= 1 then
-						unitDef.buildcostenergy = unitDef.buildcostmetal * lozEnergyCostModifierAir
-					end
-				end
-			end
-
-			-- Time to decide how much energy = 1 metal. I'm going to go with an arbitrary number of 50
-			local totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy * 0.02)
-			unitDef.buildtime = math.floor(totalValueInMetal + 0.5) * 0.25 -- 0.20 is 5 metal equivalent, 0.25 is 4 metal equivalent
-
+			-- Set Supply Costs
 			if unitDef.customparams and unitDef.customparams.supply_cost then
-				local supplycost
-				if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
-					supplycost = math.floor(totalValueInMetal + 0.5) * 0.01
-					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
-				end
-				if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
-					supplycost = math.floor(totalValueInMetal + 0.5) * 0.01
-					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
-				end
-				if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
-					supplycost = math.floor(totalValueInMetal + 0.5) * 0.0065
-					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
-				end
-				if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
-					supplycost = math.floor(totalValueInMetal + 0.5) * 0.005
-					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
-				end
+				local supplycost = totalValueInMetal * 0.01
+				unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

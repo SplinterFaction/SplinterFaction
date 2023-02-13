@@ -34,20 +34,7 @@ local lozSquadDefs = {
 	-- Loz Tech 1 Squads --
 	----------------------------
 
-	--["fedak"] =
-	--{
-	--	members = {
-	--		"fedak",
-	--		"fedak",
-	--		"fedak",
-	--	},
-	--	name = "A.K. Squad",
-	--	description = "3 x A.K. Group",
-	--	--buildCostMetal = 150, --2500
-	--	buildPic = "fedak.ssd",
-	--   size = 3,
-	--   delay = 7,
-	--},
+
 }
 
 return lozSquadDefs
