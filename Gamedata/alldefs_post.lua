@@ -623,7 +623,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 				-- This is a catchall for units that don't have a factionname declared
 				if unitDef.customparams and unitDef.customparams.factionname == nil then
-					unitDef.buildcostenergy = unitDef.buildcostmetal
+					unitDef.buildcostmetal  = 518181518
+					unitDef.buildcostenergy = 518181518
 				end
 			end
 
