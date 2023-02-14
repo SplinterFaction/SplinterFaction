@@ -27,7 +27,7 @@ return {
 				sizemod             = 1,
 				texture             = [[generated-fireball]],
 				drawOrder           = 0,
-				castShadow          = true,
+				-- castshadow          = true,
 			},
 
 		},

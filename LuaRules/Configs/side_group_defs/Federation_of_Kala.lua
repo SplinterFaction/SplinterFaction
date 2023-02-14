@@ -34,58 +34,132 @@ local fedSquadDefs = {
 	-- Fed Tech 1 Squads --
 	----------------------------
 
+	--["fedak"] =
+	--{
+	--	members = {
+	--		"fedak",
+	--		"fedak",
+	--		"fedak",
+	--	},
+	--	name = "A.K. Squad",
+	--	description = "A.K. Group",
+	--	--buildCostMetal = 150, --2500
+	--	buildPic = "fedak.ssd",
+	--	size = 3,
+	--	delay = 7,
+	--},
+	--
+	--["fedstorm"] =
+	--{
+	--	members = {
+	--		"fedstorm",
+	--		"fedstorm",
+	--	},
+	--	name = "Storm Squad",
+	--	description = "Storm Group",
+	--	--buildCostMetal = 150, --2500
+	--	buildPic = "fedstorm.ssd",
+	--	size = 2,
+	--	delay = 7,
+	--},
+	--
+	--["fedthud"] =
+	--{
+	--	members = {
+	--		"fedthud",
+	--	},
+	--	name = "Thud Squad",
+	--	description = "Storm Group",
+	--	--buildCostMetal = 150, --2500
+	--	buildPic = "fedthud.ssd",
+	--	size = 1,
+	--	delay = 7,
+	--},
+	--
+	--["fedcrasher"] =
+	--{
+	--	members = {
+	--		"fedcrasher",
+	--	},
+	--	name = "Crasher Squad",
+	--	description = "Storm Group",
+	--	--buildCostMetal = 150, --2500
+	--	buildPic = "fedthud.ssd",
+	--	size = 1,
+	--	delay = 7,
+	--},
+
 	["fedak"] =
 	{
 		members = {
 			"fedak",
 			"fedak",
 			"fedak",
+			"fedak",
+			"fedak",
 		},
-		name = "A.K. Squad",
-		description = "A.K. Group",
+		name = "Skirmish Squad",
+		description = "Mixed Group optimal for Skirmishes",
 		--buildCostMetal = 150, --2500
 		buildPic = "fedak.ssd",
-		size = 3,
+		size = 5,
 		delay = 7,
 	},
 
 	["fedstorm"] =
 	{
 		members = {
+			"fedak",
+			"fedak",
 			"fedstorm",
 			"fedstorm",
+			"fedstorm",
+			"fedthud",
+			"fedcrasher",
 		},
-		name = "Storm Squad",
-		description = "Storm Group",
+		name = "Assault Squad",
+		description = "Mixed Group optimal for Assaults",
 		--buildCostMetal = 150, --2500
 		buildPic = "fedstorm.ssd",
-		size = 2,
+		size = 7,
 		delay = 7,
 	},
 
 	["fedthud"] =
 	{
 		members = {
+			"fedak",
+			"fedak",
+			"fedstorm",
+			"fedstorm",
+			"fedthud",
+			"fedthud",
 			"fedthud",
 		},
-		name = "Thud Squad",
-		description = "Storm Group",
+		name = "Artillery Squad",
+		description = "Mixed Group optimal for Artillery Purposes",
 		--buildCostMetal = 150, --2500
 		buildPic = "fedthud.ssd",
-		size = 1,
+		size = 7,
 		delay = 7,
 	},
 
 	["fedcrasher"] =
 	{
 		members = {
+			"fedstorm",
+			"fedstorm",
+			"fedcrasher",
+			"fedcrasher",
+			"fedcrasher",
+			"fedcrasher",
 			"fedcrasher",
 		},
-		name = "Crasher Squad",
-		description = "Storm Group",
-		--buildCostMetal = 150, --2500
-		buildPic = "fedthud.ssd",
-		size = 1,
+		name = "Anti-Air Squad",
+		description = "Mixed Group optimal for Anti-Air Purposes",
+		buildCostMetal = 150,
+		buildPic = "fedcrasher.ssd",
+		size = 7,
 		delay = 7,
 	},
 }
