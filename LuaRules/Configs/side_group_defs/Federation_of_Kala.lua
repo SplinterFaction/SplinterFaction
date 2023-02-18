@@ -88,7 +88,7 @@ local fedSquadDefs = {
 	--	size = 1,
 	--	delay = 7,
 	--},
---[[
+
 	["fedak"] =
 	{
 		members = {
@@ -162,7 +162,6 @@ local fedSquadDefs = {
 		size = 7,
 		delay = 7,
 	},
-	]]--
 }
 
 return fedSquadDefs

@@ -34,6 +34,60 @@ local lozSquadDefs = {
 	-- Loz Tech 1 Squads --
 	----------------------------
 
+	["lozdiamondback"] =
+	{
+		members = {
+			"lozflea",
+			"lozflea",
+			"lozdiamondback",
+			"lozdiamondback",
+			"lozdiamondback",
+		},
+		name = "Skirmish Squad",
+		description = "Mixed Group optimal for Skirmishes",
+		--buildCostMetal = 150, --2500
+		buildPic = "lozdiamondback.ssd",
+		size = 5,
+		delay = 7,
+	},
+
+	["lozroach"] =
+	{
+		members = {
+			"lozflea",
+			"lozdiamondback",
+			"lozroach",
+			"lozroach",
+			"lozroach",
+			"lozscorpion",
+			"lozscorpion",
+		},
+		name = "Assault Squad",
+		description = "Mixed Group optimal for Assaults",
+		--buildCostMetal = 150, --2500
+		buildPic = "lozroach.ssd",
+		size = 7,
+		delay = 7,
+	},
+
+	["lozscorpion"] =
+	{
+		members = {
+			"lozscorpion",
+			"lozscorpion",
+			"lozscorpion",
+			"lozdiamondback",
+			"lozdiamondback",
+			"lozflea",
+			"lozflea",
+		},
+		name = "Artillery Squad",
+		description = "Mixed Group optimal for Artillery Purposes",
+		--buildCostMetal = 150, --2500
+		buildPic = "lozscorpion.ssd",
+		size = 7,
+		delay = 7,
+	},
 
 }
 
