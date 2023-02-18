@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 6500,
+	buildCostMetal               = 75000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozsilverback.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 20000,
 	maxSlope                     = 28,
-	maxVelocity                  = 1.4,
+	maxVelocity                  = 1.2,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -35,8 +35,7 @@ unitDef                    = {
 	radarDistance                = 0,
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
-	side                         = "CORE",
-	sightDistance                = 1200,
+	side                         = 2300,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 4,
@@ -100,7 +99,7 @@ unitDef                    = {
 	customParams                 = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
-		unitrole				 = "Assault",
+		unitrole				 = "Assault - Tech 3",
 		hpmodifieroverridepercentage = 0.2,
 		death_sounds             = "generic",
 		RequireTech              = tech,
@@ -131,7 +130,7 @@ weaponDefs                 = {
 		impulseFactor            = 0.1,
 		minintensity             = 1,
 		name                     = "Anti-Tank Railgun",
-		range                    = 1200,
+		range                    = 2300,
 		reloadtime               = 10,
 		WeaponType               = "LaserCannon",
 		rgbColor                 = "1 1 1",
@@ -151,7 +150,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		}, 
 		damage                   = {
-			default              = 3000,
+			default              = 4000,
 		},
 	},
 
@@ -172,8 +171,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 1200,
-		reloadtime             = 0.5,
+		range                  = 2300,
+		reloadtime             = 0.6,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/efighterlaser.wav",
@@ -193,7 +192,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 200,
+			default              = 400,
 		},
 	},
 
@@ -215,9 +214,9 @@ weaponDefs                 = {
 		fireStarter               = 100,
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,
-		minintensity              = 0.5,
+		minintensity              = 1,
 		name                      = "Microwave Beam",
-		range                     = 1200,
+		range                     = 2300,
 		reloadtime                = 0.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = "0.5 0.25 0",
@@ -240,7 +239,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 20,
+			default               = 250,
 		},
 	},
 

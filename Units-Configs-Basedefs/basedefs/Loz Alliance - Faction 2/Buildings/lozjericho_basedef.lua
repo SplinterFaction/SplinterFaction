@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 150,
+	buildCostMetal                = 370,
 	builder                       = false,
 	buildTime                     = 5,
 	canAttack                     = true,
@@ -34,7 +34,7 @@ unitDef                     = {
 	repairable		              = false,
 	selfDestructAs                = "mediumBuildingExplosionGeneric",
 	side                          = "CORE",
-	sightDistance                 = 650,
+	sightDistance                 = 630,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -67,7 +67,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Medium Turret",
+		unitrole				  = "Anti-Swarm Turret",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		--supply_cost               = supply,
@@ -92,8 +92,6 @@ weaponDefs = {
 		collideFeature           = false,
 		cegTag                   = "amphibrocktrail-optimized",
 		explosionGenerator       = "custom:genericshellexplosion-small",
-		burst 					 = 5,
-		burstrate 				 = 0.25,
 		energypershot            = 0,
 		fireStarter              = 70,
 		tracks                   = true,
@@ -102,7 +100,7 @@ weaponDefs = {
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Anti-Ground Guided Missile System",
 		range                    = 630,
-		reloadtime               = 3,
+		reloadtime               = 1,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "weapons/rocket1.wav",
@@ -123,7 +121,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 80,
+			default              = 400,
 		},
 	},
 }

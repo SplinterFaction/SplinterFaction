@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 300,
+	buildCostMetal               = 1600,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozreaper.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 375,
 	maxSlope                     = 26,
-	maxVelocity                  = 2.1,
+	maxVelocity                  = 1.8,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 850,
+	sightDistance                = 1300,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -90,7 +90,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "Main Battle Tank",
+		unitrole				 = "Main Battle Tank - Tech 2",
 		canbetransported 		 = "true",
 		needed_cover             = 3,
 		death_sounds             = "generic",
@@ -106,7 +106,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	railgun               = {
-		areaofeffect		   = 50,
+		areaofeffect		   = 25,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -122,8 +122,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 850,
-		reloadtime             = 4,
+		range                  = 1300,
+		reloadtime             = 6,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/allterrheavyshot.wav",
@@ -143,7 +143,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 150,
+			default              = 450,
 		},
 	},
 	lasercannon                = {
@@ -163,7 +163,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Electromagnetic Pulse Laser",
 		range                  = 850,
-		reloadtime             = 0.25,
+		reloadtime             = 0.4,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/Pistol Shot_01.wav",
@@ -182,7 +182,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 7.5,
+			default              = 40,
 		},
 	},
 }

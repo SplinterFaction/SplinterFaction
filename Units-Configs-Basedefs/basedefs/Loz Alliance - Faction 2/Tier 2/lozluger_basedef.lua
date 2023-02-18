@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 400,
+	buildCostMetal               = 1800,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozluger.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	idleTime                     = 2200,
 	leaveTracks                  = false,
 	maxDamage                    = 300,
-	maxVelocity                  = 1.8,
+	maxVelocity                  = 1.3,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 850,
+	sightDistance                = 2300,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -119,8 +119,8 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		highTrajectory	         = 1,
 		name                     = "High Explosive Plasma Cannon",
-		range                    = 1300,
-		reloadtime               = 10,
+		range                    = 2300,
+		reloadtime               = 40,
 		size					 = 5,
 		weaponType		         = "Cannon",
 		soundHit                 = "explosions/artyhit.wav",
@@ -135,7 +135,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},  
 		damage                   = {
-			default              = 1000,
+			default              = 8000,
 		},
 	},
 }
