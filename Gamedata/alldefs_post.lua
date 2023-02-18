@@ -834,10 +834,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Factory" then
-				unitDef.maxdamage = unitDef.maxdamage * 2.5
+				unitDef.maxdamage = unitDef.maxdamage * 5
 			end
 			if unitDef.customparams.unitrole == "Builder" then
-				unitDef.maxdamage = unitDef.maxdamage * 1
+				unitDef.maxdamage = unitDef.maxdamage * 3
 			end
 			if unitDef.customparams.unitrole == "Main Battle Tank" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
@@ -942,10 +942,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 0.2
 			end
 			if unitDef.customparams.unitrole == "Anti-Swarm Turret" then
-				unitDef.maxdamage = unitDef.maxdamage * 1
+				unitDef.maxdamage = unitDef.maxdamage * 2
 			end
 			if unitDef.customparams.unitrole == "Single-Target Turret" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.8
+				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 
 			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then

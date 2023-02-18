@@ -39,6 +39,8 @@ local lozSquadDefs = {
 		members = {
 			"lozflea",
 			"lozflea",
+			"lozflea",
+			"lozdiamondback",
 			"lozdiamondback",
 			"lozdiamondback",
 			"lozdiamondback",
@@ -47,7 +49,7 @@ local lozSquadDefs = {
 		description = "Mixed Group optimal for Skirmishes",
 		--buildCostMetal = 150, --2500
 		buildPic = "lozdiamondback.ssd",
-		size = 5,
+		size = 7,
 		delay = 7,
 	},
 
@@ -59,6 +61,8 @@ local lozSquadDefs = {
 			"lozroach",
 			"lozroach",
 			"lozroach",
+			"lozroach",
+			"lozroach",
 			"lozscorpion",
 			"lozscorpion",
 		},
@@ -66,7 +70,7 @@ local lozSquadDefs = {
 		description = "Mixed Group optimal for Assaults",
 		--buildCostMetal = 150, --2500
 		buildPic = "lozroach.ssd",
-		size = 7,
+		size = 9,
 		delay = 7,
 	},
 
@@ -76,6 +80,7 @@ local lozSquadDefs = {
 			"lozscorpion",
 			"lozscorpion",
 			"lozscorpion",
+			"lozroach",
 			"lozdiamondback",
 			"lozdiamondback",
 			"lozflea",
@@ -85,7 +90,7 @@ local lozSquadDefs = {
 		description = "Mixed Group optimal for Artillery Purposes",
 		--buildCostMetal = 150, --2500
 		buildPic = "lozscorpion.ssd",
-		size = 7,
+		size = 8,
 		delay = 7,
 	},
 

@@ -104,7 +104,7 @@ Shared.buildListFedSeaPlant_ai = {
 }
 
 Shared.buildListf2landfac_ai = {
-	[[lozflea]],
+	-- [[lozflea]],
 	[[lozdiamondback]],
 	[[lozroach]],
 	[[lozscorpion]],
