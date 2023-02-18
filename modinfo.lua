@@ -14,7 +14,7 @@ return {
 	description='SplinterFaction',
 	shortname='SF',
 	version='$VERSION',
-	-- version='0.32',
+	version='0.33 - Swarm',
 	mutator='Official',
 	game='SplinterFaction',
 	shortGame='SF',

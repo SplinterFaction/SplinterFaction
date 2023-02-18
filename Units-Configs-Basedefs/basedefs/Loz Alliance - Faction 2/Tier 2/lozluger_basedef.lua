@@ -84,7 +84,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				  = "mobile",
-		unitrole				 = "Artillery",
+		unitrole				 = "Artillery - Tech 2",
 		canbetransported 		 = "true",
 		canareaattack            ="1",
 		needed_cover             = 3,

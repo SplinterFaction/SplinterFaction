@@ -78,6 +78,8 @@ function UnitDef_Post(name, uDef)
 	-- This ties in with the global Cylinder Targetting
 	-- Default airsightdistance is sightdistance * 1.5
 	--uDef.airsightdistance = uDef.sightdistance * 2 --No longer needed
+	--Spring.Echo(uDef.name)
+	--Spring.Echo(uDef.sightdistance)
 	if uDef.airsightdistance == uDef.sightdistance * 1.5 then
 		uDef.airsightdistance = uDef.sightdistance
 	end
@@ -840,22 +842,40 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Main Battle Tank" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
+			if unitDef.customparams.unitrole == "Main Battle Tank - Tech 2" then
+				unitDef.maxdamage = unitDef.maxdamage * 2
+			end
+			if unitDef.customparams.unitrole == "Main Battle Tank - Tech 3" then
+				unitDef.maxdamage = unitDef.maxdamage * 1.1
+			end
 			if unitDef.customparams.unitrole == "Scout" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.4
 			end
 			if unitDef.customparams.unitrole == "Artillery" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.3
 			end
+			if unitDef.customparams.unitrole == "Artillery - Tech 2" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
 			if unitDef.customparams.unitrole == "Anti-Air" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.5
 			end
+			if unitDef.customparams.unitrole == "Anti-Air - Tech 2" then
+				unitDef.maxdamage = unitDef.maxdamage * 1.2
+			end
 			if unitDef.customparams.unitrole == "Direct Fire Support" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.5
+			end
+			if unitDef.customparams.unitrole == "Direct Fire Support - Tech 2" then
+				unitDef.maxdamage = unitDef.maxdamage * 1.2
 			end
 			if unitDef.customparams.unitrole == "Indirect Fire Support" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.6
 			end
 			if unitDef.customparams.unitrole == "Assault" then
+				unitDef.maxdamage = unitDef.maxdamage * 2
+			end
+			if unitDef.customparams.unitrole == "Assault - Tech 2" then
 				unitDef.maxdamage = unitDef.maxdamage * 2
 			end
 
@@ -920,6 +940,12 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 			if unitDef.customparams.unitrole == "Support Building" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.2
+			end
+			if unitDef.customparams.unitrole == "Anti-Swarm Turret" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+			if unitDef.customparams.unitrole == "Single-Target Turret" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
 
 			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then
