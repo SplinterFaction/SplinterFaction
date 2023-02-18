@@ -29,7 +29,7 @@ unitDef                     = {
 	repairable		              = false,
 	selfDestructAs                = "mediumBuildingExplosionGeneric",
 	side                          = "CORE",
-	sightDistance                 = 2000,
+	sightDistance                 = 1000,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -62,7 +62,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Medium Turret",
+		unitrole				  = "Single-Target Turret",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		--supply_cost               = supply,

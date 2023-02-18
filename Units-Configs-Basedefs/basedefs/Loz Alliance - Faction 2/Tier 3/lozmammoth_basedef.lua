@@ -127,7 +127,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 1600,
-		reloadtime             = 4,
+		reloadtime             = 2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/allterrassaultshot.wav",
@@ -147,7 +147,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 1500,
+			default              = 750,
 		},
 	},
 	lasercannon                = {
@@ -167,7 +167,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Electromagnetic Pulse Laser",
 		range                  = 1600,
-		reloadtime             = 0.5,
+		reloadtime             = 0.25,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/Pistol Shot_17.wav",
@@ -186,7 +186,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 50,
+			default              = 25,
 		},
 	},
 	rocket             = {
@@ -218,9 +218,9 @@ weaponDefs                 = {
 		turnrate                 = 1000,
 		turret                   = true,
 		trajectoryHeight		 = 1.5,
-		weaponAcceleration       = 300,
+		weaponAcceleration       = 600,
 		flightTime               = 10,
-		weaponVelocity           = 300,
+		weaponVelocity           = 600,
 		projectiles              = 5,
 		sprayangle				 = 5000,
 		customparams             = {

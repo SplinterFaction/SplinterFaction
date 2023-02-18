@@ -834,7 +834,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Factory" then
-				unitDef.maxdamage = unitDef.maxdamage * 1.3
+				unitDef.maxdamage = unitDef.maxdamage * 2.5
 			end
 			if unitDef.customparams.unitrole == "Builder" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
