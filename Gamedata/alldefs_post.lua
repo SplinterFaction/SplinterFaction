@@ -942,10 +942,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 0.2
 			end
 			if unitDef.customparams.unitrole == "Anti-Swarm Turret" then
-				unitDef.maxdamage = unitDef.maxdamage * 2
+				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Single-Target Turret" then
-				unitDef.maxdamage = unitDef.maxdamage * 1
+				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
 
 			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then
@@ -973,19 +973,39 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			]]--
 
 			local totalValueInMetal
-			if unitDef.buildcostenergy ~= nil or unitDef.buildcostenergy < 10 then
-				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 10)
+			if unitDef.buildcostenergy ~= nil or unitDef.buildcostenergy < 50 then
+				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 50)
 			else
 				unitDef.buildcostenergy = 10
-				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 10)
+				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 50)
 			end
 			unitDef.buildtime = math.floor(totalValueInMetal + 0.5)
 
 
 			-- Set Supply Costs
-			if unitDef.customparams and unitDef.customparams.supply_cost then
-				local supplycost = totalValueInMetal * 0.01
-				unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
+				if unitDef.customparams and unitDef.customparams.supply_cost then
+					local supplycost = totalValueInMetal * 0.01
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
+			end
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
+				if unitDef.customparams and unitDef.customparams.supply_cost then
+					local supplycost = totalValueInMetal * 0.01
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
+			end
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
+				if unitDef.customparams and unitDef.customparams.supply_cost then
+					local supplycost = totalValueInMetal * 0.0065
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
+			end
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
+				if unitDef.customparams and unitDef.customparams.supply_cost then
+					local supplycost = totalValueInMetal * 0.005
+					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
+				end
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

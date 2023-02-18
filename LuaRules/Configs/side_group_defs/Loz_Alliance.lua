@@ -33,7 +33,7 @@ local lozSquadDefs = {
 	----------------------------
 	-- Loz Tech 1 Squads --
 	----------------------------
-
+--[[
 	["lozdiamondback"] =
 	{
 		members = {
@@ -93,7 +93,7 @@ local lozSquadDefs = {
 		size = 8,
 		delay = 7,
 	},
-
+]]--
 }
 
 return lozSquadDefs

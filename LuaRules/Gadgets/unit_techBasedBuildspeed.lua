@@ -14,7 +14,7 @@ function gadget:GetInfo()
 	}
 end
 
-local multipliersForFactories       = { 10,  30, 44, 92, 92 }
+local multipliersForFactories       = { 10,  30, 44, 92, 192 }
 local multipliersForRegularBuilders = { 8,  16,  32,  64, 128 }
 local multipliersForCommanders      = multipliersForRegularBuilders
 
