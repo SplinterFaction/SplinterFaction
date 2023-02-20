@@ -1,14 +1,14 @@
 --------------------------------------------------------------------------------
 
-local unitName                    = "cloakingtower"
+local unitName                    = "largecloakingtower"
 
 --------------------------------------------------------------------------------
 
 local armortype					 = [[building]]
 
-local techrequired				 = [[tech2]]
+local techrequired				 = [[tech3]]
 
-local buildCostMetal 			  = 250
+local buildCostMetal 			  = 4000
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -23,8 +23,8 @@ local unitDef                     = {
 	energyStorage                 = 0,
 	energyUse                     = 0,
 	explodeAs                     = "smallBuildingExplosionGenericPurple",
-	footprintX                    = 2,
-	footprintZ                    = 2,
+	footprintX                    = 6,
+	footprintZ                    = 6,
 	iconType                      = "supportbuilding",
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
@@ -32,11 +32,11 @@ local unitDef                     = {
 	maxSlope                      = 60,
 	maxWaterDepth                 = 0,
 	metalStorage                  = 0,
-	name                          = "Cloaking Tower",
-	objectName                    = "ejammer3.s3o",
-	script						  = "ejammer3.cob",
+	name                          = "Large Cloaking Tower",
+	objectName                    = "largecloakingtower.s3o",
+	script						  = "largecloakingtower_lus.lua",
 	onoffable                     = true,
-	radarDistanceJam              = 200,
+	radarDistanceJam              = 800,
 	repairable		              = false,
 	selfDestructAs                = "smallBuildingExplosionGenericPurple",
 	side                          = "CORE",
@@ -91,7 +91,7 @@ local unitDef                     = {
 		
 		area_cloak = 1, -- Can this unit emit a cloaking field?
 		area_cloak_upkeep = 0, -- How much energy does it cost to maintain the cloaking field?
-		area_cloak_radius = 300, -- How large is the cloaking field?
+		area_cloak_radius = 800, -- How large is the cloaking field?
 		--area_cloak_grow_rate = 200, -- When the cloaking field is turned on, how fast does the field expand to it's full size?
 		--area_cloak_shrink_rate = 200, -- When the cloaking field is turned off, how fast does the field shrink to nothingness?
 		area_cloak_decloak_distance = 100, -- How close does something have to be in order to decloak a unit within a cloaking shield?
