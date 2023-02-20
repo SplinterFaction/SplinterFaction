@@ -44,7 +44,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 1050,
+	sightDistance                = 1200,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
@@ -165,8 +165,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Particle Cannon",
-		range                    = 2100,
-		reloadtime               = 0.1,
+		range                    = 1000,
+		reloadtime               = 0.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -184,7 +184,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 45,
+			default              = 225,
 		},
 	},
 	plasmacannon                	= {
@@ -205,7 +205,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
-		range                  = 2100,
+		range                  = 1000,
 		reloadtime             = 3,
 		size					 = 8,
 		--projectiles			   = projectiles,
@@ -245,7 +245,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rockets",
-		range                    = 2100,
+		range                    = 1000,
 		reloadtime               = 0.25,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
@@ -289,7 +289,7 @@ weaponDefs                 = {
 
 		model                    = "missilesmallvlaunch.s3o",
 		name                     = "Rocket",
-		range                    = 2100,
+		range                    = 1000,
 		reloadtime               = 1,
 		weaponType		         = "MissileLauncher",
 

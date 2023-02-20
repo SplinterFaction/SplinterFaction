@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 650,
+	sightDistance                = 850,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -122,7 +122,7 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 1300,
+		range                  = 850,
 		reloadtime             = 3,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
@@ -162,8 +162,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Electromagnetic Pulse Laser",
-		range                  = 1300,
-		reloadtime             = 0.1,
+		range                  = 850,
+		reloadtime             = 0.5,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/Pistol Shot_01.wav",
@@ -182,7 +182,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 10,
+			default              = 50,
 		},
 	},
 }

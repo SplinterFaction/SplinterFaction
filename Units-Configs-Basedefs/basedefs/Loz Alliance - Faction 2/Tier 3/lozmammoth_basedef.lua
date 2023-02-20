@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 1600,
+	sightDistance                = 800,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -126,7 +126,7 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 1600,
+		range                  = 800,
 		reloadtime             = 2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
@@ -166,8 +166,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Electromagnetic Pulse Laser",
-		range                  = 1600,
-		reloadtime             = 0.25,
+		range                  = 800,
+		reloadtime             = 0.5,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/Pistol Shot_17.wav",
@@ -186,7 +186,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 25,
+			default              = 50,
 		},
 	},
 	rocket             = {
@@ -206,7 +206,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rocket",
-		range                    = 1600,
+		range                    = 800,
 		reloadtime               = 5,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
@@ -227,7 +227,7 @@ weaponDefs                 = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= 600, -- In Elmos
 			expl_light_life		= 900, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.1, -- Use this sparingly
+			expl_light_opacity  = 0.05, -- Use this sparingly
 
 			areadamage_ceg          = "napalm",
 			areadamage_damageceg    = "burnblacknapalm",

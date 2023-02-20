@@ -44,7 +44,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 550,
+	sightDistance                = 850,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
@@ -136,7 +136,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
-		range                  = 1100,
+		range                  = 750,
 		reloadtime             = 2.6,
 		size					 = 8,
 		--projectiles			   = projectiles,
@@ -179,8 +179,8 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 1100,
-		reloadtime               = 0.2,
+		range                    = 750,
+		reloadtime               = 0.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -198,7 +198,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 20,
+			default              = 50,
 		},
 	},
 }
