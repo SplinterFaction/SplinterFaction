@@ -44,8 +44,8 @@ local buttons = {}
 local previousTrack = ''
 local curTrack	= "no name"
 
-local peaceTracks = VFS.DirList('luaui/Widgets/music/peace', '*.ogg')
-local warTracks = VFS.DirList('luaui/Widgets/music/war', '*.ogg')
+local peaceTracks = VFS.DirList('luaui/Widgets_evo/music/peace', '*.ogg')
+local warTracks = VFS.DirList('luaui/Widgets_evo/music/war', '*.ogg')
 
 --We check to make sure that we can function properly without crashing due to missing music tracks
 local next = next
@@ -108,8 +108,8 @@ local shown = false
 local mouseover = false
 local volume
 
-local dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 0)
-local interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 0)
+local dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 1)
+local interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 1)
 local warMeter = 0
 local fadelvl = Spring.GetConfigInt("snd_volmusic", 20) * 0.01
 local fadeOut = false
@@ -296,9 +296,9 @@ local function createList()
 		--local charactersToCut = GetPathLenght()
 		charactersInPath = 23
 		if tracks and tracks == peaceTracks then
-			charactersInPath = charactersInPath + 23
+			charactersInPath = charactersInPath + 8
 		elseif tracks and tracks == warTracks then
-			charactersInPath = charactersInPath + 1
+			charactersInPath = charactersInPath + 6
 		end
 		for i=charactersInPath, #trackname do
 	    local c = string.sub(trackname, i,i)
@@ -481,8 +481,8 @@ function widget:GameFrame(n)
 		--This is a little messy, but we need to be able to update these values on the fly so I see no better way
 		music_volume_percentage = Spring.GetConfigInt("snd_volmusic", 20) * 0.01
 		
-		dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 0)
-		interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 0)
+		dynamicMusic = Spring.GetConfigInt("evo_dynamicmusic", 1)
+		interruptMusic = Spring.GetConfigInt("evo_interruptmusic", 1)
 		
 		--Assume that if it isn't set, dynamic music should be the below value
 		if dynamicMusic == nil then

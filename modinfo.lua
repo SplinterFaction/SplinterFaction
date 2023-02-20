@@ -21,7 +21,7 @@ return {
 	modtype=1,
 	depend = {
 		"SplinterFaction Unittextures 1",
-		"Dreamstate Logic Music Addon 1",
+		-- "Dreamstate Logic Music Addon 1",
 		-- "Spring Features v1.9",
 	},
 }
