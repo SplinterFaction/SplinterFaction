@@ -36,7 +36,7 @@ local ringsDefs = {
 	
 	-- Shield Units
 	[UnitDefNames.cloakingtower.id] = {
-        { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 200, divs = 128  },
+        { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
     },
 
 	[UnitDefNames.sensortower.id] = {

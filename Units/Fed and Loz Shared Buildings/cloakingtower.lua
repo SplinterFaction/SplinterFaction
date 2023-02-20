@@ -47,6 +47,19 @@ local unitDef                     = {
 	workerTime                    = 0,
 	yardMap                       = "oooo oooo oooo oooo",
 
+	--------------
+	-- Cloaking --
+	--------------
+	cancloak		             = true,
+	cloakCost		             = 0,
+	cloakCostMoving	             = 0,
+	minCloakDistance             = 300,
+	decloakOnFire	             = false,
+	decloakSpherical             = true,
+	initCloaked		             = true,
+	--------------
+	--------------
+
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {
 			"deathceg3",
@@ -67,7 +80,7 @@ local unitDef                     = {
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole				  = "Support Building",
-		cannotcloak               = true,
+		cannotcloak               = false,
 		needed_cover              = 3,
 		death_sounds              = "generic",
 		armortype                 = armortype,
