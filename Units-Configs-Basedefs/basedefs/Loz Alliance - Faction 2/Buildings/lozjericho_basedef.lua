@@ -60,7 +60,7 @@ unitDef                     = {
 	},
 	weapons                       = {
 		[1]                       = {
-			def                   = "clusterrockets",
+			def                   = "flamethrower",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -85,43 +85,50 @@ unitDef                     = {
 }
 
 weaponDefs = {
-	clusterrockets             = {
-		avoidFriendly            = false,
-		avoidFeature             = false,
-		collideFriendly          = false,
-		collideFeature           = false,
-		cegTag                   = "amphibrocktrail-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		energypershot            = 0,
-		fireStarter              = 70,
-		tracks                   = true,
-		impulseFactor            = 0,
-		interceptedByShieldType  = 4,
-		model                    = "missilesmalllauncher.s3o",
-		name                     = "Anti-Ground Guided Missile System",
-		range                    = 630,
-		reloadtime               = 1,
-		weaponType		         = "MissileLauncher",
-		smokeTrail               = false,
-		soundStart               = "weapons/rocket1.wav",
-		soundHit                 = "explosions/explode5.wav",
-		startVelocity            = 150,
-		tolerance                = 2000,
-		turnrate                 = 13000,
-		turret                   = true,
-		trajectoryHeight		 = 1.5,
-		weaponAcceleration       = 75,
-		flightTime               = 3,
-		weaponVelocity           = 300,
-		sprayangle				 = 10000,
-		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
+	flamethrower           = {
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		-- cegtag					  = "burnblack",
+		beamtime				  = 0.25,
+		beamttl                   = 4,
+		largebeamlaser			  = true,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Microwave Beam",
+		range                     = 630,
+		reloadtime                = 0.25,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = "0.5 0.25 0",
+		rgbColor2                 = "0.25 0.25 0.25",
+		soundTrigger              = true,
+		soundstart                = "weapons/flamethrower2.wav",
+		-- soundHit                  = "explosions/explode5.wav",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 5,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-		damage                   = {
-			default              = 400,
+		damage                    = {
+			default               = 100,
 		},
 	},
 }

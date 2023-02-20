@@ -79,7 +79,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "clusterrockets",
+			def                  = "flakcannon",
 			onlyTargetCategory    = "GROUND BUILDING AIR SHIP",
 		},
 	},
@@ -101,38 +101,42 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	clusterrockets             = {
-		avoidFriendly            = false,
+	flakcannon   	             = {
 		avoidFeature             = false,
-		collideFriendly          = false,
+		avoidFriendly            = false,
 		collideFeature           = false,
-		cegTag                   = "amphibrocktrail-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-small",
+		collideFriendly          = false,
+		-- canAttackGround 		 = false,
+		coreThickness            = 0.5,
+		burnblow		         = true,
+		--cegTag                   = "railgun",
+		duration                 = 0.05,
 		energypershot            = 0,
-		fireStarter              = 70,
-		tracks                   = true,
+		explosionGenerator       = "custom:genericshellexplosion-medium",
+		edgeEffectiveness		 = 1,
+		fallOffRate              = 1,
+		fireStarter              = 50,
 		impulseFactor            = 0,
-		interceptedByShieldType  = 4,
-		model                    = "missilesmalllauncher.s3o",
-		name                     = "Surface to Air/Ground Guided Missile",
+		minintensity             = "1",
+		name                     = "Flak Cannon",
 		range                    = 650,
 		reloadtime               = 7,
-		weaponType		         = "MissileLauncher",
-		smokeTrail               = false,
-		soundStart               = "weapons/rocket1.wav",
-		soundHit                 = "explosions/explode5.wav",
-		startVelocity            = 250,
-		tolerance                = 8000,
-		turnrate                 = 25000,
+		WeaponType               = "Cannon",
+		rgbColor                 = "1 0.5 0",
+		rgbColor2                = "1 1 1",
+		soundTrigger             = false,
+		soundstart               = "weapons/Assault Rifle Shot_05.wav",
+		soundhit				 = "deathsounds/generic/Explosion Fireworks_01.wav",
+		size					 = 6,
+		--texture1                 = "shot",
+		--texture2                 = "empty",
+		tolerance                = 7500,
 		turret                   = true,
-		trajectoryHeight		 = 1.5,
-		weaponAcceleration       = 200,
-		flightTime               = 1.5,
-		weaponVelocity           = 1000,
+		weaponVelocity           = 3000,
 		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {

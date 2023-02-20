@@ -43,40 +43,40 @@ function widget:GameFrame(n)
 
 	if randomSound == 1 then
 		if n == 1 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_dark_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_dark_01.wav", 0.20, 'ui')
 		elseif (n % 30) == 4 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_dark_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_dark_01.wav", 0.20, 'ui')
 		end
 	elseif randomSound == 2 then
 		if n == 1 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_drifting_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_drifting_01.wav", 0.20, 'ui')
 		elseif (n % 30) == 4 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_drifting_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_drifting_01.wav", 0.20, 'ui')
 		end
 	elseif randomSound == 3 then
 		if n == 1 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_moonlight_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_moonlight_01.wav", 0.20, 'ui')
 		elseif (n % 30) == 4 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_moonlight_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_moonlight_01.wav", 0.20, 'ui')
 		end
 	elseif randomSound == 4 then
 		if n == 1 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_red_planet_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_red_planet_01.wav", 0.20, 'ui')
 		elseif (n % 30) == 4 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_red_planet_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_red_planet_01.wav", 0.20, 'ui')
 		end
 	elseif randomSound == 5 then
 		if n == 1 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_serenity_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_serenity_01.wav", 0.20, 'ui')
 		elseif (n % 30) == 4 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_serenity_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_serenity_01.wav", 0.20, 'ui')
 		end
 	elseif randomSound == 6 then
 		if n == 1 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_space_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_space_01.wav", 0.20, 'ui')
 		elseif (n % 30) == 4 then
-			Spring.PlaySoundFile("LuaUI/Sounds/ambient/magicsound/drone_space_01.wav", 0.20, 'ui')
+			Spring.PlaySoundFile("sounds/ambient/magicsound/drone_space_01.wav", 0.20, 'ui')
 		end
 	end
-	
+
 end
