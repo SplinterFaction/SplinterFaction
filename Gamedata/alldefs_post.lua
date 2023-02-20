@@ -958,26 +958,45 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			unitDef.maxdamage = math.floor(unitDef.maxdamage + 0.5)
 
 
-			-- Set a unified and standardized buildtime
-			-- First we decide how much energy = 1 metal and then we set buildtime to be equivalent to the totalValueInMetal cost
+			--------------------------------------------------------------------------------
+			-- Automatically Calculating Buildtime -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
+			--------------------------------------------------------------------------------
 			--[[
-			This is the reasoning that went into this:
-			A t0 worker would have been able to spend 4 metal per second.
-			An energy building costs 200 metal.
-			For one worker to build that energy building it would take 50 seconds.
-			In 50 seconds that generator would output 40 energy per second, totaling 2000 energy output over a period of 50 seconds.
-			Take the total energy that would have been output over the time spent building it, and divide it by the metal cost of 200 and we get 10.
-			Meaning that 10 energy is worth the equivalent of 1 metal.
+			--CALCULATE BUILDTIME--
+			The point of this is to take energy cost into account when calculating buildtime. This essentially controls how fast energy will be spent, because energy is almost always higher than metal.
 
-			It's kinda dubious, but it also makes some sense on some level.
+			Here is an example:
+
+			Example 1:
+			energyMetalWorth = 100
+			Unit cost = 100m / 1000e
+			1000 / 100 = 10
+			100 + 10 = 110 total buildtime
+
+
+			Example 2:
+			energyMetalWorth = 50
+			Unit cost = 100m / 1000e
+			1000 / 50 = 20
+			100 + 10 = 120 total buildtime
+
+
+			Example 3:
+			energyMetalWorth = 10
+			Unit cost = 100m / 1000e
+			1000 / 10 = 100
+			100 + 10 = 200 total buildtime
+
+			As you can see, energyMetalWorth has a very pronounced effect not only on buildtimes, but by extension, outflow of resources.
+			
+			Remember, as of 2/19/23, factories cannot be assisted, so this has a very pronounced effect on unit build rates.
 			]]--
-
 			local totalValueInMetal
-			if unitDef.buildcostenergy ~= nil or unitDef.buildcostenergy < 50 then
-				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 50)
+			local energyMetalWorth = 10
+			if unitDef.buildcostenergy == nil or unitDef.buildcostenergy < energyMetalWorth then
+				totalValueInMetal = unitDef.buildcostmetal
 			else
-				unitDef.buildcostenergy = 10
-				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / 50)
+				totalValueInMetal = unitDef.buildcostmetal + (unitDef.buildcostenergy / energyMetalWorth)
 			end
 			unitDef.buildtime = math.floor(totalValueInMetal + 0.5)
 

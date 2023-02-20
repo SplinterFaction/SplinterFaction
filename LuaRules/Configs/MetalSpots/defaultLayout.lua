@@ -32,7 +32,7 @@ Spring.Echo("[Default Mex Layout] Number of teamIDs in this match: " .. teamIDCo
 
 local placeMexesInWater = Spring.GetModOptions().allowmexesinwater or "disabled"
 local maxMexElevationDiff = tonumber(Spring.GetModOptions().maximummexelevationdifference) or 50
-local mexSpotsPerSideMultiplier = tonumber(Spring.GetModOptions().mexspotspersidemultiplier) or 100
+local mexSpotsPerQuadMultiplier = tonumber(Spring.GetModOptions().mexSpotsPerQuadmultiplier) or 100
 local mexRandomLayout = Spring.GetModOptions().mexrandomlayout or "standard"
 	if allycount > 2 then
 		mexRandomLayout = "legacy1"
@@ -49,8 +49,8 @@ if maxMexElevationDiff == nil then -- This is just an oshitifukedup protection
 	maxMexElevationDiff = 50
 end
 
-if mexSpotsPerSideMultiplier == nil then -- This is just an oshitifukedup protection
-	mexSpotsPerSideMultiplier = 100
+if mexSpotsPerQuadMultiplier == nil then -- This is just an oshitifukedup protection
+	mexSpotsPerQuadMultiplier = 100
 end
 
 if mexRandomLayout == "" or mexRandomLayout == nil then -- This is just an oshitifukedup protection
@@ -108,8 +108,8 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 			Spring.DestroyFeature(fID)
 		end
 	end
-	
-	
+
+
 	--[[
 	method 1: object rotated 180 degrees around centre to produce image
 	method 2: object mirrored around horizontal line passing through centre to produce image
@@ -218,7 +218,7 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 	end
 	--table.remove(positions, 1)
 	--table.remove(positions, 1)
-	
+
 	local ratioX, ratioY = 1, 1
 	if sizeX > sizeY then ratioY = sizeX / sizeY
 	elseif sizeY > sizeX then ratioX = sizeY / sizeX end
@@ -236,7 +236,7 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 		local r = math.sqrt(dx * dx + dy * dy)
 		positions[i].metal = f(r / (sizeX * math.sqrt(2) * (metalMultiplier * 0.5)))
 	end
-	
+
 	return positions
 end
 
@@ -286,38 +286,38 @@ if mexRandomLayout == "legacy4" then
 end
 
 if mexRandomLayout == "standard" then
-	
-	mexSpotsPerSide = 15
-		
+
+	mexSpotsPerQuad = 15
+
 	if mapSQRT <= 144 then -- An exception for 12x12 and smaller maps
-		mexSpotsPerSide = mexSpotsPerSide * 0.5
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+		mexSpotsPerQuad = 10
+		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
-	
+
 	if mapSQRT > 144 and mapSQRT <= 196 then -- An exception for 14x14 maps
-		mexSpotsPerSide = mexSpotsPerSide * 0.66
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+		mexSpotsPerQuad = 12
+		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
-	
+
 	if mapSQRT > 196 and mapSQRT <= 256 then -- An exception for 16x16 maps
-		mexSpotsPerSide = mexSpotsPerSide * 0.75
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+		mexSpotsPerQuad = 15
+		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
-	
+
 	if mapSQRT > 256 and mapSQRT <= 400 then -- An exception for 20x20 maps
-		mexSpotsPerSide = mexSpotsPerSide * 1
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+		mexSpotsPerQuad = 17
+		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
-	
+
 	if mapSQRT > 400 and mapSQRT <= 576 then -- An exception for 24x24 maps
-		mexSpotsPerSide = mexSpotsPerSide * 1.5
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+		mexSpotsPerQuad = 20
+		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	end
-	
+
 	if mapSQRT > 576 then -- An exception for 28x28 maps
-		mexSpotsPerSide = mexSpotsPerSide * 1.5
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerSide .. " mex points per quadrant (This is usually rounded up to the next whole number).")
-	end	
+		mexSpotsPerQuad = 25
+		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+	end
 
 	pointsPerSideModifier = 1.5 ^ (( teamIDCount - 2 ) / 2)
 	randomMirrored = true
@@ -325,7 +325,7 @@ if mexRandomLayout == "standard" then
 	pointRadius = 100 -- TODO: change this into how big a metal circle is
 	extraSeparationBetweenPoints = 50
 	howManyTriesBeforeGiveUp = 100
-	numPointsPerSide = (mexSpotsPerSide * (mexSpotsPerSideMultiplier * 0.01)) * pointsPerSideModifier
+	numPointsPerSide = (mexSpotsPerQuad * (mexSpotsPerQuadMultiplier * 0.01)) * pointsPerSideModifier
 	numPointsPerSide = math.floor(numPointsPerSide + 0.5)
 	includeCentre = false
 	method = 6
