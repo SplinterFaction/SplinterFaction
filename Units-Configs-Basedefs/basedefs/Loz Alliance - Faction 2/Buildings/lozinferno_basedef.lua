@@ -101,7 +101,7 @@ weaponDefs                  = {
 		minintensity              = 0.5,
 		name                      = "Microwave Beam",
 		range                     = 1200,
-		reloadtime                = 0.25,
+		reloadtime                = 1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = "0.5 0.25 0",
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -123,7 +123,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		}, 
 		damage                    = {
-			default               = 40,
+			default               = 160,
 		},
 	},
 }
