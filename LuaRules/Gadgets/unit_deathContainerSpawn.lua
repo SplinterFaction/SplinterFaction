@@ -64,6 +64,11 @@ if gadgetHandler:IsSyncedCode() then
 			lessGooooo = true
 		end
 
+		-- Commanders never drop reclaim so that when they upgrade they won't drop reclaim. Ofc this means that when you kill them they won't drop it either, but I'm ok with this outcome.
+		if UnitDefs[unitDefID].customParams.unitrole == "Commander" then
+			lessGooooo = false
+		end
+
 		if lessGooooo == true then
 			_, _, _, _, buildProgress = Spring.GetUnitHealth(unitID)
 			if buildProgress == 1 then

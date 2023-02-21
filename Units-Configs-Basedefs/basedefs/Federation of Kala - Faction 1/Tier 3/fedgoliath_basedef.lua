@@ -143,8 +143,8 @@ weaponDefs                 = {
 		collideFriendly        = false,
 		collideFeature         = false,
 		--cegTag			   = "thudshot",
-		--burst				   = 4,
-		--burstrate			   = 0.2,
+		burst				   = 20,
+		burstrate			   = 0.1,
 		edgeEffectiveness	   = 1,
 		explosionGenerator     = "custom:genericshellexplosion-small",
 		energypershot          = 0,
@@ -157,9 +157,9 @@ weaponDefs                 = {
 		range                  = 720,
 		reloadtime             = 5.8,
 		size				   = 8,
-		projectiles			   = 16,
+		projectiles			   = 1,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/ShotGun Boom 101 (Suppressed).wav",
+		soundStart             = "weapons/scifi_machine_gun_A_burst_04.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		sprayAngle             = 1250,
@@ -174,7 +174,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 50,
+			default              = 40,
 		},
 	},
 
