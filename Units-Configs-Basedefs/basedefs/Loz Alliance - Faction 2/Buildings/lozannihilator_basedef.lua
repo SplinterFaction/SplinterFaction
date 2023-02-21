@@ -33,7 +33,7 @@ unitDef                     = {
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
-	yardMap                       = "oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo",
+	yardMap                       = "oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo g oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo oooooooooooo",
 
 	sfxtypes                      = { 
 		pieceExplosionGenerators  = { 

@@ -306,11 +306,11 @@ Upgrade]],
 		{
 			into      = 'metalextractor_up1',
 			--require = 'etech2',
-			time      = timeToBuild_metalextractor_up1,
+			time      = 15,
 			cmdname   = [[Tech 1
 			Upgrade]],
-			energy    = energyCost_metalextractor_up1,
-			metal     = 0,
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
 			text      = [[x2 Metal Extraction rate]],
 			require   = [[tech1]],
 		},
@@ -319,11 +319,11 @@ Upgrade]],
 		{
 			into      = 'metalextractor_up2',
 			--require = 'etech2',
-			time      = timeToBuild_metalextractor_up2,
+			time      = 30,
 			cmdname   = [[Tech 2
 			Upgrade]],
-			energy    = energyCost_metalextractor_up2,
-			metal     = 0,
+			-- energy    = energyCost_metalextractor_up2,
+			-- metal     = 0,
 			text      = [[x4 Metal Extraction rate]],
 			require   = [[tech2]],
 		},
@@ -332,15 +332,38 @@ Upgrade]],
 		{
 			into      = 'metalextractor_up3',
 			--require = 'etech2',
-			time      = timeToBuild_metalextractor_up3,
+			time      = 60,
 			cmdname   = [[Tech 3
 			Upgrade]],
-			energy    = energyCost_metalextractor_up3,
-			metal     = 0,
+			-- energy    = energyCost_metalextractor_up3,
+			-- metal     = 0,
 			text      = [[x8 Metal Extraction rate]],
 			require   = [[tech3]],
 		},
 	},
+
+	fedgeostub = 	{
+		{
+			into      = 'fedguardian',
+			--require = 'etech2',
+			time      = 300,
+			cmdname   = [[Guardian]],
+			text      = [[Guardian Defense Turret]],
+			require   = [[tech3]],
+		},
+	},
+
+	lozgeostub = 	{
+		{
+			into      = 'lozannihilator',
+			--require = 'etech2',
+			time      = 300,
+			cmdname   = [[Annihilator]],
+			text      = [[Annihilator Defense Turret]],
+			require   = [[tech3]],
+		},
+	},
+
 }
 
 --
