@@ -14,14 +14,14 @@ return {
 	description='SplinterFaction',
 	shortname='SF',
 	version='$VERSION',
-	version='0.32',
+	-- version='0.44 - Swarm',
 	mutator='Official',
 	game='SplinterFaction',
 	shortGame='SF',
 	modtype=1,
 	depend = {
 		"SplinterFaction Unittextures 1",
-		"Dreamstate Logic Music Addon 1",
+		-- "Dreamstate Logic Music Addon 1",
 		-- "Spring Features v1.9",
 	},
 }

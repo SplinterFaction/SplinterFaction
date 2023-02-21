@@ -9,7 +9,7 @@ allowRawMovement = true
 
 -- In Degrees
 walkerslopetolerance = 45
-wheeledslopetolerance = 45
+wheeledslopetolerance = 30
 
 -- Fix the numbers for springs fucking stupid magic numbers
 walkerslopetolerance = walkerslopetolerance / 1.5

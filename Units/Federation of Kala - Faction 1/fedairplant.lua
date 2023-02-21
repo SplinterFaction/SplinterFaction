@@ -17,7 +17,7 @@ airPlantBuildList = Shared.buildListFedAirPlant
 
 explodeAs = [[largebuildingexplosiongeneric]]
 
-workerTime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
+workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
 
 factionname = "Federation of Kala"
 

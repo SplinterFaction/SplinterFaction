@@ -74,6 +74,7 @@ local unitDef                     = {
 		iseco                     = 1,
 		needed_cover              = 2,
 		death_sounds              = "generic",
+		RequireTech				 = "tech0",
 --		ProvideTech               = powerprovided,
 --		ProvideTechRange          = powerradius,
 		armortype                 = armortype,

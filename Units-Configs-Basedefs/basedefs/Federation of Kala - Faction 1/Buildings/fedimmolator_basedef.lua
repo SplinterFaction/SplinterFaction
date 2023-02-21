@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 410,
+	buildCostMetal                = 2060,
 	builder                       = false,
 	buildTime                     = 5,
 	canAttack                     = true,
@@ -62,7 +62,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Medium Turret",
+		unitrole				  = "Single-Target Turret",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		--supply_cost               = supply,
@@ -81,7 +81,6 @@ unitDef                     = {
 
 weaponDefs = {
 	plasmacannon                	= {
-		areaofeffect		   = 25,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -99,7 +98,7 @@ weaponDefs = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1200,
-		reloadtime             = 2,
+		reloadtime             = 5,
 		size					 = 12,
 		--projectiles			   = projectiles,
 		weaponType		       = "Cannon",
@@ -118,7 +117,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 150,
+			default              = 2000,
 		},
 	},
 }

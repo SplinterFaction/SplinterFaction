@@ -90,8 +90,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		unittype				 = "mobile",
-		unitsubtype              = "ship",
+		unittype				 = "ship",
 		unitrole				 = "Frigate",
 		canbetransported 		 = "true",
 		needed_cover             = 2,

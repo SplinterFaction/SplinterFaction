@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 5000,
+	buildCostMetal               = 62000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedjuggernaut.png]],
@@ -17,7 +17,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "GROUND MASSIVE",
-	description                  = [[Main Battle Tank]],
+	description                  = [[Heavy Assault Mech]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -31,7 +31,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 75,
 	maxSlope                     = 90,
-	maxVelocity                  = 1.7,
+	maxVelocity                  = 1.2,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -130,7 +130,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "Main Battle Tank",
+		unitrole				 = "Main Battle Tank - Tech 3",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -164,9 +164,9 @@ weaponDefs                 = {
 
 		minintensity             = 1,
 		impulseFactor            = 0,
-		name                     = "Something with Flames",
+		name                     = "Particle Cannon",
 		range                    = 1000,
-		reloadtime               = 0.1,
+		reloadtime               = 0.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -184,7 +184,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 45,
+			default              = 225,
 		},
 	},
 	plasmacannon                	= {
@@ -206,7 +206,7 @@ weaponDefs                 = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1000,
-		reloadtime             = 2,
+		reloadtime             = 3,
 		size					 = 8,
 		--projectiles			   = projectiles,
 		weaponType		       = "Cannon",
@@ -217,7 +217,7 @@ weaponDefs                 = {
 		tolerance              = 2000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 600,
+		weaponVelocity         = 1200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
@@ -236,8 +236,8 @@ weaponDefs                 = {
 		collideFeature           = false,
 		cegTag                   = "amphibrocktrail-optimized",
 		explosionGenerator       = "custom:genericshellexplosion-small",
-		burst 					 = 4,
-		burstrate 				 = 0.25,
+		-- burst 					 = 16,
+		-- burstrate 				 = 0.25,
 		energypershot            = 0,
 		fireStarter              = 70,
 		tracks                   = true,
@@ -246,7 +246,7 @@ weaponDefs                 = {
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rockets",
 		range                    = 1000,
-		reloadtime               = 3,
+		reloadtime               = 0.25,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "other/rocket_launcher.wav",
@@ -268,7 +268,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 120,
+			default              = 30,
 		},
 	},
 	missile            = {

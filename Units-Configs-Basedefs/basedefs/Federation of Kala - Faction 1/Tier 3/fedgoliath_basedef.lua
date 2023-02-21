@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 2000,
+	buildCostMetal               = 17520,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedgoliath.png]],
@@ -17,7 +17,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "GROUND MASSIVE",
-	description                  = [[Main Battle Tank]],
+	description                  = [[Heavy Combat Mech]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -30,7 +30,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 75,
 	maxSlope                     = 90,
-	maxVelocity                  = 2.5,
+	maxVelocity                  = 1.4,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -87,14 +87,14 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "particlebeamcannon",
+			def                  = "sniper",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
-			def                  = "particlebeamcannon",
+			def                  = "sniper",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
@@ -121,7 +121,7 @@ unitDef                    = {
 	customParams                 = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
-		unitrole				 = "Main Battle Tank",
+		unitrole				 = "Main Battle Tank - Tech 3",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -155,9 +155,9 @@ weaponDefs                 = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 720,
-		reloadtime             = 2.8,
+		reloadtime             = 5.8,
 		size				   = 8,
-		projectiles			   = 4,
+		projectiles			   = 16,
 		weaponType		       = "Cannon",
 		soundStart             = "weapons/ShotGun Boom 101 (Suppressed).wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
@@ -166,7 +166,7 @@ weaponDefs                 = {
 		tolerance              = 8000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 800,
+		weaponVelocity         = 1000,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -174,49 +174,49 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              =130,
+			default              = 50,
 		},
 	},
-	particlebeamcannon                 = {
 
-		accuracy                 = 0,
-		AreaOfEffect             = 10,
-		avoidFeature             = false,
-		avoidFriendly            = false,
-		collideFeature           = false,
-		collideFriendly          = false,
-		explosionGenerator       = "custom:burnblacksmall",
-		coreThickness            = 0.1,
-		duration                 = 0.4,
-		energypershot            = 0,
-		fallOffRate              = 0.1,
-		fireStarter              = 50,
-		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Revolver Single Shot (Suppressed) 2.wav",
+	sniper           = {
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		--	cegTag                = "mediumcannonweapon3",
+		duration                  = 0.1,
+		energypershot             = 0,
+		explosionGenerator        = "custom:genericshellexplosion-small",
+		fallOffRate            	  = 0,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
 
-		minintensity             = 1,
-		impulseFactor            = 0,
-		name                     = "Something with Flames",
-		range                    = 720,
-		reloadtime               = 0.2,
-		WeaponType               = [[LaserCannon]],
-		rgbColor                 = "1 0.5 0",
-		rgbColor2                = "1 1 1",
-		thickness                = 8,
-		tolerance                = 1000,
-		turret                   = true,
-		texture1                 = "shot",
-		texture2                 = "empty",
-		weaponVelocity           = 1000,
-		sprayangle				 = 500,
-		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
+		minintensity              = "1",
+		name                      = "Laser",
+		range                     = 720,
+		reloadtime                = 1,
+		WeaponType                = "LaserCannon",
+		rgbColor                  = "0 0.5 1",
+		rgbColor2                 = "1 1 1",
+		soundTrigger              = true,
+		soundstart                = "weapons/snipershot.wav",
+		soundHit                  = "explosions/explode5.wav",
+		texture1                  = "shot",
+		texture2                  = "empty",
+		thickness                 = 5,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 3000,
+		customparams              = {
+			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-		damage                   = {
-			default              = 40,
+		damage                    = {
+			default               = 200,
 		},
 	},
 }

@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 8192,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 450,
+	buildCostMetal                = 2140,
 	builder                       = false,
 	buildTime                     = 5,
 	buildpic					  = "eheavyturret2.png",
@@ -18,7 +18,7 @@ unitDef                     = {
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	iconType                      = "defenseturret",
-	maxDamage                     = 1200,
+	maxDamage                     = 2000,
 	maxSlope                      = 60,
 	maxWaterDepth                 = 0,
 	metalStorage                  = 0,
@@ -62,7 +62,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Heavy Turret",
+		unitrole				  = "Single-Target Turret",
 		needed_cover              = 5,
 		--supply_cost               = supply,
 		RequireTech				  = tech,
@@ -87,7 +87,7 @@ weaponDefs                  = {
 		collideFriendly           = false,
 		coreThickness             = 0.5,
 		-- cegtag					  = "burnblack",
-		beamtime				  = 0.5,
+		beamtime				  = 0.25,
 		beamttl                   = 4,
 		largebeamlaser			  = true,
 		duration                  = 0.8,
@@ -98,10 +98,10 @@ weaponDefs                  = {
 		fireStarter               = 100,
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,	
-		minintensity              = 0.5,
+		minintensity              = 1,
 		name                      = "Microwave Beam",
 		range                     = 1200,
-		reloadtime                = 0.5,
+		reloadtime                = 1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = "0.5 0.25 0",
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -123,7 +123,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		}, 
 		damage                    = {
-			default               = 50,
+			default               = 160,
 		},
 	},
 }

@@ -45,8 +45,26 @@ if gadgetHandler:IsSyncedCode() then
 	end
 
 	function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
-	
-		if math.random(1,2) == 1 then
+		local lessGooooo
+		if UnitDefs[unitDefID].customParams.requiretech == "tech0" then
+			if math.random(1,4) == 1 then
+				lessGooooo = true
+			end
+		elseif UnitDefs[unitDefID].customParams.requiretech == "tech1" then
+			if math.random(1,3) == 1 then
+				lessGooooo = true
+			end
+		elseif UnitDefs[unitDefID].customParams.requiretech == "tech2" then
+			if math.random(1,2) == 1 then
+				lessGooooo = true
+			end
+		elseif UnitDefs[unitDefID].customParams.requiretech == "tech3" then
+			lessGooooo = true
+		elseif UnitDefs[unitDefID].customParams.requiretech == "tech4" then
+			lessGooooo = true
+		end
+
+		if lessGooooo == true then
 			_, _, _, _, buildProgress = Spring.GetUnitHealth(unitID)
 			if buildProgress == 1 then
 				local unitName = UnitDefs[unitDefID].name
@@ -88,5 +106,4 @@ if gadgetHandler:IsSyncedCode() then
 			end
 		end
 	end
-	
 end

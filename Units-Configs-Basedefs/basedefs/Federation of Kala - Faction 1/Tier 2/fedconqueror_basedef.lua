@@ -127,8 +127,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		unittype				 = "mobile",
-		unitsubtype              = "ship",
+		unittype				 = "ship",
 		unitrole				 = "Light Cruiser",
 		canbetransported 		 = "true",
 		needed_cover             = 2,

@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 250,
+	buildCostMetal               = 1500,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozpulverizer.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 375,
 	maxSlope                     = 26,
-	maxVelocity                  = 2,
+	maxVelocity                  = 1.7,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -89,7 +89,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "Anti-Air",
+		unitrole				 = "Anti-Air - Tech 2",
 		canbetransported 		 = "true",
 		needed_cover             = 3,
 		death_sounds             = "generic",

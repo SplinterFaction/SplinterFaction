@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 250,
+	buildCostMetal               = 1700,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedcobra.png]],
@@ -30,7 +30,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 75,
 	maxSlope                     = 90,
-	maxVelocity                  = 1.8,
+	maxVelocity                  = 1.5,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -105,7 +105,7 @@ unitDef                    = {
 	customParams                 = {
 		isupgraded			  	 = isUpgraded,
 		unittype				  = "mobile",
-		unitrole				 = "Direct Fire Support",
+		unitrole				 = "Direct Fire Support - Tech 2",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -121,7 +121,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	plasmacannon                	= {
-		AreaOfEffect           = 50,
+		AreaOfEffect           = 25,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -139,18 +139,18 @@ weaponDefs                 = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 950,
-		reloadtime             = 3.7,
+		reloadtime             = 5.4,
 		size				   = 4,
-		projectiles			   = 4,
+		projectiles			   = 8,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/medassualt_blast.wav",
+		soundStart             = "other/medassualt_blast.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		sprayAngle             = 500,
 		tolerance              = 8000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 800,
+		weaponVelocity         = 1000,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -158,7 +158,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 37.5,
+			default              = 60,
 		},
 	},
 
@@ -181,7 +181,7 @@ weaponDefs                 = {
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rockets",
 		range                    = 950,
-		reloadtime               = 6,
+		reloadtime               = 11.2,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "other/tmissiletankfire.wav",
@@ -192,9 +192,9 @@ weaponDefs                 = {
 		turnrate                 = 2500,
 		turret                   = true,
 		trajectoryHeight		 = 1.5,
-		weaponAcceleration       = 300,
+		weaponAcceleration       = 600,
 		flightTime               = 10,
-		weaponVelocity           = 300,
+		weaponVelocity           = 600,
 		sprayangle				 = 2000,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
@@ -203,7 +203,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 24,
+			default              = 100,
 		},
 	},
 }

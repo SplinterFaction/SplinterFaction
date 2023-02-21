@@ -83,6 +83,7 @@ unitDef                     = {
 weaponDefs = {
 	plasmacannon                	= {
 		AreaOfEffect           = 100,
+		accuracy               = 1000,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,

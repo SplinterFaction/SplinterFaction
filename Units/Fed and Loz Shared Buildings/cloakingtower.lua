@@ -47,6 +47,19 @@ local unitDef                     = {
 	workerTime                    = 0,
 	yardMap                       = "oooo oooo oooo oooo",
 
+	--------------
+	-- Cloaking --
+	--------------
+	cancloak		             = true,
+	cloakCost		             = 0,
+	cloakCostMoving	             = 0,
+	minCloakDistance             = 300,
+	decloakOnFire	             = false,
+	decloakSpherical             = true,
+	initCloaked		             = true,
+	--------------
+	--------------
+
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {
 			"deathceg3",
@@ -67,14 +80,14 @@ local unitDef                     = {
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole				  = "Support Building",
-		cannotcloak               = true,
+		cannotcloak               = false,
 		needed_cover              = 3,
 		death_sounds              = "generic",
 		armortype                 = armortype,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		corpse                   = "energycore",
-		factionname	              = "Neutral",
+		factionname	              = "Federation of Kala",
 		
 		area_cloak = 1, -- Can this unit emit a cloaking field?
 		area_cloak_upkeep = 0, -- How much energy does it cost to maintain the cloaking field?

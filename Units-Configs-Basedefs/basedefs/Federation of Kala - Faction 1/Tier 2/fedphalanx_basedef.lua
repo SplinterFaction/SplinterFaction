@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 200,
+	buildCostMetal               = 1400,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedphalanx.png]],
@@ -31,7 +31,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 75,
 	maxSlope                     = 90,
-	maxVelocity                  = 2.1,
+	maxVelocity                  = 1.6,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
@@ -96,7 +96,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				  = "mobile",
-		unitrole				 = "Anti-Air",
+		unitrole				 = "Anti-Air - Tech 2",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -130,7 +130,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "MachineGun",
 		range                  = 800,
-		reloadtime             = 0.2,
+		reloadtime             = 0.1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/Shotgun Shot 5.wav",
@@ -149,7 +149,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 12,
+			default              = 5,
 		},
 	},
 }

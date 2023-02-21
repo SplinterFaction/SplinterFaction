@@ -134,8 +134,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		unittype				 = "mobile",
-		unitsubtype              = "ship",
+		unittype				 = "ship",
 		unitrole				 = "Destroyer",
 		canbetransported 		 = "true",
 		needed_cover             = 2,

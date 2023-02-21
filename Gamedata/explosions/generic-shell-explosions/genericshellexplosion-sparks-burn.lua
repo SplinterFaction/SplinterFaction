@@ -33,7 +33,7 @@ return {
         sizemod             = 1,
         texture             = [[generated-anim4]],
         drawOrder           = 0,
-        castShadow          = true,
+        -- castshadow          = true,
       },
     },
     kickedupdirt = {
@@ -191,7 +191,7 @@ return {
         sizemod             = 1,
         texture             = [[generated-anim4]],
         drawOrder           = 0,
-        castShadow          = true,
+        -- castshadow          = true,
       },
     },
     kickedupdirt = {
@@ -349,7 +349,7 @@ return {
         sizemod             = 1,
         texture             = [[generated-anim4]],
         drawOrder           = 0,
-        castShadow          = true,
+        -- castshadow          = true,
       },
     },
     kickedupdirt = {
@@ -508,7 +508,7 @@ return {
         sizemod             = 1,
         texture             = [[generated-anim4]],
         drawOrder           = 0,
-        castShadow          = true,
+        -- castshadow          = true,
       },
     },
     kickedupdirt = {

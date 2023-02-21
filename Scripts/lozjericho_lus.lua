@@ -29,7 +29,7 @@ end
 
 function script.FireWeapon(weaponID)
     currentFirepoint = 3 - currentFirepoint
-    EmitSfx (firepoints[currentFirepoint], 1024)
+   -- EmitSfx (firepoints[currentFirepoint], 1024)
 end
 
 function script.AimWeapon(weaponID, heading, pitch)
