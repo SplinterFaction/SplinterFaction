@@ -5,10 +5,10 @@ local unitName                    = "supplydepot"
 --------------------------------------------------------------------------------
 
 local armortype					  = [[building]]
-local storage					  = 400
+local storage					  = 0
 local supplygranted				  = 20
 
-local buildCostMetal 			  = 200
+local buildCostMetal 			  = 100
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -21,7 +21,7 @@ local unitDef                     = {
 	canAttack			          = false,
 	category                      = "BUILDING",
 
-	description                   = [[Provides +]] .. supplygranted .. [[ Supply • Provides +]] .. storage .. [[ Metal/Energy Storage]],
+	description                   = [[Provides +]] .. supplygranted .. [[ Supply]],
 	energyStorage                 = storage,
 	metalStorage                  = storage,
 	energyUse                     = 0,

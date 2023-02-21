@@ -380,6 +380,11 @@ end
 --------------------------
 -- MODOPTIONS
 -------------------------
+--[[
+Sprung — 2/20/2023 at 5:27 PM PST
+Balance? It's simple really.
+unit cost = (pwn - fail) * baw
+]]--
 
 -- process modoptions (last, because they should not get baked)
 function ModOptions_Post (UnitDefs, WeaponDefs)
@@ -594,8 +599,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				-- Set Rules for Neutral race
 				if unitDef.customparams and unitDef.customparams.factionname == "Neutral"
 						or unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala"
-						or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance"
-						or unitDef.customparams and unitDef.customparams.factionname == "zaal" then
+						or unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 
 					if unitDef.customparams then
 
@@ -605,7 +609,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -623,7 +627,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -641,7 +645,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -659,7 +663,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -677,7 +681,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -692,9 +696,16 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						if unitDef.customparams and unitDef.customparams.noenergycost == true then
 							unitDef.buildcostenergy = 0
 						end
+						if unitDef.customparams and unitDef.customparams.nometalcost == true then
+							unitDef.buildcostmetal = 0
+						end
 						if unitDef.customparams and unitDef.customparams.buildcostenergyoverride ~= nil then
 							unitDef.buildcostenergy = unitDef.customparams.buildcostenergyoverride
 						end
+						if unitDef.customparams and unitDef.customparams.buildcostmetaloverride ~= nil then
+							unitDef.buildcostmetal = unitDef.customparams.buildcostmetaloverride
+						end
+
 					end
 				end
 
