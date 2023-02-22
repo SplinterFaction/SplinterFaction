@@ -94,13 +94,6 @@ unitDef                    = {
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
-			def                  = "plasmacannon",
-			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
-			--			maxAngleDif = 70,
-			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING SHIP",
-		},
-		[3]                      = {
 			def                  = "missile",
 			--			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--			maxAngleDif = 70,
@@ -132,7 +125,7 @@ weaponDefs                 = {
 		collideFriendly        = false,
 		collideFeature         = false,
 		--cegTag			   = "thudshot",
-		burst				   = 4,
+		burst				   = 8,
 		burstrate			   = 0.1,
 		edgeEffectiveness	   = 1,
 		explosionGenerator     = "custom:genericshellexplosion-small",
@@ -147,7 +140,7 @@ weaponDefs                 = {
 		reloadtime             = 35,
 		size				   = 4,
 		weaponType		       = "Cannon",
-		soundStart             = "other/artytankshot.wav",
+		soundStart             = "weapons/scifi_pistol_B_single_01-8roundburst.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		sprayAngle             = 100,
@@ -198,7 +191,7 @@ weaponDefs                 = {
 		turret                   = true,
 
 		weaponAcceleration       = 400,
-		weaponTimer              = 3,
+		weaponTimer              = 1,
 		weaponType               = "StarburstLauncher",
 		weaponVelocity           = 400,
 		customparams             = {

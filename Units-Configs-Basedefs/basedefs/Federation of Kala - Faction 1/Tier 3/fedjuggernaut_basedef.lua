@@ -303,7 +303,7 @@ weaponDefs                 = {
 		turret                   = true,
 
 		weaponAcceleration       = 400,
-		weaponTimer              = 3,
+		weaponTimer              = 1.5,
 		weaponType               = "StarburstLauncher",
 		weaponVelocity           = 400,
 		customparams             = {
