@@ -3,11 +3,11 @@ base, rocketturret1, rocketbarrel1, rocketfirepoint1, rocketfirepoint2 = piece('
 
 local SIG_AIM = {}
 
+common = include("headers/common_includes_lus.lua")
+
 function script.Create()
     StartThread(common.SmokeUnit, {base, rocketturret1, rocketbarrel1, rocketfirepoint1, rocketfirepoint2})
 end
-
-common = include("headers/common_includes_lus.lua")
 
 local function RestoreAfterDelay()
     Sleep(2000)
