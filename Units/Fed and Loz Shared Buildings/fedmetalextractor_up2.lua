@@ -1,28 +1,28 @@
 --------------------------------------------------------------------------------
 
-unitName = [[metalextractor_up3]]
+unitName = [[fedmetalextractor_up2]]
 
 --------------------------------------------------------------------------------
 
-metalMultiplier = 16
+metalMultiplier = 8
 
-buildCostMetal = 1200
-energyUse = 100
+buildCostMetal = 600
+energyUse = 50
 
-primaryCEG = "custom:fusionreactionnuclear-4color"
+primaryCEG = "custom:fusionreactionnuclear-3color"
 
-humanName = [[Metal Extractor - Tech 3]]
+humanName = [[Metal Extractor - Tech 2]]
 
-explodeAsSelfSAs = [[largeBuildingExplosionGenericGreen]]
+explodeAsSelfSAs = [[largeBuildingExplosionGenericPurple]]
 
-objectName = [[metalextractort3.s3o]]
-script = [[metalextractor_up3_lus.lua]]
+objectName = [[metalextractort2.s3o]]
+script = [[metalextractor_up2_lus.lua]]
 
-tech = [[tech3]]
+tech = [[tech2]]
 
 noenergycost = false
 
-skyhateceg = [[custom:skyhatelasert3]]
+skyhateceg = [[custom:skyhatelasert2]]
 
 VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_basedef.lua")
 

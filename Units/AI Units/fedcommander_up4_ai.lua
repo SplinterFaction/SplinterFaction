@@ -26,7 +26,7 @@ footprintz = 7
 buildlist = Shared.buildListFedUniversalBuilderCommander_ai
 
 weapon1 = [[particlebeamcannon_up4]]
-areamexdef = [[metalextractor_up3]]
+areamexdef = [[fedmetalextractor_up3]]
 
 explodeas = [[commnuke_up4]]
 selfdestructas = [[commnuke_up4]]

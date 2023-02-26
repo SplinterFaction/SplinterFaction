@@ -25,7 +25,7 @@ movementclass = "WHEELEDTANK4"
 objectName = [[lozengineer_up2.s3o]]
 script = [[lozengineer_up2_lus.lua]]
 
-areamexdef = [[metalextractor_up2]]
+areamexdef = [[lozmetalextractor_up2]]
 requiretech = [[tech2]]
 
 explodeAs = [[largeexplosiongenericgreen]]

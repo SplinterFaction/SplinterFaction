@@ -25,7 +25,7 @@ movementclass = "WALKERTANK4"
 objectName = [[fedengineer_up3.s3o]]
 script = [[fedengineer_up3_lus.lua]]
 
-areamexdef = [[metalextractor_up3]]
+areamexdef = [[fedmetalextractor]]
 requiretech = [[tech3]]
 
 explodeAs = [[hugeexplosiongenericgreen]]

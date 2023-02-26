@@ -1,31 +1,30 @@
 --------------------------------------------------------------------------------
 
-unitName = [[metalextractor_armed_up2]]
+unitName = [[lozmetalextractor_up1]]
 
 --------------------------------------------------------------------------------
 
-metalMultiplier = 8
+metalMultiplier = 4
 
-buildCostMetal = 3480
-energyUse = 50
+buildCostMetal = 150
+energyUse = 25
 
 primaryCEG = "custom:fusionreactionnuclear-2color"
 
-humanName = [[Armed Metal Extractor - Tech 2]]
+humanName = [[Metal Extractor - Tech 1]]
 
 explodeAsSelfSAs = [[largeBuildingExplosionGeneric]]
 
-objectName = [[metalextractort2_armed.s3o]]
-script = [[metalextractor_armed_up2_lus.lua]]
+objectName = [[metalextractort1.s3o]]
+script = [[metalextractor_up1_lus.lua]]
 
-tech = [[tech2]]
+tech = [[tech1]]
 
 noenergycost = false
 
 skyhateceg = [[custom:skyhatelasert1]]
 
-VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_armed_up2_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

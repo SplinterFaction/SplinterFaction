@@ -115,8 +115,7 @@ local morphDefs = {
 		{
 		into    = 'fedcommander_up1',
 		time    = timeToBuild_fedcommander_up1,
-		cmdname = [[Tech 1
-Upgrade]],
+		cmdname = [[Tech 1]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_fedcommander_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 with upgraded weapons and armor',
@@ -127,8 +126,7 @@ Upgrade]],
 		{
 		into    = 'fedcommander_up2',
 		time    = timeToBuild_fedcommander_up2,
-		cmdname = [[Tech 2
-Upgrade]],
+		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_fedcommander_up2,
 		metal   = 0,
 		text    = 'Upgrade to Tech 2 with upgraded weapons and armor',
@@ -140,8 +138,7 @@ Upgrade]],
 		{
 		into    = 'fedcommander_up3',
 		time    = timeToBuild_fedcommander_up3,
-		cmdname = [[Tech 3
-Upgrade]],
+		cmdname = [[Tech 3]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_fedcommander_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 with upgraded weapons and armor',
@@ -153,8 +150,7 @@ Upgrade]],
 		{
 		into    = 'fedcommander_up4',
 		time    = timeToBuild_fedcommander_up4,
-		cmdname = [[Tech 4
-Upgrade]],
+		cmdname = [[Tech 4]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_fedcommander_up4,
 		metal   = 0,
 		text    = 'Upgrade into a Tech 4 BattleMech with Devestating weapons and armor',
@@ -170,8 +166,7 @@ Upgrade]],
 		{
 		into    = 'lozcommander_up1',
 		time    = timeToBuild_lozcommander_up1,
-		cmdname = [[Tech 1
-Upgrade]],
+		cmdname = [[Tech 1]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_lozcommander_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 with upgraded weapons and armor',
@@ -182,8 +177,7 @@ Upgrade]],
 		{
 		into    = 'lozcommander_up2',
 		time    = timeToBuild_lozcommander_up2,
-		cmdname = [[Tech 2
-Upgrade]],
+		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_lozcommander_up2,
 		metal   = 0,
 		text    = 'Upgrade to Tech 2 with upgraded weapons and armor',
@@ -195,8 +189,7 @@ Upgrade]],
 		{
 		into    = 'lozcommander_up3',
 		time    = timeToBuild_lozcommander_up3,
-		cmdname = [[Tech 3
-Upgrade]],
+		cmdname = [[Tech 3]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_lozcommander_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 with upgraded weapons and armor',
@@ -208,8 +201,7 @@ Upgrade]],
 		{
 		into    = 'lozcommander_up4',
 		time    = timeToBuild_lozcommander_up4,
-		cmdname = [[Tech 4
-Upgrade]],
+		cmdname = [[Tech 4]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_lozcommander_up4,
 		metal   = 0,
 		text    = 'Upgrade to a Tech 4 BattleMech with Devestating weapons and armor',
@@ -223,8 +215,7 @@ Upgrade]],
 		{
 		into    = 'lozengineer_up1',
 		time    = timeToBuild_lozengineer_up1,
-		cmdname = [[Tech 1
-Upgrade]],
+		cmdname = [[Tech 1]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_lozengineer_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 Engineer',
@@ -236,8 +227,7 @@ Upgrade]],
 --		{
 --		into    = 'lozengineer_up2',
 --		time    = timeToBuild_lozengineer_up2,
---		cmdname = [[Tech 2
---Upgrade]],
+--		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 --		energy  = energyCost_lozengineer_up2,
 --		metal   = 0,
 --		text    = 'Upgrade to Tech 2 Engineer',
@@ -249,8 +239,7 @@ Upgrade]],
 		{
 		into    = 'lozengineer_up3',
 		time    = timeToBuild_lozengineer_up3,
-		cmdname = [[Tech 3
-Upgrade]],
+		cmdname = [[Tech 3]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_lozengineer_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 Engineer',
@@ -263,8 +252,7 @@ Upgrade]],
 		{
 		into    = 'fedengineer_up1',
 		time    = timeToBuild_fedengineer_up1,
-		cmdname = [[Tech 1
-Upgrade]],
+		cmdname = [[Tech 1]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_fedengineer_up1,
 		metal   = 0,
 		text    = 'Upgrade to Tech 1 Engineer',
@@ -276,8 +264,7 @@ Upgrade]],
 --		{
 --		into    = 'fedengineer_up2',
 --		time    = timeToBuild_fedengineer_up2,
---		cmdname = [[Tech 2
---Upgrade]],
+--		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 --		energy  = energyCost_fedengineer_up2,
 --		metal   = 0,
 --		text    = 'Upgrade to Tech 2 Engineer',
@@ -289,8 +276,7 @@ Upgrade]],
 		{
 		into    = 'fedengineer_up3',
 		time    = timeToBuild_fedengineer_up3,
-		cmdname = [[Tech 3
-Upgrade]],
+		cmdname = [[Tech 3]] .. string.char(10) .. [[Upgrade]],
 		energy  = energyCost_fedengineer_up3,
 		metal   = 0,
 		text    = 'Upgrade to Tech 3 Engineer',
@@ -301,46 +287,220 @@ Upgrade]],
 ----------------------------------------------------------
 ----------------------------------------------------------
 --Economy
+
+	----------------------------------------------------------
+	---Fed Metal Extractors
+	----------------------------------------------------------
 	
-	metalextractor = 	{
+	fedmetalextractor = 	{
 		{
-			into      = 'metalextractor_up1',
+			into      = 'fedmetalextractor_up1',
 			--require = 'etech2',
 			time      = 15,
-			cmdname   = [[Tech 1
-			Upgrade]],
+			cmdname   = [[Tech 1]],
 			-- energy    = energyCost_metalextractor_up1,
 			-- metal     = 0,
-			text      = [[x2 Metal Extraction rate]],
+			text      = [[Upgrade to Tech 1, x2 Metal Extraction rate]],
+			require   = [[tech1]],
+		},
+		{
+			into      = 'fedmetalextractor_stripmine_up1',
+			--require = 'etech2',
+			time      = 15,
+			cmdname   = [[Tech 1]] .. string.char(10) .. [[Stripmine]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 1 Stripmining, x2 + 50% Metal Extraction rate]],
 			require   = [[tech1]],
 		},
 	},
-	metalextractor_up1 = 	{
+	fedmetalextractor_up1 = 	{
 		{
-			into      = 'metalextractor_up2',
+			into      = 'fedmetalextractor_up2',
 			--require = 'etech2',
 			time      = 30,
-			cmdname   = [[Tech 2
-			Upgrade]],
+			cmdname   = [[Tech 2]],
 			-- energy    = energyCost_metalextractor_up2,
 			-- metal     = 0,
-			text      = [[x4 Metal Extraction rate]],
+			text      = [[Upgrade to Tech 2, x4 Metal Extraction rate]],
+			require   = [[tech2]],
+		},
+		{
+			into      = 'fedmetalextractor_stripmine_up2',
+			--require = 'etech2',
+			time      = 15,
+			cmdname   = [[Tech 2]] .. string.char(10) .. [[Stripmine]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 2 Stripmining, x4 + 50% Metal Extraction rate]],
 			require   = [[tech2]],
 		},
 	},
-	metalextractor_up2 = 	{
+	fedmetalextractor_up2 = 	{
 		{
-			into      = 'metalextractor_up3',
+			into      = 'fedmetalextractor_up3',
 			--require = 'etech2',
 			time      = 60,
-			cmdname   = [[Tech 3
-			Upgrade]],
+			cmdname   = [[Tech 3]],
 			-- energy    = energyCost_metalextractor_up3,
 			-- metal     = 0,
-			text      = [[x8 Metal Extraction rate]],
+			text      = [[Upgrade to Tech 3, x8 Metal Extraction rate]],
+			require   = [[tech3]],
+		},
+		{
+			into      = 'fedmetalextractor_stripmine_up3',
+			--require = 'etech2',
+			time      = 15,
+			cmdname   = [[Tech 3]] .. string.char(10) .. [[Stripmine]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 3 Stripmining, x8 + 50% Metal Extraction rate]],
 			require   = [[tech3]],
 		},
 	},
+
+	---Fed Specialty Metal Extractors
+
+	fedmetalextractor_stripmine_up1 = 	{
+		{
+			into      = 'fedmetalextractor_stripmine_up2',
+			--require = 'etech2',
+			time      = 15,
+			cmdname   = [[Tech 2]] .. string.char(10) .. [[Stripmine]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 2 Stripmining, x4 + 50% Metal Extraction rate]],
+			require   = [[tech2]],
+		},
+	},
+	fedmetalextractor_stripmine_up2 = 	{
+		{
+			into      = 'fedmetalextractor_stripmine_up3',
+			--require = 'etech2',
+			time      = 15,
+			cmdname   = [[Tech 3]] .. string.char(10) .. [[Stripmine]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 3 Stripmining, x8 + 50% Metal Extraction rate]],
+			require   = [[tech3]],
+		},
+	},
+
+
+
+	----------------------------------------------------------
+	---Loz Metal Extractors
+	----------------------------------------------------------
+	lozmetalextractor = 	{
+		{
+			into      = 'lozmetalextractor_up1',
+			--require = 'etech2',
+			time      = 15,
+			cmdname   = [[Tech 1]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 1, x2 Metal Extraction rate]],
+			require   = [[tech1]],
+		},
+		{
+			into      = 'lozmetalextractor_armed_up1',
+			--require = 'etech2',
+			time      = 60,
+			cmdname   = [[Tech 1]] .. string.char(10) .. [[Armed]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 1, x2 Metal Extraction rate and 2 Gamma Ray Turrets]],
+			require   = [[tech1]],
+		},
+	},
+	lozmetalextractor_up1 = 	{
+		{
+			into      = 'lozmetalextractor_up2',
+			--require = 'etech2',
+			time      = 30,
+			cmdname   = [[Tech 2]],
+			-- energy    = energyCost_metalextractor_up2,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 2, x4 Metal Extraction rate]],
+			require   = [[tech2]],
+		},
+		{
+			into      = 'lozmetalextractor_armed_up2',
+			--require = 'etech2',
+			time      = 90,
+			cmdname   = [[Tech 2]] .. string.char(10) .. [[Armed]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 2, x4 Metal Extraction rate with 2 Gamma Ray Turrets and 1 Neutron Beam Turret]],
+			require   = [[tech2]],
+		},
+	},
+	lozmetalextractor_up2 = 	{
+		{
+			into      = 'lozmetalextractor_up3',
+			--require = 'etech2',
+			time      = 60,
+			cmdname   = [[Tech 3]],
+			-- energy    = energyCost_metalextractor_up3,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 3, x8 Metal Extraction rate]],
+			require   = [[tech3]],
+		},
+		{
+			into      = 'lozmetalextractor_armed_up3',
+			--require = 'etech2',
+			time      = 150,
+			cmdname   = [[Tech 3]] .. string.char(10) .. [[Armed]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 3, x8 Metal Extraction rate with 2 Gamma Ray Turrets and 2 Neutron Beam Turrets]],
+			require   = [[tech3]],
+		},
+	},
+	lozmetalextractor_up3 = 	{
+		{
+			into      = 'lozmetalextractor_armed_up3',
+			--require = 'etech2',
+			time      = 150,
+			cmdname   = [[Armed]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to x8 Metal Extraction rate with 2 Gamma Ray Turrets and 2 Neutron Beam Turrets]],
+			require   = [[tech3]],
+		},
+	},
+
+
+	---loz Specialty Metal Extractors
+	lozmetalextractor_armed_up1 = 	{
+		{
+			into      = 'lozmetalextractor_armed_up2',
+			--require = 'etech2',
+			time      = 90,
+			cmdname   = [[Tech 2]] .. string.char(10) .. [[Armed]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 2, x4 Metal Extraction rate with 2 Gamma Ray Turrets and 1 Neutron Beam Turret]],
+			require   = [[tech2]],
+		},
+	},
+	lozmetalextractor_armed_up2 = 	{
+		{
+			into      = 'lozmetalextractor_armed_up3',
+			--require = 'etech2',
+			time      = 150,
+			cmdname   = [[Tech 3]] .. string.char(10) .. [[Armed]],
+			-- energy    = energyCost_metalextractor_up1,
+			-- metal     = 0,
+			text      = [[Upgrade to Tech 3, x8 Metal Extraction rate with 2 Gamma Ray Turrets and 2 Neutron Beam Turrets]],
+			require   = [[tech3]],
+		},
+	},
+
+
+	----------------------------------------------------------
+	---GeoStubs
+	----------------------------------------------------------
 
 	fedgeostub = 	{
 		{

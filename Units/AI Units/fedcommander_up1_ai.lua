@@ -24,7 +24,7 @@ footprintx = 4
 footprintz = 4
 
 buildlist = Shared.buildListFedUniversalBuilderCommander_ai
-areamexdef = [[metalextractor_up1]]
+areamexdef = [[fedmetalextractor_up1]]
 
 weapon1 = [[particlebeamcannon_up1]]
 

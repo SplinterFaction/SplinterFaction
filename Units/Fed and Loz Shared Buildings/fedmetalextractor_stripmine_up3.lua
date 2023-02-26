@@ -1,30 +1,28 @@
 --------------------------------------------------------------------------------
 
-unitName = [[metalextractor]]
+unitName = [[fedmetalextractor_stripmine_up3]]
 
 --------------------------------------------------------------------------------
 
-ateranMexCost = Spring.GetModOptions().metalextractorcostateran or 50
+metalMultiplier = 24
 
-metalMultiplier = 2
+buildCostMetal = 1200
+energyUse = 300
 
-buildCostMetal = ateranMexCost
-energyUse = 0
+primaryCEG = "custom:fusionreactionnuclear-4color"
 
-primaryCEG = "custom:fusionreactionnuclear-1color"
+humanName = [[Stripmining Metal Extractor - Tech 3]]
 
-humanName = [[Metal Extractor - Tech 0]]
+explodeAsSelfSAs = [[commnuke_up3]]
 
-explodeAsSelfSAs = [[largeBuildingExplosionGenericBlue]]
+objectName = [[metalextractort3.s3o]]
+script = [[metalextractor_up3_lus.lua]]
 
-objectName = [[metalextractort0.s3o]]
-script = [[metalextractor_lus.lua]]
-
-tech = [[tech0]]
+tech = [[tech3]]
 
 noenergycost = false
 
-skyhateceg = [[custom:skyhatelasert0]]
+skyhateceg = [[custom:skyhatelasert3]]
 
 VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_basedef.lua")
 

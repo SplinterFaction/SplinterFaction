@@ -33,7 +33,7 @@ explodeas = [[commnuke_up2]]
 selfdestructas = [[commnuke_up2]]
 
 buildlist = Shared.buildListLozUniversalBuilderCommander
-areamexdef = [[metalextractor]]
+areamexdef = [[lozmetalextractor]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/lozcommander_basedef.lua")
