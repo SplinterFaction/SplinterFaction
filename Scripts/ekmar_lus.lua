@@ -4,13 +4,12 @@ local SIG_AIM = {}
 -- state variables
 terrainType = "terrainType"
 
+common = include("headers/common_includes_lus.lua")
+
 function script.Create()
 	StartThread(common.SmokeUnit, {ball})
 	StartThread(common.shieldBallSpin)
 end
-
-common = include("headers/common_includes_lus.lua")
-
 
 function script.AimFromWeapon(weaponID)
 	--Spring.Echo("AimFromWeapon: FireWeapon")

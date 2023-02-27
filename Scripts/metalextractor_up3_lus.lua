@@ -3,6 +3,8 @@ base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, bottom1, tops
 
 common = include("headers/common_includes_lus.lua")
 
+local SIG_AIM = {}
+
 -- state variables
 terrainType = "terrainType"
 skyhateEffect = "mex-fireball-small-green"
@@ -27,6 +29,29 @@ function script.Skyhateceg()
 		common.CustomEmitter(sfxpoint1, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
 		Sleep(500)
 	end
+end
+
+function script.AimFromWeapon(weaponID)
+	--Spring.Echo("AimFromWeapon: FireWeapon")
+	return pivotpoint
+end
+
+local firepoints = {pivotpoint}
+local currentFirepoint = 1
+
+function script.QueryWeapon(weaponID)
+	return firepoints[currentFirepoint]
+end
+
+function script.FireWeapon(weaponID)
+	-- EmitSfx (firepoints[currentFirepoint], 1024)
+end
+
+function script.AimWeapon(weaponID, heading, pitch)
+	Signal(SIG_AIM)
+	SetSignalMask(SIG_AIM)
+	--Spring.Echo("AimWeapon: FireWeapon")
+	return false
 end
 
 function script.Killed()
