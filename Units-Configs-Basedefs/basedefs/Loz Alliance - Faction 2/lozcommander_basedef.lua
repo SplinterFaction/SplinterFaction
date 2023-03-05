@@ -114,6 +114,7 @@ unitDef                    = {
 		area_mex_def			 = areamexdef,
 		ProvideTech              = techprovided,
 		RequireTech				 = techrequired,
+		techlevel                = techlevel,
 		canbetransported 		 = "true",
 		iscommander              = true,
 		hpoverride               = hp,

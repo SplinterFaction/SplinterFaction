@@ -603,7 +603,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 					if unitDef.customparams then
 
-						if unitDef.customparams and unitDef.customparams.requiretech == "tech0" then
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech0" or unitDef.customparams and unitDef.customparams.techlevel == "tech0" then
 							if unitDef.customparams.unittype == "mobile" then
 								unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
 							end
@@ -621,7 +621,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 						end
 
-						if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech1" or unitDef.customparams and unitDef.customparams.techlevel == "tech1" then
 							if unitDef.customparams.unittype == "mobile" then
 								unitDef.buildcostenergy = unitDef.buildcostmetal * 3
 							end
@@ -639,7 +639,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 						end
 
-						if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech2" or unitDef.customparams and unitDef.customparams.techlevel == "tech2" then
 							if unitDef.customparams.unittype == "mobile" then
 								unitDef.buildcostenergy = unitDef.buildcostmetal * 6
 							end
@@ -657,7 +657,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 						end
 
-						if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech3" or unitDef.customparams and unitDef.customparams.techlevel == "tech3" then
 							if unitDef.customparams.unittype == "mobile" then
 								unitDef.buildcostenergy = unitDef.buildcostmetal * 12
 							end
@@ -675,7 +675,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 						end
 
-						if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
+						if unitDef.customparams and unitDef.customparams.requiretech == "tech4" or unitDef.customparams and unitDef.customparams.techlevel == "tech4" then
 							if unitDef.customparams.unittype == "mobile" then
 								unitDef.buildcostenergy = unitDef.buildcostmetal * 15
 							end
@@ -794,7 +794,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 4
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.133
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 10
@@ -811,7 +811,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 4
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.133
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 10
@@ -828,7 +828,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostmetal * 4
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.133
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 10
@@ -841,9 +841,6 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Add a modifier for unit HP based upon role
 			-- Mobile Ground Units
-			if unitDef.customparams.unitrole == "Commander" then
-				unitDef.maxdamage = unitDef.maxdamage * 1
-			end
 			if unitDef.customparams.unitrole == "Factory" then
 				unitDef.maxdamage = unitDef.maxdamage * 5
 			end

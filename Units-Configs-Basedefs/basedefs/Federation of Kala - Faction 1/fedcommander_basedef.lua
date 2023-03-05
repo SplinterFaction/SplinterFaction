@@ -3,7 +3,7 @@ unitDef                    = {
 	--mobileunit 
 	transportbyenemy             = false; 
 	--**
-	buildCostEnergy              = 0,
+	buildCostEnergy              = 500,
 	buildCostMetal               = buildcostmetal,
 	buildDistance                = builddistance,
 	builder                      = true,
@@ -114,12 +114,13 @@ unitDef                    = {
 		area_mex_def			 = areamexdef,
 		ProvideTech              = techprovided,
 		RequireTech				 = techrequired,
+		techlevel                = techlevel,
 		canbetransported 		 = "true",
 		iscommander              = true,
 		needed_cover             = 2,
 		death_sounds             = "generic",
 		factionname	             = "Federation of Kala",
-
+		hpoverride               = hp,
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",

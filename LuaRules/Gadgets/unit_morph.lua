@@ -641,9 +641,9 @@ if (gadgetHandler:IsSyncedCode()) then
     end
 
 ------ This adds the metal/energy cost per second line
-    local metalCost = morphDef.metal
-    local energyCost = morphDef.energy
-    local timeCost = morphDef.time
+    local metalCost = math.floor(morphDef.metal + 0.5)
+    local energyCost = math.floor(morphDef.energy + 0.5)
+    local timeCost = math.floor(morphDef.time + 0.5)
     local metalCostPerSecond
     local energyCostPerSecond
     if timeCost ~= nil and timeCost ~= 0 then

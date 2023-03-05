@@ -6,11 +6,13 @@ unitName = [[fedcommander_up2]]
 
 humanname = [[Federation of Kala Command Unit - Tech 2]]
 buildpicture = [[ecommander.png]]
-buildcostmetal = 10000
+buildcostmetal = 5000
+hp = 25000
 builddistance = 550
 
 techprovided = [[tech0, tech1, tech2, -overseer]]
 techrequired = [[0 overseer]]
+techlevel = [[tech2]]
 
 maxvelocity = 2
 workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
