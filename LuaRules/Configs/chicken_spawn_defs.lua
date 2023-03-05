@@ -26,8 +26,8 @@ chickenTurrets = {
 	["lozrattlesnake"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false,	maxQueenAnger = 1000},
 	["fedguardian"]					= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
 	["lozannihilator"]				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
-	["fedbertha"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["lozintimidator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	-- ["fedbertha"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	-- ["lozintimidator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 
 	-- Utility
 	["cloakingtower"] 				= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true,	maxQueenAnger = 1000},
@@ -281,8 +281,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local miniBosses = { -- Units that spawn alongside queen
-	"fedanarchid",
-	"lozeurypterid",
+	"fedjuggernaut",
+	"lozsilverback",
 }
 
 local chickenMinions = { -- Units spawning other units
@@ -343,28 +343,27 @@ addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozscorpion" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedstorm" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedthud" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedcrasher" } })
-addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedbear", "3 fedphalanx" }, weight = 2 })
+-- addNewSquad({ type = "basic", minAnger = 10, units = { "1 fedbear"}, weight = 2 })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozroach" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozscorpion" } })
-addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozreaper", "3 lozpulverizer" }, weight = 2 })
+-- addNewSquad({ type = "basic", minAnger = 10, units = { "1 lozreaper"}, weight = 2 })
 
 addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedstorm" } })
 addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedthud" } })
 addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedcrasher" } })
-addNewSquad({ type = "basic", minAnger = 30, units = { "10 fedbear", "5 fedcobra", "5 fedphalanx" }, weight = 3 })
+addNewSquad({ type = "basic", minAnger = 30, units = { "1 fedbear", "1 fedcobra", "1 fedphalanx" }, weight = 3 })
 addNewSquad({ type = "basic", minAnger = 30, units = { "5 lozroach" } })
 addNewSquad({ type = "basic", minAnger = 30, units = { "5 lozscorpion" } })
-addNewSquad({ type = "basic", minAnger = 30, units = { "10 lozreaper", "5 lozpulverizer" }, weight = 3 })
+addNewSquad({ type = "basic", minAnger = 30, units = { "1 lozreaper", "1 lozpulverizer" }, weight = 3 })
 
-addNewSquad({ type = "basic", minAnger = 50, units = { "10 fedbear", "5 fedcobra", "5 fedphalanx" } })
-addNewSquad({ type = "basic", minAnger = 50, units = { "10 lozreaper", "5 lozpulverizer" } })
-addNewSquad({ type = "basic", minAnger = 50, units = { "2 fedgoliath" }, weight = 2 })
-addNewSquad({ type = "basic", minAnger = 50, units = { "2 lozmammoth" }, weight = 2 })
+addNewSquad({ type = "basic", minAnger = 50, units = { "2 fedbear", "1 fedcobra", "2 fedphalanx" } })
+addNewSquad({ type = "basic", minAnger = 50, units = { "2 lozreaper", "1 lozpulverizer" } })
 
-addNewSquad({ type = "basic", minAnger = 70, units = { "5 fedbear", "5 fedcobra", "5 fedphalanx" } })
-addNewSquad({ type = "basic", minAnger = 70, units = { "10 lozreaper", "5 lozpulverizer" } })
-addNewSquad({ type = "basic", minAnger = 70, units = { "2 fedgoliath" }, weight = 2 })
-addNewSquad({ type = "basic", minAnger = 70, units = { "2 lozmammoth" }, weight = 2 })
+addNewSquad({ type = "basic", minAnger = 70, units = { "2 fedbear", "2 fedcobra", "2 fedphalanx" } })
+addNewSquad({ type = "basic", minAnger = 70, units = { "2 lozreaper", "2 lozpulverizer" } })
+
+addNewSquad({ type = "basic", minAnger = 85, units = { "1 fedgoliath" }, weight = 2 })
+addNewSquad({ type = "basic", minAnger = 85, units = { "1 lozmammoth" }, weight = 2 })
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -377,40 +376,30 @@ addNewSquad({ type = "special", minAnger = 0, units = { "10 lozroach", "8 lozsco
 
 addNewSquad({ type = "special", minAnger = 10, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
 addNewSquad({ type = "special", minAnger = 10, units = { "10 lozroach", "8 lozscorpion" } })
-addNewSquad({ type = "special", minAnger = 10, units = { "1 fedbear", "1 fedcobra", "1 fedphalanx" }, weight = 2 })
-addNewSquad({ type = "special", minAnger = 10, units = { "1 lozreaper", "1 lozpulverizer" }, weight = 2 })
 
 addNewSquad({ type = "special", minAnger = 20, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
 addNewSquad({ type = "special", minAnger = 20, units = { "10 lozroach", "8 lozscorpion" } })
-addNewSquad({ type = "special", minAnger = 20, units = { "3 fedbear", "1 fedcobra", "1 fedphalanx" }, weight = 2 })
-addNewSquad({ type = "special", minAnger = 20, units = { "3 lozreaper", "1 lozpulverizer" }, weight = 2 })
 
 addNewSquad({ type = "special", minAnger = 30, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
 addNewSquad({ type = "special", minAnger = 30, units = { "10 lozroach", "8 lozscorpion" } })
-addNewSquad({ type = "special", minAnger = 30, units = { "5 fedbear", "5 fedcobra", "5 fedphalanx" }, weight = 4 })
-addNewSquad({ type = "special", minAnger = 30, units = { "5 lozreaper", "5 lozpulverizer" }, weight = 4 })
 
-addNewSquad({ type = "special", minAnger = 40, units = { "10 fedbear", "8 fedcobra", "5 fedphalanx" }, weight = 3 })
-addNewSquad({ type = "special", minAnger = 40, units = { "10 lozreaper", "8 lozpulverizer" }, weight = 3 })
+addNewSquad({ type = "special", minAnger = 40, units = { "1 fedbear", "1 fedcobra", "1 fedphalanx" }})
+addNewSquad({ type = "special", minAnger = 40, units = { "1 lozreaper", "1 lozpulverizer" }})
 
-addNewSquad({ type = "special", minAnger = 50, units = { "10 fedavalanche" } })
-addNewSquad({ type = "special", minAnger = 50, units = { "10 lozluger" } })
-addNewSquad({ type = "special", minAnger = 50, units = { "1 lozmammoth" } })
-addNewSquad({ type = "special", minAnger = 50, units = { "1 fedgoliath" } })
+addNewSquad({ type = "special", minAnger = 50, units = { "3 fedavalanche" } })
+addNewSquad({ type = "special", minAnger = 50, units = { "3 lozluger" } })
 
-addNewSquad({ type = "special", minAnger = 60, units = { "10 fedbear", "8 fedcobra", "5 fedphalanx" } })
-addNewSquad({ type = "special", minAnger = 60, units = { "10 lozreaper", "8 lozpulverizer" } })
-addNewSquad({ type = "special", minAnger = 60, units = { "10 fedavalanche" } })
-addNewSquad({ type = "special", minAnger = 60, units = { "10 lozluger" } })
-addNewSquad({ type = "special", minAnger = 60, units = { "1 lozmammoth" }, weight = 2 })
-addNewSquad({ type = "special", minAnger = 60, units = { "1 fedgoliath" }, weight = 2 })
+addNewSquad({ type = "special", minAnger = 60, units = { "5 fedbear"} })
+addNewSquad({ type = "special", minAnger = 60, units = { "5 lozreaper"} })
+addNewSquad({ type = "special", minAnger = 60, units = { "5 fedavalanche" } })
+addNewSquad({ type = "special", minAnger = 60, units = { "5 lozluger" } })
+addNewSquad({ type = "special", minAnger = 60, units = { "1 lozmammoth" } })
+addNewSquad({ type = "special", minAnger = 60, units = { "1 fedgoliath" } })
 
-addNewSquad({ type = "special", minAnger = 70, units = { "10 fedbear", "8 fedcobra", "5 fedphalanx" } })
-addNewSquad({ type = "special", minAnger = 70, units = { "10 lozreaper", "8 lozpulverizer" } })
-addNewSquad({ type = "special", minAnger = 70, units = { "10 fedavalanche" } })
-addNewSquad({ type = "special", minAnger = 70, units = { "10 lozluger" } })
-addNewSquad({ type = "special", minAnger = 70, units = { "1 lozmammoth" }, weight = 2 })
-addNewSquad({ type = "special", minAnger = 70, units = { "1 fedgoliath" }, weight = 2 })
+addNewSquad({ type = "special", minAnger = 70, units = { "3 fedbear", "3 fedcobra", "2 fedphalanx" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "3 lozreaper", "3 lozpulverizer" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "5 fedavalanche" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "5 lozluger" } })
 
 addNewSquad({ type = "special", minAnger = 80, units = { "1 lozmammoth" } })
 addNewSquad({ type = "special", minAnger = 80, units = { "1 fedgoliath" } })
