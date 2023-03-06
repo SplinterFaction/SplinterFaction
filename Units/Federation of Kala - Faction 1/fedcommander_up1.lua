@@ -6,7 +6,7 @@ unitName = [[fedcommander_up1]]
 
 humanname = [[Federation of Kala Command Unit - Tech 1]]
 buildpicture = [[fedcommander.png]]
-buildcostmetal = 1400
+buildcostmetal = 450
 hp = 15000
 builddistance = 550
 

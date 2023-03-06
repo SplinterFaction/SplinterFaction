@@ -11,7 +11,7 @@ techprovided = [[tech0, tech1, tech2, tech3, tech4, -overseer]]
 techrequired = [[0 overseer]]
 techlevel = [[tech4]]
 
-buildCostMetal = 32400
+buildCostMetal = 9000
 hp = 8000
 builddistance = 550
 maxvelocity = 2

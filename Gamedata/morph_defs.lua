@@ -30,7 +30,7 @@ local morphDefs = {
 	fedcommander = {
 		{
 		into    = 'fedcommander_up1',
-		time    = 60,
+		time    = 30,
 		cmdname = [[Tech 1]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_fedcommander_up1,
 		-- metal   = 0,
@@ -41,7 +41,7 @@ local morphDefs = {
 	fedcommander_up1 = {
 		{
 		into    = 'fedcommander_up2',
-		time    = 180,
+		time    = 60,
 		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_fedcommander_up2,
 		-- metal   = 0,
@@ -53,7 +53,7 @@ local morphDefs = {
 	fedcommander_up2 = {
 		{
 		into    = 'fedcommander_up3',
-		time    = 300,
+		time    = 120,
 		cmdname = [[Tech 3]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_fedcommander_up3,
 		-- metal   = 0,
@@ -65,7 +65,7 @@ local morphDefs = {
 	fedcommander_up3 = {
 		{
 		into    = 'fedcommander_up4',
-		time    = 480,
+		time    = 300,
 		cmdname = [[Tech 4]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_fedcommander_up4,
 		-- metal   = 0,
@@ -81,10 +81,10 @@ local morphDefs = {
 	lozcommander = {
 		{
 		into    = 'lozcommander_up1',
-		time    = 60,
+		time    = 30,
 		cmdname = [[Tech 1]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_lozcommander_up1,
-		-- metal   = 0,
+		-- metal   = 450, -- Assuming metal drain of 15/s
 		text    = 'Upgrade to Tech 1 with upgraded weapons and armor',
 		},
 	},
@@ -92,10 +92,10 @@ local morphDefs = {
 	lozcommander_up1 = {
 		{
 		into    = 'lozcommander_up2',
-		time    = 180,
+		time    = 60,
 		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_lozcommander_up2,
-		-- metal   = 0,
+		-- metal   = 1200, -- Assuming metal drain of 20/s
 		text    = 'Upgrade to Tech 2 with upgraded weapons and armor',
 		require = [[tech1]],
 		},
@@ -104,10 +104,10 @@ local morphDefs = {
 	lozcommander_up2 = {
 		{
 		into    = 'lozcommander_up3',
-		time    = 300,
+		time    = 120,
 		cmdname = [[Tech 3]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_lozcommander_up3,
-		-- metal   = 0,
+		-- metal   = 3000, -- Assuming metal drain of 25/s
 		text    = 'Upgrade to Tech 3 with upgraded weapons and armor',
 		require = [[tech2]],
 		},
@@ -116,10 +116,10 @@ local morphDefs = {
 	lozcommander_up3 = {
 		{
 		into    = 'lozcommander_up4',
-		time    = 480,
+		time    = 300,
 		cmdname = [[Tech 4]] .. string.char(10) .. [[Upgrade]],
 		-- energy  = energyCost_lozcommander_up4,
-		-- metal   = 0,
+		-- metal   = 9000, -- Assuming metal drain of 30/s
 		text    = 'Upgrade to a Tech 4 BattleMech with Devestating weapons and armor',
 		require = [[tech3]],
 		},
