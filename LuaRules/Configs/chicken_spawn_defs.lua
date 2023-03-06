@@ -360,8 +360,8 @@ addNewSquad({ type = "basic", minAnger = 60, units = { "2 lozreaper", "1 lozpulv
 addNewSquad({ type = "basic", minAnger = 75, units = { "2 fedbear", "2 fedcobra", "2 fedphalanx" } })
 addNewSquad({ type = "basic", minAnger = 75, units = { "2 lozreaper", "2 lozpulverizer" } })
 
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 fedgoliath" }, weight = 2 })
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozmammoth" }, weight = 2 })
+addNewSquad({ type = "basic", minAnger = 90, units = { "1 fedgoliath" } })
+addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozmammoth" } })
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -392,16 +392,14 @@ addNewSquad({ type = "special", minAnger = 60, units = { "1 lozreaper"} })
 addNewSquad({ type = "special", minAnger = 60, units = { "5 fedavalanche" } })
 addNewSquad({ type = "special", minAnger = 60, units = { "5 lozluger" } })
 
-addNewSquad({ type = "special", minAnger = 70, units = { "3 fedbear"} })
-addNewSquad({ type = "special", minAnger = 70, units = { "3 lozreaper"} })
-addNewSquad({ type = "special", minAnger = 70, units = { "5 fedavalanche" } })
-addNewSquad({ type = "special", minAnger = 70, units = { "5 lozluger" } })
+addNewSquad({ type = "special", minAnger = 70, units = { "1 fedbear"} })
+addNewSquad({ type = "special", minAnger = 70, units = { "1 lozreaper"} })
 
-addNewSquad({ type = "special", minAnger = 80, units = { "1 lozmammoth" } })
-addNewSquad({ type = "special", minAnger = 80, units = { "1 fedgoliath" } })
+addNewSquad({ type = "special", minAnger = 90, units = { "1 lozmammoth" } })
+addNewSquad({ type = "special", minAnger = 90, units = { "1 fedgoliath" } })
 
-addNewSquad({ type = "special", minAnger = 90, units = { "1 lozsilverback" } })
-addNewSquad({ type = "special", minAnger = 90, units = { "1 fedjuggernaut" } })
+addNewSquad({ type = "special", minAnger = 95, units = { "1 lozsilverback" } })
+addNewSquad({ type = "special", minAnger = 95, units = { "1 fedjuggernaut" } })
 
 for j = 1,#miniBosses do
 	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j] }, weight = 3 })
