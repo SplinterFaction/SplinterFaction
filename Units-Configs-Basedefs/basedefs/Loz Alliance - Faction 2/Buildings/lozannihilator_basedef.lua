@@ -62,7 +62,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Special Turret",
+		unitrole				  = "Single-Target Turret",
 		needed_cover              = 5,
 		--supply_cost               = supply,
 		RequireTech				  = tech,
@@ -127,7 +127,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 1175,
+			default               = 1675,
 		},
 	},
 }

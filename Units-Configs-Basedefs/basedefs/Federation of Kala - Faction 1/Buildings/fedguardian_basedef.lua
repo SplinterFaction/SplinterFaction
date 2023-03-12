@@ -62,7 +62,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Special Turret",
+		unitrole				  = "Single-Target Turret",
 		needed_cover              = 5,
 		--supply_cost               = supply,
 		RequireTech				  = tech,
@@ -87,8 +87,8 @@ weaponDefs                  = {
 		collideFriendly        = false,
 		collideFeature         = false,
 		--cegTag			   = "thudshot",
-		--burst				   = 4,
-		--burstrate			   = 0.2,
+		burst				   = 10,
+		burstrate			   = 0.1,
 		edgeEffectiveness	   = 1,
 		explosionGenerator     = "custom:genericshellexplosion-small",
 		energypershot          = 0,
@@ -100,10 +100,10 @@ weaponDefs                  = {
 		--noExplode			   = true,
 		range                  = 1200,
 		reloadtime             = 5,
-		size				   = 2,
-		projectiles			   = 32,
+		size				   = 8,
+		projectiles			   = 1,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/Shotgun Boom 101.wav",
+		soundStart             = "weapons/scifi_heavy_rifle_A_single_01-burst-10round.wav",
 		soundHit	           = "explosions/mediumcannonhit.wav",
 		soundTrigger           = true,
 		sprayAngle             = 1250,
@@ -118,7 +118,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 130,
+			default              = 416,
 		},
 	},
 }
