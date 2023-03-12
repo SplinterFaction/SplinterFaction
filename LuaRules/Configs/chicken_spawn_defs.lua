@@ -151,7 +151,7 @@ local optionValues = {
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
-		maxChickens		  = 40, -- Number of ai units spawned in the end stages of the game per wave
+		maxChickens		  = 30, -- Number of ai units spawned in the end stages of the game per wave
 		queenName         = 'fedanarchid_normal',
 		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
