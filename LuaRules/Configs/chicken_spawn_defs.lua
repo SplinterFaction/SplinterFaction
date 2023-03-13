@@ -262,7 +262,7 @@ local function addNewSquad(squadParams) -- params: {type = "basic", minAnger = 0
 	if squadParams then -- Just in case
 		if not squadParams.units then return end
 		if not squadParams.minAnger then squadParams.minAnger = 0 end
-		if not squadParams.maxAnger then squadParams.maxAnger = squadParams.minAnger + 50 end -- Eliminate squads 50% after they're introduced by default, can be overwritten
+		if not squadParams.maxAnger then squadParams.maxAnger = squadParams.minAnger + 10 end -- Eliminate squads 50% after they're introduced by default, can be overwritten
 		if squadParams.maxAnger >= 100 then squadParams.maxAnger = 1000 end -- basically infinite
 		if not squadParams.weight then squadParams.weight = 1 end
 
