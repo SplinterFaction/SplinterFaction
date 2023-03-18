@@ -28,6 +28,7 @@ end
 
 unitHealthModifier = unitHealthModifier * 0.01
 
+local canFactoriesBeAssisted = false
 local canAnyUnitsReclaim = true
 local useDefaultNanospray = true
 
@@ -732,6 +733,18 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			else
 				if unitDef.canreclaim == false then
 					unitDef.canreclaim = true
+				end
+			end
+
+			if canFactoriesBeAssisted == false then
+				if unitDef.customparams and unitDef.customparams.unitrole == "Factory" then
+					if unitDef.canbeassisted == true then
+						unitDef.canbeassisted = false
+					end
+				else
+					if unitDef.canbeassisted == false then
+						unitDef.canbeassisted = true
+					end
 				end
 			end
 

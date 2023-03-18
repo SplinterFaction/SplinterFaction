@@ -1308,6 +1308,8 @@ function applyOptionValue(i, skipRedrawWindow)
 			if value then
 				Spring.StopSoundStream()
 			end
+		elseif id == 'softparticles' then
+			Spring.SetConfigInt("softparticles",value)
 		elseif id == 'simplifiedresourcebar' then
 			Spring.SetConfigInt("evo_simplifiedresourcebar",value)
 		elseif id == 'buildpichelp' then
@@ -2242,6 +2244,8 @@ function init()
 		{id="ssao_radius", group="gfx", name=widgetOptionColor.."   radius", type="slider", min=4, max=7, step=1, value=4, description=''},
 
 		{id="cas", group="gfx", widget="Contrast Adaptive Sharpen (Old)", name="Contrast Adaptive Sharpen", type="bool", value=GetWidgetToggleValue("Contrast Adaptive Sharpen"), description='Applies sharpening (may overwhelm antialiasing settings)'},
+
+		{id="softparticles", group="gfx", name="Soft Particles", type="bool", value=tonumber(Spring.GetConfigInt("softparticles",1) or 1) == 1, description="Makes particle effects much nicer when they clip with terrain"},
 
 		{id="outline", group="gfx", widget="Outline", name="Unit outline", type="bool", value=GetWidgetToggleValue("Outline"), description='Adds a small outline to all units which makes them crisp.'},
 		{id="outline_size", group="gfx", name=widgetOptionColor.."   size", min=0.5, max=3, step=0.05, type="slider", value=1, description='Set the size of the outline'},

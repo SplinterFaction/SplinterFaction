@@ -118,6 +118,7 @@ unitDef                    = {
 		canbetransported 		 = "true",
 		iscommander              = true,
 		hpoverride               = hp,
+		buildcostenergyoverride  = buildCostEnergy,
 		needed_cover             = 2,
 		death_sounds             = "generic",
 		factionname	             = "Loz Alliance",

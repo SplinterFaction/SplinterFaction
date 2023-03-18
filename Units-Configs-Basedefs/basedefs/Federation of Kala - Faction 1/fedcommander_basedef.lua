@@ -121,6 +121,7 @@ unitDef                    = {
 		death_sounds             = "generic",
 		factionname	             = "Federation of Kala",
 		hpoverride               = hp,
+		buildcostenergyoverride  = buildCostEnergy,
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
