@@ -170,7 +170,7 @@ function gadget:DrawWorld()
 	local team = GetLocalAllyTeamID()
 	local _,_,spec = GetSpectatingState()
 	local f = GetGameFrame()
-	for u,b in spairs(SYNCED.unitsBeingSold) do
+	for u,b in pairs(SYNCED.unitsBeingSold) do
 		if GetUnitAllyTeam(u) == team or spec then
 				local x,y,z = GetUnitBasePosition(u)
 			if x and y and z then

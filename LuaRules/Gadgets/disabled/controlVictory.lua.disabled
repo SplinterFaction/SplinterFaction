@@ -265,7 +265,7 @@ local Billboard = gl.Billboard
 
 local function DrawPoints()
    local me = Spring.GetLocalAllyTeamID()
-   for _,p in spairs(SYNCED.points) do
+   for _,p in pairs(SYNCED.points) do
       local r,g,b = .5,.5,.5
       if p.owner then
          --Spring.Echo(p.owner, me)
@@ -317,7 +317,7 @@ function gadget:DrawScreen(vsx, vsy)
       local me = Spring.GetLocalAllyTeamID()
       Text("Your Score: "..SYNCED.score[me], vsx - 280, vsy * .58, 16, "lo")
       local n = 1
-      for a,s in spairs(SYNCED.score) do
+      for a,s in pairs(SYNCED.score) do
          if not name[a] then
             for _,p in ipairs(Spring.GetPlayerList()) do
                local pn,_,_,_,at = Spring.GetPlayerInfo(p)
