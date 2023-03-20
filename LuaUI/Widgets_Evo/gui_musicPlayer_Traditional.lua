@@ -448,7 +448,8 @@ function widget:IsAbove(mx, my)
   		volume = curVolume
   		createList()
   	end
-		mouseover = true
+		-- Disable volume sliders on widget mouseover
+		mouseover = false
 	end
 	return mouseover
 end

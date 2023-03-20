@@ -136,7 +136,7 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 			SimpleConverterDefs[#SimpleConverterDefs + 1] = unitDefID
 		elseif unitDef.isBuilding and #unitDef.weapons > 0 then
 			SimpleTurretDefs[#SimpleTurretDefs + 1] = unitDefID
-		elseif unitDef.customParams.simpleaiunittype == "t0storagesupply" or unitDef.customParams.simpleaiunittype == "supplydepot" then
+		elseif unitDef.customParams.simpleaiunittype == "i" then
 			SimpleSupplyDefs[#SimpleSupplyDefs + 1] = unitDefID
 		elseif unitDef.customParams.simpleaiunittype == "storage" then
 			SimpleStorageDefs[#SimpleStorageDefs + 1] = unitDefID
@@ -260,7 +260,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 			SimpleConstructorDelay[unitTeam] = SimpleConstructorDelay[unitTeam]-1
 			local r = math.random(0, 20) -- Used: 8
 			local mexspotpos = SimpleGetClosestMexSpot(unitposx, unitposz)
-			if SimpleConstructorCount[unitTeam] < 1 then
+			if SimpleConstructorCount[unitTeam] < 4 then
 				local project = SimpleConstructorDefs[math.random(1, #SimpleConstructorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -271,7 +271,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif mexspotpos and (SimpleT1Mexes[unitTeam] < 1) then
+			elseif mexspotpos and (SimpleT1Mexes[unitTeam] < 3) then
 				local project = SimpleExtractorDefs[math.random(1, #SimpleExtractorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -551,6 +551,7 @@ if gadgetHandler:IsSyncedCode() then
 	function gadget:GameFrame(n)
 		if n%1800 == 0 then
 			for j = 1, #SimpleCheaterAITeamIDs do
+				local teamID = SimpleCheaterAITeamIDs[j]
 				if teamID == SimpleCheaterAITeamIDs[j] then
 					local mcurrent, mstorage, _, mincome, mexpense = Spring.GetTeamResources(teamID, "metal")
 					local ecurrent, estorage, _, eincome, eexpense = Spring.GetTeamResources(teamID, "energy")

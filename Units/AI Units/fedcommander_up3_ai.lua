@@ -6,7 +6,9 @@ unitName = [[fedcommander_up3_ai]]
 
 humanname = [[Federation of Kala Command Unit - Tech 3 - SimpleAI]]
 buildpicture = [[ecommander.png]]
-buildcostmetal = 2000
+buildcostmetal = 0
+buildCostEnergy = 120000
+hp = 32500
 builddistance = 550
 
 techprovided = [[tech0, tech1, tech2, tech3, -overseer, -aioverseerup2, aioverseerup3]]
