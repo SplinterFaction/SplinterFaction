@@ -432,8 +432,8 @@ function gadget:DrawWorld()
   local bombPlants = SYNCED.bombPlants;
   local unitBombs  = SYNCED.unitBombs;
 
-  if ((not bombPlants) or (snext(bombPlants) == nil))and
-     ((not unitBombs) or (snext(unitBombs) == nil))
+  if ((not bombPlants) or (next(bombPlants) == nil))and
+     ((not unitBombs) or (next(unitBombs) == nil))
   then
     return; --nothing to do
   end
@@ -450,7 +450,7 @@ function gadget:DrawWorld()
 
   glColor(1,1,0,1);
   CallAsTeam({ ['read'] = readTeam }, function()
-    for unitID,bombData in spairs(bombPlants) do
+    for unitID,bombData in pairs(bombPlants) do
       if (unitID and bombData)and(IsUnitVisible(unitID)) then
         DrawPlantProgress(unitID, bombData.progress);
       end
@@ -459,7 +459,7 @@ function gadget:DrawWorld()
 
   glColor(1,0,0,1);
   CallAsTeam({ ['read'] = readTeam }, function()
-    for unitID,countdown in spairs(unitBombs) do
+    for unitID,countdown in pairs(unitBombs) do
       if (unitID and countdown)and(IsUnitVisible(unitID)) then
         DrawCountdown(unitID, countdown);
       end

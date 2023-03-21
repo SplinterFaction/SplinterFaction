@@ -936,7 +936,7 @@ else -- UNSYNCED
 	-----------------------------------------------------------------------------------------
 	local function CreatePlayerList()
 		local playerEntries = {}
-		for allyTeamID, teamScore in spairs(SYNCED.score) do
+		for allyTeamID, teamScore in pairs(SYNCED.score) do
 			-- note to self, allyTeamID +1 = ally team number	
 			if allyTeamID ~= gaia then					
 				--does this allyteam have a table? if not, make one
@@ -1118,7 +1118,7 @@ else -- UNSYNCED
 			showGameModeInfo = false
 		end
 		
-		for i, capturePoint in spairs(SYNCED.points) do
+		for i, capturePoint in pairs(SYNCED.points) do
 			if capturePoints[i] == nil then
 				capturePoints[i] = {}
 				capturePoints[i].color = {1,1,1}
@@ -1168,7 +1168,7 @@ else -- UNSYNCED
 	
 	function gadget:GameFrame()
 		
-		for i, capturePoint in spairs(SYNCED.points) do
+		for i, capturePoint in pairs(SYNCED.points) do
 			if capturePoints[i] == nil then
 				capturePoints[i] = {}
 				capturePoints[i].color = {1,1,1}
@@ -1381,7 +1381,7 @@ There are various options available in the lobby bsettings (use ]] .. yellow .. 
 			local allyCounter		= 0
 			
 			-- for all the scores with a team.
-			for allyTeamID, allyScore in spairs(SYNCED.score) do
+			for allyTeamID, allyScore in pairs(SYNCED.score) do
 				--Spring.Echo("at allied team ID", allyTeamID)
 				-- note to self, allyTeamID +1 = ally team number	
 				local allyTeamMembers = Spring.GetTeamList(allyTeamID)

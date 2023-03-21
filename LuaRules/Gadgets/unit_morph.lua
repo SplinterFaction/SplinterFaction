@@ -1753,8 +1753,6 @@ else
   local gameFrame;
   local SYNCED = SYNCED
   local CallAsTeam = CallAsTeam
-  local spairs = spairs
-  local snext = snext
 
   local GetUnitTeam         = Spring.GetUnitTeam
   local GetUnitHeading      = Spring.GetUnitHeading
@@ -2022,7 +2020,7 @@ else
     if (frame<=oldFrame) then
       return end
     oldFrame = frame
-    if not SYNCED.morphUnits or (not snext(SYNCED.morphUnits)) then    -- If table empty, return
+    if not SYNCED.morphUnits or (not next(SYNCED.morphUnits)) then    -- If table empty, return
       return end
     -- Script.LuaUI: makes an unsynced gadget call a function that is in a listening widget.
     local hasMorphUpdate = Script.LuaUI('MorphUpdate')
@@ -2038,7 +2036,7 @@ else
       then readTeam = Script.ALL_ACCESS_TEAM
       else readTeam = GetLocalTeamID() end
       CallAsTeam({ ['read'] = readTeam }, function()
-        for unitID, morphData in spairs(SYNCED.morphUnits) do
+        for unitID, morphData in pairs(SYNCED.morphUnits) do
           if (unitID and morphData)and(IsUnitVisible(unitID)) then
             morphTable[unitID] = { progress=morphData.progress, into=morphData.def.into }
           end
@@ -2049,7 +2047,7 @@ else
   end
 
   function gadget:DrawWorld()
-    if not SYNCED.morphUnits or (not snext(SYNCED.morphUnits)) then
+    if not SYNCED.morphUnits or (not next(SYNCED.morphUnits)) then
       return --//no morphs to draw
     end
 
@@ -2081,7 +2079,7 @@ else
     --- [END] Draw MorphQueue indexes
 
     CallAsTeam({ ['read'] = readTeam }, function()
-      for unitID, morphData in spairs(SYNCED.morphUnits) do
+      for unitID, morphData in pairs(SYNCED.morphUnits) do
         if unitID and morphData and IsUnitVisible(unitID) then
           DrawMorphUnit(unitID, morphData, readTeam)
         end

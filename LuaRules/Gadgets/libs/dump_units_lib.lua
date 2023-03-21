@@ -2258,16 +2258,12 @@ function GenerateFromCurrentState(Abbreviated,Grid,OnlyStartScript,WithHeightMap
 				if type(teamNamedResearched)~="table" then
 					Spring.Echo("SYNCED.namedResearched["..TeamFromPlayer[p]"..] is a "..type(teamNamedResearched)..". Can't dump tech levels.")
 				else
-					if not sipairs then
-						Spring.Echo("sipairs not found. Can't dump tech levels.")
-					else
-						local researched={}
-						for _,r in sipairs(teamNamedResearched) do
-							table.insert(researched,r)
-						end
-						if #researched>=1 then
-							table.insert(script.players[p].ExtraDoubleCustomKeys,{name="Researched",value=table.concat(researched,",")})
-						end
+					local researched={}
+					for _,r in ipairs(teamNamedResearched) do
+						table.insert(researched,r)
+					end
+					if #researched>=1 then
+						table.insert(script.players[p].ExtraDoubleCustomKeys,{name="Researched",value=table.concat(researched,",")})
 					end
 				end
 			end
