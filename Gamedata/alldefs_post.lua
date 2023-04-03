@@ -153,7 +153,7 @@ function UnitDef_Post(name, uDef)
 
 	--Set reverse velocity automatically
 	if uDef.maxvelocity then
-		uDef.maxreversevelocity = uDef.maxvelocity * 0.70
+		uDef.maxreversevelocity = uDef.maxvelocity * 0.85
 	end
 
 	--Override groundplate used
@@ -220,9 +220,7 @@ function UnitDef_Post(name, uDef)
 	-------------------------------------------------------------------------- ------
 	--------------------------------------------------------------------------------
 	-- Make units unable to be repaired via nanolathe
-	if uDef.repairable then
-		uDef.repairable = false
-	end
+	uDef.repairable = true
 
 	-------------------------------------------------------------------------- ------
 	--------------------------------------------------------------------------------
@@ -807,7 +805,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.133
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 10
@@ -824,7 +822,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.133
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 10
@@ -841,7 +839,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.133
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 10
@@ -870,7 +868,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 2
 			end
 			if unitDef.customparams.unitrole == "Main Battle Tank - Tech 3" then
-				unitDef.maxdamage = unitDef.maxdamage * 1.1
+				unitDef.maxdamage = unitDef.maxdamage * 1.4
 			end
 			if unitDef.customparams.unitrole == "Scout" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.4
@@ -905,13 +903,13 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Aircraft
 			if unitDef.customparams.unitrole == "Air Scout" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.3
+				unitDef.maxdamage = unitDef.maxdamage * 0.4
 			end
 			if unitDef.customparams.unitrole == "Interceptor" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
-			if unitDef.customparams.unitrole == "Bomber" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.5
+			if unitDef.customparams.unitrole == "Assault Bomber" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.6
 			end
 			if unitDef.customparams.unitrole == "Strike Fighter" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.8

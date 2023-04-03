@@ -1,7 +1,7 @@
 unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
-	buildCostEnergy              = 1500,
+	buildCostEnergy              = 500,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -19,7 +19,7 @@ unitDef                    = {
 	collide               = false,
 	hoverAttack           = true,
 	airStrafe             = true,
-	cruiseAlt             = 75,
+	cruiseAlt             = 100,
 	airHoverFactor        = -1.0,
 	bankingAllowed        = true,
 	useSmoothMesh         = true,

@@ -127,7 +127,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
 		range                  = 800,
-		reloadtime             = 2,
+		reloadtime             = 4,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/allterrassaultshot.wav",
@@ -147,7 +147,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 750,
+			default              = 1500,
 		},
 	},
 	lasercannon                = {

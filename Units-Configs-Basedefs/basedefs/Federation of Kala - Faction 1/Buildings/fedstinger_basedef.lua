@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 130,
+	buildCostMetal                = 330,
 	builder                       = false,
 	buildTime                     = 5,
 	canAttack                     = true,
@@ -119,7 +119,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3,
+			default              = 9,
 		},
 	},
 }

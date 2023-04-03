@@ -19,16 +19,16 @@ unitDef                    = {
 	frontToSpeed        = 0,    -- New Default
 	speedToFront        = 0.001,  -- New Default
 	crashDrag           = 0.005,
-	maxBank             = 0.7,  -- New Default
+	maxBank             = 0.85,  -- New Default
 	maxPitch            = 0.65, -- New Default
-	turnRadius          = 300,  -- New Default
+	turnRadius          = 0,  -- New Default
 	verticalSpeed       = 3.0,
-	maxAileron          = 0.025, -- New Default
+	maxAileron          = 0.0125, -- New Default
 	maxElevator         = 0.01,
-	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
-	useSmoothMesh		= true,
+	useSmoothMesh		= false,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "AIR",
 	collide                      = false,
-	cruiseAlt                    = 100,
+	cruiseAlt                    = 450,
 	description                  = [[Strike Fighter]],
 	energyMake                   = 0,
 	energyStorage                = 0,

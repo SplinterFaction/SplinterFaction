@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.1,
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
-	buildCostEnergy              = 1200,
+	buildCostEnergy              = 1000,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -19,16 +19,16 @@ unitDef                    = {
 	frontToSpeed        = 0,    -- New Default
 	speedToFront        = 0.001,  -- New Default
 	crashDrag           = 0.005,
-	maxBank             = 0.7,  -- New Default
+	maxBank             = 0.85,  -- New Default
 	maxPitch            = 0.65, -- New Default
-	turnRadius          = 400,  -- New Default
+	turnRadius          = 0,  -- New Default
 	verticalSpeed       = 3.0,
-	maxAileron          = 0.025, -- New Default
+	maxAileron          = 0.0125, -- New Default
 	maxElevator         = 0.01,
-	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
-	useSmoothMesh		= true,
+	useSmoothMesh		= false,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "AIR",
 	collide                      = false,
-	cruiseAlt                    = 100,
+	cruiseAlt                    = 300,
 	description                  = [[Interceptor]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -97,15 +97,15 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "laser",
 			onlyTargetCategory	 = "AIR",
-			mainDir = "0 1 1",
-			maxAngleDif = 180,
+			mainDir = "0 0 1",
+			maxAngleDif = 90,
 		},
-		[2]                      = {
-			def                  = "railgun",
-			onlyTargetCategory	 = "AIR",
-			mainDir = "0 1 0",
-			maxAngleDif = 180,
-		},
+		--[2]                      = {
+		--	def                  = "laser",
+		--	onlyTargetCategory	 = "AIR",
+		--	mainDir = "0 1 0",
+		--	maxAngleDif = 180,
+		--},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
 				A vector representing the firing direction of this weapon if it has a limited firing arc. Used in conjunction with maxAngleDif (See Gamedev:WeaponMainDir).
@@ -150,7 +150,7 @@ weaponDefs                 = {
 		cegTag                 = "railgun",
 		rgbColor               = "1 0 0",
 		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-small-sparks-burn",
+		explosionGenerator     = "custom:genericshellexplosion-small",
 		edgeEffectiveness	   = 1,
 		energypershot          = 0,
 		fallOffRate            = 0,
@@ -166,11 +166,11 @@ weaponDefs                 = {
 		texture1               = "shot",
 		texture2               = "empty",
 		coreThickness          = 0.25,
-		thickness              = 3,
+		thickness              = 8,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 2000,
+		weaponVelocity         = 3000,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -178,7 +178,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3,
+			default              = 16,
 		},
 	},
 

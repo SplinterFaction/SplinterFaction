@@ -36,19 +36,24 @@ function script.AimFromWeapon(WeaponID)
     return base
 end
 
+local firepoints1 = {gatlingfirepoint1, gatlingfirepoint2}
+local currentFirepoint1 = 1
+local totalNumberofFirepoints1 = 2
+
 function script.QueryWeapon(WeaponID)
     if WeaponID == 1 then
-        return gatlingfirepoint1
-    elseif WeaponID == 2 then
-        return gatlingfirepoint2
+        return firepoints1[currentFirepoint1]
     end
 end
 
 function script.FireWeapon(WeaponID)
     if WeaponID == 1 then
-        EmitSfx (gatlingfirepoint1, 1024)
-    elseif WeaponID == 2 then
-        EmitSfx (gatlingfirepoint2, 1024)
+        currentFirepoint1 = currentFirepoint1 + 1
+        if currentFirepoint1 == (totalNumberofFirepoints1 + 1) then -- when currentFirepoint gets to one more than the total number of firepoints, reset it to 1
+            currentFirepoint1 = 1
+        end
+        -- Spring.Echo(currentFirepoint)
+        EmitSfx (firepoints1[currentFirepoint1], 1024)
     end
 end
 
@@ -67,14 +72,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
         SetSignalMask(SIG_AIM)
         Turn(turretball1, x_axis, -pitch, 100)
         WaitForTurn(turretball1, x_axis)
-        --Spring.Echo("AimWeapon: FireWeapon")
-        StartThread(RestoreAfterDelay)
-        return true
-    elseif WeaponID == 2 then
-        Signal(SIG_AIM2)
-        SetSignalMask(SIG_AIM2)
-        Turn(turretball2, x_axis, -pitch, 100)
-        WaitForTurn(turretball2, x_axis)
         --Spring.Echo("AimWeapon: FireWeapon")
         StartThread(RestoreAfterDelay)
         return true

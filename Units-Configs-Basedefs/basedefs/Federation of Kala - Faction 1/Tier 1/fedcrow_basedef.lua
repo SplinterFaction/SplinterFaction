@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.1,
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
-	buildCostEnergy              = 1800,
+	buildCostEnergy              = 1200,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -19,16 +19,16 @@ unitDef                    = {
 	frontToSpeed        = 0,    -- New Default
 	speedToFront        = 0.001,  -- New Default
 	crashDrag           = 0.005,
-	maxBank             = 0.7,  -- New Default
+	maxBank             = 1,  -- New Default
 	maxPitch            = 0.65, -- New Default
-	turnRadius          = 500,  -- New Default
+	turnRadius          = 1000,  -- New Default
 	verticalSpeed       = 3.0,
-	maxAileron          = 0.025, -- New Default
+	maxAileron          = 0.0125, -- New Default
 	maxElevator         = 0.01,
-	maxRudder           = 0.002, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
-	useSmoothMesh		= true,
+	useSmoothMesh		= false,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ unitDef                    = {
 	category                     = "AIR",
 	nochasecategory              = "AIR",
 	collide                      = false,
-	cruiseAlt                    = 200,
+	cruiseAlt                    = 250,
 	description                  = [[Bomber]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -129,7 +129,7 @@ unitDef                    = {
 
 	customParams                 = {
 		unittype				 = "air",
-		unitrole				 = "Bomber",
+		unitrole				 = "Assault Bomber",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
@@ -185,41 +185,40 @@ weaponDefs                 = {
 		},
 	},
 	bomb  	             = {
-		AreaOfEffect             = 15,
+		AreaOfEffect             = 25,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
 		cylinderTargeting		 = 0,
+		burst                    = 10,
+		burstrate                = 0.1,
 		-- cegTag                   = "genericshellexplosion-small-sparks-burn",
 		edgeeffectiveness		 = 1,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-medium",
+		explosionGenerator       = "custom:genericshellexplosion-bomb",
 		fallOffRate              = 1,
 		fireStarter              = 50,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		minintensity             = "1",
 		name                     = "Cluster Bomb",
-		projectiles				 = 10,
 		range                    = 400,
-		reloadtime               = 7,
-		WeaponType               = "Cannon",
+		reloadtime               = 5,
+		WeaponType               = "AircraftBomb",
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
 		soundTrigger             = true,
 		model                    = "missilesmalllauncher.s3o",
 		soundstart               = "weapons/bombdrop.wav",
-		soundHit                 = "other/18402_inferno_xplo.wav",
+		soundHit                 = "weapons/Explosion Grenade_02.wav",
 		soundHitWet				 = "explosions/subhitbomb.wav",
-		sprayangle				 = 1000,
+		sprayangle				 = 500,
 		size					 = 4,
 		--texture1                 = "shot",
 		--texture2                 = "empty",
 		thickness                = 15,
 		tolerance                = 7500,
-		turret                   = false,
-		waterweapon              = true,
 		weaponVelocity           = 500,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
@@ -228,7 +227,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.025, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 55,
+			default              = 30,
 		},
 	},
 }

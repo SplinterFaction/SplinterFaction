@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.1,
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
-	buildCostEnergy              = 1200,
+	buildCostEnergy              = 1000,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -19,16 +19,16 @@ unitDef                    = {
 	frontToSpeed        = 0,    -- New Default
 	speedToFront        = 0.001,  -- New Default
 	crashDrag           = 0.005,
-	maxBank             = 0.7,  -- New Default
+	maxBank             = 0.85,  -- New Default
 	maxPitch            = 0.65, -- New Default
-	turnRadius          = 400,  -- New Default
+	turnRadius          = 0,  -- New Default
 	verticalSpeed       = 3.0,
-	maxAileron          = 0.025, -- New Default
+	maxAileron          = 0.0125, -- New Default
 	maxElevator         = 0.01,
-	maxRudder           = 0.01, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
-	useSmoothMesh		= true,
+	useSmoothMesh		= false,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "AIR",
 	collide                      = false,
-	cruiseAlt                    = 100,
+	cruiseAlt                    = 300,
 	description                  = [[Interceptor]],
 	energyMake                   = 0,
 	energyStorage                = 0,
@@ -100,12 +100,12 @@ unitDef                    = {
 			mainDir = "0 0 1",
 			maxAngleDif = 200,
 		},
-		[2]                      = {
-			def                  = "particlebeamcannon",
-			onlyTargetCategory	 = "AIR",
-			mainDir = "0 0 1",
-			maxAngleDif = 200,
-		},
+		--[2]                      = {
+		--	def                  = "particlebeamcannon",
+		--	onlyTargetCategory	 = "AIR",
+		--	mainDir = "0 0 1",
+		--	maxAngleDif = 200,
+		--},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
 				A vector representing the firing direction of this weapon if it has a limited firing arc. Used in conjunction with maxAngleDif (See Gamedev:WeaponMainDir).
@@ -150,9 +150,9 @@ weaponDefs                 = {
 		collideFeature           = false,
 		collideFriendly          = false,
 		canAttackGround		     = false,
-		explosionGenerator       = "custom:burnblacksmall",
-		coreThickness            = 0.1,
-		duration                 = 0.4,
+		explosionGenerator       = "custom:genericshellexplosion-small",
+		coreThickness            = 0.5,
+		duration                 = 0.2,
 		energypershot            = 0,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
@@ -163,16 +163,16 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 800,
-		reloadtime               = 0.2,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
-		rgbColor                 = "1 0.5 0",
+		rgbColor                 = "0 0 1",
 		rgbColor2                = "1 1 1",
-		thickness                = 2,
+		thickness                = 8,
 		tolerance                = 1000,
 		turret                   = true,
 		texture1                 = "shot",
 		texture2                 = "empty",
-		weaponVelocity           = 2000,
+		weaponVelocity           = 3000,
 		sprayangle				 = 75,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
@@ -181,7 +181,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3,
+			default              = 60,
 		},
 	},
 }

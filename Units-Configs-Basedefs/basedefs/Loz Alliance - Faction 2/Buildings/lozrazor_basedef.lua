@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 120,
+	buildCostMetal                = 320,
 	builder                       = false,
 	buildTime                     = 5,
 	canAttack                     = true,
@@ -60,7 +60,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
-		unittype				  = "turret",
+		unittype				  = "building",
 		unitrole				  = "Light Turret",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
@@ -84,8 +84,6 @@ weaponDefs = {
 		AreaOfEffect             = 0,
 		avoidFeature             = false,
 		avoidFriendly            = false,
-		beamTime                 = 0.1,
-		beamttl                  = 4,
 		collideFeature           = false,
 		collideFriendly          = false,
 		canAttackGround 		 = false,
@@ -103,20 +101,20 @@ weaponDefs = {
 		minintensity             = 1,
 		name                     = "High Intensity Laser Beam",
 		range                    = 700,
-		reloadtime               = 0.2,
-		WeaponType               = "BeamLaser",
+		reloadtime               = 1,
+		WeaponType               = "LaserCannon",
 		rgbColor                 = "0.25 0 0.6",
 		rgbColor2                = "0.8 0.8 0.8",
 		soundTrigger             = true,
 		soundstart               = "weapons/aegis.wav",
 		--	soundHit		     = "weapons/amphibmedtankshothit.wav",
 		scrollspeed		         = 5,
-		texture1                 = "lightning",
+		texture1                 = "shot",
 		texture2                 = "laserend",
-		thickness                = 6,
+		thickness                = 10,
 		tolerance                = 3000,
 		turret                   = true,
-		weaponVelocity           = 1000,
+		weaponVelocity           = 2500,
 		waterweapon		         = true,
 		customparams              = {
 			expl_light_color	= purple, -- As a string, RGB
@@ -125,7 +123,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 2.5,
+			default               = 90,
 		},
 	},
 }
