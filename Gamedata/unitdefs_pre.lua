@@ -83,6 +83,8 @@ Shared.buildListf1landfac_ai = {
 	[[fedavalanche]],
 	[[fedphalanx]],
 	[[fedgoliath]],
+	[[fedstriker]],
+	[[feddeleter]],
 	[[fedjuggernaut]],
 	[[fedengineer_up1_ai]],
 }
@@ -112,6 +114,7 @@ Shared.buildListf2landfac_ai = {
 	[[lozluger]],
 	[[lozpulverizer]],
 	[[lozmammoth]],
+	[[lozemperorscorpion]],
 	[[lozsilverback]],
 	[[lozengineer_up1_ai]],
 }
