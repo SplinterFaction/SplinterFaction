@@ -90,7 +90,6 @@ unitDef                    = {
 		needed_cover             = 2,
 		death_sounds             = "generic",
 		RequireTech              = tech,
-		armortype                = "light",
 		nofriendlyfire	         = "1",
 		supply_cost              = 3,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 

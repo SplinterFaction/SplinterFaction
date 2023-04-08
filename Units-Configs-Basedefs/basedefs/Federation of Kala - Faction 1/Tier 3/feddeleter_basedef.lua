@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 7500,
+	buildCostMetal               = 2500,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[feddeleter.png]],
@@ -99,11 +99,14 @@ unitDef                    = {
 		},
 	},
 	weapons                      = {
+		[1]                      = {
+			def                  = "dummy",
+		},
 	},
 	customParams                 = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
-		unitrole				 = "Main Battle Tank - Tech 3",
+		unitrole				 = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -118,11 +121,46 @@ unitDef                    = {
 		area_cloak = 1, -- Can this unit emit a cloaking field?
 		area_cloak_upkeep = 0, -- How much energy does it cost to maintain the cloaking field?
 		area_cloak_radius = 300, -- How large is the cloaking field?
-		--area_cloak_grow_rate = 200, -- When the cloaking field is turned on, how fast does the field expand to it's full size?
-		--area_cloak_shrink_rate = 200, -- When the cloaking field is turned off, how fast does the field shrink to nothingness?
+		area_cloak_grow_rate = 200, -- When the cloaking field is turned on, how fast does the field expand to it's full size?
+		area_cloak_shrink_rate = 200, -- When the cloaking field is turned off, how fast does the field shrink to nothingness?
 		area_cloak_decloak_distance = 100, -- How close does something have to be in order to decloak a unit within a cloaking shield?
 		area_cloak_init = true, -- Start up the cloak shield the moment the unit is built?
 		area_cloak_draw = true, -- No idea what this does
 		area_cloak_self = true, -- Does the cloak shield cloak the unit emitting it?
+	},
+}
+
+weaponDefs                 = {
+	dummy = {
+		avoidFeature            = false,
+		avoidFriendly           = false,
+		collideFeature          = false,
+		collideFriendly         = false,
+		coreThickness           = 0,
+		--	cegTag                = "mediumcannonweapon3",
+		duration                = 0,
+		energypershot           = 0,
+		fallOffRate             = 0,
+		impulseFactor           = 0,
+
+		minintensity            = "1",
+		name                    = "Fake Weapon",
+		range                   = 900,
+		reloadtime              = 100,
+		WeaponType              = "LaserCannon",
+		rgbColor                = "0 0 0",
+		rgbColor2               = "0 0 0",
+		soundTrigger            = true,
+		texture1                = "shot",
+		texture2                = "empty",
+		thickness               = 0,
+		tolerance               = 0,
+		turret                  = true,
+		weaponVelocity          = 3000,
+		customparams            = {
+		},
+		damage                  = {
+			default = 0,
+		},
 	},
 }

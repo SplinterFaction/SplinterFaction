@@ -885,11 +885,20 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Anti-Air - Tech 2" then
 				unitDef.maxdamage = unitDef.maxdamage * 1.2
 			end
+			if unitDef.customparams.unitrole == "Short Range Anti-Air" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.7
+			end
+			if unitDef.customparams.unitrole == "Medium Range Anti-Air" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
 			if unitDef.customparams.unitrole == "Direct Fire Support" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.5
 			end
 			if unitDef.customparams.unitrole == "Direct Fire Support - Tech 2" then
 				unitDef.maxdamage = unitDef.maxdamage * 1.2
+			end
+			if unitDef.customparams.unitrole == "Support" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.7
 			end
 			if unitDef.customparams.unitrole == "Indirect Fire Support" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.6

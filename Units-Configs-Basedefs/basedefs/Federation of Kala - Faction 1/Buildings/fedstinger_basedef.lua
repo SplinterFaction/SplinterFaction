@@ -63,7 +63,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Light Turret",
+		unitrole				  = "Short Range Anti-Air",
 		RequireTech				  = tech,
 		sightdistanceoverride	 = true,
 		--supply_cost               = supply,

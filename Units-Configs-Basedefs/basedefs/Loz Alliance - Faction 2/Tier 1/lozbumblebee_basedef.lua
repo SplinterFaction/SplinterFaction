@@ -185,7 +185,7 @@ weaponDefs                 = {
 		}, 
 	},
 	bomb  	             = {
-		AreaOfEffect             = 75,
+		AreaOfEffect             = 125,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -230,12 +230,12 @@ weaponDefs                 = {
 			areadamage_ceg          = "napalm",
 			areadamage_damageceg    = "burnblacknapalm",
 			areadamage_time         = 5,
-			areadamage_damage       = 25,
-			areadamage_range        = 75,
+			areadamage_damage       = 35,
+			areadamage_range        = 125,
 			-- areadamage_reistance = ,
 		},
 		damage                   = {
-			default              = 200,
+			default              = 250,
 		},
 	},
 }

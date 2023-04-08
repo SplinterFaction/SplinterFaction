@@ -185,7 +185,7 @@ weaponDefs                 = {
 		},
 	},
 	bomb  	             = {
-		AreaOfEffect             = 25,
+		AreaOfEffect             = 75,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -227,7 +227,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.025, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              = 55,
 		},
 	},
 }

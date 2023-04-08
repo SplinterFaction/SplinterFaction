@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 260,
+	buildCostMetal                = 1000,
 	builder                       = false,
 	buildTime                     = 5,
 	canAttack                     = true,
@@ -61,7 +61,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Heavy Turret",
+		unitrole				  = "Medium Range Anti-Air",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		--supply_cost               = supply,
@@ -80,22 +80,24 @@ unitDef                     = {
 
 weaponDefs = {
 	rockets             = {
+		areaofeffect             = 200,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
 		collideFeature           = false,
 		canAttackGround 		 = false,
 		cegTag                   = "gunshiptrail-optimized-longlasting",
-		explosionGenerator       = "custom:genericshellexplosion-small-purple",
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		energypershot            = 0,
-		burst                    = 10,
-		burstrate                = 0.1,
+		burst                    = 2,
+		burstrate                = 0.5,
+		burnblow		         = true,
 		fireStarter              = 70,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		model                    = "missilesmalllauncher.s3o",
 		name                     = "Rockets",
-		range                    = 1700,
+		range                    = 1650,
 		reloadtime               = 2,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
@@ -110,16 +112,16 @@ weaponDefs = {
 		turret                   = true,
 		tracks                   = true,
 		weaponAcceleration       = 2000,
-		flightTime               = 1.5,
+		flightTime               = 1,
 		weaponVelocity           = 2000,
 		customparams             = {
 			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 10,
+			default              = 180,
 		},
 	},
 }

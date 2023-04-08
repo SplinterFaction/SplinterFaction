@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.1,
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
-	buildCostEnergy              = 6000,
+	buildCostEnergy              = 4200,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -64,7 +64,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 1000,
+	sightDistance                = 720,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -154,8 +154,8 @@ weaponDefs                 = {
 
 		minintensity              = "1",
 		name                      = "Laser",
-		range                     = 680,
-		reloadtime                = 1,
+		range                     = 720,
+		reloadtime                = 0.1,
 		WeaponType                = "LaserCannon",
 		rgbColor                  = "0 0.5 1",
 		rgbColor2                 = "1 1 1",
@@ -175,7 +175,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 60,
+			default               = 24,
 		},
 	},
 }

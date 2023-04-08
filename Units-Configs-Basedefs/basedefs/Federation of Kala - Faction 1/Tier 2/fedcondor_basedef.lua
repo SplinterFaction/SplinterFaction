@@ -1,7 +1,7 @@
 unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
-	buildCostEnergy              = 4500,
+	buildCostEnergy              = 2100,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -215,9 +215,6 @@ unitDef                    = {
 
 weaponDefs                 = {
 	particlebeamcannon                 = {
-
-		accuracy                 = 0,
-		AreaOfEffect             = 10,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -235,7 +232,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 575,
-		reloadtime               = 0.2,
+		reloadtime               = 0.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -254,7 +251,7 @@ weaponDefs                 = {
 			-- light_radius_mult   = 1.25,
 		},
 		damage                   = {
-			default              = 10,
+			default              = 40,
 		},
 	},
 }

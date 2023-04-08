@@ -44,7 +44,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 500,
+	sightDistance                = 850,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 1,
@@ -119,6 +119,7 @@ weaponDefs                 = {
 		collideFeature         = false,
 		canattackground		   = false,
 		-- cegTag                 = "railgun",
+		burnblow               = true,
 		rgbColor               = "1 0.5 0",
 		rgbColor2              = "1 1 1",
 		explosionGenerator     = "custom:genericshellexplosion-small",
@@ -129,7 +130,7 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "MachineGun",
-		range                  = 800,
+		range                  = 850,
 		reloadtime             = 0.1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
@@ -137,7 +138,7 @@ weaponDefs                 = {
 		texture1               = "shot",
 		texture2               = "empty",
 		coreThickness          = 0.5,
-		thickness              = 3,
+		thickness              = 6,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
@@ -149,7 +150,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 5,
+			default              = 10,
 		},
 	},
 }

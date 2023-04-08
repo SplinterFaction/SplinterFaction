@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.1,
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
-	buildCostEnergy              = 6000,
+	buildCostEnergy              = 4200,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -64,7 +64,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = "smallExplosionGenericRed",
 	side                         = "CORE",
-	sightDistance                = 680,
+	sightDistance                = 720,
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
@@ -95,13 +95,13 @@ unitDef                    = {
 
 	weapons                      = {
 		[1]                      = {
-			def                  = "railgun",
+			def                  = "airrailgun",
 			onlyTargetCategory	 = "AIR",
 			mainDir = "0 1 0",
 			maxAngleDif = 200,
 		},
 		[2]                      = {
-			def                  = "burstrailgun",
+			def                  = "groundrailgun",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 			mainDir = "0 -1 0",
@@ -142,7 +142,7 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	railgun               = {
+	airrailgun               = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -158,7 +158,7 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 680,
+		range                  = 720,
 		reloadtime             = 1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
@@ -179,12 +179,12 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 40,
+			default              = 120,
 		},
 	},
 
-	burstrailgun               = {
-		areaofeffect           = 30,
+	groundrailgun               = {
+		areaofeffect           = 100,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -201,8 +201,8 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 680,
-		reloadtime             = 2,
+		range                  = 720,
+		reloadtime             = 7,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "weapons/reaperrailgun.wav",
@@ -221,7 +221,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              = 700,
 		},
 	},
 }

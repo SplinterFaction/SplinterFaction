@@ -67,6 +67,17 @@ common = {
 		Spring.UnitScript.StopSpin(frontwheels,x_axis,math.rad(100))
 		Spring.UnitScript.StopSpin(rearwheels,x_axis,math.rad(100))
 	end,
+	-- 3 wheels
+	WheelStartSpin3 = function ()
+		Spring.UnitScript.Spin(wheels1,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels2,x_axis,math.rad(250))
+		Spring.UnitScript.Spin(wheels3,x_axis,math.rad(250))
+	end,
+	WheelStopSpin3 = function ()
+		Spring.UnitScript.StopSpin(wheels1,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels2,x_axis,math.rad(100))
+		Spring.UnitScript.StopSpin(wheels3,x_axis,math.rad(100))
+	end,
 	-- 4 wheels
 	WheelStartSpin4 = function ()
 		Spring.UnitScript.Spin(wheels1,x_axis,math.rad(250))

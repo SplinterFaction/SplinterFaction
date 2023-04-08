@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 750,
+	sightDistance                = 850,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -125,7 +125,7 @@ weaponDefs                 = {
 		laserflaresize 	         = 8,
 		minintensity             = 1,
 		name                     = "High Intensity Beam Laser",
-		range                    = 750,
+		range                    = 850,
 		reloadtime               = 0.2,
 		WeaponType               = "BeamLaser",
 		rgbColor                 = "0.1 0 0.3",
@@ -147,7 +147,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 6,
+			default               = 8,
 		},
 	},
 
@@ -173,7 +173,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		minintensity             = "1",
 		name                     = "Flak Cannon",
-		range                    = 750,
+		range                    = 850,
 		reloadtime               = 4,
 		WeaponType               = "Cannon",
 		rgbColor                 = "1 0.5 0",
@@ -195,7 +195,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              = 45,
 		},
 	},
 }

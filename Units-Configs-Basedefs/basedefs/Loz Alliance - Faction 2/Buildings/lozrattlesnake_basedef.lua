@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 8192,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 230,
+	buildCostMetal                = 1000,
 	builder                       = false,
 	buildTime                     = 5,
 	buildpic					  = "eheavyturret2.png",
@@ -61,7 +61,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Light Turret",
+		unitrole				  = "Medium Range Anti-Air",
 		needed_cover              = 5,
 		--supply_cost               = supply,
 		RequireTech				  = tech,
@@ -81,7 +81,7 @@ unitDef                     = {
 weaponDefs                  = {
 	flakcannon   	             = {
 		predictboost	         = 0.3,
-		AreaOfEffect             = 140,
+		AreaOfEffect             = 200,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -89,41 +89,39 @@ weaponDefs                  = {
 		canAttackGround 		 = false,
 		coreThickness            = 0.5,
 		burnblow		         = true,
-		burst					 = 10,
-		burstrate				 = 0.1,
 		--cegTag                   = "railgun",
 		duration                 = 0.05,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-medium-purple",
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		edgeEffectiveness		 = 1,
 		fallOffRate              = 1,
 		fireStarter              = 50,
 		impulseFactor            = 0,
 		minintensity             = "1",
 		name                     = "High Explosive Flak Cannon",
-		range                    = 630,
-		reloadtime               = 5,
+		range                    = 1650,
+		reloadtime               = 3,
 		WeaponType               = "Cannon",
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
 		soundTrigger             = false,
 		soundstart               = "weapons/Assault Rifle Shot_05.wav",
 		soundhit				 = "deathsounds/generic/Explosion Fireworks_01.wav",
-		sprayangle				 = 500,
-		size					 = 3,
+		-- sprayangle				 = 500,
+		size					 = 6,
 		--texture1                 = "shot",
 		--texture2                 = "empty",
 		tolerance                = 7500,
 		turret                   = true,
-		weaponVelocity           = 3000,
+		weaponVelocity           = 5000,
 		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 45,
+			default              = 540,
 		},
 	},
 }
