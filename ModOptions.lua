@@ -125,22 +125,6 @@ local options= {
 		}
 	},
 	{
-		key    = 'mexrandomlayout',
-		name   = 'Metal Spot Layout to use',
-		desc   = 'This allows you to choose between the different metal spot layouts that are available.',
-		type="list",
-		def="standard",
-		section= "resourcing",
-		items={
-			{key="standard", name="Standard", desc="Random placing that is mirrored. Has various methods for different map shapes and is more careful with metal spot placement."},
-			{key="ffa", name="Free For All", desc=""},
-			{key="legacy1", name="Legacy 1", desc="Most uniform layout. Max metal ~49.1, Max metal spots 56."},
-			{key="legacy2", name="Legacy 2", desc="Less uniform, more clustered layout. Max metal ~50, Max metal spots 56."},
-			{key="legacy3", name="Legacy 3", desc="The Pitchfork! Dense metal layout with lower output per metal spot. Max metal ~51.1, Max metal spots 94."},
-			{key="legacy4", name="Legacy 4", desc=""},
-		}
-	},
-	{
 		key    = 'maximummexelevationdifference',
 		name   = 'Standard Metal Spot Layout: Maximum elevation difference for Metal Spot locations',
 		desc   = 'This is used as an attempt to avoid placement on cliffs (only works on Standard Metal Spot Layout)',

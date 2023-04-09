@@ -33,10 +33,7 @@ Spring.Echo("[Default Mex Layout] Number of teamIDs in this match: " .. teamIDCo
 local placeMexesInWater = Spring.GetModOptions().allowmexesinwater or "disabled"
 local maxMexElevationDiff = tonumber(Spring.GetModOptions().maximummexelevationdifference) or 50
 local mexSpotsPerQuadMultiplier = tonumber(Spring.GetModOptions().mexSpotsPerQuadmultiplier) or 100
-local mexRandomLayout = Spring.GetModOptions().mexrandomlayout or "standard"
-	if allycount > 2 then
-		mexRandomLayout = "legacy1"
-	end
+local mexRandomLayout = "standard"
 local dynamicMexOutput = Spring.GetModOptions().dynamicmexoutput or "disabled"
 
 if placeMexesInWater == "enabled" or placeMexesInWater == "" or placeMexesInWater == nil then -- This is just an oshitifukedup protection
@@ -51,10 +48,6 @@ end
 
 if mexSpotsPerQuadMultiplier == nil then -- This is just an oshitifukedup protection
 	mexSpotsPerQuadMultiplier = 100
-end
-
-if mexRandomLayout == "" or mexRandomLayout == nil then -- This is just an oshitifukedup protection
-	mexRandomLayout = "standard"
 end
 
 if dynamicMexOutput == "" or dynamicMexOutput == nil then -- This is just an oshitifukedup protection
@@ -109,14 +102,6 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 		end
 	end
 
-
-	--[[
-	method 1: object rotated 180 degrees around centre to produce image
-	method 2: object mirrored around horizontal line passing through centre to produce image
-	method 3: object mirrored around vertical line passing through centre to produce image
-	method 4: object mirrored around diagonal line going from NE to SW to produce image
-	method 5: object mirrored around diagonal line going from NW to SE to produce image
-	]]
 	local positions = {}
 	--positions[1] = {x = padding, z = padding}
 	--positions[2] = {x = sizeX - padding, z = sizeY - padding}
@@ -129,36 +114,19 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 		while not done and numIterations < howManyTriesBeforeGiveUp do
 			numIterations = numIterations + 1
 			done = true
-			if method == 6 then
-				newPoint[1] = padding + math.random() * (sizeX *0.5 - padding * 2)
-				newPoint[2] = padding + math.random() * (sizeY *0.5 - padding * 2)
-			else
-				newPoint[1] = padding + math.random() * (sizeX - padding * 2)
-				newPoint[2] = padding + math.random() * (sizeY - padding * 2)
-			end
-			if method == 1 then
-				newPoint[3] = sizeX - newPoint[1]
-				newPoint[4] = sizeY - newPoint[2]
-			elseif method == 2 then
-				newPoint[3] = newPoint[1]
-				newPoint[4] = sizeY - newPoint[2]
-			elseif method == 3 then
-				newPoint[3] = sizeX - newPoint[1]
-				newPoint[4] = newPoint[2]
-			elseif method == 4 then
-				newPoint[3] = sizeX - newPoint[2]
-				newPoint[4] = sizeY - newPoint[1]
-			elseif method == 5 then
-				newPoint[3] = newPoint[2]
-				newPoint[4] = newPoint[1]
-			elseif method == 6 then
-				newPoint[3] = newPoint[1]
-				newPoint[4] = sizeY - newPoint[2]
-				newPoint[5] = sizeX - newPoint[1]
-				newPoint[6] = newPoint[2]
-				newPoint[7] = sizeX - newPoint[1]
-				newPoint[8] = sizeY - newPoint[2]
-			end
+
+			newPoint[1] = padding + math.random() * (sizeX *0.5 - padding * 2)
+			newPoint[2] = padding + math.random() * (sizeY *0.5 - padding * 2)
+
+			newPoint[3] = newPoint[1]
+			newPoint[4] = sizeY - newPoint[2]
+
+			newPoint[5] = sizeX - newPoint[1]
+			newPoint[6] = newPoint[2]
+
+			newPoint[7] = sizeX - newPoint[1]
+			newPoint[8] = sizeY - newPoint[2]
+
 			-- check slope of new point and mirror
 			done = checkSlope(newPoint[1], newPoint[2], maxMexElevationDiff, allowWater)
 			done = done and checkSlope(newPoint[3], newPoint[4], maxMexElevationDiff, allowWater)
@@ -240,51 +208,6 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 	return positions
 end
 
-if mexRandomLayout == "legacy1" then
-	-- most normal layout
-	-- max metal ~49.1
-	-- Max spots 56
-	randomMirrored = false
-	r = {0.25, 0.5, 0.75, 0.95}
-	pointsPerLayer = {10, 11, 15, 20}
-	angleOffset = {math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4}
-	pointsBetweenVertices = {0, 0, 0, 0}
-	--m = {2, 1.66, 1.33, 1.5}
-end
-
-if mexRandomLayout == "legacy2" then
--- Bit more random/clustered
--- max metal ~50
--- Max spots 56
-	randomMirrored = false
-	r = {0.15, 0.33, 0.5, 0.75, 0.85, 0.95}
-	pointsPerLayer = {3, 6, 8, 10, 14, 15}
-	angleOffset = {math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4}
-	pointsBetweenVertices = {0, 0, 0, 0, 0, 0}
-	--m = {2, 1.75, 1.50, 1.33, 1.25, 2}
-end
-
-if mexRandomLayout == "legacy3" then
--- The Pitchfork
--- max metal ~51.1
--- Max spots 94
-	randomMirrored = false
-	r = {0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95}
-	pointsPerLayer = {3,5,3,9,3,11,13,7,19,21}
-	angleOffset = {math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4, math.pi / 4}
-	pointsBetweenVertices = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	--m = {2, 1.9, 1.7, 1.5, 1.4, 1, 1.1, 1.25, 1.4, 1.5}
-end
-
-if mexRandomLayout == "legacy4" then
-	randomMirrored = false
-	r = {0.25, 0.5, 0.85}
-	pointsPerLayer = {3, 4, 8}
-	angleOffset = {-math.pi / 2, 0, math.pi / 8}
-	pointsBetweenVertices = {1, 0, 2}
-	--m = {1, 1, 1}
-end
-
 if mexRandomLayout == "standard" then
 
 	mexSpotsPerQuad = 15
@@ -331,19 +254,6 @@ if mexRandomLayout == "standard" then
 	method = 6
 	allowWater = allowMexesInWater
 	--metalPerPoint = 1
-end
-
-if mexRandomLayout == "ffa" then
-	local numVertices = teamIDCount
-	if teamIDCount <= 2 then numVertices = 3 end -- can't have a polygon with less than 3 sides
-	randomMirrored = false
-	r = {0.12, 0.25, 0.50, 0.75, 0.88, 0.88, 0.88}
-	pointsPerLayer = {numVertices, numVertices, numVertices, numVertices, numVertices, numVertices, numVertices}
-	local theta = -math.pi / 2
-	local offset = math.pi / 14
-	angleOffset = {theta, theta, theta, theta, theta, theta - offset, theta + offset}
-	pointsBetweenVertices = {0, 0, 1, 0, 0, 0, 0}
-	--m = {2, 1.66, 1.33, 1.25, 1, 1.5, 2}
 end
 
 if r and not m then
