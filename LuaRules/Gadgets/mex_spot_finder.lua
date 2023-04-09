@@ -19,11 +19,11 @@ end
 ------------------------------------------------------------
 local MAPSIDE_METALMAP = "mapconfig/map_metal_layout.lua"
 local defaultMexMap = Spring.GetModOptions().mexlayout or "enabled"
-if defaultMexMap == "enabled" then
-	GAMESIDE_METALMAP = "LuaRules/Configs/MetalSpots/" .. ("defaultLayout") .. ".lua"
-else
+-- if defaultMexMap == "enabled" then
+-- 	GAMESIDE_METALMAP = "LuaRules/Configs/MetalSpots/" .. ("defaultLayout") .. ".lua"
+-- else
 	GAMESIDE_METALMAP = "LuaRules/Configs/MetalSpots/" .. (Game.mapName or "") .. ".lua"
-end
+--end
 
 local DEFAULT_MEX_INCOME = 2
 local MINIMUN_MEX_INCOME = 0.2
@@ -128,7 +128,7 @@ function gadget:Initialize()
 		metalSpots = false
 	end
 	
-	local metalValueOverride = gameConfig and gameConfig.metalValueOverride
+	local metalValueOverride = 1
 	
 	if metalSpots then
 		local mult = (modOptions and modOptions.metalmult) or 1
