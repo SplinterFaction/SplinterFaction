@@ -16,23 +16,23 @@ local burrowName = 'healstation_ai'
 
 chickenTurrets = {
 	-- Weapons
-	["fedmenlo"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = true	},
-	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = true	},
-	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 3,		spawnOnBurrows = false	},
-	["fedimmolator"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true,	maxQueenAnger = 1000},
-	["lozinferno"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = true,	maxQueenAnger = 1000},
-	["fedjavelin"] 					= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false,	maxQueenAnger = 1000},
-	["lozrattlesnake"] 				= { minQueenAnger = 20, 	spawnedPerWave = 3,		spawnOnBurrows = false,	maxQueenAnger = 1000},
+	["fedmenlo"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = true	},
+	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = true	},
+	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["fedimmolator"] 				= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = true,	maxQueenAnger = 1000},
+	["lozinferno"] 					= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = true,	maxQueenAnger = 1000},
+	["fedjavelin"] 					= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
+	["lozrattlesnake"] 				= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
 	["fedguardian"]					= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
 	["lozannihilator"]				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
 	-- ["fedbertha"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 	-- ["lozintimidator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
 
 	-- Utility
-	["cloakingtower"] 				= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true,	maxQueenAnger = 1000},
-	["smallshieldgenerator"] 		= { minQueenAnger = 40, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
-	["largeshieldgenerator"] 		= { minQueenAnger = 60, 	spawnedPerWave = 2,		spawnOnBurrows = true	},
+	["cloakingtower"] 				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = true,	maxQueenAnger = 1000},
+	["smallshieldgenerator"] 		= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = true	},
+	["largeshieldgenerator"] 		= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = true	},
 
 	-- Eco Fillers
 	 -- Power
@@ -281,8 +281,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local miniBosses = { -- Units that spawn alongside queen
-	"fedjuggernaut",
-	"lozsilverback",
+	"fedstriker",
+	"lozemperorscorpion",
 }
 
 local chickenMinions = { -- Units spawning other units
@@ -302,24 +302,28 @@ local chickenMinions = { -- Units spawning other units
 		"fedcobra",
 		"fedavalanche",
 		"lozreaper",
-		"fedgoliath",
-		"lozmammoth",
+		"fedstriker",
+		"lozemperorscorpion",
 	},
 	["fedanarchid_insane"] = {
 		"fedbear",
 		"lozreaper",
 		"fedgoliath",
 		"lozmammoth",
-		"fedjuggernaut",
-		"lozsilverback",
+		"fedstriker",
+		"lozemperorscorpion",
 	},
 	["fedanarchid_epic"] = {
 		"fedjuggernaut",
 		"lozsilverback",
+		"fedstriker",
+		"lozemperorscorpion",
 	},
 	["fedanarchid_unbeatable"] = {
 		"fedjuggernaut",
 		"lozsilverback",
+		"fedstriker",
+		"lozemperorscorpion",
 	},
 }
 

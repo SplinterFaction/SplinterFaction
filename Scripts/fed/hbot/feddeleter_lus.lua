@@ -18,6 +18,23 @@ end
 --    common.DirtTrail()
 --end
 
+function script.AimFromWeapon(weaponID)
+    --Spring.Echo("AimFromWeapon: FireWeapon")
+    return emitter1
+end
+
+function script.QueryWeapon(weaponID)
+    --Spring.Echo("QueryWeapon: FireWeapon")
+    return emitterfirepoint1
+end
+
+function script.AimWeapon(weaponID, heading, pitch)
+    return true
+end
+
+function script.FireWeapon(weaponID)
+end
+
 function script.Killed()
     Explode(emitter1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
     Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
