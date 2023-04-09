@@ -453,6 +453,66 @@ addNewSquad({ type = "air", minAnger = 90, units = { "2 fedeagle", "2 loztitan" 
 addNewSquad({ type = "air", minAnger = 100, units = { "6 fedeagle", "6 loztitan" } })
 addNewSquad({ type = "air", minAnger = 100, units = { "9 fedcrow", "9 lozbumblebee" } })
 
+local ecoBuildingsPenalty = { -- Additional queen hatch per second from eco buildup (for 60 minutes queen time. scales to queen time)
+	--[[
+	-- T1 Energy
+	[UnitDefNames["armsolar"].id] 	= 0.0000001,
+	[UnitDefNames["corsolar"].id] 	= 0.0000001,
+	[UnitDefNames["armwin"].id] 	= 0.0000001,
+	[UnitDefNames["corwin"].id] 	= 0.0000001,
+	[UnitDefNames["armtide"].id] 	= 0.0000001,
+	[UnitDefNames["cortide"].id] 	= 0.0000001,
+	[UnitDefNames["armadvsol"].id] 	= 0.000005,
+	[UnitDefNames["coradvsol"].id] 	= 0.000005,
+
+	-- T2 Energy
+	[UnitDefNames["armwint2"].id] 	= 0.000075,
+	[UnitDefNames["corwint2"].id] 	= 0.000075,
+	[UnitDefNames["armfus"].id] 	= 0.000125,
+	[UnitDefNames["armckfus"].id] 	= 0.000125,
+	[UnitDefNames["corfus"].id] 	= 0.000125,
+	[UnitDefNames["armuwfus"].id] 	= 0.000125,
+	[UnitDefNames["coruwfus"].id] 	= 0.000125,
+	[UnitDefNames["armafus"].id] 	= 0.0005,
+	[UnitDefNames["corafus"].id] 	= 0.0005,
+
+	-- T1 Metal Makers
+	[UnitDefNames["armmakr"].id] 	= 0.00005,
+	[UnitDefNames["cormakr"].id] 	= 0.00005,
+	[UnitDefNames["armfmkr"].id] 	= 0.00005,
+	[UnitDefNames["corfmkr"].id] 	= 0.00005,
+	
+	-- T2 Metal Makers
+	[UnitDefNames["armmmkr"].id] 	= 0.0005,
+	[UnitDefNames["cormmkr"].id] 	= 0.0005,
+	[UnitDefNames["armuwmmm"].id] 	= 0.0005,
+	[UnitDefNames["coruwmmm"].id] 	= 0.0005,
+	]]--
+}
+
+local highValueTargets = { -- Priority targets for Chickens. Must be immobile to prevent issues.
+	--[[
+	-- T2 Energy
+	[UnitDefNames["armwint2"].id] 	= true,
+	[UnitDefNames["corwint2"].id] 	= true,
+	[UnitDefNames["armfus"].id] 	= true,
+	[UnitDefNames["armckfus"].id] 	= true,
+	[UnitDefNames["corfus"].id] 	= true,
+	[UnitDefNames["armuwfus"].id] 	= true,
+	[UnitDefNames["coruwfus"].id] 	= true,
+	[UnitDefNames["armafus"].id] 	= true,
+	[UnitDefNames["corafus"].id] 	= true,
+	-- T2 Metal Makers
+	[UnitDefNames["armmmkr"].id] 	= true,
+	[UnitDefNames["cormmkr"].id] 	= true,
+	[UnitDefNames["armuwmmm"].id] 	= true,
+	[UnitDefNames["coruwmmm"].id] 	= true,
+
+	[UnitDefNames["cormoho"].id] 	= true,
+	[UnitDefNames["armmoho"].id] 	= true,
+	]]
+}
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Settings -- Adjust these
 local useEggs = false -- Drop eggs (requires egg features from Beyond All Reason)
@@ -490,6 +550,8 @@ local config = { -- Don't touch this! ------------------------------------------
 	burrowTurretSpawnRadius = burrowTurretSpawnRadius,
 	squadSpawnOptionsTable	= squadSpawnOptionsTable,
 	airStartAnger			= airStartAnger,
+	ecoBuildingsPenalty 	= ecoBuildingsPenalty,
+	highValueTargets		= highValueTargets,
 }
 
 for key, value in pairs(optionValues[difficulty]) do

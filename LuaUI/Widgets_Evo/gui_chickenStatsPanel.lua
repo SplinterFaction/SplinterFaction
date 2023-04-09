@@ -167,7 +167,11 @@ local function CreatePanelDisplayList()
 	local techLevel = ""
 	if currentTime > gameInfo.gracePeriod then
 		if gameInfo.queenAnger < 100 then
-			techLevel = "Boss Anger: " .. gameInfo.queenAnger
+			local gain = 0
+			if Spring.GetGameRulesParam("ChickenQueenAngerGain_Base") then
+				gain = math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) + math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) + math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Eco"), 3)
+			end
+			techLevel = "Boss Anger: " .. gameInfo.queenAnger .. "% (+" .. gain .. "%/s)"
 		else
 			techLevel = "Boss Health: " .. gameInfo.queenLife
 		end
@@ -179,6 +183,11 @@ local function CreatePanelDisplayList()
 	font:SetTextColor(1, 1, 1, 1)
 	font:SetOutlineColor(0, 0, 0, 1)
 	font:Print(techLevel, panelMarginX, PanelRow(1), panelFontSize, "")
+	if Spring.GetGameRulesParam("ChickenQueenAngerGain_Base") and gameInfo.queenAnger < 100 and currentTime > gameInfo.gracePeriod then
+		font:Print(textColor .. "Base: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) .. "%/s", panelMarginX+5, PanelRow(2), panelFontSize, "")
+		font:Print(textColor .. "Aggression: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) .. "%/s", panelMarginX+5, PanelRow(3), panelFontSize, "")
+		--font:Print(textColor .. "Eco: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Eco"), 3) .. "%/s", panelMarginX+5, PanelRow(4), panelFontSize, "")
+	end
 	--font:Print('ui.chickens.chickenPlayerAgression' .. (Spring.GetGameRulesParam("chickenPlayerAgressionLevel") or 0), panelMarginX, PanelRow(2), panelFontSize, "")
 	--font:Print(Spring.I18N('ui.chickens.chickenCount', { count = gameInfo.chickenCounts }), panelMarginX, PanelRow(2), panelFontSize, "")
 	font:Print('Enemies Killed: ' .. gameInfo.chickenKills, panelMarginX, PanelRow(5), panelFontSize, "")
@@ -204,7 +213,7 @@ local function getMarqueeMessage(chickenEventArgs)
 	elseif chickenEventArgs.type == "airWave" then
 		messages[1] = textColor .. "Wave " .. chickenEventArgs.waveCount
 		messages[2] = textColor .. 'Air Wave!'
-		messages[3] = textColor .. chickenEventArgs.number .. ' Aircrafts!'
+		messages[3] = textColor .. chickenEventArgs.number .. ' Units!'
 	elseif chickenEventArgs.type == "queen" then
 		messages[1] = textColor .. 'The Boss is here!'
 		messages[2] = textColor .. 'Get ready to fight!'
