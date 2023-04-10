@@ -734,8 +734,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
-			if canFactoriesBeAssisted == false then
-				if unitDef.customparams and unitDef.customparams.unitrole == "Factory" then
+			if unitDef.customparams and unitDef.customparams.unitrole == "Factory" then
+				if canFactoriesBeAssisted == false then
 					unitDef.canbeassisted = false
 				else
 					unitDef.canbeassisted = true

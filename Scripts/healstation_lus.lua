@@ -6,6 +6,7 @@ common = include("headers/common_includes_lus.lua")
 -- state variables
 terrainType = "terrainType"
 skyhateEffect = "powerplant-fireball-small-purple"
+skyhateEffect2 = "healsmall"
 
 function script.Create()
 	StartThread(common.SmokeUnit, {base, nanopoint1, fins, fin1, fin2, fin3, fin4, pad1, land1, base1, spinner, firepoint1})
@@ -16,6 +17,7 @@ end
 function script.Skyhateceg()
 	while true do
 		common.CustomEmitter(firepoint1, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
+		common.CustomEmitter(firepoint1, skyhateEffect2) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
 		Sleep(1000)
 	end
 end
