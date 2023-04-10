@@ -17,7 +17,7 @@ shield1Power               = 54670
 shield1StartingPower       = 54670
 shield1PowerRegen          = 1000
 shield1PowerRegenEnergy    = 0
-shieldRechargeDelay        = 25
+shieldRechargeDelay        = 50
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/Tier 3/lozprotector_basedef.lua")

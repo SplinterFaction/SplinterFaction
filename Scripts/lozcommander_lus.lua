@@ -31,7 +31,7 @@ function script.StopMoving()
 end
 
 local function RestoreAfterDelay()
-    Sleep(2000)
+    Sleep(10000)
     Turn(laserturret1, y_axis, 0, 5)
     Turn(laserbarrel1, x_axis, 0, 5)
 end
@@ -75,7 +75,7 @@ end
 function script.StopBuilding()
     SetUnitValue(COB.INBUILDSTANCE, 0)
     building = false
-    StartThread(RestoreAfterDelay)
+    -- StartThread(RestoreAfterDelay)
     Signal(SIG_AIM2)
     SetSignalMask(SIG_AIM2)
 end

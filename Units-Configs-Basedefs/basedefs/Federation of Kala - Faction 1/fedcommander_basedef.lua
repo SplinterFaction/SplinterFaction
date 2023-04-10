@@ -138,10 +138,11 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		explosionGenerator       = "custom:burnblacksmall",
+		commandfire              = true,
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
-		energypershot            = 0,
+		energypershot            = 500,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
@@ -150,10 +151,10 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 500,
-		burst                    = 5,
-		burstrate                = 0.2,
-		reloadtime               = 10,
+		range                    = 300,
+		burst                    = 10,
+		burstrate                = 0.1,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -171,7 +172,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 50,
+			default              = 30,
 		},
 	},
 
@@ -181,10 +182,11 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		explosionGenerator       = "custom:burnblacksmall",
+		commandfire              = true,
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
-		energypershot            = 0,
+		energypershot            = 1000,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
@@ -193,14 +195,14 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 645,
+		range                    = 500,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 10,
+		reloadtime               = 2.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
-		thickness                = 2,
+		thickness                = 4,
 		tolerance                = 1000,
 		turret                   = true,
 		texture1                 = "shot",
@@ -214,7 +216,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 50,
+			default              = 40,
 		},
 	},
 
@@ -224,10 +226,11 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		explosionGenerator       = "custom:burnblacksmall",
+		commandfire              = true,
+		explosionGenerator       = "custom:genericshellexplosion-medium",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
-		energypershot            = 0,
+		energypershot            = 2500,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
@@ -236,14 +239,14 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 900,
-		burst                    = 15,
+		range                    = 600,
+		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 12,
+		reloadtime               = 7.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
-		thickness                = 2,
+		thickness                = 6,
 		tolerance                = 1000,
 		turret                   = true,
 		texture1                 = "shot",
@@ -252,12 +255,12 @@ weaponDefs                 = {
 		sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 60,
+			default              = 810,
 		},
 	},
 
@@ -267,10 +270,11 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		explosionGenerator       = "custom:burnblacksmall",
+		commandfire              = true,
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
-		energypershot            = 0,
+		energypershot            = 5000,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
@@ -279,14 +283,14 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 900,
-		burst                    = 15,
+		range                    = 700,
+		burst                    = 10,
 		burstrate                = 0.1,
 		reloadtime               = 15,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
-		thickness                = 2,
+		thickness                = 8,
 		tolerance                = 1000,
 		turret                   = true,
 		texture1                 = "shot",
@@ -295,12 +299,12 @@ weaponDefs                 = {
 		sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 200,
+			default              = 7050,
 		},
 	},
 
@@ -310,10 +314,11 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		explosionGenerator       = "custom:burnblacksmall",
+		commandfire              = true,
+		explosionGenerator       = "custom:genericshellexplosion-large",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
-		energypershot            = 0,
+		energypershot            = 10000,
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
@@ -322,14 +327,14 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 1100,
-		burst                    = 20,
+		range                    = 900,
+		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 20,
+		reloadtime               = 30,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
-		thickness                = 2,
+		thickness                = 12,
 		tolerance                = 1000,
 		turret                   = true,
 		texture1                 = "shot",
@@ -338,12 +343,12 @@ weaponDefs                 = {
 		sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= largeExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 200,
+			default              = 24000,
 		},
 	},
 }

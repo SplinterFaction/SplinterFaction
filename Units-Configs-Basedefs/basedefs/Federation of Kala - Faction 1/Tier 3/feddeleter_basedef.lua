@@ -120,7 +120,7 @@ unitDef                    = {
 
 		area_cloak = 1, -- Can this unit emit a cloaking field?
 		area_cloak_upkeep = 0, -- How much energy does it cost to maintain the cloaking field?
-		area_cloak_radius = 300, -- How large is the cloaking field?
+		area_cloak_radius = 500, -- How large is the cloaking field?
 		area_cloak_grow_rate = 200, -- When the cloaking field is turned on, how fast does the field expand to it's full size?
 		area_cloak_shrink_rate = 200, -- When the cloaking field is turned off, how fast does the field shrink to nothingness?
 		area_cloak_decloak_distance = 100, -- How close does something have to be in order to decloak a unit within a cloaking shield?

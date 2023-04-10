@@ -7,7 +7,7 @@ unitName = [[healstation]]
 humanName = [[Healstation]]
 
 objectName = [[healstation.s3o]]
-script = [[healstation.cob]]
+script = [[healstation_lus.lua]]
 
 buildCostMetal = 250
 
