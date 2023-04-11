@@ -43,6 +43,14 @@ unitDef                    = {
 	moveState			         = "0",
 	name                         = humanname,
 	noChaseCategories	         = "NOTAIR SUPPORT VTOL AMPHIB",
+	--------------------------
+	-- Skillshot (aka DGun) --
+	--------------------------
+	noAutoFire                   = true,
+	fireState                    = 0,
+	canManualFire                = true,
+	--------------------------
+	--------------------------
 	objectName                   = objectname,
 	script			             = script,
 	radarDistance                = 0,

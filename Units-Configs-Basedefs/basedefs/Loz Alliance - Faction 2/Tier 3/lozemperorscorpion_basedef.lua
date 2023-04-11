@@ -63,7 +63,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:gdhcannon",
+			"custom:electricitylarge",
 			"custom:emptydirt",
 			"custom:blacksmoke",
 		},
@@ -79,7 +79,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "flakcannon",
+			def                  = "lightningcannon",
 			onlyTargetCategory    = "GROUND BUILDING AIR SHIP",
 		},
 	},
@@ -138,6 +138,51 @@ weaponDefs                 = {
 		},
 		damage                   = {
 			default              = 5200,
+		},
+	},
+
+	lightningcannon   	             = {
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		craterBoost              = 0,
+		craterMult               = 0,
+		burst                    = 20,
+		burstrate                = 0.01,
+		beamTTL					 = 1,
+		duration                 = 1,
+		explosionGenerator       = "custom:genericshellexplosion-electric-small",
+		energypershot            = 0,
+		edgeeffectiveness		 = 1,
+		impulseBoost             = 0,
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		intensity                = 24,
+		laserFlareSize           = 1,
+
+		name			         = "elighttank3weapon",
+		noSelfDamage             = true,
+		range                    = 1200,
+		reloadtime               = 12,
+		WeaponType               = "LightningCannon",
+		rgbColor                 = "1 1 1",
+		rgbColor2                = "1 1 1",
+		soundStart               = "weapons/lightningstrike.wav",
+		soundtrigger             = true,
+
+		texture1                 = "lightning",
+		thickness                = 1.5,
+		turret                   = true,
+		weaponVelocity           = 400,
+		customparams             = {
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 260,
 		},
 	},
 }
