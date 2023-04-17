@@ -152,12 +152,11 @@ local Sounds = {
 			maxconcurrent = 8,
 		},
 		
-		MultiSelect = {
+		UnitsSelect = {
 			--- always play on the front speaker(s)
 			file = "sounds/ui/button9.wav",
 			in3d = true,
 			maxconcurrent = 8,
-			gain = 0.25,
 		},
 		
 		MapPoint = {
