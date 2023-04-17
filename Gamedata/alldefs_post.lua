@@ -354,9 +354,6 @@ function WeaponDef_Post(name, wDef)
 		end
 	end
 
-	--Override map gravity for all weapons
-	wDef.mygravity = 0.14
-
 	--------------------------------------------------------------------------------
 	-------------------------------------------------------------------------------- Turn off waterweapons
 	--[[

@@ -70,7 +70,7 @@ if (gadgetHandler:IsSyncedCode()) then
 				local choice = random(soundClassSizes[soundClass])
 				local x, y, z = GetUnitPosition(unitID)
 				local volume = udVolumeCache[unitDefID]
-				PlaySoundFile(soundClasses[soundClass][choice], volume, x, y, z)
+				PlaySoundFile(soundClasses[soundClass][choice], (volume * 0.5), x, y, z)
 			end
 		end
 	end

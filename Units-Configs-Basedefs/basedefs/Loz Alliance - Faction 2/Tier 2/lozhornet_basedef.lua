@@ -28,7 +28,7 @@ unitDef                    = {
 	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
-	useSmoothMesh		= false,
+	useSmoothMesh		= true,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------

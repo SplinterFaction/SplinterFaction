@@ -14,21 +14,21 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	wingDrag            = 0.07,
-	wingAngle           = 0.08,
-	frontToSpeed        = 0,    -- New Default
-	speedToFront        = 0.001,  -- New Default
-	crashDrag           = 0.005,
-	maxBank             = 1,  -- New Default
-	maxPitch            = 0.65, -- New Default
-	turnRadius          = 1000,  -- New Default
+	wingDrag            = 0.135,
+	wingAngle           = 0.06315,
+	-- frontToSpeed        = 0,    -- New Default
+	speedToFront        = 0.063,  -- New Default
+	-- crashDrag           = 0.005,
+	maxBank             = 0.8,  -- New Default
+	maxPitch            = 0.625, -- New Default
+	turnRadius          = 150,  -- New Default
 	verticalSpeed       = 3.0,
-	maxAileron          = 0.0125, -- New Default
-	maxElevator         = 0.01,
-	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxAileron          = 0.0144, -- New Default
+	maxElevator         = 0.01065,
+	maxRudder           = 0.00615, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
-	useSmoothMesh		= false,
+	useSmoothMesh		= true,
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -46,8 +46,8 @@ unitDef                    = {
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = "smallExplosionGenericRed",
-	footprintX                   = 2,
-	footprintZ                   = 2,
+	footprintX                   = 4,
+	footprintZ                   = 4,
 	floater                      = true,
 	hoverAttack                  = false,
 	iconType                     = "air_bomb",
@@ -184,43 +184,31 @@ weaponDefs                 = {
 			default              = 0.5,
 		}, 
 	},
+
 	bomb  	             = {
-		AreaOfEffect             = 125,
+		AreaOfEffect             = 200,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		cylinderTargeting		 = 0,
-		--burst                    = 10,
-		--burstrate                = 0.1,
-		-- cegTag                   = "genericshellexplosion-small-sparks-burn",
+
 		edgeeffectiveness		 = 1,
 		energypershot            = 0,
 		explosionGenerator       = "custom:genericshellexplosion-bomb",
-		fallOffRate              = 1,
 		fireStarter              = 50,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		minintensity             = "1",
+		mygravity                = 0.5,
 		name                     = "High Explosive Bomb",
-		-- projectiles				 = 10,
-		range                    = 400,
+		range                    = 1200,
 		reloadtime               = 5,
 		WeaponType               = "AircraftBomb",
-		rgbColor                 = "1 0.5 0",
-		rgbColor2                = "1 1 1",
 		soundTrigger             = true,
 		model                    = "missilesmalllauncher.s3o",
 		soundstart               = "weapons/bombdrop.wav",
 		soundHit                 = "weapons/Explosion Fireworks_01.wav",
 		soundHitWet				 = "explosions/subhitbomb.wav",
-		-- sprayangle				 = 1000,
-		size					 = 10,
-		--texture1                 = "shot",
-		--texture2                 = "empty",
-		thickness                = 15,
-		tolerance                = 7500,
-		weaponVelocity           = 500,
+
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
@@ -231,7 +219,7 @@ weaponDefs                 = {
 			areadamage_damageceg    = "burnblacknapalm",
 			areadamage_time         = 5,
 			areadamage_damage       = 35,
-			areadamage_range        = 125,
+			areadamage_range        = 200,
 			-- areadamage_reistance = ,
 		},
 		damage                   = {
