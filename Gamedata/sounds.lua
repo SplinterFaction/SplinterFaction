@@ -124,6 +124,30 @@ local Sounds = {
 			in3d = "false",
 			maxconcurrent = 8,
 		},
+
+---------------------------------------------------
+--Units Under Attack-------------------------------
+---------------------------------------------------
+
+		units_under_attack = {
+			gain = 0.8,
+			pitchmod = 0,
+			gainmod  = 0,
+			dopplerscale = 0,
+			maxconcurrent = 1,
+			--priority = 1,
+			rolloff = 0,
+		},
+
+		commander_under_attack = {
+			gain = 0.8,
+			pitchmod = 0,
+			gainmod  = 0,
+			dopplerscale = 0,
+			maxconcurrent = 1,
+			--priority = 1,
+			rolloff = 0,
+		},
 		
 ---------------------------------------------------
 --Unit Selections----------------------------------
@@ -131,8 +155,8 @@ local Sounds = {
 		
 		UnitSelect = {
 			--- always play on the front speaker(s)
-			file = "sounds/miscfx/unitselect.wav",
-			in3d = true,
+			file = "sounds/unitselections/building_select_generic.wav",
+			in3d = false,
 			maxconcurrent = 8,
 		},
 		
@@ -148,13 +172,6 @@ local Sounds = {
 		BugSelect = {
 			--- always play on the front speaker(s)
 			file = "sounds/ui/zaal/bugselect.wav",
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		
-		UnitsSelect = {
-			--- always play on the front speaker(s)
-			file = "sounds/ui/button9.wav",
 			in3d = true,
 			maxconcurrent = 8,
 		},
@@ -202,19 +219,64 @@ local Sounds = {
 			in3d = "false",
 			maxconcurrent = 8,
 		},
-		
-		turret = {
+
+		building_select_generic = {
 			--- always play on the front speaker(s)
-			file = "sounds/miscfx/turretselect.wav",
-			in3d = "false",
-			maxconcurrent = 8,
+			file = "sounds/unitselections/building_select_factory.wav",
+			-- in3d = "false",
+			gain = 1.2 * 0.3,
+			pitchmod = 0.03,
+			gainmod  = 0.2 * 0.3,
+			dopplerscale = 0,
+			maxconcurrent = 2,
+			rolloff = 0.1,
+			priority = 1,
+		},
+
+		building_select_factory = {
+			--- always play on the front speaker(s)
+			file = "sounds/unitselections/building_select_factory.wav",
+			-- in3d = "false",
+			gain = 1.2 * 0.3,
+			pitchmod = 0.03,
+			gainmod  = 0.2 * 0.3,
+			dopplerscale = 0,
+			maxconcurrent = 2,
+			rolloff = 0.1,
+			priority = 1,
+		},
+
+		building_select_eco = {
+			--- always play on the front speaker(s)
+			file = "sounds/unitselections/building_select_eco.wav",
+			-- in3d = "false",
+			gain = 1.2 * 0.3,
+			pitchmod = 0.03,
+			gainmod  = 0.2 * 0.3,
+			dopplerscale = 0,
+			maxconcurrent = 2,
+			rolloff = 0.1,
+			priority = 1,
+		},
+
+		building_select_turret = {
+			--- always play on the front speaker(s)
+			file = "sounds/unitselections/building_select_turret.wav",
+			-- in3d = "false",
+			gain = 1.2 * 0.3,
+			pitchmod = 0.03,
+			gainmod  = 0.2 * 0.3,
+			dopplerscale = 0,
+			maxconcurrent = 2,
+			rolloff = 0.1,
+			priority = 1,
 		},
 		
 		healing = {
 			--- always play on the front speaker(s)
-			file = "sounds/miscfx/heal.wav",
-			in3d = "true",
-			maxconcurrent = 8,
+			file = "sounds/ui/heal.wav",
+			in3d = true,
+			maxconcurrent = 1,
 		},
 		
 		--ExampleSound = {
