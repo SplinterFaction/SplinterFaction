@@ -334,7 +334,7 @@ end
 function widget:Initialize()
 	widget:ViewResize()
 
-	Spring.PlaySoundFile("sounds/corrupted/briefing.wav", VOLUI)
+	-- Spring.PlaySoundFile("sounds/corrupted/briefing.wav", VOLUI)
 
 	displayList = gl.CreateList(function()
 		gl.Blending(true)

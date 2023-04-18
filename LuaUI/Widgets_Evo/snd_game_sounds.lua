@@ -49,14 +49,14 @@ alarmTimes["position"]			= {}
 local spamBlock					= false
 
 ----------------------------------------------------------------------------
-local cloak1 = "sounds/miscfx/cloak.wav"
-local decloak1 = "sounds/miscfx/cloak.wav"
-local cloak2 = "sounds/miscfx/cloak.wav"
-local decloak2 = "sounds/miscfx/cloak.wav"
+local cloak1 = "cloak"
+local decloak1 = "cloak"
+local cloak2 = "cloak"
+local decloak2 = "cloak"
 
-local alert = "sounds/selfdcountdown/alert sounds 3.wav"
-local cancel = "sounds/ui/cancel2.wav"
-local movefailed = "sounds/ui/cantdo4.wav"
+local alert = "alert sounds 3"
+local cancel = "cantdo"
+local movefailed = "cantdo"
 
 local ADUnits = {}
 local CMD_SELFD = CMD.SELFD
@@ -274,9 +274,9 @@ function widget:UnitDamaged (unitID, unitDefID, unitTeam, damage, paralyzer, wea
 
 		local snd 
 		if isCommander then
-			snd = 'sounds/miscfx/warning2.wav'
+			snd = 'commander_under_attack'
 		else
-			snd = 'sounds/miscfx/warning1.wav'
+			snd = 'units_under_attack'
 		end
 		-- ALL units have volume = 1.0 in unitdef. Some units, such as critters and DT:s have no volume, making the widget fail on nil index.
 		-- this was the previous lookup code for volume: udef.sounds.underattack[1].volume

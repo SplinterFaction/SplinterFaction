@@ -1,25 +1,25 @@
 
 CommandSoundEffects = {
-	[CMD.RESURRECT]		= {'ack', 0.01},
-	[CMD.RECLAIM]		= {'ack', 0.01},
-	[CMD.REPAIR]		= {'ack', 0.01},
-	[CMD.REPEAT]		= {'ack', 0.01},
-	[CMD.ATTACK]		= {'ack', 0.01},
-	[CMD.PATROL]		= {'ack', 0.01},
-	[CMD.FIGHT]			= {'ack', 0.01},
-	[CMD.GUARD]			= {'ack', 0.01},
-	[CMD.SELFD]			= {'ack', 0.01},
-	[CMD.STOP]			= {'ack', 0.01},
-	[CMD.WAIT]			= {'ack', 0.01},
-	[CMD.DGUN]			= {'ack', 0.01},
-	[CMD.MOVE]			= {'ack', 0.01},
-	[-1]				= {'ack', 0.01},	-- build (cmd < 0 == -unitdefid)
-	[33410] 			= {'ack', 0.01}, -- CMD_MORPH_PAUSE
-	[34410] 			= {'ack', 0.01}, -- CMD_MORPH_QUEUE
+	[CMD.RESURRECT]		= {'cmd_resurrect', 0.1},
+	[CMD.RECLAIM]		= {'cmd_reclaim', 0.1},
+	[CMD.REPAIR]		= {'cmd_repair', 0.1},
+	[CMD.REPEAT]		= {'cmd_repeat', 0.1},
+	[CMD.ATTACK]		= {'cmd_attack', 0.1},
+	[CMD.PATROL]		= {'cmd_patrol', 0.1},
+	[CMD.FIGHT]			= {'cmd_fight', 0.1},
+	[CMD.GUARD]			= {'cmd_guard', 0.1},
+	[CMD.SELFD]			= {'cmd_selfd', 0.1},
+	[CMD.STOP]			= {'cmd_stop', 0.1},
+	[CMD.WAIT]			= {'cmd_wait', 0.1},
+	[CMD.DGUN]			= {'cmd_dgun', 0.1},
+	[CMD.MOVE]			= {'cmd_move', 0.1},
+	[-1]				= {'cmd_build', 0.1},	-- build (cmd < 0 == -unitdefid)
+	[33410] 			= {'cmd_morph_pause', 0.1}, -- CMD_MORPH_PAUSE
+	[34410] 			= {'cmd_morph_queue', 0.1}, -- CMD_MORPH_QUEUE
 }
 
 for i = 31410,32409 do -- CMD_MORPH
-	CommandSoundEffects[i] = {'ack', 0.01}
+	CommandSoundEffects[i] = {'cmd_morph', 0.1}
 end
 
 GUIUnitSoundEffects = {
@@ -38,16 +38,24 @@ for _, udef in pairs(UnitDefs) do
 		--Spring.Echo("[RESPONSEDOUND FALLBACK]: Chicken", udef.name)
 		GUIUnitSoundEffects[udef.name] = {}
 	elseif not GUIUnitSoundEffects[udef.name] then
-		if string.find(udef.name, "fed") then
-			--Spring.Echo("[RESPONSEDOUND FALLBACK]: ARMADA", udef.name)
+		if udef.customParams.factionname and udef.customParams.factionname == "Federation of Kala" then
+			if udef.customParams.requiretech == "tech1" then
+				--Spring.Echo("[RESPONSEDOUND FALLBACK]: ARMADA", udef.name)
+				GUIUnitSoundEffects[udef.name] = {
+					BaseSoundSelectType = "unit_select_small",
+					BaseSoundMovementType = "mappoint",
+				}
+			end
+		elseif udef.customParams.factionname and udef.customParams.factionname == "Loz Alliance" then
+			--Spring.Echo("[RESPONSEDOUND FALLBACK]: CORTEX", udef.name)
 			GUIUnitSoundEffects[udef.name] = {
 				BaseSoundSelectType = "unitsselect",
 				BaseSoundMovementType = "unitselect",
 			}
-		elseif string.find(udef.name, "loz") then
+		elseif udef.customParams.factionname and udef.customParams.factionname == "Neutral" then
 			--Spring.Echo("[RESPONSEDOUND FALLBACK]: CORTEX", udef.name)
 			GUIUnitSoundEffects[udef.name] = {
-				BaseSoundSelectType = "unitsselect",
+				BaseSoundSelectType = "unitselect",
 				BaseSoundMovementType = "unitselect",
 			}
 		else

@@ -2,281 +2,28 @@
 --- other than that, you can give it any name and access it like before with filenames
 local Sounds = {
 	SoundItems = {
-	
-		build = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/miscfx/buildstart.wav",
-			--gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		buildmechanical = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/miscfx/buildstart-mechanical.wav",
-			--gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		buildmechanical1 = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/miscfx/buildstart-nano.wav",
-			--gainmod = 0.35,
-			--pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 8,
-		},
-	
-		airraider = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/weapons/tmediumtankfire.wav",
-			gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 4,
-		},
-	
-		riottankshotgun = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/weapons/bruisercannon.wav",
-			gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		
-		ehbotpeeweeshotgun = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/weapons/shotgun-reload.wav",
-			gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 16,
-		},
-		
-		pdfire = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/weapons/pointdefensefire.wav",
-			gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		
-		artyweaponhit = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/explosions/artyhit.wav",
-			gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		
-		nukeartyweaponhit = {
-			--- new since 89.0
-			--- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
-			file = "sounds/explosions/nukeartyhit.wav",
-			gainmod = 0.35,
-			pitchmod = 0.05,
-			--pitch = 0.7,
-			in3d = true,
-			maxconcurrent = 8,
-		},
-	
-		ack = {
-			--- always play on the front speaker(s)
-			file = "sounds/ui/ack.wav",
-			in3d = true,
-			maxconcurrent = 8,
-			gainmod = 0,
-			pitchmod = 0,
-		},
-		
-		dothis = {
-			--- always play on the front speaker(s)
-			file = "sounds/acknowledgements/dothis.wav",
-			in3d = true,
-			maxconcurrent = 8,
-			gainmod = 0,
-			pitchmod = 0,
-		},
-	
+
 		IncomingChat = {
-			--- always play on the front speaker(s)
-			file = "sounds/ui/beep4.wav",
-			in3d = "false",
-			maxconcurrent = 8,
+		    file = "sounds/ui/chat.wav",
+		    -- in3d = "false",
 		},
-
----------------------------------------------------
---Units Under Attack-------------------------------
----------------------------------------------------
-
-		units_under_attack = {
-			gain = 0.8,
-			pitchmod = 0,
-			gainmod  = 0,
-			dopplerscale = 0,
-			maxconcurrent = 1,
-			--priority = 1,
-			rolloff = 0,
-		},
-
-		commander_under_attack = {
-			gain = 0.8,
-			pitchmod = 0,
-			gainmod  = 0,
-			dopplerscale = 0,
-			maxconcurrent = 1,
-			--priority = 1,
-			rolloff = 0,
-		},
-		
----------------------------------------------------
---Unit Selections----------------------------------
----------------------------------------------------
-		
-		UnitSelect = {
-			--- always play on the front speaker(s)
-			file = "sounds/unitselections/building_select_generic.wav",
-			in3d = false,
-			maxconcurrent = 8,
-		},
-		
-		EngineIdle = {
-			--- always play on the front speaker(s)
-			file = "sounds/unitselections/engineidle.wav",
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		
-		
-		
-		BugSelect = {
-			--- always play on the front speaker(s)
-			file = "sounds/ui/zaal/bugselect.wav",
-			in3d = true,
-			maxconcurrent = 8,
-		},
-		
+		--MultiSelect = {
+		--	file = "sounds/ui/multiselect.wav",
+		--	-- in3d = "false",
+		--},
 		MapPoint = {
-			--- respect where the point was set, but don't attuenuate in distace
-			--- also, when moving the camera, don't pitch it
-			file = "sounds/ui/beep6.wav",
-			rolloff = 0,
-			dopplerscale = 0,
-			maxconcurrent = 8,
-		},
-		
-		factory = {
-			--- always play on the front speaker(s)
-			file = "sounds/miscfx/gdfactoryselect.wav",
-			in3d = "false",
-			maxconcurrent = 8,
-		},
-		
-		energy = {
-			--- always play on the front speaker(s)
-			file = "sounds/miscfx/gdenergy.wav",
-			in3d = "false",
-			maxconcurrent = 8,
-		},
-		
-		mex = {
-			--- always play on the front speaker(s)
-			file = "sounds/miscfx/gdmex.wav",
-			in3d = "false",
-			maxconcurrent = 8,
-		},
-		
-		radar = {
-			--- always play on the front speaker(s)
-			file = "sounds/miscfx/unitselect.wav",
-			in3d = "false",
-			maxconcurrent = 8,
-		},
-		
-		mobileunit = {
-			--- always play on the front speaker(s)
-			file = "sounds/miscfx/unitselect.wav",
-			in3d = "false",
-			maxconcurrent = 8,
-		},
-
-		building_select_generic = {
-			--- always play on the front speaker(s)
-			file = "sounds/unitselections/building_select_factory.wav",
-			-- in3d = "false",
-			gain = 1.2 * 0.3,
-			pitchmod = 0.03,
+			file = "sounds/ui/mappoint.wav",    -- file now equal as blank.wav, is being called by chat ui widget now (so users can adjust its volume)
+			gain = 0.1,
+			pitchmod = 0.02,
 			gainmod  = 0.2 * 0.3,
 			dopplerscale = 0,
-			maxconcurrent = 2,
-			rolloff = 0.1,
-			priority = 1,
-		},
-
-		building_select_factory = {
-			--- always play on the front speaker(s)
-			file = "sounds/unitselections/building_select_factory.wav",
-			-- in3d = "false",
-			gain = 1.2 * 0.3,
-			pitchmod = 0.03,
-			gainmod  = 0.2 * 0.3,
-			dopplerscale = 0,
-			maxconcurrent = 2,
-			rolloff = 0.1,
-			priority = 1,
-		},
-
-		building_select_eco = {
-			--- always play on the front speaker(s)
-			file = "sounds/unitselections/building_select_eco.wav",
-			-- in3d = "false",
-			gain = 1.2 * 0.3,
-			pitchmod = 0.03,
-			gainmod  = 0.2 * 0.3,
-			dopplerscale = 0,
-			maxconcurrent = 2,
-			rolloff = 0.1,
-			priority = 1,
-		},
-
-		building_select_turret = {
-			--- always play on the front speaker(s)
-			file = "sounds/unitselections/building_select_turret.wav",
-			-- in3d = "false",
-			gain = 1.2 * 0.3,
-			pitchmod = 0.03,
-			gainmod  = 0.2 * 0.3,
-			dopplerscale = 0,
-			maxconcurrent = 2,
-			rolloff = 0.1,
-			priority = 1,
-		},
-		
-		healing = {
-			--- always play on the front speaker(s)
-			file = "sounds/ui/heal.wav",
-			in3d = true,
 			maxconcurrent = 1,
+			rolloff = 0,
+			priority = 1,
+			in3d = true,
+		},
+		FailedCommand = {
+			file = "sounds/ui/cantdo.wav",
 		},
 		
 		--ExampleSound = {
@@ -405,6 +152,84 @@ for i=1,#files do
       gainmod  = 0;
       maxconcurrent = 1;
    }
+end
+
+local soundData = {
+
+	['ui'] = {
+		gain = 0.1,
+		pitchmod = 0,
+		gainmod  = 0,
+		dopplerscale = 0,
+		maxconcurrent = 8,
+		--priority = 1,
+		rolloff = 0,
+	},
+
+	['commands'] = {
+		gain = 1.2 * 0.3,
+		pitchmod = 0.02,
+		gainmod  = 0.2 * 0.3,
+		dopplerscale = 0,
+		maxconcurrent = 32,
+		rolloff = 0,
+		priority = 1,
+		--in3d = false,
+	},
+
+	['unitselections'] = {
+		gain = 1.2 * 0.3,
+		pitchmod = 0.02,
+		gainmod  = 0.2 * 0.3,
+		dopplerscale = 0,
+		maxconcurrent = 2,
+		rolloff = 0,
+		priority = 1,
+		--in3d = false,
+	},
+
+	['selfdcountdown'] = {
+		gain = 1.2 * 0.3,
+		pitchmod = 0.02,
+		gainmod  = 0.2 * 0.3,
+		dopplerscale = 0,
+		maxconcurrent = 1,
+		rolloff = 0,
+		priority = 1,
+		--in3d = false,
+	},
+
+}
+
+local function loadSoundFiles(directory, soundAttributes)
+	local soundFiles = VFS.DirList(directory)
+
+	for _, fileName in ipairs(soundFiles) do
+		local soundName = string.sub(fileName, string.len(directory) + 1, string.find(fileName, ".wav") -1)
+		Sounds.SoundItems[soundName] = {}
+		Sounds.SoundItems[soundName].file = fileName
+
+		local value
+		for attribute, attributeValue in pairs(soundAttributes) do
+			if type(attributeValue) ~= "table" then
+				value = attributeValue
+			else
+				value = attributeValue.default
+
+				for soundMatchPattern, customValue in pairs(attributeValue.custom) do
+					if soundName:match(soundMatchPattern) then
+						value = customValue
+					end
+				end
+			end
+
+			Sounds.SoundItems[soundName][attribute] = value
+		end
+	end
+end
+
+for directory, attributes in pairs(soundData) do
+	loadSoundFiles('sounds/' .. directory .. '/', attributes)
 end
 
 return Sounds
