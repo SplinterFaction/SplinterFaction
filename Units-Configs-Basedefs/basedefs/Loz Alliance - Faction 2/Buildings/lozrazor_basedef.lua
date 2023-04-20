@@ -62,6 +62,7 @@ unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole				  = "Short Range Anti-Air",
+		unitrole_sound            = "turret,",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		--supply_cost               = supply,

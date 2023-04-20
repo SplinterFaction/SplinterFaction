@@ -76,6 +76,7 @@ unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole				  = "Mine",
+		unitrole_sound            = "turret,",
 		decloakradiushalved		  = "true",
 		RequireTech				  = tech,
 		--supply_cost               = supply,

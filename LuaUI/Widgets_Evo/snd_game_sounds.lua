@@ -185,7 +185,7 @@ function widget:UnitCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOp
 			--PlaySoundFile(CD1)
 		else
 			ADUnits[unitID] = nil
-			PlaySoundFile(cancel)
+			PlaySoundFile(cancel, 0.1, nil, "ui")
 		end
 	end
 	return true
@@ -292,7 +292,7 @@ function widget:UnitMoveFailed(unitID, unitDefID, unitTeam)
 	local x,y,z = GetUnitPosition(unitID)
 	if (x and y and z) then SetLastMessagePosition(x,y,z) end
 	
-	PlaySoundFile(movefailed, 1.0, nil, "ui")
+	PlaySoundFile(movefailed, 0.1, nil, "ui")
 end 
 
 --changing teams, rejoin, becoming spec etc

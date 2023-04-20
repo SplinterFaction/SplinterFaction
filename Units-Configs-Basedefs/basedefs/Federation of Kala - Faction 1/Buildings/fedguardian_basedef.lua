@@ -63,6 +63,7 @@ unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole				  = "Single-Target Turret",
+		unitrole_sound            = "turret,",
 		needed_cover              = 5,
 		--supply_cost               = supply,
 		RequireTech				  = tech,

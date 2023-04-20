@@ -167,7 +167,7 @@ local soundData = {
 	},
 
 	['commands'] = {
-		gain = 1.2 * 0.3,
+		gain = 0.05,
 		pitchmod = 0.02,
 		gainmod  = 0.2 * 0.3,
 		dopplerscale = 0,
@@ -178,7 +178,7 @@ local soundData = {
 	},
 
 	['unitselections'] = {
-		gain = 1.2 * 0.3,
+		gain = 0.1,
 		pitchmod = 0.02,
 		gainmod  = 0.2 * 0.3,
 		dopplerscale = 0,
