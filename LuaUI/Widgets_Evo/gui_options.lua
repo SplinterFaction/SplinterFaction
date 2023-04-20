@@ -1314,10 +1314,6 @@ function applyOptionValue(i, skipRedrawWindow)
 			Spring.SetConfigInt("evo_simplifiedresourcebar",value)
 		elseif id == 'buildpichelp' then
 			Spring.SetConfigInt("evo_buildpichelp",value)
-		elseif id == 'dynamicmusic' then
-			Spring.SetConfigInt("evo_dynamicmusic", value)
-		elseif id == 'interruptmusic' then
-			Spring.SetConfigInt("evo_interruptmusic", value)
 		elseif id == 'showcost' then
 			Spring.SetConfigInt("evo_showcost", value)
 			if WG.buildOrderUI then WG.buildOrderUI.updateConfigInt = true end
@@ -2294,10 +2290,8 @@ function init()
 		{id="sndvolui", group="snd", name="Interface volume", type="slider", min=0, max=100, step=2, value=tonumber(Spring.GetConfigInt("snd_volui",1) or 100)},
 		{id="sndvolunitreply", group="snd", name="Unit reply volume", type="slider", min=0, max=100, step=2, value=tonumber(Spring.GetConfigInt("snd_volunitreply",1) or 100)},
 		{id="sndvolmusic", group="snd", name="Music volume", type="slider", min=0, max=100, step=2, value=tonumber(Spring.GetConfigInt("snd_volmusic",1) or 20)},
-		{id="dynamicmusic", group="snd", name="Dynamic Music", type="bool", value=tonumber(Spring.GetConfigInt("evo_dynamicmusic",1) or 1) == 1, description="If enabled, Music trackks will dynamically switch between war and peace depending on what is going on at that moment."},
-		{id="interruptmusic", group="snd", name="Dynamic Music Interruption", type="bool", value=tonumber(Spring.GetConfigInt("evo_interruptmusic",1) or 1) == 1, description="If enabled, Music tracks will fade out and switch from peace to war \nand vice versa at that moment instead of allowing the entire peace or war track to finish first."},
 		--{id="sndairabsorption", group="snd", name="Air absorption", type="slider", min=0, max=0.5, step=0.01, value=tonumber(Spring.GetConfigInt("snd_airAbsorption",1) or.1)},
-        {id="musicplayer", group="snd", widget="Music Player", name="Music player", type="bool", value=GetWidgetToggleValue("Music Player"), description='Shown on top of (adv)playerlist'},
+        --{id="musicplayer", group="snd", widget="Music Player", name="Music player", type="bool", value=GetWidgetToggleValue("Music Player"), description='Shown on top of (adv)playerlist'},
 		{id="buildmenusounds", group="snd", name="Buildmenu click sounds", type="bool", value=(WG['red_buildmenu']~=nil and WG['red_buildmenu'].getConfigPlaySounds~= nil and WG['red_buildmenu'].getConfigPlaySounds()), description='Plays a sound when clicking on orders or buildmenu icons'},
 
         {id="voicenotifs", group="snd", widget="Voice Notifs", name="Voice notifications", type="bool", value=GetWidgetToggleValue("Voice Notifs"), description='Plays various voice notifications\n\nAdjust volume with the interface volume slider'},

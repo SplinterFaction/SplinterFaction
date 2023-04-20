@@ -18,7 +18,7 @@ math.random() math.random() math.random()
 local music_volume_set = Spring.GetConfigInt("snd_volmusic", 20) * 0.01 or 0.2
 Spring.SetSoundStreamVolume(music_volume_set)
 
-musicfiles = VFS.DirList("LuaUI/Widgets_Evo/Music/loading", "*.ogg")
+musicfiles = VFS.DirList("music/original/loading", "*.ogg")
 tracks = musicfiles
 newTrack = tracks[math.random(1, #tracks)]
 
