@@ -94,8 +94,8 @@ local function ReloadMusicPlaylists()
 
 	-----------------------------------SETTINGS---------------------------------------
 
-	interruptionEnabled 			= 0
-	silenceTimerEnabled 			= 1
+	interruptionEnabled 			= Spring.GetConfigInt('UseSoundtrackInterruption', 1) == 1
+	silenceTimerEnabled 			= Spring.GetConfigInt('UseSoundtrackSilenceTimer', 1) == 1
 	local newSoundtrackEnabled 		= 1
 	local customSoundtrackEnabled	= 1
 
@@ -348,6 +348,8 @@ function widget:Update(dt)
 end
 
 function PlayNewTrack(paused)
+	interruptionEnabled = Spring.GetConfigInt('UseSoundtrackInterruption', 1) == 1
+	silenceTimerEnabled = Spring.GetConfigInt('UseSoundtrackSilenceTimer', 1) == 1
 	if (not paused) and Spring.GetGameFrame() > 1 then
 		deviceLostSafetyCheck = deviceLostSafetyCheck + 1
 	end
