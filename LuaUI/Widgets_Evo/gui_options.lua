@@ -1308,6 +1308,12 @@ function applyOptionValue(i, skipRedrawWindow)
 			if value then
 				Spring.StopSoundStream()
 			end
+		elseif id == 'soundtrackinterruptions' then
+			Spring.SetConfigInt("UseSoundtrackInterruption",value)
+		elseif id == 'silencebetweentracks' then
+			Spring.SetConfigInt("UseSoundtrackSilenceTimer",value)
+		elseif id == 'soundtrackfades' then
+			Spring.SetConfigInt("UseSoundtrackFades",value)
 		elseif id == 'softparticles' then
 			Spring.SetConfigInt("softparticles",value)
 		elseif id == 'simplifiedresourcebar' then
@@ -2297,6 +2303,10 @@ function init()
         {id="voicenotifs", group="snd", widget="Voice Notifs", name="Voice notifications", type="bool", value=GetWidgetToggleValue("Voice Notifs"), description='Plays various voice notifications\n\nAdjust volume with the interface volume slider'},
 		{id="voicenotifs_playtrackedplayernotifs", group="snd", name=widgetOptionColor.."   tracked cam/player notifs",type="bool", value=(WG['voicenotifs']~=nil and WG['voicenotifs'].getPlayTrackedPlayerNotifs()), description='Play voice notifs from the perspective of the currently camera tracked player'},
 		{id="voicenotifs_volume", group="snd", name=widgetOptionColor.."   volume", type="slider", min=0.05, max=1, step=0.05, value=1, description='NOTE: It uses interface volume channel'},
+
+		{id="soundtrackinterruptions", group="snd", name="Soundtrack Interruptions", type="bool", value=tonumber(Spring.GetConfigInt('UseSoundtrackInterruption', 1) or 1) == 1, description="Allows the current track to be dynamically interrupted when action breaks out unexpectedly."},
+		{id="silencebetweentracks", group="snd", name="Silence between tracks", type="bool", value=tonumber(Spring.GetConfigInt('UseSoundtrackSilenceTimer', 1) or 1) == 1, description="Allows the music player to insert silence between music tracks."},
+		{id="soundtrackfades", group="snd", name="Soundtrack Fades", type="bool", value=tonumber(Spring.GetConfigInt("UseSoundtrackFades", 1) or 1) == 1, description="Allows the music player to make use of volume fading in order to make track changes more seamless."},
 
 		-- CONTROL
 		{id="camera", group="control", name="Camera", type="select", options={'fps','overhead','spring','rot overhead','free'}, value=(tonumber((Spring.GetConfigInt("CamMode",1)+1) or 2))},
