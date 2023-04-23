@@ -75,7 +75,7 @@ if (gadgetHandler:IsSyncedCode()) then
 				pickedSound = string.gsub(pickedSound, soundClass, "")
 				pickedSound = string.gsub(pickedSound, "/", "")
 				pickedSound = string.gsub(pickedSound, ".wav", "")
-				PlaySoundFile(pickedSound, 0.25, x, y, z)
+				PlaySoundFile(pickedSound, 1, x, y, z)
 			end
 		end
 	end

@@ -82,22 +82,22 @@ local Sounds = {
 	},
 }
 
-local files = VFS.DirList("sounds/deathsounds/generic/")
-local t = Sounds.SoundItems
-for i=1,#files do
-	local fileName = files[i]
-	t[fileName] = {
-		file     = fileName;
-		-- gain = 1 * 0.3,
-		pitchmod = 0.02,
-		-- gainmod  = 0.2 * 0.3,
-		dopplerscale = 0,
-		maxconcurrent = 64,
-		rolloff = 0,
-		priority = 1,
-		in3d = true,
-	}
-end
+--local files = VFS.DirList("sounds/deathsounds/generic/")
+--local t = Sounds.SoundItems
+--for i=1,#files do
+--	local fileName = files[i]
+--	t[fileName] = {
+--		file     = fileName;
+--		-- gain = 1 * 0.3,
+--		pitchmod = 0.02,
+--		-- gainmod  = 0.2 * 0.3,
+--		dopplerscale = 0,
+--		maxconcurrent = 64,
+--		rolloff = 0,
+--		priority = 1,
+--		in3d = true,
+--	}
+--end
 
 -- local files = VFS.DirList("sounds/explosions/")
 -- local t = Sounds.SoundItems
@@ -161,7 +161,7 @@ end
 local soundData = {
 
 	['ui'] = {
-		gain = 1,
+		gain = 0.25,
 		pitchmod = 0,
 		gainmod  = 0,
 		dopplerscale = 0,
@@ -171,7 +171,7 @@ local soundData = {
 	},
 
 	['commands'] = {
-		gain = 1,
+		gain = 0.2 * 0.3,
 		pitchmod = 0.02,
 		gainmod  = 0.2 * 0.3,
 		dopplerscale = 0,
@@ -182,7 +182,7 @@ local soundData = {
 	},
 
 	['unitselections'] = {
-		gain = 0.2,
+		gain = 0.1,
 		pitchmod = 0.02,
 		gainmod  = 0.2 * 0.3,
 		dopplerscale = 0,
@@ -193,21 +193,21 @@ local soundData = {
 	},
 
 	['weapons'] = {
-		gain = 1,
+		gain =  1.2 * 0.3,
 		pitchmod = 0.17,
-		-- gainmod = 0.2 * 0.3,
+		gainmod = 0.2 * 0.3,
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
-		rolloff = 1.4,
+		rolloff = 0.25,
 	},
 
 	['deathsounds/generic'] = {
-		gain = 1,
+		gain = 1.2 * 0.3,
 		pitchmod = 0.17,
-		-- gainmod = 0.2 * 0.3,
+		gainmod = 0.2 * 0.3,
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
-		rolloff = 1.4,
+		rolloff = 0.25,
 	},
 
 	['selfdcountdown'] = {
