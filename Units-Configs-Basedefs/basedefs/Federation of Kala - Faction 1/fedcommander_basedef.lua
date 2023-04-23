@@ -100,7 +100,7 @@ unitDef                    = {
 	},
 	buildoptions                 = buildlist,
 	sounds                       = {
-		build					 = "miscfx/buildstart.wav",
+		build					 = "miscfx/buildstart",
 		underattack              = "other/unitsunderattack1",
 		ok                       = {
 			"ack",
@@ -154,8 +154,8 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
-
+		soundstart               = "fedcommander-skillshot",
+		soundtrigger             = false,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
@@ -198,8 +198,8 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
-
+		soundstart               = "fedcommander-skillshot",
+		soundtrigger             = false,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
@@ -242,8 +242,8 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
-
+		soundstart               = "fedcommander-skillshot",
+		soundtrigger             = false,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
@@ -286,8 +286,8 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
-
+		soundstart               = "fedcommander-skillshot",
+		soundtrigger             = false,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
@@ -330,7 +330,8 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Sci Fi Assault Rifle 7.wav",
+		soundstart               = "fedcommander-skillshot",
+		soundtrigger             = false,
 
 		minintensity             = 1,
 		impulseFactor            = 0,

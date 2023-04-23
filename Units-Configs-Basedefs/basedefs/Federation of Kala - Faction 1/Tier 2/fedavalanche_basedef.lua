@@ -140,8 +140,8 @@ weaponDefs                 = {
 		reloadtime             = 35,
 		size				   = 4,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/scifi_pistol_B_single_01-8roundburst.wav",
-		soundHit	           = "explosions/mediumcannonhit.wav",
+		soundStart             = "scifi_pistol_B_single_01-8roundburst",
+		soundHit	           = "mediumcannonhit",
 		soundTrigger           = true,
 		sprayAngle             = 100,
 		tolerance              = 10000,
@@ -183,8 +183,8 @@ weaponDefs                 = {
 
 
 		smokeTrail               = false,
-		soundHit                 = "explosions/explode_large.wav",
-		soundStart               = "weapons/missile_launch1.wav",
+		soundHit                 = "explode_large",
+		soundStart               = "missile_launch1",
 
 		tracks                   = false,
 		turnrate                 = 30000,

@@ -160,7 +160,7 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/Pistol Single Shot 3.wav",
+		soundstart               = "Pistol Single Shot 3",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
@@ -210,8 +210,8 @@ weaponDefs                 = {
 		size					 = 8,
 		--projectiles			   = projectiles,
 		weaponType		       = "Cannon",
-		soundStart             = "weapons/Pistol Single Shot (Suppressed) 3.wav",
-		soundHit	           = "explosions/mediumcannonhit.wav",
+		soundStart             = "Pistol Single Shot (Suppressed) 3",
+		soundHit	           = "mediumcannonhit",
 		soundTrigger           = true,
 		--sprayAngle             = 1000,
 		tolerance              = 2000,
@@ -249,8 +249,8 @@ weaponDefs                 = {
 		reloadtime               = 0.25,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
-		soundStart               = "other/rocket_launcher.wav",
-		soundHit                 = "explosions/explode5.wav",
+		soundStart               = "other/rocket_launcher",
+		soundHit                 = "explode5",
 		soundTrigger             = true,
 		startVelocity            = 300,
 		tolerance                = 2000,
@@ -295,8 +295,8 @@ weaponDefs                 = {
 
 
 		smokeTrail               = false,
-		soundHit                 = "explosions/explode_large.wav",
-		soundStart               = "weapons/missile_launch1.wav",
+		soundHit                 = "explode_large",
+		soundStart               = "missile_launch1",
 
 		tracks                   = true,
 		turnrate                 = 30000,

@@ -123,8 +123,8 @@ weaponDefs                 = {
 		reloadtime               = 40,
 		size					 = 5,
 		weaponType		         = "Cannon",
-		soundHit                 = "explosions/artyhit.wav",
-		soundStart               = "weapons/arty2.wav",
+		soundHit                 = "artyhit",
+		soundStart               = "lozluger-maingun",
 		
 		turret                   = true,
 		weaponVelocity           = 500,

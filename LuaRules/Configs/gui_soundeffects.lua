@@ -1,25 +1,25 @@
 
 CommandSoundEffects = {
-	[CMD.RESURRECT]		= {'cmd_resurrect', 1},
-	[CMD.RECLAIM]		= {'cmd_reclaim', 1},
-	[CMD.REPAIR]		= {'cmd_repair', 1},
-	[CMD.REPEAT]		= {'cmd_repeat', 1},
-	[CMD.ATTACK]		= {'cmd_attack', 1},
-	[CMD.PATROL]		= {'cmd_patrol', 1},
-	[CMD.FIGHT]			= {'cmd_fight', 1},
-	[CMD.GUARD]			= {'cmd_guard', 1},
-	[CMD.SELFD]			= {'cmd_selfd', 1},
-	[CMD.STOP]			= {'cmd_stop', 1},
-	[CMD.WAIT]			= {'cmd_wait', 1},
-	[CMD.DGUN]			= {'cmd_dgun', 1},
-	[CMD.MOVE]			= {'cmd_move', 1},
-	[-1]				= {'cmd_build', 1},	-- build (cmd < 0 == -unitdefid)
-	[33410] 			= {'cmd_morph_pause', 1}, -- CMD_MORPH_PAUSE
-	[34410] 			= {'cmd_morph_queue', 1}, -- CMD_MORPH_QUEUE
+	[CMD.RESURRECT]		= {'cmd_resurrect', 0.1},
+	[CMD.RECLAIM]		= {'cmd_reclaim', 0.1},
+	[CMD.REPAIR]		= {'cmd_repair', 0.1},
+	[CMD.REPEAT]		= {'cmd_repeat', 0.1},
+	[CMD.ATTACK]		= {'cmd_attack', 0.1},
+	[CMD.PATROL]		= {'cmd_patrol', 0.1},
+	[CMD.FIGHT]			= {'cmd_fight', 0.1},
+	[CMD.GUARD]			= {'cmd_guard', 0.1},
+	[CMD.SELFD]			= {'cmd_selfd', 0.1},
+	[CMD.STOP]			= {'cmd_stop', 0.1},
+	[CMD.WAIT]			= {'cmd_wait', 0.1},
+	[CMD.DGUN]			= {'cmd_dgun', 0.1},
+	[CMD.MOVE]			= {'cmd_move', 0.1},
+	[-1]				= {'cmd_build', 0.1},	-- build (cmd < 0 == -unitdefid)
+	[33410] 			= {'cmd_morph_pause', 0.1}, -- CMD_MORPH_PAUSE
+	[34410] 			= {'cmd_morph_queue', 0.1}, -- CMD_MORPH_QUEUE
 }
 
 for i = 31410,32409 do -- CMD_MORPH
-	CommandSoundEffects[i] = {'cmd_morph', 1}
+	CommandSoundEffects[i] = {'cmd_morph', 0.1}
 end
 
 GUIUnitSoundEffects = {

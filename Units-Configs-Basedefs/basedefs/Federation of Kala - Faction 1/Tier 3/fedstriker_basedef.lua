@@ -132,7 +132,7 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "weapons/scifi2_sniper_rifle_single_01.wav",
+		soundstart               = "scifi2_sniper_rifle_single_01",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
