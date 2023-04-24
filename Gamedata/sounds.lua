@@ -161,7 +161,14 @@ end
 local soundData = {
 
 	['ui'] = {
-		gain = 0.25,
+		gain = {
+			default = 0.25,
+			custom = {
+				['^beep(.)+$'] = 0.01,
+				['^button(.)+$'] = 0.01,
+				['^cantdo(.)+$'] = 0.1,
+			},
+		},
 		pitchmod = 0,
 		gainmod  = 0,
 		dopplerscale = 0,
@@ -193,21 +200,40 @@ local soundData = {
 	},
 
 	['weapons'] = {
+		gain =  1.5 * 0.3,
+		pitchmod = 0.17,
+		gainmod = 0.2 * 0.3,
+		maxconcurrent = 7,
+		dopplerscale = 1.0,
+		rolloff = 0.5,
+	},
+
+	['impacts'] = {
+		gain = 1.5 * 0.3,
+		pitchmod = 0.17,
+		gainmod = 0.2 * 0.3,
+		maxconcurrent = 7,
+		dopplerscale = 1.0,
+		rolloff = 0.5,
+	},
+
+	['deathsounds/generic'] = {
+		gain = 1.75 * 0.3,
+		pitchmod = 0.17,
+		gainmod = 0.2 * 0.3,
+		maxconcurrent = 7,
+		dopplerscale = 1.0,
+		rolloff = 0.5,
+	},
+
+	['misc'] = {
 		gain =  1.2 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
-		rolloff = 0.25,
-	},
-
-	['deathsounds/generic'] = {
-		gain = 1.2 * 0.3,
-		pitchmod = 0.17,
-		gainmod = 0.2 * 0.3,
-		maxconcurrent = 7,
-		dopplerscale = 1.0,
-		rolloff = 0.25,
+		rolloff = 0.5,
+		in3d = true,
 	},
 
 	['selfdcountdown'] = {

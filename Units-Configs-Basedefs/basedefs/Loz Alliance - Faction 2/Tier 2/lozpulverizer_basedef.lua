@@ -63,6 +63,7 @@ unitDef                    = {
 
 		explosiongenerators      = {
 			"custom:gdhcannon",
+			"custom:electricity",
 			"custom:emptydirt",
 			"custom:blacksmoke",
 		},
@@ -78,7 +79,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING AIR SHIP",
 		},
@@ -104,50 +105,48 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	lasercannon                  = {
-		predictboost	         = 0.3,
-		avoidFeature             = false,
+	lightningcannon   	             = {
 		avoidFriendly            = false,
-		beamTime                 = 0.1,
-		beamttl                  = 4,
-		collideFeature           = false,
+		avoidFeature             = false,
 		collideFriendly          = false,
-		coreThickness            = 0.3,
-		duration                 = 0.1,
+		collideFeature           = false,
+		craterBoost              = 0,
+		craterMult               = 0,
+		burst                    = 10,
+		burstrate                = 0.01,
+		beamTTL					 = 1,
+		duration                 = 1,
+		explosionGenerator       = "custom:genericshellexplosion-electric-small",
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		fallOffRate              = 1,
-		fireStarter              = 50,
+		edgeeffectiveness		 = 1,
+		impulseBoost             = 0,
+		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		impulsefactor		     = 0.1,
+		intensity                = 24,
+		laserFlareSize           = 1,
 
-		largebeamlaser	         = true,
-		laserflaresize 	         = 8,
-		minintensity             = 1,
-		name                     = "High Intensity Beam Laser",
+		name			         = "Electrical Strike Cannon",
+		noSelfDamage             = true,
 		range                    = 850,
-		reloadtime               = 0.2,
-		WeaponType               = "BeamLaser",
-		rgbColor                 = "0.1 0 0.3",
+		reloadtime               = 3,
+		WeaponType               = "LightningCannon",
+		rgbColor                 = "1 0.5 0.5",
 		rgbColor2                = "1 1 1",
-		soundTrigger             = true,
-		soundstart               = "aegis",
-		--	soundHit		     = "amphibmedtankshothit",
-		scrollspeed		         = 5,
+		soundStart               = "lozpulverizer-lightning",
+		soundtrigger             = true,
+
 		texture1                 = "lightning",
-		texture2                 = "laserend",
-		thickness                = 4,
-		tolerance                = 3000,
+		thickness                = 1.5,
 		turret                   = true,
-		weaponVelocity           = 1000,
-		customparams              = {
+		weaponVelocity           = 400,
+		customparams             = {
 			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-		damage                    = {
-			default               = 8,
+		damage                   = {
+			default              = 12,
 		},
 	},
 

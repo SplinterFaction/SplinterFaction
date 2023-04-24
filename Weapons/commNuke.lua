@@ -30,8 +30,8 @@ commNukes = {
 
 
 		smokeTrail                = false,
-		soundHit                  = "explosions/explosion_enormous.wav",
-		soundStart                = "weapons/nukelaunch.wav",
+		soundHit                  = "explosion_enormous",
+		soundStart                = "nukelaunch",
 
 		--		stockpile                 = true,
 		--		stockpileTime             = stockpiletime,
@@ -87,8 +87,8 @@ commNukes = {
 
 
 		smokeTrail                = false,
-		soundHit                  = "explosions/explosion_enormous.wav",
-		soundStart                = "weapons/nukelaunch.wav",
+		soundHit                  = "explosion_enormous",
+		soundStart                = "nukelaunch",
 
 		--		stockpile                 = true,
 		--		stockpileTime             = stockpiletime,
@@ -144,8 +144,8 @@ commNukes = {
 
 
 		smokeTrail                = false,
-		soundHit                  = "explosions/explosion_enormous.wav",
-		soundStart                = "weapons/nukelaunch.wav",
+		soundHit                  = "explosion_enormous",
+		soundStart                = "nukelaunch",
 
 		--		stockpile                 = true,
 		--		stockpileTime             = stockpiletime,
@@ -201,8 +201,8 @@ commNukes = {
 
 
 		smokeTrail                = false,
-		soundHit                  = "explosions/explosion_enormous.wav",
-		soundStart                = "weapons/nukelaunch.wav",
+		soundHit                  = "explosion_enormous",
+		soundStart                = "nukelaunch",
 
 		--		stockpile                 = true,
 		--		stockpileTime             = stockpiletime,
@@ -258,8 +258,8 @@ commNukes = {
 
 
 		smokeTrail                = false,
-		soundHit                  = "explosions/explosion_enormous.wav",
-		soundStart                = "weapons/nukelaunch.wav",
+		soundHit                  = "explosion_enormous",
+		soundStart                = "nukelaunch",
 
 		--		stockpile                 = true,
 		--		stockpileTime             = stockpiletime,

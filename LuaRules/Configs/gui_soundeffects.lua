@@ -98,7 +98,7 @@ for _, udef in pairs(UnitDefs) do
 			end
 			if udef.customParams.unitrole_sound == "turret" then
 				GUIUnitSoundEffects[udef.name] = {
-					BaseSoundSelectType = "building_select_factory",
+					BaseSoundSelectType = "building_select_turret",
 					BaseSoundMovementType = "building_movement_generic",
 					BaseSoundWeaponType = "building_weapon_generic",
 				}

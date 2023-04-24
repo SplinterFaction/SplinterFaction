@@ -48,7 +48,7 @@ end
 
 function script.FireWeapon(WeaponID)
 	if WeaponID == 1 then
-		-- EmitSfx (laserfirepoint1, 1024)
+		EmitSfx (laserfirepoint1, 1025)
 	elseif WeaponID == 2 then
 		EmitSfx (flakfirepoint1, 1024)
 	end

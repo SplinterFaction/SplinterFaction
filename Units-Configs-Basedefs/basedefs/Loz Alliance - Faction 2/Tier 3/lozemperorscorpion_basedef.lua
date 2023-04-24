@@ -161,12 +161,12 @@ weaponDefs                 = {
 		intensity                = 24,
 		laserFlareSize           = 1,
 
-		name			         = "elighttank3weapon",
+		name			         = "Electrical Strike Cannon",
 		noSelfDamage             = true,
 		range                    = 1200,
 		reloadtime               = 12,
 		WeaponType               = "LightningCannon",
-		rgbColor                 = "1 1 1",
+		rgbColor                 = "0.5 1 1",
 		rgbColor2                = "1 1 1",
 		soundStart               = "lightningstrike",
 		soundtrigger             = true,
@@ -176,7 +176,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
-			expl_light_color	= white, -- As a string, RGB
+			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
