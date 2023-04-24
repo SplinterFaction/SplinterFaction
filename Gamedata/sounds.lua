@@ -3,10 +3,11 @@
 local Sounds = {
 	SoundItems = {
 
-		IncomingChat = {
-		    file = "sounds/ui/chat.wav",
-		    -- in3d = "false",
-		},
+		--IncomingChat = {
+		--    file = "sounds/ui/chat.wav",
+		--    gain = 0.5,
+		--    -- in3d = "false",
+		--},
 		--MultiSelect = {
 		--	file = "sounds/ui/multiselect.wav",
 		--	-- in3d = "false",

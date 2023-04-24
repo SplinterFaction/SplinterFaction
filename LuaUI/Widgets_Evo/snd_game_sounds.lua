@@ -102,22 +102,22 @@ function widget:UnitCloaked(unitID, unitDefID, teamID)
 	local x,y,z = GetUnitPosition(unitID)
 	local _,_,_,_,side = GetTeamInfo(teamID)
 		
-	if side == "arm" then
-		PlaySoundFile(cloak1,VOLBATTLE,x,y,z,0,0,0,'battle')
-	else
-		PlaySoundFile(cloak2,VOLBATTLE,x,y,z,0,0,0,'battle')
-	end
+	--if side == "arm" then
+	--	PlaySoundFile(cloak1,VOLBATTLE,x,y,z,0,0,0,'battle')
+	--else
+	--	PlaySoundFile(cloak2,VOLBATTLE,x,y,z,0,0,0,'battle')
+	--end
 end
 
 function widget:UnitDecloaked(unitID, unitDefID, teamID) 
 	local x,y,z = GetUnitPosition(unitID)
 	local _,_,_,_,side = GetTeamInfo(teamID)
 	
-	if side == "arm" then
-		PlaySoundFile(decloak1,VOLBATTLE,x,y,z,0,0,0,'battle')
-	else
-		PlaySoundFile(decloak2,VOLBATTLE,x,y,z,0,0,0,'battle')
-	end
+	--if side == "arm" then
+	--	PlaySoundFile(decloak1,VOLBATTLE,x,y,z,0,0,0,'battle')
+	--else
+	--	PlaySoundFile(decloak2,VOLBATTLE,x,y,z,0,0,0,'battle')
+	--end
 end
 
 function widget:GameFrame(gameFrame)
