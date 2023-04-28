@@ -1,0 +1,53 @@
+
+base, engine1, engine2, engine3, engine4, bombbay = piece ('base', 'engine1', 'engine2', 'engine3', 'engine4', 'bombbay')
+
+common = include("headers/common_includes_lus.lua")
+
+local SIG_AIM = {}
+
+-- state variables
+isMoving = "isMoving"
+terrainType = "terrainType"
+
+function script.Create()
+    StartThread(common.SmokeUnit, {base, engine1, engine2, engine3, engine4, bombbay})
+end
+
+function script.StartMoving()
+    isMoving = true
+end
+
+function script.StopMoving()
+    isMoving = false
+end
+
+function script.AimFromWeapon(WeaponID)
+    --Spring.Echo("AimFromWeapon: FireWeapon")
+    return base
+end
+
+function script.QueryWeapon(WeaponID)
+    if WeaponID == 1 then
+        return bombbay
+    end
+end
+
+function script.FireWeapon(WeaponID)
+end
+
+function script.AimWeapon(WeaponID, heading, pitch)
+    -- Spring.SetUnitWeaponState(unitID, WeaponID, {reaimTime = 5}) -- Only use this if the turret is glitchy
+
+    if WeaponID == 1 then
+        Signal(SIG_AIM)
+        SetSignalMask(SIG_AIM)
+        --Spring.Echo("AimWeapon: FireWeapon")
+        return true
+    end
+end
+
+
+function script.Killed()
+    Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+    return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+end
