@@ -55,7 +55,7 @@ end
 
 function script.BeginTransport(passengerID)
     local unitHeight = Spring.GetUnitHeight(passengerID)
-    Move(link, y_axis, -unitHeight, 500)
+    Move(link, y_axis, -unitHeight, 1000)
 end
 
 function script.QueryTransport()

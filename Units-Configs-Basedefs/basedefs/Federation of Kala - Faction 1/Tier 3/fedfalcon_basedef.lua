@@ -99,8 +99,8 @@ unitDef                    = {
 			def                  = "rockets",
 			badTargetCategory     = "GROUND",
 			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
-			mainDir = "0 -1 0",
-			maxAngleDif = 200,
+			mainDir = "0 0 1",
+			maxAngleDif = 90,
 		},
 		--[[
 			float mainDir default: {0.0, 0.0, 1.0} i.e. forwards
