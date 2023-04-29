@@ -25,7 +25,7 @@ unitDef                    = {
 	verticalSpeed       = 3.0,
 	maxAileron          = 0.0144, -- New Default
 	maxElevator         = 0.01065,
-	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxRudder           = 0.00615, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
 	useSmoothMesh		= true,
@@ -96,7 +96,7 @@ unitDef                    = {
 
 	weapons                      = {
 		[1]                      = {
-			def                  = "rockets",
+			def                  = "bomb",
 			badTargetCategory     = "GROUND",
 			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
 			mainDir = "0 0 1",
@@ -173,42 +173,44 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	rockets             = {
+	bomb  	             = {
 		AreaOfEffect             = 350,
-		avoidFriendly            = false,
 		avoidFeature             = false,
-		collideFriendly          = false,
+		avoidFriendly            = false,
 		collideFeature           = false,
-		cegTag                   = "ehbotrocko-optimized",
-		explosionGenerator       = "custom:NUKEDATBEWMSMALL",
+		collideFriendly          = false,
 		burst                    = 3,
-		burstrate                = 0.1,
+		burstrate                = 1,
+		edgeeffectiveness		 = 1,
 		energypershot            = 0,
-		fireStarter              = 70,
+		explosionGenerator       = "custom:genericshellexplosion-bomb",
+		fireStarter              = 50,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		model                    = "missilesmalllauncher.s3o",
-		name                     = "Rockets",
+		mygravity                = 2,
+		name                     = "High Explosive Bomb",
 		range                    = 740,
 		reloadtime               = 15,
-		weaponType		         = "MissileLauncher",
-		smokeTrail               = false,
-		soundStart               = "fedcrasher-maingun",
-		soundHit                 = "explode5",
-		startVelocity            = 250,
-		tolerance                = 8000,
-		turnrate                 = 30000,
-		turret                   = true,
-		tracks                   = false,
-		sprayangle               = 750,
-		weaponAcceleration       = 100,
-		flightTime               = 2.5,
-		weaponVelocity           = 800,
+		WeaponType               = "AircraftBomb",
+		soundTrigger             = true,
+		model                    = "missilesmalllauncher.s3o",
+		soundstart               = "bombdrop",
+		soundHit                 = "Explosion Fireworks_01",
+		soundHitWet				 = "subhitbomb",
+		sprayangle               = 2000,
+
 		customparams             = {
-			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= hugeExplosion, -- In Elmos
-			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+
+			areadamage_ceg          = "napalm",
+			areadamage_damageceg    = "burnblacknapalm",
+			areadamage_time         = 5,
+			areadamage_damage       = 35,
+			areadamage_range        = 200,
+			-- areadamage_reistance = ,
 		},
 		damage                   = {
 			default              = 3600,
