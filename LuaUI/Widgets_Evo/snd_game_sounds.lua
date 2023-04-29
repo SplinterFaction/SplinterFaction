@@ -55,8 +55,8 @@ local cloak2 = "cloak"
 local decloak2 = "cloak"
 
 local alert = "alert sounds 3"
-local cancel = "cantdo"
-local movefailed = "cantdo"
+local cancel = 'cantdo'
+local movefailed = 'cantdo'
 
 local ADUnits = {}
 local CMD_SELFD = CMD.SELFD
@@ -185,7 +185,7 @@ function widget:UnitCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOp
 			--PlaySoundFile(CD1)
 		else
 			ADUnits[unitID] = nil
-			PlaySoundFile(cancel, 0.05, nil, "ui")
+			PlaySoundFile(cancel, 1, nil, "ui")
 		end
 	end
 	return true
@@ -292,7 +292,7 @@ function widget:UnitMoveFailed(unitID, unitDefID, unitTeam)
 	local x,y,z = GetUnitPosition(unitID)
 	if (x and y and z) then SetLastMessagePosition(x,y,z) end
 	
-	PlaySoundFile(movefailed, 0.05, nil, "ui")
+	PlaySoundFile(movefailed, 1, nil, "ui")
 end 
 
 --changing teams, rejoin, becoming spec etc

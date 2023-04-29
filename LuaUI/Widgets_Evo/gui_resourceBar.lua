@@ -221,7 +221,7 @@ function widget:GameFrame(n)
 						if energyNotificationTimeout <= 0 then
 							if metalNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
 								energyNotificationTimeout = 60
-								Spring.PlaySoundFile("sounds/ui/additionalgenerators.wav", VOLUI)
+								Spring.PlaySoundFile("additionalgenerators", VOLUI)
 								Spring.Echo([[You must construct additional energy generators so you can build and upgrade at full speed!]])
 							end
 						end
@@ -233,7 +233,7 @@ function widget:GameFrame(n)
 						if metalNotificationTimeout <= 0 then
 							if energyNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
 								metalNotificationTimeout = 60
-								Spring.PlaySoundFile("sounds/ui/useyourmetal.wav", VOLUI)
+								Spring.PlaySoundFile("useyourmetal", VOLUI)
 								Spring.Echo([[You are excessing metal!]])
 							end
 						end
@@ -245,7 +245,7 @@ function widget:GameFrame(n)
 						if supplyNotificationTimeout <= 0 then
 							if energyNotificationTimeout <= 20 and metalNotificationTimeout <= 20 then
 								supplyNotificationTimeout = 60
-								Spring.PlaySoundFile("sounds/ui/constructadditionalpylons.wav", VOLUI)
+								Spring.PlaySoundFile("constructadditionalpylons", VOLUI)
 								Spring.Echo([[You have no more available supply, build supply depots in order to increase the size of your army!]])
 							end
 						end
@@ -618,7 +618,7 @@ function generateDisplayList2()
 				gl.TexRect(metalOffset,0,metalOffset+(metalBarWidth*percentage),height/12)
 				if percentage == 0 and timeElapsed > 0 and (not incomeIncreased) then
 					if resourcePrompts ~= 0 then
-						Spring.PlaySoundFile("sounds/ui/metalincomeincrease.wav", 1)
+						Spring.PlaySoundFile("metalincomeincrease", 1)
 						Spring.Echo("Metal income has increased!")
 					end
 					incomeIncreased = true

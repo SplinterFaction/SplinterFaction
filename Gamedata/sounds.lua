@@ -23,9 +23,9 @@ local Sounds = {
 			priority = 1,
 			in3d = true,
 		},
-		FailedCommand = {
-			file = "sounds/ui/cantdo.wav",
-		},
+		--FailedCommand = {
+		--	file = "sounds/ui/cantdo.wav",
+		--},
 		
 		--ExampleSound = {
 			--- some things you can do with this file
@@ -159,17 +159,12 @@ for i=1,#files do
    }
 end
 
+
+
 local soundData = {
 
 	['ui'] = {
-		gain = {
-			default = 0.25,
-			custom = {
-				['^beep(.)+$'] = 0.01,
-				['^button(.)+$'] = 0.01,
-				['^cantdo(.)+$'] = 0.1,
-			},
-		},
+		gain = 0.15,
 		pitchmod = 0,
 		gainmod  = 0,
 		dopplerscale = 0,
@@ -179,7 +174,7 @@ local soundData = {
 	},
 
 	['commands'] = {
-		gain = 0.2 * 0.3,
+		gain = 0.3,
 		pitchmod = 0.02,
 		gainmod  = 0.2 * 0.3,
 		dopplerscale = 0,

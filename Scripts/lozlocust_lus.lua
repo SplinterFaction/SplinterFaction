@@ -51,6 +51,24 @@ function script.QueryWeapon(WeaponID)
 end
 
 function script.FireWeapon(WeaponID)
+    if WeaponID == 2 then
+        EmitSfx (chinfirepoint, 'electricity')
+    end
+    if WeaponID == 3 then
+        EmitSfx (topfirepoint, 'electricity')
+    end
+    if WeaponID == 4 then
+        EmitSfx (bottomfirepoint, 'electricity')
+    end
+    if WeaponID == 5 then
+        EmitSfx (leftfirepoint, 'electricity')
+    end
+    if WeaponID == 6 then
+        EmitSfx (rightfirepoint, 'electricity')
+    end
+    if WeaponID == 7 then
+        EmitSfx (rearfirepoint, 'electricity')
+    end
 end
 
 function script.AimWeapon(WeaponID, heading, pitch)

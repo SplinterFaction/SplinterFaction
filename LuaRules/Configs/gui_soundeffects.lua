@@ -81,6 +81,48 @@ for _, udef in pairs(UnitDefs) do
 			}
 		end
 
+		if udef.customParams.unittype == "air" then
+			if udef.customParams.requiretech == "tech0" or udef.customParams.requiretech == "tech1" then
+				--Spring.Echo("[RESPONSEDOUND FALLBACK]: ARMADA", udef.name)
+				GUIUnitSoundEffects[udef.name] = {
+					BaseSoundSelectType = "air_select_small",
+					BaseSoundMovementType = "unit_movement_small",
+					BaseSoundWeaponType = "unit_weapon_small",
+				}
+			end
+			if udef.customParams.requiretech == "tech2" then
+				--Spring.Echo("[RESPONSEDOUND FALLBACK]: ARMADA", udef.name)
+				GUIUnitSoundEffects[udef.name] = {
+					BaseSoundSelectType = "air_select_medium",
+					BaseSoundMovementType = "unit_movement_medium",
+					BaseSoundWeaponType = "unit_weapon_medium",
+				}
+			end
+			if udef.customParams.requiretech == "tech3" then
+				--Spring.Echo("[RESPONSEDOUND FALLBACK]: ARMADA", udef.name)
+				GUIUnitSoundEffects[udef.name] = {
+					BaseSoundSelectType = "air_select_large",
+					BaseSoundMovementType = "unit_movement_large",
+					BaseSoundWeaponType = "unit_weapon_large",
+				}
+			end
+			if udef.customParams.requiretech == "tech4" then
+				--Spring.Echo("[RESPONSEDOUND FALLBACK]: ARMADA", udef.name)
+				GUIUnitSoundEffects[udef.name] = {
+					BaseSoundSelectType = "air_select_large",
+					BaseSoundMovementType = "unit_movement_large",
+					BaseSoundWeaponType = "unit_weapon_large",
+				}
+			end
+		elseif udef.customParams.unittype == "mobile" then
+			--Spring.Echo("[RESPONSEDOUND FALLBACK]: ARMADA", udef.name)
+			GUIUnitSoundEffects[udef.name] = {
+				BaseSoundSelectType = "unit_select_small",
+				BaseSoundMovementType = "unit_movement_small",
+				BaseSoundWeaponType = "unit_weapon_small",
+			}
+		end
+
 		if udef.customParams.unittype == "building" then
 			if udef.customParams.unitrole == "Economy" then
 				GUIUnitSoundEffects[udef.name] = {

@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.1,
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
-	buildCostEnergy              = 1200,
+	buildCostEnergy              = 48000,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -19,13 +19,13 @@ unitDef                    = {
 	-- frontToSpeed        = 0,    -- New Default
 	speedToFront        = 0.063,  -- New Default
 	-- crashDrag           = 0.005,
-	maxBank             = 0.8,  -- New Default
+	maxBank             = 0.2,  -- New Default
 	maxPitch            = 0.625, -- New Default
 	turnRadius          = 150,  -- New Default
-	verticalSpeed       = 3.0,
+	verticalSpeed       = 6.0,
 	maxAileron          = 0.0144, -- New Default
 	maxElevator         = 0.01065,
-	maxRudder           = 0.00615, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
+	maxRudder           = 0.009, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
 	maxAcc          	= 1.2,    -- OG Default was 0.065
 
 	useSmoothMesh		= true,
@@ -80,7 +80,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:jetstrail",
+			"custom:electricity",
 			"custom:blacksmoke",
 		},
 	},
@@ -98,44 +98,51 @@ unitDef                    = {
 		[1]                      = {
 			def                  = "bomb",
 			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
 			mainDir = "0 0 1",
 			maxAngleDif = 90,
 		},
 		[2]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
+			onlyTargetCategory    = "AIR GROUND BUILDING SHIP",
 			mainDir = "0 0 1",
-			maxAngleDif = 220,
+			maxAngleDif = 180,
 		},
 		[3]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
+			onlyTargetCategory    = "AIR GROUND BUILDING SHIP",
 			mainDir = "0 1 0",
-			maxAngleDif = 220,
+			maxAngleDif = 180,
 		},
 		[4]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
+			onlyTargetCategory    = "AIR GROUND BUILDING SHIP",
 			mainDir = "0 -1 0",
-			maxAngleDif = 220,
+			maxAngleDif = 180,
 		},
 		[5]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
+			onlyTargetCategory    = "AIR GROUND BUILDING SHIP",
 			mainDir = "1 0 0",
-			maxAngleDif = 220,
+			maxAngleDif = 180,
 		},
 		[6]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			badTargetCategory     = "GROUND",
-			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
+			onlyTargetCategory    = "AIR GROUND BUILDING SHIP",
 			mainDir = "-1 0 0",
-			maxAngleDif = 220,
+			maxAngleDif = 180,
+		},
+		[7]                      = {
+			def                  = "lightningcannon",
+			badTargetCategory     = "GROUND",
+			onlyTargetCategory    = "AIR GROUND BUILDING SHIP",
+			mainDir = "0 0 -1",
+			maxAngleDif = 180,
 		},
 
 		--[[
@@ -183,7 +190,7 @@ weaponDefs                 = {
 		burstrate                = 1,
 		edgeeffectiveness		 = 1,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-bomb",
+		explosionGenerator       = "custom:genericshellexplosion-bomb-huge",
 		fireStarter              = 50,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
@@ -193,7 +200,7 @@ weaponDefs                 = {
 		reloadtime               = 15,
 		WeaponType               = "AircraftBomb",
 		soundTrigger             = true,
-		model                    = "missilesmalllauncher.s3o",
+		model                    = "missilebomb2.s3o",
 		soundstart               = "bombdrop",
 		soundHit                 = "Explosion Fireworks_01",
 		soundHitWet				 = "subhitbomb",
@@ -206,10 +213,10 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 
 			areadamage_ceg          = "napalm",
-			areadamage_damageceg    = "burnblacknapalm",
+			areadamage_damageceg    = "blacksmokesmall",
 			areadamage_time         = 5,
 			areadamage_damage       = 35,
-			areadamage_range        = 200,
+			areadamage_range        = 350,
 			-- areadamage_reistance = ,
 		},
 		damage                   = {
@@ -217,43 +224,48 @@ weaponDefs                 = {
 		},
 	},
 
-	lasercannon                = {
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		-- cegTag                 = "railgun",
-		rgbColor               = "1 0 0",
-		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-small",
-		edgeEffectiveness	   = 1,
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.1,
-		impulseFactor          = 0,
+	lightningcannon   	             = {
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		craterBoost              = 0,
+		craterMult               = 0,
+		burst                    = 20,
+		burstrate                = 0.01,
+		beamTTL					 = 1,
+		duration                 = 1,
+		explosionGenerator       = "custom:genericshellexplosion-electric-small",
+		energypershot            = 0,
+		edgeeffectiveness		 = 1,
+		impulseBoost             = 0,
+		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		name                   = "Electromagnetic Pulse Laser",
-		range                  = 740,
-		reloadtime             = 0.2,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "lozreaper-sideguns",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.3,
-		thickness              = 10,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 800,
+		intensity                = 24,
+		laserFlareSize           = 1,
+
+		name			         = "Electrical Strike Cannon",
+		noSelfDamage             = true,
+		range                    = 740,
+		reloadtime               = 1,
+		WeaponType               = "LightningCannon",
+		rgbColor                 = "1 0.5 1",
+		rgbColor2                = "1 1 1",
+		soundStart               = "lightningstrike",
+		soundtrigger             = true,
+
+		texture1                 = "lightning",
+		thickness                = 1.5,
+		turret                   = true,
+		weaponVelocity           = 400,
 		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 14,
+			default              = 3.5,
 		},
 	},
 }
