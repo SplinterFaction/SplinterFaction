@@ -201,7 +201,7 @@ weaponDefs                 = {
 		mygravity                = 0.8,
 		name                     = "High Explosive Bomb",
 		range                    = 1200,
-		reloadtime               = 5,
+		reloadtime               = 15,
 		WeaponType               = "AircraftBomb",
 		soundTrigger             = true,
 		model                    = "missilebomb2.s3o",
@@ -218,12 +218,12 @@ weaponDefs                 = {
 			areadamage_ceg          = "napalm",
 			areadamage_damageceg    = "blacksmokesmall",
 			areadamage_time         = 5,
-			areadamage_damage       = 35,
+			areadamage_damage       = 100,
 			areadamage_range        = 200,
 			-- areadamage_reistance = ,
 		},
 		damage                   = {
-			default              = 250,
+			default              = 600,
 		},
 	},
 }

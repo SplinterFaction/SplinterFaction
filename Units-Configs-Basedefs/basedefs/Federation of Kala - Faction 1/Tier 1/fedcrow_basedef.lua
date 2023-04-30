@@ -185,7 +185,7 @@ weaponDefs                 = {
 		},
 	},
 	bomb  	             = {
-		AreaOfEffect             = 125,
+		AreaOfEffect             = 250,
 		accuracy                 = 500,
 		avoidFeature             = false,
 		avoidFriendly            = false,
@@ -193,7 +193,7 @@ weaponDefs                 = {
 		collideFriendly          = false,
 		burst                    = 4,
 		burstrate                = 0.25,
-		edgeeffectiveness		 = 1,
+		edgeeffectiveness		 = 0.5,
 		energypershot            = 0,
 		explosionGenerator       = "custom:genericshellexplosion-bomb",
 		fireStarter              = 50,
@@ -202,7 +202,7 @@ weaponDefs                 = {
 		mygravity                = 0.8,
 		name                     = "Cluster Bomb",
 		range                    = 1200,
-		reloadtime               = 5,
+		reloadtime               = 15,
 		WeaponType               = "AircraftBomb",
 		soundTrigger             = false,
 		model                    = "missilebomb2.s3o",
@@ -217,7 +217,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.025, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 137.5,
+			default              = 275,
 		},
 	},
 }
