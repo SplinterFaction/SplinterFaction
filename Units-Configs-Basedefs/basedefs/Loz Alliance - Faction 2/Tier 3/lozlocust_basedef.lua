@@ -251,7 +251,7 @@ weaponDefs                 = {
 		WeaponType               = "LightningCannon",
 		rgbColor                 = "1 0.5 1",
 		rgbColor2                = "1 1 1",
-		soundStart               = "lightningstrike",
+		soundStart               = "lozlocust-electriccannon",
 		soundtrigger             = true,
 
 		texture1                 = "lightning",

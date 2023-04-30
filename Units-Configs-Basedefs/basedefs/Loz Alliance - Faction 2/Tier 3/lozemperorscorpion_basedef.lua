@@ -168,7 +168,7 @@ weaponDefs                 = {
 		WeaponType               = "LightningCannon",
 		rgbColor                 = "0.5 1 1",
 		rgbColor2                = "1 1 1",
-		soundStart               = "lightningstrike",
+		soundStart               = "lozemperorscorpion-maingun",
 		soundtrigger             = true,
 
 		texture1                 = "lightning",
