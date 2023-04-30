@@ -24,13 +24,13 @@ Spring.CreateDir("music/custom/menu")
 ----------------------------------------------------------------------
 
 local showGUI = false
-local minSilenceTime = 60
-local maxSilenceTime = 300
-local warLowLevel = 1000
-local warHighLevel = 20000
-local warMeterResetTime = 30 -- seconds
-local interruptionMinimumTime = 20 -- seconds
-local interruptionMaximumTime = 40 -- seconds
+local minSilenceTime = 30
+local maxSilenceTime = 120
+local warLowLevel = 750
+local warHighLevel = 15000
+local warMeterResetTime = 60 -- seconds
+local interruptionMinimumTime = 30 -- seconds
+local interruptionMaximumTime = 60 -- seconds
 
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -525,7 +525,7 @@ function widget:GameFrame(n)
 				end
 			elseif totalTime == 0 then -- there's no music
 				if silenceTimerEnabled and not bossHasSpawned then
-					Spring.Echo("silenceTimer: ", silenceTimer)
+					--Spring.Echo("silenceTimer: ", silenceTimer)
 					if silenceTimer > 0 then
 						silenceTimer = silenceTimer - 1
 					elseif silenceTimer <= 0 then
