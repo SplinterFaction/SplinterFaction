@@ -16,35 +16,37 @@ local burrowName = 'healstation_ai'
 
 chickenTurrets = {
 	-- Weapons
-	["fedmenlo"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = true	},
-	["lozjericho"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = true	},
-	["fedstinger"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["lozrazor"] 					= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["fedimmolator"] 				= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = true,	maxQueenAnger = 1000},
-	["lozinferno"] 					= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = true,	maxQueenAnger = 1000},
-	["fedjavelin"] 					= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
-	["lozrattlesnake"] 				= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
-	["fedguardian"]					= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
-	["lozannihilator"]				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false,	maxQueenAnger = 1000},
-	-- ["fedbertha"]					= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	-- ["lozintimidator"]				= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	["fedmenlo"]             = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["lozjericho"]           = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["fedstinger"]           = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["lozrazor"]             = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedimmolator"]         = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["lozinferno"]           = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["fedjavelin"]           = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["lozrattlesnake"]       = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedguardian"]          = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["lozannihilator"]       = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedearthquakemine"] 	 = { minQueenAnger = 20, spawnedPerWave = 10, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Utility
-	["cloakingtower"] 				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = true,	maxQueenAnger = 1000},
-	["smallshieldgenerator"] 		= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = true	},
-	["largeshieldgenerator"] 		= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = true	},
+	["cloakingtower"]        = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["largecloakingtower"]   = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["smallshieldgenerator"] = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["largeshieldgenerator"] = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+
+	["healstation"] 		 = { minQueenAnger = 20, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Eco Fillers
-	 -- Power
-	["fissionpowerplant"] 			= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["fusionpowerplant"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["coldfusionpowerplant"] 		= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["blackholepowerplant"] 		= { minQueenAnger = 60, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	 -- Storage
-	["supplydepot"] 				= { minQueenAnger = 0, 		spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["mediumsupplydepot"] 			= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["mediumstorage"] 				= { minQueenAnger = 20, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
-	["largestorage"] 				= { minQueenAnger = 40, 	spawnedPerWave = 1,		spawnOnBurrows = false	},
+	-- Power
+	["fissionpowerplant"]    = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fusionpowerplant"]     = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["coldfusionpowerplant"] = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["blackholepowerplant"]  = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- Storage
+	["supplydepot"]          = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["mediumsupplydepot"]    = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["mediumstorage"]        = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["largestorage"]         = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 }
 
 local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to be true, if some unit is not specified here, it drops random egg colors.
@@ -53,69 +55,56 @@ local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to 
 
 chickenBehaviours = {
 	SKIRMISH = { -- Run away from target after target gets hit -- This is for fast light units
-		[UnitDefNames["fedak"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedstorm"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedthud"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedcrasher"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozdiamondback"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozroach"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozscorpion"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedbear"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedcobra"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedavalanche"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozreaper"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedengineer_up1_ai"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["lozengineer_up1_ai"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 1 },
-		
-
-		--[[
-		[UnitDefNames["chickens2"].id] = { distance = 250, chance = 0.5 },
-		[UnitDefNames["chickenr1"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["chickenr2"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["chickene1"].id] = { distance = 300, chance = 1 },
-		[UnitDefNames["chickene2"].id] = { distance = 200, chance = 0.01 },	
-		[UnitDefNames["chickenelectricallterrainassault"].id] = { distance = 200, chance = 0.01 },
-		[UnitDefNames["chickenearty1"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["chickenelectricallterrain"].id] = { distance = 300, chance = 1 },
-		[UnitDefNames["chickenacidswarmer"].id] = { distance = 300, chance = 1 },
-		[UnitDefNames["chickenacidassault"].id] = { distance = 200, chance = 1 },
-		[UnitDefNames["chickenacidallterrainassault"].id] = { distance = 200, chance = 1 },
-		[UnitDefNames["chickenacidarty"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["chickenacidallterrain"].id] = { distance = 300, chance = 1 },
-		[UnitDefNames["chickenh2"].id] = { distance = 500, chance = 0.25 },
-		[UnitDefNames["chicken1x_spectre"].id] = { distance = 500, chance = 0.25, teleport = true, teleportcooldown = 2,},
-		[UnitDefNames["chicken2_spectre"].id] = { distance = 500, chance = 0.25, teleport = true, teleportcooldown = 2,},
-		[UnitDefNames["chickens2_spectre"].id] = { distance = 500, chance = 0.25, teleport = true, teleportcooldown = 2,},
-		]]--
+		-- T1
+		[UnitDefNames["lozscorpion"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedcrasher"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedthud"].id] = { distance = 500, chance = 1 },
+		-- T2
+		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozpulverizer"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedcobra"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedavalanche"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 1 },
+		-- T3
+		[UnitDefNames["lozemperorscorpion"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozprotector"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
 	},
 	COWARD = { -- Run away from target after getting hit by enemy -- This is for fast light units
-		[UnitDefNames["fedak"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedstorm"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedthud"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedcrasher"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozdiamondback"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozroach"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozscorpion"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedbear"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedcobra"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedavalanche"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozreaper"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 0.5 },
-		[UnitDefNames["fedengineer_up1_ai"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["lozengineer_up1_ai"].id] = { distance = 500, chance = 1 },
-		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 0.5 },
+		-- T1
+		[UnitDefNames["lozscorpion"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedcrasher"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedthud"].id] = { distance = 500, chance = 1 },
+		-- T2
+		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozpulverizer"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedcobra"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedavalanche"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 1 },
+		-- T3
+		[UnitDefNames["lozemperorscorpion"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["lozprotector"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
 
 	},
 	BERSERK = { -- Run towards target after getting hit by enemy or after hitting the target-- This is for heavy slow units
-		[UnitDefNames["fedgoliath"].id] = { distance = 3000, chance = 0.5 },
-		[UnitDefNames["fedjuggernaut"].id] = { distance = 3000, chance = 0.5 },
-		[UnitDefNames["lozmammoth"].id] = { distance = 3000, chance = 0.5 },
-		[UnitDefNames["lozsilverback"].id] = { distance = 3000, chance = 0.5 },
-		[UnitDefNames["fedanarchid"].id] = { distance = 3000, chance = 0.5 },
+		-- T1
+		[UnitDefNames["lozflea"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["lozdiamondback"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["lozroach"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedak"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedstorm"].id] = { distance = 3000, chance = 0.01 },
+		-- T2
+		[UnitDefNames["lozreaper"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedbear"].id] = { distance = 3000, chance = 0.01 },
+		-- T3
+		[UnitDefNames["lozmammoth"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedstriker"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedgoliath"].id] = { distance = 3000, chance = 0.01 },
+		-- T4
+		[UnitDefNames["lozsilverback"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedjuggernaut"].id] = { distance = 3000, chance = 0.01 },
+		-- Bosses
 		[UnitDefNames["fedanarchid_normal"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedanarchid_hard"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedanarchid_veryhard"].id] = { distance = 3000, chance = 0.01 },
@@ -124,8 +113,7 @@ chickenBehaviours = {
 		[UnitDefNames["fedanarchid_unbeatable"].id] = { distance = 3000, chance = 0.01 },
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
-		[UnitDefNames["lozengineer_up1_ai"].id] = true,
-		[UnitDefNames["fedengineer_up1_ai"].id] = true,
+		[UnitDefNames["lozflea"].id] = true,
 	},
 	ARTILLERY = { -- Long lifetime and no regrouping, always uses Fight command to keep distance
 		[UnitDefNames["fedavalanche"].id] = true,
@@ -140,9 +128,11 @@ chickenBehaviours = {
 local optionValues = {
 
 	[difficulties.normal] = {
-		chickenSpawnRate  = 30, -- Time between Waves in seconds
-		burrowSpawnRate   = 75, -- Time inbetween burrow spawns in seconds
-		turretSpawnRate   = 180, -- Time inbetween turret spawns in seconds
+		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60, -- Time between Waves in seconds
+		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
+		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
 		queenSpawnMult    = 1, -- Unused, don't touch (just in case)
 		angerBonus        = 0.2, -- Multiplier for boss anger when you kill a burrow
 		maxXP			  = 0.5, -- Random amount of XP given to spawned units
@@ -157,9 +147,11 @@ local optionValues = {
 	},
 
 	[difficulties.hard] = {
-		chickenSpawnRate  = 30,
-		burrowSpawnRate   = 60,
-		turretSpawnRate   = 120,
+		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60,
+		burrowSpawnRate   = 120,
+		turretSpawnRate   = 240,
 		queenSpawnMult    = 1,
 		angerBonus        = 0.2,
 		maxXP			  = 1,
@@ -173,9 +165,11 @@ local optionValues = {
 		queenResistanceMult   = 1.75,
 	},
 	[difficulties.veryhard] = {
-		chickenSpawnRate  = 30,
-		burrowSpawnRate   = 45,
-		turretSpawnRate   = 90,
+		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60,
+		burrowSpawnRate   = 90,
+		turretSpawnRate   = 180,
 		queenSpawnMult    = 3,
 		angerBonus        = 0.2,
 		maxXP			  = 1.5,
@@ -189,9 +183,11 @@ local optionValues = {
 		queenResistanceMult   = 2,
 	},
 	[difficulties.insane] = {
-		chickenSpawnRate  = 30,
-		burrowSpawnRate   = 30,
-		turretSpawnRate   = 60,
+		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60,
+		burrowSpawnRate   = 60,
+		turretSpawnRate   = 120,
 		queenSpawnMult    = 3,
 		angerBonus        = 0.2,
 		maxXP			  = 2,
@@ -205,9 +201,11 @@ local optionValues = {
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.epic] = {
-		chickenSpawnRate  = 30,
-		burrowSpawnRate   = 20,
-		turretSpawnRate   = 40,
+		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60,
+		burrowSpawnRate   = 40,
+		turretSpawnRate   = 80,
 		queenSpawnMult    = 3,
 		angerBonus        = 0.2,
 		maxXP			  = 5,
@@ -221,9 +219,11 @@ local optionValues = {
 		queenResistanceMult   = 3,
 	},
 	[difficulties.unbeatable] = {
-		chickenSpawnRate  = 30,
-		burrowSpawnRate   = 10,
-		turretSpawnRate   = 20,
+		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60,
+		burrowSpawnRate   = 20,
+		turretSpawnRate   = 40,
 		queenSpawnMult    = 3,
 		angerBonus        = 0.2,
 		maxXP			  = 10,
@@ -238,20 +238,22 @@ local optionValues = {
 	},
 
 	[difficulties.survival] = {
-		chickenSpawnRate  = 30,
-		burrowSpawnRate   = 75,
-		turretSpawnRate   = 150,
-		queenSpawnMult    = 1,
-		angerBonus        = 0.2,
-		maxXP			  = 0.5,
-		spawnChance       = 0.2,
-		damageMod         = 1,
-		maxBurrows        = 1000,
+		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60, -- Time between Waves in seconds
+		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
+		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
+		queenSpawnMult    = 1, -- Unused, don't touch (just in case)
+		angerBonus        = 0.2, -- Multiplier for boss anger when you kill a burrow
+		maxXP			  = 0.5, -- Random amount of XP given to spawned units
+		spawnChance       = 0.2, -- What are the chances that a burrow will spawn units each wave (this check is performed on each burrow)
+		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
+		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10,
-		maxChickens		  = 30,
-		queenName         = 'fedanarchid_unbeatable',
-		queenResistanceMult   = 1,
+		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
+		maxChickens		  = 30, -- Number of ai units spawned in the end stages of the game per wave
+		queenName         = 'fedanarchid_normal',
+		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 }
 
@@ -287,55 +289,43 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local miniBosses = { -- Units that spawn alongside queen
-	"fedstriker",
 	"lozemperorscorpion",
+	"lozmammoth",
+	"lozsilverback",
+	"fedstriker",
+	"fedgoliath",
+	"fedjuggernaut",
 }
 
 local chickenMinions = { -- Units spawning other units
 	["fedanarchid_normal"] = {
 		"fedbear",
-		"fedcobra",
 		"lozreaper",
-		"lozpulverizer",
 	},
 	["fedanarchid_hard"] = {
 		"fedbear",
-		"fedcobra",
 		"lozreaper",
 	},
 	["fedanarchid_veryhard"] = {
 		"fedbear",
-		"fedcobra",
-		"fedavalanche",
 		"lozreaper",
-		"fedstriker",
-		"lozemperorscorpion",
 	},
 	["fedanarchid_insane"] = {
 		"fedbear",
 		"lozreaper",
-		"fedgoliath",
-		"lozmammoth",
-		"fedstriker",
-		"lozemperorscorpion",
 	},
 	["fedanarchid_epic"] = {
-		"fedjuggernaut",
-		"lozsilverback",
-		"fedstriker",
-		"lozemperorscorpion",
+		"fedbear",
+		"lozreaper",
 	},
 	["fedanarchid_unbeatable"] = {
-		"fedjuggernaut",
-		"lozsilverback",
-		"fedstriker",
-		"lozemperorscorpion",
+		"fedbear",
+		"lozreaper",
 	},
 }
 
 local chickenHealers = { -- Spawn indepedently from squads in small numbers
-	"lozengineer_up1_ai",
-	"fedengineer_up1_ai",
+	"lozflea",
 },
 
 ------------------
@@ -353,10 +343,8 @@ addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozscorpion" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedstorm" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedthud" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedcrasher" } })
--- addNewSquad({ type = "basic", minAnger = 10, units = { "1 fedbear"}, weight = 2 })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozroach" } })
 addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozscorpion" } })
--- addNewSquad({ type = "basic", minAnger = 10, units = { "1 lozreaper"}, weight = 2 })
 
 addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedstorm" } })
 addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedthud" } })
@@ -370,8 +358,13 @@ addNewSquad({ type = "basic", minAnger = 60, units = { "2 lozreaper", "1 lozpulv
 addNewSquad({ type = "basic", minAnger = 75, units = { "2 fedbear", "2 fedcobra", "2 fedphalanx" } })
 addNewSquad({ type = "basic", minAnger = 75, units = { "2 lozreaper", "2 lozpulverizer" } })
 
+addNewSquad({ type = "basic", minAnger = 90, units = { "1 fedstriker"} })
+addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozemperorscorpion"} })
+addNewSquad({ type = "basic", minAnger = 90, units = { "1 feddeleter"} })
+addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozprotector"} })
 addNewSquad({ type = "basic", minAnger = 90, units = { "1 fedgoliath" } })
 addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozmammoth" } })
+
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -405,11 +398,16 @@ addNewSquad({ type = "special", minAnger = 60, units = { "5 lozluger" } })
 addNewSquad({ type = "special", minAnger = 70, units = { "1 fedbear"} })
 addNewSquad({ type = "special", minAnger = 70, units = { "1 lozreaper"} })
 
+addNewSquad({ type = "special", minAnger = 80, units = { "1 fedstriker"} })
+addNewSquad({ type = "special", minAnger = 80, units = { "1 lozemperorscorpion"} })
+addNewSquad({ type = "special", minAnger = 80, units = { "1 feddeleter"} })
+addNewSquad({ type = "special", minAnger = 80, units = { "1 lozprotector"} })
+
 addNewSquad({ type = "special", minAnger = 90, units = { "1 lozmammoth" } })
 addNewSquad({ type = "special", minAnger = 90, units = { "1 fedgoliath" } })
 
-addNewSquad({ type = "special", minAnger = 95, units = { "1 lozsilverback" } })
-addNewSquad({ type = "special", minAnger = 95, units = { "1 fedjuggernaut" } })
+addNewSquad({ type = "special", minAnger = 100, units = { "1 lozsilverback" } })
+addNewSquad({ type = "special", minAnger = 100, units = { "1 fedjuggernaut" } })
 
 for j = 1,#miniBosses do
 	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j] }, weight = 3 })
@@ -447,17 +445,21 @@ addNewSquad({ type = "air", minAnger = 60, units = { "3 fedcondor", "3 lozcrane"
 
 addNewSquad({ type = "air", minAnger = 70, units = { "6 fedhawk", "10 lozbumblebee", "6 lozhornet", "10 fedcrow" } })
 addNewSquad({ type = "air", minAnger = 70, units = { "3 fedcondor", "3 lozcrane" } })
+addNewSquad({ type = "air", minAnger = 70, units = { "1 fedfalcon", "1 lozlocust" } })
 
 addNewSquad({ type = "air", minAnger = 80, units = { "6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow" } })
 addNewSquad({ type = "air", minAnger = 80, units = { "4 fedcondor", "4 lozcrane" } })
 addNewSquad({ type = "air", minAnger = 80, units = { "1 fedeagle", "1 loztitan" } })
+addNewSquad({ type = "air", minAnger = 80, units = { "1 fedfalcon", "1 lozlocust" } })
 
 addNewSquad({ type = "air", minAnger = 90, units = { "6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow" } })
 addNewSquad({ type = "air", minAnger = 90, units = { "10 fedhawk", "10 lozhornet" } })
 addNewSquad({ type = "air", minAnger = 90, units = { "2 fedeagle", "2 loztitan" } })
+addNewSquad({ type = "air", minAnger = 90, units = { "2 fedfalcon", "2 lozlocust" } })
 
 addNewSquad({ type = "air", minAnger = 100, units = { "6 fedeagle", "6 loztitan" } })
 addNewSquad({ type = "air", minAnger = 100, units = { "9 fedcrow", "9 lozbumblebee" } })
+addNewSquad({ type = "air", minAnger = 100, units = { "3 fedfalcon", "3 lozlocust" } })
 
 local ecoBuildingsPenalty = { -- Additional queen hatch per second from eco buildup (for 60 minutes queen time. scales to queen time)
 	--[[
@@ -539,9 +541,6 @@ local config = { -- Don't touch this! ------------------------------------------
 	burrowName             	= burrowName,   -- burrow unit name
 	burrowDef              	= UnitDefNames[burrowName].id,
 	chickenSpawnMultiplier 	= Spring.GetModOptions().chicken_spawncountmult,
-	gracePeriod            	= Spring.GetModOptions().chicken_graceperiod * 60,  -- no chicken spawn in this period, frames
-	queenTime              	= Spring.GetModOptions().chicken_queentime * 60, -- time at which the queen appears, frames
-	addQueenAnger          	= Spring.GetModOptions().chicken_queenanger,
 	burrowSpawnType        	= Spring.GetModOptions().chicken_chickenstart,
 	swarmMode			   	= Spring.GetModOptions().chicken_swarmmode,
 	spawnSquare            	= spawnSquare,       
@@ -556,7 +555,7 @@ local config = { -- Don't touch this! ------------------------------------------
 	burrowTurretSpawnRadius = burrowTurretSpawnRadius,
 	squadSpawnOptionsTable	= squadSpawnOptionsTable,
 	airStartAnger			= airStartAnger,
-	ecoBuildingsPenalty 	= ecoBuildingsPenalty,
+	ecoBuildingsPenalty		= ecoBuildingsPenalty,
 	highValueTargets		= highValueTargets,
 }
 

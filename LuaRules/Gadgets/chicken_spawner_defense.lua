@@ -272,21 +272,15 @@ if gadgetHandler:IsSyncedCode() then
 	-- Difficulty
     --
 
-	if config.swarmMode then
-		config.maxChickens = config.maxChickens*10
-		config.minChickens = config.minChickens*10
-		config.chickenSpawnRate = config.chickenSpawnRate*10
-	end
-	-- local expIncrement = ((SetCount(humanTeams) * config.expStep) / config.queenTime)
 	local maxBurrows = ((config.maxBurrows*(1-config.chickenPerPlayerMultiplier))+(config.maxBurrows*config.chickenPerPlayerMultiplier)*SetCount(humanTeams))*config.chickenSpawnMultiplier
 	local queenTime = (config.queenTime + config.gracePeriod)
 	local maxWaveSize = ((config.maxChickens*(1-config.chickenPerPlayerMultiplier))+(config.maxChickens*config.chickenPerPlayerMultiplier)*SetCount(humanTeams))*config.chickenSpawnMultiplier
 	local minWaveSize = ((config.minChickens*(1-config.chickenPerPlayerMultiplier))+(config.minChickens*config.chickenPerPlayerMultiplier)*SetCount(humanTeams))*config.chickenSpawnMultiplier
+	config.chickenSpawnRate = config.chickenSpawnRate*Spring.GetModOptions().chicken_spawntimemult
 	local currentMaxWaveSize = minWaveSize
 	function updateDifficultyForSurvival()
 		t = GetGameSeconds()
 		config.gracePeriod = t-1
-		queenTime = (config.queenTime + config.gracePeriod)
 		queenAnger = 0  -- reenable chicken spawning
 		techAnger = 0
 		playerAgression = 0
@@ -308,7 +302,6 @@ if gadgetHandler:IsSyncedCode() then
 			nextDifficulty = config.difficultyParameters[5]
 			config.chickenSpawnMultiplier = config.chickenSpawnMultiplier*2
 		end
-		config.chickenSpawnRate = nextDifficulty.chickenSpawnRate
 		config.queenName = nextDifficulty.queenName
 		config.burrowSpawnRate = nextDifficulty.burrowSpawnRate
 		config.turretSpawnRate = nextDifficulty.turretSpawnRate
@@ -320,16 +313,14 @@ if gadgetHandler:IsSyncedCode() then
 		config.maxXP = nextDifficulty.maxXP
 		config.queenResistanceMult = nextDifficulty.queenResistanceMult
 		config.angerBonus = nextDifficulty.angerBonus
-		if config.swarmMode then
-			config.maxChickens = config.maxChickens*10
-			config.minChickens = config.minChickens*10
-			config.chickenSpawnRate = config.chickenSpawnRate*10
-		end
-		-- expIncrement = ((SetCount(humanTeams) * config.expStep) / config.queenTime)
+		config.queenTime = nextDifficulty.queenTime*0.5
+		queenTime = (config.queenTime + config.gracePeriod)
 		maxBurrows = ((config.maxBurrows*(1-config.chickenPerPlayerMultiplier))+(config.maxBurrows*config.chickenPerPlayerMultiplier)*SetCount(humanTeams))*config.chickenSpawnMultiplier
 		maxWaveSize = ((config.maxChickens*(1-config.chickenPerPlayerMultiplier))+(config.maxChickens*config.chickenPerPlayerMultiplier)*SetCount(humanTeams))*config.chickenSpawnMultiplier
 		minWaveSize = ((config.minChickens*(1-config.chickenPerPlayerMultiplier))+(config.minChickens*config.chickenPerPlayerMultiplier)*SetCount(humanTeams))*config.chickenSpawnMultiplier
+		config.chickenSpawnRate = nextDifficulty.chickenSpawnRate*Spring.GetModOptions().chicken_spawntimemult
 		currentMaxWaveSize = minWaveSize
+		SetGameRulesParam("ChickenQueenAngerGain_Base", 100/config.queenTime) 
 	end
 
 	--------------------------------------------------------------------------------
@@ -907,11 +898,11 @@ if gadgetHandler:IsSyncedCode() then
 			return
 		end
 		squadManagerKillerLoop()
+		
 		local waveType = "normal"
-
 		waveParameters.baseCooldown = waveParameters.baseCooldown - 1
 		waveParameters.airWave.cooldown = waveParameters.airWave.cooldown - 1
-
+		
 		if waveParameters.baseCooldown <= 0 then
 			-- special waves
 			if techAnger > config.airStartAnger and waveParameters.airWave.cooldown <= 0 then
@@ -930,7 +921,7 @@ if gadgetHandler:IsSyncedCode() then
 				if mRandom() <= config.spawnChance then
 					squadCounter = 0
 					local squad
-					if (waveType == "air" or queenID) and mRandom() <= 0.5 then
+					if (waveType == "air" or (queenID and mRandom() <= 0.25)) and mRandom() <= 0.5 then
 						for _ = 1,1000 do
 							local potentialSquad = squadSpawnOptions.air[mRandom(1, #squadSpawnOptions.air)]
 							if potentialSquad.minAnger <= techAnger and potentialSquad.maxAnger >= techAnger then
@@ -1328,10 +1319,6 @@ if gadgetHandler:IsSyncedCode() then
 			end
 		else
 			if mRandom() < config.spawnChance / 15 then
-				if SetCount(spawnQueue) == 0 and mRandom() < config.spawnChance then
-					Wave()
-					timeOfLastWave = t
-				end
 				SpawnMinions(queenID, Spring.GetUnitDefID(queenID))
 				SpawnMinions(queenID, Spring.GetUnitDefID(queenID))
 				SpawnRandomOffWaveSquad(queenID)
@@ -1501,12 +1488,6 @@ if gadgetHandler:IsSyncedCode() then
 			return
 		end
 
-		if n % 90 == 0 then
-			if (queenAnger >= 100) then
-				damageMod = (damageMod + 0.001)
-			end
-		end
-
 		local chickenTeamUnitCount = GetTeamUnitCount(chickenTeamID) or 0
 		if chickenTeamUnitCount < chickenUnitCap then
 			SpawnChickens()
@@ -1581,12 +1562,18 @@ if gadgetHandler:IsSyncedCode() then
 			elseif config.burrowSpawnRate < t - timeOfLastSpawn and burrowCount >= maxBurrows then
 				timeOfLastSpawn = t
 			end
+			
+			if t < config.gracePeriod and burrowCount < SetCount(humanTeams) then
+				SpawnBurrow()
+				chickenEvent("burrowSpawn")
+				SetGameRulesParam("chicken_hiveCount", SetCount(burrows))
+			end
 
 			if t > config.gracePeriod+5 then
 				if burrowCount > 0
 				and SetCount(spawnQueue) == 0
 				and ((config.chickenSpawnRate) < (t - timeOfLastWave)) then
-					local cCount = Wave()
+					Wave()
 					timeOfLastWave = t
 				end
 			end
@@ -1733,21 +1720,13 @@ if gadgetHandler:IsSyncedCode() then
 			end
 		end
 
-		-- if config.addQueenAnger then
-		-- 	if string.find(UnitDefs[unitDefID].name, "chicken_turret") then
-		-- 		playerAgression = playerAgression + config.angerBonus*0.25
-		-- 	end
-		-- end
-
 		if unitDefID == config.burrowDef and not gameOver then
 			local kills = GetGameRulesParam(config.burrowName .. "Kills") or 0
 			SetGameRulesParam(config.burrowName .. "Kills", kills + 1)
 
 			burrows[unitID] = nil
-			if config.addQueenAnger then
-				playerAgression = playerAgression + (config.angerBonus/config.chickenSpawnMultiplier)
-				config.maxXP = config.maxXP*1.01
-			end
+			playerAgression = playerAgression + (config.angerBonus/config.chickenSpawnMultiplier)
+			config.maxXP = config.maxXP*1.01
 
 			for i, defs in pairs(spawnQueue) do
 				if defs.burrow == unitID then

@@ -172,11 +172,14 @@ local function CreatePanelDisplayList()
 				gain = math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) + math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) + math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Eco"), 3)
 			end
 			techLevel = "Boss Anger: " .. gameInfo.queenAnger .. "% (+" .. gain .. "%/s)"
+			local totalSeconds = (100 - gameInfo.queenAnger) / gain
+			time = string.formatTime(totalSeconds)
+			font:Print(textColor .. "Boss ETA: " .. time, panelMarginX+5, PanelRow(2), panelFontSize, "")
 		else
 			techLevel = "Boss Health: " .. gameInfo.queenLife
 		end
 	else
-		techLevel = "Grace Period: " .. math.ceil(((currentTime - gameInfo.gracePeriod) * -1) - 0.5)
+		techLevel = "Grace Period: " .. string.formatTime(math.ceil(((currentTime - gameInfo.gracePeriod) * -1) - 0.5))
 	end
 
 	font:Begin()
@@ -184,13 +187,13 @@ local function CreatePanelDisplayList()
 	font:SetOutlineColor(0, 0, 0, 1)
 	font:Print(techLevel, panelMarginX, PanelRow(1), panelFontSize, "")
 	if Spring.GetGameRulesParam("ChickenQueenAngerGain_Base") and gameInfo.queenAnger < 100 and currentTime > gameInfo.gracePeriod then
-		font:Print(textColor .. "Base: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) .. "%/s", panelMarginX+5, PanelRow(2), panelFontSize, "")
+		--font:Print(textColor .. "Base: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) .. "%/s", panelMarginX+5, PanelRow(3), panelFontSize, "")
 		font:Print(textColor .. "Aggression: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) .. "%/s", panelMarginX+5, PanelRow(3), panelFontSize, "")
 		--font:Print(textColor .. "Eco: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Eco"), 3) .. "%/s", panelMarginX+5, PanelRow(4), panelFontSize, "")
 	end
 	--font:Print('ui.chickens.chickenPlayerAgression' .. (Spring.GetGameRulesParam("chickenPlayerAgressionLevel") or 0), panelMarginX, PanelRow(2), panelFontSize, "")
 	--font:Print(Spring.I18N('ui.chickens.chickenCount', { count = gameInfo.chickenCounts }), panelMarginX, PanelRow(2), panelFontSize, "")
-	font:Print('Enemies Killed: ' .. gameInfo.chickenKills, panelMarginX, PanelRow(5), panelFontSize, "")
+	font:Print('Enemies Killed: ' .. gameInfo.chickenKills, panelMarginX, PanelRow(6), panelFontSize, "")
 	--font:Print(Spring.I18N('ui.chickens.burrowCount', { count = gameInfo.chicken_hiveCount }), panelMarginX, PanelRow(4), panelFontSize, "")
 	--font:Print(Spring.I18N('ui.chickens.burrowKillCount', { count = gameInfo.chicken_hiveKills }), panelMarginX, PanelRow(5), panelFontSize, "")
 
