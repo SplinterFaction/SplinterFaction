@@ -188,6 +188,8 @@ function gadget:GameFrame(n)
 					end
 					local spawnedUnit = spCreateUnit(lootboxToSpawn..NameSuffix, posx, posy, posz, math_random(0,3), spGaiaTeam)
 					if spawnedUnit then
+						Spring.PlaySoundFile("lootbox detected", 1)
+						Spring.Echo("A Lootbox has been detected!")
 						Spring.SetUnitNeutral(spawnedUnit, true)
 					end
 					--spCreateUnit("lootdroppod_gold"..NameSuffix, posx, posy, posz, math_random(0,3), spGaiaTeam)
