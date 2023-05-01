@@ -132,7 +132,7 @@ function gadget:GameFrame(n)
 
     if n%30 == 0 and n > 2 then
 		if math.random(0,SpawnChance) == 0 then
-			LootboxesToSpawn = LootboxesToSpawn+1
+			LootboxesToSpawn = LootboxesToSpawn+0.25
 			--Spring.Echo("LOOTBOXES ENABLED, +25% to spawn")
 		-- elseif #aliveLootboxes < math.ceil((n/30)/(SpawnChance*2)) then
 			-- TryToSpawn = true

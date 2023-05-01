@@ -59,6 +59,13 @@ local function GetTechLevel(teamID)
 	end
 end
 
+local repairSpeedModifier = 0.25
+local reclaimSpeedModifier = 0.25
+local resurrectSpeedModifier = 0.25
+local captureSpeedModifier = 0.25
+local terraformSpeedModifier = 100
+
+
 --[[ This would ideally be hooked up to some sort of event that would fire if tech changes.
      Since the tech gadget doesn't seem to have that, we will just fire it periodically. ]]
 local function TechChangedEvent(teamID)
@@ -66,7 +73,13 @@ local function TechChangedEvent(teamID)
 		local techLevel = GetTechLevel(teamID) -- this would be a decent place to cache the techlevel if this was an event
 		for unitID, nominalSpeed in pairs(buildersByTeam[teamID]) do
 			if unitID ~= nil then
-				SetBuildSpeed(unitID, nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel])
+				--Spring.SetUnitBuildSpeed ( number builderID, number buildSpeed [, number repairSpeed [, number reclaimSpeed[, number resurrectSpeed [, number captureSpeed [, number terraformSpeed ]]]]] )
+				SetBuildSpeed(unitID, nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel],
+				              nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel] * repairSpeedModifier,
+				              nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel] * reclaimSpeedModifier,
+				              nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel] * resurrectSpeedModifier,
+				              nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel] * captureSpeedModifier,
+				              nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel] * terraformSpeedModifier)
 			end
 		end
 	end
@@ -90,7 +103,13 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam)
 
 	buildersByTeam[unitTeam][unitID] = nominalSpeed
 
-	SetBuildSpeed(unitID, nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)])
+	--Spring.SetUnitBuildSpeed ( number builderID, number buildSpeed [, number repairSpeed [, number reclaimSpeed[, number resurrectSpeed [, number captureSpeed [, number terraformSpeed ]]]]] )
+	SetBuildSpeed(unitID, nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)],
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)] * repairSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)] * reclaimSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)] * resurrectSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)] * captureSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)] * terraformSpeedModifier)
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
