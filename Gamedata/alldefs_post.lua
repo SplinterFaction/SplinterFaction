@@ -743,7 +743,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 
 			-- Set reclaimspeed to be a multiple of workertime. This relies on max defaults set in featuredefs post. Without some max defaults there, this will be a funny result.
-			unitDef.reclaimspeed = unitDef.workertime
+			-- unitDef.reclaimspeed = unitDef.workertime
 
 			if canAnyUnitsReclaim == false then
 				if unitDef.canreclaim == true then

@@ -54,10 +54,7 @@ unitDef                    = {
 	transportbyenemy        = false;
 	unitname                = unitName,
 	workerTime              = workertime,
-	capturespeed            = 1,
 	TerraformSpeed          = 2147000,
-	ReclaimSpeed            = 0,
-	repairspeed             = 0.5,
 	--------------
 	-- Movement --
 	--------------

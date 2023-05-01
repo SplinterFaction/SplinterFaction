@@ -62,9 +62,13 @@ end
 --[[ This would ideally be hooked up to some sort of event that would fire if tech changes.
      Since the tech gadget doesn't seem to have that, we will just fire it periodically. ]]
 local function TechChangedEvent(teamID)
-	local techLevel = GetTechLevel(teamID) -- this would be a decent place to cache the techlevel if this was an event
-	for unitID, nominalSpeed in pairs(buildersByTeam[teamID]) do
-		SetBuildSpeed(unitID, nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel])
+	if teamID ~= nil then
+		local techLevel = GetTechLevel(teamID) -- this would be a decent place to cache the techlevel if this was an event
+		for unitID, nominalSpeed in pairs(buildersByTeam[teamID]) do
+			if unitID ~= nil then
+				SetBuildSpeed(unitID, nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel], nominalSpeed * multipliers[spGetUnitDefID(unitID)][techLevel])
+			end
+		end
 	end
 end
 
@@ -86,7 +90,7 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam)
 
 	buildersByTeam[unitTeam][unitID] = nominalSpeed
 
-	SetBuildSpeed(unitID, nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)])
+	SetBuildSpeed(unitID, nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)], nominalSpeed * multipliers[unitDefID][GetTechLevel(unitTeam)])
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)

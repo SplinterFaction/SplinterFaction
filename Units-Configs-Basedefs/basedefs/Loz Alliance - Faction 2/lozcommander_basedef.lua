@@ -66,10 +66,7 @@ unitDef                    = {
 	unitname                     = unitName,
 	upright                      = false,
 	workerTime                   = workertime,
-	capturespeed                 = 0.25,
 	TerraformSpeed               = 2147000,
-	ReclaimSpeed                 = 1,	-- 0.03125 =  1 hp per second
-	repairspeed                  = 0.5,
 	--------------
 	-- Movement --
 	--------------
