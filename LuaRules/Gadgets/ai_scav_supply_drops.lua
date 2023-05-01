@@ -19,7 +19,7 @@ end
 
 if Spring.GetModOptions().lootboxes == "enabled" or (Spring.GetModOptions().lootboxes == "chicken_only" and scavengersAIEnabled) then
 	lootboxSpawnEnabled = true
-	Spring.Echo("LOOTBOXES ENABLED")
+	--Spring.Echo("LOOTBOXES ENABLED")
 else
 	lootboxSpawnEnabled = false
 end
@@ -133,7 +133,7 @@ function gadget:GameFrame(n)
     if n%30 == 0 and n > 2 then
 		if math.random(0,SpawnChance) == 0 then
 			LootboxesToSpawn = LootboxesToSpawn+1
-			Spring.Echo("LOOTBOXES ENABLED, +25% to spawn")
+			--Spring.Echo("LOOTBOXES ENABLED, +25% to spawn")
 		-- elseif #aliveLootboxes < math.ceil((n/30)/(SpawnChance*2)) then
 			-- TryToSpawn = true
 		end
@@ -145,26 +145,26 @@ function gadget:GameFrame(n)
 			end
         end
         if LootboxesToSpawn >= 1 and lootboxSpawnEnabled then
-			Spring.Echo("LOOTBOXES ENABLED, We're Spawning!")
+			--Spring.Echo("LOOTBOXES ENABLED, We're Spawning!")
             for k = 1,20 do
                 local posx = math.floor(math_random(xBorder,mapsizeX-xBorder)/16)*16
                 local posz = math.floor(math_random(zBorder,mapsizeZ-zBorder)/16)*16
                 local posy = spGroundHeight(posx, posz)
 				local canSpawnLootbox = positionCheckLibrary.FlatAreaCheck(posx, posy, posz, 128)
 				if canSpawnLootbox then
-					Spring.Echo("LOOTBOXES: Flat Area, Done")
+					--Spring.Echo("LOOTBOXES: Flat Area, Done")
 					canSpawnLootbox = positionCheckLibrary.OccupancyCheck(posx, posy, posz, 128)
 				end
 				if canSpawnLootbox then
-					Spring.Echo("LOOTBOXES: Occupancy, Done")
+					--Spring.Echo("LOOTBOXES: Occupancy, Done")
 					canSpawnLootbox = positionCheckLibrary.VisibilityCheckEnemy(posx, posy, posz, 128, spGaiaAllyTeam, true, true, true)
 				end
 				if canSpawnLootbox then
-					Spring.Echo("LOOTBOXES: Enemy Visibility, Done")
+					--Spring.Echo("LOOTBOXES: Enemy Visibility, Done")
 					canSpawnLootbox = positionCheckLibrary.StartboxCheck(posx, posy, posz, spGaiaAllyTeam, true)
 				end
                 if canSpawnLootbox then
-					Spring.Echo("LOOTBOXES: Startbox, Done")
+					--Spring.Echo("LOOTBOXES: Startbox, Done")
 					--aliveLootboxesCountT1
 					if aliveLootboxesCountT4 >= 4 and aliveLootboxesCountT3 >= 4 and aliveLootboxesCountT2 >= 3 and aliveLootboxesCountT1 >= 3 then
 						local r = math.random(0,3)
