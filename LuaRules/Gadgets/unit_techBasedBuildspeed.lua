@@ -116,6 +116,25 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
 	buildersByTeam[unitTeam][unitID] = nil
 end
 
+function gadget:UnitTaken(unitID, unitDefID, oldTeam, newTeam)
+	buildersByTeam[oldTeam][unitID] = nil
+
+	local nominalSpeed = nominalBuildSpeeds[unitDefID]
+	if not nominalSpeed then
+		return
+	end
+
+	buildersByTeam[newTeam][unitID] = nominalSpeed
+
+	--Spring.SetUnitBuildSpeed ( number builderID, number buildSpeed [, number repairSpeed [, number reclaimSpeed[, number resurrectSpeed [, number captureSpeed [, number terraformSpeed ]]]]] )
+	SetBuildSpeed(unitID, nominalSpeed * multipliers[unitDefID][GetTechLevel(newTeam)],
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(newTeam)] * repairSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(newTeam)] * reclaimSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(newTeam)] * resurrectSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(newTeam)] * captureSpeedModifier,
+	              nominalSpeed * multipliers[unitDefID][GetTechLevel(newTeam)] * terraformSpeedModifier)
+end
+
 function gadget:Initialize()
 	local teams = Spring.GetTeamList()
 	for i = 1, #teams do
