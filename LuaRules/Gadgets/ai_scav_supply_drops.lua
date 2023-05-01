@@ -128,11 +128,33 @@ local nearbyCaptureLibrary = VFS.Include("luarules/utilities/damgam_lib/nearby_c
 
 -- callins
 
+local function SpawnLootbox(posx, posy, posz)
+	if aliveLootboxesCountT3 >= 2 and math.random() <= 0.1 then
+		lootboxToSpawn = lootboxesListT4[math_random(1,#lootboxesListT4)]
+	elseif aliveLootboxesCountT2 >= 2 and math.random() <= 0.3 then
+		lootboxToSpawn = lootboxesListT3[math_random(1,#lootboxesListT3)]
+	elseif aliveLootboxesCountT1 >= 2 and math.random() <= 0.5 then
+		lootboxToSpawn = lootboxesListT2[math_random(1,#lootboxesListT2)]
+	else
+		lootboxToSpawn = lootboxesListT1[math_random(1,#lootboxesListT1)]
+	end
+	local spawnedUnit = spCreateUnit(lootboxToSpawn..NameSuffix, posx, posy, posz, math_random(0,3), spGaiaTeam)
+	if spawnedUnit then
+		Spring.PlaySoundFile("lootbox detected", 1)
+		Spring.Echo("A Lootbox has been detected!")
+		Spring.SetUnitNeutral(spawnedUnit, true)
+		Spring.SetUnitAlwaysVisible(spawnedUnit, true)
+	end
+end
+
 function gadget:GameFrame(n)
 
     if n%30 == 0 and n > 2 then
 		if math.random(0,SpawnChance) == 0 then
 			LootboxesToSpawn = LootboxesToSpawn+0.1
+			if LootboxesToSpawn < 0 then 
+				LootboxesToSpawn = 0 
+			end
 		end
 
         if aliveLootboxesCount > 0 then
@@ -158,24 +180,7 @@ function gadget:GameFrame(n)
 					canSpawnLootbox = not positionCheckLibrary.VisibilityCheck(posx, posy, posz, 128, spGaiaAllyTeam, true, true, false)
 				end
                 if canSpawnLootbox then
-					--aliveLootboxesCountT1
-					if aliveLootboxesCountT3 >= 2 and math.random() <= 0.1 then
-						lootboxToSpawn = lootboxesListT4[math_random(1,#lootboxesListT4)]
-					elseif aliveLootboxesCountT2 >= 2 and math.random() <= 0.3 then
-						lootboxToSpawn = lootboxesListT3[math_random(1,#lootboxesListT3)]
-					elseif aliveLootboxesCountT1 >= 2 and math.random() <= 0.5 then
-						lootboxToSpawn = lootboxesListT2[math_random(1,#lootboxesListT2)]
-					else
-						lootboxToSpawn = lootboxesListT1[math_random(1,#lootboxesListT1)]
-					end
-					local spawnedUnit = spCreateUnit(lootboxToSpawn..NameSuffix, posx, posy, posz, math_random(0,3), spGaiaTeam)
-					if spawnedUnit then
-						Spring.PlaySoundFile("lootbox detected", 1)
-						Spring.Echo("A Lootbox has been detected!")
-						Spring.SetUnitNeutral(spawnedUnit, true)
-						Spring.SetUnitAlwaysVisible(spawnedUnit, true)
-					end
-					--spCreateUnit("lootdroppod_gold"..NameSuffix, posx, posy, posz, math_random(0,3), spGaiaTeam)
+					SpawnLootbox(posx, posy, posz)
                     break
                 end
             end
@@ -235,7 +240,7 @@ end
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
 	for i = 1,#aliveLootboxes do
 		if unitID == aliveLootboxes[i] then
-			LootboxesToSpawn = LootboxesToSpawn+0.75
+			LootboxesToSpawn = LootboxesToSpawn+0.5
 			table.remove(aliveLootboxes, i)
 			aliveLootboxesCount = aliveLootboxesCount - 1
 			aliveLootboxCaptureDifficulty[unitID] = nil
@@ -270,12 +275,21 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
 			break
 		end
 	end
+	if UnitDefs[unitDefID].name == "healstation_ai" then
+		if math.random() <= 0.33 then
+			local posx, posy, posz = Spring.GetUnitPosition(unitID)
+			SpawnLootbox(posx, posy, posz)
+		else
+			LootboxesToSpawn = LootboxesToSpawn+0.33
+		end
+	end
 end
 
 function gadget:UnitGiven(unitID, unitDefID, unitNewTeam, unitOldTeam)
 	for i = 1,#aliveLootboxes do
 		if unitID == aliveLootboxes[i] then
 			Spring.SetUnitNeutral(unitID, true)
+			Spring.SetUnitAlwaysVisible(unitID, true)
 		end
 	end
 end
