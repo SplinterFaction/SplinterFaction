@@ -38,15 +38,15 @@ chickenTurrets = {
 
 	-- Eco Fillers
 	-- Power
-	["fissionpowerplant"]    = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fusionpowerplant"]     = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["coldfusionpowerplant"] = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["blackholepowerplant"]  = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["fissionpowerplant"]    = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["fusionpowerplant"]     = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["coldfusionpowerplant"] = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["blackholepowerplant"]  = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	-- Storage
-	["supplydepot"]          = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["mediumsupplydepot"]    = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["mediumstorage"]        = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["largestorage"]         = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["supplydepot"]          = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["mediumsupplydepot"]    = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["mediumstorage"]        = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- ["largestorage"]         = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 }
 
 local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to be true, if some unit is not specified here, it drops random egg colors.
