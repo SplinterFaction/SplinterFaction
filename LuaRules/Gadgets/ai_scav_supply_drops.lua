@@ -106,7 +106,7 @@ elseif lootboxesDensity == "verydense" then
 	lootboxDensityMultiplier = 5
 end
 
-local SpawnChance = math.ceil(75/lootboxDensityMultiplier)
+local SpawnChance = math.ceil(20/lootboxDensityMultiplier)
 
 if scavengersAIEnabled then
 	spGaiaTeam = scavengerAITeamID
@@ -132,10 +132,7 @@ function gadget:GameFrame(n)
 
     if n%30 == 0 and n > 2 then
 		if math.random(0,SpawnChance) == 0 then
-			LootboxesToSpawn = LootboxesToSpawn+0.25
-			--Spring.Echo("LOOTBOXES ENABLED, +25% to spawn")
-		-- elseif #aliveLootboxes < math.ceil((n/30)/(SpawnChance*2)) then
-			-- TryToSpawn = true
+			LootboxesToSpawn = LootboxesToSpawn+0.1
 		end
 
         if aliveLootboxesCount > 0 then
@@ -152,36 +149,21 @@ function gadget:GameFrame(n)
                 local posy = spGroundHeight(posx, posz)
 				local canSpawnLootbox = positionCheckLibrary.FlatAreaCheck(posx, posy, posz, 128)
 				if canSpawnLootbox then
-					--Spring.Echo("LOOTBOXES: Flat Area, Done")
 					canSpawnLootbox = positionCheckLibrary.OccupancyCheck(posx, posy, posz, 128)
 				end
 				if canSpawnLootbox then
-					--Spring.Echo("LOOTBOXES: Occupancy, Done")
 					canSpawnLootbox = positionCheckLibrary.VisibilityCheckEnemy(posx, posy, posz, 128, spGaiaAllyTeam, true, true, true)
 				end
 				if canSpawnLootbox then
-					--Spring.Echo("LOOTBOXES: Enemy Visibility, Done")
-					canSpawnLootbox = positionCheckLibrary.StartboxCheck(posx, posy, posz, spGaiaAllyTeam, true)
+					canSpawnLootbox = not positionCheckLibrary.VisibilityCheck(posx, posy, posz, 128, spGaiaAllyTeam, true, true, false)
 				end
                 if canSpawnLootbox then
-					--Spring.Echo("LOOTBOXES: Startbox, Done")
 					--aliveLootboxesCountT1
-					if aliveLootboxesCountT4 >= 4 and aliveLootboxesCountT3 >= 4 and aliveLootboxesCountT2 >= 3 and aliveLootboxesCountT1 >= 3 then
-						local r = math.random(0,3)
-						if r == 0 then
-							lootboxToSpawn = lootboxesListT4[math_random(1,#lootboxesListT4)]
-						elseif r == 1 then
-							lootboxToSpawn = lootboxesListT3[math_random(1,#lootboxesListT3)]
-						elseif r == 2 then
-							lootboxToSpawn = lootboxesListT2[math_random(1,#lootboxesListT2)]
-						else
-							lootboxToSpawn = lootboxesListT1[math_random(1,#lootboxesListT1)]
-						end
-					elseif aliveLootboxesCountT3 >= 4 then
+					if aliveLootboxesCountT3 >= 2 and math.random() <= 0.1 then
 						lootboxToSpawn = lootboxesListT4[math_random(1,#lootboxesListT4)]
-					elseif aliveLootboxesCountT2 >= 4 then
+					elseif aliveLootboxesCountT2 >= 2 and math.random() <= 0.3 then
 						lootboxToSpawn = lootboxesListT3[math_random(1,#lootboxesListT3)]
-					elseif aliveLootboxesCountT1 >= 4 then
+					elseif aliveLootboxesCountT1 >= 2 and math.random() <= 0.5 then
 						lootboxToSpawn = lootboxesListT2[math_random(1,#lootboxesListT2)]
 					else
 						lootboxToSpawn = lootboxesListT1[math_random(1,#lootboxesListT1)]
