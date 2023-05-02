@@ -142,7 +142,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
 		maxChickens		  = 30, -- Number of ai units spawned in the end stages of the game per wave
-		queenName         = 'fedanarchid_normal',
+		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 
@@ -161,7 +161,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 32,
-		queenName         = 'fedanarchid_hard',
+		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.75,
 	},
 	[difficulties.veryhard] = {
@@ -179,7 +179,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 34,
-		queenName         = 'fedanarchid_veryhard',
+		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2,
 	},
 	[difficulties.insane] = {
@@ -197,7 +197,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 36,
-		queenName         = 'fedanarchid_insane',
+		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.epic] = {
@@ -215,7 +215,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 38,
-		queenName         = 'fedanarchid_epic',
+		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
 	},
 	[difficulties.unbeatable] = {
@@ -233,7 +233,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 40,
-		queenName         = 'fedanarchid_unbeatable',
+		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
 	},
 
@@ -252,7 +252,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
 		maxChickens		  = 30, -- Number of ai units spawned in the end stages of the game per wave
-		queenName         = 'fedanarchid_normal',
+		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 }
