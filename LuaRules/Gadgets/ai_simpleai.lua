@@ -136,7 +136,7 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 			SimpleConverterDefs[#SimpleConverterDefs + 1] = unitDefID
 		elseif unitDef.isBuilding and #unitDef.weapons > 0 then
 			SimpleTurretDefs[#SimpleTurretDefs + 1] = unitDefID
-		elseif unitDef.customParams.simpleaiunittype == "i" then
+		elseif unitDef.customParams.simpleaiunittype == "supplydepot" then
 			SimpleSupplyDefs[#SimpleSupplyDefs + 1] = unitDefID
 		elseif unitDef.customParams.simpleaiunittype == "storage" then
 			SimpleStorageDefs[#SimpleStorageDefs + 1] = unitDefID
