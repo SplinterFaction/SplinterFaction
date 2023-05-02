@@ -69,6 +69,9 @@ chickenBehaviours = {
 		[UnitDefNames["lozemperorscorpion"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozprotector"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
+		-- T4
+		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 1 },
+		
 	},
 	COWARD = { -- Run away from target after getting hit by enemy -- This is for fast light units
 		-- T1
@@ -85,6 +88,8 @@ chickenBehaviours = {
 		[UnitDefNames["lozemperorscorpion"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozprotector"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
+		-- T4
+		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 1 },
 
 	},
 	BERSERK = { -- Run towards target after getting hit by enemy or after hitting the target-- This is for heavy slow units
@@ -104,6 +109,7 @@ chickenBehaviours = {
 		-- T4
 		[UnitDefNames["lozsilverback"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedjuggernaut"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedanarchid"].id] = { distance = 3000, chance = 0.01 },
 		-- Bosses
 		[UnitDefNames["fedanarchid_normal"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedanarchid_hard"].id] = { distance = 3000, chance = 0.01 },
