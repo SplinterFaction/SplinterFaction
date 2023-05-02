@@ -295,6 +295,9 @@ local miniBosses = { -- Units that spawn alongside queen
 	"fedstriker",
 	"fedgoliath",
 	"fedjuggernaut",
+	-- chicken special
+	"fedanarchid",
+	"lozeurypterid",
 }
 
 local chickenMinions = { -- Units spawning other units
@@ -322,6 +325,10 @@ local chickenMinions = { -- Units spawning other units
 		"fedbear",
 		"lozreaper",
 	},
+	["chickensbeacon"] = {
+		"fedbear",
+		"lozreaper",
+	}
 }
 
 local chickenHealers = { -- Spawn indepedently from squads in small numbers
@@ -410,7 +417,8 @@ addNewSquad({ type = "special", minAnger = 100, units = { "1 lozsilverback" } })
 addNewSquad({ type = "special", minAnger = 100, units = { "1 fedjuggernaut" } })
 
 for j = 1,#miniBosses do
-	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j] }, weight = 3 })
+	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 lozprotector" } })
+	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 feddeleter" } })
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
