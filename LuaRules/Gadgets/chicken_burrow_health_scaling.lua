@@ -10,7 +10,7 @@ function gadget:GetInfo()
 	}
 end
 
-local burrowName = "chickensbeacon"
+local burrowName = "healstation_ai"
 
 if gadgetHandler:IsSyncedCode() then
     function gadget:UnitCreated(unitID, unitDefID, unitTeam)
