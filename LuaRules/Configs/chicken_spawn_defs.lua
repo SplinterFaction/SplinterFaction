@@ -16,25 +16,25 @@ local burrowName = 'healstation_ai'
 
 chickenTurrets = {
 	-- Weapons
-	["fedmenlo"]             = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["lozjericho"]           = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["fedstinger"]           = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["lozrazor"]             = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fedimmolator"]         = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["lozinferno"]           = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["fedjavelin"]           = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["lozrattlesnake"]       = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fedguardian"]          = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["lozannihilator"]       = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fedearthquakemine"] 	 = { minQueenAnger = 20, spawnedPerWave = 10, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedmenlo"]             = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
+	["lozjericho"]           = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
+	["fedstinger"]           = { minQueenAnger = 0, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 60 },
+	["lozrazor"]             = { minQueenAnger = 0, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 60 },
+	["fedimmolator"]         = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["lozinferno"]           = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["fedjavelin"]           = { minQueenAnger = 30, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["lozrattlesnake"]       = { minQueenAnger = 30, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedguardian"]          = { minQueenAnger = 75, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["lozannihilator"]       = { minQueenAnger = 75, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedearthquakemine"] 	 = { minQueenAnger = 30, spawnedPerWave = 10, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Utility
-	["cloakingtower"]        = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["largecloakingtower"]   = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["smallshieldgenerator"] = { minQueenAnger = 40, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["largeshieldgenerator"] = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["cloakingtower"]        = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
+	["largecloakingtower"]   = { minQueenAnger = 60, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["smallshieldgenerator"] = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
+	["largeshieldgenerator"] = { minQueenAnger = 60, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
-	["healstation"] 		 = { minQueenAnger = 20, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["healstation"] 		 = { minQueenAnger = 30, spawnedPerWave = 5, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Eco Fillers
 	-- Power
@@ -134,106 +134,88 @@ chickenBehaviours = {
 local optionValues = {
 
 	[difficulties.normal] = {
-		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60, -- Time between Waves in seconds
 		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
 		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
 		queenSpawnMult    = 1, -- Unused, don't touch (just in case)
-		angerBonus        = 0.2, -- Multiplier for boss anger when you kill a burrow
+		angerBonus        = 0.1, -- Multiplier for boss anger when you kill a burrow
 		maxXP			  = 0.5, -- Random amount of XP given to spawned units
 		spawnChance       = 0.2, -- What are the chances that a burrow will spawn units each wave (this check is performed on each burrow)
 		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
-		maxChickens		  = 30, -- Number of ai units spawned in the end stages of the game per wave
+		maxChickens		  = 20, -- Number of ai units spawned in the end stages of the game per wave
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 
 	[difficulties.hard] = {
-		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 120,
-		turretSpawnRate   = 240,
+		turretSpawnRate   = 300,
 		queenSpawnMult    = 1,
-		angerBonus        = 0.2,
+		angerBonus        = 0.1,
 		maxXP			  = 1,
 		spawnChance       = 0.3,
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
-		maxChickens		  = 32,
+		maxChickens		  = 25,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.75,
 	},
 	[difficulties.veryhard] = {
-		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 90,
-		turretSpawnRate   = 180,
+		turretSpawnRate   = 240,
 		queenSpawnMult    = 3,
-		angerBonus        = 0.2,
+		angerBonus        = 0.1,
 		maxXP			  = 1.5,
 		spawnChance       = 0.4,
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
-		maxChickens		  = 34,
+		maxChickens		  = 30,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2,
 	},
 	[difficulties.insane] = {
-		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 60,
-		turretSpawnRate   = 120,
+		turretSpawnRate   = 180,
 		queenSpawnMult    = 3,
-		angerBonus        = 0.2,
+		angerBonus        = 0.1,
 		maxXP			  = 2,
 		spawnChance       = 0.5,
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
-		maxChickens		  = 36,
+		maxChickens		  = 35,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.epic] = {
-		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 40,
-		turretSpawnRate   = 80,
+		turretSpawnRate   = 120,
 		queenSpawnMult    = 3,
-		angerBonus        = 0.2,
+		angerBonus        = 0.1,
 		maxXP			  = 5,
 		spawnChance       = 0.6,
-		damageMod         = 1,
-		maxBurrows        = 1000,
-		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10,
-		maxChickens		  = 38,
-		queenName         = 'chickensbeacon',
-		queenResistanceMult   = 3,
-	},
-	[difficulties.unbeatable] = {
-		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
-		chickenSpawnRate  = 60,
-		burrowSpawnRate   = 20,
-		turretSpawnRate   = 40,
-		queenSpawnMult    = 3,
-		angerBonus        = 0.2,
-		maxXP			  = 10,
-		spawnChance       = 0.8,
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
@@ -242,10 +224,28 @@ local optionValues = {
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
 	},
+	[difficulties.unbeatable] = {
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		chickenSpawnRate  = 60,
+		burrowSpawnRate   = 20,
+		turretSpawnRate   = 360,
+		queenSpawnMult    = 3,
+		angerBonus        = 0.1,
+		maxXP			  = 10,
+		spawnChance       = 0.8,
+		damageMod         = 1,
+		maxBurrows        = 1000,
+		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
+		minChickens		  = 10,
+		maxChickens		  = 20,
+		queenName         = 'chickensbeacon',
+		queenResistanceMult   = 3,
+	},
 
 	[difficulties.survival] = {
-		gracePeriod       = 5 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 40 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60, -- Time between Waves in seconds
 		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
 		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
@@ -293,6 +293,91 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- MiniBoss Squads ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local chickenSquadUnitTable = {
+	t1assault = {
+		"lozdiamondback",
+		"lozroach",
+		"fedak",
+		"fedstorm",
+	},
+	t1support = {
+		"lozscorpion",
+		"fedcrasher",
+		"fedthud",
+	},
+
+	t2assault = {
+		"lozreaper",
+		"fedbear",
+	},
+	t2support = {
+		"lozluger",
+		"lozpulverizer",
+		"fedcobra",
+		"fedavalanche",
+		"fedphalanx",
+	},
+
+	t3assault = {
+		"lozmammoth",
+		"fedstriker",
+		"fedgoliath",
+	},
+	t3support = {
+		"lozemperorscorpion",
+		"lozprotector",
+		"feddeleter",
+		--some T2 for balance
+		"lozluger",
+		"lozpulverizer",
+		"fedcobra",
+		"fedavalanche",
+		"fedphalanx",
+	},
+
+	t4assault = {
+		"lozsilverback",
+		"fedjuggernaut",
+		"fedanarchid",
+	},
+	t4support = {
+		"lozeurypterid",
+		--some T3 for balance
+		"lozprotector",
+		"feddeleter",
+		--some T2 for balance
+		"lozluger",
+		"lozpulverizer",
+		"fedcobra",
+		"fedavalanche",
+		"fedphalanx",
+	},
+
+	t1air = {
+		"lozwasp",
+		"lozbumblebee",
+		"fedsparrow",
+		"fedcrow",
+	},
+	t2air = {
+		"lozhornet",
+		"lozcrane",
+		"fedhawk",
+		"fedcondor",
+	},
+	t3air = {
+		"lozlocust",
+		"loztitan",
+		"fedfalcon",
+		"fedeagle",
+	},
+	t4air = { -- no T4 air in the game :shrug:
+		"lozlocust",
+		"loztitan",
+		"fedfalcon",
+		"fedeagle",
+	},
+}
 
 local miniBosses = { -- Units that spawn alongside queen
 	"lozemperorscorpion",
@@ -307,40 +392,168 @@ local miniBosses = { -- Units that spawn alongside queen
 }
 
 local chickenMinions = { -- Units spawning other units
-	["fedanarchid_normal"] = {
-		"fedbear",
-		"lozreaper",
-	},
-	["fedanarchid_hard"] = {
-		"fedbear",
-		"lozreaper",
-	},
-	["fedanarchid_veryhard"] = {
-		"fedbear",
-		"lozreaper",
-	},
-	["fedanarchid_insane"] = {
-		"fedbear",
-		"lozreaper",
-	},
-	["fedanarchid_epic"] = {
-		"fedbear",
-		"lozreaper",
-	},
-	["fedanarchid_unbeatable"] = {
-		"fedbear",
-		"lozreaper",
-	},
 	["chickensbeacon"] = {
-		"fedbear",
+		-- T1
+		"lozdiamondback",
+		"lozroach",
+		"fedak",
+		"fedstorm",
+		"lozscorpion",
+		"fedcrasher",
+		"fedthud",
+		-- T2
 		"lozreaper",
+		"fedbear",
+		"lozluger",
+		"lozpulverizer",
+		"fedcobra",
+		"fedavalanche",
+		"fedphalanx",
 	}
 }
 
 local chickenHealers = { -- Spawn indepedently from squads in small numbers
 	"lozflea",
-},
+}
 
+------------------
+-- Basic Squads --
+------------------
+------------------
+
+for anger = 0,100 do
+	local cst = chickenSquadUnitTable
+	if anger%5 == 0 then -- only add squads every 5 anger
+		if anger < 20 then
+			for i = 1,10 do
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30, units = { "3 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+			end
+		elseif anger < 60 then
+			for i = 1,10 do
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30, units = { "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+			end
+		elseif anger < 90 then
+			for i = 1,10 do
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+			end
+		else
+			for i = 1,10 do
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30 , units = { "20 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30 , units = { "20 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30 , units = { "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30 , units = { "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30 , units = { "1 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
+				addNewSquad({ type = "basic", minAnger = anger, maxAnger = anger+30 , units = { "1 " .. cst.t3support[math.random(1,#cst.t3support)] } })
+			end
+		end
+	end
+end
+
+--------------------
+-- Special Squads --
+--------------------
+--------------------
+
+for anger = 0,100 do
+	local cst = chickenSquadUnitTable
+	if anger%5 == 0 then -- only add squads every 5 anger
+		if anger < 10 then
+			for i = 1,10 do
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+			end
+		elseif anger < 20 then
+			for i = 1,10 do
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "5 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+			end
+		elseif anger < 60 then
+			for i = 1,10 do
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "20 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "20 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+			end
+		elseif anger < 90 then
+			for i = 1,10 do
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "40 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "40 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "20 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "20 " .. cst.t1support[math.random(1,#cst.t1support)] } })
+
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "8 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "8 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t3support[math.random(1,#cst.t3support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3support[math.random(1,#cst.t3support)] } })
+			end
+		else
+			for i = 1,10 do
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "16 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "16 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "8 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "8 " .. cst.t2support[math.random(1,#cst.t2support)] } })
+
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t3support[math.random(1,#cst.t3support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "2 " .. cst.t3support[math.random(1,#cst.t3support)] } })
+
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 " .. cst.t4assault[math.random(1,#cst.t4assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 " .. cst.t4support[math.random(1,#cst.t4support)] } })
+				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4support[math.random(1,#cst.t4support)] } })
+			end
+		end
+	end
+end
+
+----------------
+-- Air Squads --
+----------------
+----------------
+
+local airStartAnger = 15 -- needed for air waves to work correctly.
+
+for anger = 0,100 do
+	local cst = chickenSquadUnitTable
+	if anger%5 == 0 then -- only add squads every 5 anger
+		if anger < 20 then
+			for i = 1,10 do
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "3 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+			end
+		elseif anger < 60 then
+			for i = 1,10 do
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "5 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+			end
+		elseif anger < 90 then
+			for i = 1,10 do
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t2air[math.random(1,#cst.t2air)] } })
+			end
+		else
+			for i = 1,10 do
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "20 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t2air[math.random(1,#cst.t2air)] } })
+
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "1 " .. cst.t3air[math.random(1,#cst.t3air)] } })
+			end
+		end
+	end
+end
+
+
+--[[
 ------------------
 -- Basic Squads --
 ------------------
@@ -475,6 +688,7 @@ addNewSquad({ type = "air", minAnger = 100, units = { "6 fedeagle", "6 loztitan"
 addNewSquad({ type = "air", minAnger = 100, units = { "9 fedcrow", "9 lozbumblebee" } })
 addNewSquad({ type = "air", minAnger = 100, units = { "3 fedfalcon", "3 lozlocust" } })
 
+]]
 local ecoBuildingsPenalty = { -- Additional queen hatch per second from eco buildup (for 60 minutes queen time. scales to queen time)
 	--[[
 	-- T1 Energy
@@ -543,7 +757,7 @@ local useWaveMsg = true -- Show dropdown message whenever new wave is spawning
 local spawnSquare = 90 -- size of the chicken spawn square centered on the burrow
 local spawnSquareIncrement = 2 -- square size increase for each unit spawned
 local minBaseDistance = 1000 -- Minimum distance of new burrows from players and other burrows
-local burrowTurretSpawnRadius = 64
+local burrowTurretSpawnRadius = 48
 
 local config = { -- Don't touch this! ---------------------------------------------------------------------------------------------------------------------------------------------
 	useEggs 				= useEggs,

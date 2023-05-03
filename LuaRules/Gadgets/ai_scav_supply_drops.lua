@@ -129,11 +129,11 @@ local nearbyCaptureLibrary = VFS.Include("luarules/utilities/damgam_lib/nearby_c
 -- callins
 
 local function SpawnLootbox(posx, posy, posz)
-	if aliveLootboxesCountT3 >= 2 and math.random() <= 0.1 then
+	if math.random() < math.min(0.8, aliveLootboxesCountT3*0.05) then
 		lootboxToSpawn = lootboxesListT4[math_random(1,#lootboxesListT4)]
-	elseif aliveLootboxesCountT2 >= 2 and math.random() <= 0.3 then
+	elseif math.random() < math.min(0.8, aliveLootboxesCountT2*0.05) then
 		lootboxToSpawn = lootboxesListT3[math_random(1,#lootboxesListT3)]
-	elseif aliveLootboxesCountT1 >= 2 and math.random() <= 0.5 then
+	elseif math.random() < math.min(0.8, aliveLootboxesCountT1*0.05) then
 		lootboxToSpawn = lootboxesListT2[math_random(1,#lootboxesListT2)]
 	else
 		lootboxToSpawn = lootboxesListT1[math_random(1,#lootboxesListT1)]
