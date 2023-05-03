@@ -7,6 +7,7 @@ local unitName                    = "lootbox_t2"
 local metalproduced			 = [[8]]
 
 local buildCostMetal 			  = 200
+local energyproduced			 = 200
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -22,9 +23,9 @@ local unitDef                     = {
 	buildpic					  = "emediumgen.png",
 	canAttack			          = false,
 	category                      = "BUILDING",
-	description                   = [[Produces +]] .. metalproduced .. [[ Energy]],
+	description                   = [[Produces +]] .. metalproduced .. [[ Metal and +]] .. energyproduced .. [[ Energy]],
 	energyStorage                 = 0,
-	energyMake                    = 0,
+	energyMake                    = energyproduced,
 	metalmake                     = metalproduced,
 	explodeAs                     = "mediumBuildingExplosionGenericBlueEMP",
 	footprintX                    = 5,
