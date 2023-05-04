@@ -28,14 +28,18 @@ if gadgetHandler:IsSyncedCode() then
 			local burrowHealth = 1000 + 500*(Spring.GetGameRulesParam("queenAnger") or 0)
 			for unitID, _ in pairs(aliveBurrows) do
 				local h, mh = Spring.GetUnitHealth(unitID)
-				local hp = h/mh
-            	Spring.SetUnitMaxHealth(unitID, burrowHealth)
-				Spring.SetUnitHealth(unitID, burrowHealth*hp)
+				if h and mh then
+					local hp = h/mh
+            		Spring.SetUnitMaxHealth(unitID, burrowHealth)
+					Spring.SetUnitHealth(unitID, burrowHealth*hp)
+				else -- failsafe
+					aliveBurrows[unitID] = nil
+				end
 			end
 		end
 	end
 
-	function gadget:UnidDestroyed(unitID, unitDefID)
+	function gadget:UnitDestroyed(unitID, unitDefID)
 		if aliveBurrows[unitID] then aliveBurrows[unitID] = nil end
 	end
 end
