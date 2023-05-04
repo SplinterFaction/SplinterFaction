@@ -391,15 +391,6 @@ local miniBosses = { -- Units that spawn alongside queen
 
 local chickenMinions = { -- Units spawning other units
 	["chickensbeacon"] = {
-		-- T1
-		"lozdiamondback",
-		"lozroach",
-		"fedak",
-		"fedstorm",
-		"lozscorpion",
-		"fedcrasher",
-		"fedthud",
-		-- T2
 		"lozreaper",
 		"fedbear",
 		"lozluger",
