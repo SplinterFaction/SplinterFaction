@@ -23,28 +23,28 @@ chickenTurrets = {
 	["lozinferno"]           = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
 	["fedjavelin"]           = { minQueenAnger = 20, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	["lozrattlesnake"]       = { minQueenAnger = 20, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fedguardian"]          = { minQueenAnger = 65, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["lozannihilator"]       = { minQueenAnger = 65, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedguardian"]          = { minQueenAnger = 50, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["lozannihilator"]       = { minQueenAnger = 50, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Utility
 	["cloakingtower"]        = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
-	["largecloakingtower"]   = { minQueenAnger = 60, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["largecloakingtower"]   = { minQueenAnger = 50, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	["smallshieldgenerator"] = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
-	["largeshieldgenerator"] = { minQueenAnger = 60, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["largeshieldgenerator"] = { minQueenAnger = 50, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	["healstation"] 		 = { minQueenAnger = 20, spawnedPerWave = 5, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Eco Fillers
 	-- Power
 	["fissionpowerplant"]    = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 20 },
-	["fusionpowerplant"]     = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 60 },
-	["coldfusionpowerplant"] = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 90 },
-	["blackholepowerplant"]  = { minQueenAnger = 90, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fusionpowerplant"]     = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 50 },
+	["coldfusionpowerplant"] = { minQueenAnger = 50, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 80 },
+	["blackholepowerplant"]  = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	-- Storage
 	["supplydepot"]          = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 20 },
 	["mediumsupplydepot"]    = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["mediumstorage"]        = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 60 },
-	["largestorage"]         = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["mediumstorage"]        = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 50 },
+	["largestorage"]         = { minQueenAnger = 50, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 }
 
 local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to be true, if some unit is not specified here, it drops random egg colors.
