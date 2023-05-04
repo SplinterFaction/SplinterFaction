@@ -473,7 +473,7 @@ for anger = 0,100 do
 		elseif anger < 50 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "20 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1support[math.random(1,#cst.t1assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
@@ -483,21 +483,21 @@ for anger = 0,100 do
 		elseif anger < 80 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "8 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2support[math.random(1,#cst.t2assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3support[math.random(1,#cst.t3assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 			end
 		else
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "2 " .. cst.t3support[math.random(1,#cst.t3assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "2 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "2 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 " .. cst.t4assault[math.random(1,#cst.t4assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4support[math.random(1,#cst.t4assault)] } })
+				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4assault[math.random(1,#cst.t4assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4support[math.random(1,#cst.t4support)] } })
 			end
 		end
