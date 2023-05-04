@@ -1234,9 +1234,8 @@ if gadgetHandler:IsSyncedCode() then
 					curH = math.max(curH, maxH*0.05)
 					local spawnChance = math.max(0, math.ceil(curH/maxH*10000))
 					if mRandom(0,spawnChance) == 1 then
-						SpawnRandomOffWaveSquad(unitID, config.chickenHealers[mRandom(1,#config.chickenHealers)], 5)
-						SpawnRandomOffWaveSquad(unitID, config.chickenHealers[mRandom(1,#config.chickenHealers)], 5)
-						SpawnRandomOffWaveSquad(unitID)
+						SpawnMinions(queenID, Spring.GetUnitDefID(queenID))
+						SpawnMinions(queenID, Spring.GetUnitDefID(queenID))
 					end
 				end
 			end
@@ -1385,7 +1384,7 @@ if gadgetHandler:IsSyncedCode() then
 			if mRandom() < config.spawnChance / 15 then
 				SpawnMinions(queenID, Spring.GetUnitDefID(queenID))
 				SpawnMinions(queenID, Spring.GetUnitDefID(queenID))
-				SpawnRandomOffWaveSquad(queenID)
+				--SpawnRandomOffWaveSquad(queenID)
 			end
 		end
 	end
