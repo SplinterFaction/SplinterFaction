@@ -471,49 +471,44 @@ for anger = 0,100 do
 		elseif anger < 20 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "5 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
 		elseif anger < 60 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "20 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "20 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 			end
 		elseif anger < 90 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "40 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "40 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "20 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "20 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "8 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "8 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 			end
 		else
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "16 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "16 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "8 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "8 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "2 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "2 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 " .. cst.t4assault[math.random(1,#cst.t4assault)] } })
-				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 " .. cst.t4support[math.random(1,#cst.t4support)] } })
 				addNewSquad({ type = "special", minAnger = anger, maxAnger = anger+30, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4support[math.random(1,#cst.t4support)] } })
 			end
 		end
 	end
+end
+for j = 1,#miniBosses do
+	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 lozprotector" } })
+	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 feddeleter" } })
 end
 
 ----------------
@@ -532,21 +527,27 @@ for anger = 0,100 do
 			end
 		elseif anger < 60 then
 			for i = 1,10 do
-				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "5 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "6 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "3 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 			end
 		elseif anger < 90 then
 			for i = 1,10 do
-				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "10 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "12 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 
-				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "2 " .. cst.t2air[math.random(1,#cst.t2air)] } })
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "6 " .. cst.t2air[math.random(1,#cst.t2air)] } })
+
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "3 " .. cst.t3air[math.random(1,#cst.t3air)] } })
 			end
 		else
 			for i = 1,10 do
-				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "20 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "24 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 
-				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "4 " .. cst.t2air[math.random(1,#cst.t2air)] } })
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "12 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 
-				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "1 " .. cst.t3air[math.random(1,#cst.t3air)] } })
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "6 " .. cst.t3air[math.random(1,#cst.t3air)] } })
+
+				addNewSquad({ type = "air", minAnger = anger, maxAnger = anger+30, units = { "3 " .. cst.t4air[math.random(1,#cst.t4air)] } })
 			end
 		end
 	end
