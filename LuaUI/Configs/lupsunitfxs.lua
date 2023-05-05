@@ -124,6 +124,17 @@ effectUnitDefs = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine8", onActive=true}},
 	},
 
+	chickenvulture = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine4", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine5", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine6", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine7", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  8, length=80, piece="engine8", onActive=true}},
+	},
+
 	lozlocust = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=40, piece="engine1", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=40, piece="engine2", onActive=true}},

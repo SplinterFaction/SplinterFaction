@@ -132,12 +132,6 @@ FireWeapon1() // what do while firing, fires 1 barrel then the next , and resets
          	emit-sfx 1024 from firepoint1;
          }
 	
-   shooting_num=shooting_num+1;
-
-            if( shooting_num == 3)
-            {  
-            	shooting_num=1;
-            }
 } 
 
 AimFromWeapon1(piecenum) // where it aims the weapon from 
@@ -156,6 +150,13 @@ if (shooting_num==1)
      {   
      	piecenum=firepoint2;
      } 
+     
+		shooting_num=shooting_num+1;
+
+    if( shooting_num == 3)
+    {  
+    	shooting_num=1;
+    }
 } 
 
 Killed(severity, corpsetype) // how it explodes 

@@ -365,6 +365,7 @@ local chickenSquadUnitTable = {
 		"loztitan",
 		"fedfalcon",
 		"fedeagle",
+		"chickenvulture",
 	},
 }
 
