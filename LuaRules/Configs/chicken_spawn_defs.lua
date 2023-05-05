@@ -97,6 +97,7 @@ chickenBehaviours = {
 		[UnitDefNames["lozroach"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedak"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedstorm"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["chickenrecluse"].id] = { distance = 3000, chance = 0.01 },
 		-- T2
 		[UnitDefNames["lozreaper"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedbear"].id] = { distance = 3000, chance = 0.01 },
@@ -297,6 +298,7 @@ local chickenSquadUnitTable = {
 		"lozroach",
 		"fedak",
 		"fedstorm",
+		"chickenrecluse",
 	},
 	t1support = {
 		"lozscorpion",
