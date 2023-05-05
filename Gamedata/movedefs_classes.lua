@@ -8,10 +8,12 @@ flowMappingToggle = true
 allowRawMovement = true
 
 -- In Degrees
+allterrainslopetolerance = 100
 walkerslopetolerance = 45
 wheeledslopetolerance = 30
 
 -- Fix the numbers for springs fucking stupid magic numbers
+allterrainslopetolerance = allterrainslopetolerance / 1.5
 walkerslopetolerance = walkerslopetolerance / 1.5
 wheeledslopetolerance = wheeledslopetolerance / 1.5
 
@@ -491,6 +493,52 @@ local moveDefs = {
         maxslope=wheeledslopetolerance,
         maxwaterdepth=250,
         maxwaterslope=40,
+        badwaterslope=40,
+        crushstrength=20,
+        depthModParams = genericDepthmodParams,
+        minwaterdepth=10,
+        heatmod=unitHeat,
+        slopemod=3,
+        allowRawMovement=allowRawMovement,
+        flowMapping=flowMappingToggle,
+    },
+
+    ALLTERRAINTANK2 = {
+        footprintx=2,
+        footprintz=2,
+        maxslope=allterrainslopetolerance,
+        maxwaterdepth=250,
+        maxwaterslope=allterrainslopetolerance,
+        badwaterslope=40,
+        crushstrength=20,
+        depthModParams = genericDepthmodParams,
+        minwaterdepth=10,
+        heatmod=unitHeat,
+        slopemod=3,
+        allowRawMovement=allowRawMovement,
+        flowMapping=flowMappingToggle,
+    },
+    ALLTERRAINTANK4 = {
+        footprintx=4,
+        footprintz=4,
+        maxslope=allterrainslopetolerance,
+        maxwaterdepth=250,
+        maxwaterslope=allterrainslopetolerance,
+        badwaterslope=40,
+        crushstrength=20,
+        depthModParams = genericDepthmodParams,
+        minwaterdepth=10,
+        heatmod=unitHeat,
+        slopemod=3,
+        allowRawMovement=allowRawMovement,
+        flowMapping=flowMappingToggle,
+    },
+    ALLTERRAINTANK8 = {
+        footprintx=8,
+        footprintz=8,
+        maxslope=allterrainslopetolerance,
+        maxwaterdepth=250,
+        maxwaterslope=allterrainslopetolerance,
         badwaterslope=40,
         crushstrength=20,
         depthModParams = genericDepthmodParams,

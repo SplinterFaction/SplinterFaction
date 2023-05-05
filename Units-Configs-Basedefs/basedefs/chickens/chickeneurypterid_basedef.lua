@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 27000,
+	buildCostMetal               = 12500,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozjaguar.png",
@@ -17,19 +17,19 @@ unitDef                    = {
 	energyStorage                = 0,
 	energyUse                    = 400,
 	explodeAs                    = explodeAs,
-	footprintX                   = 6,
-	footprintZ                   = 6,
+	footprintX                   = 8,
+	footprintZ                   = 8,
 	--highTrajectory               = 1,
 	iconType                     = "artillery",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
 	maxDamage                    = 40000,
-	maxVelocity                  = 1.5,
+	maxVelocity                  = 1,
 	maxReverseVelocity           = 0.25,
 	maxWaterDepth                = 20,
 	metalStorage                 = 0,
-	movementClass                = "WHEELEDTANK16",
+	movementClass                = "WHEELEDTANK8",
 	noChaseCategory              = "VTOL",
 	name                         = humanName,
 	objectName                   = objectName,
@@ -87,7 +87,6 @@ unitDef                    = {
 	customParams                 = {
 		unittype				  = "mobile",
 		unitrole				 = "Assault",
-		hpoverride               = 15000,
 		death_sounds             = "nuke",
 		RequireTech              = tech,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -114,7 +113,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                     = "Nuclear Plasma Cannon",
 		range                    = 1600,
-		reloadtime               = 1.2,
+		reloadtime               = 15,
 		size					 = 16,
 		weaponType		         = "Cannon",
 		soundHit                 = "deathsounds/nuke/nuke1",
@@ -122,7 +121,7 @@ weaponDefs                 = {
 		
 		tolerance                = 2000,
 		turret                   = true,
-		weaponVelocity           = 800,
+		weaponVelocity           = 600,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= 10000, -- In Elmos
@@ -130,7 +129,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.1, -- Use this sparingly
 		}, 
 		damage                   = {
-			default              = 850,
+			default              = 15000,
 		},
 	},
 }

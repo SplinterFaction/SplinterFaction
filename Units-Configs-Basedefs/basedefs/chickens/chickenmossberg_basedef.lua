@@ -1,11 +1,12 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 80,
+	buildCostMetal               = 120,
 	builder                      = false,
 	buildTime                    = 5,
-	buildpic					 = "chickenrecluse.png",
+	buildpic					 = "eallterrriot.png",
 	canAttack                    = true,
 	
+	--  canDgun			         = true,
 	canGuard                     = true,
 	canMove                      = true,
 	canPatrol                    = true,
@@ -24,21 +25,20 @@ unitDef                    = {
 	
 	-- End Cloaking
 
-	description                  = [[Raider]],
+	description                  = [[Shotgun/Riot Tank]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
-	explodeAs                    = "smallExplosionGeneric",
-	firestandorders              = "1",
+	explodeAs                    = "mediumExplosionGeneric",
 	footprintX                   = 2,
 	footprintZ                   = 2,
-	iconType                     = "raider",
+	iconType                     = "riot_lit",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
-	maxDamage                    = 245,
-	
-	maxReverseVelocity           = 2,
+	maxDamage                    = 400,
+	maxSlope                     = 180,
+	maxReverseVelocity           = 1,
 	maxWaterDepth                = 10,
 	metalStorage                 = 0,
 	movementClass                = "ALLTERRAINTANK2",
@@ -47,28 +47,28 @@ unitDef                    = {
 	script	                     = script,
 	radarDistance                = 0,
 	repairable		             = false,
-	selfDestructAs               = "smallExplosionGeneric",
-	sightDistance                = 450,
+	selfDestructAs               = "mediumExplosionGeneric",
+	sightDistance                = 490,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
 	transportbyenemy             = false;
+	turnInPlace                  = true,
 	unitname                     = unitName,
-	upright			             = false,
+	upright                      = false,
 	workerTime                   = 0,
-	--------------
+    --------------
 	-- Movement --
 	--------------
-	acceleration 				 = 2,
+    acceleration 				 = 2,
 	brakeRate                    = 0.1,
-	maxVelocity                  = 5.3,
+    maxVelocity                  = 3.2,
 	turninplace 				 = true,
 	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 750,
 	--------------
 	--------------
-
 	sfxtypes                     = { 
 		pieceExplosionGenerators = { 
 			"deathceg3", 
@@ -76,7 +76,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:factorysparks",
+			"custom:gdhcannon",
 			"custom:emptydirt",
 			"custom:blacksmoke",
 		},
@@ -92,15 +92,15 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "lighttankweapon",
+			def                  = "riottankshotgun",
 			onlyTargetCategory   = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "Raider",
+        unitrole				 = "Indirect Fire Support",
 		canbetransported 		 = "true",
-		needed_cover             = 1,
+		needed_cover             = 2,
 		death_sounds             = "generic",
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -110,43 +110,41 @@ unitDef                    = {
 	},
 }
 
-	weaponDefs                 = {
-	lighttankweapon              = {
-		
-		AreaOfEffect             = 1,
-		avoidFeature             = false,
+weaponDefs                 = {
+	riottankshotgun              = {
+		areaofeffect 			 = 75,
 		avoidFriendly            = false,
-		collideFeature           = false,
+		avoidFeature             = false,
 		collideFriendly          = false,
-		coreThickness            = 0.3,
-		duration                 = 0.1,
-		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		fallOffRate              = 0,
-		fireStarter              = 50,
-		impulseFactor            = 0,
-		interceptedByShieldType  = 4,
+		collideFeature           = false,
+		--burstrate				 = 0.2,
+		--burst					 = 5,
 		
-		minintensity             = "1",
-		name                     = "Laser",
-		range                    = 450,
-		reloadtime               = 1,
-		WeaponType               = "LaserCannon",
-		rgbColor                 = "0.5 0.8 1",
-		rgbColor2                = "1 1 1",
-		soundTrigger             = true,
-		soundstart               = "heavycannonGD",
-		texture1                 = "shot",
-		texture2                 = "empty",
-		thickness                = 6,
-		tolerance                = 1000,
+		cegTag                   = "bruisercannon",
+		edgeeffectiveness		 = 1,
+		explosionGenerator       = "custom:genericshellexplosion-large-sparks-burn",
+		energypershot            = 0,
+		interceptedByShieldType  = 4,
+		impulseFactor            = 0,
+		name                     = "Shotgun",
+		noSelfDamage             = true,
+		noexplode		         = true,
+		projectiles		     	 = 5,
+		range                    = 490,
+		reloadtime               = 7,
+		sprayangle				 = 3500,
+		size					 = 2,
+		weaponType		         = "Cannon",
+		soundHit                 = "mediumcannonhit",
+		soundStart               = "Shotgun Boom 103",
+		
 		turret                   = true,
-		weaponVelocity           = 2000,
+		weaponVelocity           = 400,
 		customparams             = {
-
-		}, 
+			single_hit			 = true,
+		},      
 		damage                   = {
-			default              = 45,
+			default              = 40,
 		},
 	},
 }

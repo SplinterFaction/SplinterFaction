@@ -68,7 +68,7 @@ chickenBehaviours = {
 		[UnitDefNames["lozprotector"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
 		-- T4
-		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["chickeneurypterid"].id] = { distance = 500, chance = 1 },
 		
 	},
 	COWARD = { -- Run away from target after getting hit by enemy -- This is for fast light units
@@ -86,8 +86,9 @@ chickenBehaviours = {
 		[UnitDefNames["lozemperorscorpion"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozprotector"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["chickendroplet"].id] = { distance = 500, chance = 1 },
 		-- T4
-		[UnitDefNames["lozeurypterid"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["chickeneurypterid"].id] = { distance = 500, chance = 1 },
 
 	},
 	BERSERK = { -- Run towards target after getting hit by enemy or after hitting the target-- This is for heavy slow units
@@ -98,24 +99,20 @@ chickenBehaviours = {
 		[UnitDefNames["fedak"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedstorm"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["chickenrecluse"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["chickenmossberg"].id] = { distance = 3000, chance = 0.01 },
 		-- T2
 		[UnitDefNames["lozreaper"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedbear"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["chickenbasher"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["chickensledge"].id] = { distance = 3000, chance = 0.01 },
 		-- T3
 		[UnitDefNames["lozmammoth"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedstriker"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedgoliath"].id] = { distance = 3000, chance = 0.01 },
 		-- T4
 		[UnitDefNames["lozsilverback"].id] = { distance = 3000, chance = 0.01 },
-		[UnitDefNames["fedjuggernaut"].id] = { distance = 3000, chance = 0.01 },
-		[UnitDefNames["fedanarchid"].id] = { distance = 3000, chance = 0.01 },
-		-- Bosses
-		[UnitDefNames["fedanarchid_normal"].id] = { distance = 3000, chance = 0.01 },
-		[UnitDefNames["fedanarchid_hard"].id] = { distance = 3000, chance = 0.01 },
-		[UnitDefNames["fedanarchid_veryhard"].id] = { distance = 3000, chance = 0.01 },
-		[UnitDefNames["fedanarchid_insane"].id] = { distance = 3000, chance = 0.01 },
-		[UnitDefNames["fedanarchid_epic"].id] = { distance = 3000, chance = 0.01 },
-		[UnitDefNames["fedanarchid_unbeatable"].id] = { distance = 3000, chance = 0.01 },
+		[UnitDefNames["fedjuggernaut"].id] = { distance = 3000, chance = 1 },
+		[UnitDefNames["chickenanarchid"].id] = { distance = 3000, chance = 1 },
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
 		[UnitDefNames["lozflea"].id] = true,
@@ -299,6 +296,7 @@ local chickenSquadUnitTable = {
 		"fedak",
 		"fedstorm",
 		"chickenrecluse",
+		"chickenmossberg",
 	},
 	t1support = {
 		"lozscorpion",
@@ -309,6 +307,8 @@ local chickenSquadUnitTable = {
 	t2assault = {
 		"lozreaper",
 		"fedbear",
+		"chickenbasher",
+		"chickensledge",
 	},
 	t2support = {
 		"lozluger",
@@ -327,30 +327,19 @@ local chickenSquadUnitTable = {
 		"lozemperorscorpion",
 		"lozprotector",
 		"feddeleter",
-		--some T2 for balance
-		"lozluger",
-		"lozpulverizer",
-		"fedcobra",
-		"fedavalanche",
-		"fedphalanx",
+		"chickendroplet",
 	},
 
 	t4assault = {
 		"lozsilverback",
 		"fedjuggernaut",
-		"fedanarchid",
+		"chickenanarchid",
 	},
 	t4support = {
-		"lozeurypterid",
+		"chickeneurypterid",
 		--some T3 for balance
 		"lozprotector",
 		"feddeleter",
-		--some T2 for balance
-		"lozluger",
-		"lozpulverizer",
-		"fedcobra",
-		"fedavalanche",
-		"fedphalanx",
 	},
 
 	t1air = {

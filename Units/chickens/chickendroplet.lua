@@ -1,22 +1,16 @@
 --------------------------------------------------------------------------------
 
-unitName = "fedanarchid"
+unitName = "chickendroplet"
 
 --------------------------------------------------------------------------------
 
-humanName = [[Anarchid]]
+humanName = [[Droplet]]
 
-objectName = "fedanarchid.s3o"
-script = "fedanarchid.cob"
+objectName = "chickendroplet.s3o"
+script = "chickendroplet.cob"
 
-hitPoints = 80000
 
-tech = [[tech4]]
-
-explodeAs = [[hugeexplosiongeneric]]
-
-VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("Units-Configs-Basedefs/basedefs/Federation of Kala - Faction 1/Tier 4/fedanarchid_basedef.lua")
+VFS.Include("Units-Configs-Basedefs/basedefs/chickens/chickendroplet_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

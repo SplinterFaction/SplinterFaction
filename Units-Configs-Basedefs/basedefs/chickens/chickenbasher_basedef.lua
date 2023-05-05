@@ -1,9 +1,9 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 80,
+	buildCostMetal               = 1200,
 	builder                      = false,
 	buildTime                    = 5,
-	buildpic					 = "chickenrecluse.png",
+	buildpic					 = "eallterrmed.png",
 	canAttack                    = true,
 	
 	canGuard                     = true,
@@ -14,41 +14,40 @@ unitDef                    = {
 
 	-- Cloaking
 
-	-- cancloak		             = true,
-	-- cloakCost		             = 0,
-	-- cloakCostMoving	             = 0,
-	-- minCloakDistance             = 70,
-	-- decloakOnFire	             = true,
-	-- decloakSpherical             = true,
-	-- initCloaked		             = false,
+	cancloak		             = true,
+	cloakCost		             = 0,
+	cloakCostMoving	             = 0,
+	minCloakDistance             = 70,
+	decloakOnFire	             = true,
+	decloakSpherical             = true,
+	initCloaked		             = false,
 	
 	-- End Cloaking
 
-	description                  = [[Raider]],
+	description                  = [[Heavy Anti-Armor Tank Destroyer]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
-	explodeAs                    = "smallExplosionGeneric",
-	firestandorders              = "1",
-	footprintX                   = 2,
-	footprintZ                   = 2,
+	explodeAs                    = "mediumExplosionGeneric",
+	footprintX                   = 4,
+	footprintZ                   = 4,
 	iconType                     = "raider",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
-	maxDamage                    = 245,
-	
-	maxReverseVelocity           = 2,
-	maxWaterDepth                = 10,
+	maxDamage                    = 250,
+	maxSlope                     = 180,
+    maxWaterDepth                = 10,
 	metalStorage                 = 0,
-	movementClass                = "ALLTERRAINTANK2",
+	mobilestandorders            = "1",
+	movementClass                = "ALLTERRAINTANK4",
 	name                         = humanName,
 	objectName                   = objectName,
 	script	                     = script,
 	radarDistance                = 0,
 	repairable		             = false,
-	selfDestructAs               = "smallExplosionGeneric",
-	sightDistance                = 450,
+	selfDestructAs               = "mediumExplosionGeneric",
+	sightDistance                = 700,
 	smoothAnim                   = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -56,19 +55,18 @@ unitDef                    = {
 	unitname                     = unitName,
 	upright			             = false,
 	workerTime                   = 0,
-	--------------
+    --------------
 	-- Movement --
 	--------------
-	acceleration 				 = 2,
+    acceleration 				 = 2,
 	brakeRate                    = 0.1,
-	maxVelocity                  = 5.3,
+    maxVelocity                  = 3.1,
 	turninplace 				 = true,
 	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 750,
 	--------------
 	--------------
-
 	sfxtypes                     = { 
 		pieceExplosionGenerators = { 
 			"deathceg3", 
@@ -76,7 +74,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:factorysparks",
+			"custom:gdhcannon",
 			"custom:emptydirt",
 			"custom:blacksmoke",
 		},
@@ -92,15 +90,15 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "lighttankweapon",
+			def                  = "mediumtankcannon",
 			onlyTargetCategory   = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "Raider",
+        unitrole				 = "Direct Fire Support - Tech 2",
 		canbetransported 		 = "true",
-		needed_cover             = 1,
+		needed_cover             = 2,
 		death_sounds             = "generic",
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -110,18 +108,21 @@ unitDef                    = {
 	},
 }
 
-	weaponDefs                 = {
-	lighttankweapon              = {
+weaponDefs                 = {
+	mediumtankcannon             = {
 		
 		AreaOfEffect             = 1,
-		avoidFeature             = false,
 		avoidFriendly            = false,
-		collideFeature           = false,
+		avoidFeature             = false,
 		collideFriendly          = false,
-		coreThickness            = 0.3,
+		collideFeature           = false,
+		beamTime                 = 0.1,
+		
+		coreThickness            = 0.5,
+		--	cegTag               = "mediumcannonweapon3",
 		duration                 = 0.1,
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small",
+		explosionGenerator       = "custom:genericshellexplosion",
 		fallOffRate              = 0,
 		fireStarter              = 50,
 		impulseFactor            = 0,
@@ -129,24 +130,26 @@ unitDef                    = {
 		
 		minintensity             = "1",
 		name                     = "Laser",
-		range                    = 450,
-		reloadtime               = 1,
+		range                    = 700,
+		reloadtime               = 1.2,
 		WeaponType               = "LaserCannon",
-		rgbColor                 = "0.5 0.8 1",
+		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
 		soundTrigger             = true,
-		soundstart               = "heavycannonGD",
+		soundstart               = "medallterrweapon",
+		soundHit                 = "mediumcannonhit",
 		texture1                 = "shot",
 		texture2                 = "empty",
-		thickness                = 6,
+		thickness                = 9,
 		tolerance                = 1000,
 		turret                   = true,
-		weaponVelocity           = 2000,
+		weaponVelocity           = 1000,
 		customparams             = {
 
 		}, 
 		damage                   = {
-			default              = 45,
+			default              = 210,
 		},
 	},
+
 }
