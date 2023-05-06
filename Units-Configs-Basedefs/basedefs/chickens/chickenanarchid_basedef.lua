@@ -1,7 +1,7 @@
 unitDef                    = {
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 17000,
+	buildCostMetal               = 10000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "fedanarchid.png",
@@ -114,7 +114,6 @@ unitDef                    = {
 		unittype				  = "mobile",
 		unitrole				 = "Assault",
 		death_sounds             = "nuke",
-		RequireTech              = tech,
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",

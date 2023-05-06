@@ -322,6 +322,7 @@ local chickenSquadUnitTable = {
 		"lozmammoth",
 		"fedstriker",
 		"fedgoliath",
+		"chickenanarchid",
 	},
 	t3support = {
 		"lozemperorscorpion",
@@ -333,7 +334,6 @@ local chickenSquadUnitTable = {
 	t4assault = {
 		"lozsilverback",
 		"fedjuggernaut",
-		"chickenanarchid",
 	},
 	t4support = {
 		"chickeneurypterid",
