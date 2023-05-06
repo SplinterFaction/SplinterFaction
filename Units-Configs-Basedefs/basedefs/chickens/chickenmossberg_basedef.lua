@@ -128,8 +128,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		name                     = "Shotgun",
 		noSelfDamage             = true,
-		noexplode		         = true,
-		projectiles		     	 = 5,
+		projectiles		     	 = 20,
 		range                    = 490,
 		reloadtime               = 7,
 		sprayangle				 = 3500,
@@ -141,7 +140,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
-			single_hit			 = true,
+			
 		},      
 		damage                   = {
 			default              = 40,
