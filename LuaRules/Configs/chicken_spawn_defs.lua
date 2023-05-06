@@ -377,8 +377,8 @@ local miniBosses = { -- Units that spawn alongside queen
 	"fedgoliath",
 	"fedjuggernaut",
 	-- chicken special
-	"fedanarchid",
-	"lozeurypterid",
+	"chickenanarchid",
+	"chickeneurypterid",
 }
 
 local chickenMinions = { -- Units spawning other units
