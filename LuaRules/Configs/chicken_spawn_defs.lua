@@ -25,6 +25,7 @@ chickenTurrets = {
 	["lozrattlesnake"]       = { minQueenAnger = 20, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	["fedguardian"]          = { minQueenAnger = 50, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	["lozannihilator"]       = { minQueenAnger = 50, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["chickenemperormenlo"]  = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Utility
 	["cloakingtower"]        = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
