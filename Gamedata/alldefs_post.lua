@@ -326,14 +326,6 @@ function WeaponDef_Post(name, wDef)
 		wDef.targetborder = tonumber(wDef.customparams.targetborderoverride)
 	end
 
-	--[[
-	-- weapon reloadTime and stockpileTime were separated in 77b1
-	if (tobool(wDef.stockpile) and (wDef.stockpiletime==nil)) then
-		wDef.stockpiletime = wDef.reloadtime
-		--wDef.reloadtime    = 2             -- 2 seconds
-	end
-	]]--
-
 	if (tobool(wDef.ballistic) or tobool(wDef.dropped)) then
 		wDef.gravityaffected = true
 	end
@@ -394,6 +386,7 @@ function WeaponDef_Post(name, wDef)
 		wDef.noselfdamage = true
 	end
 
+	wDef.soundhit = "impact-29439"
 end
 
 
