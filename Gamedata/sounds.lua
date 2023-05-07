@@ -147,17 +147,17 @@ local Sounds = {
  --   }
  --end
 
-local files = VFS.DirList("sounds/selfdcountdown/")
-local t = Sounds.SoundItems
-for i=1,#files do
-   local fileName = files[i]
-   t[fileName] = {
-      file     = fileName;
-      pitchmod = 0;
-      gainmod  = 0;
-      maxconcurrent = 1;
-   }
-end
+--local files = VFS.DirList("sounds/selfdcountdown/")
+--local t = Sounds.SoundItems
+--for i=1,#files do
+--   local fileName = files[i]
+--   t[fileName] = {
+--      file     = fileName;
+--      pitchmod = 0;
+--      gainmod  = 0;
+--      maxconcurrent = 1;
+--   }
+--end
 
 
 
@@ -205,6 +205,15 @@ local soundData = {
 	},
 
 	['impacts'] = {
+		gain = 1.5 * 0.3,
+		pitchmod = 0.17,
+		gainmod = 0.2 * 0.3,
+		maxconcurrent = 7,
+		dopplerscale = 1.0,
+		rolloff = 0.5,
+	},
+
+	['impacts/generic'] = {
 		gain = 1.5 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
