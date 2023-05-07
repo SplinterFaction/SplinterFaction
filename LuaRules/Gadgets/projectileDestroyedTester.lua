@@ -1,12 +1,14 @@
+if not gadgetHandler:IsSyncedCode() then return end
+
 function gadget:GetInfo()
 	return {
-		name = "Randomised Death Sounds",
-		desc = "Assign and play classes of unit death sounds",
-		author = "FLOZi (C. Lawrence), rewrite of DeathSounds.lua by Argh",
-		date = "19/05/2011",
-		license = "Public Domain",
-		layer = 1,
-		enabled = true
+		name      = "Unit Damaged Sound",
+		author    = "Plays impact sound whenever unit is damaged, based on the weapon type",
+		version   = "1",
+		date      = "2023",
+		license   = "GNU GPL, v2 or later",
+		layer     = 1,
+		enabled   = true,
 	}
 end
 
@@ -20,12 +22,13 @@ local GetUnitPosition = Spring.GetUnitPosition
 local PlaySoundFile = Spring.PlaySoundFile
 
 -- constants
-local SOUNDS_PATH = "sounds/deathsounds/"
+local SOUNDS_PATH = "sounds/impacts/"
 
 -- variables
 local soundClasses = {}
 local soundClassSizes = {}
-local udSoundCache = {}
+local wdSoundCache = {}
+
 -- included for RecursiveFileSearch
  local VFSUtils = VFS.Include('gamedata/VFSUtils.lua')
 
@@ -44,20 +47,21 @@ if (gadgetHandler:IsSyncedCode()) then
 				soundClassSizes[dirName] = #soundClasses[dirName]			
 			end
 		end
-		for unitDefID, unitDef in pairs(UnitDefs) do
-			local cp = unitDef.customParams
-			if cp and cp.death_sounds then
-				udSoundCache[unitDefID] = cp.death_sounds
-			else
-				udSoundCache[unitDefID] = "generic"
-			end
+		for weaponDefID, weaponDef in pairs(WeaponDefs) do
+			local cp = weaponDef.customParams
+			if cp and cp.impact_sounds then
+				wdSoundCache[weaponDefID] = cp.impact_sounds
+            else
+                if WeaponDefs[weaponDefID].type ~= "BeamLaser" then
+                    wdSoundCache[weaponDefID] = "generic"
+                end
+            end
 		end
 	end
 
-
-	function gadget:UnitDestroyed(unitID, unitDefID, teamId,attackerID)
-		if attackerID ~= nil then --Add this so that units who are destroyed via lua (like salvaging) or self destructed, will not play an overlapping sound effect
-			local soundClass = udSoundCache[unitDefID]
+	function gadget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
+		if attackerID and weaponDefID and projectileID then --Add this so that units who are destroyed via lua (like salvaging) or self destructed, will not play an overlapping sound effect
+			local soundClass = wdSoundCache[weaponDefID]
 			if soundClass then
 				local choice = random(soundClassSizes[soundClass])
 				local x, y, z = GetUnitPosition(unitID)
