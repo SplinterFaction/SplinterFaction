@@ -174,6 +174,32 @@ effectUnitDefs = {
 		{class='ShieldSphere',options=cafusShieldSphere},
 		{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,158,0}, size=100, precision=22, repeatEffect=true}},
 	},
+
+	--lozmetalextractor = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
+	--lozmetalextractor_up1 = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
+	--lozmetalextractor_up2 = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
+	--lozmetalextractor_up3 = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
+	--
+	--fedmetalextractor = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
+	--fedmetalextractor_up1 = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
+	--fedmetalextractor_up2 = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
+	--fedmetalextractor_up3 = {
+	--	{class='ShieldJitter',	options={layer=-16, life=math.huge, pos={0,35,0}, size=15, precision=22, repeatEffect=true}},
+	--},
  }
 
 effectUnitDefsXmas = {
