@@ -28,7 +28,7 @@ unitDef                    = {
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
-	movementClass                = "SUBMARINE4",
+	movementClass                = "SHIP4",
 	name                         = humanName,
 	noChaseCategory              = "AIR GROUND",
 	objectName                   = objectName,
@@ -39,7 +39,6 @@ unitDef                    = {
 	side                         = "CORE",
 	sightDistance                = 550,
 	sonarDistance                = 550,
-	waterline                    = 40,
 	floater                      = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -47,19 +46,6 @@ unitDef                    = {
 	transportbyenemy             = false;
 	unitname                     = unitName,
 	workerTime                   = 0,
-
-	--------------
-	-- Cloaking --
-	--------------
-	cancloak		             = true,
-	cloakCost		             = 0,
-	cloakCostMoving	             = 0,
-	minCloakDistance             = 425,
-	decloakOnFire	             = true,
-	decloakSpherical             = true,
-	initCloaked		             = true,
-	--------------
-	--------------
 
 	--------------
 	-- Movement --

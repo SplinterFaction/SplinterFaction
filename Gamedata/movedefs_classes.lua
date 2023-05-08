@@ -550,8 +550,57 @@ local moveDefs = {
     },
 
 -- Submarines
-    SUBMARINE4 = {
-        submarine = true,
+--    SUBMARINE4 = {
+--        submarine = true,
+--        speedModClass=3,
+--        footprintx=4,
+--        footprintz=4,
+--        maxslope=60,
+--        maxwaterslope=60,
+--        badwaterslope=0,
+--        crushstrength=20,
+--        minwaterdepth=40,
+--        heatmod=unitHeat,
+--        slopemod=0,
+--        allowRawMovement=allowRawMovement,
+--        flowMapping=flowMappingToggle,
+--    },
+--
+--    SUBMARINE5 = {
+--        submarine = true,
+--        speedModClass=3,
+--        footprintx=5,
+--        footprintz=5,
+--        maxslope=60,
+--        maxwaterslope=60,
+--        badwaterslope=0,
+--        crushstrength=20,
+--        minwaterdepth=40,
+--        heatmod=unitHeat,
+--        slopemod=0,
+--        allowRawMovement=allowRawMovement,
+--        flowMapping=flowMappingToggle,
+--    },
+
+    -- Ships
+    SHIP3 = {
+        submarine = false,
+        speedModClass=3,
+        footprintx=3,
+        footprintz=3,
+        maxslope=60,
+        maxwaterslope=60,
+        badwaterslope=0,
+        crushstrength=20,
+        minwaterdepth=40,
+        heatmod=unitHeat,
+        slopemod=0,
+        allowRawMovement=allowRawMovement,
+        flowMapping=flowMappingToggle,
+    },
+
+    SHIP4 = {
+        submarine = false,
         speedModClass=3,
         footprintx=4,
         footprintz=4,
@@ -566,28 +615,11 @@ local moveDefs = {
         flowMapping=flowMappingToggle,
     },
 
-    SUBMARINE5 = {
-        submarine = true,
+    SHIP5 = {
+        submarine = false,
         speedModClass=3,
         footprintx=5,
         footprintz=5,
-        maxslope=60,
-        maxwaterslope=60,
-        badwaterslope=0,
-        crushstrength=20,
-        minwaterdepth=40,
-        heatmod=unitHeat,
-        slopemod=0,
-        allowRawMovement=allowRawMovement,
-        flowMapping=flowMappingToggle,
-    },
-
-    -- Ships
-    SHIP3 = {
-        submarine = false,
-        speedModClass=3,
-        footprintx=3,
-        footprintz=3,
         maxslope=60,
         maxwaterslope=60,
         badwaterslope=0,
