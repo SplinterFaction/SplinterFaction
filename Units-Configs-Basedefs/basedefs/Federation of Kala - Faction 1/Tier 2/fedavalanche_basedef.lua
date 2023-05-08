@@ -175,7 +175,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 
-		model                    = "missilesmallvlaunch.s3o",
+		model                    = "neutralmissilex1.s3o",
 		name                     = "Rocket",
 		range                    = 1300,
 		reloadtime               = 12,

@@ -119,9 +119,9 @@ function UnitDef_Post(name, uDef)
 	-- Set building start sound for all builders
 	--
 
-	if uDef.builder == true and uDef.sounds then
-		uDef.sounds.build = "miscfx/Health Pickup 3.wav"
-	end
+	--if uDef.builder == true and uDef.sounds then
+	--	uDef.sounds.build = "miscfx/Health Pickup 3.wav"
+	--end
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -387,6 +387,7 @@ function WeaponDef_Post(name, wDef)
 	end
 
 	wDef.soundhit = "impact-29439"
+	wDef.soundhitwet = "subhitbomb"
 end
 
 

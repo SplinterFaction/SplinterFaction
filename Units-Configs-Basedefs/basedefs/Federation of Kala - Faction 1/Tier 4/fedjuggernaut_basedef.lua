@@ -243,7 +243,7 @@ weaponDefs                 = {
 		tracks                   = true,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		model                    = "missilesmalllauncher.s3o",
+		model                    = "neutralmissilex2.s3o",
 		name                     = "Rockets",
 		range                    = 1000,
 		reloadtime               = 0.25,
@@ -287,7 +287,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 
-		model                    = "missilesmallvlaunch.s3o",
+		model                    = "neutralmissilex3.s3o",
 		name                     = "Rocket",
 		range                    = 1000,
 		reloadtime               = 1,
