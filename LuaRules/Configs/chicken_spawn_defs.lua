@@ -732,7 +732,7 @@ local useScum = false -- Use scum as space where turrets can spawn (requires scu
 local useWaveMsg = true -- Show dropdown message whenever new wave is spawning
 local spawnSquare = 90 -- size of the chicken spawn square centered on the burrow
 local spawnSquareIncrement = 2 -- square size increase for each unit spawned
-local minBaseDistance = 1000 -- Minimum distance of new burrows from players and other burrows
+local minBaseDistance = 256 -- Minimum distance of new burrows from players and other burrows
 local burrowTurretSpawnRadius = 48
 
 local config = { -- Don't touch this! ---------------------------------------------------------------------------------------------------------------------------------------------
