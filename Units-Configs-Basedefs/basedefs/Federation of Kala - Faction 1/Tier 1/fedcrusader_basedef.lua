@@ -15,8 +15,8 @@ unitDef                    = {
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = explodeAs,
-	footprintX                   = 3,
-	footprintZ                   = 3,
+	footprintX                   = 5,
+	footprintZ                   = 5,
 	iconType                     = "mbt",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
@@ -24,11 +24,10 @@ unitDef                    = {
 	maxDamage                    = 360,
 	maxSlope                     = 60,
 	maxVelocity                  = 4.5,
-	maxReverseVelocity           = 1,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
-	movementClass                = "SHIP3",
+	movementClass                = "SHIP5",
 	name                         = humanName,
 	noChaseCategory              = "AIR GROUND",
 	objectName                   = objectName,
@@ -49,11 +48,11 @@ unitDef                    = {
 	--------------
 	-- Movement --
 	--------------
-	acceleration 				 = 2,
-	brakeRate                    = 0.1,
-	turninplace 				 = false,
-	turninplacespeedlimit 		 = 10,
-	turnInPlaceAngleLimit		 = 90,
+	acceleration 				 = 0.05,
+	brakeRate                    = 0.05,
+	turninplace 				 = true,
+--	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 400,
 	--------------
 	--------------

@@ -209,28 +209,7 @@ return {
       },
     },
   },
-  
-  
   ["bombertrail-optimized"] = {
-    engine = {
-      air                = true,
-      class              = [[CBitmapMuzzleFlame]],
-      count              = 1,
-      ground             = true,
-      underwater         = 1,
-      water              = true,
-      properties = {
-        colormap           = [[1 0.73 0.4 0.01   1 0.64 0.25 0.01   1.0 0.4 0.12 0.01   0.5 0.22 0.03 0.01   0 0 0 0.0]],
-        dir                = [[dir]],
-        frontoffset        = 0,
-        fronttexture       = [[none]],
-        length             = 32,
-        sidetexture        = [[sparkexplo]],
-        size               = 5,
-        sizegrowth         = 1,
-        ttl                = 3,
-      },
-    },
     trail = {
       air                = true,
       class              = [[CBitmapMuzzleFlame]],
@@ -243,11 +222,11 @@ return {
         dir                = [[dir]],
         frontoffset        = 0,
         fronttexture       = [[none]],
-        length             = 31,
+        length             = 2,
         sidetexture        = [[flashside2-red]],
-        size               = 10,
+        size               = 5,
         sizegrowth         = 0,
-        ttl                = 20,
+        ttl                = 5,
       },
     },
   },

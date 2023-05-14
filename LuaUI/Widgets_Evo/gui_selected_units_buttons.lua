@@ -124,24 +124,24 @@ end
 
 
 local function updateGuishader()
-	if WG['guishader'] then
-		if not picList then
-            WG['guishader'].RemoveDlist('selectionbuttons')
-            guishaderDisabled = true
-        else
-			if backgroundDimentions[1] ~= nil then
-                if dlistGuishader ~= nil then
-                  WG['guishader'].RemoveDlist('selectionbuttons')
-                  gl.DeleteList(dlistGuishader)
-                end
-                dlistGuishader = gl.CreateList( function()
-                  RectRound(backgroundDimentions[1], backgroundDimentions[2], backgroundDimentions[3], backgroundDimentions[4], usedIconSizeX / 8)
-                  WG['guishader'].InsertDlist(dlistGuishader, 'selectionbuttons')
-                end)
-                guishaderDisabled = false
-			end
-		end
-	end
+  if WG['guishader'] then
+    if not picList then
+      WG['guishader'].RemoveDlist('selectionbuttons')
+      guishaderDisabled = true
+    else
+      if backgroundDimentions[1] ~= nil then
+        if dlistGuishader ~= nil then
+          WG['guishader'].RemoveDlist('selectionbuttons')
+          gl.DeleteList(dlistGuishader)
+        end
+        dlistGuishader = gl.CreateList( function()
+          RectRound(backgroundDimentions[1], backgroundDimentions[2], backgroundDimentions[3], backgroundDimentions[4], usedIconSizeX / 8)
+          WG['guishader'].InsertDlist(dlistGuishader, 'selectionbuttons')
+        end)
+        guishaderDisabled = false
+      end
+    end
+  end
 end
 
 local selectedUnits = Spring.GetSelectedUnits()
@@ -171,36 +171,36 @@ function widget:ViewResize(n_vsx,n_vsy)
   usedIconSizeY =  math.floor((iconSizeY/2) + ((vsx*vsy) / 115000))
   fontSize = usedIconSizeY * 0.28
   iconMargin = usedIconSizeX / 25
-  
+
   if picList then
     gl.DeleteList(picList)
-	picList = gl.CreateList(DrawPicList)
+    picList = gl.CreateList(DrawPicList)
   end
 end
 
 function cacheUnitIcons()
-    if cached == nil then
-        gl.Color(1,1,1,0.001)
-        for id, unit in pairs(UnitDefs) do
-            gl.Texture('#' .. id)
-            gl.TexRect(-1,-1,0,0)
-            gl.Texture(false)
-        end
-        gl.Color(1,1,1,1)
-        cached = true
+  if cached == nil then
+    gl.Color(1,1,1,0.001)
+    for id, unit in pairs(UnitDefs) do
+      gl.Texture('#' .. id)
+      gl.TexRect(-1,-1,0,0)
+      gl.Texture(false)
     end
+    gl.Color(1,1,1,1)
+    cached = true
+  end
 end
 
 local prevMouseIcon
 local hoverClock = nil
 function widget:RecvLuaMsg(msg, playerID)
-	if msg:sub(1,18) == 'LobbyOverlayActive' then
-		chobbyInterface = (msg:sub(1,19) == 'LobbyOverlayActive1')
-	end
+  if msg:sub(1,18) == 'LobbyOverlayActive' then
+    chobbyInterface = (msg:sub(1,19) == 'LobbyOverlayActive1')
+  end
 end
 
 function widget:DrawScreen()
-	if chobbyInterface then return end
+  if chobbyInterface then return end
   cacheUnitIcons()    -- else white icon bug happens
   if picList then
     if (spIsGUIHidden()) then return end
@@ -333,14 +333,14 @@ function DrawPicList()
     currentDef  = nil
     return
   end
-  
+
   local xmid = vsx * 0.5
   local width = math.floor(usedIconSizeX * displayedUnitTypes)
   rectMinX = math.floor(xmid - (0.5 * width))
   rectMaxX = math.floor(xmid + (0.5 * width))
   rectMinY = 0
   rectMaxY = math.floor(rectMinY + usedIconSizeY)
-  
+
   -- draw background bar
   local xmin = math.floor(rectMinX)
   local xmax = math.floor(rectMinX + (usedIconSizeX * displayedUnitTypes))
@@ -415,11 +415,11 @@ function DrawUnitDefTexture(unitDefID, iconPos, count, row)
   end
   local yPad = (usedIconSizeY*(1-usedIconImgMult)) / 3
   local xPad = (usedIconSizeX*(1-usedIconImgMult)) / 3
-  
+
   local xmin = math.floor(rectMinX + (usedIconSizeX * iconPos)) + xPad
   local xmax = xmin + usedIconSizeX - xPad - xPad
   if ((xmax < 0) or (xmin > vsx)) then return end  -- bail
-  
+
   local ymin = rectMinY + yPad
   local ymax = rectMaxY - yPad
   local xmid = (xmin + xmax) * 0.5
@@ -430,7 +430,7 @@ function DrawUnitDefTexture(unitDefID, iconPos, count, row)
   glTexture('#' .. unitDefID)
   glTexRect(math.floor(xmin+iconMargin), math.floor(ymin+iconMargin+ypad2), math.ceil(xmax-iconMargin), math.ceil(ymax-iconMargin+ypad2))
   glTexture(false)
-  
+
   if count > 1 then
     -- draw the count text
     local offset = math.ceil((ymax - (ymin+iconMargin+iconMargin)) / 20)
@@ -443,27 +443,27 @@ end
 
 
 function RectRound(px,py,sx,sy,cs)
-	
-	local px,py,sx,sy,cs = math.floor(px),math.floor(py),math.ceil(sx),math.ceil(sy),math.floor(cs)
-	
-	glTexture(false)
-	glRect(px+cs, py, sx-cs, sy)
-	glRect(sx-cs, py+cs, sx, sy-cs)
-	glRect(px+cs, py+cs, px, sy-cs)
-	
-	if py <= 0 or px <= 0 then glTexture(false) else glTexture(bgcorner) end
-	glTexRect(px, py+cs, px+cs, py)		-- top left
-	
-	if py <= 0 or sx >= vsx then glTexture(false) else glTexture(bgcorner) end
-	glTexRect(sx, py+cs, sx-cs, py)		-- top right
-	
-	if sy >= vsy or px <= 0 then glTexture(false) else glTexture(bgcorner) end
-	glTexRect(px, sy-cs, px+cs, sy)		-- bottom left
-	
-	if sy >= vsy or sx >= vsx then glTexture(false) else glTexture(bgcorner) end
-	glTexRect(sx, sy-cs, sx-cs, sy)		-- bottom right
-	
-	glTexture(false)
+
+  local px,py,sx,sy,cs = math.floor(px),math.floor(py),math.ceil(sx),math.ceil(sy),math.floor(cs)
+
+  glTexture(false)
+  glRect(px+cs, py, sx-cs, sy)
+  glRect(sx-cs, py+cs, sx, sy-cs)
+  glRect(px+cs, py+cs, px, sy-cs)
+
+  if py <= 0 or px <= 0 then glTexture(false) else glTexture(bgcorner) end
+  glTexRect(px, py+cs, px+cs, py)		-- top left
+
+  if py <= 0 or sx >= vsx then glTexture(false) else glTexture(bgcorner) end
+  glTexRect(sx, py+cs, sx-cs, py)		-- top right
+
+  if sy >= vsy or px <= 0 then glTexture(false) else glTexture(bgcorner) end
+  glTexRect(px, sy-cs, px+cs, sy)		-- bottom left
+
+  if sy >= vsy or sx >= vsx then glTexture(false) else glTexture(bgcorner) end
+  glTexRect(sx, sy-cs, sx-cs, sy)		-- bottom right
+
+  glTexture(false)
 end
 
 function DrawIconQuad(iconPos, color)
@@ -486,7 +486,7 @@ function DrawIconQuad(iconPos, color)
   gl.Color(color)
   glTexRect(xmin+iconMargin, ymin+iconMargin+iconMargin, xmax-iconMargin, ymax-iconMargin)
   gl.Texture(false)
-  
+
   RectRound(xmin+iconMargin, ymin+iconMargin+iconMargin, xmax-iconMargin, ymax-iconMargin, (xmax-xmin)/15)
   glBlending(GL_SRC_ALPHA, GL_ONE)
   gl.Color(color[1],color[2],color[3],color[4]/2)
@@ -573,7 +573,7 @@ end
 
 
 function widget:MouseRelease(x, y, button)
-    if WG['smartselect'] and not WG['smartselect'].updateSelection then return end
+  if WG['smartselect'] and not WG['smartselect'].updateSelection then return end
   if (not activePress) then
     return -1
   end

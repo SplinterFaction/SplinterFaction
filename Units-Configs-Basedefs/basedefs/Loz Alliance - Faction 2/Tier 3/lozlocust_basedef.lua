@@ -45,7 +45,7 @@ unitDef                    = {
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
-	explodeAs                    = "smallExplosionGenericRed",
+	explodeAs                    = explodeAs,
 	footprintX                   = 8,
 	footprintZ                   = 8,
 	floater                      = true,
@@ -63,7 +63,7 @@ unitDef                    = {
 	objectName                   = objectName,
 	script			             = script,
 	repairable		             = false,
-	selfDestructAs               = "smallExplosionGenericRed",
+	selfDestructAs               = explodeAs,
 	side                         = "CORE",
 	sightDistance                = 800,
 	smoothAnim                   = true,
@@ -190,6 +190,7 @@ weaponDefs                 = {
 		burstrate                = 1,
 		edgeeffectiveness		 = 1,
 		energypershot            = 0,
+		cegTag                   = "bombertrail-optimized",
 		explosionGenerator       = "custom:genericshellexplosion-bomb-huge",
 		fireStarter              = 50,
 		impulseFactor            = 0,
@@ -209,7 +210,7 @@ weaponDefs                 = {
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 
 			areadamage_ceg          = "napalm",

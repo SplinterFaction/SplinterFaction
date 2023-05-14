@@ -9,6 +9,7 @@ humanName = [[Locust]]
 objectName = "lozlocust.s3o"
 script = "lozlocust_lus.lua"
 
+explodeAs = [[largeexplosiongenericred]]
 
 tech = [[tech3]]
 

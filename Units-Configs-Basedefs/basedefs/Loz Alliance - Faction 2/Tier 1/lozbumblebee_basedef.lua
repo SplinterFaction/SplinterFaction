@@ -194,6 +194,7 @@ weaponDefs                 = {
 
 		edgeeffectiveness		 = 1,
 		energypershot            = 0,
+		cegTag                   = "bombertrail-optimized",
 		explosionGenerator       = "custom:genericshellexplosion-bomb",
 		fireStarter              = 50,
 		impulseFactor            = 0,

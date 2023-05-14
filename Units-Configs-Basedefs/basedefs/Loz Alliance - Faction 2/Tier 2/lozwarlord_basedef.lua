@@ -24,7 +24,6 @@ unitDef                    = {
 	maxDamage                    = 360,
 	maxSlope                     = 60,
 	maxVelocity                  = 1.6,
-	maxReverseVelocity           = 1,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -49,11 +48,11 @@ unitDef                    = {
 	--------------
 	-- Movement --
 	--------------
-	acceleration 				 = 2,
-	brakeRate                    = 0.1,
-	turninplace 				 = false,
-	turninplacespeedlimit 		 = 10,
-	turnInPlaceAngleLimit		 = 90,
+	acceleration 				 = 0.05,
+	brakeRate                    = 0.05,
+	turninplace 				 = true,
+	--	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
 	turnrate 				 	 = 150,
 	--------------
 	--------------

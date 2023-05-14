@@ -191,15 +191,16 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		burst                    = 4,
-		burstrate                = 0.25,
+		burst                    = 10,
+		burstrate                = 0.05,
 		edgeeffectiveness		 = 0.5,
 		energypershot            = 0,
+		cegTag                   = "bombertrail-optimized",
 		explosionGenerator       = "custom:genericshellexplosion-bomb",
 		fireStarter              = 50,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		mygravity                = 0.8,
+		mygravity                = 1,
 		name                     = "Cluster Bomb",
 		range                    = 1200,
 		reloadtime               = 15,
@@ -209,7 +210,7 @@ weaponDefs                 = {
 		soundstart               = "bombdrop",
 		soundHit                 = "Explosion Grenade_02",
 		soundHitWet				 = "subhitbomb",
-		sprayangle				 = 1000,
+		sprayangle				 = 10000,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -217,7 +218,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.025, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 275,
+			default              = 110,
 		},
 	},
 }
