@@ -36,7 +36,7 @@ return {
     electricstorm = {
       air                = true,
       class              = [[CExpGenSpawner]],
-      count              = 10,
+      count              = 3,
       ground             = true,
       water              = true,
       underwater         = true,
@@ -85,7 +85,7 @@ return {
     electricstorm = {
       air                = true,
       class              = [[CExpGenSpawner]],
-      count              = 10,
+      count              = 3,
       ground             = true,
       water              = true,
       underwater         = true,
@@ -134,7 +134,7 @@ return {
     electricstorm = {
       air                = true,
       class              = [[CExpGenSpawner]],
-      count              = 10,
+      count              = 3,
       ground             = true,
       water              = true,
       underwater         = true,
@@ -183,7 +183,7 @@ return {
     electricstorm = {
       air                = true,
       class              = [[CExpGenSpawner]],
-      count              = 10,
+      count              = 3,
       ground             = true,
       water              = true,
       underwater         = true,

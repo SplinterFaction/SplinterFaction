@@ -40,6 +40,7 @@ unitDef                    = {
 	objectName                   = objectName,
 	script			             = script,
 	radarDistance                = 0,
+	radarDistanceJam             = 500,
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",

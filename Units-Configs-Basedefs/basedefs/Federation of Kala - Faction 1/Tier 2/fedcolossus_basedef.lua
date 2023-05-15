@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 1700,
+	buildCostMetal               = 14000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "fedcolossus.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 2.2,
+	maxVelocity                  = 2.1,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -36,8 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 1200,
-	sonarDistance                = 1200,
+	sightDistance                = 750,
 	waterline                    = 8,
 	floater                      = true,
 	stealth			             = true,
@@ -49,8 +48,8 @@ unitDef                    = {
 	--------------
 	-- Movement --
 	--------------
-	acceleration 				 = 0.05,
-	brakeRate                    = 0.05,
+	acceleration 				 = 0.035,
+	brakeRate                    = 0.035,
 	turninplace 				 = true,
 	--	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 45,
@@ -126,11 +125,6 @@ unitDef                    = {
 			--			maxAngleDif = 70,
 			onlyTargetCategory	  = "AIR",
 		},
-		[7]                      = {
-			def                  = "torpedo",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "SUBMARINE SHIP BUILDING GROUND",
-		},
 	},
 	customParams                 = {
 		unittype				 = "ship",
@@ -187,88 +181,48 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 17,
+			default              = 20,
 		},
 	},
 
-	torpedo             = {
-		avoidFriendly            = false,
-		avoidFeature             = false,
-		collideFriendly          = false,
-		collideFeature           = false,
-		-- cegTag                   = "ehbotrocko-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		energypershot            = 0,
-		impulseFactor            = 0,
-		interceptedByShieldType  = 4,
-		model                    = "missilesmalllauncher.s3o",
-		name                     = "Torpedo",
-		range                    = 1200,
-		burst                    = 3,
-		burstrate                = 0.25,
-		reloadtime               = 4,
-		weaponType		         = "TorpedoLauncher",
-		waterweapon              = true,
-		smokeTrail               = false,
-		soundStart               = "torpedolaunch",
-		soundHit                 = "subhitbomb",
-		startVelocity            = 250,
-		tolerance                = 8000,
-		turnrate                 = 30000,
-		turret                   = true,
-		tracks                   = false,
-		flightTime               = 10,
-		weaponVelocity           = 100,
-		customparams             = {
-			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 100,
-		},
-	},
 
 	machinegun                = {
-		predictboost	       = 0.3,
+		areaofeffect           = 50,
+		predictboost	       = 1,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
 		canattackground		   = false,
+		burnblow               = true,
+		burst                  = 15,
+		burstrate              = 0.07,
 		-- cegTag                 = "railgun",
-		rgbColor               = "1 0.5 0",
-		rgbColor2              = "1 1 1",
 		explosionGenerator     = "custom:genericshellexplosion-small",
 		edgeEffectiveness	   = 1,
 		energypershot          = 0,
 		fallOffRate            = 0,
-		duration			   = 0.05,
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "MachineGun",
 		range                  = 1200,
-		reloadtime             = 0.2,
+		reloadtime             = 1,
 		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "Shotgun Shot 5",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.5,
-		thickness              = 3,
+		weaponType		       = "Cannon",
+		soundStart             = "scifi_machine_gun_B_burst_05",
+		soundtrigger           = true,
+		size                   = 3,
 		tolerance              = 10000,
 		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 6000,
+		weaponVelocity         = 1500,
 		customparams             = {
-			expl_light_color	= yellow, -- As a string, RGB
+			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 6,
+			default              = 1,
 		},
 	},
 
@@ -311,7 +265,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 17.5,
+			default              = 30,
 		},
 	},
 }

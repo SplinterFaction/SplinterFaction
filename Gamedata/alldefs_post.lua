@@ -791,7 +791,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- Raise emitheight for all ground units and add seismic sensors to everything
 			--------------------------------------------------------------------------------
 
-			if unitDef.customparams.unittype == "mobile" then
+			if unitDef.customparams.unittype == "mobile" or unitDef.customparams.unittype == "ship" then
 				unitDef.losemitheight = 300
 				unitDef.seismicsignature = 1
 				unitDef.seismicdistance = 1
@@ -952,11 +952,14 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Submarine" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.3
 			end
+			if unitDef.customparams.unitrole == "Corvette" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.6
+			end
 			if unitDef.customparams.unitrole == "Frigate" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.3
+				unitDef.maxdamage = unitDef.maxdamage * 1.1
 			end
 			if unitDef.customparams.unitrole == "Destroyer" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.5
+				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
 			if unitDef.customparams.unitrole == "Light Cruiser" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.6

@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 260,
+	buildCostMetal               = 880,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozenforcer.png",
@@ -10,7 +10,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "SHIP",
-	description                  = [[Attack Boat]],
+	description                  = [[Frigate]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 4.5,
+	maxVelocity                  = 3,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 700,
+	sightDistance                = 600,
 	waterline                    = 3,
 	floater                      = true,
 	stealth			             = true,
@@ -84,7 +84,7 @@ unitDef                    = {
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[2]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			onlyTargetCategory    = "AIR",
 		},
 	},
@@ -105,61 +105,13 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	lasercannon                  = {
-		predictboost	         = 0.3,
-		avoidFeature             = false,
-		avoidFriendly            = false,
-		beamTime                 = 0.1,
-		beamttl                  = 4,
-		collideFeature           = false,
-		collideFriendly          = false,
-		canattackground          = false,
-		coreThickness            = 0.3,
-		duration                 = 0.1,
-		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		fallOffRate              = 1,
-		fireStarter              = 50,
-		interceptedByShieldType  = 4,
-		impulsefactor		     = 0.1,
-
-		largebeamlaser	         = true,
-		laserflaresize 	         = 8,
-		minintensity             = 1,
-		name                     = "High Intensity Beam Laser",
-		range                    = 700,
-		reloadtime               = 0.3,
-		WeaponType               = "BeamLaser",
-		rgbColor                 = "0.1 0 0.3",
-		rgbColor2                = "1 1 1",
-		soundTrigger             = true,
-		soundstart               = "aegis",
-		--	soundHit		     = "amphibmedtankshothit",
-		scrollspeed		         = 5,
-		texture1                 = "lightning",
-		texture2                 = "laserend",
-		thickness                = 4,
-		tolerance                = 3000,
-		turret                   = true,
-		weaponVelocity           = 1000,
-		customparams              = {
-			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                    = {
-			default               = 2,
-		},
-	},
-
 	railgun               = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "0.2 0 1",
+		-- cegTag                 = "railgun",
+		rgbColor               = "0 0 1",
 		rgbColor2              = "1 1 1",
 		explosionGenerator     = "custom:genericshellexplosion-medium",
 		energypershot          = 0,
@@ -172,11 +124,11 @@ weaponDefs                 = {
 		reloadtime             = 2,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "roachrailgun",
+		soundStart             = "lozroach-maingun",
 		texture1               = "shot",
 		texture2               = "empty",
 		coreThickness          = 0.3,
-		thickness              = 6,
+		thickness              = 12,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
@@ -189,7 +141,53 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 100,
+			default              = 230,
+		},
+	},
+
+	lightningcannon   	             = {
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		canattackground          = false,
+		craterBoost              = 0,
+		craterMult               = 0,
+		burst                    = 10,
+		burstrate                = 0.01,
+		beamTTL					 = 1,
+		duration                 = 1,
+		explosionGenerator       = "custom:genericshellexplosion-electric-small",
+		energypershot            = 0,
+		edgeeffectiveness		 = 1,
+		impulseBoost             = 0,
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		intensity                = 24,
+		laserFlareSize           = 1,
+
+		name			         = "Electrical Strike Cannon",
+		noSelfDamage             = true,
+		range                    = 700,
+		reloadtime               = 0.3,
+		WeaponType               = "LightningCannon",
+		rgbColor                 = [[1 0.5 0]],
+		rgbColor2                = "1 1 1",
+		soundStart               = "lozscorpion-maingun",
+		soundtrigger             = true,
+
+		texture1                 = "lightning",
+		thickness                = 1.5,
+		turret                   = true,
+		weaponVelocity           = 400,
+		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 1.5,
 		},
 	},
 }

@@ -32,8 +32,8 @@ Shared.buildListFedAirPlant = {
 }
 
 Shared.buildListFedSeaPlant = {
-	[[fedcrusader]],
 	[[fedpiranha]],
+	[[fedcrusader]],
 	[[fedcolossus]],
 	[[fedconqueror]],
 }
@@ -68,8 +68,8 @@ Shared.buildListLozAirPlant = {
 }
 
 Shared.buildListLozSeaPlant = {
-	[[lozenforcer]],
 	[[lozsnake]],
+	[[lozenforcer]],
 	[[lozexecutioner]],
 	[[lozwarlord]],
 }

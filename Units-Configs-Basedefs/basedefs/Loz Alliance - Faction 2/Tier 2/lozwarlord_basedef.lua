@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 3000,
+	buildCostMetal               = 28000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozwarlord.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 1.6,
+	maxVelocity                  = 1.4,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 1700,
+	sightDistance                = 500,
 	waterline                    = 5,
 	floater                      = true,
 	stealth			             = true,
@@ -48,8 +48,8 @@ unitDef                    = {
 	--------------
 	-- Movement --
 	--------------
-	acceleration 				 = 0.05,
-	brakeRate                    = 0.05,
+	acceleration 				 = 0.035,
+	brakeRate                    = 0.035,
 	turninplace 				 = true,
 	--	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 45,
@@ -84,21 +84,11 @@ unitDef                    = {
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[2]                      = {
-			def                  = "plasmacannon",
-			badTargetCategory     = "SHIP GROUND",
-			onlyTargetCategory    = "SHIP GROUND BUILDING",
-		},
-		[3]                      = {
-			def                  = "plasmacannon",
-			badTargetCategory     = "SHIP GROUND",
-			onlyTargetCategory    = "SHIP GROUND BUILDING",
-		},
-		[4]                      = {
-			def                  = "lasercannon",
+			def                  = "lightningcannon",
 			onlyTargetCategory    = "AIR",
 		},
-		[5]                      = {
-			def                  = "lasercannon",
+		[3]                      = {
+			def                  = "lightningcannon",
 			onlyTargetCategory    = "AIR",
 		},
 	},
@@ -131,7 +121,7 @@ weaponDefs                 = {
 		explosionGenerator       = "custom:genericshellexplosion-medium",
 		energypershot            = 0,
 
-		burst                    = 2,
+		burst                    = 6,
 		burstrate                = 0.3,
 
 		impulseFactor            = 0,
@@ -154,55 +144,53 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 114,
+			default              = 500,
 		},
 	},
 
-	lasercannon                  = {
-		predictboost	         = 0.3,
-		avoidFeature             = false,
+	lightningcannon   	             = {
 		avoidFriendly            = false,
-		beamTime                 = 0.1,
-		beamttl                  = 4,
-		collideFeature           = false,
+		avoidFeature             = false,
 		collideFriendly          = false,
+		collideFeature           = false,
 		canattackground          = false,
-		coreThickness            = 0.3,
-		duration                 = 0.1,
+		craterBoost              = 0,
+		craterMult               = 0,
+		burst                    = 10,
+		burstrate                = 0.01,
+		beamTTL					 = 1,
+		duration                 = 1,
+		explosionGenerator       = "custom:genericshellexplosion-electric-small",
 		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		fallOffRate              = 1,
-		fireStarter              = 50,
+		edgeeffectiveness		 = 1,
+		impulseBoost             = 0,
+		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		impulsefactor		     = 0.1,
+		intensity                = 24,
+		laserFlareSize           = 1,
 
-		largebeamlaser	         = true,
-		laserflaresize 	         = 8,
-		minintensity             = 1,
-		name                     = "High Intensity Beam Laser",
+		name			         = "Electrical Strike Cannon",
+		noSelfDamage             = true,
 		range                    = 1700,
 		reloadtime               = 0.4,
-		WeaponType               = "BeamLaser",
-		rgbColor                 = "0.1 0 0.3",
+		WeaponType               = "LightningCannon",
+		rgbColor                 = [[0.5 0 0]],
 		rgbColor2                = "1 1 1",
-		soundTrigger             = true,
-		soundstart               = "aegis",
-		--	soundHit		     = "amphibmedtankshothit",
-		scrollspeed		         = 5,
+		soundStart               = "lozscorpion-maingun",
+		soundtrigger             = true,
+
 		texture1                 = "lightning",
-		texture2                 = "laserend",
-		thickness                = 4,
-		tolerance                = 3000,
+		thickness                = 1.5,
 		turret                   = true,
-		weaponVelocity           = 1000,
-		customparams              = {
-			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
+		weaponVelocity           = 400,
+		customparams             = {
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-		damage                    = {
-			default               = 2,
+		damage                   = {
+			default              = 0.2,
 		},
 	},
 }

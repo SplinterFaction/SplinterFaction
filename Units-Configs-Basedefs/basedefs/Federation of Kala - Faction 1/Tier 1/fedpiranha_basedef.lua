@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 150,
+	buildCostMetal               = 300,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozpiranha.png",
@@ -10,7 +10,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "SHIP",
-	description                  = [[Fast Attack Ship]],
+	description                  = [[Corvette]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 3,
+	maxVelocity                  = 4.2,
 --	maxReverseVelocity           = 0.5,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
@@ -37,9 +37,9 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 550,
+	sightDistance                = 500,
 	waterline                    = 2,
-	sonarDistance                = 550,
+	sonarDistance                = 500,
 	floater                      = true,
 	stealth			             = true,
 	seismicSignature             = 2,
@@ -51,8 +51,8 @@ unitDef                    = {
 	--------------
 	-- Movement --
 	--------------
-	acceleration 				 = 0.05,
-	brakeRate                    = 0.05,
+	acceleration 				 = 0.075,
+	brakeRate                    = 0.075,
 	turninplace 				 = true,
 --	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 45,
@@ -89,7 +89,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "ship",
-		unitrole				 = "Ship",
+		unitrole				 = "Corvette",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",
@@ -138,7 +138,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 250,
+			default              = 1250,
 		},
 	},
 }

@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 2000,
+	buildCostMetal               = 15000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozexecutioner.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 2,
+	maxVelocity                  = 1.9,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -36,8 +36,8 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 1350,
-	sonarDistance                = 1350,
+	sightDistance                = 750,
+	sonarDistance                = 750,
 	waterline                    = 5,
 	floater                      = true,
 	stealth			             = true,
@@ -49,8 +49,8 @@ unitDef                    = {
 	--------------
 	-- Movement --
 	--------------
-	acceleration 				 = 0.05,
-	brakeRate                    = 0.05,
+	acceleration 				 = 0.035,
+	brakeRate                    = 0.035,
 	turninplace 				 = true,
 	--	turninplacespeedlimit 		 = 10,
 	turnInPlaceAngleLimit		 = 45,
@@ -130,19 +130,6 @@ unitDef                    = {
 			mainDir = "0 0 1",
 			maxAngleDif = 220,
 		},
-		[6]                      = {
-			def                  = "lasercannon",
-			onlyTargetCategory    = "AIR",
-		},
-		[7]                      = {
-			def                  = "lasercannon",
-			onlyTargetCategory    = "AIR",
-		},
-		[8]                      = {
-			def                  = "torpedo",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "SUBMARINE SHIP BUILDING GROUND",
-		},
 	},
 	customParams                 = {
 		unittype				 = "ship",
@@ -166,9 +153,8 @@ weaponDefs                 = {
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
-		cegTag                 = "railgun",
-		edgeEffectiveness	   = 1,
-		rgbColor               = "0.2 0 1",
+		-- cegTag                 = "railgun",
+		rgbColor               = "1 0 0",
 		rgbColor2              = "1 1 1",
 		explosionGenerator     = "custom:genericshellexplosion-medium",
 		energypershot          = 0,
@@ -177,115 +163,31 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 1350,
-		reloadtime             = 3,
+		range                  = 700,
+		reloadtime             = 6,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "reaperrailgun",
+		soundStart             = "lozroach-maingun",
 		texture1               = "shot",
 		texture2               = "empty",
-		coreThickness          = 0.4,
-		thickness              = 6,
+		coreThickness          = 0.3,
+		thickness              = 12,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 2000,
+		weaponVelocity         = 1500,
 		customparams             = {
 			single_hit		 	 = true,
-			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_color	= green, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 150,
+			default              = 900,
 		},
 	},
 
-	lasercannon                  = {
-		predictboost	         = 0.3,
-		avoidFeature             = false,
-		avoidFriendly            = false,
-		beamTime                 = 0.1,
-		beamttl                  = 4,
-		collideFeature           = false,
-		collideFriendly          = false,
-		canattackground          = false,
-		coreThickness            = 0.3,
-		duration                 = 0.1,
-		energypershot            = 0,
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		fallOffRate              = 1,
-		fireStarter              = 50,
-		interceptedByShieldType  = 4,
-		impulsefactor		     = 0.1,
-
-		largebeamlaser	         = true,
-		laserflaresize 	         = 8,
-		minintensity             = 1,
-		name                     = "Electromagnetic Pulse Laser",
-		range                    = 1350,
-		reloadtime               = 0.3,
-		WeaponType               = "BeamLaser",
-		rgbColor                 = "0.1 0 0.3",
-		rgbColor2                = "1 1 1",
-		soundTrigger             = true,
-		soundstart               = "aegis",
-		--	soundHit		     = "amphibmedtankshothit",
-		scrollspeed		         = 5,
-		texture1                 = "lightning",
-		texture2                 = "laserend",
-		thickness                = 4,
-		tolerance                = 3000,
-		turret                   = true,
-		weaponVelocity           = 1000,
-		customparams              = {
-			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                    = {
-			default               = 2,
-		},
-	},
-
-	torpedo             = {
-		avoidFriendly            = false,
-		avoidFeature             = false,
-		collideFriendly          = false,
-		collideFeature           = false,
-		-- cegTag                   = "ehbotrocko-optimized",
-		explosionGenerator       = "custom:genericshellexplosion-small",
-		energypershot            = 0,
-		impulseFactor            = 0,
-		interceptedByShieldType  = 4,
-		model                    = "missilesmalllauncher.s3o",
-		name                     = "Torpedo",
-		range                    = 1350,
-		reloadtime               = 1,
-		weaponType		         = "TorpedoLauncher",
-		waterweapon              = true,
-		smokeTrail               = false,
-		soundStart               = "torpedolaunch",
-		soundHit                 = "subhitbomb",
-		startVelocity            = 250,
-		tolerance                = 8000,
-		turnrate                 = 30000,
-		turret                   = true,
-		tracks                   = false,
-		flightTime               = 10,
-		weaponVelocity           = 100,
-		customparams             = {
-			expl_light_color	= purple, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-		},
-		damage                   = {
-			default              = 75,
-		},
-	},
 	plasmacannon              = {
 		AreaOfEffect             = 50,
 		avoidFriendly            = false,
@@ -300,11 +202,10 @@ weaponDefs                 = {
 
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		highTrajectory	         = 0,
 		name                     = "Plasma Cannon",
 		range                    = 1350,
-		reloadtime               = 2,
-		size					 = 5,
+		reloadtime               = 4,
+		size					 = 7,
 		weaponType		         = "Cannon",
 		soundHit                 = "artyhit",
 		soundStart               = "arty2",
@@ -318,7 +219,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 60,
+			default              = 500,
 		},
 	},
 }

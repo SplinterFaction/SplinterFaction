@@ -3,7 +3,7 @@
 #include "sfxtype.h"
 #include "exptype.h"
 
-piece  base, base1, base2, base3, base4, spinner1, spinner2, spinner3, spinner4, nanopoint1, nano1, nano2, nano3, nano4, sfxpoint1, sfxpoint2, lilypad;
+piece  base, nano1, nano2, nano3, nano4, nanopoint1, nanopoint2, nanopoint3, nanopoint4, buildunitnanopoint;
 
 static-var  spray, unitviewer, statechg_DesiredState, statechg_StateChanging, building, terraintype;
 
@@ -44,13 +44,13 @@ buildingfx()
    {
       if (building) 
       {   
-              emit-sfx 1024 from nano1;
+              emit-sfx 1024 from nanopoint1;
               sleep 60;
-              emit-sfx 1024 from nano4;
+              emit-sfx 1024 from nanopoint4;
               sleep 60;
-              emit-sfx 1024 from nano3;
+              emit-sfx 1024 from nanopoint3;
               sleep 60;
-              emit-sfx 1024 from nano2;
+              emit-sfx 1024 from nanopoint2;
               sleep 60;
        }         
    sleep 600;
@@ -63,7 +63,7 @@ buildingfx2()
    {
       if (building)    
       {
-              emit-sfx 1025 from nanopoint1;
+              emit-sfx 1025 from buildunitnanopoint;
       }        
    sleep 300;
    }
@@ -88,10 +88,6 @@ fx()
 
 OpenYard()
 {
-	spin spinner1 around y-axis speed <50.005495>;
-	spin spinner2 around y-axis speed <50.005495>;
-	spin spinner3 around y-axis speed <50.005495>;
-	spin spinner4 around y-axis speed <50.005495>;
 	set YARD_OPEN to 1;
 	while( !get YARD_OPEN )
 	{
@@ -104,10 +100,6 @@ OpenYard()
 
 CloseYard()
 {
-	stop-spin spinner1 around z-axis decelerate <15.000000>; 
-	stop-spin spinner2 around z-axis decelerate <15.000000>;
-	stop-spin spinner3 around z-axis decelerate <15.000000>;
-	stop-spin spinner4 around z-axis decelerate <15.000000>;
 	set YARD_OPEN to 0;
 	while( get YARD_OPEN )
 	{
@@ -178,19 +170,19 @@ QueryNanoPiece(piecenum)
 {
 	if( spray == 0 )
 	{
-		piecenum = nano1;
+		piecenum = nanopoint1;
 	}
 	if( spray == 1 )
 	{
-		piecenum = nano2;
+		piecenum = nanopoint2;
 	}
 	if( spray == 2 )
 	{
-		piecenum = nano3;
+		piecenum = nanopoint3;
 	}
 	if( spray == 3 )
 	{
-		piecenum = nano4;
+		piecenum = nanopoint4;
 	}
 	++spray;
 	if( spray >= 4 )
@@ -227,19 +219,16 @@ building = 0;
 
 QueryBuildInfo(piecenum)
 {
-	piecenum = nanopoint1;
+	piecenum = buildunitnanopoint;
 }
 
 
 Killed(severity, corpsetype) // how it explodes 
 { 
 	corpsetype = 1; 
-	explode base1 type EXPLODE_ON_HIT;
-	explode base2 type EXPLODE_ON_HIT;
-	explode base3 type EXPLODE_ON_HIT;
-	explode base4 type EXPLODE_ON_HIT;
-	explode spinner1 type EXPLODE_ON_HIT;
-	explode spinner2 type EXPLODE_ON_HIT;
-	explode spinner3 type EXPLODE_ON_HIT;
-	explode spinner4 type EXPLODE_ON_HIT;
+	explode base type EXPLODE_ON_HIT;
+	explode nano1 type EXPLODE_ON_HIT;
+	explode nano2 type EXPLODE_ON_HIT;
+	explode nano3 type EXPLODE_ON_HIT;
+	explode nano4 type EXPLODE_ON_HIT;
 } 

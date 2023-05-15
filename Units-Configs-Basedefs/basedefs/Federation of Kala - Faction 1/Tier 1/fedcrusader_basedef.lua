@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 220,
+	buildCostMetal               = 880,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "fedcrusader.png",
@@ -10,7 +10,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "SHIP",
-	description                  = [[Attack Boat]],
+	description                  = [[Frigate]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 4.5,
+	maxVelocity                  = 3,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -36,7 +36,7 @@ unitDef                    = {
 	repairable		             = false,
 	selfDestructAs               = explodeAs,
 	side                         = "CORE",
-	sightDistance                = 700,
+	sightDistance                = 600,
 	waterline                    = 3,
 	floater                      = true,
 	stealth			             = true,
@@ -106,8 +106,6 @@ unitDef                    = {
 
 weaponDefs                 = {
 	particlebeamcannon                 = {
-		accuracy                 = 0,
-		AreaOfEffect             = 10,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -123,7 +121,7 @@ weaponDefs                 = {
 
 		minintensity             = 1,
 		impulseFactor            = 0,
-		name                     = "Something with Flames",
+		name                     = "Particle Cannon",
 		range                    = 700,
 		reloadtime               = 0.3,
 		WeaponType               = [[LaserCannon]],
@@ -143,7 +141,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 20,
+			default              = 35,
 		},
 	},
 
@@ -156,12 +154,10 @@ weaponDefs                 = {
 		cegTag                   = "gunshiptrail-optimized-longlasting",
 		explosionGenerator       = "custom:genericshellexplosion-small",
 		energypershot            = 0,
-		burst                    = 2,
-		burstrate                = 0.1,
 		fireStarter              = 70,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		model                    = "missilesmalllauncher.s3o",
+		model                    = "neutralmissilex1.s3o",
 		name                     = "Rockets",
 		range                    = 700,
 		reloadtime               = 1,
@@ -187,7 +183,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 4,
+			default              = 50,
 		},
 	},
 }
