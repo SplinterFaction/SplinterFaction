@@ -91,7 +91,7 @@ local ringsDefs = {
     },
 
 
-	[UnitDefNames.fedanarchid.id] = {
+	[UnitDefNames.chickenanarchid.id] = {
 		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
 	},
 
