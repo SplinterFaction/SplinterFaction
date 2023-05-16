@@ -20,16 +20,16 @@ if gadgetHandler:IsSyncedCode() then
 	local spSetUnitRulesParam = Spring.SetUnitRulesParam
 	local INLOS_ACCESS = {inlos = true}
 	local gameFrame = 0
-	
+
 	function gadget:GameFrame(n)
 		gameFrame = n
 	end
-	
+
 	function gadget:ShieldPreDamaged(proID, proOwnerID, shieldEmitterWeaponNum, shieldCarrierUnitID, bounceProjectile, beamEmitter, beamCarrierID)
 		spSetUnitRulesParam(shieldCarrierUnitID, "shieldHitFrame", gameFrame, INLOS_ACCESS)
 		return false
 	end
-	
+
 	return
 end
 
@@ -71,12 +71,12 @@ local function UpdateVisibility(unitID, unitData, unitVisible, forceUpdate)
 		local ux,_,uz = Spring.GetUnitPosition(unitID)
 		unitVisible = GetVisibleSearch(ux, uz, unitData.search)
 	end
-	
+
 	if unitVisible == unitData.unitVisible and not forceUpdate then
 		return
 	end
 	unitData.unitVisible = unitVisible
-	
+
 	for i = 1, #unitData.fxTable do
 		local fxID = unitData.fxTable[i]
 		local fx = Lups.GetParticles(fxID)
@@ -87,9 +87,9 @@ end
 local function AddUnit(unitID, unitDefID)
 	if (not Lups) then
 		Lups = GG['Lups']
-		LupsAddParticles = Lups.AddParticles 
+		LupsAddParticles = Lups.AddParticles
 	end
-	
+
 	local def = shieldUnitDefs[unitDefID]
 	local defFx = def.fx
 	local fxTable = {}
@@ -103,7 +103,7 @@ local function AddUnit(unitID, unitDefID)
 			fxTable[#fxTable + 1] = fxID
 		end
 	end
-	
+
 	local unitData = {
 		unitDefID  = unitDefID,
 		search     = def.search,
@@ -111,7 +111,7 @@ local function AddUnit(unitID, unitDefID)
 		allyTeamID = Spring.GetUnitAllyTeam(unitID)
 	}
 	shieldUnits.Add(unitID, unitData)
-	
+
 	local _, fullview = spGetSpectatingState()
 	UpdateVisibility(unitID, unitData, fullview, true)
 end

@@ -1140,7 +1140,7 @@ do
         if (reloaded==false) then
           reload = 1 - ((reloadFrame-gameFrame)/30) / ci.reloadTime;
           reload = math.max(reload,0)
-          
+
           local infotext = ''
           if (fullText and drawBarPercentage > 0) then
             infotext = reload..'%'
