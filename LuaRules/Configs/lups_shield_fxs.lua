@@ -3,8 +3,8 @@ local ShieldSphereBase = {
 	life = 10000,
 	size = 350,
 	radius = 350,
-	colormap1 = {{0.1, 0.1, 1, 0.1}, {1, 0.1, 0.1, 0.05}},
-	colormap2 = {{0.2, 0.9, 1, 0.0}, {1, 0.9, 0.2, 0.0}},
+	colormap1 = {{0, 0, 1, 1}, {1, 1, 1, 0.001}},
+	colormap2 = {{0, 0, 0, 0}, {0, 0, 0, 0}}, -- This color is overlaid on everything within the shield
 	repeatEffect = true,
 	drawBack = 0.7,
 }
@@ -71,6 +71,7 @@ for unitDefID = 1, #UnitDefs do
 		myShield.size = radius
 		myShield.radius = radius
 		myShield.pos = {0, tonumber(ud.customParams.shield_emit_height) or 0, tonumber(ud.customParams.shield_emit_offset) or 0}
+		myShield.strength = 0.001
 
 		local strengthMult = tonumber(ud.customParams.shield_color_mult)
 		if strengthMult then
@@ -80,6 +81,7 @@ for unitDefID = 1, #UnitDefs do
 
 		local fxTable = {
 			{class = 'ShieldSphereColor', options = myShield},
+			{class='ShieldJitter',	options=myShield},
 		}
 
 		if string.find(ud.name, "chicken_") then

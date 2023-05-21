@@ -109,6 +109,8 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Loz Alliance",
 		corpse                   = "energycore",
+
+		shield_radius             = shieldradius,
 	},
 }
 

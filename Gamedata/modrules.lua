@@ -20,13 +20,22 @@ local modrules  = {
   },
 
   movement = {
-    allowAirPlanesToLeaveMap = true,  -- defaults to true
-	allowAircraftToHitGround = false,
-    allowPushingEnemyUnits   = true, -- defaults to false
-    allowCrushingAlliedUnits = false, -- defaults to false
-    allowUnitCollisionDamage = false, -- defaults to false
-	allowUnitCollisionOverlap = true,  -- defaults to true     -- this lets units clump close together when moving, after which they are pushed apart
-	allowGroundUnitGravity = false,
+    allowUnitCollisionDamage = false,	-- default: true if using QTPFS pathfinder.  Do unit-unit (skidding) collisions cause damage?
+    allowUnitCollisionOverlap = true,	-- can mobile units collision volumes overlap one another? Allows unit movement like this (video http://www.youtube.com/watch?v=mRtePUdVk2o ) at the cost of more 'clumping'.
+    allowCrushingAlliedUnits = false,	-- default: false.  Can allied ground units crush each other during collisions? Units still have to be explicitly set as crushable using the crushable parameter of Spring.SetUnitBlocking.
+    allowGroundUnitGravity = false,		-- default: true.   Allows fast moving mobile units to 'catch air' as they move over terrain.
+    --NOTE: allowGroundUnitGravity was set to false to "Fix units flying over hills and bumps", but this came at a cost for unit impulse which was a desired trait
+    --allowGroundUnitGravity = true, is possibly causing units getting stuck in labs
+
+    allowAirPlanesToLeaveMap = true,	-- Are (gunship) aircraft allowed to fly outside the bounds of the map?
+    allowAircraftToHitGround = true,	-- Are aircraft allowed to hit the ground whilst manoeuvring?
+    allowPushingEnemyUnits = false,		-- Can enemy ground units push each other during collisions?
+    allowHoverUnitStrafing = true,		-- Allows hovercraft units to slide in turns.
+
+    allowDirectionalPathing = true,  	-- determines if ground speed going downhill != going uphill
+    allowAircraftToLeaveMap = true,		-- determines if gunships are allowed to leave map boundaries
+    maxCollisionPushMultiplier = 1, 	-- mitigate slow units being pushed faster than they can normally walk by fast units
+
   },
   
   construction = {

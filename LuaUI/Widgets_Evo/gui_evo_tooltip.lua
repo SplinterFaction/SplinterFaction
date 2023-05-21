@@ -623,6 +623,12 @@ local function GetTooltipUnit(id)
 	result = result.."\255\200\200\200Health: ".."\255\200\200\200"..floor(health).."\255\200\200\200/\255\200\200\200"..floor(maxHealth).." ("..unitRoleStr..")"
 	if hasShield then result=result.."\255\135\135\255      Shield: "..FormatNbr(math.min(ShieldPower,maxShieldPower)).."/"..FormatNbr(maxShieldPower) end
 	end
+	if ud.customParams.isshieldedunit == "1" then
+		local overshieldStrength  = Spring.GetUnitRulesParam(id, "personalShield")
+		local shieldMaxStrength = ud.customParams.shield_max_strength
+		result=result.."\255\135\135\255      OverShield: "..FormatNbr(math.min(overshieldStrength,shieldMaxStrength)).."/"..FormatNbr(shieldMaxStrength)
+	end
+
 
 	-- energy and metal upkeep
 	if isFriendly then

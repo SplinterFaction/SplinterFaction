@@ -128,6 +128,8 @@ unitDef                    = {
 		death_sounds             = "generic",
 		factionname	             = "Loz Alliance",
 
+		shield_radius            = shieldradius,
+
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",

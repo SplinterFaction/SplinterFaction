@@ -120,6 +120,7 @@ local barColors = {
   stock   = { 0.50,0.50,0.50,barValueAlpha },
   reload  = { 0.05,0.60,0.60,barValueAlpha },
   shield  = { 0.20,0.60,0.60,barValueAlpha },
+  overshield  = { 0.20,0.20,0.60,barValueAlpha },
   resurrect = { 1.00,0.50,0.00,barValueAlpha },
   reclaim   = { 0.75,0.75,0.75,barValueAlpha },
 }
@@ -161,8 +162,8 @@ local barFeatureDList;
 --// speedup (there are a lot more localizations, but they are in limited scope cos we are running out of upvalues)
 local glColor         = gl.Color
 local glMyText        = gl.FogCoord
-local floor     			= math.floor
-local sub 						= string.sub
+local floor     	  = math.floor
+local sub 			  = string.sub
 local GetUnitDefID    = Spring.GetUnitDefID
 local glDepthTest     = gl.DepthTest 
 
@@ -1050,6 +1051,16 @@ do
         if (shieldOn)and(build==1)and(shieldPower<ci.maxShield) then
           shieldPower = shieldPower / ci.maxShield
           AddBar("shield",shieldPower,"shield",(fullText and floor(shieldPower*100)..'%') or '')
+        end
+      end
+
+      --// Overshield
+      if UnitDefs[GetUnitDefID(unitID)].customParams and UnitDefs[GetUnitDefID(unitID)].customParams.isshieldedunit == "1"  then
+        local shieldPower = Spring.GetUnitRulesParam(unitID, "personalShield")
+        local maxPower = UnitDefs[GetUnitDefID(unitID)].customParams.shield_max_strength
+        if shieldPower < tonumber(maxPower) then
+          shieldPower = shieldPower / maxPower
+          AddBar("overshield",shieldPower,"overshield",(fullText and floor(shieldPower*100)..'%') or '')
         end
       end
 

@@ -32,7 +32,5 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
             -- Spring.Echo([[New Shield Power is: ]] .. newPower)
             Spring.SetUnitShieldState(unitID, -1, true, newPower)
             return damage, 0
-        end
-    --local name = UnitDefs[unitDefID].name
-    --Spring.Echo(name .. [[ ]] .. weaponID)
+    end
 end
