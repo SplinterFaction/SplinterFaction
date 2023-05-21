@@ -1082,7 +1082,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
-			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" and unitDef.unitname ~= "lozcommander" then
+			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" then
 				--if unitDef.customparams.unittype == "mobile" or unitDef.customparams.unittype == "ship" or unitDef.customparams.unittype == "air" then
 
 					--[[

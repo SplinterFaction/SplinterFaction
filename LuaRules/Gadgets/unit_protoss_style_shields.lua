@@ -6,7 +6,7 @@ function gadget:GetInfo()
 		author  = "GoogleFrog and ChatGPT3",
 		date    = "21 May 2023",
 		license = "GNU GPL, v2 or later",
-		layer   = 0,
+		layer   = 999999,
 		enabled = true
 	}
 end
@@ -40,6 +40,28 @@ local function initShieldedUnit(unitID, shieldParams)
 	Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength)
 end
 
+function gadget:Initialize()
+
+end
+
+-- Cache shield parameters
+local unitDefs = UnitDefs
+for unitDefID = 1, #unitDefs do
+	local unitDef = UnitDefs[unitDefID]
+	local customParams = unitDef.customParams
+	if customParams and customParams.isshieldedunit == "1" then
+		--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ IS shielded]])
+		cachedShieldParams[unitDefID] = {
+			shieldMaxStrength = tonumber(customParams.shield_max_strength) or 100,
+			shieldRegenerationRate = tonumber(customParams.shield_regeneration_rate) or 5,
+			shieldRegenerationDelay = tonumber(customParams.shield_regeneration_delay) or 10,
+		}
+	else
+		--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ is NOT shielded]])
+	end
+
+end
+
 -- Apply function for updating shielded units
 local function UpdateShieldedUnit(unitID, shieldedUnit, index, frame)
 	-- Check if the Shielded Unit is still alive
@@ -65,7 +87,9 @@ local function UpdateShieldedUnit(unitID, shieldedUnit, index, frame)
 end
 
 function gadget:GameFrame(frame)
-	IterableMap.ApplyFraction(shieldedUnits, frame, frame%UPDATE_PERIOD, UpdateShieldedUnit, frame)
+	--if frame > 1 then
+		IterableMap.ApplyFraction(shieldedUnits, UPDATE_PERIOD, frame%UPDATE_PERIOD, UpdateShieldedUnit, frame)
+	--end
 end
 
 -- Handle unit pre-damage event
@@ -96,22 +120,3 @@ function gadget:UnitCreated(unitID, unitDefID)
 	end
 end
 
-function gadget:Initialize()
-	-- Cache shield parameters
-	local unitDefs = UnitDefs
-	for unitDefID = 1, #unitDefs do
-		local unitDef = UnitDefs[unitDefID]
-		local customParams = unitDef.customParams
-		if customParams and customParams.isshieldedunit == "1" then
-			--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ IS shielded]])
-			cachedShieldParams[unitDefID] = {
-				shieldMaxStrength = tonumber(customParams.shield_max_strength) or 100,
-				shieldRegenerationRate = tonumber(customParams.shield_regeneration_rate) or 5,
-				shieldRegenerationDelay = tonumber(customParams.shield_regeneration_delay) or 10,
-			}
-		else
-			--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ is NOT shielded]])
-		end
-
-	end
-end

@@ -24,6 +24,8 @@ noenergycost = false
 
 skyhateceg = [[custom:skyhatelasert1]]
 
+faction = [[Federation of Kala]]
+
 VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs

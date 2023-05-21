@@ -236,30 +236,4 @@ weaponDefs                 = {
 			default               = 250,
 		},
 	},
-
-	shield                        = {
-		Smartshield               = true,
-		Exteriorshield            = true,
-		Visibleshield             = false,
-		Visibleshieldrepulse      = false,
-		ShieldStartingPower       = shield1StartingPower,
-		Shieldenergyuse           = 0,
-		Shieldradius              = 100,
-		Shieldpower               = shield1Power,
-		Shieldpowerregen          = shield1PowerRegen,
-		Shieldpowerregenenergy    = shield1PowerRegenEnergy,
-		rechargeDelay		  	  = shieldRechargeDelay,
-		Shieldintercepttype       = 4,
-		Shieldgoodcolor           = "0.0 0.2 1.0",
-		Shieldbadcolor            = "1.0 0 0",
-		Shieldalpha              = 0.2,
-
-		texture1		          = "shield4",
-
-		visibleShieldHitFrames    = 1,
-		weaponType                = [[Shield]],
-		damage                    = {
-			default               = 1,
-		},
-	},
 }

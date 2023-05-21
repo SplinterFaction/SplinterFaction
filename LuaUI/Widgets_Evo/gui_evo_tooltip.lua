@@ -621,12 +621,12 @@ local function GetTooltipUnit(id)
 	local maxShieldPower = ud.shieldPower
 	if (health ~= nil) then
 	result = result.."\255\200\200\200Health: ".."\255\200\200\200"..floor(health).."\255\200\200\200/\255\200\200\200"..floor(maxHealth).." ("..unitRoleStr..")"
-	if hasShield then result=result.."\255\135\135\255      Shield: "..FormatNbr(math.min(ShieldPower,maxShieldPower)).."/"..FormatNbr(maxShieldPower) end
+	if hasShield then result=result.."\255\255\255\255      Shield: \255\135\135\255"..FormatNbr(math.min(ShieldPower,maxShieldPower)).."\255\255\255\255/\255\135\135\255"..FormatNbr(maxShieldPower) end
 	end
 	if ud.customParams.isshieldedunit == "1" then
 		local overshieldStrength  = Spring.GetUnitRulesParam(id, "personalShield")
 		local shieldMaxStrength = ud.customParams.shield_max_strength
-		result=result.."\255\135\135\255      OverShield: "..FormatNbr(math.min(overshieldStrength,shieldMaxStrength)).."/"..FormatNbr(shieldMaxStrength)
+		result=result.."\255\255\255\255      OverShield: \255\200\200\255"..FormatNbr(math.min(overshieldStrength,shieldMaxStrength)).."\255\255\255\255/\255\200\200\255"..FormatNbr(shieldMaxStrength)
 	end
 
 
@@ -856,7 +856,13 @@ function GenerateNewTooltip()
 				costStr.."\255\213\213\255".."    Build time: ".."\255\170\170\255"..
 				floor((29+floor(31+fud.buildTime/(buildpower/32)))/30).."s".."    "..GetTooltipTransportability(fud).."\n"..
 				"\255\200\200\200Health: ".."\255\200\200\200"..fud.health.." ("..unitRoleStr..")"
-				if fud.shieldPower > 0 then NewTooltip=NewTooltip.."\255\135\135\255     Shield: "..FormatNbr(fud.shieldPower) end
+				if fud.shieldPower > 0 then NewTooltip=NewTooltip.."\255\135\135\255     Shield: \255\255\255\255"..FormatNbr(fud.shieldPower) end
+
+			-- Add OverShield to mouseover buildpics
+			if fud.customParams.isshieldedunit == "1" then
+				local shieldMaxStrength = fud.customParams.shield_max_strength
+				NewTooltip=NewTooltip.."\255\200\200\255    OverShield: \255\255\255\255"..FormatNbr(shieldMaxStrength)
+			end
 					
 			-- weapons
 			if fud.weapons and fud.weapons[1] and fud.weapons[1].weaponDef then
