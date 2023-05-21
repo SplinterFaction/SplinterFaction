@@ -108,10 +108,6 @@ unitDef                    = {
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
-		[2]                      = {
-			def                  = weapon2,
-		},
-
 	},
 	customParams                 = {
 		unittype				 = "mobile",
@@ -122,13 +118,9 @@ unitDef                    = {
 		techlevel                = techlevel,
 		canbetransported 		 = "true",
 		iscommander              = true,
-		hpoverride               = hp,
-		buildcostenergyoverride  = buildCostEnergy,
 		needed_cover             = 2,
 		death_sounds             = "generic",
 		factionname	             = "Loz Alliance",
-
-		shield_radius            = shieldradius,
 
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -192,33 +184,6 @@ weaponDefs                 = {
 		},
 	},
 
-	commshield                        = {
-
-		Smartshield               = true,
-		Exteriorshield            = true,
-		Visibleshield             = false,
-		Visibleshieldrepulse      = false,
-		ShieldStartingPower       = 4125,
-		Shieldenergyuse           = 0,
-		Shieldradius              = shieldradius,
-		Shieldpower               = 8250,
-		Shieldpowerregen          = 150,
-		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 80,
-		Shieldintercepttype       = 4,
-		Shieldgoodcolor           = "0.0 0.2 1.0",
-		Shieldbadcolor            = "1.0 0 0",
-		Shieldalpha              = 0.2,
-
-		texture1		          = "shield4",
-
-		visibleShieldHitFrames    = 1,
-		weaponType                = [[Shield]],
-		damage                    = {
-			default               = 1,
-		},
-	},
-
 	commrailgun_up1               = {
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -269,33 +234,6 @@ weaponDefs                 = {
 		},
 		damage                    = {
 			default               = 400,
-		},
-	},
-
-	commshield_up1                        = {
-
-		Smartshield               = true,
-		Exteriorshield            = true,
-		Visibleshield             = false,
-		Visibleshieldrepulse      = false,
-		ShieldStartingPower       = 8250,
-		Shieldenergyuse           = 0,
-		Shieldradius              = shieldradius,
-		Shieldpower               = 14000,
-		Shieldpowerregen          = 200,
-		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 60,
-		Shieldintercepttype       = 4,
-		Shieldgoodcolor           = "0.0 0.2 1.0",
-		Shieldbadcolor            = "1.0 0 0",
-		Shieldalpha              = 0.2,
-
-		texture1		          = "shield4",
-
-		visibleShieldHitFrames    = 1,
-		weaponType                = [[Shield]],
-		damage                    = {
-			default               = 1,
 		},
 	},
 
@@ -352,33 +290,6 @@ weaponDefs                 = {
 		},
 	},
 
-	commshield_up2                        = {
-
-		Smartshield               = true,
-		Exteriorshield            = true,
-		Visibleshield             = false,
-		Visibleshieldrepulse      = false,
-		ShieldStartingPower       = 14000,
-		Shieldenergyuse           = 0,
-		Shieldradius              = shieldradius,
-		Shieldpower               = 23000,
-		Shieldpowerregen          = 325,
-		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 60,
-		Shieldintercepttype       = 4,
-		Shieldgoodcolor           = "0.0 0.2 1.0",
-		Shieldbadcolor            = "1.0 0 0",
-		Shieldalpha              = 0.2,
-
-		texture1		          = "shield4",
-
-		visibleShieldHitFrames    = 1,
-		weaponType                = [[Shield]],
-		damage                    = {
-			default               = 1,
-		},
-	},
-
 	commrailgun_up3               = {
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -432,33 +343,6 @@ weaponDefs                 = {
 		},
 	},
 
-	commshield_up3                        = {
-
-		Smartshield               = true,
-		Exteriorshield            = true,
-		Visibleshield             = false,
-		Visibleshieldrepulse      = false,
-		ShieldStartingPower       = 23000,
-		Shieldenergyuse           = 0,
-		Shieldradius              = shieldradius,
-		Shieldpower               = 28500,
-		Shieldpowerregen          = 500,
-		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 40,
-		Shieldintercepttype       = 4,
-		Shieldgoodcolor           = "0.0 0.2 1.0",
-		Shieldbadcolor            = "1.0 0 0",
-		Shieldalpha              = 0.2,
-
-		texture1		          = "shield4",
-
-		visibleShieldHitFrames    = 1,
-		weaponType                = [[Shield]],
-		damage                    = {
-			default               = 1,
-		},
-	},
-
 	commrailgun_up4               = {
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -509,33 +393,6 @@ weaponDefs                 = {
 		},
 		damage                    = {
 			default               = 240000,
-		},
-	},
-
-	commshield_up4                        = {
-
-		Smartshield               = true,
-		Exteriorshield            = true,
-		Visibleshield             = false,
-		Visibleshieldrepulse      = false,
-		ShieldStartingPower       = 28500,
-		Shieldenergyuse           = 0,
-		Shieldradius              = shieldradius,
-		Shieldpower               = 42000,
-		Shieldpowerregen          = 1000,
-		Shieldpowerregenenergy    = 0,
-		rechargeDelay		  	  = 20,
-		Shieldintercepttype       = 4,
-		Shieldgoodcolor           = "0.0 0.2 1.0",
-		Shieldbadcolor            = "1.0 0 0",
-		Shieldalpha              = 0.2,
-
-		texture1		          = "shield4",
-
-		visibleShieldHitFrames    = 1,
-		weaponType                = [[Shield]],
-		damage                    = {
-			default               = 1,
 		},
 	},
 }

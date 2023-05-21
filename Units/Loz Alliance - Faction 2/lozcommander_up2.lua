@@ -11,7 +11,7 @@ techprovided = [[tech0, tech1, tech2, -overseer]]
 techrequired = [[0 overseer]]
 techlevel = [[tech2]]
 
-buildCostMetal = 0
+buildCostMetal = 10000
 buildCostEnergy = 30000
 hp = 2000
 builddistance = 550
@@ -29,7 +29,6 @@ footprintx = 5
 footprintz = 5
 
 weapon1 = [[commrailgun_up2]]
-weapon2 = [[commshield_up2]]
 
 explodeas = [[commnuke_up2]]
 selfdestructas = [[commnuke_up2]]

@@ -236,7 +236,7 @@ Shared.buildListLozUniversalBuilder = {
 	[[lozrattlesnake]],
 	-- [[lozannihilator]],
 	-- [[lozintimidator]],
-	[[healstation]],
+	-- [[healstation]],
 	-- [[lozeurypterid]],
 	[[lozengineer_up1]],
 }
@@ -266,7 +266,7 @@ Shared.buildListLozUniversalBuilderCommander = {
 	[[lozrattlesnake]],
 	-- [[lozannihilator]],
 	-- [[lozintimidator]],
-	[[healstation]],
+	-- [[healstation]],
 	-- [[lozeurypterid]],
 	[[lozengineer_up1]],
 }

@@ -91,11 +91,5 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Loz Alliance",
 		corpse                   = "energycore",
-
-		isShieldedUnit = "1",
-		shield_init_strength = 10000,
-		shield_max_strength = 10000,
-		shield_regeneration_rate = 250,
-		shield_regeneration_delay = 10,
 	},
 }

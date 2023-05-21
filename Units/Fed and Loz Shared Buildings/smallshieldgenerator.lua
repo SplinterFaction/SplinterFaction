@@ -87,7 +87,6 @@ local unitDef                     = {
 		needed_cover              = 1,
 		death_sounds              = "generic",
 		shield_power			  = shield1Power,
-		shield_radius             = shieldradius,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = "Loz Alliance",

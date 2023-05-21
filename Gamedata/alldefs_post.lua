@@ -206,15 +206,18 @@ function UnitDef_Post(name, uDef)
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	-- Implement idle autoheal for all units
-	if uDef.idletime == nil then uDef.idletime = 0 end
-	if uDef.idletime > 450 then
-		uDef.idletime = 450
-	end
+	if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
+		-- Implement idle autoheal for all units
+		if uDef.idletime == nil then uDef.idletime = 0 end
+		if uDef.idletime > 450 then
+			uDef.idletime = 450
+		end
 
-	if uDef.idleautoheal == nil then uDef.idleautoheal = 0 end
-	if uDef.idleautoheal < 1 then
-		uDef.idleautoheal = 2.5
+		if uDef.idleautoheal == nil then uDef.idleautoheal = 0 end
+		if uDef.idleautoheal < 1 then
+			uDef.idleautoheal = 2.5
+		end
+
 	end
 
 	-------------------------------------------------------------------------- ------
@@ -1077,6 +1080,29 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					local supplycost = totalValueInMetal * 0.005
 					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
 				end
+			end
+
+			if unitDef.customparams and unitDef.customparams.factionname == "Loz Alliance" and unitDef.unitname ~= "lozcommander" then
+				--if unitDef.customparams.unittype == "mobile" or unitDef.customparams.unittype == "ship" or unitDef.customparams.unittype == "air" then
+
+					--[[
+						unitDef.customparams.isshieldedunit = "1",
+						unitDef.customparams.shield_init_strength = 10000,
+						unitDef.customparams.shield_max_strength = 10000,
+						unitDef.customparams.shield_regeneration_rate = 250,
+						unitDef.customparams.shield_regeneration_delay = 10,
+					]]--
+
+					local reducedMaxdamage = unitDef.maxdamage * 0.5
+					local maximumShieldStrength = unitDef.maxdamage * 0.5
+					local regenerationRate = maximumShieldStrength / 30
+
+					unitDef.customparams.isshieldedunit = "1"
+					unitDef.maxdamage = reducedMaxdamage
+					unitDef.customparams.shield_max_strength = maximumShieldStrength
+					unitDef.customparams.shield_regeneration_rate = regenerationRate
+					unitDef.customparams.shield_regeneration_delay = 30
+				--end
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

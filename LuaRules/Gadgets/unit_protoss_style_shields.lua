@@ -34,7 +34,7 @@ local function initShieldedUnit(unitID, shieldParams)
 		shieldStrength = shieldParams.shieldMaxStrength or 100,
 		shieldMaxStrength = shieldParams.shieldMaxStrength or 100,
 		shieldRegenerationRate = shieldParams.shieldRegenerationRate or 5,
-		shieldRegenerationDelay = shieldParams.shieldRegenerationDelay or 10,
+		shieldRegenerationDelay = shieldParams.shieldRegenerationDelay * 30 or 300,
 	}
 	IterableMap.Add(shieldedUnits, unitID, shieldedUnit)
 	Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength)
@@ -47,11 +47,16 @@ local function UpdateShieldedUnit(unitID, shieldedUnit, index, frame)
 		-- Remove destroyed units from the map
 		return true
 	end
+
+	if shieldedUnit.lastFrameDamaged == nil then
+		shieldedUnit.lastFrameDamaged = 1
+	end
+
 	-- Regenerate shield if necessary
 	local frameDiff = frame - shieldedUnit.lastFrameDamaged
-	Spring.Echo([[Frame]] .. frame)
-	Spring.Echo([[Last Frame Damaged]] .. shieldedUnit.lastFrameDamaged)
-	Spring.Echo([[Framediff]] .. frameDiff)
+	-- Spring.Echo([[Frame]] .. frame)
+	-- Spring.Echo([[Last Frame Damaged]] .. shieldedUnit.lastFrameDamaged)
+	-- Spring.Echo([[Framediff]] .. frameDiff)
 	if frameDiff > shieldedUnit.shieldRegenerationDelay and shieldedUnit.shieldStrength < shieldedUnit.shieldMaxStrength then
 		local regenAmount = shieldedUnit.shieldRegenerationRate * UPDATE_PERIOD / 30  -- Divide by 30 to convert frames to seconds
 		shieldedUnit.shieldStrength = math.min(shieldedUnit.shieldStrength + regenAmount, shieldedUnit.shieldMaxStrength)
@@ -60,7 +65,7 @@ local function UpdateShieldedUnit(unitID, shieldedUnit, index, frame)
 end
 
 function gadget:GameFrame(frame)
-	IterableMap.ApplyFraction(shieldedUnits, UPDATE_PERIOD, frame, UpdateShieldedUnit, frame)
+	IterableMap.ApplyFraction(shieldedUnits, frame, frame%UPDATE_PERIOD, UpdateShieldedUnit, frame)
 end
 
 -- Handle unit pre-damage event

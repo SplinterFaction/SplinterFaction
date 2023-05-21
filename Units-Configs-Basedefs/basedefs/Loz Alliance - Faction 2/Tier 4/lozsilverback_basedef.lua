@@ -90,17 +90,11 @@ unitDef                    = {
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
-		[4]                      = {
-			def                  = "shield",
-			-- badTargetCategory     = "BUILDING",
-			-- onlyTargetCategory    = "GROUND BUILDING SHIP",
-		},
 	},
 	customParams                 = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 3",
-		hpoverride               = 7500,
 		death_sounds             = "generic",
 		RequireTech              = tech,
 		nofriendlyfire	         = "1",
@@ -109,8 +103,6 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Loz Alliance",
 		corpse                   = "energycore",
-
-		shield_radius             = shieldradius,
 	},
 }
 

@@ -11,9 +11,9 @@ techprovided = [[tech0, -overseer]]
 techrequired = [[0 overseer]]
 techlevel = [[tech0]]
 
-buildCostMetal = 0
+buildCostMetal = 3500
 buildCostEnergy = 500
-hp = 500
+
 builddistance = 550
 maxvelocity = 2
 workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget
@@ -29,7 +29,6 @@ footprintx = 3
 footprintz = 3
 
 weapon1 = [[commrailgun]]
-weapon2 = [[commshield]]
 
 explodeas = [[commnuke]]
 selfdestructas = [[commnuke]]
