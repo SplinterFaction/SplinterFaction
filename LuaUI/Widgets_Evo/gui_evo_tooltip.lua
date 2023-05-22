@@ -532,18 +532,18 @@ local function GetTooltipUpkeep(eMake, eUse, mMake, mUse)
 		--useMetalTexture..generateResColour.." +"..FormatNbr(mMake, 1)..white.." / "..useResColour..FormatNbr(-mUse, 1)
 end
 -- get tooltip for one unit
-local function GetTooltipUnit(id)
+local function GetTooltipUnit(uID)
 	local result = ""
-	local u=id
-	local ud=UnitDefs[Spring.GetUnitDefID(u)]
+	local unitID=uID
+	local unitDefs=UnitDefs[Spring.GetUnitDefID(unitID)]
 
-	local metalMake,metalUse,energyMake,energyUse = Spring.GetUnitResources(u)
+	local metalMake,metalUse,energyMake,energyUse = Spring.GetUnitResources(unitID)
 	local isFriendly = metalMake ~= nil       -- assume only friendly units have this info
 
 	-- build progress, health and shield
-	local health,maxHealth,paralyzeDamage,captureProgress,buildProgress = Spring.GetUnitHealth(u)
-	stunned_or_beingbuilt, stunned, beingbuilt = Spring.GetUnitIsStunned(u)
-	result = result.."\n"..ud.humanName.." ("..ud.tooltip..")"
+	local health,maxHealth,paralyzeDamage,captureProgress,buildProgress = Spring.GetUnitHealth(unitID)
+	stunned_or_beingbuilt, stunned, beingbuilt = Spring.GetUnitIsStunned(unitID)
+	result = result.."\n"..unitDefs.humanName.." ("..unitDefs.tooltip..")"
 	--[[local hpMod = spGetUnitRulesParam(u,"upgrade_hp")
 	if not hpMod then
 		hpMod = 1
@@ -585,7 +585,7 @@ local function GetTooltipUnit(id)
 		result = result.."\255\194\173\255   PARALYZED"
 	end
 	-- cloaking
-	if spGetUnitIsCloaked(u) then
+	if spGetUnitIsCloaked(unitID) then
 		result = result.."\255\170\170\170   CLOAKED"
 	end
 	-- alliance                
@@ -599,35 +599,34 @@ local function GetTooltipUnit(id)
 
 	-- cost
 	--result = result.."\255\200\200\200Metal: "..ud.metalCost.."    \255\255\255\0Energy: "..ud.energyCost.."    "..GetTooltipTransportability(ud).."\n"
-	local unitsupplycost = ud.customParams.supply_cost or 0
-	local unitsupplygive = ud.customParams.supply_granted or 0
-	result = result..GetTooltipCost(unitsupplycost, unitsupplygive, ud.energyCost, ud.metalCost).."    "..GetTooltipTransportability(ud).."\n"
+	local unitsupplycost = unitDefs.customParams.supply_cost or 0
+	local unitsupplygive = unitDefs.customParams.supply_granted or 0
+	result = result..GetTooltipCost(unitsupplycost, unitsupplygive, unitDefs.energyCost, unitDefs.metalCost).."    "..GetTooltipTransportability(unitDefs).."\n"
 
 
 	--[[local armorTypeStr= "L"
 	if ( Game.armorTypes[ud.armorType] == "armor_heavy" ) then armorTypeStr = "H"
 	elseif ( Game.armorTypes[ud.armorType] == "armor_medium" ) then armorTypeStr = "M" end]]
-	local armorTypeStr = ud.customParams.armortype
+	local armorTypeStr = unitDefs.customParams.armortype
 	if armorTypeStr == nil then
 		armorTypeStr = "None"
 	end
 
-	local unitRoleStr = ud.customParams.unitrole
+	local unitRoleStr = unitDefs.customParams.unitrole
 	if unitRoleStr == nil then
 		unitRoleStr = "Unit Role Undefined"
 	end
 
-	local hasShield, ShieldPower=Spring.GetUnitShieldState(id)
-	local maxShieldPower = ud.shieldPower
+	local hasShield, ShieldPower=Spring.GetUnitShieldState(unitID)
+	local maxShieldPower = unitDefs.shieldPower
 	if (health ~= nil) then
 	result = result.."\255\200\200\200Health: ".."\255\200\200\200"..floor(health).."\255\200\200\200/\255\200\200\200"..floor(maxHealth).." ("..unitRoleStr..")"
 	if hasShield then result=result.."\255\255\255\255      Shield: \255\135\135\255"..FormatNbr(math.min(ShieldPower,maxShieldPower)).."\255\255\255\255/\255\135\135\255"..FormatNbr(maxShieldPower) end
 	end
 
-	if ud.customParams.isshieldedunit == "1" then
-		local overshieldStrength  = Spring.GetUnitRulesParam(id, "personalShield")
-		local shieldMaxStrength = ud.customParams.shield_max_strength
-
+	local overshieldStrength = Spring.GetUnitRulesParam(unitID, "personalShield")
+	if overshieldStrength then
+		local shieldMaxStrength = unitDefs.customParams.shield_max_strength
 		-- Sanity checks
 		--[[
 			Spring.Echo("Unitname " .. ud.name .. "/ sheildedunit status " .. ud.customParams.isshieldedunit)
@@ -639,10 +638,7 @@ local function GetTooltipUnit(id)
 			end
 		--]]
 		--
-
-		if overshieldStrength ~= nil and shieldMaxStrength ~= nil then -- don't die ... Just in case something goes sideways that I didn't plan for
-			result=result.."\255\255\255\255      OverShield: \255\200\200\255"..FormatNbr(math.min(overshieldStrength,shieldMaxStrength)).."\255\255\255\255/\255\200\200\255"..FormatNbr(shieldMaxStrength)
-		end
+		result=result.."\255\255\255\255      OverShield: \255\200\200\255"..FormatNbr(math.min(overshieldStrength,shieldMaxStrength)).."\255\255\255\255/\255\200\200\255"..FormatNbr(shieldMaxStrength)
 	end
 
 
@@ -656,11 +652,11 @@ local function GetTooltipUnit(id)
 	end
 
 	-- weapons
-	result = result..GetTooltipWeaponData(ud).."\n"
+	result = result..GetTooltipWeaponData(unitDefs).."\n"
 
 	-- build power
-	if ud.buildSpeed and ud.buildSpeed > 0 then
-	result = result.."\n"..GetTooltipBuildPower(ud.buildSpeed)..  "\255\255\255\255\n"
+	if unitDefs.buildSpeed and unitDefs.buildSpeed > 0 then
+	result = result.."\n"..GetTooltipBuildPower(unitDefs.buildSpeed)..  "\255\255\255\255\n"
 	end
 
 	-- upgrades (upgrade centers only)
@@ -710,7 +706,7 @@ local function GetTooltipUnit(id)
 		result = result.."\n\255\180\180\180"..ud.customParams.tip.."\255\255\255\255\n"
 	end]]
 	return result
-	end
+end
 	
 -- generates new tooltip 
 function GenerateNewTooltip()

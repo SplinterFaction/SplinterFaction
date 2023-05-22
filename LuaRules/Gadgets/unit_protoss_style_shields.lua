@@ -18,7 +18,7 @@ if not gadgetHandler:IsSyncedCode() then
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-
+local IN_LOS = {inlos = true}
 local UPDATE_PERIOD = 5
 local IterableMap = VFS.Include("LuaRules/Gadgets/Include/IterableMap.lua")
 
@@ -37,25 +37,27 @@ local function initShieldedUnit(unitID, shieldParams)
 		shieldRegenerationDelay = shieldParams.shieldRegenerationDelay * 30 or 300,
 	}
 	IterableMap.Add(shieldedUnits, unitID, shieldedUnit)
-	Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength)
+	Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength, IN_LOS)
 end
 
 function gadget:Initialize()
-	-- Cache shield parameters
-	local unitDefs = UnitDefs
-	for unitDefID = 1, #unitDefs do
-		local unitDef = UnitDefs[unitDefID]
-		local customParams = unitDef.customParams
-		if customParams and customParams.isshieldedunit == "1" then
-			--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ IS shielded]])
-			cachedShieldParams[unitDefID] = {
-				shieldMaxStrength = tonumber(customParams.shield_max_strength) or 100,
-				shieldRegenerationRate = tonumber(customParams.shield_regeneration_rate) or 5,
-				shieldRegenerationDelay = tonumber(customParams.shield_regeneration_delay) or 10,
-			}
-		else
-			--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ is NOT shielded]])
-		end
+
+end
+
+-- Cache shield parameters
+local unitDefs = UnitDefs
+for unitDefID = 1, #unitDefs do
+	local unitDef = UnitDefs[unitDefID]
+	local customParams = unitDef.customParams
+	if customParams and customParams.isshieldedunit == "1" then
+		--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ IS shielded]])
+		cachedShieldParams[unitDefID] = {
+			shieldMaxStrength = tonumber(customParams.shield_max_strength) or 100,
+			shieldRegenerationRate = tonumber(customParams.shield_regeneration_rate) or 5,
+			shieldRegenerationDelay = tonumber(customParams.shield_regeneration_delay) or 10,
+		}
+	else
+		--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ is NOT shielded]])
 	end
 end
 
@@ -79,7 +81,7 @@ local function UpdateShieldedUnit(unitID, shieldedUnit, index, frame)
 	if frameDiff > shieldedUnit.shieldRegenerationDelay and shieldedUnit.shieldStrength < shieldedUnit.shieldMaxStrength then
 		local regenAmount = shieldedUnit.shieldRegenerationRate * UPDATE_PERIOD / 30  -- Divide by 30 to convert frames to seconds
 		shieldedUnit.shieldStrength = math.min(shieldedUnit.shieldStrength + regenAmount, shieldedUnit.shieldMaxStrength)
-		Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength)
+		Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength, IN_LOS)
 	end
 end
 
@@ -100,7 +102,7 @@ function gadget:UnitPreDamaged(unitID, _, _, damage)
 			remainingDamage = damage - shieldedUnit.shieldStrength
 			shieldedUnit.shieldStrength = 0
 		end
-		Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength)
+		Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength, IN_LOS)
 		shieldedUnit.lastFrameDamaged = Spring.GetGameFrame()
 		return remainingDamage -- Remaining damage applied to the unit
 	end

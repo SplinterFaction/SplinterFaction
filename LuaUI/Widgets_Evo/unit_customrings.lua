@@ -15,13 +15,13 @@ end
 --[[
 
 	You can have as many rings as you like.
-		
-		color = {0.5,0,1,0.3}, --R,G,B,A on a scale from 0 - 1. A is the opacity with 1 being fully opaque to 0 being fully transparent. Easy and quick color picker here: http://www.dematte.at/colorPicker/  Take 255 divided by the color value you want, and that is it's value on a scale from 0 - 1. 
-			 
+
+		color = {0.5,0,1,0.3}, --R,G,B,A on a scale from 0 - 1. A is the opacity with 1 being fully opaque to 0 being fully transparent. Easy and quick color picker here: http://www.dematte.at/colorPicker/  Take 255 divided by the color value you want, and that is it's value on a scale from 0 - 1.
+
 		radius = 500, --How large of a radius the ring will cover.
 
 		linewidth = 1, --1 is basically 1 pixel thick. It will scale as you zoom in and out. Maximum value seems to be 32.
-            
+
 ]]--
 
 local ringsDefs = {
@@ -33,7 +33,7 @@ local ringsDefs = {
         --{ color = {0.5,0,1,0.2}, lineWidth = 5, radius = 500 },
 		{ color = {0,1,0,0.25}, lineWidth = 10, radius = 500, divs = 128 },
     },
-	
+
 	-- Shield Units
 	[UnitDefNames.cloakingtower.id] = {
         { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
@@ -165,7 +165,7 @@ function widget:DrawWorldPreUnit()
 			end
 		end
 	end
-    
+
     gl.LineWidth(1)
     gl.Color(1, 1, 1, 1)
 end

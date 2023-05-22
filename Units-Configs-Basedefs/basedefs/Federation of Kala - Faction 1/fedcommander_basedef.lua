@@ -128,7 +128,7 @@ unitDef                    = {
 		hpoverride               = hp,
 		buildcostenergyoverride  = buildCostEnergy,
 		nofriendlyfire	         = "1",
-		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
+		normaltex               = "unittextures/lego2skin_explorernormal.dds",
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 	},
 }
@@ -136,7 +136,6 @@ unitDef                    = {
 --------------------------------------------------------------------------------
 
 weaponDefs                 = {
-
 	particlebeamcannon                 = {
 		accuracy                 = 0,
 		avoidFeature             = false,
