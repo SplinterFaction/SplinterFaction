@@ -1058,9 +1058,11 @@ do
       if UnitDefs[GetUnitDefID(unitID)].customParams and UnitDefs[GetUnitDefID(unitID)].customParams.isshieldedunit == "1"  then
         local overshieldPower = Spring.GetUnitRulesParam(unitID, "personalShield")
         local maxOvershieldPower = UnitDefs[GetUnitDefID(unitID)].customParams.shield_max_strength
-        if overshieldPower < tonumber(maxOvershieldPower) then
-          overshieldPower = overshieldPower / maxOvershieldPower
-          AddBar("overshield",overshieldPower,"overshield",(fullText and floor(overshieldPower*100)..'%') or '')
+        if overshieldPower ~= nil and maxOvershieldPower ~= nil then -- don't die ... Just in case something goes sideways that I didn't plan for
+          if overshieldPower < tonumber(maxOvershieldPower) then
+            overshieldPower = overshieldPower / maxOvershieldPower
+            AddBar("overshield",overshieldPower,"overshield",(fullText and floor(overshieldPower*100)..'%') or '')
+          end
         end
       end
 
