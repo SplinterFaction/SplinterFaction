@@ -169,7 +169,7 @@ weaponDefs                 = {
 		name			         = "Electrical Strike Cannon",
 		noSelfDamage             = true,
 		range                    = 700,
-		reloadtime               = 0.3,
+		reloadtime               = 2.5,
 		WeaponType               = "LightningCannon",
 		rgbColor                 = [[1 0.5 0]],
 		rgbColor2                = "1 1 1",
@@ -187,7 +187,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 1.5,
+			default              = 20,
 		},
 	},
 }

@@ -66,12 +66,14 @@ function script.AimFromWeapon(WeaponID)
 	return cannonturret1
 end
 
-function script.Shot(num)
-	gun_1 = gun_1 + 1
-	if gun_1 > 3 then
-		gun_1 = 1
+function script.Shot(WeaponID)
+	if WeaponID == 1 then
+		gun_1 = gun_1 + 1
+		if gun_1 > 3 then
+			gun_1 = 1
+		end
+		EmitSfx(gunPieces[gun_1].firepoint, 1024)
 	end
-	EmitSfx(gunPieces[gun_1].firepoint, 1024)
 end
 
 function script.QueryWeapon(WeaponID)
@@ -80,7 +82,7 @@ function script.QueryWeapon(WeaponID)
 	elseif WeaponID == 2 then
 		return laserfirepoint1
 	elseif WeaponID == 3 then
-		return laserfirepoint1
+		return laserfirepoint2
 	end
 end
 

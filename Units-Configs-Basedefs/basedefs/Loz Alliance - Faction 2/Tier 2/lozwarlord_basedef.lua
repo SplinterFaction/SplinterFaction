@@ -85,11 +85,11 @@ unitDef                    = {
 		},
 		[2]                      = {
 			def                  = "lightningcannon",
-			onlyTargetCategory    = "AIR",
+			onlyTargetCategory    = "AIR SHIP GROUND BUILDING",
 		},
 		[3]                      = {
 			def                  = "lightningcannon",
-			onlyTargetCategory    = "AIR",
+			onlyTargetCategory    = "AIR SHIP GROUND BUILDING",
 		},
 	},
 	customParams                 = {
@@ -153,7 +153,6 @@ weaponDefs                 = {
 		avoidFeature             = false,
 		collideFriendly          = false,
 		collideFeature           = false,
-		canattackground          = false,
 		craterBoost              = 0,
 		craterMult               = 0,
 		burst                    = 10,
@@ -172,7 +171,7 @@ weaponDefs                 = {
 		name			         = "Electrical Strike Cannon",
 		noSelfDamage             = true,
 		range                    = 1700,
-		reloadtime               = 0.4,
+		reloadtime               = 5,
 		WeaponType               = "LightningCannon",
 		rgbColor                 = [[0.5 0 0]],
 		rgbColor2                = "1 1 1",
@@ -190,7 +189,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 0.2,
+			default              = 2.5,
 		},
 	},
 }
