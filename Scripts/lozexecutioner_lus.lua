@@ -1,5 +1,5 @@
 
-base, railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, torpedofirepoint1, cannonturret1, cannonbarrel1, cannonfirepoint1, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2 = piece('base', 'railgunturret1', 'railgunbarrel1', 'railgunfirepoint1', 'railgunturret2', 'railgunbarrel2', 'railgunfirepoint2', 'railgunturret3', 'railgunbarrel3', 'railgunfirepoint3', 'railgunturret4', 'railgunbarrel4', 'railgunfirepoint4', 'torpedofirepoint1', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'laserturret1', 'laserbarrel1', 'laserfirepoint1', 'laserturret2', 'laserbarrel2', 'laserfirepoint2')
+base, railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, cannonturret1, cannonbarrel1, cannonfirepoint1 = piece('base', 'railgunturret1', 'railgunbarrel1', 'railgunfirepoint1', 'railgunturret2', 'railgunbarrel2', 'railgunfirepoint2', 'railgunturret3', 'railgunbarrel3', 'railgunfirepoint3', 'railgunturret4', 'railgunbarrel4', 'railgunfirepoint4', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1')
 
 common = include("headers/common_includes_lus.lua")
 
@@ -10,7 +10,6 @@ local SIG_AIM4 = {}
 local SIG_AIM5 = {}
 local SIG_AIM6 = {}
 local SIG_AIM7 = {}
-local SIG_AIM8 = {}
 
 -- state variables
 isMoving = "isMoving"
@@ -33,7 +32,7 @@ function script.Bubbles()
 end
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, torpedofirepoint1, cannonturret1, cannonbarrel1, cannonfirepoint1, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2})
+	StartThread(common.SmokeUnit, {base, railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, cannonturret1, cannonbarrel1, cannonfirepoint1})
 end
 
 
@@ -54,12 +53,6 @@ function RestoreAfterDelay()
 
 	Turn(cannonturret1, y_axis, 0, 1)
 	Turn(cannonbarrel1, x_axis, 0, 1)
-
-	Turn(laserturret1, y_axis, 0, 1)
-	Turn(laserbarrel1, x_axis, 0, 1)
-
-	Turn(laserturret2, y_axis, 0, 1)
-	Turn(laserbarrel2, x_axis, 0, 1)
 end
 
 function script.AimFromWeapon(WeaponID)
@@ -78,12 +71,6 @@ function script.QueryWeapon(WeaponID)
 		return railgunfirepoint4
 	elseif WeaponID == 5 then
 		return cannonfirepoint1
-	elseif WeaponID == 6 then
-		return laserfirepoint1
-	elseif WeaponID == 7 then
-		return laserfirepoint2
-	elseif WeaponID == 8 then
-		return torpedofirepoint1
 	end
 end
 
@@ -98,12 +85,6 @@ function script.FireWeapon(WeaponID)
 		EmitSfx (railgunfirepoint4, 1024)
 	elseif WeaponID == 5 then
 		EmitSfx (cannonfirepoint1, 1024)
-	elseif WeaponID == 6 then
-		-- EmitSfx (laserfirepoint1, 1024)
-	elseif WeaponID == 7 then
-		-- EmitSfx (laserfirepoint2, 1024)
-	elseif WeaponID == 8 then
-		-- EmitSfx (torpedofirepoint1, 1024)
 	end
 end
 
@@ -155,29 +136,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		WaitForTurn(cannonbarrel1, x_axis)
 		StartThread(RestoreAfterDelay)
 		return true
-	elseif WeaponID == 6 then
-		Signal(SIG_AIM6)
-		SetSignalMask(SIG_AIM6)
-		Turn(laserturret1, y_axis, heading, 10)
-		Turn(laserbarrel1, x_axis, -pitch, 10)
-		WaitForTurn(laserturret1, y_axis)
-		WaitForTurn(laserbarrel1, x_axis)
-		StartThread(RestoreAfterDelay)
-		return true
-	elseif WeaponID == 7 then
-		Signal(SIG_AIM7)
-		SetSignalMask(SIG_AIM7)
-		Turn(laserturret2, y_axis, heading, 10)
-		Turn(laserbarrel2, x_axis, -pitch, 10)
-		WaitForTurn(laserturret2, y_axis)
-		WaitForTurn(laserbarrel2, x_axis)
-		StartThread(RestoreAfterDelay)
-		return true
-	elseif WeaponID == 8 then
-		Signal(SIG_AIM8)
-		SetSignalMask(SIG_AIM8)
-
-		return true
 	end
 end
 
@@ -192,10 +150,6 @@ function script.Killed()
 	Explode(railgunbarrel4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	Explode(cannonturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

@@ -6,7 +6,7 @@ function gadget:GetInfo()
 		author  = "GoogleFrog and ChatGPT3",
 		date    = "21 May 2023",
 		license = "GNU GPL, v2 or later",
-		layer   = 999999,
+		layer   = 0,
 		enabled = true
 	}
 end
@@ -41,25 +41,22 @@ local function initShieldedUnit(unitID, shieldParams)
 end
 
 function gadget:Initialize()
-
-end
-
--- Cache shield parameters
-local unitDefs = UnitDefs
-for unitDefID = 1, #unitDefs do
-	local unitDef = UnitDefs[unitDefID]
-	local customParams = unitDef.customParams
-	if customParams and customParams.isshieldedunit == "1" then
-		--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ IS shielded]])
-		cachedShieldParams[unitDefID] = {
-			shieldMaxStrength = tonumber(customParams.shield_max_strength) or 100,
-			shieldRegenerationRate = tonumber(customParams.shield_regeneration_rate) or 5,
-			shieldRegenerationDelay = tonumber(customParams.shield_regeneration_delay) or 10,
-		}
-	else
-		--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ is NOT shielded]])
+	-- Cache shield parameters
+	local unitDefs = UnitDefs
+	for unitDefID = 1, #unitDefs do
+		local unitDef = UnitDefs[unitDefID]
+		local customParams = unitDef.customParams
+		if customParams and customParams.isshieldedunit == "1" then
+			--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ IS shielded]])
+			cachedShieldParams[unitDefID] = {
+				shieldMaxStrength = tonumber(customParams.shield_max_strength) or 100,
+				shieldRegenerationRate = tonumber(customParams.shield_regeneration_rate) or 5,
+				shieldRegenerationDelay = tonumber(customParams.shield_regeneration_delay) or 10,
+			}
+		else
+			--Spring.Echo("[Protoss Style Shields] " .. UnitDefs[unitDefID].name .. [[ is NOT shielded]])
+		end
 	end
-
 end
 
 -- Apply function for updating shielded units

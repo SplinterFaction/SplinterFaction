@@ -1056,11 +1056,11 @@ do
 
       --// Overshield
       if UnitDefs[GetUnitDefID(unitID)].customParams and UnitDefs[GetUnitDefID(unitID)].customParams.isshieldedunit == "1"  then
-        local shieldPower = Spring.GetUnitRulesParam(unitID, "personalShield")
-        local maxPower = UnitDefs[GetUnitDefID(unitID)].customParams.shield_max_strength
-        if shieldPower < tonumber(maxPower) then
-          shieldPower = shieldPower / maxPower
-          AddBar("overshield",shieldPower,"overshield",(fullText and floor(shieldPower*100)..'%') or '')
+        local overshieldPower = Spring.GetUnitRulesParam(unitID, "personalShield")
+        local maxOvershieldPower = UnitDefs[GetUnitDefID(unitID)].customParams.shield_max_strength
+        if overshieldPower < tonumber(maxOvershieldPower) then
+          overshieldPower = overshieldPower / maxOvershieldPower
+          AddBar("overshield",overshieldPower,"overshield",(fullText and floor(overshieldPower*100)..'%') or '')
         end
       end
 

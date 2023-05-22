@@ -623,10 +623,26 @@ local function GetTooltipUnit(id)
 	result = result.."\255\200\200\200Health: ".."\255\200\200\200"..floor(health).."\255\200\200\200/\255\200\200\200"..floor(maxHealth).." ("..unitRoleStr..")"
 	if hasShield then result=result.."\255\255\255\255      Shield: \255\135\135\255"..FormatNbr(math.min(ShieldPower,maxShieldPower)).."\255\255\255\255/\255\135\135\255"..FormatNbr(maxShieldPower) end
 	end
+
 	if ud.customParams.isshieldedunit == "1" then
 		local overshieldStrength  = Spring.GetUnitRulesParam(id, "personalShield")
 		local shieldMaxStrength = ud.customParams.shield_max_strength
-		result=result.."\255\255\255\255      OverShield: \255\200\200\255"..FormatNbr(math.min(overshieldStrength,shieldMaxStrength)).."\255\255\255\255/\255\200\200\255"..FormatNbr(shieldMaxStrength)
+
+		-- Sanity checks
+		--[[
+			Spring.Echo("Unitname " .. ud.name .. "/ sheildedunit status " .. ud.customParams.isshieldedunit)
+			if overshieldStrength ~= nil then
+				Spring.Echo("[Gui Tooltip] overshieldStrength is: " .. overshieldStrength)
+			end
+			if shieldMaxStrength then
+				Spring.Echo("[Gui Tooltip] shieldMaxStrength is: " .. shieldMaxStrength)
+			end
+		--]]
+		--
+
+		if overshieldStrength ~= nil and shieldMaxStrength ~= nil then -- don't die ... Just in case something goes sideways that I didn't plan for
+			result=result.."\255\255\255\255      OverShield: \255\200\200\255"..FormatNbr(math.min(overshieldStrength,shieldMaxStrength)).."\255\255\255\255/\255\200\200\255"..FormatNbr(shieldMaxStrength)
+		end
 	end
 
 

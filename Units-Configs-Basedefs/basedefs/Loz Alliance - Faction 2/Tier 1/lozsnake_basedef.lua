@@ -89,7 +89,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "ship",
-		unitrole				 = "Ship",
+		unitrole				 = "Corvette",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",
