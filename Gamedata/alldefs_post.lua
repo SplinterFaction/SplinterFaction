@@ -1082,6 +1082,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
+			-- Protoss Style Shields
 			if unitDef.customparams.factionname == "Loz Alliance" then
 				--[[
 					unitDef.customparams.isshieldedunit = "1",
@@ -1091,8 +1092,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					unitDef.customparams.shield_regeneration_delay = 10,
 				]]--
 
-				local reducedMaxdamage = unitDef.maxdamage * 0.5
-				local maximumShieldStrength = unitDef.maxdamage * 0.5
+				local reducedMaxdamage = unitDef.maxdamage * 0.25
+				local maximumShieldStrength = unitDef.maxdamage * 0.75
 				local regenerationRate
 
 				unitDef.customparams.isshieldedunit = "1"
