@@ -487,10 +487,10 @@ for anger = 0,100 do
 		end
 	end
 end
-for j = 1,#miniBosses do
-	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 lozprotector" } })
-	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 feddeleter" } })
-end
+-- for j = 1,#miniBosses do
+-- 	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 lozprotector" } })
+-- 	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 feddeleter" } })
+-- end
 
 ----------------
 -- Air Squads --
