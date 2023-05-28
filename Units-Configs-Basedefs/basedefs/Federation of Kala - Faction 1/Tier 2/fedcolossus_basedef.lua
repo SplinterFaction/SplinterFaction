@@ -150,8 +150,8 @@ weaponDefs                 = {
 		collideFriendly        = false,
 		collideFeature         = false,
 		--cegTag			   = "thudshot",
-		--burst				   = 4,
-		--burstrate			   = 0.2,
+		burst				   = 5,
+		burstrate			   = 0.1,
 		edgeEffectiveness	   = 1,
 		explosionGenerator     = "custom:genericshellexplosion-small",
 		energypershot          = 0,
@@ -162,13 +162,13 @@ weaponDefs                 = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1200,
-		reloadtime             = 2,
+		reloadtime             = 3,
 		size				   = 2,
-		projectiles			   = 5,
+		-- projectiles			   = 5,
 		weaponType		       = "Cannon",
 		soundStart             = "Shotgun Boom 101",
 		soundHit	           = "mediumcannonhit",
-		soundTrigger           = true,
+		soundTrigger           = false,
 		sprayAngle             = 750,
 		tolerance              = 8000,
 		turret                 = true,
@@ -181,7 +181,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 20,
+			default              = 100,
 		},
 	},
 
@@ -196,7 +196,7 @@ weaponDefs                 = {
 		canattackground		   = false,
 		burnblow               = true,
 		burst                  = 15,
-		burstrate              = 0.07,
+		burstrate              = 0.065,
 		-- cegTag                 = "railgun",
 		explosionGenerator     = "custom:genericshellexplosion-small",
 		edgeEffectiveness	   = 1,
@@ -227,7 +227,7 @@ weaponDefs                 = {
 	},
 
 	clusterrockets             = {
-		AreaOfEffect             = 20,
+		AreaOfEffect             = 100,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
@@ -265,7 +265,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              =100,
 		},
 	},
 }

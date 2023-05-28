@@ -6,6 +6,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1     0 0 1 1     0 0 0 0]],
@@ -39,6 +40,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1     1 0.6 0 1     0 0 0 0]],
@@ -71,6 +73,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1       1 0 0.6 1     0 0 0 0]],
@@ -103,6 +106,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1       0 1 0 0.5       0 0 0 0]],
@@ -135,6 +139,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1     1 0.6 0 1     0 0 0 0]],
@@ -168,6 +173,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1       1 0 0.6 1     0 0 0 0]],
@@ -200,6 +206,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1       1 0 0.6 1     0 0 0 0]],
@@ -232,6 +239,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0 0 0 0     0.7 0.7 0.7 1       0 1 0 0.5       0 0 0 0]],
@@ -264,6 +272,7 @@ return {
 			class      = [[CSimpleParticleSystem]],
 			count      = 1,
 			ground     = true,
+			underwater = true,
 			properties = {
 				airdrag             = 0.97,
 				colormap            = [[0.5 0 0 0.01  0.8 0.5 0 0.01	0 0 0 0.01]],
