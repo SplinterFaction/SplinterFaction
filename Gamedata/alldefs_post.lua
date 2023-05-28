@@ -1102,23 +1102,23 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 				-- Set Regeration Rate Based upon tech level
 				if unitDef.customparams.requiretech == "tech0" then
-					regenerationRate = maximumShieldStrength / 30
+					regenerationRate = maximumShieldStrength / 7.5
 					unitDef.customparams.shield_regeneration_rate = regenerationRate
 				end
 				if unitDef.customparams.requiretech == "tech1" then
-					regenerationRate = maximumShieldStrength / 30
+					regenerationRate = maximumShieldStrength / 15
 					unitDef.customparams.shield_regeneration_rate = regenerationRate
 				end
 				if unitDef.customparams.requiretech == "tech2" then
-					regenerationRate = maximumShieldStrength / 45
+					regenerationRate = maximumShieldStrength / 30
 					unitDef.customparams.shield_regeneration_rate = regenerationRate
 				end
 				if unitDef.customparams.requiretech == "tech3" then
-					regenerationRate = maximumShieldStrength / 60
+					regenerationRate = maximumShieldStrength / 45
 					unitDef.customparams.shield_regeneration_rate = regenerationRate
 				end
 				if unitDef.customparams.requiretech == "tech4" then
-					regenerationRate = maximumShieldStrength / 90
+					regenerationRate = maximumShieldStrength / 60
 					unitDef.customparams.shield_regeneration_rate = regenerationRate
 				end
 
