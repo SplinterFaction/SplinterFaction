@@ -1121,8 +1121,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					regenerationRate = maximumShieldStrength / 60
 					unitDef.customparams.shield_regeneration_rate = regenerationRate
 				end
+				if unitDef.customparams.unitrole == "Commander" then
+					regenerationRate = maximumShieldStrength / 30
+				end
 
-				unitDef.customparams.shield_regeneration_delay = 30
+				unitDef.customparams.shield_regeneration_delay = 15
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

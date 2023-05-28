@@ -71,7 +71,7 @@ local chiliCache = {}
 local vsx, vsy = sGetWindowGeometry()
 
 local sGetConfigInt = Spring.GetConfigInt
-local buildOrderUI = sGetConfigInt("evo_buildorderui", 6)
+local buildOrderUI = sGetConfigInt("evo_buildorderui", 1)
 local showCost = sGetConfigInt("evo_showcost", 1) == 1
 local showTechReq = sGetConfigInt("evo_showtechreq", 1) == 1
 local showHotkeys = sGetConfigInt("evo_showhotkeys", 1) == 1
@@ -88,17 +88,17 @@ if buildOrderUI == 1 then
             x = '0%', y = '24%',
             width = '100%', height = '25%',
             orientation = 'horizontal',
-            maxWidth = 390,
-            padding = {5, 5, 5, 5},     -- outer panel
+            maxWidth = 500,
+            padding = {0, 0, 0, 0},     -- outer panel
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 4, columns = 4,
+            rows = 4, columns = 5,
             x = '0%', y = '50%',
             width = '50%', height = '50%',
             orientation = 'horizontal',
-            maxWidth = 390,
-            padding = {5, 5, 5, 5},
+            maxWidth = 500,
+            padding = {0, 0, 0, 0},
         },
         labels = {
             captionFontMaxSize = fontSize,
@@ -120,16 +120,16 @@ elseif buildOrderUI == 2 then
             x = '0%', y = '24%',
             width = '100%', height = '25%',
             orientation = 'horizontal',
-            maxWidth = 390,
+            maxWidth = 500,
             padding = {5, 5, 5, 5},     -- outer panel
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 6, columns = 6,
+            rows = 5, columns = 6,
             x = '0%', y = '50%',
             width = '50%', height = '50%',
             orientation = 'horizontal',
-            maxWidth = 390,
+            maxWidth = 500,
             padding = {5, 5, 5, 5},
         },
         labels = {
@@ -153,16 +153,16 @@ else
             x = '0%', y = '24%',
             width = '100%', height = '25%',
             orientation = 'horizontal',
-            maxWidth = 390,
+            maxWidth = 500,
             padding = {5, 5, 5, 5},     -- outer panel
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 3, columns = 3,
+            rows = 3, columns = 4,
             x = '0%', y = '50%',
             width = '50%', height = '50%',
             orientation = 'horizontal',
-            maxWidth = 390,
+            maxWidth = 500,
             padding = {5, 5, 5, 5},
         },
         labels = {
@@ -484,7 +484,7 @@ local function addBuildCommand(cmd)
                 chiliCache['hotkeyLabel' .. cmd.id] = Label:New{
                     name = 'hotkeyLabel' .. cmd.id,
                     parent = image,
-                    x = '5%', y = '5%',
+                    x = '62.5%', y = '5%',
                     valign = 'top',
                     --caption = metalCost .. line .. energyCost,
                     font = {
