@@ -103,12 +103,8 @@ local unitAttachments = {
     },
 }
 
-local deleteAttachments = {
-    UnitDefNames["lozoutpost"].id,
-}
-local unitAttachedTo = {
-    UnitDefNames["lozoutpost"].id,
-}
+local deleteAttachments = {}
+local unitAttachedTo = {}
 
 
 function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponID, projectileID, attackerID,
@@ -131,8 +127,10 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID)
     end
     if #deleteAttachments > 0 then
         for i = 1, #deleteAttachments do
-            unitAttachedTo[deleteAttachments[i]] = nil
-            Spring.DestroyUnit(deleteAttachments[i], false, true)
+            if deleteAttachments[i] then
+                unitAttachedTo[deleteAttachments[i]] = nil
+                Spring.DestroyUnit(deleteAttachments[i], false, true)
+            end
         end
         deleteAttachments = {}
     end
