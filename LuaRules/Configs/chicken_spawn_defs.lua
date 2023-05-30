@@ -43,7 +43,6 @@ chickenTurrets = {
 	["blackholepowerplant"]  = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	-- Storage
 	["supplydepot"]          = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 20 },
-	["mediumsupplydepot"]    = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	["mediumstorage"]        = { minQueenAnger = 20, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 50 },
 	["largestorage"]         = { minQueenAnger = 50, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 }

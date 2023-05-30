@@ -1083,7 +1083,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			-- Protoss Style Shields
-			if unitDef.customparams.factionname == "Loz Alliance" then
+			if unitDef.customparams.factionname == "Loz Alliance" and unitDef.customparams.overshield ~= false then
 				--[[
 					unitDef.customparams.isshieldedunit = "1",
 					unitDef.customparams.shield_init_strength = 10000,

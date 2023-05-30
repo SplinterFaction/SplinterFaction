@@ -87,12 +87,28 @@ local unitAttachments = {
 }
 ]]
 
-local unitAttachments = {
+local straight = 150
+local diagonal = 100
 
+local unitAttachments = {
+    [UnitDefNames["lozoutpost"].id] = {
+        { unitType = "neutraljericho",   posx = -straight, posz = 0,         dir = 0 },
+        { unitType = "neutraljericho",   posx = straight,  posz = 0,         dir = 0 },
+        { unitType = "neutralinferno",   posx = 0,         posz = -straight, dir = 0 },
+        { unitType = "neutralinferno",   posx = 0,         posz = straight,  dir = 0 },
+        { unitType = "neutralrazor", posx = -diagonal, posz = -diagonal, dir = 0 },
+        { unitType = "neutralrazor", posx = diagonal,  posz = diagonal,  dir = 0 },
+        { unitType = "neutralrazor", posx = diagonal,  posz = -diagonal, dir = 0 },
+        { unitType = "neutralrazor", posx = -diagonal, posz = diagonal,  dir = 0 },
+    },
 }
 
-local deleteAttachments = {}
-local unitAttachedTo = {}
+local deleteAttachments = {
+    UnitDefNames["lozoutpost"].id,
+}
+local unitAttachedTo = {
+    UnitDefNames["lozoutpost"].id,
+}
 
 
 function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponID, projectileID, attackerID,

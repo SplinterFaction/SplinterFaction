@@ -1,20 +1,20 @@
 --------------------------------------------------------------------------------
 
-unitName = [[lozinferno]]
+unitName = [[neutraljericho]]
 
 --------------------------------------------------------------------------------
 
-humanName = [[Inferno]]
+humanName = [[Jericho]]
 
-objectName = [[lozinferno.s3o]]
-script = [[lozinferno_lus.lua]]
+objectName = [[lozjericho.s3o]]
+script = [[lozjericho_lus.lua]]
 
-tech = [[tech2]]
+tech = [[tech1]]
 
-faction = [[Loz Alliance]]
+faction = [[Neutral]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/buildings/lozinferno_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/buildings/lozjericho_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

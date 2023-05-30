@@ -11,6 +11,8 @@ script = [[lozrazor_lus.lua]]
 
 tech = [[tech1]]
 
+faction = [[Loz Alliance]]
+
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
 VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 2/buildings/lozrazor_basedef.lua")
 
