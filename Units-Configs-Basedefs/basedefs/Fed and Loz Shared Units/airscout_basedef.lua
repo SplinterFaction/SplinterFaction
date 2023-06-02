@@ -171,9 +171,9 @@ weaponDefs                 = {
 
 		-----
 		stockpile                = true,
-		stockpiletime            = 60,
-		metalpershot             = 250,
-		energypershot            = 1000,
+		stockpiletime            = 30,
+		metalpershot             = 0,
+		energypershot            = 0,
 		-----
 
 		sprayangle				 = 5000,
