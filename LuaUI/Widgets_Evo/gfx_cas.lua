@@ -4,7 +4,7 @@ end
 
 function widget:GetInfo()
 	return {
-		name	  = "Contrast Adaptive Sharpen (Old)",
+		name	  = "Contrast Adaptive Sharpen",
 		desc	  = "Spring port of AMD FidelityFX' Contrast Adaptive Sharpen (CAS)",
 		author	  = "martymcmodding, ivand",
 		layer	  = 2000,
@@ -18,50 +18,64 @@ end
 -- Constants
 -----------------------------------------------------------------
 
-local GL_RGBA8 = 0x8058
+--local GL_RGBA8 = 0x8058
 
-local SHARPNESS = 0.7
-local version = 1.01
+local SHARPNESS = 1.0
+local version = 1.06
 
 -----------------------------------------------------------------
 -- Lua Shortcuts
 -----------------------------------------------------------------
 
 local glTexture		 = gl.Texture
-local glTexRect		 = gl.TexRect
-local glCallList		= gl.CallList
-local glCopyToTexture   = gl.CopyToTexture
+local glBlending	 = gl.Blending
 
 -----------------------------------------------------------------
 -- File path Constants
 -----------------------------------------------------------------
 
-local luaShaderDir = "LuaUI/Widgets_Evo/Include/"
+local luaShaderDir = "LuaUI/Widgets_evo/Include/"
 
 -----------------------------------------------------------------
 -- Shader Sources
 -----------------------------------------------------------------
 
 local vsCAS = [[
-#version 150 compatibility
+#version 330
+// full screen triangle
+uniform float viewPosX;
+uniform float viewPosY;
 
-void main() {
-	gl_Position = gl_Vertex;
+const vec2 vertices[3] = vec2[3](
+	vec2(-1.0, -1.0),
+	vec2( 3.0, -1.0),
+	vec2(-1.0,  3.0)
+);
+
+out vec2 viewPos;
+
+void main()
+{
+	gl_Position = vec4(vertices[gl_VertexID], 0.0, 1.0);
+	viewPos = vec2(viewPosX, viewPosY);
 }
 ]]
 
 local fsCAS = [[
-#version 150 compatibility
-#line 20051
+#version 330
+#line 20058
 
 uniform sampler2D screenCopyTex;
 uniform float sharpness;
 
-#if 0
+#if 0 // in case AMD drivers refuse to compile the shader, though according to GLSL spec they shouldn't
 	#define TEXEL_FETCH_OFFSET(t, c, l, o) texelFetch(t, c + o, l)
 #else
 	#define TEXEL_FETCH_OFFSET texelFetchOffset
 #endif
+
+in vec2 viewPos;
+out vec4 fragColor;
 
 vec3 CASPass(ivec2 tc) {
 	// fetch a 3x3 neighborhood around the pixel 'e',
@@ -113,7 +127,8 @@ vec3 CASPass(ivec2 tc) {
 }
 
 void main() {
-	gl_FragColor = vec4(CASPass(ivec2(gl_FragCoord.xy)), 1.0);
+	fragColor = vec4(CASPass(ivec2(gl_FragCoord.xy - viewPos)), 1.0);
+	//fragColor = vec4(1.0, 0.0, 0.0, 0.5);
 }
 ]]
 
@@ -123,7 +138,7 @@ void main() {
 
 local LuaShader = VFS.Include(luaShaderDir.."LuaShader.lua")
 
-local vsx, vsy, vpx, vpy
+local vpx, vpy
 local screenCopyTex
 local casShader
 
@@ -138,59 +153,79 @@ local fullTexQuad
 -- Widget Functions
 -----------------------------------------------------------------
 
+local function UpdateShader()
+	casShader:ActivateWith(function()
+		casShader:SetUniform("sharpness", SHARPNESS)
+		casShader:SetUniform("viewPosX", vpx)
+		casShader:SetUniform("viewPosY", vpy)
+	end)
+end
 
 function widget:Initialize()
 
 	if gl.CreateShader == nil then
 		Spring.Echo("CAS: createshader not supported, removing")
-		widgetHandler:RemoveWidget(self)
+		widgetHandler:RemoveWidget()
 		return
 	end
 
-	vsx, vsy, vpx, vpy = Spring.GetViewGeometry()
+	_, _, vpx, vpy = Spring.GetViewGeometry()
 
-	local commonTexOpts = {
-		target = GL_TEXTURE_2D,
-		border = false,
-		min_filter = GL.NEAREST,
-		mag_filter = GL.NEAREST,
+	--local commonTexOpts = {
+	--	target = GL_TEXTURE_2D,
+	--	border = false,
+	--	min_filter = GL.NEAREST,
+	--	mag_filter = GL.NEAREST,
 
-		wrap_s = GL.CLAMP_TO_EDGE,
-		wrap_t = GL.CLAMP_TO_EDGE,
-	}
+	--	wrap_s = GL.CLAMP_TO_EDGE,
+	--	wrap_t = GL.CLAMP_TO_EDGE,
+	--}
 
-	commonTexOpts.format = GL_RGBA8
-	screenCopyTex = gl.CreateTexture(vsx, vsy, commonTexOpts)
+	--commonTexOpts.format = GL_RGBA8
+	--screenCopyTex = gl.CreateTexture(vsx, vsy, commonTexOpts)
 
 	casShader = LuaShader({
-		vertex = vsCAS,
-		fragment = fsCAS,
-		uniformInt = {
-			screenCopyTex = 0,
-		},
-	}, ": Contrast Adaptive Sharpen")
-	casShader:Initialize()
+		                      vertex = vsCAS,
+		                      fragment = fsCAS,
+		                      uniformInt = {
+			                      screenCopyTex = 0,
+		                      },
+	                      }, ": Contrast Adaptive Sharpen")
 
-	fullTexQuad = gl.CreateList( function ()
-		gl.DepthTest(false)
-		gl.Blending(false)
-		gl.TexRect(-1, -1, 1, 1, false, true) --false, true
-		gl.Blending(true)
-	end)
+	local shaderCompiled = casShader:Initialize()
+	if not shaderCompiled then
+		Spring.Echo("Failed to compile Contrast Adaptive Sharpen shader, removing widget")
+		widgetHandler:RemoveWidget()
+		return
+	end
+
+	UpdateShader()
+
+	fullTexQuad = gl.GetVAO()
+	if fullTexQuad == nil then
+		widgetHandler:RemoveWidget() --no fallback for potatoes
+		return
+	end
 
 	WG.cas = {}
 	WG.cas.setSharpness = function(value)
 		SHARPNESS = value
+		UpdateShader()
 	end
-	WG.cas.getSharpness = function(value)
+	WG.cas.getSharpness = function()
 		return SHARPNESS
 	end
+
 end
 
 function widget:Shutdown()
-	gl.DeleteTexture(screenCopyTex)
-	casShader:Finalize()
-	gl.DeleteList(fullTexQuad)
+	--gl.DeleteTexture(screenCopyTex)
+	if casShader then
+		casShader:Finalize()
+	end
+	if fullTexQuad then
+		fullTexQuad:Delete()
+	end
 end
 
 function widget:ViewResize()
@@ -199,16 +234,26 @@ function widget:ViewResize()
 end
 
 function widget:DrawScreenEffects()
-	glCopyToTexture(screenCopyTex, 0, 0, vpx, vpy, vsx, vsy)
+	--glCopyToTexture(screenCopyTex, 0, 0, vpx, vpy, vsx, vsy)
+	if WG['screencopymanager'] and WG['screencopymanager'].GetScreenCopy then
+		screenCopyTex = WG['screencopymanager'].GetScreenCopy()
+	else
+		--glCopyToTexture(screenCopyTex, 0, 0, vpx, vpy, vsx, vsy)
+		Spring.Echo("Missing Screencopy Manager, exiting",  WG['screencopymanager'] )
+		widgetHandler:RemoveWidget()
+		return false
+	end
+	if screenCopyTex == nil then return end
 	glTexture(0, screenCopyTex)
-	casShader:ActivateWith( function()
-		casShader:SetUniform("sharpness", SHARPNESS)
-		glCallList(fullTexQuad)
-	end)
+	glBlending(false)
+	casShader:Activate()
+	fullTexQuad:DrawArrays(GL.TRIANGLES, 3)
+	casShader:Deactivate()
+	glBlending(true)
 	glTexture(0, false)
 end
 
-function widget:GetConfigData(data)
+function widget:GetConfigData()
 	return {
 		version = version,
 		SHARPNESS = SHARPNESS
@@ -216,7 +261,7 @@ function widget:GetConfigData(data)
 end
 
 function widget:SetConfigData(data)
-	if data.SHARPNESS ~= nil  and data.version ~= nil and data.version == version then
+	if data.SHARPNESS ~= nil and data.version ~= nil and data.version == version then
 		SHARPNESS = data.SHARPNESS
 	end
 end

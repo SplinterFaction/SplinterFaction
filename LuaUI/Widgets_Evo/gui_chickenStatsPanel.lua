@@ -39,7 +39,7 @@ local waveFontSize = 36
 
 local vsx, vsy = Spring.GetViewGeometry()
 
-local fontfile2 = "fonts/" .. Spring.GetConfigString("ui_font2", "josefinsans-semibold.ttf")
+local fontfile2 = "fonts/" .. Spring.GetConfigString("ui_font2", "Saira_SemiCondensed-SemiBold.ttf")
 
 local viewSizeX, viewSizeY = 0, 0
 local w = 300

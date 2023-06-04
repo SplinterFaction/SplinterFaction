@@ -13,14 +13,14 @@ end
 
 local ui_opacity = tonumber(Spring.GetConfigFloat("ui_opacity",0.66) or 0.66)
 
-local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "JosefinSans-SemiBold.ttf")
+local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
 local vsx,vsy = Spring.GetViewGeometry()
 local fontfileScale = (0.5 + (vsx*vsy / 5700000))
 local fontfileSize = 25
 local fontfileOutlineSize = 6
 local fontfileOutlineStrength = 1.33
 local font = gl.LoadFont(fontfile, fontfileSize*fontfileScale, fontfileOutlineSize*fontfileScale, fontfileOutlineStrength)
-local fontfile2 = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font2", "JosefinSans-Bold.ttf")
+local fontfile2 = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font2", "Saira_SemiCondensed-SemiBold.ttf")
 local font2 = gl.LoadFont(fontfile2, fontfileSize*fontfileScale, fontfileOutlineSize*fontfileScale, fontfileOutlineStrength)
 
 local height = 38
@@ -336,15 +336,15 @@ local function updateButtons()
 	local totalWidth = area[3] - area[1]
 
 	local text = '    '
-    if (WG['teamstats'] ~= nil) then text = text..'Stats   ' end
-    if (WG['commands'] ~= nil) then text = text..'Commands List   ' end
-    if (WG['keybinds'] ~= nil) then text = text..'Keybinds   ' end
-    if (WG['changelog'] ~= nil) then text = text..'Changes   ' end
-    if (WG['options'] ~= nil) then text = text..'Settings   ' end
+    if (WG['teamstats'] ~= nil) then text = text..'Stats    ' end
+    if (WG['commands'] ~= nil) then text = text..'  Commands List    ' end
+    if (WG['keybinds'] ~= nil) then text = text..'  Keybinds    ' end
+    if (WG['changelog'] ~= nil) then text = text..' Changes ' end
+    if (WG['options'] ~= nil) then text = text..'   Settings   ' end
 	if chobbyLoaded then
 		text = text..'Lobby  '
 	else
-		text = text..'Quit  '
+		text = text..'  Quit  '
 	end
 
 	local fontsize = totalWidth / font2:GetTextWidth(text)
@@ -398,13 +398,13 @@ local function updateButtons()
             if (WG['commands'] ~= nil) then
                 buttons = buttons + 1
                 if buttons > 1 then offset = offset+width end
-                width = font2:GetTextWidth('Commands List') * fontsize + (buttons == 1 and 20 or 0)
+                width = font2:GetTextWidth('    Commands List') * fontsize + (buttons == 1 and 20 or 0)
                 buttonsArea['buttons']['commands'] = {area[1]+offset, area[2]+margin, area[1]+offset+width, area[4]}
 			end
             if (WG['keybinds'] ~= nil) then
                 buttons = buttons + 1
                 if buttons > 1 then offset = offset+width end
-                width = font2:GetTextWidth('  Keybinds ') * fontsize + (buttons == 1 and 20 or 0)
+                width = font2:GetTextWidth('  Keybinds  ') * fontsize + (buttons == 1 and 20 or 0)
                 buttonsArea['buttons']['keybinds'] = {area[1]+offset, area[2]+margin, area[1]+offset+width, area[4]}
             end
             if (WG['changelog'] ~= nil) then
@@ -416,7 +416,7 @@ local function updateButtons()
             if (WG['options'] ~= nil) then
                 buttons = buttons + 1
                 if buttons > 1 then offset = offset+width end
-                width = font2:GetTextWidth('  Settings ') * fontsize
+                width = font2:GetTextWidth('    Settings    ') * fontsize
                 buttonsArea['buttons']['options'] = {area[1]+offset, area[2]+margin, area[1]+offset+width, area[4]}
             end
 			if chobbyLoaded then
@@ -425,7 +425,7 @@ local function updateButtons()
 				buttonsArea['buttons']['quit'] = {area[1]+offset, area[2]+margin, area[3], area[4]}
 			else
 				offset = offset+width
-				width = font2:GetTextWidth('  Quit  ') * fontsize
+				width = font2:GetTextWidth('Quit') * fontsize
 				buttonsArea['buttons']['quit'] = {area[1]+offset, area[2]+margin, area[3], area[4]}
 			end
 		end

@@ -11,8 +11,8 @@ function widget:GetInfo()
 end
 
 
-local defaultFile = "fonts/" .. Spring.GetConfigString("ui_font", "josefinsans-semibold.ttf")
-local defaultFile2 = "fonts/" .. Spring.GetConfigString("ui_font2", "josefinsans-semibold.ttf")
+local defaultFile = "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
+local defaultFile2 = "fonts/" .. Spring.GetConfigString("ui_font2", "Saira_SemiCondensed-SemiBold.ttf")
 local defaultSize = 28
 local defaultOutlineSize = 0.18
 local defaultOutlineStrength = 1.1

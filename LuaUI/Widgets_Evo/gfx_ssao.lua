@@ -106,8 +106,8 @@ local presets = {
 -- File path Constants
 -----------------------------------------------------------------
 
-local shadersDir = "LuaUI/Widgets_Evo/Shaders/"
-local luaShaderDir = "LuaUI/Widgets_Evo/Include/"
+local shadersDir = "LuaUI/Widgets_evo/Shaders/"
+local luaShaderDir = "LuaUI/Widgets_evo/Include/"
 
 -----------------------------------------------------------------
 -- Global Variables

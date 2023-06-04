@@ -12,14 +12,14 @@ end
 
 local ui_opacity = tonumber(Spring.GetConfigFloat("ui_opacity",0.66) or 0.66)
 
-local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "JosefinSans-SemiBold.ttf")
+local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
 local vsx,vsy = Spring.GetViewGeometry()
 local fontfileScale = (0.5 + (vsx*vsy / 5700000))
 local fontfileSize = 25
 local fontfileOutlineSize = 6
 local fontfileOutlineStrength = 1.33
 local font = gl.LoadFont(fontfile, fontfileSize*fontfileScale, fontfileOutlineSize*fontfileScale, fontfileOutlineStrength)
-local fontfile2 = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font2", "JosefinSans-Bold.ttf")
+local fontfile2 = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font2", "Saira_SemiCondensed-SemiBold.ttf")
 local font2 = gl.LoadFont(fontfile2, fontfileSize*fontfileScale, fontfileOutlineSize*fontfileScale, fontfileOutlineStrength)
 
 
@@ -439,11 +439,13 @@ function generateDisplayList()
 		gl.Color(0.33,0.33,0.33,0.15)
 		RectRound(supplyOffset-bgmargin2, -bgmargin2, metalOffset+metalBarWidth+bgmargin2, height+bgmargin2,9)
 
-		font2:Begin()
-		font2:Print(yellow .. "Energy", energyOffset+textOffsetX+29, textOffsetY, FontSize, "on")
-		font2:Print(green .. "Supply", supplyOffset+textOffsetX+29, textOffsetY, FontSize, "on")
-		font2:Print(skyblue .. "Metal", metalOffset+textOffsetX+29, textOffsetY, FontSize, "on")
-		font2:End()
+		if simplifiedResourceBar == 1 then
+			font2:Begin()
+			font2:Print(yellow .. "Energy", energyOffset+textOffsetX+29, textOffsetY, FontSize, "on")
+			font2:Print(green .. "Supply", supplyOffset+textOffsetX+29, textOffsetY, FontSize, "on")
+			font2:Print(skyblue .. "Metal", metalOffset+textOffsetX+29, textOffsetY, FontSize, "on")
+			font2:End()
+		end
 	  gl.Texture(false)
 		
 	end)

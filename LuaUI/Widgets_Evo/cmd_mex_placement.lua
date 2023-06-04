@@ -16,10 +16,10 @@ end
 VFS.Include("LuaRules/Configs/customcmds.h.lua")
 VFS.Include("common/luautilities/glVolumes.lua")
 
-local fontfile = "JosefinSans-SemiBold.ttf"
+local fontfile = "Saira_SemiCondensed-SemiBold.ttf"
 
-local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "JosefinSans-SemiBold.ttf")
-local fontfile2 = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font2", "JosefinSans-Bold.ttf")
+local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
+local fontfile2 = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font2", "Saira_SemiCondensed-SemiBold.ttf")
 
 local font = gl.LoadFont(fontfile, 80, 8, 3)
 
