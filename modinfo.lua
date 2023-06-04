@@ -13,7 +13,7 @@ return {
 	name='SplinterFaction',
 	description='SplinterFaction',
 	shortname='SF',
-	version='0.75', -- 0.75
+	version='$VERSION', -- 0.75
 	mutator='Official',
 	game='SplinterFaction',
 	shortGame='SF',

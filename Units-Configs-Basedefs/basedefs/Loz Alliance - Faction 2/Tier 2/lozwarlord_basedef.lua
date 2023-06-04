@@ -133,7 +133,7 @@ weaponDefs                 = {
 		size					 = 8,
 		weaponType		         = "Cannon",
 		soundHit                 = "artyhit",
-		soundStart               = "arty2",
+		soundStart               = "warlordcannon",
 
 		turret                   = true,
 		weaponVelocity           = 500,
