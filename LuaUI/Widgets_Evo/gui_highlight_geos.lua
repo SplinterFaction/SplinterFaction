@@ -7,7 +7,7 @@ function widget:GetInfo()
 		version   = '1.0',
 		date      = 'Mar, 2011',
 		license   = 'GNU GPL, v2 or later',
-		layer     = 0,
+		layer     = 99999999,
 		enabled   = true,  --  loaded by default?
 	}
 end
@@ -53,7 +53,10 @@ local function HighlightGeos()
 	local features = Spring.GetAllFeatures()
 	for i = 1, #features do
 		local fID = features[i]
-		if FeatureDefs[Spring.GetFeatureDefID(fID)].geoThermal then
+		--The following returns false, which is troubling because the featurerulesparam is set and does exist (otherwise the geokiller gadget in luagaia wouldn't work)
+		--local customGeo = Spring.GetFeatureRulesParam(fID, "customGeovent")
+		--Spring.Echo("[Highlight Geos] The value of the FeatureRulesParam "customGeovent" is: " .. customGeo)
+		if FeatureDefs[Spring.GetFeatureDefID(fID)].geoThermal and Spring.GetFeatureRulesParam(fID, "customGeovent") == 1 then -- This isn't going to work until I figure out why I can't seem to get the featurerulesparam
 			local fx, fy, fz = Spring.GetFeaturePosition(fID)
 			gl.BeginEnd(GL.LINE_STRIP, PillarVerts, fx, fy, fz)
 			geos[#geos+1] = {x = fx, z = fz}
@@ -81,7 +84,7 @@ end
 function widget:DrawWorld()
 	if chobbyInterface then return end
 	if Spring.IsGUIHidden() then return end
-	
+
 	local _, cmdID = spGetActiveCommand()
 	drawGeos = spGetMapDrawMode() == 'metal' or (WG.GetWidgetOption and WG.GetWidgetOption('Chili Minimap','Settings/Interface/Map','alwaysDisplayMexes').value)
 	

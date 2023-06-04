@@ -91,16 +91,17 @@ local function f(x)
 end
 local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, extraSeparationBetweenPoints, howManyTriesBeforeGiveUp, numPointsPerSide, includeCentre, method, allowWater)
 	-- Delete vanilla geothermal positions
-	local featureList = Spring.GetAllFeatures()
-	for i = 1, #featureList do
-		local fID = featureList[i]
-		local fDefID = Spring.GetFeatureDefID(fID)
-		local fDef = FeatureDefs[fDefID]
-
-		if fDef.geoThermal and (fDef.name ~= 'geovent') then
-			Spring.DestroyFeature(fID)
-		end
-	end
+	-- This cannot be done here. It has to be done in luagaia. See geokiller gadget.
+	--local featureList = Spring.GetAllFeatures()
+	--for i = 1, #featureList do
+	--	local fID = featureList[i]
+	--	local fDefID = Spring.GetFeatureDefID(fID)
+	--	local fDef = FeatureDefs[fDefID]
+	--
+	--	if fDef.geoThermal and (fDef.name == 'geovent') then
+	--		Spring.DestroyFeature(fID)
+	--	end
+	--end
 
 	local positions = {}
 	--positions[1] = {x = padding, z = padding}
@@ -169,16 +170,20 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 			end
 			geoCounter = geoCounter + 1
 		else
-			Spring.CreateFeature('geovent', newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], 1, Spring.GetGaiaTeamID())
+			local featureID = Spring.CreateFeature('geovent', newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], 1, Spring.GetGaiaTeamID())
+			Spring.SetFeatureRulesParam(featureID, "customGeovent", 1)
 			-- Spring.MarkerAddPoint ( newPoint[1], Spring.GetGroundHeight(newPoint[1],newPoint[2])+5, newPoint[2], "GeoVent")
-			Spring.CreateFeature('geovent', newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], 1, Spring.GetGaiaTeamID())
+			local featureID = Spring.CreateFeature('geovent', newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], 1, Spring.GetGaiaTeamID())
+			Spring.SetFeatureRulesParam(featureID, "customGeovent", 1)
 			-- Spring.MarkerAddPoint ( newPoint[3], Spring.GetGroundHeight(newPoint[3],newPoint[4])+5, newPoint[4], "GeoVent")
 			if newPoint[5] then
-				Spring.CreateFeature('geovent', newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], 1, Spring.GetGaiaTeamID())
+				local featureID = Spring.CreateFeature('geovent', newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], 1, Spring.GetGaiaTeamID())
+				Spring.SetFeatureRulesParam(featureID, "customGeovent", 1)
 				-- Spring.MarkerAddPoint ( newPoint[5], Spring.GetGroundHeight(newPoint[5],newPoint[6])+5, newPoint[6], "GeoVent")
 			end
 			if newPoint[7] then
-				Spring.CreateFeature('geovent', newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], 1, Spring.GetGaiaTeamID())
+				local featureID = Spring.CreateFeature('geovent', newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], 1, Spring.GetGaiaTeamID())
+				Spring.SetFeatureRulesParam(featureID, "customGeovent", 1)
 				-- Spring.MarkerAddPoint ( newPoint[7], Spring.GetGroundHeight(newPoint[7],newPoint[8])+5, newPoint[8], "GeoVent")
 			end
 			geoCounter = 0

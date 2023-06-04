@@ -49,7 +49,7 @@ if gadgetHandler:IsSyncedCode() then
 				local fDefID = Spring.GetFeatureDefID(fID)
 				local fDef = FeatureDefs[fDefID]
 
-				if (not fDef.geoThermal) and (fDef.name ~= 'geovent')
+				if (not fDef.geoThermal)
 				and (fDef.name ~= 'xelnotgawatchtower')
 				and (fDef.name ~= 'crystalring')
 				then
