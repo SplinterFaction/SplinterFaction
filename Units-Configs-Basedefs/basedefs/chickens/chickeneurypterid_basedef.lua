@@ -98,7 +98,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	nukeartyweapon               = {
-		AreaOfEffect             = 800,
+		AreaOfEffect             = 100,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,

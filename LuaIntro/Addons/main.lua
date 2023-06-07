@@ -12,13 +12,13 @@ if addon.InGetInfo then
 	}
 end
 
-local defaultFont = 'JosefinSans-SemiBold.ttf'
+local defaultFont = 'Saira_SemiCondensed-SemiBold.ttf'
 local fontfile = 'luaui/fonts/'..Spring.GetConfigString("ui_font", defaultFont)
 if not VFS.FileExists(fontfile) then
 	Spring.SetConfigString('ui_font', defaultFont)
 	fontfile = 'luaui/fonts/'..defaultFont
 end
-local defaultFont2 = 'JosefinSans-Bold.ttf'
+local defaultFont2 = 'Saira_SemiCondensed-SemiBold.ttf'
 local fontfile2 = 'luaui/fonts/'..Spring.GetConfigString("ui_font2", defaultFont2)
 if not VFS.FileExists(fontfile2) then
 	Spring.SetConfigString('ui_font2', defaultFont2)
@@ -44,9 +44,14 @@ end
 -- Random tips we can show
 local titleColor = "\255\215\255\215"
 local contentColor = "\255\255\255\255"
+local highlightColor = "\255\255\255\0"
+local newLine = "\n"
 local tips = {
-	"loadingpics/dreamstatelogic.dds "..titleColor.."Dreamstate Logic\n"..contentColor.."Composer of a many ambient tracks used ingame, check out his music on Soundcloud!",
-	"Press Enter to Chat, Use Alt+Enter to Team Chat, Use Ctrl+Enter to Global Chat",
+	"loadingpics/xtadeus.dds "..titleColor.."Xtadeus\n"..contentColor.."Composer of all of the music in the game. Check out his channel on youtube!" .. newLine .. highlightColor .. "www.youtube.com/@xtadeus4777",
+	[[Press Enter to Chat:
+Press Ctrl+Enter to switch to All Chat
+Press Alt+Enter to switch to Ally Chat
+Press Shift+Enter to switch to Spectator Chat]],
 }
 
 -- Random unit descriptions we can show
@@ -54,12 +59,24 @@ local titleColor = "\255\215\255\215"
 local contentColor = "\255\255\255\255"
 local unit_descs = {
 
-	"fedmenlo.dds "..titleColor.."Menlo\n"..contentColor.."The penultimate in defense matricies.",
-	"loadingpics/defensematrix.dds "..titleColor.."Menlo\n"..contentColor.."The penultimate in defense matricies.",
+	"fedmenlo.dds "..titleColor.."Menlo" .. newLine .. contentColor .. "The penultimate in defense matricies.",
+	"loadingpics/defensematrix.dds " .. titleColor .."Menlo" .. newLine .. contentColor .."The penultimate in defense matricies.",
 }
 
 local quotes = {
-	{"Zopto is to lol as carbon is to life", "Dr.Hamster"},
+	{"Strategy without tactics is the slowest route to victory. Tactics without strategy is the noise before defeat.", "Sun Tzu"},
+	{"He will win who knows when to fight and when not to fight.", "Sun Tzu"},
+	{"When I have won a victory I do not repeat my tactics but respond to circumstances in an infinite variety of ways.", "Sun Tzu"},
+	{"The art of war is the art of deception.", "Sun Tzu"},
+	{"Brains will always conquer brawn, in the end. The soldiers can flex their muscles all they want, but the well-thought-out tactics of the generals are what win the war.", "Patrick Hall"},
+	{"The best defense is a confusing offense.", "Kimberly Pauley"},
+	{"When your opponent is making a mistake, do nothing to interfere.", "Napoleon Bonaparte"},
+	{"Effective strategy considers and plans for its own failure.", "Eric Engle"},
+	{"No campaign plan survives first contact with the enemy.", "Carl von Clausewitz"},
+	{"Tactics is the art of using troops in battle; strategy is the art of using battles to win the war.", "Carl von Clausewitz"},
+	{"The enemy of a good plan is the dream of a perfect plan.", "Carl von Clausewitz"},
+	{"Where absolute superiority is not attainable, you must produce a relative one at the decisive point by making skillful use of what you have.", "Carl von Clausewitz"},
+	{"The best form of defense is attack.", "Carl von Clausewitz"},
 }
 
 
@@ -296,7 +313,7 @@ function addon.DrawLoadScreen()
 
 	if showTips then
 		-- In this format, there can be an optional image before the tip/description.
-		-- Any image ends in .dss, so if such a text piece is found, we extract that and show it as an image.
+		-- Any image ends in .dds, so if such a text piece is found, we extract that and show it as an image.
 		local text_to_show = random_tip_or_desc
 		yPos = yPosTips
 		if random_tip_or_desc[2] then

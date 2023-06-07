@@ -28,8 +28,9 @@ chickenTurrets = {
 	["chickenemperormenlo"]  = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Utility
-	["cloakingtower"]        = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
-	["largecloakingtower"]   = { minQueenAnger = 50, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	-- Chickens should NEVER be spawning cloaking towers.
+	-- ["cloakingtower"]        = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
+	-- ["largecloakingtower"]   = { minQueenAnger = 50, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	["smallshieldgenerator"] = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
 	["largeshieldgenerator"] = { minQueenAnger = 50, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
