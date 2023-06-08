@@ -1,12 +1,12 @@
 
 local difficulties = {
-	veryeasy = 0,
-	easy 	 = 1,
-	normal   = 2,
-	hard     = 3,
-	veryhard = 4,
-	epic     = 5,
-	survival = 6,
+	veryeasy = 1,
+	easy 	 = 2,
+	normal   = 3,
+	hard     = 4,
+	veryhard = 5,
+	epic     = 6,
+	--survival = 6,
 }
 
 local difficulty = difficulties[Spring.GetModOptions().chicken_difficulty]

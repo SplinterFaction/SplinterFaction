@@ -812,14 +812,14 @@ local options= {
 	-- Chickens
 	{
 		key 	= 'chicken_defense_options',
-		name 	= 'Corruptors',
-		desc 	= 'Various gameplay options that will change how Corruptor Defense is played.',
+		name 	= 'Raptors',
+		desc 	= 'Various gameplay options that will change how the Raptor Defense is played.',
 		type 	= 'section',
 	},
 	{
 		key="chicken_difficulty",
-		name="Difficulty",
-		desc="Corruptor difficulty",
+		name="Base Difficulty",
+		desc="Raptors difficulty",
 		type="list",
 		def="normal",
 		section="chicken_defense_options",
@@ -831,7 +831,7 @@ local options= {
 			{key="veryhard", name="Very Hard", desc="Very Hard"},
 			{key="epic", name="Epic", desc="Epic"},
 
-			{key="survival", name="Endless", desc="Endless Mode"}
+			--{key="survival", name="Endless", desc="Endless Mode"}
 		}
 	},
 	{
@@ -848,8 +848,16 @@ local options= {
 		}
 	},
 	{
+		key    = "chicken_endless",
+		name   = "Endless Mode",
+		desc   = "When you kill the queen, the game doesn't end, but loops around at higher difficulty instead, infinitely.",
+		type   = "bool",
+		def    = false,
+		section= "chicken_defense_options",
+	},
+	{
 		key    = "chicken_queentimemult",
-		name   = "Boss Spawn Time Multiplier",
+		name   = "Queen Hatching Time Multiplier",
 		desc   = "How quickly Queen Hatch goes from 0 to 100% (Range: 0.1 - 3)",
 		type   = "number",
 		def    = 1,
@@ -864,9 +872,9 @@ local options= {
 		desc   = "How many times more raptors will spawn per wave. (Range: 1 - 5)",
 		type   = "number",
 		def    = 1,
-		min    = 0.1,
+		min    = 1,
 		max    = 5,
-		step   = 0.1,
+		step   = 1,
 		section= "chicken_defense_options",
 	},
 	{
