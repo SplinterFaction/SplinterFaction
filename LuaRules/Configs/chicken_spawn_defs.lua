@@ -131,8 +131,8 @@ chickenBehaviours = {
 local optionValues = {
 
 	[difficulties.veryeasy] = {
-		gracePeriod       = 4 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60, -- Time between Waves in seconds
 		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
 		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
@@ -150,8 +150,8 @@ local optionValues = {
 	},
 
 	[difficulties.easy] = {
-		gracePeriod       = 4 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 120,
 		turretSpawnRate   = 300,
@@ -168,8 +168,8 @@ local optionValues = {
 		queenResistanceMult   = 1.75,
 	},
 	[difficulties.normal] = {
-		gracePeriod       = 4 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 90,
 		turretSpawnRate   = 240,
@@ -186,8 +186,8 @@ local optionValues = {
 		queenResistanceMult   = 2,
 	},
 	[difficulties.hard] = {
-		gracePeriod       = 4 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 60,
 		turretSpawnRate   = 180,
@@ -204,8 +204,8 @@ local optionValues = {
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.veryhard] = {
-		gracePeriod       = 4 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 40,
 		turretSpawnRate   = 120,
@@ -222,8 +222,8 @@ local optionValues = {
 		queenResistanceMult   = 3,
 	},
 	[difficulties.epic] = {
-		gracePeriod       = 4 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 40,
 		turretSpawnRate   = 120,
@@ -238,25 +238,6 @@ local optionValues = {
 		maxChickens		  = 50,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
-	},
-
-	[difficulties.survival] = {
-		gracePeriod       = 4 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
-		chickenSpawnRate  = 60, -- Time between Waves in seconds
-		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
-		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
-		queenSpawnMult    = 1, -- Unused, don't touch (just in case)
-		angerBonus        = 0.1, -- Multiplier for boss anger when you kill a burrow
-		maxXP			  = 0.5, -- Random amount of XP given to spawned units
-		spawnChance       = 0.2, -- What are the chances that a burrow will spawn units each wave (this check is performed on each burrow)
-		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
-		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
-		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
-		maxChickens		  = 20, -- Number of ai units spawned in the end stages of the game per wave
-		queenName         = 'chickensbeacon',
-		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 }
 
