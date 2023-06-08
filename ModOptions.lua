@@ -864,9 +864,9 @@ local options= {
 		desc   = "How many times more raptors will spawn per wave. (Range: 1 - 5)",
 		type   = "number",
 		def    = 1,
-		min    = 1,
+		min    = 0.1,
 		max    = 5,
-		step   = 1,
+		step   = 0.1,
 		section= "chicken_defense_options",
 	},
 	{
