@@ -819,7 +819,7 @@ local options= {
 	{
 		key="chicken_difficulty",
 		name="Base Difficulty",
-		desc="Raptors difficulty",
+		desc="Corruptors difficulty",
 		type="list",
 		def="normal",
 		section="chicken_defense_options",
@@ -857,8 +857,8 @@ local options= {
 	},
 	{
 		key    = "chicken_queentimemult",
-		name   = "Queen Hatching Time Multiplier",
-		desc   = "How quickly Queen Hatch goes from 0 to 100% (Range: 0.1 - 3)",
+		name   = "Boss Anger Multiplier",
+		desc   = "How quickly Boss Anger goes from 0 to 100% (Range: 0.1 - 3)",
 		type   = "number",
 		def    = 1,
 		min    = 0.1,
@@ -869,7 +869,7 @@ local options= {
 	{
 		key    = "chicken_spawncountmult",
 		name   = "Unit Spawn Per Wave Multiplier",
-		desc   = "How many times more raptors will spawn per wave. (Range: 1 - 5)",
+		desc   = "How many times more corrupted units will spawn per wave. (Range: 1 - 5)",
 		type   = "number",
 		def    = 1,
 		min    = 1,
@@ -891,7 +891,7 @@ local options= {
 	{
 		key    = "chicken_graceperiodmult",
 		name   = "Grace Period Time Multiplier",
-		desc   = "Time before Raptors become active. (Range: 0.1 - 3)",
+		desc   = "Time before Corruptors become active. (Range: 0.1 - 3)",
 		type   = "number",
 		def    = 1,
 		min    = 0.1,
