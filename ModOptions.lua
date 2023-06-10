@@ -812,8 +812,8 @@ local options= {
 	-- Chickens
 	{
 		key 	= 'chicken_defense_options',
-		name 	= 'Raptors',
-		desc 	= 'Various gameplay options that will change how the Raptor Defense is played.',
+		name 	= 'Corruptors',
+		desc 	= 'Various gameplay options that will change how the Corruptors mode is played.',
 		type 	= 'section',
 	},
 	{
@@ -858,7 +858,7 @@ local options= {
 	{
 		key    = "chicken_queentimemult",
 		name   = "Boss Anger Multiplier",
-		desc   = "How quickly Boss Anger goes from 0 to 100% (Range: 0.1 - 3)",
+		desc   = "How quickly Boss Anger goes from 0 to 100% (Range: 0.1 - 3). The default timing for this is 60 minutes.",
 		type   = "number",
 		def    = 1,
 		min    = 0.1,

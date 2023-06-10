@@ -352,25 +352,16 @@ local chickenSquadUnitTable = {
 }
 
 local miniBosses = { -- Units that spawn alongside queen
-	"lozemperorscorpion",
-	"lozmammoth",
-	"lozsilverback",
 	"fedstriker",
-	"fedgoliath",
-	"fedjuggernaut",
-	-- chicken special
-	"chickenanarchid",
-	"chickeneurypterid",
 }
 
 local chickenMinions = { -- Units spawning other units
+	-- Artillery spawning here is a bit too strong and makes the battle somewhat unapproachable
 	["chickensbeacon"] = {
 		"lozreaper",
 		"fedbear",
-		"lozluger",
 		"lozpulverizer",
 		"fedcobra",
-		"fedavalanche",
 		"fedphalanx",
 	}
 }
