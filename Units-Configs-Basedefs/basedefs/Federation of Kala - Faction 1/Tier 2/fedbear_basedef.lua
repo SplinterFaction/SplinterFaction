@@ -174,7 +174,7 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "fedbear-particlecannon",
+		soundstart               = "fedbear-particlecannon2",
 
 		minintensity             = 1,
 		impulseFactor            = 0,
