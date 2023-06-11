@@ -1,19 +1,13 @@
 --------------------------------------------------------------------------------
 
-local unitName                    = "lozoutpost"
+local unitName                    = "lozsuperjericho"
 
 --------------------------------------------------------------------------------
 
-local armortype					 = [[building]]
-
 local techrequired				 = [[tech2]]
 
-local shield1Power               = 5000
-local shield1PowerRegen          = 25
-local shield1PowerRegenEnergy    = 0
-local buildCostMetal 			  = 1850
+local buildCostMetal 			  = 900
 local maxDamage					  = buildCostMetal * 12.5
-local shieldRechargeDelay		 = 15
 
 local unitDef                     = {
 	activateWhenBuilt             = true,
@@ -26,14 +20,14 @@ local unitDef                     = {
 	canstop                       = "1",
 	category                      = "BUILDING",
 	damageModifier                = 0.2,
-	description                   = [[Protective Shield]],
+	description                   = [[]],
 	energyStorage                 = 0,
 	energyUse                     = 0,
 	explodeAs                     = "hugeBuildingExplosionGenericBlue",
 	footprintX                    = 2,
 	footprintZ                    = 2,
 	floater			              = false,
-	iconType                      = "shield",
+	iconType                      = "defenseturret",
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	maxDamage                     = maxDamage,
@@ -41,10 +35,10 @@ local unitDef                     = {
 	maxWaterDepth                 = 0,
 	mass				          = 1000,
 	metalStorage                  = 0,
-	name                          = "Small Shield Generator",
+	name                          = "",
 	onOffable					  = true,
-	objectName                    = "smallshieldgenerator.s3o",
-	script			              = "smallshieldgenerator_lus.lua",
+	objectName                    = "empty.s3o",
+	script			              = "empty_lus.lua",
 	repairable		              = false,
 	selfDestructAs                = "hugeBuildingExplosionGenericBlue",
 	selfDestructCountdown         = 0,
@@ -54,7 +48,7 @@ local unitDef                     = {
 	TEDClass                      = "FORT",
 	unitname                      = unitName,
 	workerTime                    = 0,
-	yardMap                       = "ooo ooo ooo",
+	yardMap                       = "o",
 
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {
@@ -86,53 +80,14 @@ local unitDef                     = {
 		unitrole 				  = "Support Building",
 		needed_cover              = 1,
 		death_sounds              = "generic",
-		shield_power			  = shield1Power,
-		overshield                = false,
-		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
-		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	              = "Loz Alliance",
+		factionname	              = "Neutral",
 	},
-	useGroundDecal                = true,
+	useGroundDecal                = false,
 	BuildingGroundDecalType       = "factorygroundplate.dds",
 	BuildingGroundDecalSizeX      = 5,
 	BuildingGroundDecalSizeY      = 5,
 	BuildingGroundDecalDecaySpeed = 0.9,
 }
-
-
---------------------------------------------------------------------------------
-
-local weaponDefs                  = {
-	shield                        = {
-		
-		Smartshield               = true,
-		Exteriorshield            = true,
-		Visibleshield             = false,
-		Visibleshieldrepulse      = false,
-		ShieldStartingPower       = shield1Power * 0.5,
-		Shieldenergyuse           = 0,
-		Shieldradius              = 250,
-		Shieldpower               = shield1Power,
-		Shieldpowerregen          = shield1PowerRegen,
-		Shieldpowerregenenergy    = shield1PowerRegenEnergy,
-		rechargeDelay		  	  = shieldRechargeDelay,
-		Shieldintercepttype       = 4,
-		Shieldgoodcolor           = "0.0 0.2 1.0",
-		Shieldbadcolor            = "1.0 0 0",
-		Shieldalpha              = 0.2,
-		
-		texture1		          = "shield4",
-		
-		visibleShieldHitFrames    = 1,
-		weaponType                = [[Shield]],
-		damage                    = {
-			default               = 1,
-		},
-	},
-}
-unitDef.weaponDefs                = weaponDefs
-
-
 --------------------------------------------------------------------------------
 
 return lowerkeys({ [unitName]     = unitDef })

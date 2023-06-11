@@ -517,23 +517,49 @@ local morphDefs = {
 
 	fedgeostub = 	{
 		{
+			into      = 'fedmenlomk2',
+			time      = 60,
+			cmdname   = [[Menlo Mark II]],
+			text      = [[Upgraded Menlo Defense Turret]],
+			require   = [[tech1]],
+		},
+		{
 			into      = 'fedguardian',
-			--require = 'etech2',
-			time      = 180,
+			time      = 60,
 			cmdname   = [[Guardian]],
 			text      = [[Guardian Defense Turret]],
 			require   = [[tech3]],
+		},
+		{
+			into      = 'geometalextractor',
+			time      = 60,
+			cmdname   = [[Metal Extractor]],
+			text      = [[Geothermal Metal Extractor]],
+			require   = [[tech4]],
 		},
 	},
 
 	lozgeostub = 	{
 		{
+			into      = 'lozsuperjericho',
+			time      = 60,
+			cmdname   = [[Super Jericho]],
+			text      = [[A cluster of linked Jericho]],
+			require   = [[tech1]],
+		},
+		{
 			into      = 'lozannihilator',
-			--require = 'etech2',
-			time      = 180,
+			time      = 60,
 			cmdname   = [[Annihilator]],
 			text      = [[Annihilator Defense Turret]],
 			require   = [[tech3]],
+		},
+		{
+			into      = 'geometalextractor',
+			time      = 60,
+			cmdname   = [[Metal Extractor]],
+			text      = [[Geothermal Metal Extractor]],
+			require   = [[tech4]],
 		},
 	},
 

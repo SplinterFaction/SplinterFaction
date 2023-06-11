@@ -71,6 +71,7 @@ unitDef                     = {
 		unitrole_sound            = "turret",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
+		hasovershield             = overshield,
 		--supply_cost               = supply,
 		death_sounds              = "generic",
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 

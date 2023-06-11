@@ -67,6 +67,7 @@ unitDef                     = {
 		needed_cover              = 5,
 		--supply_cost               = supply,
 		RequireTech				  = tech,
+		hasovershield             = overshield,
 		death_sounds              = "generic",
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",

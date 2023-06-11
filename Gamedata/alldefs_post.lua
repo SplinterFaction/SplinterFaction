@@ -157,6 +157,9 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--Override groundplate used
+	if uDef.usegrounddecal == true then
+		uDef.usegrounddecal = false
+	end
 	if uDef.usegrounddecal == true and uDef.customparams and uDef.customparams.customgrounddecal ~= true then
 		if uDef.customparams and uDef.customparams.factionname == "Neutral" or
 				uDef.customparams and uDef.customparams.factionname == "Federation of Kala" or
@@ -1083,49 +1086,52 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			-- Protoss Style Shields
-			if unitDef.customparams.factionname == "Loz Alliance" and unitDef.customparams.overshield ~= false then
-				--[[
-					unitDef.customparams.isshieldedunit = "1",
-					unitDef.customparams.shield_init_strength = 10000,
-					unitDef.customparams.shield_max_strength = 10000,
-					unitDef.customparams.shield_regeneration_rate = 250,
-					unitDef.customparams.shield_regeneration_delay = 10,
-				]]--
+			if unitDef.customparams.hasovershield ~= "false" then
+				if unitDef.customparams.factionname == "Loz Alliance" then
+					--[[
+						unitDef.customparams.isshieldedunit = "1",
+						unitDef.customparams.shield_init_strength = 10000,
+						unitDef.customparams.shield_max_strength = 10000,
+						unitDef.customparams.shield_regeneration_rate = 250,
+						unitDef.customparams.shield_regeneration_delay = 10,
+					]]--
 
-				local reducedMaxdamage = unitDef.maxdamage * 0.25
-				local maximumShieldStrength = unitDef.maxdamage * 0.75
-				local regenerationRate
+					local reducedMaxdamage = unitDef.maxdamage * 0.25
+					local maximumShieldStrength = unitDef.maxdamage * 0.75
+					local regenerationRate
 
-				unitDef.customparams.isshieldedunit = "1"
-				unitDef.maxdamage = reducedMaxdamage
-				unitDef.customparams.shield_max_strength = maximumShieldStrength
+					unitDef.customparams.isshieldedunit = "1"
+					unitDef.maxdamage = reducedMaxdamage
+					unitDef.customparams.shield_max_strength = maximumShieldStrength
 
-				-- Set Regeration Rate Based upon tech level
-				if unitDef.customparams.requiretech == "tech0" then
-					regenerationRate = maximumShieldStrength / 7.5
-					unitDef.customparams.shield_regeneration_rate = regenerationRate
-				end
-				if unitDef.customparams.requiretech == "tech1" then
-					regenerationRate = maximumShieldStrength / 15
-					unitDef.customparams.shield_regeneration_rate = regenerationRate
-				end
-				if unitDef.customparams.requiretech == "tech2" then
-					regenerationRate = maximumShieldStrength / 30
-					unitDef.customparams.shield_regeneration_rate = regenerationRate
-				end
-				if unitDef.customparams.requiretech == "tech3" then
-					regenerationRate = maximumShieldStrength / 45
-					unitDef.customparams.shield_regeneration_rate = regenerationRate
-				end
-				if unitDef.customparams.requiretech == "tech4" then
-					regenerationRate = maximumShieldStrength / 60
-					unitDef.customparams.shield_regeneration_rate = regenerationRate
-				end
-				if unitDef.customparams.unitrole == "Commander" then
-					regenerationRate = maximumShieldStrength / 30
-				end
+					-- Set Regeration Rate Based upon tech level
+					if unitDef.customparams.requiretech == "tech0" then
+						regenerationRate = maximumShieldStrength / 7.5
+						unitDef.customparams.shield_regeneration_rate = regenerationRate
+					end
+					if unitDef.customparams.requiretech == "tech1" then
+						regenerationRate = maximumShieldStrength / 15
+						unitDef.customparams.shield_regeneration_rate = regenerationRate
+					end
+					if unitDef.customparams.requiretech == "tech2" then
+						regenerationRate = maximumShieldStrength / 30
+						unitDef.customparams.shield_regeneration_rate = regenerationRate
+					end
+					if unitDef.customparams.requiretech == "tech3" then
+						regenerationRate = maximumShieldStrength / 45
+						unitDef.customparams.shield_regeneration_rate = regenerationRate
+					end
+					if unitDef.customparams.requiretech == "tech4" then
+						regenerationRate = maximumShieldStrength / 60
+						unitDef.customparams.shield_regeneration_rate = regenerationRate
+					end
+					if unitDef.customparams.unitrole == "Commander" then
+						regenerationRate = maximumShieldStrength / 30
+						unitDef.customparams.shield_regeneration_rate = regenerationRate
+					end
 
-				unitDef.customparams.shield_regeneration_delay = 15
+					unitDef.customparams.shield_regeneration_delay = 15
+				end
 			end
 
 			-- Allow Hitpoints to be globally Controlled via Modotions

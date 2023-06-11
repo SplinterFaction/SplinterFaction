@@ -87,19 +87,16 @@ local unitAttachments = {
 }
 ]]
 
-local straight = 150
-local diagonal = 100
+-- local straight = 20
+-- local diagonal = 100
 
 local unitAttachments = {
-    [UnitDefNames["lozoutpost"].id] = {
-        { unitType = "neutraljericho",   posx = -straight, posz = 0,         dir = 0 },
-        { unitType = "neutraljericho",   posx = straight,  posz = 0,         dir = 0 },
-        { unitType = "neutralinferno",   posx = 0,         posz = -straight, dir = 0 },
-        { unitType = "neutralinferno",   posx = 0,         posz = straight,  dir = 0 },
-        { unitType = "neutralrazor", posx = -diagonal, posz = -diagonal, dir = 0 },
-        { unitType = "neutralrazor", posx = diagonal,  posz = diagonal,  dir = 0 },
-        { unitType = "neutralrazor", posx = diagonal,  posz = -diagonal, dir = 0 },
-        { unitType = "neutralrazor", posx = -diagonal, posz = diagonal,  dir = 0 },
+    [UnitDefNames["lozsuperjericho"].id] = {
+        { unitType = "lozjericho",   posx = -20,         posz = 0, dir = 0 },
+        { unitType = "lozjericho",   posx = 20,         posz = 0,  dir = 0 },
+        { unitType = "lozjericho",   posx = 0,         posz = -20, dir = 0 },
+        { unitType = "lozjericho",   posx = 0,         posz = 20,  dir = 0 },
+
     },
 }
 
