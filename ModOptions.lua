@@ -276,37 +276,6 @@ local options= {
 		-- (step <= 0) means that there is no quantization
 	},
 
-	{
-		key    = 'mexcost',
-		name   = 'Metal Extractor Costs',
-		desc   = 'Allows you to set the cost of Metal Extractors',
-		type   = 'section',
-	},
-	{
-		key    = 'metalextractorcostateran',
-		name   = 'Ateran Metal Extractor Cost',
-		desc   = 'How much metal does an Ateran Metal Extractor cost?',
-		type   = 'number',
-		section= 'mexcost',
-		def    = 50,
-		min    = 1,
-		max    = 500,
-		step   = 1,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
-	},
-	{
-		key    = 'metalextractorcostzaal',
-		name   = 'Zaal Metal Extractor Cost',
-		desc   = 'How much metal does an Zaal Metal Extractor cost?',
-		type   = 'number',
-		section= 'mexcost',
-		def    = 65,
-		min    = 1,
-		max    = 500,
-		step   = 1,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
-	},
-
 	-- Gameplay Options
 	{
 		key    = 'gameplayoptions',
@@ -858,9 +827,9 @@ local options= {
 	{
 		key    = "chicken_queentimemult",
 		name   = "Boss Anger Multiplier",
-		desc   = "How quickly Boss Anger goes from 0 to 100% (Range: 0.1 - 3). The default timing for this is 60 minutes.",
+		desc   = "How quickly Boss Anger goes from 0 to 100% (Range: 0.1 - 3). The default timing for this is 20 minutes. A 'full' run would be 60 minutes (a value of 1)",
 		type   = "number",
-		def    = 1,
+		def    = 0.3,
 		min    = 0.1,
 		max    = 3,
 		step   = 0.1,
@@ -891,7 +860,7 @@ local options= {
 	{
 		key    = "chicken_graceperiodmult",
 		name   = "Grace Period Time Multiplier",
-		desc   = "Time before Corruptors become active. (Range: 0.1 - 3)",
+		desc   = "Time before Corruptors become active (Range: 0.1 - 3). Default is 6 minutes.",
 		type   = "number",
 		def    = 1,
 		min    = 0.1,
