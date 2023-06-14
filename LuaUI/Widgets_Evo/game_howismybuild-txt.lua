@@ -3,7 +3,7 @@
 ----------------------------------------
     function widget:GetInfo()
       return {
-        name      = "How is my build",
+        name      = "How is my build - Textbuilder",
         desc      = "Prints info about build timings and income to /LuaUI/Widgets/buildsaves and saves each match.",
         author    = "Tumulten & vvoop",
         date      = "Mar 7, 2014",
@@ -17,13 +17,13 @@
     local teamResources = Spring.GetTeamResources
     local workingUnits = {}
     local dataArray = {}
-    local logDir="buildsaves/"
+    local logDir="MyBuildTimings/"
     local file
     local fileName 
      
     function widget:Initialize()
 			Spring.CreateDir(logDir);
-            fileName = logDir.. Game.mapName.. "_".. tostring(os.date("%m-%d-%Y_%H;%M")) ..".log"
+            fileName = logDir.. Game.mapName.. "_".. tostring(os.date("%m-%d-%Y_%H;%M")) ..".txt"
             file = io.open(fileName, "w");
             local header = string.format("%35s%17s%17s%17s%17s",
                     "Name: ", "Start time: ","Finish time: ","Metal income: ","Energy income: ")
