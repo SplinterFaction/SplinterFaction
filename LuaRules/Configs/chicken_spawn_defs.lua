@@ -357,9 +357,9 @@ local miniBosses = { -- Units that spawn alongside queen
 
 local chickenMinions = { -- Units spawning other units
 	-- Artillery spawning here is a bit too strong and makes the battle somewhat unapproachable
-	["chickensbeacon"] = {
-		"lozflea",
-	}
+	--["chickensbeacon"] = {
+	--	"lozflea",
+	--}
 }
 
 local chickenHealers = { -- Spawn indepedently from squads in small numbers
