@@ -51,13 +51,11 @@ if gadgetHandler:IsSyncedCode() then
 				lessGooooo = true
 			end
 		elseif UnitDefs[unitDefID].customParams.requiretech == "tech1" then
-			if math.random(1,3) == 1 then
-				lessGooooo = true
-			end
-		elseif UnitDefs[unitDefID].customParams.requiretech == "tech2" then
 			if math.random(1,2) == 1 then
 				lessGooooo = true
 			end
+		elseif UnitDefs[unitDefID].customParams.requiretech == "tech2" then
+				lessGooooo = true
 		elseif UnitDefs[unitDefID].customParams.requiretech == "tech3" then
 			lessGooooo = true
 		elseif UnitDefs[unitDefID].customParams.requiretech == "tech4" then
@@ -81,13 +79,13 @@ if gadgetHandler:IsSyncedCode() then
 				local featureID = Spring.CreateFeature (partsList[math.random(1,#partsList)], posx, posy, posz, 0, unitTeam)
 				if featureID then
 					-- Spring.Echo("[Death Spawns] Unit Cost is " .. unitCostMetal)
-					local featureValueMetal = unit.metalCost * 0.25
-					local featureValueEnergy = unit.energyCost * 0.25
+					local featureValueMetal = unit.metalCost * 0.75
+					local featureValueEnergy = unit.energyCost * 0.75
 					local reclaimTime
 					if featureValueMetal ~= nil then
-						reclaimTime = featureValueMetal * 0.25
+						reclaimTime = featureValueMetal * 0.75
 					else
-						reclaimTime = featureValueEnergy * 0.25
+						reclaimTime = featureValueEnergy * 0.75
 					end
 					-- Spring.Echo(featureValueMetal)
 					-- Spring.Echo(featureValueEnergy)
