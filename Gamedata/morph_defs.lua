@@ -219,26 +219,6 @@ local morphDefs = {
 			text      = [[Upgrade to Tech 1, x4 Metal Extraction rate]],
 			require   = [[tech1]],
 		},
-		--{
-		--	into      = 'fedmetalextractor_stripmine_up1',
-		--	--require = 'etech2',
-		--	time      = 15,
-		--	cmdname   = [[Tech 1]] .. string.char(10) .. [[Stripmine]],
-		--	-- energy    = energyCost_metalextractor_up1,
-		--	-- metal     = 0,
-		--	text      = [[Upgrade to Tech 1 Stripmining, x2 + 50% Metal Extraction rate]],
-		--	require   = [[tech1]],
-		--},
-		--{
-		--	into      = 'fedmetalextractor_cloak_up1',
-		--	--require = 'etech2',
-		--	time      = 30,
-		--	cmdname   = [[Tech 1]] .. string.char(10) .. [[Cloak]],
-		--	-- energy    = energyCost_metalextractor_up1,
-		--	-- metal     = 0,
-		--	text      = [[Upgrade to Tech 1 with Area Cloak]],
-		--	require   = [[tech1]],
-		--},
 	},
 	fedmetalextractor_up1 = 	{
 		{
@@ -251,32 +231,12 @@ local morphDefs = {
 			text      = [[Upgrade to Tech 2, x8 Metal Extraction rate]],
 			require   = [[tech2]],
 		},
-		--{
-		--	into      = 'fedmetalextractor_stripmine_up2',
-		--	--require = 'etech2',
-		--	time      = 30,
-		--	cmdname   = [[Tech 2]] .. string.char(10) .. [[Stripmine]],
-		--	-- energy    = energyCost_metalextractor_up1,
-		--	-- metal     = 0,
-		--	text      = [[Upgrade to Tech 2 Stripmining, x4 + 50% Metal Extraction rate]],
-		--	require   = [[tech2]],
-		--},
-		--{
-		--	into      = 'fedmetalextractor_cloak_up2',
-		--	--require = 'etech2',
-		--	time      = 60,
-		--	cmdname   = [[Tech 2]] .. string.char(10) .. [[Cloak]],
-		--	-- energy    = energyCost_metalextractor_up1,
-		--	-- metal     = 0,
-		--	text      = [[Upgrade to Tech 2 with Area Cloak]],
-		--	require   = [[tech2]],
-		--},
 	},
 	fedmetalextractor_up2 = 	{
 		{
 			into      = 'fedmetalextractor_up3',
 			--require = 'etech2',
-			time      = 60,
+			time      = 45,
 			cmdname   = [[Tech 3]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up3,
 			-- metal     = 0,
@@ -296,58 +256,6 @@ local morphDefs = {
 			require   = [[tech4]],
 		},
 	},
-
-	---Fed Specialty Metal Extractors
-
-	fedmetalextractor_stripmine_up1 = 	{
-		{
-			into      = 'fedmetalextractor_stripmine_up2',
-			--require = 'etech2',
-			time      = 60,
-			cmdname   = [[Tech 2]] .. string.char(10) .. [[Stripmine]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 2 Stripmining, x4 + 50% Metal Extraction rate]],
-			require   = [[tech2]],
-		},
-	},
-	fedmetalextractor_stripmine_up2 = 	{
-		{
-			into      = 'fedmetalextractor_stripmine_up3',
-			--require = 'etech2',
-			time      = 120,
-			cmdname   = [[Tech 3]] .. string.char(10) .. [[Stripmine]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 3 Stripmining, x8 + 50% Metal Extraction rate]],
-			require   = [[tech3]],
-		},
-	},
-	fedmetalextractor_cloak_up1 = 	{
-		{
-			into      = 'fedmetalextractor_cloak_up2',
-			--require = 'etech2',
-			time      = 60,
-			cmdname   = [[Tech 2]] .. string.char(10) .. [[Cloak]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 2 with Area Cloak]],
-			require   = [[tech2]],
-		},
-	},
-	fedmetalextractor_cloak_up2 = 	{
-		{
-			into      = 'fedmetalextractor_cloak_up3',
-			--require = 'etech2',
-			time      = 120,
-			cmdname   = [[Tech 3]] .. string.char(10) .. [[Cloak]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 3 with Area Cloak]],
-			require   = [[tech3]],
-		},
-	},
-
 
 
 	----------------------------------------------------------
@@ -381,7 +289,7 @@ local morphDefs = {
 		{
 			into      = 'lozmetalextractor_up3',
 			--require = 'etech2',
-			time      = 60,
+			time      = 45,
 			cmdname   = [[Tech 3]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up3,
 			-- metal     = 0,
@@ -399,58 +307,6 @@ local morphDefs = {
 			-- metal     = 0,
 			text      = [[Upgrade to Tech 4, x32 Metal Extraction rate]],
 			require   = [[tech4]],
-		},
-	},
-
-
-	---loz Specialty Metal Extractors
-	lozmetalextractor_armed_up1 = 	{
-		{
-			into      = 'lozmetalextractor_armed_up2',
-			--require = 'etech2',
-			time      = 90,
-			cmdname   = [[Tech 2]] .. string.char(10) .. [[Armed]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 2, x4 Metal Extraction rate with 2 Gamma Ray Turrets and 1 Neutron Beam Turret]],
-			require   = [[tech2]],
-		},
-	},
-	lozmetalextractor_armed_up2 = 	{
-		{
-			into      = 'lozmetalextractor_armed_up3',
-			--require = 'etech2',
-			time      = 150,
-			cmdname   = [[Tech 3]] .. string.char(10) .. [[Armed]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 3, x8 Metal Extraction rate with 2 Gamma Ray Turrets and 2 Neutron Beam Turrets]],
-			require   = [[tech3]],
-		},
-	},
-	lozmetalextractor_shield_up1 = 	{
-
-		{
-			into      = 'lozmetalextractor_shield_up2',
-			--require = 'etech2',
-			time      = 90,
-			cmdname   = [[Tech 2]] .. string.char(10) .. [[Shielded]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 2, x4 Metal Extraction rate with an Area Shield]],
-			require   = [[tech2]],
-		},
-	},
-	lozmetalextractor_shield_up2 = 	{
-		{
-			into      = 'lozmetalextractor_shield_up3',
-			--require = 'etech2',
-			time      = 150,
-			cmdname   = [[Tech 3]] .. string.char(10) .. [[Shielded]],
-			-- energy    = energyCost_metalextractor_up1,
-			-- metal     = 0,
-			text      = [[Upgrade to Tech 3, x8 Metal Extraction rate with an Area Shield]],
-			require   = [[tech3]],
 		},
 	},
 
