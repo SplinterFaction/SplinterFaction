@@ -58,8 +58,8 @@ local USE_MATERIAL_INDICES = true -- for future material indices based SSAO eval
 -- File path Constants
 -----------------------------------------------------------------
 
-local shadersDir = "LuaUI/Widgets_Evo/Shaders/"
-local luaShaderDir = "LuaUI/Widgets_Evo/Include/"
+local shadersDir = "LuaUI/widgets/Shaders/"
+local luaShaderDir = "LuaUI/widgets/Include/"
 
 -----------------------------------------------------------------
 -- Global Variables

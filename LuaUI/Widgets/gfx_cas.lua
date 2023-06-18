@@ -34,7 +34,7 @@ local glBlending	 = gl.Blending
 -- File path Constants
 -----------------------------------------------------------------
 
-local luaShaderDir = "LuaUI/Widgets_evo/Include/"
+local luaShaderDir = "LuaUI/widgets/Include/"
 
 -----------------------------------------------------------------
 -- Shader Sources

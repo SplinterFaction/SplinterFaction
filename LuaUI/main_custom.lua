@@ -26,7 +26,7 @@ include("savetable.lua")
 include("debug.lua")
 include("fonts.lua")
 include("layout.lua")   -- contains a simple LayoutButtons()
-include("widgets_evo.lua")  -- the widget handler
+include("widgets_custom.lua")  -- the widget handler
 
 
 --------------------------------------------------------------------------------

@@ -25,7 +25,7 @@ newTrack = tracks[math.random(1, #tracks)]
 if newTrack == nil then
 	Spring.Echo("[LuaIntro Music Player] newTrack is returning nil for some reason")
 	Spring.Echo("[LuaIntro Music Player] number of tracks is " .. #tracks)
-	newTrack = "LuaUI/Widgets_Evo/Music/loading/Cyberpunk - Crash.ogg"
+	newTrack = "LuaUI/widgets/Music/loading/Cyberpunk - Crash.ogg"
 	Spring.Echo("[LuaIntro Music Player] Now Playing " .. newTrack)
 	Spring.PlaySoundStream(newTrack)
 	Spring.SetSoundStreamVolume(music_volume_set)

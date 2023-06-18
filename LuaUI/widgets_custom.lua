@@ -31,7 +31,7 @@ local gl = gl
 local modShortUpper = Game.modShortName:upper()
 local ORDER_FILENAME     = LUAUI_DIRNAME .. 'Config/' .. modShortUpper .. '_order.lua'
 local CONFIG_FILENAME    = LUAUI_DIRNAME .. 'Config/' .. modShortUpper .. '_data.lua'
-local WIDGET_DIRNAME     = LUAUI_DIRNAME .. 'Widgets_Evo/'
+local WIDGET_DIRNAME     = LUAUI_DIRNAME .. 'widgets/'
 
 local SELECTOR_BASENAME = 'selector.lua'
 
@@ -43,7 +43,7 @@ local SAFEWRAP = 1
 local SAFEDRAW = false  -- requires SAFEWRAP to work
 local glPopAttrib  = gl.PopAttrib
 local glPushAttrib = gl.PushAttrib
-local section = 'widgets_evo.lua'
+local section = 'widgets.lua'
 
 
 --------------------------------------------------------------------------------

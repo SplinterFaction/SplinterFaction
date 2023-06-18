@@ -264,7 +264,7 @@ function init()
 			"#define LOW_QUALITY 0 \n",
 			"#define HIGH_QUALITY 1 \n"
 		},
-		fragment = VFS.LoadFile("LuaUI/Widgets_EVO/Shaders/dof.fs", VFS.ZIP),
+		fragment = VFS.LoadFile("LuaUI/widgets/Shaders/dof.fs", VFS.ZIP),
 
 		uniformInt = {origTex = 0, blurTex0 = 1, blurTex1 = 2, blurTex2 = 3, blurTex3 = 4},
 	})

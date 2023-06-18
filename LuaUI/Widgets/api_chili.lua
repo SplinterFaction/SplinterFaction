@@ -37,7 +37,7 @@ end
 
 assert(debug)
 local source = debug and debug.getinfo(1).source
-local DIR = GetDirectory(source) or ((LUA_DIRNAME or LUAUI_DIRNAME) .."Widgets_Evo/")
+local DIR = GetDirectory(source) or ((LUA_DIRNAME or LUAUI_DIRNAME) .."widgets/")
 CHILI_DIRNAME = DIR .. "chili/"
 
 --------------------------------------------------------------------------------
