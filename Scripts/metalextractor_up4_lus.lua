@@ -7,7 +7,7 @@ local SIG_AIM = {}
 
 -- state variables
 terrainType = "terrainType"
-skyhateEffect = "powerplant-fireball-small-yellow"
+skyhateEffect = "powerplant-fireball-small-red"
 
 function script.Create()
 	StartThread(common.SmokeUnit, {base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, bottom1, topspin1, sfxpointt1, bottom2, topspin2, sfxpointt2, bottom3, topspin3, sfxpointt3, bottom4, topspin4, sfxpointt4})

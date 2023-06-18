@@ -62,7 +62,7 @@ local unitDef                     = {
 	},
 	customParams                  = {
 		death_sounds              = "generic",
-		ProvideTech               = "50 Power, tech0, tech1, tech2, tech3",
+		ProvideTech               = "50 Power, tech0, tech1, tech2, tech3, tech4",
 		supply_granted            = 10000,
 		hpoverride                = 100000,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 

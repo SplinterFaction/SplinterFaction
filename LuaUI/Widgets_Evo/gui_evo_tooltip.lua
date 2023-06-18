@@ -1,6 +1,6 @@
 function widget:GetInfo()
 	return {
-		name      = "Evo Tooltip",
+		name      = "Tooltip",
 		desc      = "overrides default tooltip, shows shield and weapon info",
 		author    = "CommonPlayer, raaar, based on a Kernel Panic widget by zwszg",
 		date      = "September 2012",

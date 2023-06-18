@@ -1,22 +1,22 @@
 --------------------------------------------------------------------------------
 
-unitName = [[geometalextractor]]
+unitName = [[fedmetalextractor_up4]]
 
 --------------------------------------------------------------------------------
 
-metalMultiplier = 64
+metalMultiplier = 32
 
-buildCostMetal = 4800
-energyUse = 500
+buildCostMetal = 2400
+energyUse = 250
 
 primaryCEG = "custom:fusionreactionnuclear-4color"
 
-humanName = [[Geothermal Metal Extractor - Tech 4]]
+humanName = [[Metal Extractor - Tech 4]]
 
-explodeAsSelfSAs = [[hugeBuildingExplosionGenericGreen]]
+explodeAsSelfSAs = [[largeBuildingExplosionGenericGreen]]
 
 objectName = [[metalextractort3.s3o]]
-script = [[metalextractor_geo_lus.lua]]
+script = [[metalextractor_up4_lus.lua]]
 
 tech = [[tech4]]
 
@@ -24,7 +24,7 @@ noenergycost = false
 
 skyhateceg = [[custom:skyhatelasert3]]
 
-faction = [[Neutral]]
+faction = [[Federation of Kala]]
 
 VFS.Include("units-configs-basedefs/basedefs/Fed and Loz Shared Buildings/metalextractor_basedef.lua")
 
