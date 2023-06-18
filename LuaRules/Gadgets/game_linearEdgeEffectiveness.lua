@@ -25,6 +25,9 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
 	end
 
 	local baseDamage = weaponDef.damages[UnitDefs[unitDefID].armorType]
+	if baseDamage == 0 then
+		return 0
+	end
 
 	local isArmored, armorMult = Spring.GetUnitArmored(unitID)
 	if isArmored then
