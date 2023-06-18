@@ -44,6 +44,9 @@ local modrules  = {
     constructionDecaySpeed = 1,  -- defaults to 0.03
   },
 
+  damage = {
+    debris = 0,
+  },
 
   reclaim = {
     multiReclaim  = 1,    -- defaults to 0
