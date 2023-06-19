@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 
-unitName = [[geometalextractor]]
+unitName = [[geometalmaker]]
 
 --------------------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ energyUse = 500
 
 primaryCEG = "custom:fusionreactionnuclear-4color"
 
-humanName = [[Geothermal Metal Extractor - Tech 4]]
+humanName = [[Geothermal Metal Maker]]
 
 explodeAsSelfSAs = [[hugeBuildingExplosionGenericGreen]]
 
