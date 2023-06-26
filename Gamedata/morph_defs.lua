@@ -355,10 +355,10 @@ local morphDefs = {
 			require   = [[tech3]],
 		},
 		{
-			into      = 'geometalextractor',
+			into      = 'geometalmaker',
 			time      = 60,
-			cmdname   = [[Metal Extractor]],
-			text      = [[Geothermal Metal Extractor]],
+			cmdname   = [[Metal Maker]],
+			text      = [[Geothermal Metal Maker]],
 			require   = [[tech4]],
 		},
 	},

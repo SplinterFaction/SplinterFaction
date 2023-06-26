@@ -1036,18 +1036,16 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			energyMetalWorth = 50
 			Unit cost = 100m / 1000e
 			1000 / 50 = 20
-			100 + 10 = 120 total buildtime
+			100 + 20 = 120 total buildtime
 
 
 			Example 3:
 			energyMetalWorth = 10
 			Unit cost = 100m / 1000e
 			1000 / 10 = 100
-			100 + 10 = 200 total buildtime
+			100 + 100 = 200 total buildtime
 
 			As you can see, energyMetalWorth has a very pronounced effect not only on buildtimes, but by extension, outflow of resources.
-			
-			Remember, as of 2/19/23, factories cannot be assisted, so this has a very pronounced effect on unit build rates.
 			]]--
 			local totalValueInMetal
 			local energyMetalWorth = 10
