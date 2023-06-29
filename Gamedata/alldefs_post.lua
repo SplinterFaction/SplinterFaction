@@ -1005,6 +1005,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Single-Target Turret" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
+			if unitDef.customparams.unitrole == "Weapon of Mass Destruction" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
 
 			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then
 				unitDef.maxdamage = unitDef.maxdamage * unitDef.customparams.hpmodifieroverridepercentage
