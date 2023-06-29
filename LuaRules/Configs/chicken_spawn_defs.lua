@@ -248,6 +248,7 @@ local squadSpawnOptionsTable = {
 	basic = {}, -- 67% spawn chance
 	special = {}, -- 33% spawn chance, there's 1% chance of Special squad spawning Super squad, which is specials but 30% anger earlier.
 	air = {}, -- Air waves
+	healer = {},
 }
 
 local function addNewSquad(squadParams) -- params: {type = "basic", minAnger = 0, maxAnger = 100, units = {"1 chicken1"}, weight = 1}
@@ -349,6 +350,19 @@ local chickenSquadUnitTable = {
 		"fedeagle",
 		"chickenvulture",
 	},
+
+	t1healer = {
+		"lozflea",
+	},
+	t2healer = {
+		"lozflea",
+	},
+	t3healer = {
+		"lozflea",
+	},
+	t4healer = {
+		"lozflea",
+	},
 }
 
 local miniBosses = { -- Units that spawn alongside queen
@@ -364,10 +378,6 @@ local chickenMinions = { -- Units spawning other units
 		"fedbear",
 		"fedcobra",
 	}
-}
-
-local chickenHealers = { -- Spawn indepedently from squads in small numbers
-	"lozflea",
 }
 
 ------------------
@@ -495,6 +505,35 @@ for anger = 0,100 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t3air[math.random(1,#cst.t3air)] } })
 
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t4air[math.random(1,#cst.t4air)] } })
+			end
+		end
+	end
+end
+
+for anger = 0,100 do
+	local cst = chickenSquadUnitTable
+	if anger%5 == 0 then -- only add squads every 5 anger
+		if anger < 20 then
+			for i = 1,10 do
+				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
+			end
+		elseif anger < 50 then
+			for i = 1,10 do
+				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
+
+				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
+			end
+		elseif anger < 80 then
+			for i = 1,10 do
+				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
+
+				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
+			end
+		else
+			for i = 1,10 do
+				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
+
+				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t4healer[math.random(1,#cst.t4healer)] } })
 			end
 		end
 	end
