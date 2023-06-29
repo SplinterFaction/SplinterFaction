@@ -15,7 +15,7 @@ humanName = [[Geothermal Metal Maker]]
 
 explodeAsSelfSAs = [[hugeBuildingExplosionGenericGreen]]
 
-objectName = [[metalextractort3.s3o]]
+objectName = [[metalmaker_geo_t4.s3o]]
 script = [[metalextractor_geo_lus.lua]]
 
 tech = [[tech4]]
