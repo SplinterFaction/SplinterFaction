@@ -752,7 +752,6 @@ local config = { -- Don't touch this! ------------------------------------------
 	difficulty             	= difficulty,
 	difficulties           	= difficulties,
 	chickenEggs			   	= table.copy(chickenEggs),
-	chickenHealers			= table.copy(chickenHealers),
 	burrowName             	= burrowName,   -- burrow unit name
 	burrowDef              	= UnitDefNames[burrowName].id,
 	chickenSpawnMultiplier 	= Spring.GetModOptions().chicken_spawncountmult,
