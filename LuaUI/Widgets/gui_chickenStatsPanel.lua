@@ -25,7 +25,7 @@ if not Spring.Utilities.Gametype.IsChickens() then
 	return false
 end
 
-if not Spring.GetGameRulesParam("difficulty") then
+if not Spring.GetGameRulesParam("chickenDifficulty") then
 	return false
 end
 
@@ -69,12 +69,13 @@ local hasChickenEvent = false
 local difficultyOption = Spring.GetModOptions().chicken_difficulty
 
 local rules = {
-	"queenTime",
-	"queenAnger",
-	"gracePeriod",
-	"queenLife",
+	"chickenQueenTime",
+	"chickenQueenAnger",
+	"chickenTechAnger",
+	"chickenGracePeriod",
+	"chickenQueenHealth",
 	"lagging",
-	"difficulty",
+	"chickenDifficulty",
 	"chickenCount",
 	"chickenaCount",
 	"chickensCount",
@@ -165,18 +166,18 @@ local function CreatePanelDisplayList()
 
 	local currentTime = GetGameSeconds()
 	local techLevel = ""
-	if currentTime > gameInfo.gracePeriod then
-		if gameInfo.queenAnger < 100 then
+	if currentTime > gameInfo.chickenGracePeriod then
+		if gameInfo.chickenQueenAnger < 100 then
 			local gain = 0
 			if Spring.GetGameRulesParam("ChickenQueenAngerGain_Base") then
 				gain = math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) + math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) + math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Eco"), 3)
 			end
-			techLevel = "Boss Anger: " .. gameInfo.queenAnger .. "% (+" .. gain .. "%/s)"
-			local totalSeconds = (100 - gameInfo.queenAnger) / gain
+			techLevel = "Boss Anger: " .. gameInfo.chickenQueenAnger .. "% (+" .. gain .. "%/s)"
+			local totalSeconds = (100 - gameInfo.chickenQueenAnger) / gain
 			time = string.formatTime(totalSeconds)
 			font:Print(textColor .. "Boss ETA: " .. time, panelMarginX+5, PanelRow(2), panelFontSize, "")
 		else
-			techLevel = "Boss Health: " .. gameInfo.queenLife
+			techLevel = "Boss Health: " .. gameInfo.chickenQueenHealth
 		end
 	else
 		techLevel = "Grace Period: " .. string.formatTime(math.ceil(((currentTime - gameInfo.gracePeriod) * -1) - 0.5))
@@ -186,7 +187,7 @@ local function CreatePanelDisplayList()
 	font:SetTextColor(1, 1, 1, 1)
 	font:SetOutlineColor(0, 0, 0, 1)
 	font:Print(techLevel, panelMarginX, PanelRow(1), panelFontSize, "")
-	if Spring.GetGameRulesParam("ChickenQueenAngerGain_Base") and gameInfo.queenAnger < 100 and currentTime > gameInfo.gracePeriod then
+	if Spring.GetGameRulesParam("ChickenQueenAngerGain_Base") and gameInfo.chickenQueenAnger < 100 and currentTime > gameInfo.chickenGracePeriod then
 		--font:Print(textColor .. "Base: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) .. "%/s", panelMarginX+5, PanelRow(3), panelFontSize, "")
 		font:Print(textColor .. "Aggression: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) .. "%/s", panelMarginX+5, PanelRow(3), panelFontSize, "")
 		--font:Print(textColor .. "Eco: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Eco"), 3) .. "%/s", panelMarginX+5, PanelRow(4), panelFontSize, "")
