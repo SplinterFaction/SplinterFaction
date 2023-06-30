@@ -180,7 +180,7 @@ local function CreatePanelDisplayList()
 			techLevel = "Boss Health: " .. gameInfo.chickenQueenHealth
 		end
 	else
-		techLevel = "Grace Period: " .. string.formatTime(math.ceil(((currentTime - gameInfo.gracePeriod) * -1) - 0.5))
+		techLevel = "Grace Period: " .. string.formatTime(math.ceil(((currentTime - gameInfo.chickenGracePeriod) * -1) - 0.5))
 	end
 
 	font:Begin()
