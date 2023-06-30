@@ -132,7 +132,7 @@ local optionValues = {
 
 	[difficulties.veryeasy] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60, -- Time between Waves in seconds
 		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
 		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
@@ -143,7 +143,7 @@ local optionValues = {
 		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
+		minChickens		  = 15, -- Number of ai units spawned in the beginning stages of the game per wave
 		maxChickens		  = 20, -- Number of ai units spawned in the end stages of the game per wave
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
@@ -151,7 +151,7 @@ local optionValues = {
 
 	[difficulties.easy] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 120,
 		turretSpawnRate   = 300,
@@ -162,14 +162,14 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10,
+		minChickens		  = 18,
 		maxChickens		  = 25,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.75,
 	},
 	[difficulties.normal] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 90,
 		turretSpawnRate   = 240,
@@ -180,14 +180,14 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10,
+		minChickens		  = 20,
 		maxChickens		  = 30,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2,
 	},
 	[difficulties.hard] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 60,
 		turretSpawnRate   = 180,
@@ -198,14 +198,14 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10,
+		minChickens		  = 25,
 		maxChickens		  = 35,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.veryhard] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 40,
 		turretSpawnRate   = 120,
@@ -216,14 +216,14 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10,
+		minChickens		  = 30,
 		maxChickens		  = 40,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
 	},
 	[difficulties.epic] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 40,
 		turretSpawnRate   = 120,
@@ -234,7 +234,7 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 10,
+		minChickens		  = 35,
 		maxChickens		  = 50,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
@@ -385,19 +385,19 @@ local chickenMinions = { -- Units spawning other units
 ------------------
 ------------------
 
-for anger = 0,100 do
+for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 20 then
+		if anger < 40 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "3 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 			end
-		elseif anger < 50 then
+		elseif anger < 100 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
-		elseif anger < 80 then
+		elseif anger < 200 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
@@ -423,20 +423,20 @@ end
 --------------------
 --------------------
 
-for anger = 0,100 do
+for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
 		if anger < 10 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 			end
-		elseif anger < 20 then
+		elseif anger < 40 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
-		elseif anger < 50 then
+		elseif anger < 100 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "20 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
@@ -446,7 +446,7 @@ for anger = 0,100 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 			end
-		elseif anger < 80 then
+		elseif anger < 160 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "8 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
@@ -481,20 +481,20 @@ end
 
 local airStartAnger = 15 -- needed for air waves to work correctly.
 
-for anger = 0,100 do
+for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 20 then
+		if anger < 40 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 			end
-		elseif anger < 50 then
+		elseif anger < 100 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 			end
-		elseif anger < 80 then
+		elseif anger < 200 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 
@@ -510,20 +510,20 @@ for anger = 0,100 do
 	end
 end
 
-for anger = 0,100 do
+for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 20 then
+		if anger < 40 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 			end
-		elseif anger < 50 then
+		elseif anger < 100 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 			end
-		elseif anger < 80 then
+		elseif anger < 200 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 
