@@ -808,7 +808,7 @@ local options= {
 		name="Burrow Placement",
 		desc="Control where burrows spawn",
 		type="list",
-		def="initialbox",
+		def="alwaysbox",
 		section="chicken_defense_options",
 		items={
 			{key="avoid", name="Avoid Players", desc="Burrows avoid player units"},
