@@ -398,7 +398,7 @@ for anger = 0,1000 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
 		elseif anger < 300 then
-			for i = 1,10 do
+			for i = 1,5 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 
@@ -406,7 +406,7 @@ for anger = 0,1000 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 			end
 		else
-			for i = 1,10 do
+			for i = 1,2 do
 
 				addNewSquad({ type = "basic", minAnger = anger, units = { "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
@@ -447,7 +447,7 @@ for anger = 0,1000 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 			end
 		elseif anger < 300 then
-			for i = 1,10 do
+			for i = 1,5 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "8 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2support[math.random(1,#cst.t2support)] } })
@@ -457,22 +457,17 @@ for anger = 0,1000 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 			end
 		else
-			for i = 1,10 do
+			for i = 1,2 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3assault[math.random(1,#cst.t3assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t3assault[math.random(1,#cst.t3assault)], "1 " .. cst.t3support[math.random(1,#cst.t3support)] } })
 
 				addNewSquad({ type = "special", minAnger = anger, units = { "1 " .. cst.t4assault[math.random(1,#cst.t4assault)] } })
-				--addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4assault[math.random(1,#cst.t4assault)] } })
-				--addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4support[math.random(1,#cst.t4support)] } })
+				addNewSquad({ type = "special", minAnger = anger, units = { "1 "  .. cst.t4assault[math.random(1,#cst.t4assault)], "1 " .. cst.t4support[math.random(1,#cst.t4support)] } })
 			end
 		end
 	end
 end
--- for j = 1,#miniBosses do
--- 	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 lozprotector" } })
--- 	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 feddeleter" } })
--- end
 
 ----------------
 -- Air Squads --
@@ -495,13 +490,13 @@ for anger = 0,1000 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 			end
 		elseif anger < 300 then
-			for i = 1,10 do
+			for i = 1,5 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t3air[math.random(1,#cst.t3air)] } })
 			end
 		else
-			for i = 1,10 do
+			for i = 1,2 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t3air[math.random(1,#cst.t3air)] } })
 
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t4air[math.random(1,#cst.t4air)] } })
@@ -524,13 +519,13 @@ for anger = 0,1000 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 			end
 		elseif anger < 300 then
-			for i = 1,10 do
+			for i = 1,5 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
 			end
 		else
-			for i = 1,10 do
+			for i = 1,2 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
 
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t4healer[math.random(1,#cst.t4healer)] } })
@@ -539,143 +534,6 @@ for anger = 0,1000 do
 	end
 end
 
-
---[[
-------------------
--- Basic Squads --
-------------------
-------------------
-
-addNewSquad({ type = "basic", minAnger = 0, units = { "5 fedak" } })
-addNewSquad({ type = "basic", minAnger = 0, units = { "5 fedstorm" } })
-addNewSquad({ type = "basic", minAnger = 0, units = { "5 fedcrasher" } })
-addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozdiamondback" } })
-addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozroach" } })
-addNewSquad({ type = "basic", minAnger = 0, units = { "5 lozscorpion" } })
-
-addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedstorm" } })
-addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedthud" } })
-addNewSquad({ type = "basic", minAnger = 10, units = { "5 fedcrasher" } })
-addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozroach" } })
-addNewSquad({ type = "basic", minAnger = 10, units = { "5 lozscorpion" } })
-
-addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedstorm" } })
-addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedthud" } })
-addNewSquad({ type = "basic", minAnger = 30, units = { "5 fedcrasher" } })
-addNewSquad({ type = "basic", minAnger = 30, units = { "5 lozroach" } })
-addNewSquad({ type = "basic", minAnger = 30, units = { "5 lozscorpion" } })
-
-addNewSquad({ type = "basic", minAnger = 60, units = { "1 fedbear", "1 fedcobra", "1 fedphalanx" } })
-addNewSquad({ type = "basic", minAnger = 60, units = { "2 lozreaper", "1 lozpulverizer" } })
-
-addNewSquad({ type = "basic", minAnger = 75, units = { "2 fedbear", "2 fedcobra", "2 fedphalanx" } })
-addNewSquad({ type = "basic", minAnger = 75, units = { "2 lozreaper", "2 lozpulverizer" } })
-
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 fedstriker"} })
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozemperorscorpion"} })
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 feddeleter"} })
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozprotector"} })
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 fedgoliath" } })
-addNewSquad({ type = "basic", minAnger = 90, units = { "1 lozmammoth" } })
-
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Special Squads -----------------------------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-addNewSquad({ type = "special", minAnger = 0, units = { "15 fedak" } })
-addNewSquad({ type = "special", minAnger = 0, units = { "15 lozdiamondback" } })
-addNewSquad({ type = "special", minAnger = 0, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
-addNewSquad({ type = "special", minAnger = 0, units = { "10 lozroach", "8 lozscorpion" } })
-
-addNewSquad({ type = "special", minAnger = 10, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
-addNewSquad({ type = "special", minAnger = 10, units = { "10 lozroach", "8 lozscorpion" } })
-
-addNewSquad({ type = "special", minAnger = 20, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
-addNewSquad({ type = "special", minAnger = 20, units = { "10 lozroach", "8 lozscorpion" } })
-
-addNewSquad({ type = "special", minAnger = 30, units = { "10 fedstorm", "4 fedthud", "6 fedcrasher" } })
-addNewSquad({ type = "special", minAnger = 30, units = { "10 lozroach", "8 lozscorpion" } })
-
-addNewSquad({ type = "special", minAnger = 40, units = { "1 fedbear", "1 fedcobra", "1 fedphalanx" }})
-addNewSquad({ type = "special", minAnger = 40, units = { "1 lozreaper", "1 lozpulverizer" }})
-
-addNewSquad({ type = "special", minAnger = 50, units = { "3 fedavalanche" } })
-addNewSquad({ type = "special", minAnger = 50, units = { "3 lozluger" } })
-
-addNewSquad({ type = "special", minAnger = 60, units = { "1 fedbear"} })
-addNewSquad({ type = "special", minAnger = 60, units = { "1 lozreaper"} })
-addNewSquad({ type = "special", minAnger = 60, units = { "5 fedavalanche" } })
-addNewSquad({ type = "special", minAnger = 60, units = { "5 lozluger" } })
-
-addNewSquad({ type = "special", minAnger = 70, units = { "1 fedbear"} })
-addNewSquad({ type = "special", minAnger = 70, units = { "1 lozreaper"} })
-
-addNewSquad({ type = "special", minAnger = 80, units = { "1 fedstriker"} })
-addNewSquad({ type = "special", minAnger = 80, units = { "1 lozemperorscorpion"} })
-addNewSquad({ type = "special", minAnger = 80, units = { "1 feddeleter"} })
-addNewSquad({ type = "special", minAnger = 80, units = { "1 lozprotector"} })
-
-addNewSquad({ type = "special", minAnger = 90, units = { "1 lozmammoth" } })
-addNewSquad({ type = "special", minAnger = 90, units = { "1 fedgoliath" } })
-
-addNewSquad({ type = "special", minAnger = 100, units = { "1 lozsilverback" } })
-addNewSquad({ type = "special", minAnger = 100, units = { "1 fedjuggernaut" } })
-
-for j = 1,#miniBosses do
-	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 lozprotector" } })
-	addNewSquad({ type = "special", minAnger = 100, units = { "1 " .. miniBosses[j], "1 feddeleter" } })
-end
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Air Squads ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-local airStartAnger = 30 -- needed for air waves to work correctly.
-
-addNewSquad({ type = "air", minAnger = 30, units = { "4 fedsparrow" } })
-addNewSquad({ type = "air", minAnger = 30, units = { "4 lozwasp" } })
-addNewSquad({ type = "air", minAnger = 30, units = { "4 fedhawk", "4 lozhornet" } })
-addNewSquad({ type = "air", minAnger = 30, units = { "5 fedcrow" } })
-addNewSquad({ type = "air", minAnger = 30, units = { "3 fedhawk", "5 lozbumblebee" } })
-addNewSquad({ type = "air", minAnger = 30, units = { "2 fedcondor" } })
-addNewSquad({ type = "air", minAnger = 30, units = { "2 lozcrane" } })
-
-addNewSquad({ type = "air", minAnger = 40, units = { "3 fedhawk", "4 lozhornet" } })
-addNewSquad({ type = "air", minAnger = 40, units = { "2 lozhornet", "5 fedcrow" } })
-addNewSquad({ type = "air", minAnger = 40, units = { "3 fedhawk", "5 lozbumblebee" } })
-addNewSquad({ type = "air", minAnger = 40, units = { "2 fedcondor", "5 lozcrane" } })
-
-addNewSquad({ type = "air", minAnger = 50, units = { "3 fedhawk", "3 lozhornet" } })
-addNewSquad({ type = "air", minAnger = 50, units = { "3 lozhornet", "5 fedcrow" } })
-addNewSquad({ type = "air", minAnger = 50, units = { "3 fedhawk", "5 lozbumblebee" } })
-addNewSquad({ type = "air", minAnger = 50, units = { "3 fedcondor", "3 lozcrane" } })
-addNewSquad({ type = "air", minAnger = 50, units = { "1 fedeagle", "1 loztitan" } })
-
-addNewSquad({ type = "air", minAnger = 60, units = { "6 fedhawk", "6 lozhornet" } })
-addNewSquad({ type = "air", minAnger = 60, units = { "5 lozhornet", "10 fedcrow" } })
-addNewSquad({ type = "air", minAnger = 60, units = { "5 fedhawk", "10 lozbumblebee" } })
-addNewSquad({ type = "air", minAnger = 60, units = { "3 fedcondor", "3 lozcrane" } })
-
-addNewSquad({ type = "air", minAnger = 70, units = { "6 fedhawk", "10 lozbumblebee", "6 lozhornet", "10 fedcrow" } })
-addNewSquad({ type = "air", minAnger = 70, units = { "3 fedcondor", "3 lozcrane" } })
-addNewSquad({ type = "air", minAnger = 70, units = { "1 fedfalcon", "1 lozlocust" } })
-
-addNewSquad({ type = "air", minAnger = 80, units = { "6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow" } })
-addNewSquad({ type = "air", minAnger = 80, units = { "4 fedcondor", "4 lozcrane" } })
-addNewSquad({ type = "air", minAnger = 80, units = { "1 fedeagle", "1 loztitan" } })
-addNewSquad({ type = "air", minAnger = 80, units = { "1 fedfalcon", "1 lozlocust" } })
-
-addNewSquad({ type = "air", minAnger = 90, units = { "6 fedhawk", "10 lozbumblebee", "5 lozhornet", "10 fedcrow" } })
-addNewSquad({ type = "air", minAnger = 90, units = { "10 fedhawk", "10 lozhornet" } })
-addNewSquad({ type = "air", minAnger = 90, units = { "2 fedeagle", "2 loztitan" } })
-addNewSquad({ type = "air", minAnger = 90, units = { "2 fedfalcon", "2 lozlocust" } })
-
-addNewSquad({ type = "air", minAnger = 100, units = { "6 fedeagle", "6 loztitan" } })
-addNewSquad({ type = "air", minAnger = 100, units = { "9 fedcrow", "9 lozbumblebee" } })
-addNewSquad({ type = "air", minAnger = 100, units = { "3 fedfalcon", "3 lozlocust" } })
-
-]]
 local ecoBuildingsPenalty = { -- Additional queen hatch per second from eco buildup (for 60 minutes queen time. scales to queen time)
 	--[[
 	-- T1 Energy
