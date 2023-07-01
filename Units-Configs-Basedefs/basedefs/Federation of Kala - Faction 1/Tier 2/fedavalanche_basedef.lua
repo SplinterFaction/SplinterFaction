@@ -4,7 +4,7 @@ unitDef                    = {
 	transportbyenemy             = false;
 	--**
 	buildCostEnergy              = 0,
-	buildCostMetal               = 1680,
+	buildCostMetal               = 840,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedavalanche.png]],
@@ -155,7 +155,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 440,
+			default              = 110,
 		},
 	},
 
@@ -201,7 +201,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 1200,
+			default              = 300,
 		},
 	},
 }

@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 1800,
+	buildCostMetal               = 900,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozluger.png",
@@ -135,7 +135,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},  
 		damage                   = {
-			default              = 8000,
+			default              = 2000,
 		},
 	},
 }

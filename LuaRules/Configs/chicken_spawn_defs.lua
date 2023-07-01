@@ -143,7 +143,7 @@ local optionValues = {
 		damageMod         = 1, -- Multiplier for how much damage spawned units will deal to player units
 		maxBurrows        = 1000, -- Maximum number of burrows that can be on the map
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 15, -- Number of ai units spawned in the beginning stages of the game per wave
+		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
 		maxChickens		  = 20, -- Number of ai units spawned in the end stages of the game per wave
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
@@ -162,7 +162,7 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 18,
+		minChickens		  = 10,
 		maxChickens		  = 25,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 1.75,
@@ -180,7 +180,7 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 20,
+		minChickens		  = 10,
 		maxChickens		  = 30,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2,
@@ -198,7 +198,7 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 25,
+		minChickens		  = 10,
 		maxChickens		  = 35,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 2.5,
@@ -216,7 +216,7 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 30,
+		minChickens		  = 10,
 		maxChickens		  = 40,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
@@ -234,7 +234,7 @@ local optionValues = {
 		damageMod         = 1,
 		maxBurrows        = 1000,
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
-		minChickens		  = 35,
+		minChickens		  = 10,
 		maxChickens		  = 50,
 		queenName         = 'chickensbeacon',
 		queenResistanceMult   = 3,
@@ -392,12 +392,12 @@ for anger = 0,1000 do
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "3 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 			end
-		elseif anger < 100 then
+		elseif anger < 175 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
-		elseif anger < 200 then
+		elseif anger < 300 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
@@ -436,7 +436,7 @@ for anger = 0,1000 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
-		elseif anger < 100 then
+		elseif anger < 175 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "20 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
@@ -446,7 +446,7 @@ for anger = 0,1000 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 			end
-		elseif anger < 160 then
+		elseif anger < 300 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "8 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
@@ -488,13 +488,13 @@ for anger = 0,1000 do
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 			end
-		elseif anger < 100 then
+		elseif anger < 175 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 			end
-		elseif anger < 200 then
+		elseif anger < 300 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 
@@ -517,13 +517,13 @@ for anger = 0,1000 do
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 			end
-		elseif anger < 100 then
+		elseif anger < 175 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 			end
-		elseif anger < 200 then
+		elseif anger < 300 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 
