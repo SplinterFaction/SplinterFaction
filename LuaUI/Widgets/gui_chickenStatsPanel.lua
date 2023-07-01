@@ -175,7 +175,7 @@ local function CreatePanelDisplayList()
 			techLevel = "Boss Anger: " .. gameInfo.chickenQueenAnger .. "% (+" .. gain .. "%/s)"
 			local totalSeconds = (100 - gameInfo.chickenQueenAnger) / gain
 			time = string.formatTime(totalSeconds)
-			font:Print(textColor .. "Boss ETA: " .. time, panelMarginX+5, PanelRow(2), panelFontSize, "")
+			font:Print(textColor .. "Boss ETA: " .. time, panelMarginX+5, PanelRow(3), panelFontSize, "")
 		else
 			techLevel = "Boss Health: " .. gameInfo.chickenQueenHealth
 		end
@@ -187,9 +187,10 @@ local function CreatePanelDisplayList()
 	font:SetTextColor(1, 1, 1, 1)
 	font:SetOutlineColor(0, 0, 0, 1)
 	font:Print(techLevel, panelMarginX, PanelRow(1), panelFontSize, "")
+	font:Print("Tech Level: " .. gameInfo.chickenTechAnger .. "%", panelMarginX, PanelRow(4), panelFontSize, "")
 	if Spring.GetGameRulesParam("ChickenQueenAngerGain_Base") and gameInfo.chickenQueenAnger < 100 and currentTime > gameInfo.chickenGracePeriod then
 		--font:Print(textColor .. "Base: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Base"), 3) .. "%/s", panelMarginX+5, PanelRow(3), panelFontSize, "")
-		font:Print(textColor .. "Aggression: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) .. "%/s", panelMarginX+5, PanelRow(3), panelFontSize, "")
+		font:Print(textColor .. "Aggression: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Aggression"), 3) .. "%/s", panelMarginX+5, PanelRow(2), panelFontSize, "")
 		--font:Print(textColor .. "Eco: +" .. math.round(Spring.GetGameRulesParam("ChickenQueenAngerGain_Eco"), 3) .. "%/s", panelMarginX+5, PanelRow(4), panelFontSize, "")
 	end
 	--font:Print('ui.chickens.chickenPlayerAgression' .. (Spring.GetGameRulesParam("chickenPlayerAgressionLevel") or 0), panelMarginX, PanelRow(2), panelFontSize, "")
@@ -201,7 +202,7 @@ local function CreatePanelDisplayList()
 	-- if gotScore then
 	-- 	font:Print('ui.chickens.score', { score = commaValue(scoreCount) }, 88, h - 170, panelFontSize, "")
 	-- else
-		font:Print('Difficulty: ' .. difficultyOption, 120, h - 170, panelFontSize, "")
+		font:Print('Difficulty: ' .. difficultyOption, panelMarginX, PanelRow(8), panelFontSize, "")
 	-- end
 	font:End()
 
