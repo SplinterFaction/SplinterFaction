@@ -388,7 +388,7 @@ local chickenMinions = { -- Units spawning other units
 for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 40 then
+		if anger < 80 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "3 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 			end
@@ -430,7 +430,7 @@ for anger = 0,1000 do
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 			end
-		elseif anger < 40 then
+		elseif anger < 80 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
@@ -479,7 +479,7 @@ local airStartAnger = 15 -- needed for air waves to work correctly.
 for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 40 then
+		if anger < 80 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 			end
@@ -508,7 +508,7 @@ end
 for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 40 then
+		if anger < 80 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 			end
