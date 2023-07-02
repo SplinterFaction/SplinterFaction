@@ -10,42 +10,43 @@ local difficulties = {
 }
 
 local difficulty = difficulties[Spring.GetModOptions().chicken_difficulty]
-local burrowName = 'healstation_ai'
+local burrowName = 'chickensbeacon'
 
 chickenTurrets = {
+
 	-- Weapons
 	["fedearthquakemine"] 	 = { minQueenAnger = 0, spawnedPerWave = 10, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fedmenlo"]             = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["lozjericho"]           = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["fedstinger"]           = { minQueenAnger = 0, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["lozrazor"]             = { minQueenAnger = 0, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fedimmolator"]         = { minQueenAnger = 80, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["lozinferno"]           = { minQueenAnger = 80, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["fedjavelin"]           = { minQueenAnger = 80, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["lozrattlesnake"]       = { minQueenAnger = 80, spawnedPerWave = 4, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fedguardian"]          = { minQueenAnger = 175, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["lozannihilator"]       = { minQueenAnger = 175, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["chickenemperormenlo"]  = { minQueenAnger = 300, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedmenlo"]             = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 70 },
+	["lozjericho"]           = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 70 },
+	["fedstinger"]           = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 70 },
+	["lozrazor"]             = { minQueenAnger = 0, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 70 },
+	["fedimmolator"]         = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["lozinferno"]           = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["fedjavelin"]           = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["lozrattlesnake"]       = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["fedmenlomk2"]          = { minQueenAnger = 30, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fedguardian"]          = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["lozannihilator"]       = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["chickenemperormenlo"]  = { minQueenAnger = 90, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 
 	-- Utility
-	-- Chickens should NEVER be spawning cloaking towers.
-	-- ["cloakingtower"]        = { minQueenAnger = 20, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 60 },
-	-- ["largecloakingtower"]   = { minQueenAnger = 50, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["smallshieldgenerator"] = { minQueenAnger = 80, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
-	["largeshieldgenerator"] = { minQueenAnger = 175, spawnedPerWave = 2, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["cloakingtower"]        = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 99 },
+	["largecloakingtower"]   = { minQueenAnger = 90, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["smallshieldgenerator"] = { minQueenAnger = 30, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
+	["largeshieldgenerator"] = { minQueenAnger = 60, spawnedPerWave = 2, spawnOnBurrows = true, maxQueenAnger = 1000 },
 
-	["healstation"] 		 = { minQueenAnger = 80, spawnedPerWave = 5, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["healstation"] 		 = { minQueenAnger = 30, spawnedPerWave = 5, spawnOnBurrows = true, maxQueenAnger = 1000 },
 
 	-- Eco Fillers
 	-- Power
-	["fissionpowerplant"]    = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["fusionpowerplant"]     = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["coldfusionpowerplant"] = { minQueenAnger = 175, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["blackholepowerplant"]  = { minQueenAnger = 300, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["fissionpowerplant"]    = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 40 },
+	["fusionpowerplant"]     = { minQueenAnger = 30, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 70 },
+	["coldfusionpowerplant"] = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 99 },
+	["blackholepowerplant"]  = { minQueenAnger = 90, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 	-- Storage
-	["supplydepot"]          = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["mediumstorage"]        = { minQueenAnger = 80, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
-	["largestorage"]         = { minQueenAnger = 175, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
+	["supplydepot"]          = { minQueenAnger = 0, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 40 },
+	["mediumstorage"]        = { minQueenAnger = 30, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 70 },
+	["largestorage"]         = { minQueenAnger = 60, spawnedPerWave = 1, spawnOnBurrows = false, maxQueenAnger = 1000 },
 }
 
 local chickenEggs = { -- Specify eggs dropped by unit here, requires useEggs to be true, if some unit is not specified here, it drops random egg colors.
@@ -70,6 +71,14 @@ chickenBehaviours = {
 		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
 		-- T4
 		[UnitDefNames["chickeneurypterid"].id] = { distance = 500, chance = 1 },
+
+		-- BOSS
+		[UnitDefNames["chickenboss_veryeasy"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_easy"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_normal"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_hard"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_veryhard"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_epic"].id] = { distance = 500, chance = 0.001 },
 		
 	},
 	COWARD = { -- Run away from target after getting hit by enemy -- This is for fast light units
@@ -90,6 +99,13 @@ chickenBehaviours = {
 		[UnitDefNames["chickendroplet"].id] = { distance = 500, chance = 1 },
 		-- T4
 		[UnitDefNames["chickeneurypterid"].id] = { distance = 500, chance = 1 },
+
+		[UnitDefNames["chickenboss_veryeasy"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_easy"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_normal"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_hard"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_veryhard"].id] = { distance = 500, chance = 0.001 },
+		[UnitDefNames["chickenboss_epic"].id] = { distance = 500, chance = 0.001 },
 
 	},
 	BERSERK = { -- Run towards target after getting hit by enemy or after hitting the target-- This is for heavy slow units
@@ -114,9 +130,20 @@ chickenBehaviours = {
 		[UnitDefNames["lozsilverback"].id] = { distance = 3000, chance = 0.01 },
 		[UnitDefNames["fedjuggernaut"].id] = { distance = 3000, chance = 1 },
 		[UnitDefNames["chickenanarchid"].id] = { distance = 3000, chance = 1 },
+
+		[UnitDefNames["chickenboss_veryeasy"].id] = { distance = 2000, chance = 0.001 },
+		[UnitDefNames["chickenboss_easy"].id] = { distance = 2000, chance = 0.001 },
+		[UnitDefNames["chickenboss_normal"].id] = { distance = 2000, chance = 0.001 },
+		[UnitDefNames["chickenboss_hard"].id] = { distance = 2000, chance = 0.001 },
+		[UnitDefNames["chickenboss_veryhard"].id] = { distance = 2000, chance = 0.001 },
+		[UnitDefNames["chickenboss_epic"].id] = { distance = 2000, chance = 0.001 },
 	},
 	HEALER = { -- Getting long max lifetime and always use Fight command. These units spawn as healers from burrows and queen
 		[UnitDefNames["lozflea"].id] = true,
+		[UnitDefNames["chickenhealer_mk1"].id] = true,
+		[UnitDefNames["chickenhealer_mk2"].id] = true,
+		[UnitDefNames["chickenhealer_mk3"].id] = true,
+		[UnitDefNames["chickenhealer_mk4"].id] = true,
 	},
 	ARTILLERY = { -- Long lifetime and no regrouping, always uses Fight command to keep distance
 		[UnitDefNames["fedavalanche"].id] = true,
@@ -132,7 +159,7 @@ local optionValues = {
 
 	[difficulties.veryeasy] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60, -- Time between Waves in seconds
 		burrowSpawnRate   = 150, -- Time inbetween burrow spawns in seconds
 		turretSpawnRate   = 360, -- Time inbetween turret spawns in seconds
@@ -145,13 +172,13 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10, -- Number of ai units spawned in the beginning stages of the game per wave
 		maxChickens		  = 20, -- Number of ai units spawned in the end stages of the game per wave
-		queenName         = 'chickensbeacon',
+		queenName         = 'chickenboss_veryeasy',
 		queenResistanceMult   = 1.5, -- Multipler for how quickly the queen will gain resistances for each weapon
 	},
 
 	[difficulties.easy] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 120,
 		turretSpawnRate   = 300,
@@ -164,12 +191,12 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 25,
-		queenName         = 'chickensbeacon',
+		queenName         = 'chickenboss_easy',
 		queenResistanceMult   = 1.75,
 	},
 	[difficulties.normal] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 90,
 		turretSpawnRate   = 240,
@@ -182,12 +209,12 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 30,
-		queenName         = 'chickensbeacon',
+		queenName         = 'chickenboss_normal',
 		queenResistanceMult   = 2,
 	},
 	[difficulties.hard] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 60,
 		turretSpawnRate   = 180,
@@ -200,12 +227,12 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 35,
-		queenName         = 'chickensbeacon',
+		queenName         = 'chickenboss_hard',
 		queenResistanceMult   = 2.5,
 	},
 	[difficulties.veryhard] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 40,
 		turretSpawnRate   = 120,
@@ -218,12 +245,12 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 40,
-		queenName         = 'chickensbeacon',
+		queenName         = 'chickenboss_veryhard',
 		queenResistanceMult   = 3,
 	},
 	[difficulties.epic] = {
 		gracePeriod       = 6 * Spring.GetModOptions().chicken_graceperiodmult * 60,
-		queenTime      	  = 20 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
+		queenTime      	  = 60 * Spring.GetModOptions().chicken_queentimemult * 60, -- time at which the queen appears, frames
 		chickenSpawnRate  = 60,
 		burrowSpawnRate   = 40,
 		turretSpawnRate   = 120,
@@ -236,7 +263,7 @@ local optionValues = {
 		chickenPerPlayerMultiplier = 1, -- This modifies the minimum and maximum number of chickens that will spawn for each player on the map
 		minChickens		  = 10,
 		maxChickens		  = 50,
-		queenName         = 'chickensbeacon',
+		queenName         = 'chickenboss_epic',
 		queenResistanceMult   = 3,
 	},
 }
@@ -320,7 +347,7 @@ local chickenSquadUnitTable = {
 	},
 	t4support = {
 		"chickeneurypterid",
-		--some T3 for balance
+		-- some T3 for balance
 		"lozprotector",
 		"feddeleter",
 	},
@@ -343,41 +370,40 @@ local chickenSquadUnitTable = {
 		"fedfalcon",
 		"fedeagle",
 	},
-	t4air = { -- no T4 air in the game :shrug:
+	t4air = {
+		"chickenvulture",
+		-- some T3 for balance
 		"lozlocust",
 		"loztitan",
 		"fedfalcon",
 		"fedeagle",
-		"chickenvulture",
 	},
 
 	t1healer = {
-		"lozflea",
+		"chickenhealer_mk1",
 	},
 	t2healer = {
-		"lozflea",
+		"chickenhealer_mk2",
 	},
 	t3healer = {
-		"lozflea",
+		"chickenhealer_mk3",
 	},
 	t4healer = {
-		"lozflea",
+		"chickenhealer_mk4",
 	},
 }
 
-local miniBosses = { -- Units that spawn alongside queen
-	"fedstriker",
-}
+local miniBosses = chickenSquadUnitTable.t4assault -- Units that spawn alongside queen
 
 local chickenMinions = { -- Units spawning other units
 	-- Artillery spawning here is a bit too strong and makes the battle somewhat unapproachable
-	["chickensbeacon"] = {
-		"fedstorm",
-		"lozroach",
-		"lozreaper",
-		"fedbear",
-		"fedcobra",
-	}
+	["chickenboss_veryeasy"] 	= chickenSquadUnitTable.t1assault,
+	["chickenboss_easy"] 		= chickenSquadUnitTable.t1assault,
+	["chickenboss_normal"] 		= chickenSquadUnitTable.t2assault,
+	["chickenboss_hard"] 		= chickenSquadUnitTable.t2assault,
+	["chickenboss_veryhard"] 	= chickenSquadUnitTable.t2assault,
+	["chickenboss_epic"] 		= chickenSquadUnitTable.t3assault,
+	["chickensbeacon"] 			= {"lozflea",}
 }
 
 ------------------
@@ -388,16 +414,16 @@ local chickenMinions = { -- Units spawning other units
 for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 80 then
+		if anger < 30 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "3 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 			end
-		elseif anger < 175 then
+		elseif anger < 60 then
 			for i = 1,10 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
-		elseif anger < 300 then
+		elseif anger < 90 then
 			for i = 1,5 do
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "basic", minAnger = anger, units = { "10 " .. cst.t1support[math.random(1,#cst.t1support)] } })
@@ -430,13 +456,13 @@ for anger = 0,1000 do
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 			end
-		elseif anger < 80 then
+		elseif anger < 30 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 " .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "5 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "5 " .. cst.t1support[math.random(1,#cst.t1support)] } })
 			end
-		elseif anger < 175 then
+		elseif anger < 60 then
 			for i = 1,10 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "20 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "10 "  .. cst.t1assault[math.random(1,#cst.t1assault)], "10 " .. cst.t1assault[math.random(1,#cst.t1assault)] } })
@@ -446,7 +472,7 @@ for anger = 0,1000 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "2 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "2 " .. cst.t2support[math.random(1,#cst.t2support)] } })
 			end
-		elseif anger < 300 then
+		elseif anger < 90 then
 			for i = 1,5 do
 				addNewSquad({ type = "special", minAnger = anger, units = { "8 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
 				addNewSquad({ type = "special", minAnger = anger, units = { "4 "  .. cst.t2assault[math.random(1,#cst.t2assault)], "4 " .. cst.t2assault[math.random(1,#cst.t2assault)] } })
@@ -479,17 +505,17 @@ local airStartAnger = 15 -- needed for air waves to work correctly.
 for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 80 then
+		if anger < 30 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 			end
-		elseif anger < 175 then
+		elseif anger < 60 then
 			for i = 1,10 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 
 				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 			end
-		elseif anger < 300 then
+		elseif anger < 90 then
 			for i = 1,5 do
 				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 
@@ -508,17 +534,17 @@ end
 for anger = 0,1000 do
 	local cst = chickenSquadUnitTable
 	if anger%5 == 0 then -- only add squads every 5 anger
-		if anger < 80 then
+		if anger < 30 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 			end
-		elseif anger < 175 then
+		elseif anger < 60 then
 			for i = 1,10 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 			end
-		elseif anger < 300 then
+		elseif anger < 90 then
 			for i = 1,5 do
 				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 
@@ -602,8 +628,8 @@ local useWaveMsg = true -- Show dropdown message whenever new wave is spawning
 local spawnSquare = 90 -- size of the chicken spawn square centered on the burrow
 local spawnSquareIncrement = 2 -- square size increase for each unit spawned
 local minBaseDistance = 256 -- Minimum distance of new burrows from players and other burrows
-local burrowTurretSpawnRadius = 48
-local bossFightWaveSizeScale = 100 -- Percentage
+local burrowTurretSpawnRadius = 64
+local bossFightWaveSizeScale = 50 -- Percentage
 local defaultChickenFirestate = 2 -- 0 - Hold Fire | 1 - Return Fire | 2 - Fire at Will | 3 - Fire at everything
 
 local config = { -- Don't touch this! ---------------------------------------------------------------------------------------------------------------------------------------------

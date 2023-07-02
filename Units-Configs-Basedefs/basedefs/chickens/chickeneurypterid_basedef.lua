@@ -113,7 +113,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                     = "Nuclear Plasma Cannon",
 		range                    = 1600,
-		reloadtime               = 15,
+		reloadtime               = 1.5,
 		size					 = 16,
 		weaponType		         = "Cannon",
 		soundHit                 = "deathsounds/nuke/nuke1",
@@ -129,7 +129,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.1, -- Use this sparingly
 		}, 
 		damage                   = {
-			default              = 15000,
+			default              = 1500,
 		},
 	},
 }

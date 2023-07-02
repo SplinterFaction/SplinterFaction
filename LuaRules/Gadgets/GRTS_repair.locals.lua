@@ -42,6 +42,10 @@ local repairUnits= {
 	[UnitDefNames.healstation_ai.id] = {radius=750,strength=10.0},
 	[UnitDefNames.fedengineer_up1_ai.id] = {radius=750,strength=10.0},
 	[UnitDefNames.lozengineer_up1_ai.id] = {radius=750,strength=10.0},
+	[UnitDefNames.chickenhealer_mk1.id] = {radius=250,strength=5.0},
+	[UnitDefNames.chickenhealer_mk2.id] = {radius=350,strength=10.0},
+	[UnitDefNames.chickenhealer_mk3.id] = {radius=450,strength=15.0},
+	[UnitDefNames.chickenhealer_mk4.id] = {radius=550,strength=20.0},
 	-- [UnitDefNames.zarm.id] = {radius=1000,strength=10.0},
 }
 

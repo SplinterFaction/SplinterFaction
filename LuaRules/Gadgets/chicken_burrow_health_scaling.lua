@@ -10,7 +10,7 @@ function gadget:GetInfo()
 	}
 end
 
-local burrowName = "healstation_ai"
+local burrowName = "chickensbeacon"
 local aliveBurrows = {}
 
 if gadgetHandler:IsSyncedCode() then

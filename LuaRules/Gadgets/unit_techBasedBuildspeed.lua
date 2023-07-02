@@ -22,15 +22,17 @@ local nominalBuildSpeeds = {}
 local multipliers = {}
 for unitDefID, unitDef in pairs(UnitDefs) do
 	local role = unitDef.customParams.unitrole
-	if role == "Factory" then
-		nominalBuildSpeeds[unitDefID] = unitDef.buildSpeed
-		multipliers[unitDefID] = multipliersForFactories
-	elseif role == "Builder" then
-		nominalBuildSpeeds[unitDefID] = unitDef.buildSpeed
-		multipliers[unitDefID] = multipliersForRegularBuilders
-	elseif role == "Commander" then
-		nominalBuildSpeeds[unitDefID] = unitDef.buildSpeed
-		multipliers[unitDefID] = multipliersForCommanders
+	if not string.find(unitDef.name, "chicken") then
+		if role == "Factory" then
+			nominalBuildSpeeds[unitDefID] = unitDef.buildSpeed
+			multipliers[unitDefID] = multipliersForFactories
+		elseif role == "Builder" then
+			nominalBuildSpeeds[unitDefID] = unitDef.buildSpeed
+			multipliers[unitDefID] = multipliersForRegularBuilders
+		elseif role == "Commander" then
+			nominalBuildSpeeds[unitDefID] = unitDef.buildSpeed
+			multipliers[unitDefID] = multipliersForCommanders
+		end
 	end
 end
 
