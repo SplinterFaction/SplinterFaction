@@ -1,0 +1,11 @@
+Natural Reader - Sara
+Goldwave
+echo > Splinterfaction
+Or from scratch:
+echo > 
+Echoes 5
+Delay 0.0100
+Volume 0.00
+Feedback -60.00
+Stereo Yes
+Generate Tail Yes
