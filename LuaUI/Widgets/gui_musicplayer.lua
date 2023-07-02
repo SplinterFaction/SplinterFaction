@@ -478,11 +478,11 @@ function widget:GameFrame(n)
 	end
 
 	if n%30 == 15 then
-		-- if Spring.GetGameRulesParam("BossFightStarted") and Spring.GetGameRulesParam("BossFightStarted") == 1 then
-		-- 	bossHasSpawned = true
-		-- else
-		-- 	bossHasSpawned = false
-		-- end
+		if Spring.GetGameRulesParam("BossFightStarted") and Spring.GetGameRulesParam("BossFightStarted") == 1 then
+			bossHasSpawned = true
+		else
+			bossHasSpawned = false
+		end
 		if deviceLostSafetyCheck >= 3 then
 			return
 		end

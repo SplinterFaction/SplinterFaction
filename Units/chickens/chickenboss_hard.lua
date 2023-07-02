@@ -7,7 +7,7 @@ unitName = "chickenboss_hard"
 humanName = [[Corrupted Anarchid (Boss)]]
 
 objectName = "fedanarchid_big.s3o"
-script = "fedanarchid.cob"
+script = "chickenanarchid.cob"
 
 hitPoints = 175000
 

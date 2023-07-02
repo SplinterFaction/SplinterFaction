@@ -38,7 +38,7 @@ local lootboxList = {
 }
 
 local spawnerList = {
-    [UnitDefNames["healstation_ai"].id] = true,
+    [UnitDefNames["chickensbeacon"].id] = true,
 }
 
 local teams = Spring.GetTeamList()

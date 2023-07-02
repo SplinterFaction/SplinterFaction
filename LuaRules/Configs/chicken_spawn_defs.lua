@@ -86,19 +86,23 @@ chickenBehaviours = {
 		[UnitDefNames["lozscorpion"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["fedcrasher"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["fedthud"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["chickenhealer_mk1"].id] = { distance = 500, chance = 1 },
 		-- T2
 		[UnitDefNames["lozluger"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozpulverizer"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["fedcobra"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["fedavalanche"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["fedphalanx"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["chickenhealer_mk2"].id] = { distance = 500, chance = 1 },
 		-- T3
 		[UnitDefNames["lozemperorscorpion"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["lozprotector"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["feddeleter"].id] = { distance = 500, chance = 1 },
 		[UnitDefNames["chickendroplet"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["chickenhealer_mk3"].id] = { distance = 500, chance = 1 },
 		-- T4
 		[UnitDefNames["chickeneurypterid"].id] = { distance = 500, chance = 1 },
+		[UnitDefNames["chickenhealer_mk4"].id] = { distance = 500, chance = 1 },
 
 		[UnitDefNames["chickenboss_veryeasy"].id] = { distance = 500, chance = 0.001 },
 		[UnitDefNames["chickenboss_easy"].id] = { distance = 500, chance = 0.001 },
@@ -106,6 +110,8 @@ chickenBehaviours = {
 		[UnitDefNames["chickenboss_hard"].id] = { distance = 500, chance = 0.001 },
 		[UnitDefNames["chickenboss_veryhard"].id] = { distance = 500, chance = 0.001 },
 		[UnitDefNames["chickenboss_epic"].id] = { distance = 500, chance = 0.001 },
+
+
 
 	},
 	BERSERK = { -- Run towards target after getting hit by enemy or after hitting the target-- This is for heavy slow units
@@ -282,8 +288,8 @@ local function addNewSquad(squadParams) -- params: {type = "basic", minAnger = 0
 	if squadParams then -- Just in case
 		if not squadParams.units then return end
 		if not squadParams.minAnger then squadParams.minAnger = 0 end
-		if not squadParams.maxAnger then squadParams.maxAnger = squadParams.minAnger + 100 end -- Eliminate squads 50% after they're introduced by default, can be overwritten
-		if squadParams.maxAnger >= 100 then squadParams.maxAnger = 1000 end -- basically infinite
+		if not squadParams.maxAnger then squadParams.maxAnger = squadParams.minAnger + 1000 end -- Eliminate squads 50% after they're introduced by default, can be overwritten
+		if squadParams.maxAnger >= 1000 then squadParams.maxAnger = 1000 end -- basically infinite
 		if not squadParams.weight then squadParams.weight = 1 end
 
 		for _ = 1,squadParams.weight do
@@ -393,7 +399,12 @@ local chickenSquadUnitTable = {
 	},
 }
 
-local miniBosses = chickenSquadUnitTable.t4assault -- Units that spawn alongside queen
+local miniBosses = {} -- Units that spawn alongside queen
+table.append(miniBosses, chickenSquadUnitTable.t3assault)
+table.append(miniBosses, chickenSquadUnitTable.t3support)
+table.append(miniBosses, chickenSquadUnitTable.t4assault)
+table.append(miniBosses, chickenSquadUnitTable.t4support)
+
 
 local chickenMinions = { -- Units spawning other units
 	-- Artillery spawning here is a bit too strong and makes the battle somewhat unapproachable
@@ -507,25 +518,25 @@ for anger = 0,1000 do
 	if anger%5 == 0 then -- only add squads every 5 anger
 		if anger < 30 then
 			for i = 1,10 do
-				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+				addNewSquad({ type = "air", minAnger = anger, units = { "1 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 			end
 		elseif anger < 60 then
 			for i = 1,10 do
-				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t1air[math.random(1,#cst.t1air)] } })
+				addNewSquad({ type = "air", minAnger = anger, units = { "2 " .. cst.t1air[math.random(1,#cst.t1air)] } })
 
-				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t2air[math.random(1,#cst.t2air)] } })
+				addNewSquad({ type = "air", minAnger = anger, units = { "1 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 			end
 		elseif anger < 90 then
 			for i = 1,5 do
-				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t2air[math.random(1,#cst.t2air)] } })
+				addNewSquad({ type = "air", minAnger = anger, units = { "2 " .. cst.t2air[math.random(1,#cst.t2air)] } })
 
-				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t3air[math.random(1,#cst.t3air)] } })
+				addNewSquad({ type = "air", minAnger = anger, units = { "1 " .. cst.t3air[math.random(1,#cst.t3air)] } })
 			end
 		else
 			for i = 1,2 do
-				addNewSquad({ type = "air", minAnger = anger, units = { "6 " .. cst.t3air[math.random(1,#cst.t3air)] } })
+				addNewSquad({ type = "air", minAnger = anger, units = { "2 " .. cst.t3air[math.random(1,#cst.t3air)] } })
 
-				addNewSquad({ type = "air", minAnger = anger, units = { "3 " .. cst.t4air[math.random(1,#cst.t4air)] } })
+				addNewSquad({ type = "air", minAnger = anger, units = { "1 " .. cst.t4air[math.random(1,#cst.t4air)] } })
 			end
 		end
 	end
@@ -536,23 +547,23 @@ for anger = 0,1000 do
 	if anger%5 == 0 then -- only add squads every 5 anger
 		if anger < 30 then
 			for i = 1,10 do
-				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
+				addNewSquad({ type = "healer", minAnger = anger, maxAnger = anger+10, units = { "1 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 			end
 		elseif anger < 60 then
 			for i = 1,10 do
-				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
+				addNewSquad({ type = "healer", minAnger = anger, maxAnger = anger+10, units = { "2 " .. cst.t1healer[math.random(1,#cst.t1healer)] } })
 
-				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
+				addNewSquad({ type = "healer", minAnger = anger, maxAnger = anger+10, units = { "1 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 			end
 		elseif anger < 90 then
 			for i = 1,5 do
-				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
+				addNewSquad({ type = "healer", minAnger = anger, maxAnger = anger+10, units = { "2 " .. cst.t2healer[math.random(1,#cst.t2healer)] } })
 
-				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
+				addNewSquad({ type = "healer", minAnger = anger, maxAnger = anger+10, units = { "1 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
 			end
 		else
 			for i = 1,2 do
-				addNewSquad({ type = "healer", minAnger = anger, units = { "2 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
+				addNewSquad({ type = "healer", minAnger = anger, maxAnger = anger+10, units = { "2 " .. cst.t3healer[math.random(1,#cst.t3healer)] } })
 
 				addNewSquad({ type = "healer", minAnger = anger, units = { "1 " .. cst.t4healer[math.random(1,#cst.t4healer)] } })
 			end
