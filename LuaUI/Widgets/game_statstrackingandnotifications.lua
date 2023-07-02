@@ -15,9 +15,23 @@ local killCount = 0
 local myTeamID = Spring.GetMyTeamID
 local myAllyTeamID = Spring.GetMyAllyTeamID
 local unitAllyTeamID = Spring.GetUnitAllyTeam
-local unitDefs=UnitDefs[Spring.GetUnitDefID(unitID)]
 local notificationTimeout = 10
+local allyCommHPNotificationTimeout = 60
+local allyT4HPNotificationTimeout = 60
+local notificationQueue = {}
+local dt = 1 -- Timeout Decrement
 
+--[[
+Description of how to enqueue stuff, because I get loopy and forget how to do things...
+
+Whenever you want to display a notification, instead of directly echoing the message, you will add it to the queue:
+
+local function enqueueNotification(message)
+  table.insert(notificationQueue, { message = message })
+end
+
+With this queuing system in place, multiple notifications will be added to the queue instead of being directly enacted, and they will be played one after another as the `notificationTimeout` reaches 0.
+]]--
 
 function widget:Initialize()
 	---- See if the kills file exists
@@ -69,60 +83,86 @@ end
 
 
 function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
+	-- Spring.Echo("A unit is taking damage")
+	-- Spring.Echo("The Unit's Team is " .. unitTeam)
+	local unitHP,unitMaxHP = Spring.GetUnitHealth(unitID)
 	if unitTeam ~= myTeamID() then
 		-- Ally high value units under attack
-		if unitDefs.customParams.unittype == "Commander" then
-			if notificationTimeout <= 0 then
-				Spring.Echo("An Allied Commander is Taking Damage")
+		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
+			if allyCommHPNotificationTimeout <= 0 then
+				if unitHP <= unitMaxHP * 0.5 then
+					table.insert(notificationQueue, { message = "An Allied Commander has taken heavy damage" })
+				end
 			end
 		end
-		if unitDefs.customParams.requiretech == "tech4" and unitDefs.customParams.unittype ~= "Commander" then
-			if notificationTimeout <= 0 then
-				Spring.Echo("An Allied Tier 4 Unit is Taking Damage")
+		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
+			if allyT4HPNotificationTimeout <= 0 then
+				if unitHP <= unitMaxHP * 0.5 then
+					table.insert(notificationQueue, { message = "An Allied Tier 4 unit has taken heavy damage" })
+				end
 			end
 		end
 	end
 
 	if unitTeam == myTeamID() then
-		if unitDefs.customParams.requiretech == "tech4" and unitDefs.customParams.unittype ~= "Commander" then
-			if notificationTimeout <= 0 then
-				Spring.Echo("My Tier 4 Unit is Taking Damage")
-			end
+		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
+			-- Spring.Echo("My Commander is Taking Damage")
+		end
+		if UnitDefs[unitDefID].customParams.requiretech == "tech3" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
+			table.insert(notificationQueue, { message = "My Tier 3 Unit is Taking Damage" })
+			-- Spring.Echo("I'm adding t3 unit taking damage to the queue")
+		end
+		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
+				-- Spring.Echo("My Tier 4 Unit is Taking Damage")
 		end
 	end
 end
 
-function widget:UnitEnteredLos(unitID, unitTeam, allyTeam, unitDefID)
+function widget:UnitEnteredLos(unitID, unitTeam, allyTeam)
+	local unitDefID = Spring.GetUnitDefID(unitID)
 	if allyTeam ~= myAllyTeamID then
-		if unitDefs.customParams.unittype == "Commander" then
-			if notificationTimeout <= 0 then
-				Spring.Echo("An Enemy Commander has been spotted")
-			end
+		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
+			-- Spring.Echo("An Enemy Commander has been spotted")
 		end
-		if unitDefs.customParams.requiretech == "tech4" and unitDefs.customParams.unittype ~= "Commander" then
-			if notificationTimeout <= 0 then
-				Spring.Echo("An Enemy Tier 4 Unit has been spotted")
-			end
+		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
+			-- Spring.Echo("An Enemy Tier 4 Unit has been spotted")
 		end
-		if unitDefs.name == "feddeleter" then
-			if notificationTimeout <= 0 then
-				Spring.Echo("An Enemy Tier 3 Cloaking Mech has been spotted")
-			end
+		if UnitDefs[unitDefID].name == "feddeleter" then
+			-- Spring.Echo("An Enemy Tier 3 Cloaking Mech has been spotted")
 		end
-		if unitDefs.name == "lozprotector" then
-			if notificationTimeout <= 0 then
-				Spring.Echo("An Enemy Tier 3 Shielding Tank has been spotted")
-			end
+		if UnitDefs[unitDefID].name == "lozprotector" then
+			-- Spring.Echo("An Enemy Tier 3 Shielding Tank has been spotted")
 		end
 	end
 end
 
+local function updateNotifications(dt)
+	-- Decrement the timeout
+	notificationTimeout = notificationTimeout - dt
+	allyCommHPNotificationTimeout = allyCommHPNotificationTimeout - dt
+	allyT4HPNotificationTimeout = allyT4HPNotificationTimeout - dt
 
-function widget:GameFrame(n)
-	if n%30 == 1 then
-		notificationTimeout = notificationTimeout - 1
+	-- Spring.Echo("notificationTimeout is " .. notificationTimeout)
 
+	-- Check if the timeout has reached 0
+	if notificationTimeout <= 0 then
+		-- Check if there are notifications in the queue
+		if #notificationQueue > 0 then
+			-- Dequeue the next notification
+			local nextNotification = table.remove(notificationQueue, 1)
 
+			-- Echo the notification message
+			Spring.Echo(nextNotification.message)
 
+			-- Reset the timeout
+			notificationTimeout = 10
+		end
 	end
 end
+
+function widget:GameFrame(frame)
+	if frame%30 == 5 then
+		updateNotifications(dt)
+	end
+end
+
