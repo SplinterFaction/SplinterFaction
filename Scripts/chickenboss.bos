@@ -1,7 +1,7 @@
 
 // One ninth of the full cycle duration, in millisecond
 // The larger this value the slower the walk animation
-#define WALK_PERIOD 300
+#define WALK_PERIOD 500
 
 
 piece	base,turret1,barrel1,firepoint1,turret2,barrel2,firepoint2,turret3,barrel3,firepoint3,
