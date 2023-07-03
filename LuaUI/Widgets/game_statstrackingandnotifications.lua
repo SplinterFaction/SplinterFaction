@@ -134,7 +134,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 			if allyCommHPNotificationTimeout <= 0 then
 				if unitHP <= unitMaxHP * 0.5 then
 					table.insert(notificationQueue, { message = "allycomWarning" })
-					Spring.MarkerAddPoint(x,y,z,_,true)
+					Spring.MarkerAddPoint(x,y,z,"An allied Commander has taken critical damage!",true)
 					Spring.MarkerErasePosition(x,y,z)
 				end
 				allyCommHPNotificationTimeout = 60
@@ -145,7 +145,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				if allyJuggernautNotificationTimeout <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
 						table.insert(notificationQueue, { message = "allyjuggernautWarning" })
-						Spring.MarkerAddPoint(x,y,z,_,true)
+						Spring.MarkerAddPoint(x,y,z,"An allied Juggernaut has sustained heavy damage!",true)
 						Spring.MarkerErasePosition(x,y,z)
 					end
 					allyJuggernautNotificationTimeout = 60
@@ -155,7 +155,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				if allySilverbackNotificationTimeout <= 0 then
 					if unitHP <= unitMaxHP * 0.75 then
 						table.insert(notificationQueue, { message = "allysilverbackWarning" })
-						Spring.MarkerAddPoint(x,y,z,_,true)
+						Spring.MarkerAddPoint(x,y,z,"An allied Silverback has sustained heavy damage!",true)
 						Spring.MarkerErasePosition(x,y,z)
 					end
 					allySilverbackNotificationTimeout = 60
@@ -169,11 +169,11 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 			if myCommHPNotificationTimeout <= 0 then
 				if unitHP <= unitMaxHP * 0.25 then
 					table.insert(notificationQueue, { message = "mycomCriticalDamageWarning" })
-					Spring.MarkerAddPoint(x,y,z,_,true)
+					Spring.MarkerAddPoint(x,y,z,"Our Commander has sustained critical damage!",true)
 					Spring.MarkerErasePosition(x,y,z)
 				elseif unitHP <= unitMaxHP * 0.5 then
 					table.insert(notificationQueue, { message = "mycomHeavyDamageWarning" })
-					Spring.MarkerAddPoint(x,y,z,_,true)
+					Spring.MarkerAddPoint(x,y,z,"Our Commander has sustained heavy damage!",true)
 					Spring.MarkerErasePosition(x,y,z)
 				end
 				myCommHPNotificationTimeout = 30
@@ -184,7 +184,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				if goliathNotificationTimeout <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
 						table.insert(notificationQueue, { message = "mygoliathWarning" })
-						Spring.MarkerAddPoint(x,y,z,_,true)
+						Spring.MarkerAddPoint(x,y,z,"Our Goliath has sustained heavy damage!",true)
 						Spring.MarkerErasePosition(x,y,z)
 					end
 					goliathNotificationTimeout = 60
@@ -194,7 +194,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				if mammothNotificationTimeout <= 0 then
 					if unitHP <= unitMaxHP * 0.75 then
 						table.insert(notificationQueue, { message = "mymammothWarning" })
-						Spring.MarkerAddPoint(x,y,z,_,true)
+						Spring.MarkerAddPoint(x,y,z,"Our Mammoth has sustained heavy damage!",true)
 						Spring.MarkerErasePosition(x,y,z)
 					end
 					mammothNotificationTimeout = 60
@@ -206,7 +206,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				if juggernautNotificationTimeout <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
 						table.insert(notificationQueue, { message = "myjuggernautWarning" })
-						Spring.MarkerAddPoint(x,y,z,_,true)
+						Spring.MarkerAddPoint(x,y,z,"Our Juggernaut has sustained heavy damage!",true)
 						Spring.MarkerErasePosition(x,y,z)
 					end
 					juggernautNotificationTimeout = 60
@@ -216,7 +216,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				if silverbackNotificationTimeout <= 0 then
 					if unitHP <= unitMaxHP * 0.75 then
 						table.insert(notificationQueue, { message = "mysilverbackWarning" })
-						Spring.MarkerAddPoint(x,y,z,_,true)
+						Spring.MarkerAddPoint(x,y,z,"Our Silverback has sustained heavy damage!",true)
 						Spring.MarkerErasePosition(x,y,z)
 					end
 					silverbackNotificationTimeout = 60
@@ -226,7 +226,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 		if UnitDefs[unitDefID].customParams.metal_extractor then
 			if myMexNotificationTimeout <= 0 then
 					table.insert(notificationQueue, { message = "myMexDamageWarning" })
-					Spring.MarkerAddPoint(x,y,z,_,true)
+					Spring.MarkerAddPoint(x,y,z,"Our Metal Extractor is under attack!",true)
 					Spring.MarkerErasePosition(x,y,z)
 				myMexNotificationTimeout = 15
 			end
@@ -237,12 +237,16 @@ end
 function widget:UnitEnteredLos(unitID, unitTeam, allyTeam)
 	local unitDefID = Spring.GetUnitDefID(unitID)
 	local x,y,z = Spring.GetUnitPosition(unitID)
-	if allyTeam ~= myAllyTeamID then
-		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
+	Spring.Echo(1)
+	if unitTeam ~= myTeamID() then
+		Spring.Echo(2)
+		if UnitDefs[unitDefID].customParams.unitrole == "Commander" then
+			Spring.Echo(3)
 			if enemyCommanderSpottedTimeout <= 0 then
+				Spring.Echo(4)
 				table.insert(notificationQueue, { message = "enemycommanderSpotted" })
 				enemyCommanderSpottedTimeout = 60
-				Spring.MarkerAddPoint(x,y,z,_,true)
+				Spring.MarkerAddPoint(x,y,z,"An enemy Commander has been spotted",true)
 				Spring.MarkerErasePosition(x,y,z)
 			end
 		end
@@ -250,25 +254,31 @@ function widget:UnitEnteredLos(unitID, unitTeam, allyTeam)
 			if enemyT2Notification == 0 then
 				table.insert(notificationQueue, { message = "enemyt2" })
 				enemyT2Notification = 1
+				Spring.MarkerAddPoint(x,y,z,"Our enemies have achieved Tier 2!",true)
+				Spring.MarkerErasePosition(x,y,z)
 			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech3" then
 			if enemyT3Notification == 0 then
 				table.insert(notificationQueue, { message = "enemyt3" })
 				enemyT3Notification = 1
+				Spring.MarkerAddPoint(x,y,z,"Our enemies have achieved Tier 3!",true)
+				Spring.MarkerErasePosition(x,y,z)
 			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech4" then
 			if enemyT4Notification == 0 then
 				table.insert(notificationQueue, { message = "enemyt4" })
 				enemyT4Notification = 1
+				Spring.MarkerAddPoint(x,y,z,"Our enemies have achieved Tier 4!",true)
+				Spring.MarkerErasePosition(x,y,z)
 			end
 		end
 		if UnitDefs[unitDefID].name == "feddeleter" then
 			if enemyCloakingMechSpottedTimeout <= 0 then
 				table.insert(notificationQueue, { message = "enemyt3CloakingMech" })
 				enemyCloakingMechSpottedTimeout = 60
-				Spring.MarkerAddPoint(x,y,z,_,true)
+				Spring.MarkerAddPoint(x,y,z,"An enemy Tier 3 Cloaking Mech has been spotted!",true)
 				Spring.MarkerErasePosition(x,y,z)
 			end
 		end
@@ -276,29 +286,29 @@ function widget:UnitEnteredLos(unitID, unitTeam, allyTeam)
 			if enemyShieldingTankSpottedTimeout <= 0 then
 				table.insert(notificationQueue, { message = "enemyt3ShieldingTank" })
 				enemyShieldingTankSpottedTimeout = 60
-				Spring.MarkerAddPoint(x,y,z,_,true)
+				Spring.MarkerAddPoint(x,y,z,"An enemy Tier 3 Shielding Tank has been spotted!",true)
 				Spring.MarkerErasePosition(x,y,z)
 			end
 		end
 	end
 	if UnitDefs[unitDefID].name == "lootbox_t1" then
 		table.insert(notificationQueue, { message = "lootboxdetectedt1" })
-		Spring.MarkerAddPoint(x,y,z,_,true)
+		Spring.MarkerAddPoint(x,y,z,"Tier 1 Lootbox Detected!",true)
 		Spring.MarkerErasePosition(x,y,z)
 	end
 	if UnitDefs[unitDefID].name == "lootbox_t2" then
 		table.insert(notificationQueue, { message = "lootboxdetectedt2" })
-		Spring.MarkerAddPoint(x,y,z,_,true)
+		Spring.MarkerAddPoint(x,y,z,"Tier 2 Lootbox Detected!",true)
 		Spring.MarkerErasePosition(x,y,z)
 	end
 	if UnitDefs[unitDefID].name == "lootbox_t3" then
 		table.insert(notificationQueue, { message = "lootboxdetectedt3" })
-		Spring.MarkerAddPoint(x,y,z,_,true)
+		Spring.MarkerAddPoint(x,y,z,"Tier 3 Lootbox Detected!",true)
 		Spring.MarkerErasePosition(x,y,z)
 	end
 	if UnitDefs[unitDefID].name == "lootbox_t4" then
 		table.insert(notificationQueue, { message = "lootboxdetectedt4" })
-		Spring.MarkerAddPoint(x,y,z,_,true)
+		Spring.MarkerAddPoint(x,y,z,"Tier 4 Lootbox Detected!",true)
 		Spring.MarkerErasePosition(x,y,z)
 	end
 
@@ -309,24 +319,28 @@ function WG.AddNotification(notificationType)
 		if energyNotificationTimeout <= 0 then
 			table.insert(notificationQueue, { message = "energyWarning" })
 			energyNotificationTimeout = 30
+			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "Build more power plants!")
 		end
 	end
 	if notificationType == "metalWarning" then
 		if metalNotificationTimeout <= 0 then
 			table.insert(notificationQueue, { message = "metalWarning" })
 			metalNotificationTimeout = 30
+			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "You are excessing metal!")
 		end
 	end
 	if notificationType == "supplyWarning" then
 		if supplyNotificationTimeout <= 0 then
 			table.insert(notificationQueue, { message = "supplyWarning" })
 			supplyNotificationTimeout = 30
+			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "Build more supply depots!")
 		end
 	end
 	if notificationType == "morphFinished" then
 		if upgradeNotificationTimeout <= 0 then
 			table.insert(notificationQueue, { message = "upgradecomplete" })
 			upgradeNotificationTimeout = 10
+			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "Unit upgrade complete!")
 		end
 	end
 end
@@ -367,7 +381,7 @@ local function updateNotifications(dt)
 			-- Spring.Echo(nextNotification.message)
 
 			-- Reset the timeout
-			notificationTimeout = 10
+			notificationTimeout = 5
 		end
 	end
 end
