@@ -1592,9 +1592,8 @@ function MorphFinished(unitID)
 
 		if Spring.GetUnitTeam(unitID) == Spring.GetMyTeamID() then
 			if resourcePrompts == 1 then
-				Spring.PlaySoundFile("sounds/ui/evolutionfinished.wav", 1)
+				WG.AddNotification("morphFinished")
 			end
-			Spring.Echo("Your unit(s) have finished Upgrading")
 		end
 	end
 	notificationTimeout = 10

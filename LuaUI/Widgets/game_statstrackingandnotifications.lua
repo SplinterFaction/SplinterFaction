@@ -6,7 +6,7 @@ function widget:GetInfo()
 		date      = "",
 		license   = "",
 		layer     = 0,
-		enabled   = false
+		enabled   = true
 	}
 end
 
@@ -15,9 +15,29 @@ local killCount = 0
 local myTeamID = Spring.GetMyTeamID
 local myAllyTeamID = Spring.GetMyAllyTeamID
 local unitAllyTeamID = Spring.GetUnitAllyTeam
+
 local notificationTimeout = 10
+
 local allyCommHPNotificationTimeout = 60
+local myCommHPNotificationTimeout = 60
 local allyT4HPNotificationTimeout = 60
+local goliathNotificationTimeout = 60
+local mammothNotificationTimeout = 60
+local juggernautNotificationTimeout = 60
+local silverbackNotificationTimeout = 60
+local allyJuggernautNotificationTimeout = 60
+local allySilverbackNotificationTimeout = 60
+local energyNotificationTimeout = 30
+local metalNotificationTimeout = 30
+local supplyNotificationTimeout = 30
+local enemyT2Notification = 0
+local enemyT3Notification = 0
+local enemyT4Notification = 0
+local enemyCommanderSpottedTimeout = 60
+local enemyCloakingMechSpottedTimeout = 60
+local enemyShieldingTankSpottedTimeout = 60
+local upgradeNotificationTimeout = 10
+
 local notificationQueue = {}
 local dt = 1 -- Timeout Decrement
 
@@ -34,6 +54,25 @@ With this queuing system in place, multiple notifications will be added to the q
 ]]--
 
 function widget:Initialize()
+
+	notificationTimeout = 0
+	allyCommHPNotificationTimeout = 0
+	myCommHPNotificationTimeout = 0
+	allyT4HPNotificationTimeout = 0
+	goliathNotificationTimeout = 0
+	mammothNotificationTimeout = 0
+	juggernautNotificationTimeout = 0
+	silverbackNotificationTimeout = 0
+	allyJuggernautNotificationTimeout = 0
+	allySilverbackNotificationTimeout = 0
+	energyNotificationTimeout = 0
+	metalNotificationTimeout = 0
+	supplyNotificationTimeout = 0
+	enemyCommanderSpottedTimeout = 0
+	enemyCloakingMechSpottedTimeout = 0
+	enemyShieldingTankSpottedTimeout = 0
+	upgradeNotificationTimeout = 0
+
 	---- See if the kills file exists
 	--if not VFS.FileExists(killsFile) then
 	--	Spring.Echo("THE KILLS FILE DOES NOT EXIST SO I WILL CREATE IT")
@@ -50,6 +89,9 @@ function widget:Initialize()
 	--	io.close(file)
 	--	killCount = tonumber(content) or 0
 	--end
+
+	widgetHandler:RegisterGlobal("unit_morph_finished", UnitFinishedMorphing)
+
 end
 
 --So apparently, unitdestroyed in widgetspace is only called when one of your own units dies
@@ -91,14 +133,26 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
 			if allyCommHPNotificationTimeout <= 0 then
 				if unitHP <= unitMaxHP * 0.5 then
-					table.insert(notificationQueue, { message = "An Allied Commander has taken heavy damage" })
+					table.insert(notificationQueue, { message = "allycomWarning" })
 				end
+				allyCommHPNotificationTimeout = 60
 			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
-			if allyT4HPNotificationTimeout <= 0 then
-				if unitHP <= unitMaxHP * 0.5 then
-					table.insert(notificationQueue, { message = "An Allied Tier 4 unit has taken heavy damage" })
+			if UnitDefs[unitDefID].name == "fedjuggernaut" then
+				if allyJuggernautNotificationTimeout <= 0 then
+					if unitHP <= unitMaxHP * 0.5 then
+						table.insert(notificationQueue, { message = "allyjuggernautWarning" })
+					end
+					allyJuggernautNotificationTimeout = 60
+				end
+			end
+			if UnitDefs[unitDefID].name == "lozsilverback" then
+				if allySilverbackNotificationTimeout <= 0 then
+					if unitHP <= unitMaxHP * 0.75 then
+						table.insert(notificationQueue, { message = "allysilverbackWarning" })
+					end
+					allySilverbackNotificationTimeout = 60
 				end
 			end
 		end
@@ -106,14 +160,50 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 
 	if unitTeam == myTeamID() then
 		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
-			-- Spring.Echo("My Commander is Taking Damage")
+			if myCommHPNotificationTimeout <= 0 then
+				if unitHP <= unitMaxHP * 0.25 then
+					table.insert(notificationQueue, { message = "mycomCriticalDamageWarning" })
+				elseif unitHP <= unitMaxHP * 0.5 then
+					table.insert(notificationQueue, { message = "mycomHeavyDamageWarning" })
+				end
+				myCommHPNotificationTimeout = 30
+			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech3" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
-			table.insert(notificationQueue, { message = "My Tier 3 Unit is Taking Damage" })
-			-- Spring.Echo("I'm adding t3 unit taking damage to the queue")
+			if UnitDefs[unitDefID].name == "fedgoliath" then
+				if goliathNotificationTimeout <= 0 then
+					if unitHP <= unitMaxHP * 0.5 then
+						table.insert(notificationQueue, { message = "mygoliathWarning" })
+					end
+					goliathNotificationTimeout = 60
+				end
+			end
+			if UnitDefs[unitDefID].name == "lozmammoth" then
+				if mammothNotificationTimeout <= 0 then
+					if unitHP <= unitMaxHP * 0.75 then
+						table.insert(notificationQueue, { message = "mymammothWarning" })
+					end
+					mammothNotificationTimeout = 60
+				end
+			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
-				-- Spring.Echo("My Tier 4 Unit is Taking Damage")
+			if UnitDefs[unitDefID].name == "fedjuggernaut" then
+				if juggernautNotificationTimeout <= 0 then
+					if unitHP <= unitMaxHP * 0.5 then
+						table.insert(notificationQueue, { message = "myjuggernautWarning" })
+					end
+					juggernautNotificationTimeout = 60
+				end
+			end
+			if UnitDefs[unitDefID].name == "lozsilverback" then
+				if silverbackNotificationTimeout <= 0 then
+					if unitHP <= unitMaxHP * 0.75 then
+						table.insert(notificationQueue, { message = "mysilverbackWarning" })
+					end
+					silverbackNotificationTimeout = 60
+				end
+			end
 		end
 	end
 end
@@ -122,16 +212,67 @@ function widget:UnitEnteredLos(unitID, unitTeam, allyTeam)
 	local unitDefID = Spring.GetUnitDefID(unitID)
 	if allyTeam ~= myAllyTeamID then
 		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
-			-- Spring.Echo("An Enemy Commander has been spotted")
+			if enemyCommanderSpottedTimeout <= 0 then
+				table.insert(notificationQueue, { message = "enemycommanderSpotted" })
+				enemyCommanderSpottedTimeout = 60
+			end
 		end
-		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
-			-- Spring.Echo("An Enemy Tier 4 Unit has been spotted")
+		if UnitDefs[unitDefID].customParams.requiretech == "tech2" then
+			if enemyT2Notification == 0 then
+				table.insert(notificationQueue, { message = "enemyt2" })
+				enemyT2Notification = 1
+			end
+		end
+		if UnitDefs[unitDefID].customParams.requiretech == "tech3" then
+			if enemyT3Notification == 0 then
+				table.insert(notificationQueue, { message = "enemyt3" })
+				enemyT3Notification = 1
+			end
+		end
+		if UnitDefs[unitDefID].customParams.requiretech == "tech4" then
+			if enemyT4Notification == 0 then
+				table.insert(notificationQueue, { message = "enemyt4" })
+				enemyT4Notification = 1
+			end
 		end
 		if UnitDefs[unitDefID].name == "feddeleter" then
-			-- Spring.Echo("An Enemy Tier 3 Cloaking Mech has been spotted")
+			if enemyCloakingMechSpottedTimeout <= 0 then
+				table.insert(notificationQueue, { message = "enemyt3CloakingMech" })
+				enemyCloakingMechSpottedTimeout = 60
+			end
 		end
 		if UnitDefs[unitDefID].name == "lozprotector" then
-			-- Spring.Echo("An Enemy Tier 3 Shielding Tank has been spotted")
+			if enemyShieldingTankSpottedTimeout <= 0 then
+				table.insert(notificationQueue, { message = "enemyt3ShieldingTank.wav" })
+				enemyShieldingTankSpottedTimeout = 60
+			end
+		end
+	end
+end
+
+function WG.AddNotification(notificationType)
+	if notificationType == "energyWarning" then
+		if energyNotificationTimeout <= 0 then
+			table.insert(notificationQueue, { message = "energyWarning" })
+			energyNotificationTimeout = 30
+		end
+	end
+	if notificationType == "metalWarning" then
+		if metalNotificationTimeout <= 0 then
+			table.insert(notificationQueue, { message = "metalWarning" })
+			metalNotificationTimeout = 30
+		end
+	end
+	if notificationType == "supplyWarning" then
+		if supplyNotificationTimeout <= 0 then
+			table.insert(notificationQueue, { message = "supplyWarning" })
+			supplyNotificationTimeout = 30
+		end
+	end
+	if notificationType == "morphFinished" then
+		if upgradeNotificationTimeout <= 0 then
+			table.insert(notificationQueue, { message = "upgradecomplete" })
+			upgradeNotificationTimeout = 10
 		end
 	end
 end
@@ -141,6 +282,21 @@ local function updateNotifications(dt)
 	notificationTimeout = notificationTimeout - dt
 	allyCommHPNotificationTimeout = allyCommHPNotificationTimeout - dt
 	allyT4HPNotificationTimeout = allyT4HPNotificationTimeout - dt
+	myCommHPNotificationTimeout = myCommHPNotificationTimeout - dt
+	goliathNotificationTimeout = goliathNotificationTimeout - dt
+	mammothNotificationTimeout = mammothNotificationTimeout - dt
+	juggernautNotificationTimeout = juggernautNotificationTimeout - dt
+	silverbackNotificationTimeout = silverbackNotificationTimeout - dt
+	allyJuggernautNotificationTimeout = allyJuggernautNotificationTimeout - dt
+	allySilverbackNotificationTimeout = allySilverbackNotificationTimeout - dt
+	energyNotificationTimeout = energyNotificationTimeout - dt
+	metalNotificationTimeout = metalNotificationTimeout - dt
+	supplyNotificationTimeout = supplyNotificationTimeout - dt
+	enemyCommanderSpottedTimeout = enemyCommanderSpottedTimeout - dt
+	enemyCloakingMechSpottedTimeout = enemyCloakingMechSpottedTimeout - dt
+	enemyShieldingTankSpottedTimeout = enemyShieldingTankSpottedTimeout - dt
+	upgradeNotificationTimeout = upgradeNotificationTimeout - dt
+
 
 	-- Spring.Echo("notificationTimeout is " .. notificationTimeout)
 
@@ -151,12 +307,23 @@ local function updateNotifications(dt)
 			-- Dequeue the next notification
 			local nextNotification = table.remove(notificationQueue, 1)
 
-			-- Echo the notification message
-			Spring.Echo(nextNotification.message)
+			-- Play the sound file
+			Spring.PlaySoundFile(nextNotification.message, VOLUI)
+			-- Spring.Echo(nextNotification.message)
 
 			-- Reset the timeout
 			notificationTimeout = 10
 		end
+	end
+end
+
+local function purgeNotificationQueue()
+	-- Remove many entries (such as dumping all queued events)
+	local startRecord = 1
+	local endRecord = 100
+	 -- Loop through table indices  1 - 100 and remove them ... If there are more than 3 or 4, we seriously fucked up, but going to 100 just to be sure.
+	for recordsToRemove = endRecord, startRecord, -1 do
+		table.remove(notificationQueue, recordsToRemove)
 	end
 end
 
@@ -166,3 +333,6 @@ function widget:GameFrame(frame)
 	end
 end
 
+function widget:Shutdown()
+	widgetHandler:DeregisterGlobal("unit_morph_finished")
+end

@@ -68,9 +68,9 @@ local VOLUI = 0.015*Spring.GetConfigInt('snd_volui') or 1.0
 
 simplifiedResourceBar = Spring.GetConfigInt("evo_simplifiedresourcebar", 1)
 
-local energyNotificationTimeout = 60
-local metalNotificationTimeout = 60
-local supplyNotificationTimeout = 60
+local energyWarningTimeout = 15
+local supplyWarningTimeout = 15
+local metalWarningTimeout = 15
 
 -- Avoids spamming of income increased notification
 local incomeIncreased = false
@@ -176,10 +176,10 @@ end
 
 function widget:GameFrame(n)
 	if n%30 == 1 then
-		energyNotificationTimeout = energyNotificationTimeout - 1
-		metalNotificationTimeout = metalNotificationTimeout - 1
-		supplyNotificationTimeout = supplyNotificationTimeout - 1
-		
+		energyWarningTimeout = energyWarningTimeout - 1
+		metalWarningTimeout = metalWarningTimeout - 1
+		supplyWarningTimeout = supplyWarningTimeout - 1
+
 		--Spring.Echo("E " .. energyNotificationTimeout)
 		--Spring.Echo("M " .. metalNotificationTimeout)
 		--Spring.Echo("S " .. supplyNotificationTimeout)
@@ -215,40 +215,32 @@ function widget:GameFrame(n)
 			end
 		elseif increment > 0 then
 			if n%30 == 1 then
-				if energyWarning == true then
-					--Spring.Echo("EnergyWarning")
-					if resourcePrompts == 1 then
-						if energyNotificationTimeout <= 0 then
-							if metalNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
-								energyNotificationTimeout = 60
-								Spring.PlaySoundFile("additionalgenerators", VOLUI)
-								Spring.Echo([[You must construct additional energy generators so you can build and upgrade at full speed!]])
-							end
+				-- We don't strictly need the warning timeouts here, but they are here to prevent lua message spam
+				if energyWarningTimeout <= 0 then
+					if energyWarning == true then
+						--Spring.Echo("EnergyWarning")
+						if resourcePrompts == 1 then
+							WG.AddNotification("energyWarning")
 						end
+						energyWarning = 15
 					end
 				end
-				if metalWarning == true then
-					--Spring.Echo("MetalWarning")
-					if resourcePrompts == 1 then
-						if metalNotificationTimeout <= 0 then
-							if energyNotificationTimeout <= 20 and supplyNotificationTimeout <= 20 then
-								metalNotificationTimeout = 60
-								Spring.PlaySoundFile("useyourmetal", VOLUI)
-								Spring.Echo([[You are excessing metal!]])
-							end
+				if metalWarningTimeout <= 0 then
+					if metalWarning == true then
+						--Spring.Echo("MetalWarning")
+						if resourcePrompts == 1 then
+							WG.AddNotification("metalWarning")
 						end
+						metalWarning = 15
 					end
 				end
-				if supplyWarning == true then
-					--Spring.Echo("SupplyWarning")
-					if resourcePrompts == 1 then
-						if supplyNotificationTimeout <= 0 then
-							if energyNotificationTimeout <= 20 and metalNotificationTimeout <= 20 then
-								supplyNotificationTimeout = 60
-								Spring.PlaySoundFile("constructadditionalpylons", VOLUI)
-								Spring.Echo([[You have no more available supply, build supply depots in order to increase the size of your army!]])
-							end
+				if supplyWarningTimeout <= 0 then
+					if supplyWarning == true then
+						--Spring.Echo("SupplyWarning")
+						if resourcePrompts == 1 then
+							WG.AddNotification("supplyWarning")
 						end
+						supplyWarning = 15
 					end
 				end
 			end
