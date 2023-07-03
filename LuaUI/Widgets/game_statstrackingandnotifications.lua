@@ -89,9 +89,6 @@ function widget:Initialize()
 	--	io.close(file)
 	--	killCount = tonumber(content) or 0
 	--end
-
-	widgetHandler:RegisterGlobal("unit_morph_finished", UnitFinishedMorphing)
-
 end
 
 --So apparently, unitdestroyed in widgetspace is only called when one of your own units dies
@@ -334,5 +331,5 @@ function widget:GameFrame(frame)
 end
 
 function widget:Shutdown()
-	widgetHandler:DeregisterGlobal("unit_morph_finished")
+
 end
