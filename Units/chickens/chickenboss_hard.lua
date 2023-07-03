@@ -9,7 +9,7 @@ humanName = [[Corrupted Anarchid (Boss)]]
 objectName = "fedanarchid_big.s3o"
 script = "chickenboss.cob"
 
-hitPoints = 175000
+hitPoints = 175000*Spring.GetModOptions().chicken_queentimemult
 
 tech = [[tech4]]
 
