@@ -198,8 +198,8 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam)
 				aliveLootboxesT1[#aliveLootboxesT1+1] = unitID
 				aliveLootboxesCountT1 = aliveLootboxesCountT1 + 1
 				aliveLootboxCaptureDifficulty[unitID] = 2
-				Spring.PlaySoundFile("lootboxdetectedt1", 1)
-				Spring.Echo("A Tech 1 Lootbox has been detected!")
+				--Spring.PlaySoundFile("lootboxdetectedt1", 1)
+				--Spring.Echo("A Tech 1 Lootbox has been detected!")
 				break
 			end
 		end
@@ -208,8 +208,8 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam)
 				aliveLootboxesT2[#aliveLootboxesT2+1] = unitID
 				aliveLootboxesCountT2 = aliveLootboxesCountT2 + 1
 				aliveLootboxCaptureDifficulty[unitID] = 4
-				Spring.PlaySoundFile("lootboxdetectedt2", 1)
-				Spring.Echo("A Tech 2 Lootbox has been detected!")
+				--Spring.PlaySoundFile("lootboxdetectedt2", 1)
+				--Spring.Echo("A Tech 2 Lootbox has been detected!")
 				break
 			end
 		end
@@ -218,8 +218,8 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam)
 				aliveLootboxesT3[#aliveLootboxesT3+1] = unitID
 				aliveLootboxesCountT3 = aliveLootboxesCountT3 + 1
 				aliveLootboxCaptureDifficulty[unitID] = 8
-				Spring.PlaySoundFile("lootboxdetectedt3", 1)
-				Spring.Echo("A Tech 3 Lootbox has been detected!")
+				--Spring.PlaySoundFile("lootboxdetectedt3", 1)
+				--Spring.Echo("A Tech 3 Lootbox has been detected!")
 				break
 			end
 		end
@@ -228,8 +228,8 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam)
 				aliveLootboxesT4[#aliveLootboxesT4+1] = unitID
 				aliveLootboxesCountT4 = aliveLootboxesCountT4 + 1
 				aliveLootboxCaptureDifficulty[unitID] = 16
-				Spring.PlaySoundFile("lootboxdetectedt4", 1)
-				Spring.Echo("A Tech 4 Lootbox has been detected!")
+				--PlaySoundFile("lootboxdetectedt4", 1)
+				--Spring.Echo("A Tech 4 Lootbox has been detected!")
 				break
 			end
 		end
