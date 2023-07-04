@@ -328,6 +328,17 @@ local options= {
 		step   = 1,  -- quantization is aligned to the def value
 		-- (step <= 0) means that there is no quantization
 	},
+	{
+		key="map_waterlevel",
+		name="Water Level",
+		desc=" <0 = Decrease water level, >0 = Increase water level",
+		type="number",
+		section="gameplayoptions",
+		def    = 0,
+		min    = -10000,
+		max    = 10000,
+		step   = 1,
+	},
 
 
 	{
