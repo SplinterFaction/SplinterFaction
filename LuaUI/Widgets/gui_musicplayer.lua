@@ -120,10 +120,6 @@ local function ReloadMusicPlaylists()
 	end
 
 	if customSoundtrackEnabled then
-		table.append(peaceTracks, baseTracksCustom)
-		table.append(warhighTracks, baseTracksCustom)
-		table.append(warlowTracks, baseTracksCustom)
-
 		table.append(peaceTracks, peaceTracksCustom)
 		table.append(warhighTracks, warhighTracksCustom)
 		table.append(warlowTracks, warlowTracksCustom)
