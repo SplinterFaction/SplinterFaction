@@ -70,27 +70,27 @@ local function ReloadMusicPlaylists()
 	deviceLostSafetyCheck = 0
 	---------------------------------COLLECT MUSIC------------------------------------
 
+	local allowedExtensions = "{*.ogg,*.mp3}"
 	-- New Soundtrack List
 	local musicDirNew 			= 'music/original'
-	local peaceTracksNew 			= VFS.DirList(musicDirNew..'/peace', '*.ogg')
-	local warhighTracksNew 			= VFS.DirList(musicDirNew..'/warhigh', '*.ogg')
-	local warlowTracksNew 			= VFS.DirList(musicDirNew..'/warlow', '*.ogg')
-	local gameoverTracksNew 		= VFS.DirList(musicDirNew..'/gameover', '*.ogg')
-	local bossFightTracksNew   		= VFS.DirList(musicDirNew..'/bossfight', '*.ogg')
-	local menuTracksNew 			= VFS.DirList(musicDirNew..'/menu', '*.ogg')
-	local loadingTracksNew   		= VFS.DirList(musicDirNew..'/loading', '*.ogg')
+	local peaceTracksNew 			= VFS.DirList(musicDirNew..'/peace', allowedExtensions)
+	local warhighTracksNew 			= VFS.DirList(musicDirNew..'/warhigh', allowedExtensions)
+	local warlowTracksNew 			= VFS.DirList(musicDirNew..'/warlow', allowedExtensions)
+	local gameoverTracksNew 		= VFS.DirList(musicDirNew..'/gameover', allowedExtensions)
+	local bossFightTracksNew   		= VFS.DirList(musicDirNew..'/bossfight', allowedExtensions)
+	local menuTracksNew 			= VFS.DirList(musicDirNew..'/menu', allowedExtensions)
+	local loadingTracksNew   		= VFS.DirList(musicDirNew..'/loading', allowedExtensions)
 
 	-- Custom Soundtrack List
-	local musicDirCustom 			= 'music/custom'
-	local baseTracksCustom 			= VFS.DirList(musicDirCustom, '*.ogg')
-	local peaceTracksCustom 		= VFS.DirList(musicDirCustom..'/peace', '*.ogg')
-	local warhighTracksCustom 		= VFS.DirList(musicDirCustom..'/warhigh', '*.ogg')
-	local warlowTracksCustom 		= VFS.DirList(musicDirCustom..'/warlow', '*.ogg')
-	local warTracksCustom 			= VFS.DirList(musicDirCustom..'/war', '*.ogg')
-	local gameoverTracksCustom 		= VFS.DirList(musicDirCustom..'/gameover', '*.ogg')
-	local bossFightTracksCustom 	= VFS.DirList(musicDirCustom..'/bossfight', '*.ogg')
-	local menuTracksCustom 			= VFS.DirList(musicDirCustom..'/menu', '*.ogg')
-	local loadingTracksCustom  		= VFS.DirList(musicDirCustom..'/loading', '*.ogg')
+	local musicDirCustom 		= 'music/custom'
+	local peaceTracksCustom 		= VFS.DirList(musicDirCustom..'/peace', allowedExtensions)
+	local warhighTracksCustom 		= VFS.DirList(musicDirCustom..'/warhigh', allowedExtensions)
+	local warlowTracksCustom 		= VFS.DirList(musicDirCustom..'/warlow', allowedExtensions)
+	local warTracksCustom 			= VFS.DirList(musicDirCustom..'/war', allowedExtensions)
+	local gameoverTracksCustom 		= VFS.DirList(musicDirCustom..'/gameover', allowedExtensions)
+	local bossFightTracksCustom 	= VFS.DirList(musicDirCustom..'/bossfight', allowedExtensions)
+	local menuTracksCustom 			= VFS.DirList(musicDirCustom..'/menu', allowedExtensions)
+	local loadingTracksCustom  		= VFS.DirList(musicDirCustom..'/loading', allowedExtensions)
 
 	-----------------------------------SETTINGS---------------------------------------
 
