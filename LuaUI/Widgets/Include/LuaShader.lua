@@ -192,6 +192,28 @@ vec2 heighmapUVatWorldPos(vec2 worldpos){
 	uvhm = uvhm	* inverseMapSize;
 	return uvhm;
 }
+
+// This does 'mirror' style tiling of UVs like the way the map edge extension works
+vec2 heighmapUVatWorldPosMirrored(vec2 worldpos) { 
+	const vec2 inverseMapSize = 1.0 / mapSize.xy;
+	// Some texel magic to make the heightmap tex perfectly align:
+	const vec2 heightmaptexel = vec2(8.0, 8.0);
+	worldpos +=  vec2(-8.0, -8.0) * (worldpos * inverseMapSize) + vec2(4.0, 4.0) ;
+	vec2 uvhm = worldpos * inverseMapSize;
+	
+	return abs(fract(uvhm * 0.5 + 0.5) - 0.5) * 2.0;
+}
+
+// Note that this function does not check the Z or depth of the clip space, but in regular springrts top-down views, this isnt needed either. 
+// the radius to cameradist ratio is a good proxy for visibility in the XY plane
+bool isSphereVisibleXY(vec4 wP, float wR){ //worldPos, worldRadius
+	vec3 ToCamera = wP.xyz - cameraViewInv[3].xyz; // vector from worldpos to camera
+	float isqrtDistRatio = wR * inversesqrt(dot(ToCamera, ToCamera)); // calculate the relative screen-space size of it
+	vec4 cWPpos = cameraViewProj * wP; // transform the worldpos into clip space
+	vec2 clipVec = cWPpos.ww * (1.0 + isqrtDistRatio); // normalize the clip tolerance
+	return any(greaterThan(abs(cWPpos.xy), clipVec)); // check if the clip space coords lie outside of the tolerance relaxed [-1.0, 1.0] space
+}
+
 /*
 vec3 hsv2rgb(vec3 c){
 	vec4 K=vec4(1.,2./3.,1./3.,3.);
@@ -210,7 +232,39 @@ vec3 rgb2hsv(vec3 c){
 
 ]]
 
-    return eubs
+
+	local waterAbsorbColorR, waterAbsorbColorG, waterAbsorbColorB = gl.GetWaterRendering("absorb")
+	local waterMinColorR, waterMinColorG, waterMinColorB = gl.GetWaterRendering("minColor")
+	local waterBaseColorR, waterBaseColorG, waterBaseColorB = gl.GetWaterRendering("baseColor")
+	
+	--Spring.Echo(waterAbsorbColorR, waterAbsorbColorG, waterAbsorbColorB)
+	--Spring.Debug.TableEcho(waterAbsorbColor)
+	local waterUniforms = 
+[[ 
+#define WATERABSORBCOLOR vec3(%f,%f,%f)
+#define WATERMINCOLOR vec3(%f,%f,%f)
+#define WATERBASECOLOR vec3(%f,%f,%f)
+#define SMF_SHALLOW_WATER_DEPTH_INV 0.1
+
+// vertex below shallow water depth --> alpha=1
+// vertex above shallow water depth --> alpha=waterShadeAlpha
+vec4 waterBlend(float fragmentheight){
+	if (fragmentheight>=0) return vec4(0.0);
+	vec4 waterBlendResult = vec4(1.0, 1.0, 1.0, 0.0);
+	waterBlendResult.rgb = WATERBASECOLOR.rgb;
+	waterBlendResult.rgb -= WATERABSORBCOLOR * clamp( -fragmentheight, 0, 1023);
+	waterBlendResult.rgb = max(waterBlendResult.rgb, WATERMINCOLOR);
+	waterBlendResult.a = clamp(-fragmentheight * SMF_SHALLOW_WATER_DEPTH_INV, 0.0, 1.0);
+	return waterBlendResult;
+}
+]]
+	waterUniforms = string.format(waterUniforms, 
+		waterAbsorbColorR, waterAbsorbColorG, waterAbsorbColorB,
+		waterMinColorR, waterMinColorG, waterMinColorB, 
+		waterBaseColorR, waterBaseColorG, waterBaseColorB
+	)
+
+    return eubs .. waterUniforms
 end
 
 local function CreateShaderDefinesString(args) -- Args is a table of stuff that are the shader parameters
@@ -220,6 +274,7 @@ local function CreateShaderDefinesString(args) -- Args is a table of stuff that 
   end
   return table.concat(defines)
 end
+
 
 local LuaShader = setmetatable({}, {
 	__call = function(self, ...) return new(self, ...) end,
@@ -231,6 +286,68 @@ LuaShader.isDeferredShadingEnabled = IsDeferredShadingEnabled()
 LuaShader.GetAdvShadingActive = GetAdvShadingActive
 LuaShader.GetEngineUniformBufferDefs = GetEngineUniformBufferDefs
 LuaShader.CreateShaderDefinesString = CreateShaderDefinesString
+
+
+local function CheckShaderUpdates(shadersourcecache, delaytime)
+	-- todo: extract shaderconfig
+	if shadersourcecache.forceupdate or shadersourcecache.lastshaderupdate == nil or 
+		Spring.DiffTimers(Spring.GetTimer(), shadersourcecache.lastshaderupdate) > (delaytime or 0.5) then 
+		shadersourcecache.lastshaderupdate = Spring.GetTimer()
+		local vsSrcNew = (shadersourcecache.vssrcpath and VFS.LoadFile(shadersourcecache.vssrcpath)) or shadersourcecache.vsSrc
+		local fsSrcNew = (shadersourcecache.fssrcpath and VFS.LoadFile(shadersourcecache.fssrcpath)) or shadersourcecache.fsSrc
+		local gsSrcNew = (shadersourcecache.gssrcpath and VFS.LoadFile(shadersourcecache.gssrcpath)) or shadersourcecache.gsSrc
+		if vsSrcNew == shadersourcecache.vsSrc and 
+			fsSrcNew == shadersourcecache.fsSrc and 
+			gsSrcNew == shadersourcecache.gsSrc and 
+			not shadersourcecache.forceupdate then 
+			--Spring.Echo("No change in shaders")
+			return nil
+		else
+			local compilestarttime = Spring.GetTimer()
+			shadersourcecache.vsSrc = vsSrcNew
+			shadersourcecache.fsSrc = fsSrcNew
+			shadersourcecache.gsSrc = gsSrcNew
+			shadersourcecache.forceupdate = nil
+			shadersourcecache.updateFlag = true
+			local engineUniformBufferDefs = LuaShader.GetEngineUniformBufferDefs()
+			local shaderDefines = LuaShader.CreateShaderDefinesString(shadersourcecache.shaderConfig)
+			if vsSrcNew then 
+				vsSrcNew = vsSrcNew:gsub("//__ENGINEUNIFORMBUFFERDEFS__", engineUniformBufferDefs)
+				vsSrcNew = vsSrcNew:gsub("//__DEFINES__", shaderDefines)
+			end
+			if fsSrcNew then 
+				fsSrcNew = fsSrcNew:gsub("//__ENGINEUNIFORMBUFFERDEFS__", engineUniformBufferDefs)
+				fsSrcNew = fsSrcNew:gsub("//__DEFINES__", shaderDefines)
+			end
+			if gsSrcNew then 
+				gsSrcNew = gsSrcNew:gsub("//__ENGINEUNIFORMBUFFERDEFS__", engineUniformBufferDefs)
+				gsSrcNew = gsSrcNew:gsub("//__DEFINES__", shaderDefines)
+			end
+			local reinitshader =  LuaShader(
+				{
+				vertex = vsSrcNew,
+				fragment = fsSrcNew,
+				geometry = gsSrcNew,
+				uniformInt = shadersourcecache.uniformInt,
+				uniformFloat = shadersourcecache.uniformFloat,
+				},
+				shadersourcecache.shaderName
+			)
+			local shaderCompiled = reinitshader:Initialize()
+			
+			Spring.Echo(shadersourcecache.shaderName, " recompiled in ", Spring.DiffTimers(Spring.GetTimer(), compilestarttime, true), "ms at", Spring.GetGameFrame(), "success", shaderCompiled or false)
+			if shaderCompiled then 
+				reinitshader.ignoreUnkUniform = true
+				return reinitshader
+			else
+				return nil
+			end
+		end
+	end
+	return nil
+end
+
+LuaShader.CheckShaderUpdates = CheckShaderUpdates
 
 
 local function lines(str)
@@ -430,7 +547,7 @@ function LuaShader:Compile(suppresswarnings)
 	local shaderObj = self.shaderObj
 
 	local shLog = gl.GetShaderLog() or ""
-
+	self.shLog = shLog
 	if not shaderObj then
 		self:ShowError(shLog)
 		return false
@@ -510,6 +627,8 @@ function LuaShader:Deactivate()
 	self.active = false
 	glUseShader(0)
 end
+
+
 -----------------============ End of general LuaShader methods ============-----------------
 
 
@@ -565,7 +684,36 @@ local function isUpdateRequired(uniform, tbl)
 
 	return update
 end
+
+local function isUpdateRequiredNoTable(uniform, u1, u2, u3, u4)
+	if (u2 == nil) and (type(u1) == "string") then --named matrix
+		return true --no need to update cache
+	end
+
+	local update = false
+	local cachedValues = uniform.values
+	
+	if u1 and cachedValues[1] ~= u1 then 
+		update = true 
+		cachedValues[1] = val 	
+	end 
+	if u2 and cachedValues[2] ~= u2 then 
+		update = true 
+		cachedValues[2] = u2	
+	end 
+	if u3 and cachedValues[3] ~= u3 then 
+		update = true 
+		cachedValues[3] = u3 	
+	end 
+	if u4 and cachedValues[4] ~= u4 then 
+		update = true 
+		cachedValues[4] = u4 	
+	end 
+
+	return update
+end
 -----------------============ End of friend LuaShader functions ============-----------------
+
 
 
 -----------------============ LuaShader uniform manipulation functions ============-----------------
@@ -576,32 +724,40 @@ function LuaShader:GetUniformLocation(name)
 end
 
 --FLOAT UNIFORMS
-local function setUniformAlwaysImpl(uniform, ...)
-	glUniform(uniform.location, ...)
+local function setUniformAlwaysImpl(uniform, u1, u2, u3, u4)
+	if u4 ~= nil then 
+		glUniform(uniform.location, u1, u2, u3, u4)
+	elseif u3 ~= nil then 
+		glUniform(uniform.location, u1, u2, u3)
+	elseif u2 ~= nil then 
+		glUniform(uniform.location, u1, u2)
+	else
+		glUniform(uniform.location, u1)
+	end
 	return true --currently there is no way to check if uniform is set or not :(
 end
 
-function LuaShader:SetUniformAlways(name, ...)
+function LuaShader:SetUniformAlways(name, u1, u2, u3, u4)
 	local uniform = getUniform(self, name)
 	if not uniform then
 		return false
 	end
-	return setUniformAlwaysImpl(uniform, ...)
+	return setUniformAlwaysImpl(uniform, u1, u2, u3, u4)
 end
 
-local function setUniformImpl(uniform, ...)
-	if isUpdateRequired(uniform, {...}) then
-		return setUniformAlwaysImpl(uniform, ...)
+local function setUniformImpl(uniform, u1, u2, u3, u4)
+	if isUpdateRequiredNoTable(uniform, u1, u2, u3, u4) then
+		return setUniformAlwaysImpl(uniform, u1, u2, u3, u4)
 	end
 	return true
 end
 
-function LuaShader:SetUniform(name, ...)
+function LuaShader:SetUniform(name, u1, u2, u3, u4)
 	local uniform = getUniform(self, name)
 	if not uniform then
 		return false
 	end
-	return setUniformImpl(uniform, ...)
+	return setUniformImpl(uniform, u1, u2, u3, u4)
 end
 
 LuaShader.SetUniformFloat = LuaShader.SetUniform
