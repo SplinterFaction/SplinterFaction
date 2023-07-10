@@ -121,7 +121,7 @@ local drawIncome = false -- Should we draw the income estimation?
 local minimapIconSizeMult = 0.0145 --0.0145
 
 -- only used when animating a spreadsheet/atlas texture
-local spotTexture = "bitmaps/default/mexspots1.dds"
+local spotTexture = "bitmaps/default/mexspots.png"
 local animRate = 500      -- That's actually the reverse of animrate, the lower it is the faster the animation goes
 local texturewidth = 40 --160 (actual in-game rect width)
 local textureYoffset = 4 --10 (offset from the ground)
@@ -753,7 +753,7 @@ function DrawMexList()
     local gf = spGetGameFrame() + spGetFrameTimeOffset();
 
     gl.Texture(0, spotTexture)
-    gl.Blending(GL.ONE, GL.ONE) -- "hellish" look (1/2)
+    --gl.Blending(GL.ONE, GL.ONE) -- "hellish" look (1/2)
 
     if WG.metalSpots and circleList then
         for i = 1, #WG.metalSpots do
@@ -771,7 +771,7 @@ function DrawMexList()
             --glTranslate(x,y + 100,z)
             glTranslate(0, y + textureYoffset, 0)
             --glColor(0,0,0,1) Black Solid
-            glColor(0.53, 0.77, 0.89, 0.9)
+            --glColor(0.53, 0.77, 0.89, 0.9)
             --glRotate(currentRotationAngle,0,1,0)
             --glScale(0.9,1,0.9)
             gl.UseShader(animShader)
@@ -804,7 +804,7 @@ function DrawMexList()
         end
     end
 
-    gl.Blending(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA) --Hellish look (2/2)
+    --gl.Blending(GL.SRC_ALPHA, GL.SRC_ALPHA) --Hellish look (2/2)
     gl.Texture(0, false)
 end
 
@@ -974,7 +974,8 @@ function widget:DrawInMiniMap(minimapX, minimapY)
         glLineWidth(1.75)
         --mexColor[4] = 0.85
         --glColor(mexColor)
-        glColor(0.53, 0.77, 0.89, 1)
+        --glColor(0.53, 0.77, 0.89, 1) --Baby Blue
+        glColor(0, 1, 0, 1)
 
         --This is for mex circles on the minimap that denote the amount that mexes give (hard to see)
         -- glColor(0,0,0,0.66)
