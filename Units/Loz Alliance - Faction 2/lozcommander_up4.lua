@@ -11,9 +11,10 @@ techprovided = [[tech0, tech1, tech2, tech3, tech4, -overseer]]
 techrequired = [[0 overseer]]
 techlevel = [[tech4]]
 
-buildCostMetal = 20000
-buildCostEnergy = 600000
-hp = 8000
+buildCostMetal = 7200
+buildCostEnergy = 280800
+hp = 50000
+
 builddistance = 550
 maxvelocity = 2
 workertime = 1 -- Baseline because this gets multiplied in the tech based factory buildspeed gadget

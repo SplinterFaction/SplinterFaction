@@ -116,6 +116,7 @@ unitDef                    = {
 		ProvideTech              = techprovided,
 		RequireTech				 = techrequired,
 		techlevel                = techlevel,
+		hpoverride               = hp,
 		canbetransported 		 = "true",
 		iscommander              = true,
 		needed_cover             = 2,

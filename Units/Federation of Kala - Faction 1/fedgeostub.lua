@@ -4,7 +4,7 @@ unitName = "fedgeostub"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 500
+buildCostMetal = 100
 
 humanName = [[Geothermal Construction Stub]]
 
