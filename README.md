@@ -10,16 +10,10 @@ As players progress through the game, they engage in intense battles across vari
 
 Ultimately, the fate of the galaxy rests in the players' hands as they shape the outcome of the conflict between the Loz Alliance and the Federation of Kala. The choices they make and the strategies they employ will determine the course of the war and the future of the Iamman people and the Xenos.
 
-
-
 # Can I play it?
 
 Yes you can! Download keys are limited, however. The game is not ready for a prime release, so understand that what you are seeing is (a lot of the time) *very* WIP and not representative of the final game.
 
-
-
-We have infrequent and inpromptu playtest sessions that you are welcome to join as well.
-
-
+We have infrequent and impromptu playtest sessions that you are welcome to join as well.
 
 For more information, join our Discord ([SplinterFaction](https://discord.gg/7Bam847ykN)) and follow us on Itch.io ([SplinterFaction by FrozenYak](https://frozenyak.itch.io/splinterfaction))
