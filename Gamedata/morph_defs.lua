@@ -224,7 +224,7 @@ local morphDefs = {
 		{
 			into      = 'fedmetalextractor_up2',
 			--require = 'etech2',
-			time      = 30,
+			time      = 15,
 			cmdname   = [[Tech 2]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up2,
 			-- metal     = 0,
@@ -236,7 +236,7 @@ local morphDefs = {
 		{
 			into      = 'fedmetalextractor_up3',
 			--require = 'etech2',
-			time      = 45,
+			time      = 15,
 			cmdname   = [[Tech 3]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up3,
 			-- metal     = 0,
@@ -248,7 +248,7 @@ local morphDefs = {
 		{
 			into      = 'fedmetalextractor_up4',
 			--require = 'etech2',
-			time      = 60,
+			time      = 15,
 			cmdname   = [[Tech 4]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up3,
 			-- metal     = 0,
@@ -277,7 +277,7 @@ local morphDefs = {
 		{
 			into      = 'lozmetalextractor_up2',
 			--require = 'etech2',
-			time      = 30,
+			time      = 15,
 			cmdname   = [[Tech 2]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up2,
 			-- metal     = 0,
@@ -289,7 +289,7 @@ local morphDefs = {
 		{
 			into      = 'lozmetalextractor_up3',
 			--require = 'etech2',
-			time      = 45,
+			time      = 15,
 			cmdname   = [[Tech 3]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up3,
 			-- metal     = 0,
@@ -301,7 +301,7 @@ local morphDefs = {
 		{
 			into      = 'lozmetalextractor_up4',
 			--require = 'etech2',
-			time      = 60,
+			time      = 15,
 			cmdname   = [[Tech 4]] .. string.char(10) .. [[Standard]],
 			-- energy    = energyCost_metalextractor_up3,
 			-- metal     = 0,
@@ -344,7 +344,7 @@ local morphDefs = {
 			into      = 'lozsuperjericho',
 			time      = 60,
 			cmdname   = [[Super Jericho]],
-			text      = [[A cluster of linked Jericho]],
+			text      = [[A cluster of linked Inferno]],
 			require   = [[tech1]],
 		},
 		{
