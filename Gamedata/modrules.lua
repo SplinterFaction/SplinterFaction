@@ -49,9 +49,9 @@ local modrules  = {
   },
 
   reclaim = {
-    multiReclaim  = 1,    -- defaults to 0
-    reclaimMethod = 0,    -- defaults to 1
-    unitMethod    = 0,    -- defaults to 1
+    multiReclaim = 1,		-- Can multiple units reclaim a feature or only one? 0 implies the latter, all other values the former.
+    reclaimMethod = 0,		-- Controls how features are reclaimed. Can be 0 - gradual reclaim, 1 - all reclaimed at end, any other positive value n - reclaim in n chunks.
+    unitMethod = 1,			-- Controls how units are reclaimed. Can be 0 - gradual reclaim, 1 - all reclaimed at end, any other positive value n - reclaim in n chunks.
 
     unitEnergyCostFactor    = 0,  -- defaults to 0
     unitEfficiency          = 1,  -- defaults to 1
