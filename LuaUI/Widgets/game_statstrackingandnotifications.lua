@@ -39,6 +39,11 @@ local enemyShieldingTankSpottedTimeout = 60
 local upgradeNotificationTimeout = 10
 local myMexNotificationTimeout = 15
 
+local meT1Notification = 0
+local meT2Notification = 0
+local meT3Notification = 0
+local meT4Notification = 0
+
 local notificationQueue = {}
 local dt = 1 -- Timeout Decrement
 
@@ -122,6 +127,36 @@ end
 --	io.close(file)
 --end
 
+
+function widget:UnitFinished(unitID, unitDefID, unitTeam)
+	if unitTeam == myTeamID() then
+		-- Announce to the player that we have hit a tier
+		if UnitDefs[unitDefID].customParams.techlevel == "tech1" then
+			if meT1Notification == 0 then
+				table.insert(notificationQueue, { message = "met1" })
+				meT1Notification = 1
+			end
+		end
+		if UnitDefs[unitDefID].customParams.techlevel == "tech2" then
+			if meT2Notification == 0 then
+				table.insert(notificationQueue, { message = "met2" })
+				meT2Notification = 1
+			end
+		end
+		if UnitDefs[unitDefID].customParams.techlevel == "tech3" then
+			if meT3Notification == 0 then
+				table.insert(notificationQueue, { message = "met3" })
+				meT3Notification = 1
+			end
+		end
+		if UnitDefs[unitDefID].customParams.techlevel == "tech4" then
+			if meT4Notification == 0 then
+				table.insert(notificationQueue, { message = "met4" })
+				meT4Notification = 1
+			end
+		end
+	end
+end
 
 function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 	-- Spring.Echo("A unit is taking damage")

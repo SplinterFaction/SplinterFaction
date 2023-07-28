@@ -118,6 +118,39 @@ local ringsDefs = {
 		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 5000, divs = 128  },
 	},
 
+	--Commander Skillshot Ranges
+	[UnitDefNames.fedcommander.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
+	},
+	[UnitDefNames.fedcommander_up1.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 500, divs = 128  },
+	},
+	[UnitDefNames.fedcommander_up2.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
+	},
+	[UnitDefNames.fedcommander_up3.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 700, divs = 128  },
+	},
+	[UnitDefNames.fedcommander_up4.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 900, divs = 128  },
+	},
+
+	[UnitDefNames.lozcommander.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
+	},
+	[UnitDefNames.lozcommander_up1.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 500, divs = 128  },
+	},
+	[UnitDefNames.lozcommander_up2.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
+	},
+	[UnitDefNames.lozcommander_up3.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 700, divs = 128  },
+	},
+	[UnitDefNames.lozcommander_up4.id] = {
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 900, divs = 128  },
+	},
+
 }
 
 local ringedUnits = {}

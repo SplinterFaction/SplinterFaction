@@ -133,6 +133,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	commrailgun           = {
+		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
 		collideFeature            = false,
@@ -157,7 +158,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 300,
-		reloadtime                = 1,
+		reloadtime                = 0.1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -186,6 +187,7 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up1               = {
+		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
 		collideFeature            = false,
@@ -210,7 +212,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 500,
-		reloadtime                = 2.5,
+		reloadtime                = 1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -239,6 +241,7 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up2               = {
+		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
 		collideFeature            = false,
@@ -263,7 +266,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 600,
-		reloadtime                = 7.5,
+		reloadtime                = 2.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -292,6 +295,7 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up3               = {
+		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
 		collideFeature            = false,
@@ -316,7 +320,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 700,
-		reloadtime                = 15,
+		reloadtime                = 5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -345,6 +349,7 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up4               = {
+		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
 		collideFeature            = false,
@@ -369,7 +374,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 900,
-		reloadtime                = 30,
+		reloadtime                = 7.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
