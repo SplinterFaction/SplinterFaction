@@ -44,6 +44,11 @@ local meT2Notification = 0
 local meT3Notification = 0
 local meT4Notification = 0
 
+local dontRemindMeToTechToT1 = 0
+local dontRemindMeToTechToT2 = 0
+local dontRemindMeToTechToT3 = 0
+local dontRemindMeToTechToT4 = 0
+
 local notificationQueue = {}
 local dt = 1 -- Timeout Decrement
 
@@ -414,6 +419,46 @@ end
 function widget:GameFrame(frame)
 	if frame%30 == 5 then
 		updateNotifications(dt)
+	end
+
+	--Let the player know that they have enough income to tech up
+	if frame > 450 then
+		if frame%450 == 5 then -- frame%450 = every 15 seconds
+			-- Get the current resourcing stats
+			su, sm = math.round(Spring.GetTeamRulesParam(myTeamID(), "supplyUsed") or 0), math.round(Spring.GetTeamRulesParam(myTeamID(), "supplyMax") or 0)
+			ec, es, ep, ei, ee = Spring.GetTeamResources(myTeamID(), "energy")
+			mc, ms, mp, mi, me = Spring.GetTeamResources(myTeamID(), "metal")
+			Spring .Echo ("energy " .. ei)
+			Spring .Echo ("metal " .. mi)
+			if meT1Notification == 0 and dontRemindMeToTechToT1 == 0 then
+				if mi >= 10 and ei >= 170 then
+					table.insert(notificationQueue, { message = "enoughincomefort1" })
+					-- Spring.Echo("You have enough income to tech to tier 1!")
+					dontRemindMeToTechToT1 = 1
+				end
+			end
+			if meT1Notification == 1 and meT2Notification == 0 and dontRemindMeToTechToT2 == 0 then
+				if mi >= 20 and ei >= 560 then
+					table.insert(notificationQueue, { message = "enoughincomefort2" })
+					-- Spring.Echo("You have enough income to tech to tier 2!")
+					dontRemindMeToTechToT2 = 1
+				end
+			end
+			if meT1Notification == 1 and meT2Notification == 1 and meT3Notification == 0 and dontRemindMeToTechToT3 == 0 then
+				if mi >= 40 and ei >= 1040 then
+					table.insert(notificationQueue, { message = "enoughincomefort3" })
+					-- Spring.Echo("You have enough income to tech to tier 3!")
+					dontRemindMeToTechToT3 = 1
+				end
+			end
+			if meT1Notification == 1 and meT2Notification == 1 and meT3Notification == 1 and meT4Notification == 0 and dontRemindMeToTechToT4 == 0 then
+				if mi >= 80 and ei >= 3120 then
+					table.insert(notificationQueue, { message = "enoughincomefort4" })
+					-- Spring.Echo("You have enough income to tech to tier 4!")
+					dontRemindMeToTechToT4 = 1
+				end
+			end
+		end
 	end
 end
 
