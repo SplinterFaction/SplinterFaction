@@ -337,6 +337,13 @@ local morphDefs = {
 			text      = [[Geothermal Metal Maker]],
 			require   = [[tech4]],
 		},
+		{
+			into      = 'condenser',
+			time      = 60,
+			cmdname   = [[Condenser]],
+			text      = [[Resource Storage Facility and Supply Depot]],
+			require   = [[tech1]],
+		},
 	},
 
 	lozgeostub = 	{
@@ -360,6 +367,13 @@ local morphDefs = {
 			cmdname   = [[Metal Maker]],
 			text      = [[Geothermal Metal Maker]],
 			require   = [[tech4]],
+		},
+		{
+			into      = 'condenser',
+			time      = 60,
+			cmdname   = [[Condenser]],
+			text      = [[Resource Storage Facility and Supply Depot]],
+			require   = [[tech1]],
 		},
 	},
 
