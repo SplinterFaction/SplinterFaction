@@ -428,8 +428,8 @@ function widget:GameFrame(frame)
 			su, sm = math.round(Spring.GetTeamRulesParam(myTeamID(), "supplyUsed") or 0), math.round(Spring.GetTeamRulesParam(myTeamID(), "supplyMax") or 0)
 			ec, es, ep, ei, ee = Spring.GetTeamResources(myTeamID(), "energy")
 			mc, ms, mp, mi, me = Spring.GetTeamResources(myTeamID(), "metal")
-			Spring .Echo ("energy " .. ei)
-			Spring .Echo ("metal " .. mi)
+			-- Spring .Echo ("energy " .. ei)
+			-- Spring .Echo ("metal " .. mi)
 			if meT1Notification == 0 and dontRemindMeToTechToT1 == 0 then
 				if mi >= 10 and ei >= 170 then
 					table.insert(notificationQueue, { message = "enoughincomefort1" })
