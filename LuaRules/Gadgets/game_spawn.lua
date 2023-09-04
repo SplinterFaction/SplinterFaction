@@ -36,10 +36,10 @@ end
 
 local aiStartUnits = {
 	["fedcommander"] = {
-		"fedcommander_ai",
+		"fedcommander",
 	},
 	["lozcommander"] = {
-		"fedcommander_ai",
+		"lozcommander",
 	},
 }
 
@@ -51,7 +51,6 @@ local factionDefComms = {
 local validStartComm = {
 	[UnitDefNames["fedcommander"].id] = true,
 	[UnitDefNames["lozcommander"].id] = true,
-	[UnitDefNames["fedcommander_ai"].id] = true,
 }
 
 local ACCESS_LEVEL = {
