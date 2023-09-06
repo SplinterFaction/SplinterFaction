@@ -6,7 +6,7 @@ function widget:GetInfo()
 		date      = "",
 		license   = "",
 		layer     = 0,
-		enabled   = false
+		enabled   = true
 	}
 end
 
@@ -73,7 +73,7 @@ end
 
 function widget:GameFrame(frame)
 	--Let the player know that they have enough income to tech up
-	if frame > 4500 then -- Don't do shit for 2.5 minutes
+	if frame > 2700 then -- Don't do shit for 1.5 minutes
 		if frame%1800 == 21 then -- frame%1800 = every 60 seconds == 21 means do it on frame 21 of 30 (we just chose a random frame so that it doesn't get lumped in with a ton stuff from other widgets)
 			--Spring.Echo("My tech level is: " .. myTechLevel)
 			for unitID in pairs(mexes) do
