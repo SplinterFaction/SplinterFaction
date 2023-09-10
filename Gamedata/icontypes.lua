@@ -9,6 +9,7 @@
 --------------------------------------------------------------------------------
 
 local icontypes = {
+	--walkers
 	botengineer = {
 		bitmap='icons/supcomish/botengineer.png',
 		size=2,
@@ -75,7 +76,7 @@ local icontypes = {
 		--radiusadjust=true,
 	},
 
-
+	--tanks
 	airintelt1 = {
 		bitmap='icons/supcomish/airintelt1.png',
 		size=2,

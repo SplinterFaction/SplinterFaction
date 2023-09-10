@@ -929,7 +929,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Aircraft
 			if unitDef.customparams.unitrole == "Air Scout" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.4
+				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Interceptor" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
@@ -1097,8 +1097,8 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.customparams.shield_regeneration_delay = 10,
 					]]--
 
-					local reducedMaxdamage = unitDef.maxdamage * 0.25
-					local maximumShieldStrength = unitDef.maxdamage * 0.75
+					local reducedMaxdamage = unitDef.maxdamage * 0.5
+					local maximumShieldStrength = unitDef.maxdamage * 0.5
 					local regenerationRate
 
 					unitDef.customparams.isshieldedunit = "1"
