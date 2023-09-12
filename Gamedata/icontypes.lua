@@ -76,7 +76,7 @@ local icontypes = {
 		--radiusadjust=true,
 	},
 
-	--tanks
+	--aircraft
 	airintelt1 = {
 		bitmap='icons/supcomish/airintelt1.png',
 		size=2,
@@ -118,11 +118,234 @@ local icontypes = {
 		--radiusadjust=true,
 	},
 
+	--tanks
+	tankraidert1 = {
+		bitmap='icons/supcomish/tankraidert1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankassaultt1 = {
+		bitmap='icons/supcomish/tankassaultt1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankassaultt2 = {
+		bitmap='icons/supcomish/tankassaultt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankassaultt3 = {
+		bitmap='icons/supcomish/tankassaultt3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankassaultt4 = {
+		bitmap='icons/supcomish/tankassaultt4.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankartilleryt1 = {
+		bitmap='icons/supcomish/tankartilleryt1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankartilleryt2 = {
+		bitmap='icons/supcomish/tankartilleryt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankaat2 = {
+		bitmap='icons/supcomish/tankaat2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankfiresupportt3 = {
+		bitmap='icons/supcomish/tankfiresupportt3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankintelt1 = {
+		bitmap='icons/supcomish/tankintelt1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankshieldt3 = {
+		bitmap='icons/supcomish/tankshieldt3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	tankengineer = {
+		bitmap='icons/supcomish/tankengineer.png',
+		size=2,
+		--radiusadjust=true,
+	},
 
 
+	--Ships
+	shipraidert1 = {
+		bitmap='icons/supcomish/shipraidert1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	shipassaultt1 = {
+		bitmap='icons/supcomish/shipassaultt1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	shipassaultt2 = {
+		bitmap='icons/supcomish/shipassaultt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	shipfiresupportt2 = {
+		bitmap='icons/supcomish/shipfiresupportt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	shipartilleryt2 = {
+		bitmap='icons/supcomish/shipartilleryt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
 
 
+	--Structures
 
+	structuremetalgeneratort0 = {
+		bitmap='icons/supcomish/structuremetalgeneratort0.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuremetalgeneratort1 = {
+		bitmap='icons/supcomish/structuremetalgeneratort1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuremetalgeneratort2 = {
+		bitmap='icons/supcomish/structuremetalgeneratort2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuremetalgeneratort3 = {
+		bitmap='icons/supcomish/structuremetalgeneratort3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuremetalgeneratort4 = {
+		bitmap='icons/supcomish/structuremetalgeneratort4.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuremetalgeneratort5 = {
+		bitmap='icons/supcomish/structuremetalgeneratort5.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureenergygeneratort0 = {
+		bitmap='icons/supcomish/structureenergygeneratort0.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureenergygeneratort1 = {
+		bitmap='icons/supcomish/structureenergygeneratort1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureenergygeneratort2 = {
+		bitmap='icons/supcomish/structureenergygeneratort2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureenergygeneratort3 = {
+		bitmap='icons/supcomish/structureenergygeneratort3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureenergygeneratort4 = {
+		bitmap='icons/supcomish/structureenergygeneratort4.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structurestoraget1 = {
+		bitmap='icons/supcomish/structurestoraget1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structurestoraget2 = {
+		bitmap='icons/supcomish/structurestoraget2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structurestoraget3 = {
+		bitmap='icons/supcomish/structurestoraget3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuresupplyt0 = {
+		bitmap='icons/supcomish/structuresupplyt0.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuresupplyt2 = {
+		bitmap='icons/supcomish/structuresupplyt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuredefenset1 = {
+		bitmap='icons/supcomish/structuredefenset1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuredefenset2 = {
+		bitmap='icons/supcomish/structuredefenset2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structuredefenset3 = {
+		bitmap='icons/supcomish/structuredefenset3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureaat1 = {
+		bitmap='icons/supcomish/structureaat1.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureaat2 = {
+		bitmap='icons/supcomish/structureaat2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureshieldt2 = {
+		bitmap='icons/supcomish/structureshieldt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureshieldt3 = {
+		bitmap='icons/supcomish/structureshieldt3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structureintelt0 = {
+		bitmap='icons/supcomish/structureintelt0.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structurecounterintelt2 = {
+		bitmap='icons/supcomish/structurecounterintelt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structurecounterintelt3 = {
+		bitmap='icons/supcomish/structurecounterintelt3.png',
+		size=2,
+		--radiusadjust=true,
+	},
+	structurefactoryt0 = {
+		bitmap='icons/supcomish/structurefactoryt0.png',
+		size=2,
+		--radiusadjust=true,
+	},
 
 
 
@@ -134,96 +357,97 @@ local icontypes = {
 
 
 	----------------------------------
+	---Old Shit
 	----------------------------------
 	default = {
 		bitmap='icons/nato/default.dds',
 		size=1,
 		radiusadjust=true,
 	},
-
-	commander = {
-		bitmap='icons/nato/commander.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	engineer = {
-		bitmap='icons/nato/engineer.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	economy = {
-		bitmap='icons/nato/economy.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	supportbuilding = {
-		bitmap='icons/nato/supportbuilding.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	defenseturret = {
-		bitmap='icons/nato/defense-turret.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	shield = {
-		bitmap='icons/nato/shield.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	factory = {
-		bitmap='icons/nato/factory.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	antiair = {
-		bitmap='icons/nato/anti-air.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	scout = {
-		bitmap='icons/nato/scout.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	scoutvision = {
-		bitmap='icons/nato/scout-vision.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	mbt = {
-		bitmap='icons/nato/mbt.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	firesupport = {
-		bitmap='icons/nato/fire-support.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	artillery = {
-		bitmap='icons/nato/artillery.dds',
-		size=1,
-		radiusadjust=true,
-	},
-
-	assault = {
-		bitmap='icons/nato/assault.dds',
-		size=1,
-		radiusadjust=true,
-	},
+	--
+	--commander = {
+	--	bitmap='icons/nato/commander.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--engineer = {
+	--	bitmap='icons/nato/engineer.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--economy = {
+	--	bitmap='icons/nato/economy.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--supportbuilding = {
+	--	bitmap='icons/nato/supportbuilding.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--defenseturret = {
+	--	bitmap='icons/nato/defense-turret.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--shield = {
+	--	bitmap='icons/nato/shield.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--factory = {
+	--	bitmap='icons/nato/factory.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--antiair = {
+	--	bitmap='icons/nato/anti-air.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--scout = {
+	--	bitmap='icons/nato/scout.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--scoutvision = {
+	--	bitmap='icons/nato/scout-vision.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--mbt = {
+	--	bitmap='icons/nato/mbt.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--firesupport = {
+	--	bitmap='icons/nato/fire-support.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--artillery = {
+	--	bitmap='icons/nato/artillery.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
+	--
+	--assault = {
+	--	bitmap='icons/nato/assault.dds',
+	--	size=1,
+	--	radiusadjust=true,
+	--},
 }
 
 --------------------------------------------------------------------------------
