@@ -341,6 +341,11 @@ local icontypes = {
 		size=2,
 		--radiusadjust=true,
 	},
+	structuresupportt2 = {
+		bitmap='icons/supcomish/structuresupportt2.png',
+		size=2,
+		--radiusadjust=true,
+	},
 	structurefactoryt0 = {
 		bitmap='icons/supcomish/structurefactoryt0.png',
 		size=2,

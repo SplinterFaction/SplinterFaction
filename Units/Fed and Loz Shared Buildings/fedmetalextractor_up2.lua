@@ -13,6 +13,8 @@ primaryCEG = "custom:fusionreactionnuclear-3color"
 
 humanName = [[Metal Extractor - Tech 2]]
 
+iconType = [[structuremetalgeneratort2]]
+
 explodeAsSelfSAs = [[largeBuildingExplosionGenericPurple]]
 
 objectName = [[metalextractort2.s3o]]
