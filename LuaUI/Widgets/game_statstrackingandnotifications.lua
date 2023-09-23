@@ -66,24 +66,26 @@ With this queuing system in place, multiple notifications will be added to the q
 
 function widget:Initialize()
 
-	notificationTimeout = 0
-	allyCommHPNotificationTimeout = 0
-	myCommHPNotificationTimeout = 0
-	allyT4HPNotificationTimeout = 0
-	goliathNotificationTimeout = 0
-	mammothNotificationTimeout = 0
-	juggernautNotificationTimeout = 0
-	silverbackNotificationTimeout = 0
-	allyJuggernautNotificationTimeout = 0
-	allySilverbackNotificationTimeout = 0
-	energyNotificationTimeout = 0
-	metalNotificationTimeout = 0
-	supplyNotificationTimeout = 0
-	enemyCommanderSpottedTimeout = 0
-	enemyCloakingMechSpottedTimeout = 0
-	enemyShieldingTankSpottedTimeout = 0
-	upgradeNotificationTimeout = 0
-	myMexNotificationTimeout = 0
+	------------ Uncomment these to make testing easier
+	--notificationTimeout = 0
+	--allyCommHPNotificationTimeout = 0
+	--myCommHPNotificationTimeout = 0
+	--allyT4HPNotificationTimeout = 0
+	--goliathNotificationTimeout = 0
+	--mammothNotificationTimeout = 0
+	--juggernautNotificationTimeout = 0
+	--silverbackNotificationTimeout = 0
+	--allyJuggernautNotificationTimeout = 0
+	--allySilverbackNotificationTimeout = 0
+	--energyNotificationTimeout = 0
+	--metalNotificationTimeout = 0
+	--supplyNotificationTimeout = 0
+	--enemyCommanderSpottedTimeout = 0
+	--enemyCloakingMechSpottedTimeout = 0
+	--enemyShieldingTankSpottedTimeout = 0
+	--upgradeNotificationTimeout = 0
+	--myMexNotificationTimeout = 0
+	------------
 
 	---- See if the kills file exists
 	--if not VFS.FileExists(killsFile) then
