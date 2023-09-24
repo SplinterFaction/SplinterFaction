@@ -167,7 +167,7 @@ weaponDefs                 = {
 		rgbColor2                = "1 1 1",
 		soundTrigger             = true,
 		model                    = "sensortower.s3o",
-		soundstart               = "other/dronespawner.wav",
+		soundstart               = "dronespawner",
 
 		-----
 		stockpile                = true,

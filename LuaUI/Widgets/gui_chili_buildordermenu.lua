@@ -484,7 +484,7 @@ local function addBuildCommand(cmd)
                 chiliCache['hotkeyLabel' .. cmd.id] = Label:New{
                     name = 'hotkeyLabel' .. cmd.id,
                     parent = image,
-                    x = '62.5%', y = '5%',
+                    x = '5%', y = '5%',
                     valign = 'top',
                     --caption = metalCost .. line .. energyCost,
                     font = {

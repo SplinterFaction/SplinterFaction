@@ -95,7 +95,7 @@ unitDef                    = {
 
 	weapons                      = {
 		[1]                      = {
-			def                  = "sniper",
+			def                  = "missile",
 			badTargetCategory    = "GROUND BUILDING",
 			onlyTargetCategory	 = "AIR GROUND BUILDING SHIP",
 			mainDir = "0 0 1",
@@ -136,46 +136,42 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	sniper           = {
-		avoidFeature              = false,
-		avoidFriendly             = false,
-		collideFeature            = false,
-		collideFriendly           = false,
-		coreThickness             = 0.5,
-		canAttackGround           = true,
-		--	cegTag                = "mediumcannonweapon3",
-		duration                  = 0.15,
-		energypershot             = 0,
-		explosionGenerator        = "custom:genericshellexplosion-small",
-		fallOffRate            	  = 0,
-		fireStarter               = 100,
-		impulseFactor             = 0,
-		interceptedByShieldType   = 4,
-
-		minintensity              = "1",
-		name                      = "Laser",
-		range                     = 720,
-		reloadtime                = 0.1,
-		WeaponType                = "LaserCannon",
-		rgbColor                  = "0 0.5 1",
-		rgbColor2                 = "1 1 1",
-		soundTrigger              = true,
-		soundstart                = "snipershot",
-		soundHit                  = "explode5",
-		texture1                  = "shot",
-		texture2                  = "empty",
-		thickness                 = 5,
-		tolerance                 = 1000,
-		turret                    = true,
-		weaponVelocity            = 3000,
-		customparams              = {
-			expl_light_color	= blue, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+	missile           = {
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		cegTag                   = "ehbotrocko-optimized",
+		explosionGenerator       = "custom:genericshellexplosion-medium",
+		energypershot            = 0,
+		fireStarter              = 70,
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		model                    = "neutralmissilex1.s3o",
+		name                     = "Rockets",
+		range                    = 720,
+		reloadtime               = 0.25,
+		weaponType		         = "MissileLauncher",
+		smokeTrail               = false,
+		soundStart               = "scifi_sniper_rifle_A_single_08",
+		soundHit                 = "explode5",
+		tolerance                = 8000,
+		turnrate                 = 30000,
+		turret                   = true,
+		tracks                   = true,
+		startVelocity            = 400,
+		weaponAcceleration       = 400,
+		flightTime               = 2.5,
+		weaponVelocity           = 3000,
+		sprayangle               = 20000,
+		customparams             = {
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-		damage                    = {
-			default               = 24,
+		damage                   = {
+			default              = 60,
 		},
 	},
 }

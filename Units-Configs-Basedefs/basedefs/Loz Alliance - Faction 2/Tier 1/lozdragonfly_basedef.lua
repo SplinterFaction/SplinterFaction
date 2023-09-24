@@ -63,7 +63,7 @@ unitDef                    = {
 	idleTime                     = 2200,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 5,
+	maxVelocity                  = 6,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -85,14 +85,14 @@ unitDef                    = {
 	--------------------------------------------------------------------------------
 	-- Transport specific tags
 
-	transportSize			= 2,
+	transportSize			= 30,
 	-- minTransportSize			=
-	transportCapacity		= 4,
-	-- transportMass			=
+	transportCapacity		= 500,
+	transportMass			= 1600,
 	-- minTransportMass			=
 	-- loadingRadius			=
-	-- unloadSpread				=
-	-- isFirePlatform			= false,
+	unloadSpread				= 10,
+	isFirePlatform			= false,
 	-- holdSteady				=
 	releaseHeld				= false,
 	-- cantBeTransported		=

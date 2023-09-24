@@ -68,9 +68,9 @@ unitDef                     = {
 	},
 	weapons                       = {
 		[1]                       = {
-			def                   = "mine",
-			badTargetCategory     = "BUILDING SHIP",
-			onlyTargetCategory    = "GROUND BUILDING SHIP",
+			def                   = "shotgunblast",
+			badTargetCategory     = "SHIP",
+			onlyTargetCategory    = "GROUND SHIP",
 		},
 	},
 	customParams                  = {
@@ -94,50 +94,43 @@ unitDef                     = {
 }
 
 weaponDefs = {
-	mine                    = {
-		name                      ="Land Mine",
-		AreaOfEffect             = 20,
-		avoidFriendly             = false,
-		avoidFeature              = false,
-		collideFriendly           = false,
-		collideFeature            = false,
-		canAttackGround           = false,
-		cegTag                   = "missiletrail",
-		flightTime               = 1.5,
-
-		tolerance                 = 1000,
-		turret                    = true,
-		impulseFactor             = 0,
-
-		model                    = "missilesmallvlaunch.s3o",
-		edgeeffectiveness	      = 1,
-		energypershot             = 0,
-		range                     = 100,
-		reloadtime                = 10,
-		weaponvelocity            = 2500,
-
-
-		smokeTrail               = false,
-		tracks                   = true,
-		turnrate                 = 200000,
-
-		weaponAcceleration       = 800,
-		weaponTimer              = 0.5,
-		weaponType               = "StarburstLauncher",
-		weaponVelocity           = 2500,
-		soundHit                ="minedetonation",
-		soundStart				= "minewhir",
-		explosiongenerator        ="custom:genericshellexplosion-small-white",
-		customparams              = {
-			nofriendlyfire	      = "true",
-			expl_light_color	= red, -- As a string, RGB
+	shotgunblast                = {
+		predictboost	       = 1,
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		canattackground		   = false,
+		burnblow               = true,
+		burst                  = 10,
+		burstrate              = 0.001,
+		-- cegTag                 = "railgun",
+		explosionGenerator     = "custom:genericshellexplosion-small",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		fallOffRate            = 0,
+		impulseFactor          = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Shotgun Mine",
+		range                  = 200,
+		reloadtime             = 10,
+		--projectiles			   = 5,
+		weaponType		       = "Cannon",
+		soundStart             = "shotgunmine",
+		soundtrigger           = true,
+		size                   = 1,
+		sprayangle             = 500,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponVelocity         = 400,
+		customparams             = {
+			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
-
-		damage                    = {
-			default               = 150,
+		damage                   = {
+			default              = 35,
 		},
 	},
 }

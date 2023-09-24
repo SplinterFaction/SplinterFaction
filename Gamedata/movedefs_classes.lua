@@ -1,21 +1,22 @@
+local unitHeat = 0.0042
 if Spring.GetModOptions and Spring.GetModOptions().unitheat ~= nil then
 	unitHeat = Spring.GetModOptions().unitheat * 0.0042
-else
-	unitHeat = 0.0042
 end
 
-flowMappingToggle = true
-allowRawMovement = true
+local flowMappingToggle = true
+local allowRawMovement = true
 
 -- In Degrees
-allterrainslopetolerance = 100
-walkerslopetolerance = 45
-wheeledslopetolerance = 30
+local allterrainslopetolerance = 100
+local walkerslopetolerance = 45
+local wheeledslopetolerance = 30
 
 -- Fix the numbers for springs fucking stupid magic numbers
 allterrainslopetolerance = allterrainslopetolerance / 1.5
 walkerslopetolerance = walkerslopetolerance / 1.5
 wheeledslopetolerance = wheeledslopetolerance / 1.5
+
+local minWaterDepth = 5
 
 local genericDepthmodParams = {
 		minHeight      = 0,
@@ -592,7 +593,7 @@ local moveDefs = {
         maxwaterslope=60,
         badwaterslope=0,
         crushstrength=20,
-        minwaterdepth=40,
+        minwaterdepth=minWaterDepth,
         heatmod=unitHeat,
         slopemod=0,
         allowRawMovement=allowRawMovement,
@@ -608,7 +609,7 @@ local moveDefs = {
         maxwaterslope=60,
         badwaterslope=0,
         crushstrength=20,
-        minwaterdepth=40,
+        minwaterdepth=minWaterDepth,
         heatmod=unitHeat,
         slopemod=0,
         allowRawMovement=allowRawMovement,
@@ -624,7 +625,7 @@ local moveDefs = {
         maxwaterslope=60,
         badwaterslope=0,
         crushstrength=20,
-        minwaterdepth=40,
+        minwaterdepth=minWaterDepth,
         heatmod=unitHeat,
         slopemod=0,
         allowRawMovement=allowRawMovement,
@@ -640,7 +641,7 @@ local moveDefs = {
         maxwaterslope=60,
         badwaterslope=0,
         crushstrength=20,
-        minwaterdepth=40,
+        minwaterdepth=minWaterDepth,
         heatmod=unitHeat,
         slopemod=0,
         allowRawMovement=allowRawMovement,
@@ -656,7 +657,7 @@ local moveDefs = {
         maxwaterslope=60,
         badwaterslope=0,
         crushstrength=20,
-        minwaterdepth=40,
+        minwaterdepth=minWaterDepth,
         heatmod=unitHeat,
         slopemod=0,
         allowRawMovement=allowRawMovement,

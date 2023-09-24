@@ -12,8 +12,9 @@ end
 
 function widget:Initialize()
 		Spring.Echo([[I'm a filthy cheater]])
-
+	if not Spring.IsCheatingEnabled() then
 		Spring.SendCommands("cheat")
+	end
 		Spring.SendCommands("globallos")
 		Spring.SendCommands("godmode")
 
