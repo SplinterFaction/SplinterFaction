@@ -26,6 +26,13 @@ effectUnitDefs = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine4", onActive=true}},
 	},
 
+	airscoutxl = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=30, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=30, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=30, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=30, piece="engine4", onActive=true}},
+	},
+
 	fedsparrow = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},

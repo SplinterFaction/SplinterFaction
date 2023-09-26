@@ -22,6 +22,7 @@ unitDef                    = {
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = explodeAs,
+	fireState					 = 0,
 	footprintX                   = 4,
 	footprintZ                   = 4,
 	iconType                     = "botcounterintelt3",

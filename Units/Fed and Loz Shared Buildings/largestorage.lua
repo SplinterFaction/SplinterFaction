@@ -5,6 +5,7 @@ local unitName                    = "largestorage"
 --------------------------------------------------------------------------------
 
 local storage					  = 20000
+local supplygranted				  = 500
 
 local buildCostMetal 			  = 2000
 local maxDamage					  = buildCostMetal * 12.5
@@ -19,7 +20,7 @@ local unitDef                     = {
 	canAttack			          = false,
 	category                      = "BUILDING",
 
-	description                   = [[Provides +]] .. storage .. [[ Metal/Energy Storage]],
+	description                   = [[Provides +]] .. storage .. [[ Metal/Energy Storage and Provides +]] .. supplygranted .. [[ Supply]],
 	energyStorage                 = storage,
 	metalStorage                  = storage,
 	energyUse                     = 0,
@@ -33,7 +34,7 @@ local unitDef                     = {
 	maxSlope                      = 50,
 	maxWaterDepth                 = 0,
 	--metalStorage                  = storage,
-	name                          = "Large Resource Storage Facility",
+	name                          = "Large Resource Storage Facility and Supply Depot",
 	objectName                    = "largestorage3.s3o",
 	script			              = "largestorage2_lus.lua",
 	radarDistance                 = 0,
@@ -72,6 +73,7 @@ local unitDef                     = {
 		simpleaiunittype          = "storage",
 		iseco                     = 1,
 		RequireTech				  = [[tech3]],
+		supply_granted            = supplygranted,
 		needed_cover              = 2,
 		death_sounds              = "generic",
 		noenergycost			  = false,

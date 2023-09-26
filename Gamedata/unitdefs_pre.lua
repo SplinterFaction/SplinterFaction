@@ -27,6 +27,7 @@ Shared.buildListFedAirPlant = {
 	[[fedcrow]],
 	[[fedhawk]],
 	[[fedcondor]],
+	[[airscoutxl],
 	[[fedfalcon]],
 	[[fedeagle]],
 }
@@ -62,6 +63,7 @@ Shared.buildListLozAirPlant = {
 	[[lozbumblebee]],
 	[[lozdragonfly]],
 	[[lozhornet]],
+	[[airscoutxl],
 	[[lozcrane]],
 	[[lozlocust]],
 	[[loztitan]],
