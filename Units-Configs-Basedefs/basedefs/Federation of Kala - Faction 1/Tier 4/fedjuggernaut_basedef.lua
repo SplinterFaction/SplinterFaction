@@ -184,7 +184,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 225,
+			default              = 400,
 		},
 	},
 	plasmacannon                	= {
@@ -225,7 +225,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 835,
+			default              = 1670,
 		},
 	},
 	clusterrockets             = {
@@ -268,7 +268,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 30,
+			default              = 120,
 		},
 	},
 	missile            = {
@@ -313,7 +313,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 400,
+			default              = 800,
 		},
 	},
 }
