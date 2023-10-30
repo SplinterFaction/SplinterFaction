@@ -423,6 +423,13 @@ function widget:GameFrame(frame)
 		updateNotifications(dt)
 	end
 
+	if frame == 5 then
+		local isSpectating = Spring.GetSpectatingState()
+		if isSpectating then
+			widgetHandler:RemoveWidget()
+		end
+	end
+
 	--Let the player know that they have enough income to tech up
 	if frame > 450 then
 		if frame%450 == 5 then -- frame%450 = every 15 seconds

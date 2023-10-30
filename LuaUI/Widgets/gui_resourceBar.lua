@@ -175,7 +175,7 @@ function RectRound(px,py,sx,sy,cs, tl,tr,br,bl)		-- (coordinates work differentl
 end
 
 function widget:GameFrame(n)
-	if n%30 == 1 then
+	if n%30 == 12 then
 		energyWarningTimeout = energyWarningTimeout - 1
 		metalWarningTimeout = metalWarningTimeout - 1
 		supplyWarningTimeout = supplyWarningTimeout - 1
@@ -185,7 +185,7 @@ function widget:GameFrame(n)
 		--Spring.Echo("S " .. supplyNotificationTimeout)
 	end
 
-	if n%30 == 1 then
+	if n%30 == 10 then
 		local spectator = Spring.GetSpectatingState()
 		--Spring.Echo(spectator)
 		resourcePrompts = Spring.GetConfigInt("evo_resourceprompts", 1)
@@ -214,7 +214,7 @@ function widget:GameFrame(n)
 				
 			end
 		elseif increment > 0 then
-			if n%30 == 1 then
+			if n%30 == 9 then
 				-- We don't strictly need the warning timeouts here, but they are here to prevent lua message spam
 				if energyWarningTimeout <= 0 then
 					if energyWarning == true then
