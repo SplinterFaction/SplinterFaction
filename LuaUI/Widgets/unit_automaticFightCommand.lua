@@ -68,8 +68,8 @@ local function SetupUnit(unitID)
 	      z = z + 1
 	    end	
 		-- meta enables reclaim enemy units, alt autoresurrect ( if available )
-		spGiveOrderToUnit(unitID, CMD.MOVE_STATE, { 0 }, {})
-		spGiveOrderToUnit(unitID, CMD_FIGHT, { x, y, z }, {"meta"})
+		-- spGiveOrderToUnit(unitID, CMD.MOVE_STATE, { 1 }, {})
+		spGiveOrderToUnit(unitID, CMD_FIGHT, { x, y, z }, {"shift"})
 	end
 end
 
@@ -86,7 +86,7 @@ function widget:Initialize()
 end
 
 
-function widget:UnitCreated(unitID, unitDefID, unitTeam)
+function widget:UnitFinished(unitID, unitDefID, unitTeam)
 	if unitTeam ~= spGetMyTeamID() then
 		return
 	end
