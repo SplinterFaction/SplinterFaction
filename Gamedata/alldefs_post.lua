@@ -1060,6 +1060,30 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			unitDef.buildtime = math.floor(totalValueInMetal + 0.5)
 
 
+			-- Set global Buildspeed
+			if unitDef.customparams then
+				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Factory" or unitDef.customparams.unitrole == "Commander" then
+					unitDef.workertime = 8
+				end
+			end
+
+			-- Tier Based Buildtimes
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
+				unitDef.buildtime = unitDef.buildtime / 2
+			end
+
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
+				unitDef.buildtime = unitDef.buildtime / 4
+			end
+
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
+				unitDef.buildtime = unitDef.buildtime / 8
+			end
+
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
+				unitDef.buildtime = unitDef.buildtime / 16
+			end
+
 			-- Set Supply Costs
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
 				if unitDef.customparams and unitDef.customparams.supply_cost then
