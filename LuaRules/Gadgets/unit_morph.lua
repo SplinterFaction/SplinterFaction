@@ -2095,11 +2095,6 @@ else
 
     cachedReadTeamTable.read = readTeam
     CallAsTeam(cachedReadTeamTable, DrawMorphUnits, readTeam)
-    for unitID, morphData in pairs(morphUnits) do
-      if unitID and morphData and IsUnitVisible(unitID) then
-        DrawMorphUnit(unitID, morphData, readTeam)
-      end
-    end
     glDepthTest(false)
     glBlending(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
   end
