@@ -110,7 +110,7 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	railgun               = {
+	railgun_old               = {
 		areaofeffect		   = 15,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -140,7 +140,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 2000,
 		customparams             = {
-			single_hit		 	 = true,
+			--single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -150,6 +150,56 @@ weaponDefs                 = {
 			default              = 1500,
 		},
 	},
+
+	railgun           = {
+		areaofeffect		      = 15,
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		-- cegtag					  = "burnblack",
+		beamtime				  = 0.5,
+		beamttl                   = 4,
+		largebeamlaser			  = true,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Beam",
+		range                     = 800,
+		reloadtime                = 4,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = "0.1 0.1 0.5",
+		rgbColor2                 = "1 1 1",
+		soundTrigger              = true,
+		soundstart                = "lozmammoth-maingun",
+		-- soundHit                  = "explode5",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 5,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			--single_hit		 	 = true,
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                    = {
+			default               = 1500,
+		},
+	},
+
 	lasercannon                = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -207,7 +257,7 @@ weaponDefs                 = {
 		fireStarter               = 100,
 		impulseFactor             = 0,
 		interceptedByShieldType   = 4,
-		minintensity              = 0.5,
+		minintensity              = 1,
 		name                      = "Gamma Ray Beam",
 		range                     = 800,
 		reloadtime                = 0.25,

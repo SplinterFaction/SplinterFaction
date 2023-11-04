@@ -15,8 +15,8 @@ unitDef                    = {
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = explodeAs,
-	footprintX                   = 8,
-	footprintZ                   = 8,
+	footprintX                   = 12,
+	footprintZ                   = 12,
 	iconType                     = "tankassaultt4",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
@@ -107,7 +107,7 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	heavyrailgun              = {
+	heavyrailgun_old              = {
 		areaofeffect		   = 50,
 		avoidFriendly            = false,
 		avoidFeature             = false,
@@ -148,6 +148,55 @@ weaponDefs                 = {
 		},
 	},
 
+	heavyrailgun           = {
+		areaofeffect		      = 50,
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		-- cegtag					  = "burnblack",
+		beamtime				  = 0.5,
+		beamttl                   = 4,
+		largebeamlaser			  = true,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Anti-Tank Railgun",
+		range                     = 1200,
+		reloadtime                = 10,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = "1 1 5",
+		rgbColor2                 = "1 1 1",
+		soundTrigger              = true,
+		soundstart                = "lozsilverback-maingun",
+		-- soundHit                  = "explode5",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 7,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			--single_hit		 	 = true,
+			expl_light_color	= white, -- As a string, RGB
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                    = {
+			default               = 10000,
+		},
+	},
+
 	railgun               = {
 		areaofeffect		   = 25,
 		avoidFriendly          = false,
@@ -179,7 +228,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 2000,
 		customparams             = {
-			single_hit		 	 = true,
+			--single_hit		 	 = true,
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

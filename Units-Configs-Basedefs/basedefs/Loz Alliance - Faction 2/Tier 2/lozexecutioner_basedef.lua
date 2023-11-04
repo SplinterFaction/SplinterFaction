@@ -177,7 +177,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 1500,
 		customparams             = {
-			single_hit		 	 = true,
+			--single_hit		 	 = true,
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second

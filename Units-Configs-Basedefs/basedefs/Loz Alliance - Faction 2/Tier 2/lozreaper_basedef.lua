@@ -105,7 +105,7 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	railgun               = {
+	railgun_old               = {
 		areaofeffect		   = 25,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -146,6 +146,56 @@ weaponDefs                 = {
 			default              = 225,
 		},
 	},
+
+	railgun           = {
+		areaofeffect		      = 25,
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		-- cegtag					  = "burnblack",
+		beamtime				  = 0.5,
+		beamttl                   = 4,
+		largebeamlaser			  = true,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Beam",
+		range                     = 850,
+		reloadtime                = 3,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = "0.2 0 1",
+		rgbColor2                 = "1 1 1",
+		soundTrigger              = true,
+		soundstart                = "lozreaper-maingun",
+		-- soundHit                  = "explode5",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 3,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			--single_hit		 	 = true,
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                    = {
+			default               = 225,
+		},
+	},
+
 	lasercannon                = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
