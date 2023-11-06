@@ -121,12 +121,12 @@ local drawIncome = false -- Should we draw the income estimation?
 local minimapIconSizeMult = 0.0145 --0.0145
 
 -- only used when animating a spreadsheet/atlas texture
-local spotTexture = "bitmaps/default/mexspots.png"
-local animRate = 500      -- That's actually the reverse of animrate, the lower it is the faster the animation goes
+local spotTexture = "bitmaps/default/mexspots1.png"
+local animRate = 5000      -- That's actually the reverse of animrate, the lower it is the faster the animation goes
 local texturewidth = 80 --160 (actual in-game rect width)
 local textureYoffset = 1 --10 (offset from the ground)
-local numberOfImagesX = 4
-local numberOfImagesY = 4
+local numberOfImagesX = 1
+local numberOfImagesY = 1
 
 --------------------
 
