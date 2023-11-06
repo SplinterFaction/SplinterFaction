@@ -167,6 +167,40 @@ return {
 		},
 	},
 
+	["powerplant-fireball-small-blue"] = {
+		flame = {
+			air        = true,
+			class      = [[CSimpleParticleSystem]],
+			count      = 1,
+			ground     = true,
+			underwater = true,
+			properties = {
+				airdrag             = 0.97,
+				colormap            = [[0 0 0 0     0.7 0.7 0.7 1     0 0 1 1     0 0 0 0]],
+				directional         = false,
+				emitrot             = 0,
+				emitrotspread       = 0,
+				emitvector          = [[0,0,0]],
+				gravity             = [[0,0,0]],
+				numparticles        = [[1]],
+				particlelife        = 64,
+				particlelifespread  = 0,
+				particlesize        = 18,
+				particlesizespread  = 1,
+				particlespeed       = 0,
+				particlespeedspread = 0,
+				sizegrowth          = 0,
+				sizemod             = 1,
+				rotParams           = [[-24 r48, -60 r120, -180 r360]],
+				animParams          = [[4,4,16]], --[xTiles, yTiles, animLength in game frames]
+				pos                 = [[0,4,0]],
+				texture             = [[generated-generator]],
+				drawOrder           = 0,
+			},
+
+		},
+	},
+
 	["powerplant-fireball-small-purple"] = {
 		flame = {
 			air        = true,
@@ -186,6 +220,39 @@ return {
 				particlelife        = 64,
 				particlelifespread  = 0,
 				particlesize        = 25,
+				particlesizespread  = 1,
+				particlespeed       = 0,
+				particlespeedspread = 0,
+				sizegrowth          = 0,
+				sizemod             = 1,
+				rotParams           = [[-24 r48, -60 r120, -180 r360]],
+				animParams          = [[4,4,16]], --[xTiles, yTiles, animLength in game frames]
+				pos                 = [[0,4,0]],
+				texture             = [[generated-generator]],
+				drawOrder           = 0,
+			},
+		},
+	},
+
+	["powerplant-fireball-medium-orange"] = {
+		flame = {
+			air        = true,
+			class      = [[CSimpleParticleSystem]],
+			count      = 1,
+			ground     = true,
+			underwater = true,
+			properties = {
+				airdrag             = 0.97,
+				colormap            = [[0 0 0 0     0.7 0.7 0.7 1     1 0.6 0 1     0 0 0 0]],
+				directional         = false,
+				emitrot             = 0,
+				emitrotspread       = 0,
+				emitvector          = [[0,0,0]],
+				gravity             = [[0,0,0]],
+				numparticles        = [[1]],
+				particlelife        = 64,
+				particlelifespread  = 0,
+				particlesize        = 40,
 				particlesizespread  = 1,
 				particlespeed       = 0,
 				particlespeedspread = 0,

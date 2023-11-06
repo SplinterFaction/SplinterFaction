@@ -1,11 +1,11 @@
 
-base, sfxpoint1 = piece('base', 'sfxpoint1')
+base, top1, top2, top3, sfxpoint1 = piece('base', 'top1', 'top2', 'top3', 'sfxpoint1')
 
 common = include("headers/common_includes_lus.lua")
 
 -- state variables
 terrainType = "terrainType"
-skyhateEffect = "powerplant-fireball-small-blue"
+skyhateEffect = "powerplant-fireball-medium-orange"
 
 function script.Create()
 	StartThread(common.SmokeUnit, {base, sfxpoint1})
@@ -23,5 +23,8 @@ end
 
 function script.Killed()
 	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(top1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(top2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	Explode(top3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

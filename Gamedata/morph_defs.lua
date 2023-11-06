@@ -338,6 +338,13 @@ local morphDefs = {
 			require   = [[tech4]],
 		},
 		{
+			into      = 'geothermalpowerplant',
+			time      = 60,
+			cmdname   = [[Geothermal Powerplant]],
+			text      = [[Geothermal Powerplant]],
+			require   = [[tech1]],
+		},
+		{
 			into      = 'condenser',
 			time      = 60,
 			cmdname   = [[Condenser]],
@@ -367,6 +374,13 @@ local morphDefs = {
 			cmdname   = [[Metal Maker]],
 			text      = [[Geothermal Metal Maker]],
 			require   = [[tech4]],
+		},
+		{
+			into      = 'geothermalpowerplant',
+			time      = 60,
+			cmdname   = [[Geothermal Powerplant]],
+			text      = [[Geothermal Powerplant]],
+			require   = [[tech1]],
 		},
 		{
 			into      = 'condenser',
