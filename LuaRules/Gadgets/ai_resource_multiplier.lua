@@ -6,9 +6,13 @@ function gadget:GetInfo()
 		date = "September 2018",
 		license = "GPL",
 		layer = 1,
-		enabled = false
+		enabled = true
 	}
 end
+
+local ai_enableincomemultiplier = Spring.GetModOptions().ai_enableincomemultiplier or "disabled"
+if ai_enableincomemultiplier == "disabled" then return end
+
 
 local timedResBonusMultiplier = 0.00020 
 local timedResBonusMultiplierMax = 2
@@ -19,6 +23,8 @@ if (not gadgetHandler:IsSyncedCode()) then
 end
 
 local aiResourceMultiplier = tonumber(Spring.GetModOptions().ai_incomemultiplier) or 1
+aiResourceMultiplier = aiResourceMultiplier * 0.01
+-- Spring.Echo("aiResourceMultiplier is set to " .. aiResourceMultiplier)
 
 if timedResBonusMultiplier == 0 and aiResourceMultiplier == 1 then
 	return

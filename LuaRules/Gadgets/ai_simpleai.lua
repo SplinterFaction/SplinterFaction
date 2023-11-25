@@ -271,7 +271,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif mexspotpos and (SimpleT1Mexes[unitTeam] < 3) then
+			elseif mexspotpos and (SimpleT1Mexes[unitTeam] < 6) then
 				local project = SimpleExtractorDefs[math.random(1, #SimpleExtractorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -281,7 +281,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif ecurrent < estorage*0.50 then
+			elseif ecurrent < estorage*0.50 or eincome <= 200 then
 				local project = SimpleGeneratorDefs[math.random(1, #SimpleGeneratorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -301,10 +301,10 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif (ecurrent > estorage * 0.50 and mcurrent > mstorage * 0.50) and SimpleConstructorDelay[unitTeam] > 0 and SimpleFactoryDelay[unitTeam] <= 0 then
+			elseif (ecurrent > estorage * 0.50 and mcurrent > mstorage * 0.50) and SimpleConstructorDelay[unitTeam] > 0 and SimpleFactoryDelay[unitTeam] <= 0 and eincome >= 200 then
 				local project = SimpleFactoriesDefs[math.random(1, #SimpleFactoriesDefs)]
 				for i2 = 1,#buildOptions do
-					if buildOptions[i2] == project and (SimpleFactories[unitTeam][project] or 0 < 2) then
+					if buildOptions[i2] == project and (SimpleFactories[unitTeam][project] or 0 < 4) then
 						SimpleFactoryDelay[unitTeam] = 60*SimpleFactoriesCount[unitTeam]
 						SimpleBuildOrder(unitID, project)
 						Spring.Echo("Success! Project Type: Factory.")

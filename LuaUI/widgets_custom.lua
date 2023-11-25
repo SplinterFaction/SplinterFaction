@@ -153,6 +153,8 @@ local flexCallIns = {
   'DrawGenesis',
   'DrawWorld',
   'DrawWorldPreUnit',
+  'DrawPreDecals',
+  'DrawGroundPostForward',
   'DrawWorldShadow',
   'DrawWorldReflection',
   'DrawWorldRefraction',
@@ -1281,6 +1283,18 @@ function widgetHandler:DrawWorldPreUnit()
     w:DrawWorldPreUnit()
   end
   return
+end
+
+function widgetHandler:DrawPreDecals()
+  for _,w in ripairs(self.DrawPreDecalsList) do
+    w:DrawPreDecals()
+  end
+end
+
+function widgetHandler:DrawGroundPostForward()
+  for _,w in ripairs(self.DrawGroundPostForwardList) do
+    w:DrawGroundPostForward()
+  end
 end
 
 
