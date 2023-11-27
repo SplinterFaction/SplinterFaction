@@ -196,7 +196,16 @@ local soundData = {
 	},
 
 	['weapons'] = {
-		gain =  1.5 * 0.3,
+		gain =  1.75 * 0.3,
+		pitchmod = 0.17,
+		gainmod = 0.2 * 0.3,
+		maxconcurrent = 16,
+		dopplerscale = 1.0,
+		rolloff = 0.5,
+	},
+
+	['weaponsloud'] = {
+		gain =  2.5 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
 		maxconcurrent = 16,

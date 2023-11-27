@@ -11,6 +11,13 @@
 local iconSize = 2.5
 
 local icontypes = {
+
+	commander = {
+		bitmap='icons/supcomish/commander.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
+
 	--walkers
 	botengineer = {
 		bitmap='icons/supcomish/botengineer.png',
