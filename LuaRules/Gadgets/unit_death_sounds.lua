@@ -26,8 +26,6 @@ local SOUNDS_PATH = "sounds/deathsounds/"
 local soundClasses = {}
 local soundClassSizes = {}
 local udSoundCache = {}
--- included for RecursiveFileSearch
- local VFSUtils = VFS.Include('gamedata/VFSUtils.lua')
 
 if (gadgetHandler:IsSyncedCode()) then
 -- SYNCED
@@ -40,7 +38,7 @@ if (gadgetHandler:IsSyncedCode()) then
 				local dirName = string.gsub(subDir,SOUNDS_PATH,'')
 				dirName = string.gsub(dirName,"/",'')
 				-- Spring.Echo (dirName)
-				soundClasses[dirName] = RecursiveFileSearch(subDir)
+				soundClasses[dirName] = VFS.DirList(subDir, nil, nil, true)
 				soundClassSizes[dirName] = #soundClasses[dirName]			
 			end
 		end
