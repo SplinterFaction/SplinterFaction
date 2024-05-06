@@ -76,5 +76,14 @@ AutoAdd("scars", false)
 AutoAdd("groundfx", true)
 AutoAdd("projectiletextures", true)
 
+if Script.IsEngineMinVersion(105, 0, 2365) then
+	-- defaults from basecontent; note that auto
+	-- detection would catch the normals too
+	resources.graphics.scars = {
+		'scars/scar1.tga',
+		'scars/scar2.tga',
+	}
+end
+
 return resources
 
