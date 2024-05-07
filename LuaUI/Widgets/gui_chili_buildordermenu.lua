@@ -79,12 +79,17 @@ WG.buildOrderUI = {updateConfigInt = false}
 
 local fontSize =  14 * widgetScale
 
+local traditionalCompact = 2
+local traditionalSmall = 1
+local traditionalLarge = 0
 
-if buildOrderUI == 1 then
+
+
+if buildOrderUI == traditionalSmall then
     Config = {
         ordermenu = {
             name = 'ordermenu',
-            rows = 6, columns = 4,
+            rows = 5, columns = 5,
             x = '0%', y = '24%',
             width = '100%', height = '25%',
             orientation = 'horizontal',
@@ -112,11 +117,11 @@ if buildOrderUI == 1 then
     }
 
     --Traditional with compact pictures
-elseif buildOrderUI == 2 then
+elseif buildOrderUI == traditionalCompact then
     Config = {
         ordermenu = {
             name = 'ordermenu',
-            rows = 6, columns = 4,
+            rows = 5, columns = 5,
             x = '0%', y = '24%',
             width = '100%', height = '25%',
             orientation = 'horizontal',
@@ -125,7 +130,7 @@ elseif buildOrderUI == 2 then
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 5, columns = 6,
+            rows = 4, columns = 6,
             x = '0%', y = '50%',
             width = '50%', height = '50%',
             orientation = 'horizontal',
@@ -143,26 +148,26 @@ elseif buildOrderUI == 2 then
         },
     }
 else
-    --buildOrderUI == 0
+    buildOrderUI = traditionalLarge
     --This is the Default
     --Traditional with larger pictures
     Config = {
         ordermenu = {
             name = 'ordermenu',
-            rows = 6, columns = 4,
+            rows = 5, columns = 5,
             x = '0%', y = '24%',
             width = '100%', height = '25%',
             orientation = 'horizontal',
-            maxWidth = 500,
+            maxWidth = 600,
             padding = {5, 5, 5, 5},     -- outer panel
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 3, columns = 4,
+            rows = 4, columns = 5,
             x = '0%', y = '50%',
             width = '50%', height = '50%',
             orientation = 'horizontal',
-            maxWidth = 500,
+            maxWidth = 600,
             padding = {5, 5, 5, 5},
         },
         labels = {
@@ -449,8 +454,8 @@ local function addBuildCommand(cmd)
 
     end
     local techReqColors = {color2incolor(0,0.8,1), color2incolor(1,0.5,0), color2incolor(1,0,1), color2incolor(0,1,0), color2incolor(1,0,0)}
-    if showTechReq and cmd.disabled then
-        if stringfind(cmd.tooltip, 'Requires') and not stringfind(cmd.tooltip, 'Provides') then
+    if showTechReq then
+        if stringfind(cmd.tooltip, 'Requires') or stringfind(cmd.tooltip, 'Provides') then
             local s, e = stringfind(cmd.tooltip, 'tech%d*')
             if s then
                 local techLevel = stringsub(cmd.tooltip, s + 4, e)
