@@ -304,7 +304,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 			elseif (ecurrent > estorage * 0.50 and mcurrent > mstorage * 0.50) and SimpleConstructorDelay[unitTeam] > 0 and SimpleFactoryDelay[unitTeam] <= 0 and eincome >= 200 then
 				local project = SimpleFactoriesDefs[math.random(1, #SimpleFactoriesDefs)]
 				for i2 = 1,#buildOptions do
-					if buildOptions[i2] == project and (SimpleFactories[unitTeam][project] or 0 < 4) then
+					if buildOptions[i2] == project and (SimpleFactories[unitTeam][project] or 0 < 10) then
 						SimpleFactoryDelay[unitTeam] = 60*SimpleFactoriesCount[unitTeam]
 						SimpleBuildOrder(unitID, project)
 						Spring.Echo("Success! Project Type: Factory.")

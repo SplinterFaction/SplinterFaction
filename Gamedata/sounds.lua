@@ -214,7 +214,7 @@ local soundData = {
 	},
 
 	['impacts'] = {
-		gain = 1.5 * 0.3,
+		gain = 3 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
 		maxconcurrent = 7,
@@ -223,7 +223,7 @@ local soundData = {
 	},
 
 	['impacts/generic'] = {
-		gain = 1.5 * 0.3,
+		gain = 3 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
 		maxconcurrent = 7,
@@ -232,7 +232,7 @@ local soundData = {
 	},
 
 	['deathsounds/generic'] = {
-		gain = 1.75 * 0.3,
+		gain = 8 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
 		maxconcurrent = 7,
