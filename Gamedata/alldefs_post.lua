@@ -28,7 +28,8 @@ end
 
 unitHealthModifier = unitHealthModifier * 0.01
 
-local canFactoriesBeAssisted = true
+local canFactoriesBeAssisted = false
+local canBuildersBeAssisted = false
 local canAnyUnitsReclaim = true
 local useDefaultNanospray = true
 
@@ -763,6 +764,14 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
+			if unitDef.customparams and unitDef.customparams.unitrole == "Builder" then
+				if canBuildersBeAssisted == false then
+					unitDef.canbeassisted = false
+				else
+					unitDef.canbeassisted = true
+				end
+			end
+
 			--[[
 			--------------------------------------------------------------------------------
 			-- Radar Negation and Sight Distance Maximums -- !!!! THIS SECTION IS VERY IMPORTANT !!!!
@@ -1077,11 +1086,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
-				unitDef.buildtime = unitDef.buildtime / 8
+				unitDef.buildtime = unitDef.buildtime / 16
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
-				unitDef.buildtime = unitDef.buildtime / 16
+				unitDef.buildtime = unitDef.buildtime / 32
 			end
 
 			-- Set Supply Costs
