@@ -1331,6 +1331,10 @@ function applyOptionValue(i, skipRedrawWindow)
 			if WG.buildOrderUI then WG.buildOrderUI.updateConfigInt = true end
 		elseif id == 'ctrl_dequeue' then
 			Spring.SetConfigInt("evo_ctrl_dequeue", value)
+		elseif id == 'active_highlight_builders' then
+			Spring.SetConfigInt("evo_active_highlight_builders", value)
+			Spring.SendCommands("luaui togglewidget Constructor locater")
+			Spring.SendCommands("luaui togglewidget Constructor locater")
 		end
 
 		if options[i].widget ~= nil then
@@ -2419,7 +2423,9 @@ function init()
         {id="onlyfighterspatrol", group="game", widget="OnlyFightersPatrol", name="Only fighters patrol", type="bool", value=GetWidgetToggleValue("Autoquit"), description='Only fighters obey a factory\'s patrol route after leaving airlab.'},
 		{id="fightersfly", group="game", widget="Set fighters on Fly mode", name="Set fighters on Fly mode", type="bool", value=GetWidgetToggleValue("Set fighters on Fly mode"), description='Setting fighters on Fly mode when created'},
 
-		{id="passivebuilders", group="game", widget="Passive builders", name="Passive builders", type="bool", value=GetWidgetToggleValue("Passive builders"), description='Sets builders (nanos, labs and cons) on passive mode\n\nPassive mode means that builders will only spend energy when its availible.\nUsage: You could set your most important builders on active and leave the rest on passive'},
+		{id="passivebuilders", group="game", widget="Passive builders", name="Passive builders", type="bool", value=GetWidgetToggleValue("Passive builders"), description='Sets builders (nanos, labs and cons) on passive mode\n\nPassive mode means that builders will only spend energy when it\'s availible.\nUsage: You could set your most important builders on active and leave the rest on passive'},
+
+		{id="active_highlight_builders", group="game", name="Highlight all builders on mouseover?", type="bool", value=Spring.GetConfigInt("evo_active_highlight_builders",0) == 1, description='Enabling this option will cause all builders to have a flashing ring around them when you \nput your mouse over them. They will also flash on the minimap. The default behavior is off, \nbecause you can simply press spacebar to cause all builders on the map to highlight.'},
 
 		{id="autogroup_immediate", group="game", name="Autogroup immediate mode", type="bool", value=(WG['autogroup']~=nil and WG['autogroup'].getImmediate~=nil and WG['autogroup'].getImmediate()), description='Units built/resurrected/received are added to autogroups immediately instead of waiting them to be idle.\n\n(add units to autogroup with ALT+number)'},
 

@@ -22,7 +22,7 @@ include"keysym.h.lua"
 -- options begin
 
 -- how many sides the marker "circles" will have
-local circleDivs = 32
+local circleDivs = 64
 
 -- how fast the constructor-indicating graphics blink
 local aniSpeedMultiplier = 4
@@ -56,12 +56,14 @@ local activationKeyTable = {
 -- enabling this means having your cursor on a constructor activates
 -- the constructor-indicating graphics
 local activateOnMouseOver = false
+if Spring.GetConfigInt("evo_active_highlight_builders", 0) == 1
+    then activateOnMouseOver = true
+end
 
 -- enabling this causes the widget to draw only on the mini map
 local miniMapOnly = false
 
 -- options end
-
 
 
 
@@ -126,8 +128,6 @@ local useSecColors = true
 local lastTime
 local aniSpeed
 local aniDelta
-
-
 
 function append(list, value)
   --Echo(widgetName .. ': entered "' .. debug.getinfo(1, "n").name .. '"')
@@ -378,7 +378,7 @@ function widget:DrawInMiniMap(sx, sy)
 
         glLineWidth(1)
 
-        glColor(red, green, blue, aniFactor*0.4)
+        glColor(red, green, blue, aniFactor*1)
 
         local max = conList:len()
 
@@ -457,7 +457,7 @@ function widget:DrawWorldPreUnit()
         aniFactor = aniFactor + aniDelta
 
         
-        glLineWidth(2.5)
+        glLineWidth(5)
 
         camFactor = cy/200+25
 
