@@ -5,6 +5,7 @@ unitDef                    = {
 	buildTime                    = 5,
 	buildpic					 = "lozluger.png",
 	canAttack                    = true,
+	fireState                    = 0,
 	canGuard                     = true,
 	canHover                     = false,
 	canMove                      = true,
@@ -87,6 +88,7 @@ unitDef                    = {
 		unitrole				 = "Artillery - Tech 2",
 		canbetransported 		 = "true",
 		canareaattack            ="1",
+		stockpileLimit           = 5,
 		needed_cover             = 3,
 		death_sounds             = "generic",
 		RequireTech              = tech,
@@ -104,7 +106,8 @@ unitDef                    = {
 
 weaponDefs                 = {
 	Artilleryweapon              = {
-		AreaOfEffect             = 50,
+		commandfire              = true,
+		AreaOfEffect             = 200,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
@@ -117,17 +120,25 @@ weaponDefs                 = {
 		
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		highTrajectory	         = 1,
 		name                     = "High Explosive Plasma Cannon",
 		range                    = 1300,
-		reloadtime               = 40,
+		reloadtime               = 1,
 		size					 = 10,
 		weaponType		         = "Cannon",
 		soundHit                 = "artyhit",
 		soundStart               = "lozluger-maingun",
-		
+		sprayangle               = 500,
+
+		-----
+		stockpile                = true,
+		stockpiletime            = 90,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
+
+		trajectoryHeight	   = 2,
 		turret                   = true,
-		weaponVelocity           = 500,
+		weaponVelocity           = 450,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
@@ -135,7 +146,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},  
 		damage                   = {
-			default              = 4000,
+			default              = 8000,
 		},
 	},
 }

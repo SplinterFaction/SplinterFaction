@@ -205,7 +205,7 @@ local soundData = {
 	},
 
 	['weaponsloud'] = {
-		gain =  6 * 0.3,
+		gain =  5 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
 		maxconcurrent = 16,
@@ -232,7 +232,7 @@ local soundData = {
 	},
 
 	['deathsounds/generic'] = {
-		gain = 8 * 0.3,
+		gain = 4 * 0.3,
 		pitchmod = 0.17,
 		gainmod = 0.2 * 0.3,
 		maxconcurrent = 7,

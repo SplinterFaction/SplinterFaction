@@ -211,39 +211,40 @@ end
 
 if mexRandomLayout == "standard" then
 
-	mexSpotsPerQuad = 15
+	mexSpotsPerPlayer = 10
+	mexSpotsPerQuad = (mexSpotsPerPlayer * 2) / 4
 
-	if mapSQRT <= 144 then -- An exception for 12x12 and smaller maps
-		mexSpotsPerQuad = 10
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
-	end
+	--if mapSQRT <= 144 then -- An exception for 12x12 and smaller maps
+	--	mexSpotsPerQuad = 10
+	--	Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+	--end
+	--
+	--if mapSQRT > 144 and mapSQRT <= 196 then -- An exception for 14x14 maps
+	--	mexSpotsPerQuad = 12
+	--	Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+	--end
+	--
+	--if mapSQRT > 196 and mapSQRT <= 256 then -- An exception for 16x16 maps
+	--	mexSpotsPerQuad = 15
+	--	Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+	--end
+	--
+	--if mapSQRT > 256 and mapSQRT <= 400 then -- An exception for 20x20 maps
+	--	mexSpotsPerQuad = 17
+	--	Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+	--end
+	--
+	--if mapSQRT > 400 and mapSQRT <= 576 then -- An exception for 24x24 maps
+	--	mexSpotsPerQuad = 20
+	--	Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+	--end
+	--
+	--if mapSQRT > 576 then -- An exception for 28x28 maps
+	--	mexSpotsPerQuad = 25
+	--	Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
+	--end
 
-	if mapSQRT > 144 and mapSQRT <= 196 then -- An exception for 14x14 maps
-		mexSpotsPerQuad = 12
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
-	end
-
-	if mapSQRT > 196 and mapSQRT <= 256 then -- An exception for 16x16 maps
-		mexSpotsPerQuad = 15
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
-	end
-
-	if mapSQRT > 256 and mapSQRT <= 400 then -- An exception for 20x20 maps
-		mexSpotsPerQuad = 17
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
-	end
-
-	if mapSQRT > 400 and mapSQRT <= 576 then -- An exception for 24x24 maps
-		mexSpotsPerQuad = 20
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
-	end
-
-	if mapSQRT > 576 then -- An exception for 28x28 maps
-		mexSpotsPerQuad = 25
-		Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
-	end
-
-	pointsPerSideModifier = 1.5 ^ (( teamIDCount - 2 ) / 2)
+	pointsPerSideModifier = 1 ^ (( teamIDCount - 2 ) / 2)
 	randomMirrored = true
 	padding = 100
 	pointRadius = 100 -- TODO: change this into how big a metal circle is

@@ -9,7 +9,7 @@ unitDef                    = {
 	buildTime                    = 5,
 	buildpic					 = [[fedavalanche.png]],
 	canAttack                    = true,
-	
+	fireState                    = 0,
 	canGuard                     = true,
 	canHover                     = true,
 	canMove                      = true,
@@ -105,6 +105,7 @@ unitDef                    = {
 		unittype				  = "mobile",
 		unitrole				 = "Artillery - Tech 2",
 		canbetransported 		 = "true",
+		stockpileLimit           = 5,
 		needed_cover             = 1,
 		death_sounds             = "generic",
 		RequireTech              = tech,
@@ -119,7 +120,8 @@ unitDef                    = {
 
 weaponDefs                 = {
 	plasmacannon                	= {
-		AreaOfEffect           = 25,
+		commandfire            = true,
+		AreaOfEffect           = 100,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -131,23 +133,29 @@ weaponDefs                 = {
 		explosionGenerator     = "custom:genericshellexplosion-small",
 		energypershot          = 0,
 		-- duration			   = 0.25,
-		highTrajectory		   = 1,
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1300,
-		reloadtime             = 35,
+		reloadtime             = 1,
+		-----
+		stockpile                = true,
+		stockpiletime            = 70,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
+		trajectoryHeight	   = 2,
 		size				   = 4,
 		weaponType		       = "Cannon",
 		soundStart             = "scifi_pistol_B_single_01-8roundburst",
 		soundHit	           = "mediumcannonhit",
 		soundTrigger           = true,
-		sprayAngle             = 100,
+		sprayAngle             = 750,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 600,
+		weaponVelocity         = 450,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -155,7 +163,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 220,
+			default              = 440,
 		},
 	},
 
