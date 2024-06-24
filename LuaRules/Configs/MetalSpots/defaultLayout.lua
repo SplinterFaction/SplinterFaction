@@ -31,7 +31,7 @@ Spring.Echo("[Default Mex Layout] Number of teamIDs in this match: " .. teamIDCo
 
 local placeMexesInWater = Spring.GetModOptions().allowmexesinwater or "disabled"
 local maxMexElevationDiff = tonumber(Spring.GetModOptions().maximummexelevationdifference) or 50
-local mexSpotsPerQuadMultiplier = tonumber(Spring.GetModOptions().mexSpotsPerQuadmultiplier) or 100
+local mexSpotsPerPlayerOverride = tonumber(Spring.GetModOptions().mexSpotsPerPlayerOverride) or 7
 local mexRandomLayout = "standard"
 local dynamicMexOutput = Spring.GetModOptions().dynamicmexoutput or "disabled"
 
@@ -43,10 +43,6 @@ end
 
 if maxMexElevationDiff == nil then -- This is just an oshitifukedup protection
 	maxMexElevationDiff = 50
-end
-
-if mexSpotsPerQuadMultiplier == nil then -- This is just an oshitifukedup protection
-	mexSpotsPerQuadMultiplier = 100
 end
 
 if dynamicMexOutput == "" or dynamicMexOutput == nil then -- This is just an oshitifukedup protection
@@ -192,27 +188,22 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 	if sizeX > sizeY then ratioY = sizeX / sizeY
 	elseif sizeY > sizeX then ratioX = sizeY / sizeX end
 	local sizeMax = math.max(sizeX, sizeY)
-	if teamIDCount < 2 then
-		metalMultiplier = 2
-	elseif teamIDCount > 8 then
-		metalMultiplier = 8
-	else
-		metalMultiplier = teamIDCount
-	end
 	for i = 1, #positions do
 		local dx = sizeMax * 0.5 - positions[i].x * ratioX
 		local dy = sizeMax * 0.5 - positions[i].z * ratioY
 		local r = math.sqrt(dx * dx + dy * dy)
-		positions[i].metal = f(r / (sizeX * math.sqrt(2) * (metalMultiplier * 0.5)))
+		positions[i].metal = f(r / (sizeX * math.sqrt(2)))
 	end
 
 	return positions
 end
 
 if mexRandomLayout == "standard" then
-
-	mexSpotsPerPlayer = 10
-	mexSpotsPerQuad = (mexSpotsPerPlayer * 2) / 4
+	mexSpotsPerPlayer = 7 --mexSpotsPerPlayerOverride needs to always mirror this value, otherwise the override will ALWAYS take precedence
+	if mexSpotsPerPlayer ~= mexSpotsPerPlayerOverride then
+		mexSpotsPerPlayer = mexSpotsPerPlayerOverride
+	end
+	mexSpotsPerQuad = (mexSpotsPerPlayer * teamIDCount) / 4
 
 	--if mapSQRT <= 144 then -- An exception for 12x12 and smaller maps
 	--	mexSpotsPerQuad = 10
@@ -244,18 +235,17 @@ if mexRandomLayout == "standard" then
 	--	Spring.Echo("[Default Mex Layout] Map Square Root size is " .. mapSQRT .. " with a teamIDCount of " .. teamIDCount.. ". Placing " .. mexSpotsPerQuad .. " mex points per quadrant (This is usually rounded up to the next whole number).")
 	--end
 
-	pointsPerSideModifier = 1 ^ (( teamIDCount - 2 ) / 2)
 	randomMirrored = true
 	padding = 100
 	pointRadius = 100 -- TODO: change this into how big a metal circle is
 	extraSeparationBetweenPoints = 50
 	howManyTriesBeforeGiveUp = 100
-	numPointsPerSide = (mexSpotsPerQuad * (mexSpotsPerQuadMultiplier * 0.01)) * pointsPerSideModifier
+	numPointsPerSide = mexSpotsPerQuad
 	numPointsPerSide = math.floor(numPointsPerSide + 0.5)
 	includeCentre = false
 	method = 6
 	allowWater = allowMexesInWater
-	--metalPerPoint = 1
+		--metalPerPoint = 1
 end
 
 if r and not m then

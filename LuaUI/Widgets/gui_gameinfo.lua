@@ -144,9 +144,19 @@ if chickensEnabled then	-- filter chicken modoptions
 end
 content = content .. titlecolor.."Mod options\n"
 for key, value in pairs(changedModoptions) do
+	if value == true then
+		value = "True"
+	else
+		value = "False"
+	end
 	content = content .. keycolor..key..separator..valuecolor..value.."\n"
 end
 for key, value in pairs(unchangedModoptions) do
+	if value == true then
+		value = "True"
+	else
+		value = "False"
+	end
 	content = content .. keycolor..key..separator..valuegreycolor..value.."\n"
 end
 
