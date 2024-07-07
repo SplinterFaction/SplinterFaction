@@ -13,7 +13,7 @@ unitDef                    = {
 	CanAttack			         = true,
 	CanAssist			         = true,
 	canBeAssisted                = true,
-	CanCapture                   = false,
+	CanCapture                   = true,
 	CanRepair			         = true,
 	canRestore					 = true,
 	
