@@ -87,16 +87,16 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
+	----- Set building Mask 0 for all mobile units
 	--------------------------------------------------------------------------------
-	-- Set building Mask 0 for all mobile units
 	--
 	if uDef.customparams and uDef.customparams.unittype == "mobile" then
 		uDef.buildingmask = 0
 	end
 
 	--------------------------------------------------------------------------------
+	----- 3dbuildrange for all non plane builders
 	--------------------------------------------------------------------------------
-	-- 3dbuildrange for all non plane builders
 	--
 	--[[
 	for name, ud in pairs(UnitDefs) do
@@ -107,26 +107,16 @@ function UnitDef_Post(name, uDef)
 	--]]
 
 	--------------------------------------------------------------------------------
+	----- turn off unit collision check for planes
 	--------------------------------------------------------------------------------
-	-- turn off unit collision check for planes
 	--
-
 	if uDef.canfly then
 		uDef.collide = false
 	end
 
 	--------------------------------------------------------------------------------
+	----- Calculate mincloakdistance based on unit footprint size
 	--------------------------------------------------------------------------------
-	-- Set building start sound for all builders
-	--
-
-	--if uDef.builder == true and uDef.sounds then
-	--	uDef.sounds.build = "miscfx/Health Pickup 3.wav"
-	--end
-
-	--------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------
-	-- Calculate mincloakdistance based on unit footprint size
 	--
 	--[[
 	local sqrt = math.sqrt
@@ -144,20 +134,28 @@ function UnitDef_Post(name, uDef)
 	]]--
 
 	--------------------------------------------------------------------------------
+	----- Engine Kludge Removal
 	--------------------------------------------------------------------------------
-	-- Spring Kludge Removal
 	--
 	uDef.activateWhenBuilt  = true
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-
-	--Set reverse velocity automatically
 	if uDef.maxreversevelocity then
-		uDef.maxreversevelocity = uDef.maxvelocity * 0.85
+		if uDef.customparams and uDef.customparams.factionname == "Neutral" then
+			uDef.maxreversevelocity = uDef.maxvelocity * 0.85
+		end
+		if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
+			uDef.maxreversevelocity = uDef.maxvelocity * 0.85
+		end
+		if uDef.customparams and uDef.customparams.factionname == "Loz Alliance" then
+			uDef.maxreversevelocity = uDef.maxvelocity * 0.25
+		end
 	end
 
-	--Override groundplate used
+	--------------------------------------------------------------------------------
+	-----Override groundplate used
+	--------------------------------------------------------------------------------
 	if uDef.usegrounddecal == true then
 		uDef.usegrounddecal = false
 	end
@@ -184,8 +182,8 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
+	----- Turn on/off nanospray globally
 	--------------------------------------------------------------------------------
-	-- Turn on/off nanospray globally
 	if useDefaultNanospray == true then
 		if uDef.shownanospray == nil or uDef.shownanospray == false then
 			uDef.shownanospray = true
@@ -197,8 +195,8 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
+	----- Turn off Chicken Egg drops
 	--------------------------------------------------------------------------------
-	-- Turn off Chicken Egg drops
 	if uDef.corpse == "chicken_egg" then
 		uDef.corpse = ""
 	end
@@ -209,31 +207,43 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
+	----- Implement idle autoheal for all units
 	--------------------------------------------------------------------------------
 	if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
-		-- Implement idle autoheal for all units
-		if uDef.idletime == nil then uDef.idletime = 0 end
-		if uDef.idletime > 450 then
-			uDef.idletime = 450
-		end
 
-		if uDef.idleautoheal == nil then uDef.idleautoheal = 0 end
-		if uDef.idleautoheal < 1 then
-			uDef.idleautoheal = 2.5
-		end
+		-- How many seconds must the unit be idle before it's self healing starts?
+		local secondsBeforeHealingStarts = 5
 
+		-- How much health does it gain per second
+		local healthGainPerSecond = 25
+
+		uDef.idletime = secondsBeforeHealingStarts * 30
+		uDef.idleautoheal = healthGainPerSecond * 2
+
+		-- Spring.Echo(uDef.unitname)
+		-- Spring.Echo(uDef.idletime)
+		-- Spring.Echo(uDef.idleautoheal)
+	else
+		-- How many seconds must the unit be idle before it's self healing starts?
+		local secondsBeforeHealingStarts = 5
+
+		-- How much health does it gain per second
+		local healthGainPerSecond = 0
+
+		uDef.idletime = secondsBeforeHealingStarts * 30
+		uDef.idleautoheal = healthGainPerSecond * 2
 	end
 
-	-------------------------------------------------------------------------- ------
 	--------------------------------------------------------------------------------
-	-- Make units unable to be repaired via nanolathe
+	----- Make units unable to be repaired via nanolathe
+	--------------------------------------------------------------------------------
 	uDef.repairable = true
 
 	-------------------------------------------------------------------------- ------
+	----- Use per piece collision volumes
+	----- !Potentially very expensive!
 	--------------------------------------------------------------------------------
-	-- Use per piece collision volumes
-	-- !Potentially very expensive!
-	-- I'm using this to save myself a boatload of time
+
 	uDef.usePieceCollisionVolumes = false
 
 	if uDef.turnrate ~= nil and uDef.canfly ~= true then
@@ -271,12 +281,25 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
+	----- Limit Commander units to one per team
 	--------------------------------------------------------------------------------
-	-- Limit Commander units to one per team
 	if uDef.customparams and uDef.customparams.unitrole and uDef.customparams.unitrole == "Commander" then
 		uDef.unitrestricted = 1
 	end
-	
+
+	--------------------------------------------------------------------------------
+	----- Set building start sound for all builders (This is no longer needed due to implementation of Damgam's sound gadget
+	--------------------------------------------------------------------------------
+	--
+
+	--if uDef.builder == true and uDef.sounds then
+	--	uDef.sounds.build = "miscfx/Health Pickup 3.wav"
+	--end
+
+	--------------------------------------------------------------------------------
+	----- Turn off unit sounds so that they don't conflict with the unit sounds gadget
+	--------------------------------------------------------------------------------
+
 	if uDef.sounds then
 		if uDef.sounds.ok then
 			uDef.sounds.ok = nil
@@ -354,15 +377,16 @@ function WeaponDef_Post(name, wDef)
 	end
 
 	--------------------------------------------------------------------------------
-	-------------------------------------------------------------------------------- Turn off waterweapons
+	---Turn off waterweapons
+	--------------------------------------------------------------------------------
 	--[[
 	if wDef.waterweapon then
 		wDef.waterweapon = false
 	end
 	]]--
 	--------------------------------------------------------------------------------
+	----- Disable Friendly Fire Completely
 	--------------------------------------------------------------------------------
-	-- Disable Friendly Fire Completely
 	if wDef.customparams and wDef.customparams.friendlyfireexception == nil then
 		wDef.customparams.nofriendlyfire = true
 	end

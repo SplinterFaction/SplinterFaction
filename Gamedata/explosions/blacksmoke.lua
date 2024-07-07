@@ -12,12 +12,12 @@ return {
       underwater = true,
       properties = {
         airdrag             = 0.97,
-        colormap            = [[0.5 0.5 0.5 0.5   0 0 0 0   0 0 0 0]],
+        colormap            = [[1 1 1 0.1   1 1 1 0.1   1 1 1 0.1   1 1 1 0.1   0 0 0 0]],
         directional         = false,
         emitrot             = 0,
         emitrotspread       = 0,
-        emitvector          = [[0,1,0]],
-        gravity             = [[0,0.1,0]],
+        emitvector          = [[0,0,0]],
+        gravity             = [[0,0,0]],
         numparticles        = 1,
         particlelife        = 60,
         particlelifespread  = 9,
@@ -25,8 +25,8 @@ return {
         particlesizespread  = 0,
         particlespeed       = 0,
         particlespeedspread = 0,
-        rotParams           = [[0, 0, 0]],
-        animParams          = [[4,4,-10]], --[xTiles, yTiles, animLength in game frames]
+        -- rotParams           = [[-24 r48, -60 r120, -180 r360]],
+        animParams          = [[7,7,70]], --[xTiles, yTiles, animLength in game frames]
         pos                 = [[0,0,0]],
         sizegrowth          = 0,
         sizemod             = 1,
