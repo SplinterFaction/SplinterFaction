@@ -39,7 +39,8 @@ local blue2 = 0
 
 -- if the camera aka. in-game view is below this height the constructor-indicating graphics
 -- are disabled
-local minActivationHeight = 1000
+-- ... tf? Why should there be a minimum activation height???
+-- local minActivationHeight = 1000
 
 -- if the camera is above this height the constructor-indicating graphics are shown. 
 -- Type "false" or "nil" (without the quotation marks) to disable
@@ -176,8 +177,9 @@ end
 function areConditionsMet()
     local cx, cy, cz = GetCameraPosition()
 
-    if (keyPressed or above or (activationHeight and cy >= activationHeight)) and 
-        cy >= minActivationHeight and not IsGUIHidden() then
+    -- Remove activation height because I think it's stupid.
+    -- if (keyPressed or above or (activationHeight and cy >= activationHeight)) and cy >= minActivationHeight and not IsGUIHidden() then
+    if (keyPressed or above or (activationHeight and cy >= activationHeight)) and not IsGUIHidden() then
         return true
     end
     return false
