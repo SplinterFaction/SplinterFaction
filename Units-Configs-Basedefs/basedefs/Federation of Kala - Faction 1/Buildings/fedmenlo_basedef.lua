@@ -34,7 +34,7 @@ unitDef                     = {
 	repairable		              = false,
 	selfDestructAs                = "mediumBuildingExplosionGeneric",
 	side                          = "CORE",
-	sightDistance                 = 750,
+	sightDistance                 = 630,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -105,7 +105,7 @@ weaponDefs = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 630,
+		range                    = 750,
 		reloadtime               = 0.1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
@@ -124,7 +124,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 40,
+			default              = 10,
 		},
 	},
 }

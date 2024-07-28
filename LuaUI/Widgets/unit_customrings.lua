@@ -46,7 +46,7 @@ local ringsDefs = {
 
     -- Defense Turrets
     [UnitDefNames.fedmenlo.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 630, divs = 128  },
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 750, divs = 128  },
     },
 
     [UnitDefNames.fedstinger.id] = {
@@ -71,7 +71,7 @@ local ringsDefs = {
 
 
     [UnitDefNames.lozjericho.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 630, divs = 128  },
+        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 750, divs = 128  },
     },
 
     [UnitDefNames.lozrazor.id] = {
@@ -123,7 +123,7 @@ local ringsDefs = {
 		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
 	},
 	[UnitDefNames.fedcommander_up1.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 500, divs = 128  },
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 400, divs = 128  },
 	},
 	[UnitDefNames.fedcommander_up2.id] = {
 		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
@@ -139,7 +139,7 @@ local ringsDefs = {
 		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
 	},
 	[UnitDefNames.lozcommander_up1.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 500, divs = 128  },
+		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 400, divs = 128  },
 	},
 	[UnitDefNames.lozcommander_up2.id] = {
 		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
