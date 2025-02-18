@@ -89,6 +89,8 @@ unitDef                    = {
 			def                  = "flamethrower",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
+			mainDir = "0 0 1",
+			maxAngleDif = 120,
 		},
 	},
 	customParams                 = {
@@ -175,7 +177,7 @@ weaponDefs                 = {
 		rgbColor                  = "1 1 5",
 		rgbColor2                 = "1 1 1",
 		soundTrigger              = true,
-		soundstart                = "lozsilverback-maingun",
+		soundstart                = "lozsilverback-maingun1",
 		-- soundHit                  = "explode5",
 		-- sprayangle				  = 500,
 		texture1                  = "flashside3",
