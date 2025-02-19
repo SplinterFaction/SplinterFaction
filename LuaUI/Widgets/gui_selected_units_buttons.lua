@@ -581,7 +581,7 @@ function widget:MouseRelease(x, y, button)
   local icon = MouseOverIcon(x, y)
 
   local units, unitDefsCount = spGetSelectedUnitsSorted()
-  if (unitsDefsCount ~= unitTypes) then
+  if (unitDefsCount ~= unitTypes) then
     return -1  -- discard this click
   end
 
