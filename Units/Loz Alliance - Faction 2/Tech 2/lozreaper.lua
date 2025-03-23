@@ -6,7 +6,7 @@ unitName = "lozreaper"
 
 humanName = "Reaper"
 
-objectName = "lozreaper.s3o"
+objectName = "lozreaper2.s3o"
 script = "lozreaper_lus.lua"
 
 tech = [[tech2]]

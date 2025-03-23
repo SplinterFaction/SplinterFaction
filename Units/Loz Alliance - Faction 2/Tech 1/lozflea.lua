@@ -5,7 +5,7 @@ unitName = "lozflea"
 --------------------------------------------------------------------------------
 humanName = [[Flea]]
 
-objectName = "lozflea.s3o"
+objectName = "lozflea2.s3o"
 script = "lozflea_lus.lua"
 
 tech = [[tech1]]

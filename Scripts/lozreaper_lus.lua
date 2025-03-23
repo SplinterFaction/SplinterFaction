@@ -1,4 +1,4 @@
-base, frontwheels, middlewheels, rearwheels, laserturret1, laserturret2, railgunturret1, laserbarrel1, laserbarrel2, railgunbarrel1, laserfirepoint1, laserfirepoint2, railgunfirepoint1= piece('base', 'frontwheels', 'middlewheels', 'rearwheels', 'laserturret1', 'laserturret2', 'railgunturret1', 'laserbarrel1', 'laserbarrel2', 'railgunbarrel1', 'laserfirepoint1', 'laserfirepoint2', 'railgunfirepoint1')
+base, wheels1, wheels2, wheels3, wheels4, laserturret1, laserturret2, railgunturret1, laserbarrel1, laserbarrel2, railgunbarrel1, laserfirepoint1, laserfirepoint2, railgunfirepoint1= piece('base', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'laserturret1', 'laserturret2', 'railgunturret1', 'laserbarrel1', 'laserbarrel2', 'railgunbarrel1', 'laserfirepoint1', 'laserfirepoint2', 'railgunfirepoint1')
 
 local SIG_AIM = {}
 local SIG_AIM2 = {}
@@ -9,23 +9,19 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, frontwheels, middlewheels, rearwheels, laserturret1, laserturret2, railgunturret1, laserbarrel1, laserbarrel2, railgunbarrel1, laserfirepoint1, laserfirepoint2, railgunfirepoint1})
+	StartThread(common.SmokeUnit, {base, wheels1, wheels2, wheels3, wheels4, laserturret1, laserturret2, railgunturret1, laserbarrel1, laserbarrel2, railgunbarrel1, laserfirepoint1, laserfirepoint2, railgunfirepoint1})
 end
 
 common = include("headers/common_includes_lus.lua")
 
 function script.StartMoving()
    isMoving = true
-	Spin( frontwheels, 1, 50)
-	Spin( middlewheels, 1, 50)
-	Spin( rearwheels, 1, 50)
+	common.WheelStartSpin4()
 end
 
 function script.StopMoving()
    isMoving = false
-	StopSpin( frontwheels, 1, 50)
-	StopSpin( middlewheels, 1, 50)
-	StopSpin( rearwheels, 1, 50)
+	common.WheelStopSpin4()
 end
 
 local function RestoreAfterDelay()
