@@ -53,6 +53,7 @@ if gadgetHandler:IsSyncedCode() then
 				and (fDef.name ~= 'xelnotgawatchtower')
 				and (fDef.name ~= 'crystalring')
 				and (fDef.name ~= 'metal')
+				and (fDef.name ~= 'geovent')
 				then
 					local fx, fy, fz = Spring.GetFeaturePosition(fID)
 					Spring.DestroyFeature(fID)

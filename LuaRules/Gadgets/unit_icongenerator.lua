@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------------
 --
 --  file:    unit_icongenerator.lua
---  brief:   
+--  brief:
 --  author:  jK
 --
 --  Copyright (C) 2007.
@@ -48,6 +48,7 @@ if (gadgetHandler:IsSyncedCode()) then
     for i=1,#units do
       if ((units[i].frame + 30) == n) then
         Spring.DestroyUnit(units[i].id,false,true);
+        if GG and GG.CollectGarbage then GG.CollectGarbage() end  -- Free Lua memory after destruction
       elseif (units[i].frame == n) then
         SendToUnsynced("buildicon_unitcreated",units[i].id,units[i].defname);
         new[#new+1] = units[i];
@@ -57,7 +58,8 @@ if (gadgetHandler:IsSyncedCode()) then
     end;
     units = new;
 
-    if (#units>10) then return end;
+    local maxUnitsInMemory = 3  -- Reduced from 10 to ease memory load
+    if (#units >= maxUnitsInMemory) then return end;
     if (#units==0) then curTeam=nil; end;
 
     local leftunits = {};
@@ -83,7 +85,7 @@ if (gadgetHandler:IsSyncedCode()) then
 
 			local env = Spring.UnitScript.GetScriptEnv(uid)
 			if env then lus = true end
-			
+
 			if lus then
 				if env.Activate then Spring.UnitScript.CallAsUnit(uid, env.Activate) end
 			else Spring.CallCOBScript(uid,"Activate",0) end
@@ -192,6 +194,11 @@ GL_READ_FRAMEBUFFER_EXT   = 0x8CA8
 --------------------------------------------------------------------------------
 
 local autoConfigs = {}
+
+function GG.CollectGarbage()
+  collectgarbage("collect")
+end
+
 
 scheme = "" --// global var!
 
@@ -887,6 +894,7 @@ end
 
 
   local function CreateIcon(udid,uid)
+    Spring.Echo("Generating icon for unit: " .. UnitDefs[udid].name)
     local faction = GetFaction(UnitDefs[udid].factions or {});
 
     local cfg = unitConfigs[udid]
@@ -956,7 +964,11 @@ end
       --end;
 
       gl.SaveImage(0,0,iconX,iconY, outfile,{alpha=true});
+      collectgarbage("collect")  -- Free Lua memory after saving icon
     end);
+
+    Spring.Echo("Finished icon for unit: " .. UnitDefs[udid].name)
+
 
     if (not result and not cfg.empty) then
       Spring.Log(gadget:GetInfo().name, LOG.ERROR, "icongen: ".. (UnitDefs[udid].name) ..": give up :<");

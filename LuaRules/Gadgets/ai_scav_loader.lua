@@ -19,7 +19,7 @@ function gadget:GetInfo()
     author    = "Damgam",
     date      = "2019",
     layer     = -100,
-    enabled   = enabled,
+    enabled   = false,
   }
 end
 
@@ -29,7 +29,7 @@ end
 
 if gadgetHandler:IsSyncedCode() then
 		
-	if enabled then
+	if enabled == true then
 		VFS.Include('luarules/gadgets/scavengers/boot.lua')
 	end
 

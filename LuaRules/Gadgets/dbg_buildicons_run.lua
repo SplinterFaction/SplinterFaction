@@ -17,7 +17,7 @@ end
 local startframe = 1000000000
 local index=1
 local unitnames={}
-local timedelay=30*10 --yeah this crap takes 8 hours, for a total of 427 units :D
+local timedelay=1*10 --yeah this crap takes 8 hours, for a total of 427 units :D
 
 function buildslowly()
 Spring.Echo('building icons all slow-like')
