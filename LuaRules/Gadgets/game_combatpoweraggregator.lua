@@ -71,10 +71,15 @@ end
 
 -- Handle unit destruction events.
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerDefID, attackerTeam)
-	local cost = 0
+	local metalCost = 0
+	local energyCost = 0
 	if UnitDefs[unitDefID] then
-		cost = UnitDefs[unitDefID].metalCost or 0
+		metalCost = UnitDefs[unitDefID].metalCost or 0
+		energyCost = UnitDefs[unitDefID].energyCost or 0
 	end
+
+	-- Calculate total unit value (energy converted to metal: 10 energy = 1 metal)
+	local totalCost = metalCost + (energyCost / 10)
 
 	local victimName = teamToPlayer[unitTeam]
 	local attackerName = nil
@@ -86,19 +91,21 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerD
 		if attackerName then
 			if victimName == attackerName then
 				-- Friendly fire: subtract cost twice.
-				cp[victimName] = cp[victimName] - (cost * 2)
+				cp[victimName] = cp[victimName] - (totalCost * 2)
 			else
-				cp[attackerName] = cp[attackerName] + cost
-				cp[victimName] = cp[victimName] - cost
+				cp[attackerName] = cp[attackerName] + totalCost
+				cp[victimName] = cp[victimName] - totalCost
 			end
 		else
-			-- No attacker (suicide, environmental, etc.).
-			cp[victimName] = cp[victimName] - cost
+			-- No attacker (suicide, environmental, etc.)
+			cp[victimName] = cp[victimName] - totalCost
 		end
-		-- Clamp victim's CP so it never drops below the baseline.
+
+		-- Clamp victim's CP so it never falls below the baseline.
 		if cp[victimName] < baseline[victimName] then
 			cp[victimName] = baseline[victimName]
 		end
+
 		Spring.SetGameRulesParam("combatPower_" .. victimName, cp[victimName])
 		if attackerName and attackerName ~= victimName then
 			Spring.SetGameRulesParam("combatPower_" .. attackerName, cp[attackerName])

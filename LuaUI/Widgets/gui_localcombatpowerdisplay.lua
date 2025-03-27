@@ -96,27 +96,36 @@ local function updateCPPanel()
 	local players = Spring.GetPlayerList()
 	local yPos = 30
 	for _, playerID in ipairs(players) do
-		local name, active, spec = Spring.GetPlayerInfo(playerID)
+		local name, active, spec, teamID = Spring.GetPlayerInfo(playerID)
 		if active and not spec then
+			-- Get team color (values from 0 to 1)
+			local r, g, b, a = Spring.GetTeamColor(teamID)
+			local ir = math.floor(r * 255)
+			local ig = math.floor(g * 255)
+			local ib = math.floor(b * 255)
+			local colorCode = "\255" .. string.char(ir, ig, ib)
+			local whiteCode = "\255" .. string.char(255,255,255)
 			local cpValue = Spring.GetGameRulesParam("combatPower_" .. name) or 0
+			local caption = colorCode .. name .. whiteCode .. ": " .. cpValue
 			if not cpLabels[name] then
 				cpLabels[name] = Chili.Label:New{
 					parent  = cpPanel,
-					caption = name .. ": " .. cpValue,
+					caption = caption,
 					x       = 5,
 					y       = yPos,
 					width   = "100%",
 					height  = 25,
-					font    = { color = {1,1,1,1}, size = 14 },
+					font    = { color = {1, 1, 1, 1}, size = 24 },
 				}
 			else
-				cpLabels[name]:SetCaption(name .. ": " .. cpValue)
+				cpLabels[name]:SetCaption(caption)
 				cpLabels[name]:SetPos(5, yPos)
 			end
 			yPos = yPos + 30
 		end
 	end
 end
+
 
 --------------------------------------------------------------------------------
 -- Widget GameOver: Save final CP to persistent file.

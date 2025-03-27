@@ -19,14 +19,14 @@ skin.general = {
   font        = "Saira_SemiCondensed-SemiBold.ttf",
   fontsize    = 13,
   textColor   = {1.0, 1.0, 1.0, 1.0},
-  focusColor   = {0.35, 0.35, 1.0, 0.9},
+  focusColor   = {0.35, 0.35, 1.0, 1},
   borderColor  = {1.0, 1.0, 1.0, 1.0},
 
   --padding         = {5, 5, 5, 5}, --// padding: left, top, right, bottom
-  backgroundColor = {0.1, 0.1, 0.1, 0.7},
+  backgroundColor = {0, 0, 0, 1},
 
   font = {
-    outlineColor     = {0,0,0,0.7},
+    outlineColor     = {0,0,0,1},
     --autoOutlineColor = false,
     shadow           = true,
   },
@@ -45,7 +45,7 @@ skin.button = {
 
   padding = {5, 5, 5, 5},
   backgroundColor = {1, 1, 1, 1},
-  focusColor = {1, 1, 1, 0.9},
+  focusColor = {1, 1, 1, 1},
 
   DrawControl = DrawButton,
 }
@@ -59,7 +59,7 @@ skin.combobox = {
 	padding     = {10, 10, 26, 10},
 
 	textColor = {1,1,1,1},
-	backgroundColor = {0.1, 0.1, 0.1, 0.7},
+	backgroundColor = {0.1, 0.1, 0.1, 1},
 
 	DrawControl = DrawComboBox,
 }
@@ -86,7 +86,7 @@ skin.combobox_item = {
 
 skin.editbox = {
   textColor       = {1.0, 1.0, 1.0, 1.0},
-  backgroundColor = {0.1, 0.1, 0.1, 0.7},
+  backgroundColor = {0.1, 0.1, 0.1, 1},
   cursorColor     = {0.35, 0.35, 1.0, 0.9},
 }
 
