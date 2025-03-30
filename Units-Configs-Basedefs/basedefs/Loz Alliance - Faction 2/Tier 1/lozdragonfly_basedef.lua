@@ -1,7 +1,7 @@
 unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
-	buildCostEnergy              = 1500,
+	buildCostEnergy              = 3000,
 	buildCostMetal               = 0,
 	builder                      = false,
 	buildTime                    = 2.5,
@@ -94,7 +94,7 @@ unitDef                    = {
 	unloadSpread				= 10,
 	isFirePlatform			= false,
 	-- holdSteady				=
-	releaseHeld				= false,
+	releaseHeld				= true,
 	-- cantBeTransported		=
 	-- transportByEnemy			=
 	transportUnloadMethod	= 0,
