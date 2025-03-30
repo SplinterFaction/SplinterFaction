@@ -319,7 +319,8 @@ local morphDefs = {
 		{
 			into      = 'fedmenlomk2',
 			time      = 60,
-			cmdname   = [[Menlo Mark II]],
+			cmdname   = [[Menlo
+Mark II]],
 			text      = [[Upgraded Menlo Defense Turret]],
 			require   = [[tech1]],
 		},
@@ -333,14 +334,16 @@ local morphDefs = {
 		{
 			into      = 'geometalmaker',
 			time      = 60,
-			cmdname   = [[Metal Maker]],
+			cmdname   = [[Metal
+Maker]],
 			text      = [[Geothermal Metal Maker]],
 			require   = [[tech4]],
 		},
 		{
 			into      = 'geothermalpowerplant',
 			time      = 60,
-			cmdname   = [[Geothermal Powerplant]],
+			cmdname   = [[Geothermal
+Powerplant]],
 			text      = [[Geothermal Powerplant]],
 			require   = [[tech1]],
 		},
@@ -357,8 +360,9 @@ local morphDefs = {
 		{
 			into      = 'lozsuperjericho',
 			time      = 60,
-			cmdname   = [[Super Jericho]],
-			text      = [[A cluster of linked Inferno]],
+			cmdname   = [[Super
+Jericho]],
+			text      = [[A cluster of linked Jericho]],
 			require   = [[tech1]],
 		},
 		{
@@ -371,14 +375,16 @@ local morphDefs = {
 		{
 			into      = 'geometalmaker',
 			time      = 60,
-			cmdname   = [[Metal Maker]],
+			cmdname   = [[Metal
+Maker]],
 			text      = [[Geothermal Metal Maker]],
 			require   = [[tech4]],
 		},
 		{
 			into      = 'geothermalpowerplant',
 			time      = 60,
-			cmdname   = [[Geothermal Powerplant]],
+			cmdname   = [[Geothermal
+Powerplant]],
 			text      = [[Geothermal Powerplant]],
 			require   = [[tech1]],
 		},

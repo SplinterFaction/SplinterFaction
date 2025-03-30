@@ -48,9 +48,9 @@ unitDef                     = {
 		},
 	},
 	sounds                        = {
-		underattack               = "other/unitsunderattack1",
+		underattack               = "unitsunderattack1",
 		select                    = {
-			"other/turretselect",
+			"turretselect",
 		},
 	},
 	weapons                       = {
@@ -104,12 +104,12 @@ weaponDefs                  = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 1200,
-		reloadtime                = 2,
+		reloadtime                = 0.5,
 		WeaponType                = "BeamLaser",
-		rgbColor                  = blue,
+		rgbColor                  = red,
 		rgbColor2                 = "0.25 0.25 0.25",
 		soundTrigger              = true,
-		soundstart                = "lozannihilator-maingun",
+		soundstart                = "annihilator-continuous",
 		-- soundHit                  = "explode5",
 		-- sprayangle				  = 500,
 		texture1                  = "lightning",
@@ -128,7 +128,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 1675,
+			default               = 419,
 		},
 	},
 }

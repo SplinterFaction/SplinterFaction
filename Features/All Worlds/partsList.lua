@@ -39,7 +39,7 @@ for i = 1,#partsList do
 		reclaimable				    = true,
 		autoreclaimable				= true,
 		indestructible		        = true,
-		smokeTime			        = 0,
+		smokeTime			        = 300,
 		upright				        = true, -- This MUST be set to true. Spring has a bug and without this set to true, spring will refuse to set direction OR rotate around the x and z axes. Direction and rotation will not work on any engine version prior to BAR engine version 1499.
 	--	nodrawundergray				= "1.0",
 

@@ -29,7 +29,7 @@ unitDef                     = {
 	repairable		              = false,
 	selfDestructAs                = "hugeBuildingExplosionGenericRed",
 	side                          = "CORE",
-	sightDistance                 = 1200,
+	sightDistance                 = 1000,
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
@@ -100,11 +100,11 @@ weaponDefs                  = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1200,
-		reloadtime             = 5,
+		reloadtime             = 1,
 		size				   = 8,
 		projectiles			   = 1,
 		weaponType		       = "Cannon",
-		soundStart             = "scifi_heavy_rifle_A_single_01-burst-10round",
+		soundStart             = "guardian-scifi_heavy_rifle_A_single_01-burst-10round",
 		soundHit	           = "mediumcannonhit",
 		soundTrigger           = true,
 		sprayAngle             = 1250,
@@ -119,7 +119,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 416,
+			default              = 83,
 		},
 	},
 }

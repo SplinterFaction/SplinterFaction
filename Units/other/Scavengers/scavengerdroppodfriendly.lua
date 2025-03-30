@@ -50,7 +50,7 @@ return {
 		customparams = {
 			isairbase = true,
 			normaltex = "unittextures/Core_normal.dds",
-			subfolder = "other/scavengers",
+			subfolder = "scavengers",
 		},
 		featuredefs = {},
 		sfxtypes = {

@@ -54,7 +54,7 @@ return {
 		yardmap = "oooooo oooooo oooooo oooooo oooooo oooooo",
 		customparams = {
 			normaltex = "unittextures/bfaction_normals.dds",
-			subfolder = "other/lootboxes",
+			subfolder = "lootboxes",
 		},
 		sfxtypes = {
 			explosiongenerators = {

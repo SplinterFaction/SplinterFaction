@@ -11,7 +11,7 @@ humanName = [[Geothermal Construction Stub]]
 objectName = "geothermal-stub.s3o"
 script = "geothermal-stub_lus.lua"
 
-tech = [[tech1]]
+tech = [[tech0]]
 
 explodeAs = [[smallbuildingexplosiongeneric]]
 

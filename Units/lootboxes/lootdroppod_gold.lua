@@ -50,7 +50,7 @@ return {
 		customparams = {
 			isairbase = true,
 			normaltex = "unittextures/bfaction_normals.dds",
-			subfolder = "other/lootboxes",
+			subfolder = "lootboxes",
 		},
 		featuredefs = {},
 		sfxtypes = {

@@ -53,9 +53,9 @@ local unitDef                     = {
 		},
 	},
 	sounds                        = {
-		underattack               = "other/unitsunderattack1",
+		underattack               = "unitsunderattack1",
 		select                    = {
-			"other/gdenergy",
+			"gdenergy",
 		},
 	},
 	weapons                       = {

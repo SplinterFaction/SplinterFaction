@@ -188,10 +188,16 @@ function gadget:GameFrame(frame)
                     for j = 1,#featuresInRange do
                         local featureID = featuresInRange[j]
                         local health = Spring.GetFeatureHealth(featureID)
-                        if health > damage then
-                            Spring.SetFeatureHealth(featureID, health - damage)
+                        local featureDefID = Spring.GetFeatureDefID(featureID)
+                        local fd = FeatureDefs[featureDefID]
+                        if fd.name == "geovent" then
+                            --Don't do shit
                         else
-                            Spring.DestroyFeature(featureID)
+                            if health > damage then
+                                Spring.SetFeatureHealth(featureID, health - damage)
+                            else
+                                Spring.DestroyFeature(featureID)
+                            end
                         end
                         local ux, uy, uz = Spring.GetFeaturePosition(featureID)
                         Spring.SpawnCEG(aliveExplosions[i].damageCeg, ux, uy + 8, uz, 0, 0, 0)
