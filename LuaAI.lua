@@ -25,6 +25,10 @@ return {
 		desc = 'EasyAI (Simple)',
 	},
 	{
+		name = 'Enhanced Splinterfaction AI',
+		desc = 'An enhanced and modular AI',
+	},
+	{
 		name = 'SimpleDefenderAI',
 		desc = 'EasyAI (Defender)',
 	},

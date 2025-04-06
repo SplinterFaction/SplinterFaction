@@ -51,50 +51,8 @@ end
 
 -------- lists
 BadUnitsList = {}
-if gameShortName == "BYAR" then
-	BadUnitsList = {
-		-- transports
-		"armthovr",
-		"corthovr",
-		"armatlas",
-		"armtship",
-		"corvalk",
-		"cortship",
-		"armdfly",
-		"corseah",
-		"corint",
 
-		-- stockpilers
-		"armscab",
-		"armemp",
-		"armjuno",
-		"armamd",
-		"armmercury",
-		"armsilo",
-		"armcarry",
-		"corfmd",
-		"corjuno",
-		"corscreamer",
-		"corsilo",
-		"cortron",
-		"corcarry",
-		"cormabm",
-
-		-- minelayers
-		"armmlv",
-		"cormlv",
-
-		-- depth charge launchers
-		"armdl",
-		"cordl",
-
-		-- walls
-		"armdrag",
-		"cordrag",
-	}
-end
-
-if gameShortName == "EvoRTS" then
+if gameShortName == "SF" then
 	BadUnitsList = {}
 end
 
@@ -419,7 +377,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 							break
 						end
 					end
-					
+
 				end
 
 			elseif r == 0 or r == 1 or r == 2 or r == 3 or r == 4 or r == 5 then
@@ -596,8 +554,8 @@ if gadgetHandler:IsSyncedCode() then
 								else
 									Spring.GiveOrderToUnit(unitID, 37382, {0}, 0)
 								end
-								
-								
+
+
 								local nearestEnemy = Spring.GetUnitNearestEnemy(unitID, 250, true)
 								local unitHealthPercentage = (unitHealth/unitMaxHealth)*100
 
@@ -645,7 +603,7 @@ if gadgetHandler:IsSyncedCode() then
 								end
 							end
 						end
-						
+
 						if unitCommands == 0 then
 							for u = 1, #SimpleConstructorDefs do
 								if unitDefID == SimpleConstructorDefs[u] then
