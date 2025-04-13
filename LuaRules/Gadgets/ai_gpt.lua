@@ -49,7 +49,7 @@ AI.unitDefsByRole = {
 
 -- Preset starting build order: 4 Constructors, then 3 Extractors, then 4 Generators
 AI.startingBuildOrder = {
-	{ role = "Constructor", count = 4 },
+	{ role = "Constructor", count = 3 },
 	{ role = "Extractor",   count = 3 },
 	{ role = "Generator",   count = 4 },
 }
@@ -195,6 +195,17 @@ function AI:ConvertUnitNamesToDefIDs()
 	end
 end
 
+function AI:PrintConvertedUnitDefs()
+	for role, unitList in pairs(self.unitDefsByRole) do
+		Spring.Echo("Role: " .. role)
+		for i, defID in ipairs(unitList) do
+			local unitName = UnitDefs[defID] and UnitDefs[defID].name or "nil"
+			Spring.Echo("  " .. i .. ": " .. tostring(defID) .. " (" .. unitName .. ")")
+		end
+	end
+end
+
+
 -- Get the commander's tech level (using ProvideTech) for the given team
 function AI:GetCommanderTechLevel(teamID)
 	local units = Spring.GetTeamUnits(teamID)
@@ -276,54 +287,24 @@ end
 
 -- Get a generic build position near the builder using nearby friendly buildings as reference
 function AI:GetBuildPosition(builderID, buildingDefID)
-	-- Get builder position
 	local bx, by, bz = Spring.GetUnitPosition(builderID)
-	-- Get building footprint size
-	local bd = UnitDefs[buildingDefID]
-	local baseSearchRadius = math.max(100, bd.xsize * 16, bd.zsize * 16)
-	local searchRadius = baseSearchRadius
-	local maxRadius = baseSearchRadius * 3
-
-	-- Loop through increasing radii
-	for range = searchRadius, maxRadius, baseSearchRadius do
-		local units = Spring.GetUnitsInCylinder(bx, bz, range, Spring.GetUnitTeam(builderID))
-		if #units > 0 then
-			-- Pick a random reference unit among nearby friendly units.
-			local refUnit = units[math.random(#units)]
-			local rx, ry, rz = Spring.GetUnitPosition(refUnit)
-			-- Use spacing proportional to the building's size (random variation)
-			local spacing = math.random(bd.xsize * 4, bd.xsize * 8)
-			-- Pick a random facing
-			local r = math.random(0, 3)
-			-- Get reference unit's footprint
-			local reffoot = UnitDefs[Spring.GetUnitDefID(refUnit)]
-			-- Calculate offsets based on facing (you might need to adjust these multipliers)
-			local offsetX = (r == 1 and reffoot.xsize * 8 or (r == 3 and -reffoot.xsize * 8 or 0))
-			local offsetZ = (r == 0 and reffoot.zsize * 8 or (r == 2 and -reffoot.zsize * 8 or 0))
-			local pos = {
-				x = rx + offsetX + math.random(-spacing, spacing),
-				y = Spring.GetGroundHeight(rx + offsetX, rz + offsetZ),
-				z = rz + offsetZ + math.random(-spacing, spacing),
-			}
-			if Spring.TestBuildOrder(buildingDefID, pos.x, pos.y, pos.z, r) == 2 then
-				return pos
-			end
+	local maxAttempts = 20  -- Increase this number if necessary.
+	for attempt = 1, maxAttempts do
+		-- Randomly choose a position within a certain radius of the builder.
+		local radius = 300  -- You can adjust this radius as needed.
+		local pos = {
+			x = bx + math.random(-radius, radius),
+			y = Spring.GetGroundHeight(bx, bz),
+			z = bz + math.random(-radius, radius)
+		}
+		local facing = math.random(0, 3)
+		if Spring.TestBuildOrder(buildingDefID, pos.x, pos.y, pos.z, facing) == 2 then
+			return pos
 		end
 	end
-
-	-- Fallback: try near the builder directly, with an expanded random range based on building size.
-	local fallbackRange = baseSearchRadius * 2
-	local pos = {
-		x = bx + math.random(-fallbackRange, fallbackRange),
-		y = Spring.GetGroundHeight(bx, bz),
-		z = bz + math.random(-fallbackRange, fallbackRange),
-	}
-	if Spring.TestBuildOrder(buildingDefID, pos.x, pos.y, pos.z, math.random(0, 3)) == 2 then
-		return pos
-	end
-
 	return nil
 end
+
 
 
 function AI:BuildEdgeDefense(teamID)
@@ -382,41 +363,52 @@ function AI:BuildEdgeDefense(teamID)
 	end
 end
 
+-- Helper: check if a given unitDefID belongs to a specified role.
+function AI:IsRole(unitDefID, role)
+	for _, defID in ipairs(self.unitDefsByRole[role] or {}) do
+		Spring.Echo("Comparing unitDefID: " .. tostring(unitDefID) .. " with defID: " .. tostring(defID))
+		if tostring(unitDefID) == tostring(defID) then
+			return true
+		end
+	end
+	return false
+end
+
+
+-- Revised GetRoleCount that uses the helper.
 function AI:GetRoleCount(teamID, role)
 	local count = 0
 	local units = Spring.GetTeamUnits(teamID)
+	Spring.Echo("GetRoleCount: Team " .. teamID .. " has " .. #units .. " units for role " .. role)
+
 	for _, unitID in ipairs(units) do
 		local unitDefID = Spring.GetUnitDefID(unitID)
-		local match = false
-		if role == "Constructor" then
-			for _, defID in ipairs(self.unitDefsByRole.Constructor or {}) do
-				if unitDefID == defID then
-					match = true
-					break
-				end
-			end
-		elseif role == "Extractor" then
-			for _, defID in ipairs(self.unitDefsByRole.Extractor or {}) do
-				if unitDefID == defID then
-					match = true
-					break
-				end
-			end
-		elseif role == "Generator" then
-			for _, defID in ipairs(self.unitDefsByRole.Generator or {}) do
-				if unitDefID == defID then
-					match = true
-					break
-				end
-			end
-		end
-		if match then
+		if self:IsRole(unitDefID, role) then
+			local unitName = UnitDefs[unitDefID] and UnitDefs[unitDefID].name or "Unknown"
+			local health, maxHealth, paralyze, buildProgress = Spring.GetUnitHealth(unitID)
+			Spring.Echo("GetRoleCount: Team " .. teamID .. " unit " .. unitID .. " (" .. unitName ..
+					            ") buildProgress: " .. tostring(buildProgress) .. ", health: " .. tostring(health))
+			-- Simply count every unit that matches the role.
 			count = count + 1
 		end
 	end
+
+	Spring.Echo("GetRoleCount: Team " .. teamID .. " total " .. role .. " count: " .. count)
 	return count
 end
 
+-- Returns the land factory unitDefID for the given faction.
+function AI:GetLandFactoryID(faction)
+	for _, unitDefID in ipairs(self.unitDefsByRole.Factory or {}) do
+		local unitName = string.lower(UnitDefs[unitDefID].name or "")
+		if faction == "fed" and string.find(unitName, "f1landfac") then
+			return unitDefID
+		elseif faction == "loz" and string.find(unitName, "f2landfac") then
+			return unitDefID
+		end
+	end
+	return nil  -- In case none is found
+end
 
 --------------------------------------------------------------------------------
 -- Utility Functions for Builders & Combat
@@ -653,25 +645,32 @@ function AI:ExecuteStartingBuildOrder(teamID)
 
 	if not index or index > #orderTable then
 		teamData.startingBuildOrderActive = false
-		Spring.Echo("Team " .. teamID .. " completed the starting build order.")
+		Spring.Echo("Team " .. teamID .. " has completed the entire starting build order.")
 		return
 	end
 
 	local currentOrder = orderTable[index]
 	local builtCount = self:GetRoleCount(teamID, currentOrder.role)
+	Spring.Echo("Starting Build Order (Team " .. teamID .. ") - Step " .. index .. ": Require " .. currentOrder.count .. " " .. currentOrder.role .. " units; currently built (or under construction): " .. builtCount)
 
-	-- If we haven't built enough units for this order, try issuing an order.
 	if builtCount < currentOrder.count then
-		local builder = self:FindAnyBuilder(teamID)  -- For starting orders, use a relaxed criteria.
+		local builder = self:FindAnyBuilder(teamID)  -- relaxed criteria for starting orders
 		if builder then
-			Spring.Echo("Team " .. teamID .. " starting build order: issuing " .. currentOrder.role)
+			Spring.Echo("Team " .. teamID .. " issuing build order for " .. currentOrder.role .. " (" .. builtCount .. "/" .. currentOrder.count .. ")")
 			self:BuildUnit(teamID, currentOrder.role)
+		else
+			Spring.Echo("Team " .. teamID .. " has no available builder for " .. currentOrder.role .. " at this time.")
 		end
 	else
-		Spring.Echo("Team " .. teamID .. " completed starting order for " .. currentOrder.role)
+		Spring.Echo("Team " .. teamID .. " starting order for " .. currentOrder.role .. " complete (" .. builtCount .. "/" .. currentOrder.count .. "). Moving to next step.")
 		teamData.startingBuildOrderIndex = index + 1
+		if teamData.startingBuildOrderIndex > #orderTable then
+			teamData.startingBuildOrderActive = false
+			Spring.Echo("Team " .. teamID .. " has completed the entire starting build order.")
+		end
 	end
 end
+
 
 
 
@@ -729,6 +728,7 @@ function AI:UpdateEconomy(teamID)
 	end
 
 	if constructors < 4 then
+		Spring.Echo("There are currently " .. constructors)
 		self:BuildUnit(teamID, "Constructor")
 	else
 		if ratioMetal < 0.4 then
@@ -763,6 +763,8 @@ end
 function AI:KeepCommandersInBase(teamID)
 	local base = self.teamData[teamID].basePosition
 	if not base then return end
+	local baseRadius = self.teamData[teamID].baseRadius or 300
+	local tolerance = baseRadius * 1.1  -- Allow a 10% buffer beyond the base radius
 	local units = Spring.GetTeamUnits(teamID)
 	for _, unitID in ipairs(units) do
 		local unitDefID = Spring.GetUnitDefID(unitID)
@@ -772,15 +774,16 @@ function AI:KeepCommandersInBase(teamID)
 				local dx = x - base.x
 				local dz = z - base.z
 				local distSq = dx * dx + dz * dz
-				if distSq > 250 * 250 then
+				if distSq > tolerance * tolerance then
 					Spring.GiveOrderToUnit(unitID, CMD.MOVE, { base.x, base.y, base.z }, {})
-					Spring.Echo("Commander " .. unitID .. " returning to base")
+					Spring.Echo("Commander " .. unitID .. " returning to base (" .. base.x .. ", " .. base.y .. ", " .. base.z .. ")")
 				end
 				break
 			end
 		end
 	end
 end
+
 
 function AI:UpdateBaseArea(teamID)
 	local base = self.teamData[teamID].basePosition
@@ -821,6 +824,211 @@ function AI:UpdateBaseArea(teamID)
 
 	self.teamData[teamID].baseRadius = newRadius
 	Spring.Echo("Team " .. teamID .. " base radius updated to " .. newRadius)
+end
+
+
+--------------------------------------------------------------------------------
+-- Factory & Attack Logic
+--------------------------------------------------------------------------------
+
+-- Called each GameFrame to manage factory production and issue attack orders.
+function AI:UpdateFactories(teamID)
+	-- Check how many factories we already have.
+	local currentFactories = self:GetRoleCount(teamID, "Factory")
+	if currentFactories >= 2 then
+		Spring.Echo("Team " .. teamID .. " already has " .. currentFactories .. " factories; not ordering more.")
+		return
+	end
+
+	local faction = self:GetTeamFaction(teamID)
+	local landFactory = self:GetLandFactoryID(faction)
+	if not landFactory then
+		Spring.Echo("Team " .. teamID .. ": No land factory found for faction " .. faction)
+		return
+	end
+
+	local builder = self:FindAvailableBuilder(teamID)
+	if not builder then
+		Spring.Echo("Team " .. teamID .. ": No available builder to construct factories!")
+		return
+	end
+
+	-- Order the land factory first.
+	local pos1 = self:GetBuildPosition(builder, landFactory)
+	if pos1 then
+		Spring.GiveOrderToUnit(builder, -landFactory, { pos1.x, pos1.y, pos1.z, math.random(0, 3) }, {})
+		Spring.Echo("Team " .. teamID .. ": Issued build order for land factory (" .. UnitDefs[landFactory].name .. ")")
+	else
+		Spring.Echo("Team " .. teamID .. ": Could not find a build position for land factory (" .. UnitDefs[landFactory].name .. ")")
+		return
+	end
+
+	-- Check again: if factories are still less than 2, issue a build order for a secondary factory.
+	currentFactories = self:GetRoleCount(teamID, "Factory")
+	if currentFactories < 2 then
+		local otherFactoryOptions = {}
+		for _, option in ipairs(self.unitDefsByRole.Factory or {}) do
+			if option ~= landFactory then
+				table.insert(otherFactoryOptions, option)
+			end
+		end
+
+		if #otherFactoryOptions > 0 then
+			local choice = otherFactoryOptions[math.random(#otherFactoryOptions)]
+			local pos2 = self:GetBuildPosition(builder, choice)
+			if pos2 then
+				Spring.GiveOrderToUnit(builder, -choice, { pos2.x, pos2.y, pos2.z, math.random(0, 3) }, {})
+				Spring.Echo("Team " .. teamID .. ": Issued build order for secondary factory (" .. UnitDefs[choice].name .. ")")
+			else
+				Spring.Echo("Team " .. teamID .. ": Could not find a build position for secondary factory (" .. UnitDefs[choice].name .. ")")
+			end
+		else
+			Spring.Echo("Team " .. teamID .. ": No secondary factory options available")
+		end
+	end
+end
+
+
+
+-- Build the two required factories when tech level 1 is reached.
+function AI:BuildRequiredFactories(teamID)
+	local faction = self:GetTeamFaction(teamID)
+	local landFactory = self:GetLandFactoryID(faction)
+
+	local otherFactoryOptions = {}
+	for _, option in ipairs(self.unitDefsByRole.Factory or {}) do
+		if option ~= landFactory then
+			table.insert(otherFactoryOptions, option)
+		end
+	end
+
+	local builder = self:FindAvailableBuilder(teamID)
+	if not builder then return end
+
+	-- Order the land factory.
+	local pos1 = self:GetBuildPosition(builder, landFactory)
+	if pos1 then
+		Spring.GiveOrderToUnit(builder, -landFactory, { pos1.x, pos1.y, pos1.z, math.random(0, 3) }, {})
+		Spring.Echo("Team " .. teamID .. " issuing build order for land factory (" .. UnitDefs[landFactory].name .. ")")
+	end
+
+	-- Order a second factory (randomly chosen from the remaining ones).
+	if #otherFactoryOptions > 0 then
+		local choice = otherFactoryOptions[math.random(#otherFactoryOptions)]
+		local pos2 = self:GetBuildPosition(builder, choice)
+		if pos2 then
+			Spring.GiveOrderToUnit(builder, -choice, { pos2.x, pos2.y, pos2.z, math.random(0, 3) }, {})
+			Spring.Echo("Team " .. teamID .. " issuing build order for second factory (" .. UnitDefs[choice].name .. ")")
+		end
+	end
+end
+
+
+-- Manage production of attacking units from factories.
+-- This example assumes that factories have a production queue and you can give them
+-- orders to build units continuously.
+function AI:ManageFactoryProduction(teamID)
+	local factories = Spring.GetTeamUnitsByDefs(teamID, self.unitDefsByRole.Factory)
+	for _, facID in ipairs(factories) do
+		local cmdCount = Spring.GetUnitCommandCount(facID)
+		if cmdCount == 0 then
+			-- Choose an attacking unit based on faction and tech level.
+			local attacker = self:ChooseAttackerForFactory(teamID)
+			if attacker then
+				-- Issue the production order.
+				Spring.GiveOrderToUnit(facID, -attacker, {}, {})
+				Spring.Echo("Factory " .. facID .. " ordered to produce " .. UnitDefs[attacker].name)
+			end
+		end
+	end
+
+	-- Optionally, if you want to continually launch attacks:
+	self:IssueAttackOrders(teamID)
+end
+
+-- Chooses an attacker unit from a list (this list should be defined based on your game)
+function AI:ChooseAttackerForFactory(teamID)
+	local faction = self:GetTeamFaction(teamID)
+	local techLevel = self:GetCommanderTechLevel(teamID)
+	local attackerList = {}
+	-- Here, you would define which units are considered attackers.
+	-- For example purposes, let's assume you have an AI.unitDefsByRole.Attacker table.
+	if self.unitDefsByRole.Attacker then
+		for _, unitID in ipairs(self.unitDefsByRole.Attacker) do
+			-- Only select if the unit’s required tech is <= commander's tech.
+			local reqTech = (UnitDefs[unitID].customParams and UnitDefs[unitID].customParams.requiretech) or "tech0"
+			reqTech = string.lower(reqTech)
+			local unitTech = tonumber(reqTech:match("tech(%d)")) or 0
+			if unitTech <= techLevel then
+				-- Also filter by faction name if needed.
+				local unitName = string.lower(UnitDefs[unitID].name or "")
+				if (faction == "fed" and not string.find(unitName, "loz")) or
+						(faction == "loz" and not string.find(unitName, "fed")) then
+					table.insert(attackerList, unitID)
+				end
+			end
+		end
+	end
+
+	if #attackerList > 0 then
+		return attackerList[math.random(#attackerList)]
+	else
+		return nil
+	end
+end
+
+-- Groups a number of attacking units and issues a fight order.
+function AI:IssueAttackOrders(teamID)
+	-- Find idle combat units from the team.
+	local combatUnits = {}
+	local units = Spring.GetTeamUnits(teamID)
+	for _, unitID in ipairs(units) do
+		local unitDefID = Spring.GetUnitDefID(unitID)
+		if self:IsCombatUnit(unitDefID) then
+			local cmdCount = Spring.GetUnitCommandCount(unitID)
+			if cmdCount == 0 then
+				table.insert(combatUnits, unitID)
+			end
+		end
+	end
+
+	-- If there are enough combat units, group them.
+	local groupSize = math.random(3, 6)
+	if #combatUnits >= groupSize then
+		-- Occasionally send a larger group.
+		if math.random() < 0.2 then
+			groupSize = groupSize + math.random(2, 4)
+		end
+
+		local group = {}
+		for i = 1, math.min(groupSize, #combatUnits) do
+			table.insert(group, combatUnits[i])
+		end
+
+		-- Choose an attack target (this can be improved by using enemy base positions, etc.).
+		local targetX, targetY, targetZ = self:SelectAttackTarget(teamID)
+		if targetX then
+			for _, unitID in ipairs(group) do
+				Spring.GiveOrderToUnit(unitID, CMD.FIGHT, { targetX + math.random(-50,50), targetY, targetZ + math.random(-50,50) }, {"shift"})
+			end
+			Spring.Echo("Team " .. teamID .. " sending attack group of " .. #group .. " units")
+		end
+	end
+end
+
+-- Selects an attack target (this is a simple example that picks the nearest enemy unit)
+function AI:SelectAttackTarget(teamID)
+	local enemyID = nil
+	local units = Spring.GetTeamUnits(teamID)
+	for _, unitID in ipairs(units) do
+		enemyID = Spring.GetUnitNearestEnemy(unitID, 1000, false)
+		if enemyID then break end
+	end
+	if enemyID then
+		return Spring.GetUnitPosition(enemyID)
+	else
+		return nil, nil, nil
+	end
 end
 
 
@@ -906,7 +1114,6 @@ function gadget:Initialize()
 	for i = 1, #teams do
 		local teamID = teams[i]
 		local luaAI = Spring.GetTeamLuaAI(teamID)
-		-- Check if the team's Lua AI starts with "Enhanced Splinterfaction AI"
 		if luaAI and luaAI ~= "" and string.sub(luaAI, 1, 28) == "Enhanced Splinterfaction AI" then
 			AI.teamData[teamID].enabled = true
 			Spring.Echo("Enhanced Splinterfaction AI enabled for team " .. teamID)
@@ -918,6 +1125,7 @@ function gadget:Initialize()
 
 	if AI and AI.ConvertUnitNamesToDefIDs then
 		AI:ConvertUnitNamesToDefIDs()
+		AI:PrintConvertedUnitDefs()  -- Check conversion results
 		Spring.Echo("Unit definitions have been converted to unitDefIDs.")
 	else
 		Spring.Echo("Error: AI table or ConvertUnitNamesToDefIDs function not found!")
@@ -925,11 +1133,12 @@ function gadget:Initialize()
 end
 
 
+
 function gadget:GameFrame(n)
 	if n % 30 == 0 then
 		for teamID, data in pairs(AI.teamData) do
 			if data.enabled then
-				-- Update base area, etc., as before...
+				-- Update the base area every 300 frames.
 				if n % 300 == 0 then
 					AI:UpdateBaseArea(teamID)
 				end
@@ -938,7 +1147,6 @@ function gadget:GameFrame(n)
 				if data.startingBuildOrderActive then
 					AI:ExecuteStartingBuildOrder(teamID)
 				else
-					-- Normal economic and combat behavior...
 					local anyEnemy = false
 					local units = Spring.GetTeamUnits(teamID)
 					for _, unitID in ipairs(units) do
@@ -947,12 +1155,17 @@ function gadget:GameFrame(n)
 							break
 						end
 					end
+
 					if anyEnemy then
 						data.state = "combat"
 						AI:UpdateCombat(teamID)
 					else
 						data.state = "economic"
 						AI:UpdateEconomy(teamID)
+						-- Update factories every 150 frames in the economic phase.
+						if n % 150 == 0 then
+							AI:UpdateFactories(teamID)
+						end
 					end
 				end
 
