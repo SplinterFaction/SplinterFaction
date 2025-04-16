@@ -94,7 +94,7 @@ unitDef                    = {
 	buildoptions                 = buildlist,
 	sounds                       = {
 		build					 = "miscfx/buildstart",
-		underattack              = "other/unitsunderattack1",
+		underattack              = "units_under_attack",
 		ok                       = {
 			"ack",
 		},

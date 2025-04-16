@@ -71,7 +71,7 @@ unitDef                      = {
 	},
 	buildoptions = amphibFactoryBuildList,
 	sounds                         = {
-		underattack                = "other/unitsunderattack1",
+		underattack                = "units_under_attack",
 		select                     = {
 			"other/gdfactoryselect",
 		},

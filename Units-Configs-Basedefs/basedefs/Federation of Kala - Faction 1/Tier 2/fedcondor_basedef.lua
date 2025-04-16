@@ -86,8 +86,8 @@ unitDef                    = {
 
 	transportSize			= 30,
 	-- minTransportSize			=
-	transportCapacity		= 500,
-	transportMass			= 17520,
+	transportCapacity		= 100,
+	transportMass			= 5000,
 	-- minTransportMass			=
 	-- loadingRadius			=
 	unloadSpread				= 10,
@@ -163,7 +163,7 @@ unitDef                    = {
 		},
 	},
 	sounds                       = {
-		underattack              = "other/unitsunderattack1",
+		underattack              = "units_under_attack",
 		ok                       = {
 			"ack",
 		},
@@ -231,7 +231,7 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 575,
+		range                    = 750,
 		reloadtime               = 0.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",

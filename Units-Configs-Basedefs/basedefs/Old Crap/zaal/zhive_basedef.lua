@@ -59,7 +59,7 @@ unitDef                     = {
 	},
 	buildoptions                 = Shared.buildListZaal,
 	sounds                        = {
-		underattack               = "other/unitsunderattack1",
+		underattack               = "units_under_attack",
 		select                    = {
 			"BugSelect",
 		},

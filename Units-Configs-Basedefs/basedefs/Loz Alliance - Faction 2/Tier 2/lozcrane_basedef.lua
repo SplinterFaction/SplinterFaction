@@ -87,8 +87,8 @@ unitDef                    = {
 
 	transportSize			= 30,
 	-- minTransportSize			=
-	transportCapacity		= 500,
-	transportMass			= 20000,
+	transportCapacity		= 100,
+	transportMass			= 5000,
 	-- minTransportMass			=
 	-- loadingRadius			=
 	unloadSpread				= 10,
@@ -164,7 +164,7 @@ unitDef                    = {
 		},
 	},
 	sounds                       = {
-		underattack              = "other/unitsunderattack1",
+		underattack              = "units_under_attack",
 		ok                       = {
 			"ack",
 		},
@@ -230,7 +230,7 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
 		name                   = "Railgun",
-		range                  = 575,
+		range                  = 750,
 		reloadtime             = 1,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",

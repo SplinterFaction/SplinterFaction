@@ -60,7 +60,7 @@ unitDef                      = {
 	},
 	buildoptions                   = F1LandFacBuildList,
 	sounds                         = {
-		underattack                = "other/unitsunderattack1",
+		underattack                = "units_under_attack",
 		select                     = {
 			"other/gdfactoryselect",
 		},

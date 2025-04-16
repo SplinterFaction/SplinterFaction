@@ -48,7 +48,7 @@ unitDef                     = {
 		},
 	},
 	sounds                        = {
-		underattack               = "unitsunderattack1",
+		underattack               = "units_under_attack",
 		select                    = {
 			"turretselect",
 		},

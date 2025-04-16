@@ -87,8 +87,8 @@ unitDef                    = {
 
 	transportSize			= 30,
 	-- minTransportSize			=
-	transportCapacity		= 500,
-	transportMass			= 62000,
+	transportCapacity		= 100,
+	transportMass			= 25000,
 	-- minTransportMass			=
 	-- loadingRadius			=
 	unloadSpread				= 10,
@@ -164,7 +164,7 @@ unitDef                    = {
 		},
 	},
 	sounds                       = {
-		underattack              = "other/unitsunderattack1",
+		underattack              = "units_under_attack",
 		ok                       = {
 			"ack",
 		},
