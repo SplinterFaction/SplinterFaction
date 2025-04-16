@@ -8,7 +8,7 @@ function gadget:GetInfo()
 		author = "YourName",
 		date = "2025",
 		layer = -100,
-		enabled = true,
+		enabled = false,
 	}
 end
 

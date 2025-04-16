@@ -48,7 +48,7 @@ unitDef                     = {
 		},
 	},
 	sounds                        = {
-		underattack               = "other/unitsunderattack1",
+		underattack               = "unitsunderattack1",
 		select                    = {
 			"other/turretselect",
 		},
@@ -170,7 +170,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3,
+			default              = 4,
 		},
 	},
 }

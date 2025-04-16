@@ -48,7 +48,7 @@ unitDef                     = {
 		},
 	},
 	sounds                        = {
-		underattack               = "other/unitsunderattack1",
+		underattack               = "unitsunderattack1",
 		select                    = {
 			"other/turretselect",
 		},
@@ -107,7 +107,7 @@ weaponDefs                  = {
 		rgbColor2                = "1 1 1",
 		soundTrigger             = false,
 		soundstart               = "Assault Rifle Shot_05",
-		soundhit				 = "deathsounds/generic/Explosion Fireworks_01",
+		soundhit				 = "Explosion Fireworks_01",
 		-- sprayangle				 = 500,
 		size					 = 6,
 		--texture1                 = "shot",
