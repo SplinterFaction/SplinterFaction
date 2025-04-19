@@ -119,6 +119,7 @@ unitDef                    = {
 		area_mex_def			 = areamexdef,
 		ProvideTech              = techprovided,
 		RequireTech				 = techrequired,
+		stockpileLimit           = 5,
 		techlevel                = techlevel,
 		canbetransported 		 = "true",
 		iscommander              = true,
@@ -137,6 +138,12 @@ unitDef                    = {
 
 weaponDefs                 = {
 	particlebeamcannon                 = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 0.3,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		accuracy                 = 0,
 		avoidGround              = false,
 		avoidFeature             = false,
@@ -159,7 +166,7 @@ weaponDefs                 = {
 		range                    = 300,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 1,
+		reloadtime               = 0.1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -182,6 +189,12 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up1                 = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 3,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		accuracy                 = 0,
 		avoidGround              = false,
 		avoidFeature             = false,
@@ -204,7 +217,7 @@ weaponDefs                 = {
 		range                    = 400,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 2.5,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -227,6 +240,12 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up2                 = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 7.5,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		accuracy                 = 0,
 		avoidGround              = false,
 		avoidFeature             = false,
@@ -249,7 +268,7 @@ weaponDefs                 = {
 		range                    = 600,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 5,
+		reloadtime               = 2.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -272,6 +291,12 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up3                 = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 15,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		accuracy                 = 0,
 		avoidGround              = false,
 		avoidFeature             = false,
@@ -294,7 +319,7 @@ weaponDefs                 = {
 		range                    = 700,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 7.5,
+		reloadtime               = 5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -317,6 +342,12 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up4                 = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 22.5,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		accuracy                 = 0,
 		avoidGround              = false,
 		avoidFeature             = false,
@@ -340,7 +371,7 @@ weaponDefs                 = {
 		range                    = 900,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 10,
+		reloadtime               = 7.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",

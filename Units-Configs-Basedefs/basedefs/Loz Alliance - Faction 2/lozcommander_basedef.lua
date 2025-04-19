@@ -115,6 +115,7 @@ unitDef                    = {
 		area_mex_def			 = areamexdef,
 		ProvideTech              = techprovided,
 		RequireTech				 = techrequired,
+		stockpileLimit           = 5,
 		techlevel                = techlevel,
 		hpoverride               = hp,
 		canbetransported 		 = "true",
@@ -133,6 +134,12 @@ unitDef                    = {
 
 weaponDefs                 = {
 	commrailgun           = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 0.3,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -158,7 +165,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 300,
-		reloadtime                = 1,
+		reloadtime                = 0.1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -187,6 +194,12 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up1               = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 3,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -212,7 +225,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 400,
-		reloadtime                = 2.5,
+		reloadtime                = 1,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -241,6 +254,12 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up2               = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 7.5,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -266,7 +285,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 600,
-		reloadtime                = 5,
+		reloadtime                = 2.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -295,6 +314,12 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up3               = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 15,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -320,7 +345,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 700,
-		reloadtime                = 7.5,
+		reloadtime                = 5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -349,6 +374,12 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up4               = {
+		-----
+		stockpile                = true,
+		stockpiletime            = 22.5,
+		metalpershot             = 0,
+		energypershot            = 0,
+		-----
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -374,7 +405,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 900,
-		reloadtime                = 10,
+		reloadtime                = 7.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
