@@ -16,6 +16,8 @@ unitDef                    = {
 	CanCapture                   = true,
 	CanRepair			         = true,
 	canRestore					 = true,
+
+	cantBeTransported            = true,
 	
 	canGuard                     = true,
 	canMove                      = true,
