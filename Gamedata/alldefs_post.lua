@@ -207,7 +207,8 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
-	----- Implement idle autoheal for all units
+	----- Implement idle autoheal for all units (Disabled)
+	----- Implement gadgetized HP Regen for Federation of Kala units
 	--------------------------------------------------------------------------------
 	if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
 
@@ -215,7 +216,7 @@ function UnitDef_Post(name, uDef)
 		local secondsBeforeHealingStarts = 5
 
 		-- How much health does it gain per second
-		local healthGainPerSecond = 25
+		local healthGainPerSecond = 0
 
 		uDef.idletime = secondsBeforeHealingStarts * 30
 		uDef.idleautoheal = healthGainPerSecond * 2
@@ -232,6 +233,14 @@ function UnitDef_Post(name, uDef)
 
 		uDef.idletime = secondsBeforeHealingStarts * 30
 		uDef.idleautoheal = healthGainPerSecond * 2
+	end
+
+	----- Gadgetized HP Regen
+	if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
+
+		uDef.customparams.health_regen_rate = 30  -- Health regenerated per second
+		uDef.customparams.health_regen_delay = 5  -- Time in seconds the unit needs to be undamaged before regeneration starts
+
 	end
 
 	--------------------------------------------------------------------------------
@@ -1041,6 +1050,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Weapon of Mass Destruction" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
+			if unitDef.customparams.unitrole == "Commander" then
+				unitDef.maxdamage = unitDef.maxdamage * 15
+			end
 
 			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then
 				unitDef.maxdamage = unitDef.maxdamage * unitDef.customparams.hpmodifieroverridepercentage
@@ -1184,7 +1196,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 					if unitDef.customparams.unitrole == "Commander" then
-						regenerationRate = maximumShieldStrength / 30
+						regenerationRate = maximumShieldStrength / 60
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 

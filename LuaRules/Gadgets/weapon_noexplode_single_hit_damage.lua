@@ -45,7 +45,7 @@ end
 function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 
 	-- Check if the weapon has 'noexplode' and 'single_hit' set to true
-	Spring.Echo("The weapon id that will deal damage is " .. weaponDefID)
+	--Spring.Echo("The weapon id that will deal damage is " .. weaponDefID)
 	if weaponHits[weaponDefID] then
 		if not weaponHits[weaponDefID][projectileID] then
 			weaponHits[weaponDefID][projectileID] = {}
