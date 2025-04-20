@@ -27,48 +27,52 @@ Example:
 
 --]]
 
-local weaponHits = {}
+if gadgetHandler:IsSyncedCode() then
 
-function gadget:Initialize()
-	-- Initialize a table to track weapons and their 'single_hit' custom param
-	weaponHits = {}
+	local weaponHits = {}
 
-	for weaponDefID, weaponDef in pairs(WeaponDefs) do
-		if weaponDef.noExplode == true then
-			if weaponDef.customParams and weaponDef.customParams.single_hit == "true" then
-				weaponHits[weaponDefID] = {}
+	function gadget:Initialize()
+		-- Initialize a table to track weapons and their 'single_hit' custom param
+		weaponHits = {}
+
+		for weaponDefID, weaponDef in pairs(WeaponDefs) do
+			if weaponDef.noExplode == true then
+				if weaponDef.customParams and weaponDef.customParams.single_hit == "true" then
+					weaponHits[weaponDefID] = {}
+				end
 			end
 		end
 	end
-end
 
-function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
+	function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 
-	-- Check if the weapon has 'noexplode' and 'single_hit' set to true
-	--Spring.Echo("The weapon id that will deal damage is " .. weaponDefID)
-	if weaponHits[weaponDefID] then
-		if not weaponHits[weaponDefID][projectileID] then
-			weaponHits[weaponDefID][projectileID] = {}
+		-- Check if the weapon has 'noexplode' and 'single_hit' set to true
+		--Spring.Echo("The weapon id that will deal damage is " .. weaponDefID)
+		if weaponHits[weaponDefID] then
+			if not weaponHits[weaponDefID][projectileID] then
+				weaponHits[weaponDefID][projectileID] = {}
+			end
+
+			-- Ensure the unit has not been hit by this projectile yet
+			if not weaponHits[weaponDefID][projectileID][unitID] then
+				-- Track that this unit has been hit by this projectile
+				weaponHits[weaponDefID][projectileID][unitID] = true
+				-- Return the damage normally
+				--Spring.Echo("Projectile " .. projectileID .. " hitting unit " .. unitID .. " for full damage: " .. damage)
+				return damage
+			else
+				-- If it's already been hit by this projectile, return 0 damage
+				--Spring.Echo("No damage to unit " .. unitID .. " from projectile " .. projectileID .. " (already hit)")
+				return 0
+			end
 		end
 
-		-- Ensure the unit has not been hit by this projectile yet
-		if not weaponHits[weaponDefID][projectileID][unitID] then
-			-- Track that this unit has been hit by this projectile
-			weaponHits[weaponDefID][projectileID][unitID] = true
-			-- Return the damage normally
-			--Spring.Echo("Projectile " .. projectileID .. " hitting unit " .. unitID .. " for full damage: " .. damage)
-			return damage
-		else
-			-- If it's already been hit by this projectile, return 0 damage
-			--Spring.Echo("No damage to unit " .. unitID .. " from projectile " .. projectileID .. " (already hit)")
-			return 0
-		end
+		-- If not a relevant weapon, return the damage as normal
+		return damage
 	end
 
-	-- If not a relevant weapon, return the damage as normal
-	return damage
-end
+	function gadget:GameFrame(frame)
+		-- Not needed in this case, leaving empty for now
+	end
 
-function gadget:GameFrame(frame)
-	-- Not needed in this case, leaving empty for now
 end
