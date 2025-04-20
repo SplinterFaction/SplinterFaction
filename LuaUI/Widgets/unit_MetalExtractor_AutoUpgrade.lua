@@ -45,6 +45,16 @@ function widget:UnitCreated(unitID, unitDefID, teamID)
 	end
 end
 
+function widget:UnitGiven(unitID, unitDefID, teamID)
+	if teamID == Spring.GetLocalTeamID() and UnitDefs[unitDefID].customParams.metal_extractor then
+		if UnitDefs[unitDefID].customParams.requiretech == "tech4" then
+			-- Don't add t4 to the table
+		else
+			mexes[unitID] = true
+		end
+	end
+end
+
 -- Get my current tech level the ghetto way
 function widget:UnitFinished(unitID, unitDefID, unitTeam)
 	if unitTeam == myTeamID() and UnitDefs[unitDefID].customParams.unitrole == "Commander" then
@@ -66,6 +76,7 @@ function widget:UnitFinished(unitID, unitDefID, unitTeam)
 		end
 	end
 end
+
 
 function widget:UnitDestroyed(unitID)
 	mexes[unitID] = nil

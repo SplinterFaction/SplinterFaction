@@ -97,5 +97,10 @@ end
 
 
 function widget:UnitGiven(unitID, unitDefID, unitTeam)
-	widget:UnitCreated(unitID, unitDefID, unitTeam)
+	if unitTeam ~= spGetMyTeamID() then
+		return
+	end
+	if IsTargetUnit(UnitDefs[unitDefID]) then
+		SetupUnit(unitID)
+	end
 end
