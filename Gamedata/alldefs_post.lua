@@ -207,41 +207,12 @@ function UnitDef_Post(name, uDef)
 	end
 
 	--------------------------------------------------------------------------------
-	----- Implement idle autoheal for all units (Disabled)
-	----- Implement gadgetized HP Regen for Federation of Kala units
+	----- Disable Engine Autoheal
 	--------------------------------------------------------------------------------
-	if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
+	uDef.autoheal = 0
+	uDef.idletime = 0
+	uDef.idleautoheal = 0
 
-		-- How many seconds must the unit be idle before it's self healing starts?
-		local secondsBeforeHealingStarts = 5
-
-		-- How much health does it gain per second
-		local healthGainPerSecond = 0
-
-		uDef.idletime = secondsBeforeHealingStarts * 30
-		uDef.idleautoheal = healthGainPerSecond * 2
-
-		-- Spring.Echo(uDef.unitname)
-		-- Spring.Echo(uDef.idletime)
-		-- Spring.Echo(uDef.idleautoheal)
-	else
-		-- How many seconds must the unit be idle before it's self healing starts?
-		local secondsBeforeHealingStarts = 5
-
-		-- How much health does it gain per second
-		local healthGainPerSecond = 0
-
-		uDef.idletime = secondsBeforeHealingStarts * 30
-		uDef.idleautoheal = healthGainPerSecond * 2
-	end
-
-	----- Gadgetized HP Regen
-	if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
-
-		uDef.customparams.health_regen_rate = 30  -- Health regenerated per second
-		uDef.customparams.health_regen_delay = 5  -- Time in seconds the unit needs to be undamaged before regeneration starts
-
-	end
 
 	--------------------------------------------------------------------------------
 	----- Make units unable to be repaired via nanolathe
@@ -1153,6 +1124,28 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					local supplycost = totalValueInMetal * 0.005
 					unitDef.customparams.supply_cost = math.floor(supplycost + 0.5)
 				end
+			end
+
+			----- Gadgetized HP Regen
+			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
+				unitDef.customparams.health_regen_delay = 5  -- Time in seconds the unit needs to be undamaged before regeneration starts
+
+				if unitDef.customparams.requiretech == "tech0" then
+					unitDef.customparams.health_regen_rate = 20  -- Health regenerated per second
+				end
+				if unitDef.customparams.requiretech == "tech1" then
+					unitDef.customparams.health_regen_rate = 25  -- Health regenerated per second
+				end
+				if unitDef.customparams.requiretech == "tech2" then
+					unitDef.customparams.health_regen_rate = 30  -- Health regenerated per second
+				end
+				if unitDef.customparams.requiretech == "tech3" then
+					unitDef.customparams.health_regen_rate = 35  -- Health regenerated per second
+				end
+				if unitDef.customparams.requiretech == "tech4" then
+					unitDef.customparams.health_regen_rate = 45  -- Health regenerated per second
+				end
+
 			end
 
 			-- Protoss Style Shields

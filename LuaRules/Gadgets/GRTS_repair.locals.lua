@@ -112,7 +112,7 @@ function gadget:UnitUnloaded(u,ud,team,t)
 end
 
 function gadget:GameFrame(f)
-	if (f+8)%32 < .1 then
+	if f%30 == 17 then --1 second, on frame 17 of a 30 frame cycle (30 frames per second)
 		repaired={}
 		for u,d in pairs(repairers) do
 		
