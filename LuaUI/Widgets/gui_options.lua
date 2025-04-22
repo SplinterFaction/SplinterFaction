@@ -1617,6 +1617,8 @@ function applyOptionValue(i, skipRedrawWindow)
 		elseif id == 'buildordermenu' then
 			Spring.SetConfigInt("evo_buildorderui",(value-1))
 			Spring.SendCommands("luarules reloadluaui")
+		elseif id == 'customrings' then
+			Spring.SetConfigInt("CustomUnitRingsMode",(value-1))
 		elseif id == 'water' then
 			Spring.SendCommands("water "..(value-1))
 			Spring.SendCommands("water "..(value-1))
@@ -2276,7 +2278,7 @@ function init()
 
 		{id="xrayshader", group="gfx", widget="XrayShader", name="Unit xray shader", type="bool", value=GetWidgetToggleValue("XrayShader"), description='Highlights all units, highlight effect dissolves on close camera range.\n\nFades out and disables at low fps\nWorks less on dark teamcolors'},
 		{id="particles", group="gfx", name="Max particles", type="slider", min=5000, max=100000, step=500, value=tonumber(Spring.GetConfigInt("MaxParticles",100000) or 25000), description='Particles used for explosions, smoke, fire and missiletrails\n\nSetting a low value will mean that various effects wont show properly'},
-		{id="nanoparticles", group="gfx", name="Max nano particles", type="slider", min=0, max=5000, step=100, value=tonumber(Spring.GetConfigInt("MaxNanoParticles",500) or 500), description='NOTE: Nano particles are more expensive regarding the CPU'},
+		{id="nanoparticles", group="gfx", name="Max nano particles", type="slider", min=0, max=500, step=100, value=tonumber(Spring.GetConfigInt("MaxNanoParticles",500) or 500), description='NOTE: Nano particles are more expensive regarding the CPU'},
 
 		--{id="treeradius", group="gfx", name="Tree render distance", type="slider", restart=true, min=0, max=2000, step=50, value=tonumber(Spring.GetConfigInt("TreeRadius",1) or 1000), description='Applies to SpringRTS engine default trees\n\nChanges will be applied next game'},
 
@@ -2435,6 +2437,9 @@ function init()
 
         {id="transportai", group="game", widget="Transport AI", name="Transport AI", type="bool", value=GetWidgetToggleValue("Transport AI"), description='Transport units automatically pick up new units going to factory waypoint.'},
 		{id="settargetdefault", group="game", widget="Set target default", name="Set-target as default", type="bool", value=GetWidgetToggleValue("Set target default"), description='Replace default attack command to a set-target command\n(when rightclicked on enemy unit)'},
+		{id="customrings", group="game", name="Range Rings Mode", type="select", options={'My Units','My Units + Allied Units','All Units'}, value=Spring.GetConfigInt("CustomUnitRingsMode",1) + 1, description='Rings are used to show common useful ranges of various units and abilities.\n\nExamples: Commander Skillshot Range, Healstation Radius, etc.'},
+		{id="autotechup", group="game", widget="Commander AutoUpgrade", name="Commander AutoUpgrade", type="bool", value=GetWidgetToggleValue("Commander AutoUpgrade"), description='Do Commanders Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
+		{id="mexautoupgrade", group="game", widget="MetalExtractor AutoUpgrade", name="MetalExtractor AutoUpgrade", type="bool", value=GetWidgetToggleValue("MetalExtractor AutoUpgrade"), description='Do Metal Extractors Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
 	}
 
 	-- set lowest quality shadows for Intel GPU (they eat fps but dont show)

@@ -85,6 +85,14 @@ unitDef                     = {
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = "Federation of Kala",
 		corpse                   = "energycore",
+
+		-- Begin unit rings
+		ring_color = "1,0,0,0.5",
+		ring_radius = "200",
+		ring_linewidth = "1",
+		ring_divs = "128",
+		ring_alwaysshow = "false",
+
 	},
 	useGroundDecal                = false,
 	BuildingGroundDecalType       = "factorygroundplate.dds",

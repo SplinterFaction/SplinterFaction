@@ -33,6 +33,16 @@ if gadgetHandler:IsSyncedCode() then
 		regenEnabled[unitID] = (regenRate > 0 and regenDelay > 0)
 	end
 
+	function gadget:UnitGiven(unitID, unitDefID, newTeam, oldTeam)
+		local customParams = UnitDefs[unitDefID].customParams
+		-- Get the health regen rate and the damage-free duration from the unit's custom parameters
+		local regenRate = tonumber(customParams.health_regen_rate) or 0  -- default to 0 if not set
+		local regenDelay = tonumber(customParams.health_regen_delay) or 5  -- default to 5 seconds if not set
+
+		-- Initialize the tracking tables
+		lastDamageTime[unitID] = Spring.GetGameFrame()
+		regenEnabled[unitID] = (regenRate > 0 and regenDelay > 0)
+	end
 	function gadget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 		if regenEnabled[unitID] then
 			-- Reset the last damage time to stop regeneration

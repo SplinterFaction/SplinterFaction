@@ -98,6 +98,13 @@ local unitDef                     = {
 		area_cloak_init = true, -- Start up the cloak shield the moment the unit is built?
 		area_cloak_draw = true, -- No idea what this does
 		area_cloak_self = true, -- Does the cloak shield cloak the unit emitting it?
+
+		-- Begin unit rings
+		ring_color = "1,1,0,0.5",
+		ring_radius = "800",
+		ring_linewidth = "1",
+		ring_divs = "128",
+		ring_alwaysshow = "false",
 	},
 	useGroundDecal                = true,
 	BuildingGroundDecalType       = "factorygroundplate.dds",

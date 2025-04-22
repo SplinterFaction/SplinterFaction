@@ -86,10 +86,19 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Neutral",
 		retreatRangeDAI			 = buildDistance*2,
-		
-		-- groundtexselectimg    = ":nc:bitmaps/icons/repairzone.png",
-		-- groundtexselectxsize  = 1000, 
-		-- groundtexselectzsize  = 1000, 	
+		areaheal_radius          = "500",
+		areaheal_amount          = "100",
+		areaheal_delayafterdamage = "5", -- 5 seconds after damage before healing resumes
+
+		-- Begin unit rings
+		ring_color = "0,1,0,0.05",
+		ring_radius = "500",
+		ring_linewidth = "10",
+		ring_divs = "128",
+		ring_alwaysshow = "true",
+		ring_texture = "LuaUI/Images/customringtextures/green_ring_fill.dds", -- texture overlay (super clean & fast)
+		ring_texsize = "1024", -- size of texture quad in world units
+
 	},
 	useGroundDecal                = true,
 	BuildingGroundDecalType       = "factorygroundplate.dds",

@@ -1,204 +1,283 @@
 function widget:GetInfo()
-  return {
-    name      = "Custom Unit Rings",
-    desc      = "Draws rings based upon customparams",
-    author    = "Original - CarRepairer, Revamped - Regret, This Version - Niobium",
-    date      = "04/05/2012",
-    license   = "Public Domain",
-    layer     = 0,
-    enabled   = true  --  loaded by default?
-  }
+	return {
+		name = "Custom Unit Rings",
+		desc = "Draws rings and textures using ring parameters from customParams",
+		author = "",
+		date = "2025",
+		license = "Public Domain",
+		layer = 0,
+		enabled = true
+	}
 end
 
---[[Comments section (using block style comment for attention getter...ness]]--
-
 --[[
+--------------------------------------------------------------------------------------------------------------------
+*******WHEN USING THIS IN YOUR OWN PROJECT, DON'T FORGET THE CONFIG FILE! (LuaUI/Configs/customunitrings.lua)*******
+--------------------------------------------------------------------------------------------------------------------
 
-	You can have as many rings as you like.
+--------------------------------------------------------------------------------------------------------------------
+*** springsettings.cfg Option ***
+--------------------------------------------------------------------------------------------------------------------
+CustomUnitRingsMode = 1
 
-		color = {0.5,0,1,0.3}, --R,G,B,A on a scale from 0 - 1. A is the opacity with 1 being fully opaque to 0 being fully transparent. Easy and quick color picker here: http://www.dematte.at/colorPicker/  Take 255 divided by the color value you want, and that is it's value on a scale from 0 - 1.
+0 → Show rings only for units owned by the local player
+1 → Show rings for local player + allies (default)
+2 → Show rings for all units
 
-		radius = 500, --How large of a radius the ring will cover.
 
-		linewidth = 1, --1 is basically 1 pixel thick. It will scale as you zoom in and out. Maximum value seems to be 32.
+If you need the define rings outside of customparams, edit the config file here LuaUI/Configs/customunitrings.lua
+
+ Multiple rings via customParams (_1, _2, ..., _n)
+
+	ring_color = "r,g,b,a" — for line/outline color
+	ring_fillcolor = "r,g,b,a" — filled triangle ring (optional fallback)
+	ring_texture = "LuaUI/Images/customringtextures/green_ring_fill.dds" — texture overlay (super clean & fast)
+	ring_texsize = "1024" — size of texture quad in world units
+	ring_radius = "250" — fallback radius for drawing circle lines
+	ring_linewidth = "1" — outline thickness
+	ring_divs = "128" — sides of the circle (outline only)
+	ring_alwaysshow = "true" or "false"
+
+You can use the following keys in the unit’s customParams:
+
+    ring_color = "R,G,B,A" (example: "0.5,1,0,0.3")
+    ring_radius = "500"
+    ring_linewidth = "2"
+    ring_divs = "128"
+    ring_alwaysshow = "true" or "false"
+
+You can define multiple rings by appending _1, _2, etc. (e.g., ring_color_1, ring_radius_1, etc.). double and triple digits are supported (e.g. _10 _100)
+RING NUMBERS MUST BE CONSECUTIVE! YOU CANNOT SKIP NUMBERS! (Do not do this: _1, _3. Numbers must be one after the other: _1, _2, _3, etc)
+
+customParams = {
+	ring_color = "0,1,0,0.25",
+	ring_radius = "500",
+	ring_linewidth = "10",
+	ring_divs = "128",
+	ring_alwaysshow = "false",
+
+	ring_color_1 = "1,0,0,0.5",
+	ring_radius_1 = "1000",
+	ring_linewidth_1 = "2",
+	ring_divs_1 = "128",
+	ring_alwaysshow_1 = "true",
+}
+
+customParams = {
+	-- Ring 1 with texture overlay
+	ring_radius = "500",
+	ring_color = "1,1,1,0.5",
+	ring_texture = "LuaUI/Images/customringtextures/green_ring_fill.dds",
+	ring_texsize = "1000",  -- optional, defaults to radius * 2
+	ring_alwaysshow = "true",
+
+	-- Ring 2 with fill color
+	ring_radius_1 = "300",
+	ring_fillcolor_1 = "0,1,0,0.25",
+	ring_divs_1 = "64",
+	ring_linewidth_1 = "1",
+
+	-- Ring 3 with outline only
+	ring_radius_2 = "800",
+	ring_color_2 = "1,0,0,0.3",
+}
+
 
 ]]--
 
-local ringsDefs = {
+local showMode = Spring.GetConfigInt("CustomUnitRingsMode", 1)
+local myAllyTeam = Spring.GetMyAllyTeamID()
+local myTeam = Spring.GetMyTeamID()
+local lastShowMode = showMode
 
-
-
-	[UnitDefNames.healstation.id] = {
-        --{ color = {1,0.5,0,0.8}, lineWidth = 2, radius = 800 },
-        --{ color = {0.5,0,1,0.2}, lineWidth = 5, radius = 500 },
-		{ color = {0,1,0,0.25}, lineWidth = 10, radius = 500, divs = 128 },
-    },
-
-	-- Shield Units
-	[UnitDefNames.cloakingtower.id] = {
-        { color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
-    },
-
-	[UnitDefNames.sensortower.id] = {
-		{ color = {1, 1, 0, 0.5}, lineWidth = 1, radius = 100, divs = 128  },
-	},
-
-
-    -- Defense Turrets
-    [UnitDefNames.fedmenlo.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 750, divs = 128  },
-    },
-
-    [UnitDefNames.fedstinger.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
-    },
-
-    [UnitDefNames.fedimmolator.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
-    },
-
-    [UnitDefNames.fedguardian.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
-    },
-
-    [UnitDefNames.fedbertha.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 8000, divs = 128  },
-    },
-
-    [UnitDefNames.fedearthquakemine.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 100, divs = 128  },
-    },
-
-
-    [UnitDefNames.lozjericho.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 750, divs = 128  },
-    },
-
-    [UnitDefNames.lozrazor.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 550, divs = 128  },
-    },
-
-    [UnitDefNames.lozinferno.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
-    },
-
-    [UnitDefNames.lozannihilator.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
-    },
-
-    [UnitDefNames.lozintimidator.id] = {
-        { color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 8000, divs = 128  },
-    },
-
-
-	[UnitDefNames.chickenanarchid.id] = {
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1200, divs = 128  },
-	},
-
-	[UnitDefNames.atm.id] = {
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 250, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 500, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 750, divs = 128  },
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 1000, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1250, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1500, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 1750, divs = 128  },
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 2000, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 2250, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 2500, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 2750, divs = 128  },
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 3000, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 3250, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 3500, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 3750, divs = 128  },
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 4000, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 4250, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 4500, divs = 128  },
-		{ color = {1, 0.5, 0, 0.5}, lineWidth = 1, radius = 4750, divs = 128  },
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 5000, divs = 128  },
-	},
-
-	--Commander Skillshot Ranges
-	[UnitDefNames.fedcommander.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
-	},
-	[UnitDefNames.fedcommander_up1.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 400, divs = 128  },
-	},
-	[UnitDefNames.fedcommander_up2.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
-	},
-	[UnitDefNames.fedcommander_up3.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 700, divs = 128  },
-	},
-	[UnitDefNames.fedcommander_up4.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 900, divs = 128  },
-	},
-
-	[UnitDefNames.lozcommander.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 300, divs = 128  },
-	},
-	[UnitDefNames.lozcommander_up1.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 400, divs = 128  },
-	},
-	[UnitDefNames.lozcommander_up2.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 600, divs = 128  },
-	},
-	[UnitDefNames.lozcommander_up3.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 700, divs = 128  },
-	},
-	[UnitDefNames.lozcommander_up4.id] = {
-		{ color = {1, 0, 0, 0.5}, lineWidth = 1, radius = 900, divs = 128  },
-	},
-
-}
 
 local ringedUnits = {}
 
+local function ParseColorString(str)
+	if not str then return nil end
+	local r, g, b, a = str:match("([^,]+),([^,]+),([^,]+),([^,]+)")
+	return r and { tonumber(r), tonumber(g), tonumber(b), tonumber(a) } or nil
+end
+
+local function ExtractRingConfigs(customParams)
+	local rings = {}
+	local index = 0
+	while true do
+		local suffix = index == 0 and "" or ("_" .. index)
+
+		local radius = tonumber(customParams["ring_radius" .. suffix])
+		local colorStr = customParams["ring_color" .. suffix]
+		local fillColorStr = customParams["ring_fillcolor" .. suffix]
+		local texture = customParams["ring_texture" .. suffix]
+
+		-- Only process if there's something to draw
+		if not (radius or texture) then break end
+
+		local ring = {
+			radius = radius or 0,
+			lineWidth = tonumber(customParams["ring_linewidth" .. suffix]) or 1,
+			divs = tonumber(customParams["ring_divs" .. suffix]) or 32,
+			color = ParseColorString(colorStr),
+			fillColor = ParseColorString(fillColorStr),
+			texture = texture,
+			texSize = tonumber(customParams["ring_texsize" .. suffix]),
+			alwaysshow = (customParams["ring_alwaysshow" .. suffix] or "false") == "true"
+		}
+		table.insert(rings, ring)
+		index = index + 1
+	end
+	return #rings > 0 and rings or nil
+end
+
 function widget:Initialize()
-    for _, uId in pairs(Spring.GetAllUnits()) do
-        widget:UnitEnteredLos(uId)
-    end
-end
-
-function widget:UnitEnteredLos(uId)
-    local uDefId = Spring.GetUnitDefID(uId)
-    if uDefId then
-        widget:UnitCreated(uId, uDefId)
-    end
-end
-
-function widget:UnitCreated(uId, uDefId)
-    local rings = ringsDefs[uDefId]
-    if rings then
-        ringedUnits[uId] = rings
-    end
-end
-
-function widget:RecvLuaMsg(msg, playerID)
-	if msg:sub(1,18) == 'LobbyOverlayActive' then
-		chobbyInterface = (msg:sub(1,19) == 'LobbyOverlayActive1')
+	for _, uId in pairs(Spring.GetAllUnits()) do
+		widget:UnitEnteredLos(uId)
 	end
 end
 
+function widget:UnitEnteredLos(unitID)
+	local unitDefID = Spring.GetUnitDefID(unitID)
+	if unitDefID then
+		widget:UnitCreated(unitID, unitDefID)
+	end
+end
+
+local unitRingConfig = VFS.FileExists("LuaUI/Configs/customunitrings.lua") and VFS.Include("LuaUI/Configs/customunitrings.lua") or {}
+
+function widget:UnitCreated(unitID, unitDefID)
+	local ud = UnitDefs[unitDefID]
+	if not ud then return end
+
+	local defName = ud.name
+	local rings
+
+	-- Try config file first
+	if unitRingConfig[defName] then
+		rings = unitRingConfig[defName]
+	else
+		-- Fallback: try customParams
+		rings = ExtractRingConfigs(ud.customParams or {})
+	end
+
+	if rings then
+		ringedUnits[unitID] = rings
+	end
+end
+
+function widget:UnitGiven(unitID, unitDefID, newTeam, oldTeam)
+	local ud = UnitDefs[unitDefID]
+	if not ud then return end
+
+	local defName = ud.name
+	local rings
+
+	-- Try config file first
+	if unitRingConfig[defName] then
+		rings = unitRingConfig[defName]
+	else
+		-- Fallback: try customParams
+		rings = ExtractRingConfigs(ud.customParams or {})
+	end
+
+	if rings then
+		ringedUnits[unitID] = rings
+	end
+end
+
+
+
+function widget:UnitDestroyed(unitID)
+	ringedUnits[unitID] = nil
+end
+
+local function UpdateShowMode()
+	local newMode = Spring.GetConfigInt("CustomUnitRingsMode", 1)
+	if newMode ~= lastShowMode then
+		showMode = newMode
+		lastShowMode = newMode
+		Spring.Echo("CustomUnitRingsMode updated to " .. newMode)
+	end
+end
+
+
 function widget:DrawWorldPreUnit()
-	if chobbyInterface then return end
-	if Spring.IsGUIHidden() then return end
-    for uId, rings in pairs(ringedUnits) do
-		if (Spring.IsUnitAllied(uId)and Spring.IsUnitSelected(uId)) then
-			local ux, uy, uz = Spring.GetUnitPosition(uId)
-			if ux then
-				for _, ring in pairs(rings) do
-					gl.Color(ring.color)
-					gl.LineWidth(ring.lineWidth or 1)
-					gl.DrawGroundCircle(ux, uy, uz, ring.radius, ring.divs or 32)
+
+	for unitID, rings in pairs(ringedUnits) do
+		local show = false
+		local unitTeam = Spring.GetUnitTeam(unitID)
+		local unitAllyTeam = Spring.GetUnitAllyTeam(unitID)
+
+		-- Show conditions based on config setting
+		if showMode == 2 then
+			show = true -- Show everything
+		elseif showMode == 1 and unitAllyTeam == myAllyTeam then
+			show = true -- Show allied units
+		elseif showMode == 0 and unitTeam == myTeam then
+			show = true -- Show own units only
+		end
+
+		-- Respect selection or alwaysshow
+		if show then
+			local filtered = true
+			for _, ring in ipairs(rings) do
+				if ring.alwaysshow or Spring.IsUnitSelected(unitID) then
+					filtered = false
+					break
 				end
-			else
-				ringedUnits[uId] = nil
+			end
+			show = not filtered
+		end
+
+		if show then
+			local ux, uy, uz = Spring.GetUnitPosition(unitID)
+			if ux then
+				for _, ring in ipairs(rings) do
+					if ring.alwaysshow or Spring.IsUnitSelected(unitID) then
+						-- Draw texture ring
+						if ring.texture then
+							gl.PushMatrix()
+							gl.Translate(ux, uy + 1, uz)
+							gl.Rotate(90, 1, 0, 0)
+							gl.Texture(ring.texture)
+							gl.Color(1, 1, 1, (ring.color and ring.color[4]) or 1)
+							local s = ring.texSize or (ring.radius * 2)
+							gl.TexRect(-s/2, -s/2, s/2, s/2)
+							gl.Texture(false)
+							gl.PopMatrix()
+						end
+
+						-- Draw filled triangle ring (fallback, if no texture)
+						if not ring.texture and ring.fillColor then
+							gl.Color(ring.fillColor)
+							gl.BeginEnd(GL.TRIANGLE_FAN, function()
+								gl.Vertex(ux, uy + 1, uz)
+								for i = 0, ring.divs do
+									local angle = (i / ring.divs) * 2 * math.pi
+									local dx = math.cos(angle) * ring.radius
+									local dz = math.sin(angle) * ring.radius
+									gl.Vertex(ux + dx, uy + 1, uz + dz)
+								end
+							end)
+						end
+
+						-- Outline ring
+						if ring.color and ring.radius then
+							gl.Color(ring.color)
+							gl.LineWidth(ring.lineWidth)
+							gl.DrawGroundCircle(ux, uy, uz, ring.radius, ring.divs)
+						end
+					end
+				end
 			end
 		end
 	end
 
-    gl.LineWidth(1)
-    gl.Color(1, 1, 1, 1)
+	gl.LineWidth(1)
+	gl.Color(1, 1, 1, 1)
+end
+
+function widget:GameFrame(n)
+	if n % 90 == 0 then -- every 3 seconds (30fps)
+		UpdateShowMode()
+	end
 end
