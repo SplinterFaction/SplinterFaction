@@ -1146,10 +1146,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					unitDef.customparams.health_regen_rate = 60  -- Health regenerated per second
 				end
 				if unitDef.customparams.requiretech == "tech3" then
-					unitDef.customparams.health_regen_rate = 90  -- Health regenerated per second
+					unitDef.customparams.health_regen_rate = 120  -- Health regenerated per second
 				end
 				if unitDef.customparams.requiretech == "tech4" then
-					unitDef.customparams.health_regen_rate = 120  -- Health regenerated per second
+					unitDef.customparams.health_regen_rate = 240  -- Health regenerated per second
 				end
 
 			end
