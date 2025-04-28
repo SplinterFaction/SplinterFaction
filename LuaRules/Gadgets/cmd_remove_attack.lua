@@ -5,7 +5,7 @@ end
 function gadget:GetInfo()
   return {
 	name 	= "Remove Attack",
-	desc	= "Removes attack from units which have no need for the command.",
+	desc	= "Removes the attack command from units with the customparam removeattack true.",
 	author	= "GoogleFrog",
 	date	= "3 April 2015",
 	license	= "GNU GPL, v2 or later",
