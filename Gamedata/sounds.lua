@@ -166,84 +166,90 @@ local soundData = {
 	['ui'] = {
 		gain = 0.15,
 		pitchmod = 0,
-		gainmod  = 0,
+		gainmod = 0,
 		dopplerscale = 0,
 		maxconcurrent = 8,
-		--priority = 1,
 		rolloff = 0,
 	},
 
 	['commands'] = {
 		gain = 0.3,
 		pitchmod = 0.02,
-		gainmod  = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 32,
 		rolloff = 0,
 		priority = 1,
-		--in3d = false,
 	},
 
 	['unitselections'] = {
 		gain = 0.1,
 		pitchmod = 0.02,
-		gainmod  = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 2,
 		rolloff = 0,
 		priority = 1,
-		--in3d = false,
 	},
 
 	['weapons'] = {
-		gain =  1.75 * 0.3,
+		gain = 0.525,  -- 1.75 * 0.3 = 0.525
 		pitchmod = 0.17,
-		gainmod = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['weaponsloud'] = {
-		gain =  5 * 0.3,
+		gain = 1.5,  -- 5 * 0.3 = 1.5
 		pitchmod = 0.17,
-		gainmod = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['impacts'] = {
-		gain = 3 * 0.3,
+		gain = 0.9,  -- 3 * 0.3 = 0.9
 		pitchmod = 0.17,
-		gainmod = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['impacts/generic'] = {
-		gain = 3 * 0.3,
+		gain = 0.9,  -- 3 * 0.3 = 0.9
 		pitchmod = 0.17,
-		gainmod = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['deathsounds/generic'] = {
-		gain = 4 * 0.3,
+		gain = 1.2,  -- 4 * 0.3 = 1.2
 		pitchmod = 0.17,
-		gainmod = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
+		maxconcurrent = 7,
+		dopplerscale = 1.0,
+		rolloff = 0.5,
+	},
+
+	['deathsounds/commander'] = {
+		gain = 6,  -- 20 * 0.3 = 6
+		pitchmod = 0.17,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['misc'] = {
-		gain =  1.2 * 0.3,
+		gain = 0.36,  -- 1.2 * 0.3 = 0.36
 		pitchmod = 0.17,
-		gainmod = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
@@ -251,16 +257,14 @@ local soundData = {
 	},
 
 	['selfdcountdown'] = {
-		gain = 1.2 * 0.3,
+		gain = 0.36,  -- 1.2 * 0.3 = 0.36
 		pitchmod = 0.02,
-		gainmod  = 0.2 * 0.3,
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 1,
 		rolloff = 0,
 		priority = 1,
-		--in3d = false,
 	},
-
 }
 
 local function loadSoundFiles(directory, soundAttributes)

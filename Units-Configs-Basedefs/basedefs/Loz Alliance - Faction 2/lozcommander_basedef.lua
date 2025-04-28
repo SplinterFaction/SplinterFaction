@@ -121,11 +121,11 @@ unitDef                    = {
 		stockpileLimit           = 5,
 		techlevel                = techlevel,
 		--hpoverride               = hp,
-		canbetransported 		 = "true",
 		iscommander              = true,
 		needed_cover             = 2,
-		death_sounds             = "generic",
+		death_sounds             = "commander",
 		factionname	             = "Loz Alliance",
+		removeattack             = "true",
 
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
