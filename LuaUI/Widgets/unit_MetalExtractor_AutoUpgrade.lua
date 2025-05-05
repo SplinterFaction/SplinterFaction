@@ -77,6 +77,9 @@ function widget:UnitFinished(unitID, unitDefID, unitTeam)
 	end
 end
 
+function widget:UnitTaken(unitID, unitDefID, oldTeam, newTeam)
+	mexes[unitID] = nil
+end
 
 function widget:UnitDestroyed(unitID)
 	mexes[unitID] = nil

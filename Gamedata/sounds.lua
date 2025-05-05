@@ -238,7 +238,7 @@ local soundData = {
 	},
 
 	['deathsounds/commander'] = {
-		gain = 6,  -- 20 * 0.3 = 6
+		gain = 20,  -- 20 * 0.3 = 6
 		pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,

@@ -1085,7 +1085,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- Set Global Capturespeed
 			if unitDef.customparams then
 				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Commander" then
-					unitDef.capturespeed = unitDef.workertime * 0.5
+					unitDef.capturespeed = unitDef.workertime * 0.25
 				end
 			end
 

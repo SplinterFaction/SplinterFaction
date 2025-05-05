@@ -49,14 +49,6 @@ unitDef                    = {
 	moveState			         = "0",
 	name                         = humanname,
 	noChaseCategories	         = "NOTAIR SUPPORT VTOL AMPHIB",
-	--------------------------
-	-- Skillshot (aka DGun) --
-	--------------------------
-	noAutoFire                   = true,
-	fireState                    = 0,
-	canManualFire                = true,
-	--------------------------
-	--------------------------
 	objectName                   = objectname,
 	script			             = script,
 	radarDistance                = 0,
@@ -127,7 +119,7 @@ unitDef                    = {
 		needed_cover             = 2,
 		death_sounds             = "commander",
 		factionname	             = "Federation of Kala",
-		removeattack             = "true",
+		--removeattack             = "true",
 		--hpoverride               = hp,
 		buildcostenergyoverride  = buildCostEnergy,
 		nofriendlyfire	         = "1",
@@ -140,14 +132,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	particlebeamcannon                 = {
-		-----
-		stockpile                = true,
-		stockpiletime            = 0.3,
-		metalpershot             = 0,
-		energypershot            = 0,
-		-----
 		accuracy                 = 0,
-		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -165,10 +150,10 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 300,
+		range                    = 320,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 0.1,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -179,28 +164,19 @@ weaponDefs                 = {
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
 		sprayangle				 = 200,
-		noexplode                = true,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
-			single_hit          = "true",
 		},
 		damage                   = {
-			default              = 30,
+			default              = 3.3,
 		},
 	},
 
 	particlebeamcannon_up1                 = {
-		-----
-		stockpile                = true,
-		stockpiletime            = 3,
-		metalpershot             = 0,
-		energypershot            = 0,
-		-----
 		accuracy                 = 0,
-		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -218,7 +194,7 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 400,
+		range                    = 420,
 		burst                    = 10,
 		burstrate                = 0.1,
 		reloadtime               = 1,
@@ -232,28 +208,19 @@ weaponDefs                 = {
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
 		sprayangle				 = 200,
-		noexplode                = true,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
-			single_hit          = "true",
 		},
 		damage                   = {
-			default              = 40,
+			default              = 6.7,
 		},
 	},
 
 	particlebeamcannon_up2                 = {
-		-----
-		stockpile                = true,
-		stockpiletime            = 7.5,
-		metalpershot             = 0,
-		energypershot            = 0,
-		-----
 		accuracy                 = 0,
-		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -271,10 +238,10 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 600,
+		range                    = 620,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 2.5,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -285,28 +252,19 @@ weaponDefs                 = {
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
 		sprayangle				 = 200,
-		noexplode                = true,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
-			single_hit          = "true",
 		},
 		damage                   = {
-			default              = 810,
+			default              = 18.8,
 		},
 	},
 
 	particlebeamcannon_up3                 = {
-		-----
-		stockpile                = true,
-		stockpiletime            = 15,
-		metalpershot             = 0,
-		energypershot            = 0,
-		-----
 		accuracy                 = 0,
-		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -324,10 +282,10 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 700,
+		range                    = 720,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 5,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -338,28 +296,19 @@ weaponDefs                 = {
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
 		sprayangle				 = 200,
-		noexplode                = true,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
-			single_hit          = "true",
 		},
 		damage                   = {
-			default              = 7050,
+			default              = 156.2,
 		},
 	},
 
 	particlebeamcannon_up4                 = {
-		-----
-		stockpile                = true,
-		stockpiletime            = 22.5,
-		metalpershot             = 0,
-		energypershot            = 0,
-		-----
 		accuracy                 = 0,
-		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -378,10 +327,10 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 900,
+		range                    = 920,
 		burst                    = 10,
 		burstrate                = 0.1,
-		reloadtime               = 7.5,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -392,16 +341,14 @@ weaponDefs                 = {
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
 		sprayangle				 = 200,
-		noexplode                = true,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
-			single_hit          = "true",
 		},
 		damage                   = {
-			default              = 24000,
+			default              = 367.2,
 		},
 	},
 }
