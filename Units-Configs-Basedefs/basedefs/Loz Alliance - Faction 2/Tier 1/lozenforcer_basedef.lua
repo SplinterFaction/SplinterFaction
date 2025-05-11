@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 880,
+	buildCostMetal               = 300,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozenforcer.png",
@@ -187,7 +187,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 20,
+			default              = 12.5,
 		},
 	},
 }

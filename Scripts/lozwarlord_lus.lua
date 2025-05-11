@@ -53,14 +53,6 @@ function RestoreAfterDelay()
 	Turn(laserbarrel2, x_axis, 0, 1)
 end
 
-local gun_1 = 1
-
-local gunPieces = {
-	{ firepoint = cannonfirepoint2 },
-	{ firepoint = cannonfirepoint1 },
-	{ firepoint = cannonfirepoint3 }
-}
-
 function script.AimFromWeapon(WeaponID)
 	--Spring.Echo("AimFromWeapon: FireWeapon")
 	return cannonturret1
@@ -68,20 +60,26 @@ end
 
 function script.Shot(WeaponID)
 	if WeaponID == 1 then
-		gun_1 = gun_1 + 1
-		if gun_1 > 3 then
-			gun_1 = 1
-		end
-		EmitSfx(gunPieces[gun_1].firepoint, 1024)
+		EmitSfx(cannonfirepoint1, 1024)
+	end
+	if WeaponID == 2 then
+		EmitSfx(cannonfirepoint2, 1024)
+	end
+	if WeaponID == 3 then
+		EmitSfx(cannonfirepoint3, 1024)
 	end
 end
 
 function script.QueryWeapon(WeaponID)
 	if WeaponID == 1 then
-		return gunPieces[gun_1].firepoint
+		return cannonfirepoint1
 	elseif WeaponID == 2 then
-		return laserfirepoint1
+		return cannonfirepoint2
 	elseif WeaponID == 3 then
+		return cannonfirepoint3
+	elseif WeaponID == 4 then
+		return laserfirepoint1
+	elseif WeaponID == 5 then
 		return laserfirepoint2
 	end
 end
@@ -96,31 +94,43 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		SetSignalMask(SIG_AIM)
 		Turn(cannonturret1, y_axis, heading, 10)
 		Turn(cannonbarrel1, x_axis, -pitch, 10)
-		Turn(cannonturret2, y_axis, heading, 10)
-		Turn(cannonbarrel2, x_axis, -pitch, 10)
-		Turn(cannonturret3, y_axis, heading, 10)
-		Turn(cannonbarrel3, x_axis, -pitch, 10)
 		WaitForTurn(cannonturret1, y_axis)
 		WaitForTurn(cannonbarrel1, x_axis)
-		WaitForTurn(cannonturret2, y_axis)
-		WaitForTurn(cannonbarrel2, x_axis)
-		WaitForTurn(cannonturret3, y_axis)
-		WaitForTurn(cannonbarrel3, x_axis)
 		StartThread(RestoreAfterDelay)
 		--Spring.Echo("AimWeapon: FireWeapon")
 		return true
 	elseif WeaponID == 2 then
 		Signal(SIG_AIM2)
 		SetSignalMask(SIG_AIM2)
+		Turn(cannonturret2, y_axis, heading, 10)
+		Turn(cannonbarrel2, x_axis, -pitch, 10)
+		WaitForTurn(cannonturret2, y_axis)
+		WaitForTurn(cannonbarrel2, x_axis)
+		StartThread(RestoreAfterDelay)
+		--Spring.Echo("AimWeapon: FireWeapon")
+		return true
+	elseif WeaponID == 3 then
+		Signal(SIG_AIM3)
+		SetSignalMask(SIG_AIM3)
+		Turn(cannonturret3, y_axis, heading, 10)
+		Turn(cannonbarrel3, x_axis, -pitch, 10)
+		WaitForTurn(cannonturret3, y_axis)
+		WaitForTurn(cannonbarrel3, x_axis)
+		StartThread(RestoreAfterDelay)
+		--Spring.Echo("AimWeapon: FireWeapon")
+		return true
+	elseif WeaponID == 4 then
+		Signal(SIG_AIM4)
+		SetSignalMask(SIG_AIM4)
 		Turn(laserturret1, y_axis, heading, 10)
 		Turn(laserbarrel1, x_axis, -pitch, 10)
 		WaitForTurn(laserturret1, y_axis)
 		WaitForTurn(laserbarrel1, x_axis)
 		StartThread(RestoreAfterDelay)
 		return true
-	elseif WeaponID == 3 then
-		Signal(SIG_AIM3)
-		SetSignalMask(SIG_AIM3)
+	elseif WeaponID == 5 then
+		Signal(SIG_AIM5)
+		SetSignalMask(SIG_AIM5)
 		Turn(laserturret2, y_axis, heading, 10)
 		Turn(laserbarrel2, x_axis, -pitch, 10)
 		WaitForTurn(laserturret2, y_axis)

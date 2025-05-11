@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 14000,
+	buildCostMetal               = 3000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "fedcolossus.png",
@@ -265,7 +265,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              =100,
+			default              =120,
 		},
 	},
 }

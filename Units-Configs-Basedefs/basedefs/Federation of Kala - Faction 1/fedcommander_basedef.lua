@@ -137,7 +137,6 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-small",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -171,7 +170,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3.3,
+			default              = 3,
 		},
 	},
 
@@ -181,7 +180,6 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-small",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -215,7 +213,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 6.7,
+			default              = 6.5,
 		},
 	},
 
@@ -225,7 +223,6 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-medium",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -269,7 +266,6 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-large",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -313,7 +309,6 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
-		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-large",
 		coreThickness            = 0.1,
 		duration                 = 0.8,

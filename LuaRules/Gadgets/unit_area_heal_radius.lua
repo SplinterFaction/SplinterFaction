@@ -35,13 +35,6 @@ local areaRadiusParam = "areaheal_radius"
 local areaAmountParam = "areaheal_amount"
 local areaDelayParam  = "areaheal_delayafterdamage"
 
-function gadget:Initialize()
-	local allUnits = GetAllUnits()
-	for _, unitID in ipairs(allUnits) do
-		AddUnitIfHealer(unitID)
-	end
-end
-
 local function AddUnitIfHealer(unitID)
 	local defID = GetUnitDefID(unitID)
 	if not defID then return end
@@ -54,6 +47,13 @@ local function AddUnitIfHealer(unitID)
 			delay = tonumber(cp[areaDelayParam]) or 0,
 			allyTeam = GetUnitAllyTeam(unitID)
 		}
+	end
+end
+
+function gadget:Initialize()
+	local allUnits = GetAllUnits()
+	for _, unitID in ipairs(allUnits) do
+		AddUnitIfHealer(unitID)
 	end
 end
 

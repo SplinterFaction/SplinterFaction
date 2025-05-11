@@ -135,10 +135,9 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
-		--commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
-		beamtime				  = 0.5,
+		beamtime				  = 0.25,
 		beamttl                   = 10,
 		largebeamlaser			  = true,
 		laserFlareSize            = 3,
@@ -178,7 +177,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 15,
+			default               = 30,
 		},
 	},
 
@@ -189,10 +188,9 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
-		--commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
-		beamtime				  = 0.5,
+		beamtime				  = 0.25,
 		beamttl                   = 10,
 		largebeamlaser			  = true,
 		laserFlareSize            = 3,
@@ -232,7 +230,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 37.5,
+			default               = 65,
 		},
 	},
 
@@ -243,10 +241,9 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
-		--commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
-		beamtime				  = 0.5,
+		beamtime				  = 0.25,
 		beamttl                   = 10,
 		largebeamlaser			  = true,
 		laserFlareSize            = 4,
@@ -286,7 +283,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 175,
+			default               = 210,
 		},
 	},
 
@@ -297,10 +294,9 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
-		--commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
-		beamtime				  = 0.5,
+		beamtime				  = 0.25,
 		beamttl                   = 10,
 		largebeamlaser			  = true,
 		laserFlareSize            = 5,
@@ -340,7 +336,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 1625,
+			default               = 800,
 		},
 	},
 
@@ -351,10 +347,9 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
-		--commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
-		beamtime				  = 0.5,
+		beamtime				  = 0.25,
 		beamttl                   = 10,
 		largebeamlaser			  = true,
 		laserFlareSize            = 6,
@@ -394,7 +389,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 3667,
+			default               = 950,
 		},
 	},
 }

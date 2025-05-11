@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 24000,
+	buildCostMetal               = 2400,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "fedconqueror.png",
@@ -153,7 +153,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 1000,
+			default              = 250,
 		},
 	},
 }

@@ -986,6 +986,12 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Heavy Cruiser" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.9
 			end
+			if unitDef.customparams.unitrole == "Battlecruiser" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.6
+			end
+			if unitDef.customparams.unitrole == "Battleship" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.8
+			end
 
 			-- Turrets
 			if unitDef.customparams.unitrole == "Light Turret" then
@@ -1136,19 +1142,19 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				unitDef.customparams.health_regen_delay = 5  -- Time in seconds the unit needs to be undamaged before regeneration starts
 
-				if unitDef.customparams.requiretech == "tech0" then
+				if unitDef.customparams.requiretech == "tech0" or unitDef.unitname == "fedcommander" then
 					unitDef.customparams.health_regen_rate = 15  -- Health regenerated per second
 				end
-				if unitDef.customparams.requiretech == "tech1" then
+				if unitDef.customparams.requiretech == "tech1" or unitDef.unitname == "fedcommander_up1" then
 					unitDef.customparams.health_regen_rate = 30  -- Health regenerated per second
 				end
-				if unitDef.customparams.requiretech == "tech2" then
+				if unitDef.customparams.requiretech == "tech2" or unitDef.unitname == "fedcommander_up2" then
 					unitDef.customparams.health_regen_rate = 60  -- Health regenerated per second
 				end
-				if unitDef.customparams.requiretech == "tech3" then
+				if unitDef.customparams.requiretech == "tech3" or unitDef.unitname == "fedcommander_up3" then
 					unitDef.customparams.health_regen_rate = 120  -- Health regenerated per second
 				end
-				if unitDef.customparams.requiretech == "tech4" then
+				if unitDef.customparams.requiretech == "tech4" or unitDef.unitname == "fedcommander_up4" then
 					unitDef.customparams.health_regen_rate = 240  -- Health regenerated per second
 				end
 
@@ -1174,32 +1180,28 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					unitDef.customparams.shield_max_strength = maximumShieldStrength
 
 					-- Set Regeration Rate Based upon tech level
-					if unitDef.customparams.requiretech == "tech0" then
+					if unitDef.customparams.requiretech == "tech0" or unitDef.unitname == "lozcommander" then
 						regenerationRate = maximumShieldStrength / 7.5 --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
-					if unitDef.customparams.requiretech == "tech1" then
+					if unitDef.customparams.requiretech == "tech1" or unitDef.unitname == "lozcommander_up1" then
 						regenerationRate = maximumShieldStrength / 15 --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
-					if unitDef.customparams.requiretech == "tech2" then
+					if unitDef.customparams.requiretech == "tech2" or unitDef.unitname == "lozcommander_up2" then
 						regenerationRate = maximumShieldStrength / 30 --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
-					if unitDef.customparams.requiretech == "tech3" then
+					if unitDef.customparams.requiretech == "tech3" or unitDef.unitname == "lozcommander_up3" then
 						regenerationRate = maximumShieldStrength / 45 --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
-					if unitDef.customparams.requiretech == "tech4" then
-						regenerationRate = maximumShieldStrength / 60 --This is how many seconds it will take to go from 0% - 100%
-						unitDef.customparams.shield_regeneration_rate = regenerationRate
-					end
-					if unitDef.customparams.unitrole == "Commander" then
+					if unitDef.customparams.requiretech == "tech4" or unitDef.unitname == "lozcommander_up4" then
 						regenerationRate = maximumShieldStrength / 60 --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 
-					unitDef.customparams.shield_regeneration_delay = 15
+					unitDef.customparams.shield_regeneration_delay = 15 --How many seconds it takes for the shield to begin regenerating
 				end
 			end
 

@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 28000,
+	buildCostMetal               = 2800,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozwarlord.png",
@@ -79,15 +79,25 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "plasmacannon",
+			def                  = "lasercannon",
 			badTargetCategory     = "SHIP GROUND",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[2]                      = {
+			def                  = "lasercannon",
+			badTargetCategory     = "SHIP GROUND",
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
+		},
+		[3]                      = {
+			def                  = "lasercannon",
+			badTargetCategory     = "SHIP GROUND",
+			onlyTargetCategory    = "SHIP GROUND BUILDING",
+		},
+		[4]                      = {
 			def                  = "lightningcannon",
 			onlyTargetCategory    = "AIR SHIP GROUND BUILDING",
 		},
-		[3]                      = {
+		[5]                      = {
 			def                  = "lightningcannon",
 			onlyTargetCategory    = "AIR SHIP GROUND BUILDING",
 		},
@@ -122,7 +132,7 @@ weaponDefs                 = {
 		energypershot            = 0,
 
 		burst                    = 6,
-		burstrate                = 0.3,
+		burstrate                = 0.9,
 
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
@@ -145,6 +155,55 @@ weaponDefs                 = {
 		},
 		damage                   = {
 			default              = 500,
+		},
+	},
+
+	lasercannon              = {
+		areaofeffect            = 30,
+		avoidFeature            = false,
+		avoidFriendly           = false,
+		collideFeature          = false,
+		collideFriendly         = false,
+		coreThickness           = 0.5,
+		-- cegtag					  = "burnblack",
+		beamtime                = 0.5,
+		beamttl                 = 4,
+		largebeamlaser          = true,
+		duration                = 0.8,
+		energypershot           = 0,
+		edgeeffectiveness       = 0,
+		explosionGenerator      = "custom:burnblacksmall",
+		fallOffRate             = 0.1,
+		fireStarter             = 100,
+		impulseFactor           = 0,
+		interceptedByShieldType = 4,
+		minintensity            = 1,
+		name                    = "Beam",
+		range                   = 1700,
+		reloadtime              = 7,
+		WeaponType              = "BeamLaser",
+		rgbColor                = "0.2 1 0.2",
+		rgbColor2               = "1 1 1",
+		soundTrigger            = true,
+		soundstart              = "warlordlaser",
+		-- soundHit                  = "explode5",
+		-- sprayangle				  = 500,
+		texture1                = "flashside3",
+		texture2                = "empty",
+		thickness               = 3,
+		tolerance               = 1000,
+		turret                  = true,
+		weaponVelocity          = 750,
+		waterweapon             = false,
+		customparams            = {
+			--single_hit		 	 = true,
+			expl_light_color   = blue, -- As a string, RGB
+			expl_light_radius  = mediumExplosion, -- In Elmos
+			expl_light_life    = mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity = 0.25, -- Use this sparingly
+		},
+		damage                  = {
+			default = 1000,
 		},
 	},
 

@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 15000,
+	buildCostMetal               = 3200,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozexecutioner.png",
@@ -96,39 +96,37 @@ unitDef                    = {
 			}
 		]]--
 		[1]                      = {
-			def                  = "railgun",
+			def                  = "flamethrower",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 			mainDir = "-1 0 0",
 			maxAngleDif = 180,
 		},
 		[2]                      = {
-			def                  = "railgun",
+			def                  = "flamethrower",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 			mainDir = "-1 0 0",
 			maxAngleDif = 180,
 		},
 		[3]                      = {
-			def                  = "railgun",
+			def                  = "flamethrower",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 			mainDir = "1 0 0",
 			maxAngleDif = 180,
 		},
 		[4]                      = {
-			def                  = "railgun",
+			def                  = "flamethrower",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 			mainDir = "1 0 0",
 			maxAngleDif = 180,
 		},
 		[5]                      = {
-			def                  = "plasmacannon",
+			def                  = "torpedo",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
-			mainDir = "0 0 1",
-			maxAngleDif = 220,
 		},
 	},
 	customParams                 = {
@@ -188,34 +186,84 @@ weaponDefs                 = {
 		},
 	},
 
-	plasmacannon              = {
-		AreaOfEffect             = 50,
+	flamethrower           = {
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		-- cegtag					  = "burnblack",
+		beamtime				  = 0.25,
+		beamttl                   = 4,
+		largebeamlaser			  = true,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Beam",
+		range                     = 1350,
+		reloadtime                = 0.25,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = "1 0 0",
+		rgbColor2                 = "0.25 0.25 0.25",
+		soundTrigger              = true,
+		soundstart                = "lozmammoth-sidebeams",
+		-- soundHit                  = "explode5",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 3,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			expl_light_color	= yellow, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                    = {
+			default               = 37.5,
+		},
+	},
+
+	torpedo             = {
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
 		collideFeature           = false,
-
-		--cegTag                   = "artyshot2",
-		avoidNeutral	         = false,
-		explosionGenerator       = "custom:genericshellexplosion-medium",
+		-- cegTag                   = "ehbotrocko-optimized",
+		explosionGenerator       = "custom:genericshellexplosion-small",
 		energypershot            = 0,
-
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
-		name                     = "Plasma Cannon",
+		model                    = "neutralmissilex1.s3o",
+		name                     = "Torpedo",
 		range                    = 1350,
 		reloadtime               = 4,
-		size					 = 7,
-		weaponType		         = "Cannon",
-		soundHit                 = "artyhit",
-		soundStart               = "executionercannon",
-
+		weaponType		         = "TorpedoLauncher",
+		waterweapon              = true,
+		smokeTrail               = false,
+		soundStart               = "torpedolaunch",
+		soundHit                 = "subhitbomb",
+		tolerance                = 8000,
+		turnrate                 = 30000,
 		turret                   = true,
-		weaponVelocity           = 500,
+		tracks                   = true,
+		flightTime               = 10,
+		startVelocity            = 200,
+		weaponAcceleration       = 25,
+		weaponVelocity           = 250,
 		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= largeExplosion, -- In Elmos
-			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_color	= purple, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
