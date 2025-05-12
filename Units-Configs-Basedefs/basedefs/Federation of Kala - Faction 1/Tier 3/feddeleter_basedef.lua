@@ -17,7 +17,7 @@ unitDef                    = {
 	canPatrol                    = true,
 	canstop                      = "1",
 	category                     = "GROUND MASSIVE",
-	description                  = [[Heavy Area Cloaker Mech]],
+	description                  = [[Heavy Area Cloak and Repair Mech]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -125,10 +125,23 @@ unitDef                    = {
 		area_cloak_radius = 500, -- How large is the cloaking field?
 		area_cloak_grow_rate = 200, -- When the cloaking field is turned on, how fast does the field expand to it's full size?
 		area_cloak_shrink_rate = 200, -- When the cloaking field is turned off, how fast does the field shrink to nothingness?
-		area_cloak_decloak_distance = 100, -- How close does something have to be in order to decloak a unit within a cloaking shield?
+		area_cloak_decloak_distance = 50, -- How close does something have to be in order to decloak a unit within a cloaking shield?
 		area_cloak_init = true, -- Start up the cloak shield the moment the unit is built?
 		area_cloak_draw = true, -- No idea what this does
 		area_cloak_self = true, -- Does the cloak shield cloak the unit emitting it?
+
+		areaheal_radius          = "500",
+		areaheal_amount          = "50",
+		areaheal_delayafterdamage = "5", -- 5 seconds after damage before healing resumes
+
+		-- Begin unit rings
+		ring_color = "0,1,0,0.25",
+		ring_radius = "500",
+		ring_linewidth = "10",
+		ring_divs = "128",
+		ring_alwaysshow = "true",
+		--ring_texture = "LuaUI/Images/customringtextures/green_ring_fill.dds", -- texture overlay (super clean & fast)
+		--ing_texsize = "1024", -- size of texture quad in world units
 	},
 }
 
