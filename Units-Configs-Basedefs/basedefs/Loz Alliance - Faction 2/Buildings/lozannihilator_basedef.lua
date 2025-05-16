@@ -62,7 +62,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Single-Target Turret",
+		unitrole				  = "Special Turret",
 		unitrole_sound            = "turret",
 		needed_cover              = 5,
 		--supply_cost               = supply,
@@ -112,12 +112,12 @@ weaponDefs                  = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 1200,
-		reloadtime                = 0.5,
+		reloadtime                = 8,
 		WeaponType                = "BeamLaser",
-		rgbColor                  = red,
+		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
 		soundTrigger              = true,
-		soundstart                = "annihilator-continuous",
+		soundstart                = "annihilator-short",
 		-- soundHit                  = "explode5",
 		-- sprayangle				  = 500,
 		texture1                  = "lightning",
@@ -136,7 +136,7 @@ weaponDefs                  = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 419,
+			default               = 4700,
 		},
 	},
 }

@@ -6,7 +6,7 @@ unitName = [[lozannihilator]]
 
 humanName = [[Annihilator]]
 
-objectName = [[lozannihilator.s3o]]
+objectName = [[lozannihilator2.s3o]]
 script = [[lozannihilator_lus.lua]]
 
 tech = [[tech3]]

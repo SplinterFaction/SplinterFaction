@@ -62,7 +62,7 @@ unitDef                     = {
 	},
 	customParams                  = {
 		unittype				  = "building",
-		unitrole				  = "Single-Target Turret",
+		unitrole				  = "Special Turret",
 		unitrole_sound            = "turret",
 		needed_cover              = 5,
 		--supply_cost               = supply,
@@ -89,16 +89,14 @@ unitDef                     = {
 
 weaponDefs                  = {
 	plasmacannon                	= {
-		AreaOfEffect           = 75,
+		AreaOfEffect           = 250,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
 		--cegTag			   = "thudshot",
-		burst				   = 10,
-		burstrate			   = 0.1,
-		edgeEffectiveness	   = 1,
-		explosionGenerator     = "custom:genericshellexplosion-small",
+		edgeEffectiveness	   = 0.1,
+		explosionGenerator     = "custom:genericshellexplosion-large",
 		energypershot          = 0,
 		--duration			   = 0.25,
 		-- highTrajectory		   = 1,
@@ -107,26 +105,26 @@ weaponDefs                  = {
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1200,
-		reloadtime             = 1,
-		size				   = 8,
+		reloadtime             = 8,
+		size				   = 16,
 		projectiles			   = 1,
 		weaponType		       = "Cannon",
-		soundStart             = "guardian-scifi_heavy_rifle_A_single_01-burst-10round",
+		soundStart             = "guardian-single-shot",
 		soundHit	           = "mediumcannonhit",
 		soundTrigger           = true,
-		sprayAngle             = 1250,
+		--sprayAngle             = 1250,
 		tolerance              = 8000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 800,
+		weaponVelocity         = 400,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= hugeExplosion, -- In Elmos
+			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 83,
+			default              = 3500,
 		},
 	},
 }
