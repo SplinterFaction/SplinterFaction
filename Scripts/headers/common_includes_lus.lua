@@ -388,5 +388,119 @@ common = {
 		------------------------------------------------------------------------------------------------------------------------------------
 	end,
 
+	WalkScript4Legged = function ()
+
+		local SIG_WALK = 1
+		local walking = false
+		local ANIM_FRAMES = 4
+
+		-- Map actual visible leg locations to logical names (adjusted for Spring's mirroring)
+		local vis_lf1, vis_lf2 = rr1, rr2  -- visually Left Front
+		local vis_rf1, vis_rf2 = lr1, lr2  -- visually Right Front
+		local vis_lr1, vis_lr2 = rf1, rf2  -- visually Left Rear
+		local vis_rr1, vis_rr2 = lf1, lf2  -- visually Right Rear
+
+		local function GetSpeedParams()
+			local maxSpeed = UnitDefs[Spring.GetUnitDefID(unitID)].speed *   1
+			if maxSpeed <= 0 then return 0, 300 end
+			local sleepFrames = math.floor(ANIM_FRAMES / maxSpeed + 0.5)
+			if sleepFrames < 1 then sleepFrames = 1 end
+			local speedMod = 1 / sleepFrames
+			return speedMod, 33 * sleepFrames
+		end
+
+		local function Walk()
+			Signal(SIG_WALK)
+			SetSignalMask(SIG_WALK)
+
+			while true do
+				local speedMult, sleepTime = GetSpeedParams()
+
+				-- === PHASE A: LF(front) + RR(rear) move forward ===
+
+				-- Front Left: reach and pull
+				Turn(vis_lf1, z_axis, -0.3, 3 * speedMult)
+				Turn(vis_lf1, y_axis,  0.6, 3 * speedMult) -- reach
+				Turn(vis_lf2, z_axis, -0.3, 3 * speedMult)
+
+				-- Rear Right: rise and prepare push
+				Turn(vis_rr1, z_axis, -0.6, 3 * speedMult) -- lift
+				Turn(vis_rr1, y_axis, -0.3, 3 * speedMult) -- curled forward
+				Turn(vis_rr2, z_axis, -0.6, 3 * speedMult)
+
+				-- Front Right: pull/push phase
+				Turn(vis_rf1, z_axis, 0.0, 3 * speedMult)
+				Turn(vis_rf1, y_axis, -0.6, 3 * speedMult) -- pulling
+				Turn(vis_rf2, z_axis, 0.0, 3 * speedMult)
+
+				-- Rear Left: plant and push
+				Turn(vis_lr1, z_axis, 0.0, 3 * speedMult)
+				Turn(vis_lr1, y_axis,  0.6, 3 * speedMult) -- pushing
+				Turn(vis_lr2, z_axis, 0.0, 3 * speedMult)
+
+				WaitForTurn(vis_lf1, y_axis)
+				WaitForTurn(vis_rr1, y_axis)
+				Sleep(sleepTime)
+
+				-- === PHASE B: RF(front) + LR(rear) move forward ===
+
+				-- Front Right: reach and pull
+				Turn(vis_rf1, z_axis, -0.3, 3 * speedMult)
+				Turn(vis_rf1, y_axis,  0.6, 3 * speedMult) -- reach
+				Turn(vis_rf2, z_axis, -0.3, 3 * speedMult)
+
+				-- Rear Left: rise and prepare push
+				Turn(vis_lr1, z_axis, -0.6, 3 * speedMult)
+				Turn(vis_lr1, y_axis, -0.3, 3 * speedMult)
+				Turn(vis_lr2, z_axis, -0.6, 3 * speedMult)
+
+				-- Front Left: pull
+				Turn(vis_lf1, z_axis, 0.0, 3 * speedMult)
+				Turn(vis_lf1, y_axis, -0.6, 3 * speedMult)
+				Turn(vis_lf2, z_axis, 0.0, 3 * speedMult)
+
+				-- Rear Right: push
+				Turn(vis_rr1, z_axis, 0.0, 3 * speedMult)
+				Turn(vis_rr1, y_axis,  0.6, 3 * speedMult)
+				Turn(vis_rr2, z_axis, 0.0, 3 * speedMult)
+
+				WaitForTurn(vis_rf1, y_axis)
+				WaitForTurn(vis_lr1, y_axis)
+				Sleep(sleepTime)
+			end
+		end
+
+		local function StopWalking()
+			Signal(SIG_WALK)
+			SetSignalMask(SIG_WALK)
+
+			local speedMult = 0.5 * GetSpeedParams()
+			local allLegs = {
+				vis_lf1, vis_lf2,
+				vis_rf1, vis_rf2,
+				vis_lr1, vis_lr2,
+				vis_rr1, vis_rr2
+			}
+			for _, piece in ipairs(allLegs) do
+				Turn(piece, x_axis, 0, 2 * speedMult)
+				Turn(piece, y_axis, 0, 2 * speedMult)
+				Turn(piece, z_axis, 0, 2 * speedMult)
+			end
+		end
+
+		function script.StartMoving()
+			if not walking then
+				walking = true
+				StartThread(Walk)
+			end
+		end
+
+		function script.StopMoving()
+			walking = false
+			StartThread(StopWalking)
+		end
+
+	end,
+
 }
 return common
