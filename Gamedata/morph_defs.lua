@@ -42,14 +42,14 @@ local morphDefs = {
 		{
 		into    = 'fedcommander_up2',
 		time    = 120,
-		metal   = 1440,
-		energy  = 36000,
+		metal   = 2220,
+		energy  = 38400,
 		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 		text    = 'Upgrade to Tech 2 with upgraded weapons and armor',
 		require = [[tech1]],
 		},
 	},
-		
+
 	fedcommander_up2 = {
 		{
 		into    = 'fedcommander_up3',
@@ -93,8 +93,8 @@ local morphDefs = {
 		{
 		into    = 'lozcommander_up2',
 		time    = 120,
-		metal   = 1440,
-		energy  = 36000,
+		metal   = 2220,
+		energy  = 38400,
 		cmdname = [[Tech 2]] .. string.char(10) .. [[Upgrade]],
 		text    = 'Upgrade to Tech 2 with upgraded weapons and armor',
 		require = [[tech1]],
