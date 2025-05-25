@@ -1091,13 +1091,13 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- Set Global Capturespeed
 			if unitDef.customparams then
 				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Commander" then
-					unitDef.capturespeed = unitDef.workertime * 0.25
+					unitDef.capturespeed = unitDef.workertime * 0.1
 				end
 			end
 			-- Set Global Repairspeed
 			if unitDef.customparams then
 				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Commander" then
-					unitDef.repairspeed = unitDef.workertime * 0.1
+					unitDef.repairspeed = unitDef.workertime * 0.05
 				end
 			end
 

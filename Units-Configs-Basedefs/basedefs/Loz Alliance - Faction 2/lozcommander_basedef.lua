@@ -73,6 +73,16 @@ unitDef                    = {
 	turnrate 				 	 = 600,
 	--------------
 	--------------
+
+	--------------------------
+	-- Skillshot (aka DGun) --
+	--------------------------
+	noAutoFire                   = true,
+	fireState                    = 0,
+	canManualFire                = true,
+	--------------------------
+	--------------------------
+
 	sfxtypes                     = {
 		pieceExplosionGenerators = { 
 			"deathceg3", 
@@ -117,7 +127,7 @@ unitDef                    = {
 		needed_cover             = 2,
 		death_sounds             = "commander",
 		factionname	             = "Loz Alliance",
-		--removeattack             = "true",
+		removeattack             = "true",
 
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
@@ -135,6 +145,7 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
+		commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
 		beamtime				  = 0.25,
@@ -153,7 +164,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 300,
-		reloadtime                = 1,
+		reloadtime               = 7.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -188,6 +199,7 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
+		commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
 		beamtime				  = 0.25,
@@ -206,7 +218,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 400,
-		reloadtime                = 1,
+		reloadtime               = 7.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -230,7 +242,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 65,
+			default               = 380,
 		},
 	},
 
@@ -241,6 +253,7 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
+		commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
 		beamtime				  = 0.25,
@@ -259,7 +272,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 600,
-		reloadtime                = 1,
+		reloadtime               = 7.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -283,7 +296,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 210,
+			default               = 2500,
 		},
 	},
 
@@ -294,6 +307,7 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
+		commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
 		beamtime				  = 0.25,
@@ -312,7 +326,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 700,
-		reloadtime                = 1,
+		reloadtime               = 7.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -336,7 +350,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 800,
+			default               = 10000,
 		},
 	},
 
@@ -347,6 +361,7 @@ weaponDefs                 = {
 		collideFeature            = false,
 		collideFriendly           = false,
 		coreThickness             = 0.5,
+		commandfire               = true,
 		-- cegtag					  = "burnblack",
 		-- beamDecay                 = 0.9,
 		beamtime				  = 0.25,
@@ -365,7 +380,7 @@ weaponDefs                 = {
 		minintensity              = 1,
 		name                      = "High Intensity BeamLaser",
 		range                     = 900,
-		reloadtime                = 1,
+		reloadtime               = 7.5,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = purple,
 		rgbColor2                 = "0.25 0.25 0.25",
@@ -389,7 +404,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 950,
+			default               = 25000,
 		},
 	},
 }

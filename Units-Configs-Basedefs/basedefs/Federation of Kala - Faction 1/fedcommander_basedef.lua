@@ -76,6 +76,16 @@ unitDef                    = {
 	turnrate 				 	 = 750,
 	--------------
 	--------------
+
+	--------------------------
+	-- Skillshot (aka DGun) --
+	--------------------------
+	noAutoFire                   = true,
+	fireState                    = 0,
+	canManualFire                = true,
+	--------------------------
+	--------------------------
+
 	sfxtypes                     = {
 		pieceExplosionGenerators = { 
 			"deathceg3", 
@@ -119,7 +129,7 @@ unitDef                    = {
 		needed_cover             = 2,
 		death_sounds             = "commander",
 		factionname	             = "Federation of Kala",
-		--removeattack             = "true",
+		removeattack             = "true",
 		--hpoverride               = hp,
 		buildcostenergyoverride  = buildCostEnergy,
 		nofriendlyfire	         = "1",
@@ -137,6 +147,7 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
+		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-small",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -144,15 +155,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "fedcommander-skillshot",
+		soundstart               = "fedcommander-skillshot2",
 		soundtrigger             = true,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 305,
-		burst                    = 10,
-		burstrate                = 0.1,
-		reloadtime               = 1,
+		--burst                    = 10,
+		--burstrate                = 0.1,
+		reloadtime               = 7.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -162,7 +173,7 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
-		sprayangle				 = 200,
+		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -170,7 +181,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3,
+			default              = 30,
 		},
 	},
 
@@ -180,6 +191,7 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
+		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-small",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -187,15 +199,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "fedcommander-skillshot",
+		soundstart               = "fedcommander-skillshot2",
 		soundTrigger             = false,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 405,
-		burst                    = 10,
-		burstrate                = 0.1,
-		reloadtime               = 1,
+		--burst                    = 10,
+		--burstrate                = 0.1,
+		reloadtime               = 7.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -205,7 +217,7 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
-		sprayangle				 = 200,
+		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -213,7 +225,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 6.5,
+			default              = 380,
 		},
 	},
 
@@ -223,6 +235,7 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
+		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-medium",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -230,15 +243,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "fedcommander-skillshot",
+		soundstart               = "fedcommander-skillshot2",
 		soundTrigger             = false,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 605,
-		burst                    = 10,
-		burstrate                = 0.1,
-		reloadtime               = 1,
+		--burst                    = 10,
+		--burstrate                = 0.1,
+		reloadtime               = 7.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -248,7 +261,7 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
-		sprayangle				 = 200,
+		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -256,7 +269,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 18.8,
+			default              = 2500,
 		},
 	},
 
@@ -266,6 +279,7 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
+		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-large",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -273,15 +287,15 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "fedcommander-skillshot",
+		soundstart               = "fedcommander-skillshot2",
 		soundTrigger             = false,
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 705,
-		burst                    = 10,
-		burstrate                = 0.1,
-		reloadtime               = 1,
+		--burst                    = 10,
+		--burstrate                = 0.1,
+		reloadtime               = 7.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -291,7 +305,7 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
-		sprayangle				 = 200,
+		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -299,7 +313,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 156.2,
+			default              = 10000,
 		},
 	},
 
@@ -309,6 +323,7 @@ weaponDefs                 = {
 		avoidFriendly            = false,
 		collideFeature           = false,
 		collideFriendly          = false,
+		commandfire              = true,
 		explosionGenerator       = "custom:genericshellexplosion-large",
 		coreThickness            = 0.1,
 		duration                 = 0.8,
@@ -316,16 +331,16 @@ weaponDefs                 = {
 		fallOffRate              = 0.1,
 		fireStarter              = 50,
 		interceptedByShieldType  = 4,
-		soundstart               = "fedcommander-skillshot",
+		soundstart               = "fedcommander-skillshot2",
 		soundTrigger             = false,
 
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
 		range                    = 905,
-		burst                    = 10,
-		burstrate                = 0.,
-		reloadtime               = 1,
+		--burst                    = 10,
+		--burstrate                = 0.,
+		reloadtime               = 7.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -335,7 +350,7 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
-		sprayangle				 = 200,
+		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -343,7 +358,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 367.2,
+			default              = 25000,
 		},
 	},
 }
