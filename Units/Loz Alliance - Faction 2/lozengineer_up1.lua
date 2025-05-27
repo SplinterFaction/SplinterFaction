@@ -5,7 +5,7 @@ unitName = "lozengineer_up1"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 80
+buildCostMetal = 220
 buildDistance = 350
 
 buildpic = [[lozengineer_up1.png]]

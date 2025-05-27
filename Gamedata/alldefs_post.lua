@@ -889,7 +889,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 5
 			end
 			if unitDef.customparams.unitrole == "Builder" then
-				unitDef.maxdamage = unitDef.maxdamage * 3
+				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Main Battle Tank" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
@@ -1091,7 +1091,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- Set Global Capturespeed
 			if unitDef.customparams then
 				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Commander" then
-					unitDef.capturespeed = unitDef.workertime * 0.1
+					unitDef.capturespeed = unitDef.workertime * 0.25
 				end
 			end
 			-- Set Global Repairspeed

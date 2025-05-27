@@ -22,10 +22,12 @@ if gadgetHandler:IsSyncedCode() then
 		if unitTeam == attackerTeam then
 			--Spring.Echo("The units are on the same team!")
 			-- Get the weapon's customparams to determine if friendly fire is allowed
-			if weaponDef.customParams and weaponDef.customParams.friendlyfire then
-				if weaponDef.customParams.friendlyfire == "true" then
-					--Spring.Echo("Friendly fire is allowed in this case, applying damage!")
-					return damage
+			if weaponDef then
+				if weaponDef.customParams and weaponDef.customParams.friendlyfire then
+					if weaponDef.customParams.friendlyfire == "true" then
+						--Spring.Echo("Friendly fire is allowed in this case, applying damage!")
+						return damage
+					end
 				end
 			else
 				--Spring.Echo("Friendly fire is not allowed in this case, removing damage!")

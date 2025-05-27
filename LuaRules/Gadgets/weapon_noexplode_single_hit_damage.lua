@@ -5,7 +5,7 @@ function gadget:GetInfo()
 		author    = "",
 		date      = "2025",
 		license   = "MIT",
-		layer     = -100,
+		layer     = 1000,
 		enabled   = true
 	}
 end
@@ -34,10 +34,14 @@ if gadgetHandler:IsSyncedCode() then
 	function gadget:Initialize()
 		-- Initialize a table to track weapons and their 'single_hit' custom param
 		weaponHits = {}
-
+		--Spring.Echo("[Weapon Single Hit Damage] Initializing single_hit")
 		for weaponDefID, weaponDef in pairs(WeaponDefs) do
-			if weaponDef.noExplode == true then
-				if weaponDef.customParams and weaponDef.customParams.single_hit == "true" then
+			--Spring.Echo("[Weapon Single Hit Damage] Looking for noexplode weapons")
+			--Spring.Echo("[Weapon Single Hit Damage] Checking " .. weaponDef.name)
+			if weaponDef.noExplode == true then -- noExplode -- CAPITALIZATION IS SUPER IMPORTANT HERE!
+				--Spring.Echo("[Weapon Single Hit Damage] Found one! It's name is " .. weaponDef.name .. " and it's ID is ".. weaponDefID)
+				if weaponDef.customParams and weaponDef.customParams.single_hit then
+					--Spring.Echo("[Weapon Single Hit Damage] Adding " ..weaponDef.name .. " " .. weaponDefID .. " to the single_hit table")
 					weaponHits[weaponDefID] = {}
 				end
 			end
@@ -47,7 +51,7 @@ if gadgetHandler:IsSyncedCode() then
 	function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 
 		-- Check if the weapon has 'noexplode' and 'single_hit' set to true
-		--Spring.Echo("The weapon id that will deal damage is " .. weaponDefID)
+		--Spring.Echo("[Weapon Single Hit Damage] The weapon id that will deal damage is " .. weaponDefID)
 		if weaponHits[weaponDefID] then
 			if not weaponHits[weaponDefID][projectileID] then
 				weaponHits[weaponDefID][projectileID] = {}
@@ -58,11 +62,11 @@ if gadgetHandler:IsSyncedCode() then
 				-- Track that this unit has been hit by this projectile
 				weaponHits[weaponDefID][projectileID][unitID] = true
 				-- Return the damage normally
-				--Spring.Echo("Projectile " .. projectileID .. " hitting unit " .. unitID .. " for full damage: " .. damage)
+				--Spring.Echo("[Weapon Single Hit Damage] Projectile " .. projectileID .. " hitting unit " .. unitID .. " for full damage: " .. damage)
 				return damage
 			else
 				-- If it's already been hit by this projectile, return 0 damage
-				--Spring.Echo("No damage to unit " .. unitID .. " from projectile " .. projectileID .. " (already hit)")
+				--Spring.Echo("[Weapon Single Hit Damage] No damage to unit " .. unitID .. " from projectile " .. projectileID .. " (already hit)")
 				return 0
 			end
 		end

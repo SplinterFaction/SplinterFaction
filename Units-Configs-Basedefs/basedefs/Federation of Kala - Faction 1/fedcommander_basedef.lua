@@ -163,7 +163,7 @@ weaponDefs                 = {
 		range                    = 305,
 		--burst                    = 10,
 		--burstrate                = 0.1,
-		reloadtime               = 7.5,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -173,12 +173,14 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
+		noexplode                = true,
 		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit            = "true",
 		},
 		damage                   = {
 			default              = 30,
@@ -207,7 +209,7 @@ weaponDefs                 = {
 		range                    = 405,
 		--burst                    = 10,
 		--burstrate                = 0.1,
-		reloadtime               = 7.5,
+		reloadtime               = 1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -218,14 +220,16 @@ weaponDefs                 = {
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
 		--sprayangle				 = 200,
+		noexplode                = true,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit            = "true",
 		},
 		damage                   = {
-			default              = 380,
+			default              = 400,
 		},
 	},
 
@@ -251,7 +255,7 @@ weaponDefs                 = {
 		range                    = 605,
 		--burst                    = 10,
 		--burstrate                = 0.1,
-		reloadtime               = 7.5,
+		reloadtime               = 2.5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -261,15 +265,17 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
+		noexplode                = true,
 		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit            = "true",
 		},
 		damage                   = {
-			default              = 2500,
+			default              = 6000,
 		},
 	},
 
@@ -295,7 +301,7 @@ weaponDefs                 = {
 		range                    = 705,
 		--burst                    = 10,
 		--burstrate                = 0.1,
-		reloadtime               = 7.5,
+		reloadtime               = 5,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
 		rgbColor2                = "1 1 1",
@@ -305,15 +311,17 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
+		noexplode                = true,
 		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit            = "true",
 		},
 		damage                   = {
-			default              = 10000,
+			default              = 52500,
 		},
 	},
 
@@ -350,15 +358,17 @@ weaponDefs                 = {
 		texture1                 = "shot",
 		texture2                 = "empty",
 		weaponVelocity           = 1000,
+		noexplode                = true,
 		--sprayangle				 = 200,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit            = "true",
 		},
 		damage                   = {
-			default              = 25000,
+			default              = 196875,
 		},
 	},
 }

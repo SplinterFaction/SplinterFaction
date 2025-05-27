@@ -57,7 +57,7 @@ function gadget:Initialize()
 	end
 end
 
-function gadget:UnitCreated(unitID, unitDefID, team)
+function gadget:UnitFinished(unitID, unitDefID, unitTeam)
 	AddUnitIfHealer(unitID)
 end
 

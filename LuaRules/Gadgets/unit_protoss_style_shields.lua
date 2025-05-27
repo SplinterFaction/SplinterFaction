@@ -92,9 +92,15 @@ function gadget:GameFrame(frame)
 end
 
 -- Handle unit pre-damage event
-function gadget:UnitPreDamaged(unitID, _, _, damage)
+function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 	local shieldedUnit = IterableMap.Get(shieldedUnits, unitID)
 	if shieldedUnit then
+		if paralyzer then
+			--Spring.Echo("Damage is " .. damage)
+			local adjustedDamage = damage * 0.5
+			--Spring.Echo("Adjusted Damage is " .. adjustedDamage)
+			return adjustedDamage
+		end
 		local remainingDamage = 0
 		if shieldedUnit.shieldStrength >= damage then
 			shieldedUnit.shieldStrength = shieldedUnit.shieldStrength - damage
