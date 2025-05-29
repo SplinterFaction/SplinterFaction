@@ -17,10 +17,10 @@ Spring.Echo("[Default Mex Layout] Map square root size is: " .. mapSQRT)
 local count = #Spring.GetTeamList() - 1
 local allycount = #Spring.GetAllyTeamList() - 1
 -- for i = 1, #players do
-    -- local playerID = players[i]
-    -- if not select(3, Spring.GetPlayerInfo(playerID)) then
-        -- count = count + 1
-    -- end
+-- local playerID = players[i]
+-- if not select(3, Spring.GetPlayerInfo(playerID)) then
+-- count = count + 1
+-- end
 -- end
 Spring.SetGameRulesParam("peopleCount", count)
 
@@ -153,7 +153,7 @@ local function makePositionsRandomMirrored(sizeX, sizeY, padding, pointRadius, e
 			end
 		end
 		if numIterations == howManyTriesBeforeGiveUp then logFailures = logFailures + 1 end
-		
+
 		positions[#positions + 1] = {x = newPoint[1], z = newPoint[2]}
 		positions[#positions + 1] = {x = newPoint[3], z = newPoint[4]}
 		if newPoint[5] then
@@ -245,7 +245,7 @@ if mexRandomLayout == "standard" then
 	includeCentre = false
 	method = 6
 	allowWater = allowMexesInWater
-		--metalPerPoint = 1
+	--metalPerPoint = 1
 end
 
 if r and not m then
@@ -273,10 +273,10 @@ if not randomMirrored then
 		for j = 2, pointsPerLayer[i] + 1 do
 			results[lengResults] = {x = currX, z = currZ, metal = m[i]}
 			lengResults = lengResults + 1
-			
+
 			angle = angleOffset[i] + math.pi * 2 * j / pointsPerLayer[i]
 			nextX, nextZ = mapx + r[i] * math.cos(angle) * size * ratioX, mapz + r[i] * math.sin(angle) * size * ratioZ
-			
+
 			local numParts = pointsBetweenVertices[i] + 1
 			for k = 1, pointsBetweenVertices[i] do
 				results[lengResults] = {
