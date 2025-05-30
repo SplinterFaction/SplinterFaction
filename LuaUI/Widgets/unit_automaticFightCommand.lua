@@ -1,11 +1,14 @@
+-- TODO: Remove/adjust me when/if https://github.com/beyond-all-reason/RecoilEngine/issues/<TODO-MY-ISSUE-ID-PLEASE-FILE> is resolved
+
 function widget:GetInfo()
   return {
-	name		= "Automatic Fight Command",
-	desc		= "Gives select units a fight command after they have been built (because Spring doesn't call unitIdle properly)",
+	name		= "Fix UnitIdle callin",
+	desc		= "UnitIdle is not called for recently finished units without order queues",
 	author		= "Forby",
 	date		= "Jan 8, 2007",
 	license		= "GNU GPL, v2 or later",
 	layer		= 0,
+	handler		= true, -- we issue artifical UnitIdle callin to other widgets
 	enabled		= true  --  loaded by default?
   }
 end
@@ -20,6 +23,7 @@ local spGetUnitDefID		= Spring.GetUnitDefID
 local spGetUnitPosition		= Spring.GetUnitPosition
 local spGiveOrderToUnit		= Spring.GiveOrderToUnit
 local spGetSpectatingState	= Spring.GetSpectatingState
+local spGetUnitCommandCount 	= Spring.GetUnitCommandCount
 
 local hmsx = Game.mapSizeX/2
 local hmsz = Game.mapSizeZ/2
@@ -28,6 +32,7 @@ local hmsz = Game.mapSizeZ/2
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+-- TODO: Consider making this available for all units, there might be some gotchas like engine issuing UnitFinished before assigning orders to units coming out of factory
 local targetUnits = {
 	fedengineer          = true,
 	fedengineer_up1      = true,
@@ -54,23 +59,12 @@ local function IsTargetUnit(ud)
 end
 
 
-local function SetupUnit(unitID)
-	local x, y, z = spGetUnitPosition(unitID)
-	if x and y and z then
-	    if (x > hmsx) then -- avoid to issue commands outside map
-	      x = x - 1
-	    else
-	      x = x + 1
-	    end
-	    if (z > hmsz) then
-	      z = z - 1
-	    else
-	      z = z + 1
-	    end	
-		-- meta enables reclaim enemy units, alt autoresurrect ( if available )
-		-- spGiveOrderToUnit(unitID, CMD.MOVE_STATE, { 1 }, {})
-		spGiveOrderToUnit(unitID, CMD_FIGHT, { x, y, z }, {"shift"})
+local function SetupUnit(unitID, unitDefID, unitTeam)
+	if spGetUnitCommandCount(unitID) > 0 then
+		return
 	end
+	
+	widgetHandler:UnitIdle(unitID, unitDefID, unitTeam)
 end
 
 function widget:PlayerChanged()
@@ -87,20 +81,18 @@ end
 
 
 function widget:UnitFinished(unitID, unitDefID, unitTeam)
-	if unitTeam ~= spGetMyTeamID() then
+	if unitTeam ~= spGetMyTeamID() or not IsTargetUnit(UnitDefs[unitDefID]) then
 		return
 	end
-	if IsTargetUnit(UnitDefs[unitDefID]) then
-		SetupUnit(unitID)
-	end
+
+	SetupUnit(unitID, unitDefID, unitTeam)
 end
 
 
 function widget:UnitGiven(unitID, unitDefID, unitTeam)
-	if unitTeam ~= spGetMyTeamID() then
+	if unitTeam ~= spGetMyTeamID() or not IsTargetUnit(UnitDefs[unitDefID]) then
 		return
 	end
-	if IsTargetUnit(UnitDefs[unitDefID]) then
-		SetupUnit(unitID)
-	end
+
+	SetupUnit(unitID, unitDefID, unitTeam)
 end
