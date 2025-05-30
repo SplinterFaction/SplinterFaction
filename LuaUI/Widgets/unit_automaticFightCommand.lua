@@ -64,7 +64,7 @@ local function SetupUnit(unitID, unitDefID, unitTeam)
 		return
 	end
 	
-	widgetManager:UnitIdle(unitID, unitDefID, unitTeam)
+	widgetHandler:UnitIdle(unitID, unitDefID, unitTeam)
 end
 
 function widget:PlayerChanged()
