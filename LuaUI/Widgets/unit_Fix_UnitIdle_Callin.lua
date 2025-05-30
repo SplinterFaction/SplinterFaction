@@ -1,4 +1,4 @@
--- TODO: Remove/adjust me when/if https://github.com/beyond-all-reason/RecoilEngine/issues/<TODO-MY-ISSUE-ID-PLEASE-FILE> is resolved
+-- TODO: Remove/adjust me when/if https://github.com/beyond-all-reason/RecoilEngine/issues/2342 is resolved
 
 function widget:GetInfo()
   return {
