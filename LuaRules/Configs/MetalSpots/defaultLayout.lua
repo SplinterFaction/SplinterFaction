@@ -31,7 +31,7 @@ Spring.Echo("[Default Mex Layout] Number of teamIDs in this match: " .. teamIDCo
 
 local placeMexesInWater = Spring.GetModOptions().allowmexesinwater or "disabled"
 local maxMexElevationDiff = tonumber(Spring.GetModOptions().maximummexelevationdifference) or 50
-local mexSpotsPerPlayerOverride = tonumber(Spring.GetModOptions().mexSpotsPerPlayerOverride) or 7
+local mexSpotsPerPlayerOverride = tonumber(Spring.GetModOptions().mexSpotsPerPlayerOverride) or 10
 local mexRandomLayout = "standard"
 local dynamicMexOutput = Spring.GetModOptions().dynamicmexoutput or "disabled"
 

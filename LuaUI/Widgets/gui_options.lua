@@ -2440,6 +2440,7 @@ function init()
 		{id="customrings", group="game", name="Range Rings Mode", type="select", options={'My Units','My Units + Allied Units','All Units'}, value=Spring.GetConfigInt("CustomUnitRingsMode",1) + 1, description='Rings are used to show common useful ranges of various units and abilities.\n\nExamples: Commander Skillshot Range, Healstation Radius, etc.'},
 		{id="autotechup", group="game", widget="Commander AutoUpgrade", name="Commander AutoUpgrade", type="bool", value=GetWidgetToggleValue("Commander AutoUpgrade"), description='Do Commanders Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
 		{id="mexautoupgrade", group="game", widget="MetalExtractor AutoUpgrade", name="MetalExtractor AutoUpgrade", type="bool", value=GetWidgetToggleValue("MetalExtractor AutoUpgrade"), description='Do Metal Extractors Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
+		{id="unitautoreclaimhealassist", group="game", widget="Unit Auto Reclaim/Heal/Assist", name="Unit Auto Reclaim/Heal/Assist", type="bool", value=GetWidgetToggleValue("Unit Auto Reclaim/Heal/Assist"), description='Makes idle unselected builders/rez/com/nanos \nreclaim metal if metal bar is not full, repair nearby units and assist in building'},
 	}
 
 	-- set lowest quality shadows for Intel GPU (they eat fps but dont show)

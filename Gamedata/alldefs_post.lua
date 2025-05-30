@@ -889,7 +889,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 5
 			end
 			if unitDef.customparams.unitrole == "Builder" then
-				unitDef.maxdamage = unitDef.maxdamage * 1
+				unitDef.maxdamage = unitDef.maxdamage * 3
 			end
 			if unitDef.customparams.unitrole == "Main Battle Tank" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
