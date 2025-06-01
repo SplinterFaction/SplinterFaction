@@ -768,7 +768,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
-			if unitDef.customparams and unitDef.customparams.unitrole == "Builder" then
+			if unitDef.customparams and unitDef.customparams.unitrole == "Builder" or unitDef.customparams and unitDef.customparams.unitrole == "Commander" then
 				if canBuildersBeAssisted == false then
 					unitDef.canbeassisted = false
 				else
@@ -1097,7 +1097,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- Set Global Repairspeed
 			if unitDef.customparams then
 				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Commander" then
-					unitDef.repairspeed = unitDef.workertime * 0.05
+					unitDef.repairspeed = unitDef.workertime
 				end
 			end
 

@@ -1335,6 +1335,26 @@ function applyOptionValue(i, skipRedrawWindow)
 			Spring.SetConfigInt("evo_active_highlight_builders", value)
 			Spring.SendCommands("luaui togglewidget Constructor locater")
 			Spring.SendCommands("luaui togglewidget Constructor locater")
+		elseif id == 'usenetworksmoothing' then
+			Spring.SetConfigInt("sf_useNetworkSmoothing", value)
+			local networksmoothingsetting = Spring.GetConfigInt("sf_useNetworkSmoothing", 1)
+			if networksmoothingsetting == 1 then
+				Spring.SetConfigInt("UseNetMessageSmoothingBuffer", 1)
+				Spring.SetConfigInt("NetworkLossFactor", 0)
+				Spring.SetConfigInt("LinkOutgoingBandwidth", 196608)
+				Spring.SetConfigInt("LinkIncomingSustainedBandwidth", 196608)
+				Spring.SetConfigInt("LinkIncomingPeakBandwidth", 196608)
+				Spring.SetConfigInt("LinkIncomingMaxPacketRate", 1024)
+				Spring.Echo("[Network Smoothing] Enabled")
+			else
+				Spring.SetConfigInt("UseNetMessageSmoothingBuffer", 0)
+				Spring.SetConfigInt("NetworkLossFactor", 2)
+				Spring.SetConfigInt("LinkOutgoingBandwidth", 196608)
+				Spring.SetConfigInt("LinkIncomingSustainedBandwidth", 1048576)
+				Spring.SetConfigInt("LinkIncomingPeakBandwidth", 1048576)
+				Spring.SetConfigInt("LinkIncomingMaxPacketRate", 2048)
+				Spring.Echo("[Network Smoothing] Disabled")
+			end
 		end
 
 		if options[i].widget ~= nil then
@@ -2440,6 +2460,7 @@ function init()
 		{id="customrings", group="game", name="Range Rings Mode", type="select", options={'My Units','My Units + Allied Units','All Units'}, value=Spring.GetConfigInt("CustomUnitRingsMode",1) + 1, description='Rings are used to show common useful ranges of various units and abilities.\n\nExamples: Commander Skillshot Range, Healstation Radius, etc.'},
 		{id="autotechup", group="game", widget="Commander AutoUpgrade", name="Commander AutoUpgrade", type="bool", value=GetWidgetToggleValue("Commander AutoUpgrade"), description='Do Commanders Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
 		{id="mexautoupgrade", group="game", widget="MetalExtractor AutoUpgrade", name="MetalExtractor AutoUpgrade", type="bool", value=GetWidgetToggleValue("MetalExtractor AutoUpgrade"), description='Do Metal Extractors Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
+		{id="usenetworksmoothing", group="game", name="Network Smoothing", type="bool", value=Spring.GetConfigInt("sf_useNetworkSmoothing",1) == 1, description='Network smoothing helps players with unstable internet. When enabled, it adds a 0.5s delay\nto commands. This delay feels like lag but remains consistent. Disabling it with a poor\nconnection causes choppy input. With a good connection, disabling it removes the 0.5s lag.'},
 	}
 
 	-- set lowest quality shadows for Intel GPU (they eat fps but dont show)
