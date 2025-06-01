@@ -36,8 +36,12 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
 		-- New aggression instance: punish attacker
 		ApplyParalyzeDamage(attackerID, 1000000, unitID)
 
-		--Allow the damage through, but halve it
-		local adjustedDamage = damage * 0.5
+		--Allow the damage through, but only allow a percentage of remaining health through
+		local health = Spring.GetUnitHealth(unitID)
+		local adjustedDamage
+		if health then
+			adjustedDamage = 0.2 * health
+		end
 		return adjustedDamage
 	end
 end

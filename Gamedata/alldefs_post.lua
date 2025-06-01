@@ -28,8 +28,8 @@ end
 
 unitHealthModifier = unitHealthModifier * 0.01
 
-local canFactoriesBeAssisted = false
-local canBuildersBeAssisted = false
+local canFactoriesBeAssisted = true
+local canBuildersBeAssisted = true
 local canAnyUnitsReclaim = true
 local useDefaultNanospray = true
 
@@ -215,11 +215,11 @@ function UnitDef_Post(name, uDef)
 
 
 	--------------------------------------------------------------------------------
-	----- Make units unable to be repaired via nanolathe
+	----- Can units be repaired via nanolathe?
 	--------------------------------------------------------------------------------
-	uDef.repairable = true
+	uDef.repairable = false
 
-	-------------------------------------------------------------------------- ------
+	--------------------------------------------------------------------------------
 	----- Use per piece collision volumes
 	----- !Potentially very expensive!
 	--------------------------------------------------------------------------------
