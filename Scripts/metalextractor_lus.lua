@@ -6,6 +6,7 @@ common = include("headers/common_includes_lus.lua")
 -- state variables
 terrainType = "terrainType"
 skyhateEffect = "mex-fireball-small-blue"
+isOn = false
 
 function script.Create()
 	StartThread(common.SmokeUnit, {base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, bottom1, topspin1, sfxpointt1})
@@ -16,14 +17,27 @@ function script.Create()
 	UnitScript.Spin(pivotpoint,y_axis,math.rad(mexSpinSpeed))
 
 	UnitScript.Spin(topspin1,y_axis,math.rad(mexSpinSpeed * 0.25))
-
-
 end
 
 function script.Skyhateceg()
-	while true do
-		common.CustomEmitter(sfxpoint1, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
+	while isOn do
+		common.CustomEmitter(sfxpoint1, skyhateEffect)
 		Sleep(500)
+	end
+end
+
+function script.Activate()
+	isOn = true
+	if not skyhateThread then
+		skyhateThread = StartThread(script.Skyhateceg)
+	end
+end
+
+function script.Deactivate()
+	isOn = false
+	if skyhateThread then
+		KillThread(skyhateThread)
+		skyhateThread = nil
 	end
 end
 

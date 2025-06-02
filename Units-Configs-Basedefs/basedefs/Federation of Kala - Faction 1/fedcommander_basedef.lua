@@ -143,7 +143,11 @@ unitDef                    = {
 
 weaponDefs                 = {
 	particlebeamcannon                 = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		accuracy                 = 0,
+		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -189,7 +193,11 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up1                 = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		accuracy                 = 0,
+		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -235,7 +243,11 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up2                 = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		accuracy                 = 0,
+		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -281,7 +293,11 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up3                 = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		accuracy                 = 0,
+		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -327,7 +343,11 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up4                 = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		accuracy                 = 0,
+		avoidGround              = false,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,

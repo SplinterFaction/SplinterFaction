@@ -53,7 +53,7 @@ return {
 	-- Key is the unitDefName
 	fedcommander = {
 		{
-			radius = 300,
+			radius = 225,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 64,
@@ -67,7 +67,7 @@ return {
 	},
 	fedcommander_up1 = {
 		{
-			radius = 400,
+			radius = 325,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 64,
@@ -81,7 +81,7 @@ return {
 	},
 	fedcommander_up2 = {
 		{
-			radius = 600,
+			radius = 525,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 64,
@@ -95,7 +95,7 @@ return {
 	},
 	fedcommander_up3 = {
 		{
-			radius = 700,
+			radius = 625,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 128,
@@ -109,7 +109,7 @@ return {
 	},
 	fedcommander_up4 = {
 		{
-			radius = 900,
+			radius = 825,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 128,
@@ -124,7 +124,7 @@ return {
 
 	lozcommander = {
 		{
-			radius = 300,
+			radius = 225,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 64,
@@ -138,7 +138,7 @@ return {
 	},
 	lozcommander_up1 = {
 		{
-			radius = 400,
+			radius = 325,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 64,
@@ -152,7 +152,7 @@ return {
 	},
 	lozcommander_up2 = {
 		{
-			radius = 600,
+			radius = 525,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 64,
@@ -166,7 +166,7 @@ return {
 	},
 	lozcommander_up3 = {
 		{
-			radius = 700,
+			radius = 625,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 128,
@@ -180,7 +180,7 @@ return {
 	},
 	lozcommander_up4 = {
 		{
-			radius = 900,
+			radius = 825,
 			color = {1, 0, 0, 0.5},
 			lineWidth = 1,
 			divs = 128,

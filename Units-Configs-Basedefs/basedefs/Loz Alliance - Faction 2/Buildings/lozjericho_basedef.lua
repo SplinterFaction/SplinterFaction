@@ -81,7 +81,7 @@ unitDef                     = {
 
 		-- Begin unit rings
 		ring_color = "1,0,0,0.5",
-		ring_radius = "750",
+		ring_radius = "630",
 		ring_linewidth = "1",
 		ring_divs = "128",
 		ring_alwaysshow = "false",
@@ -115,7 +115,7 @@ weaponDefs = {
 		interceptedByShieldType   = 4,
 		minintensity              = 1,
 		name                      = "Gamma Ray Beam",
-		range                     = 750,
+		range                     = 630,
 		reloadtime                = 0.25,
 		WeaponType                = "BeamLaser",
 		rgbColor                  = "0 0.25 0",

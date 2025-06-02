@@ -139,6 +139,9 @@ unitDef                    = {
 
 weaponDefs                 = {
 	commrailgun           = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -186,6 +189,9 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up1               = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -233,6 +239,9 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up2               = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -280,6 +289,9 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up3               = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,
@@ -327,6 +339,9 @@ weaponDefs                 = {
 	},
 
 	commrailgun_up4               = {
+		areaofeffect             = 100,
+		edgeeffectiveness        = 0.1,
+		hardstop                 = true,
 		avoidGround               = false,
 		avoidFeature              = false,
 		avoidFriendly             = false,

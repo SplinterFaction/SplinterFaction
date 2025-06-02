@@ -99,8 +99,8 @@ unitDef                    = {
 			def                  = "bomb",
 			badTargetCategory     = "GROUND",
 			onlyTargetCategory    = "GROUND BUILDING SHIP SUBMARINE",
-			mainDir = "0 -1 0",
-			maxAngleDif = 200,
+			--mainDir = "0 -1 0",
+			--maxAngleDif = 200,
 		},
 		[2]                      = {
 			def                  = "machinegun",

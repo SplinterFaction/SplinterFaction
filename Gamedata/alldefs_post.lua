@@ -1028,7 +1028,21 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Commander" then
-				unitDef.maxdamage = unitDef.maxdamage * 15
+				if unitDef.customparams.techlevel == "tech0" then
+					unitDef.maxdamage = unitDef.maxdamage * 15
+				end
+				if unitDef.customparams.techlevel == "tech1" then
+					unitDef.maxdamage = unitDef.maxdamage * 15
+				end
+				if unitDef.customparams.techlevel == "tech2" then
+					unitDef.maxdamage = unitDef.maxdamage * 7.5
+				end
+				if unitDef.customparams.techlevel == "tech3" then
+					unitDef.maxdamage = unitDef.maxdamage * 5
+				end
+				if unitDef.customparams.techlevel == "tech4" then
+					unitDef.maxdamage = unitDef.maxdamage * 2.5
+				end
 			end
 
 			if unitDef.customparams and unitDef.customparams.hpmodifieroverridepercentage then

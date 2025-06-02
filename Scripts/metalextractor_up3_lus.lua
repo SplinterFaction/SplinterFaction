@@ -8,6 +8,7 @@ local SIG_AIM = {}
 -- state variables
 terrainType = "terrainType"
 skyhateEffect = "mex-fireball-small-green"
+isOn = false
 
 function script.Create()
 	StartThread(common.SmokeUnit, {base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, bottom1, topspin1, sfxpointt1, bottom2, topspin2, sfxpointt2, bottom3, topspin3, sfxpointt3, bottom4, topspin4, sfxpointt4})
@@ -25,9 +26,24 @@ function script.Create()
 end
 
 function script.Skyhateceg()
-	while true do
-		common.CustomEmitter(sfxpoint1, skyhateEffect) -- Second argument is the piece name, third argument needs to be a string because it will be the name of the CEG effect used
+	while isOn do
+		common.CustomEmitter(sfxpoint1, skyhateEffect)
 		Sleep(500)
+	end
+end
+
+function script.Activate()
+	isOn = true
+	if not skyhateThread then
+		skyhateThread = StartThread(script.Skyhateceg)
+	end
+end
+
+function script.Deactivate()
+	isOn = false
+	if skyhateThread then
+		KillThread(skyhateThread)
+		skyhateThread = nil
 	end
 end
 

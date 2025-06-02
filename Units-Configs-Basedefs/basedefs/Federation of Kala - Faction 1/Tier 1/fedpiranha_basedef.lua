@@ -117,7 +117,7 @@ weaponDefs                 = {
 		model                    = "neutralmissilex1.s3o",
 		name                     = "Torpedo",
 		range                    = 550,
-		reloadtime               = 5,
+		reloadtime               = 1,
 		weaponType		         = "TorpedoLauncher",
 		waterweapon              = true,
 		smokeTrail               = false,
@@ -138,7 +138,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 1250,
+			default              = 250,
 		},
 	},
 }

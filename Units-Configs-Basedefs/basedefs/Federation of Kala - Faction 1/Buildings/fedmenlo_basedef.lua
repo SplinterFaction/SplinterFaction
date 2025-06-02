@@ -80,7 +80,7 @@ unitDef                     = {
 
 		-- Begin unit rings
 		ring_color = "1,0,0,0.5",
-		ring_radius = "750",
+		ring_radius = "630",
 		ring_linewidth = "1",
 		ring_divs = "128",
 		ring_alwaysshow = "false",
@@ -112,7 +112,7 @@ weaponDefs = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 750,
+		range                    = 630,
 		reloadtime               = 0.1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
