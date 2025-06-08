@@ -117,7 +117,7 @@ if gadgetHandler:IsSyncedCode() then
 		type = CMDTYPE.ICON_UNIT,
 		name = 'Set Unit Target',
 		action = 'settargetnoground',
-		cursor = 'cursorsetattack',
+		cursor = 'settarget',
 		tooltip = tooltipText,
 		hidden = true,
 	}
@@ -127,7 +127,7 @@ if gadgetHandler:IsSyncedCode() then
 		type = CMDTYPE.ICON_UNIT_OR_RECTANGLE,
 		name = 'Set Target',
 		action = 'settargetrectangle',
-		cursor = 'cursorsetattack',
+		cursor = 'settarget',
 		tooltip = tooltipText,
 		hidden = true,
 	}
@@ -137,7 +137,7 @@ if gadgetHandler:IsSyncedCode() then
 		type = CMDTYPE.ICON_UNIT_OR_AREA,
 		name = 'Set Target', --extra spaces center the 'Set' text
 		action = 'settarget',
-		cursor = 'cursorsetattack',
+		cursor = 'settarget',
 		tooltip = tooltipText,
 		hidden = false,
 	}
@@ -692,7 +692,7 @@ else	-- UNSYNCED
 		gadgetHandler:AddSyncAction("targetIndex", handleTargetIndexEvent)
 
 		-- register cursor
-		Spring.AssignMouseCursor("settarget", "cursorsettarget", false)
+		Spring.AssignMouseCursor("settarget", "cursorsetattack", false)
 		--show the command in the queue
 		Spring.SetCustomCommandDrawData(CMD_UNIT_SET_TARGET, "settarget", queueColour, true)
 		Spring.SetCustomCommandDrawData(CMD_UNIT_SET_TARGET_NO_GROUND, "settargetnoground", queueColour, true)
