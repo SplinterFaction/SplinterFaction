@@ -310,7 +310,7 @@ if (gadgetHandler:IsSyncedCode()) then
   local morphStopCmdDesc = {
     id     = CMD_MORPH_STOP,
     type   = CMDTYPE.ICON,
-    name   = 'Stop\nMorph',
+    name   = 'Cancel\nUpgrade',
     texture = 'luaui/images/gfxbuttons/cmd_morphstop.png',
     cursor = 'Morph',
     action = 'morph',
@@ -319,7 +319,7 @@ if (gadgetHandler:IsSyncedCode()) then
   local morphQueueCmdDesc = {
     id     = CMD_MORPH_QUEUE, -- might be added by the calling function if/when supports more than one option
     type   = CMDTYPE.ICON,
-    name   = 'Queue',
+    name   = 'Queue\nUpgrade',
     texture = 'luaui/images/gfxbuttons/cmd_morphqueue.png',
     cursor = 'Morph',  -- add with LuaUI?
     action = 'morphqueue',
@@ -328,7 +328,7 @@ if (gadgetHandler:IsSyncedCode()) then
   local morphPauseCmdDesc = {
     id     = CMD_MORPH_PAUSE,
     type   = CMDTYPE.ICON,
-    name   = 'Pause',
+    name   = 'Pause\nUpgrade',
     texture = 'luaui/images/gfxbuttons/cmd_morphpause.png',
     cursor = 'Morph',  -- add with LuaUI?
     action = 'morphpause',
@@ -657,7 +657,7 @@ if (gadgetHandler:IsSyncedCode()) then
       else
         energyCostPerSecond = 0
       end
-      tt = tt .. CyanStr .. 'metal' .. WhiteStr .. ' / ' .. YellowStr .. 'energy' .. WhiteStr .. ' cost per second: ' .. CyanStr .. metalCostPerSecond .. WhiteStr .. " / " .. YellowStr .. energyCostPerSecond  .. '\n'
+      tt = tt .. CyanStr .. 'metal' .. WhiteStr .. ' / ' .. YellowStr .. 'energy' .. WhiteStr .. ' cost per second: ' .. CyanStr .. metalCostPerSecond .. WhiteStr .. " / " .. YellowStr .. energyCostPerSecond  .. '' .. '\n'
     end
 ------
 
@@ -898,7 +898,7 @@ if (gadgetHandler:IsSyncedCode()) then
 
     local pauseDescID = spFindUnitCmdDesc(unitID, CMD_MORPH_PAUSE)
     if pauseDescID then
-      local str = morphingUnit.paused and GreenStr.."Resume" or OrangeStr.."Pause"
+      local str = morphingUnit.paused and GreenStr.."Resume\nUpgrade" or OrangeStr.."Pause\nUpgrade"
       --Spring.Echo("Pausing/Resuming Morph: "..str)
       spEditUnitCmdDesc(unitID, pauseDescID, {name=str, tooltip="Pause/Resume Upgrade"})
     end
