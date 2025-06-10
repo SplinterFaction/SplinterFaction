@@ -16,6 +16,7 @@ local unitDef                     = {
 	buildCostEnergy               = 0,
 	buildCostMetal                = buildCostMetal,
 	builder                       = false,
+	buildingMask				  = 4,
 	buildTime                     = 5,
 	buildpic					  = "emediumgen.png",
 	canAttack			          = false,
@@ -68,6 +69,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		metal_maker = true,
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		simpleaiunittype          = "energygenerator",
