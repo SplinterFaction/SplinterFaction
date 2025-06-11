@@ -184,12 +184,12 @@ weaponDefs                 = {
 			single_hit            = "true",
 		},
 		damage                    = {
-			default               = 30,
+			default               = 100,
 		},
 	},
 
 	commrailgun_up1               = {
-		areaofeffect             = 100,
+		areaofeffect             = 50,
 		edgeeffectiveness        = 0.1,
 		hardstop                 = true,
 		avoidGround               = false,
@@ -234,12 +234,12 @@ weaponDefs                 = {
 			single_hit            = "true",
 		},
 		damage                    = {
-			default               = 400,
+			default               = 175,
 		},
 	},
 
 	commrailgun_up2               = {
-		areaofeffect             = 100,
+		areaofeffect             = 50,
 		edgeeffectiveness        = 0.1,
 		hardstop                 = true,
 		avoidGround               = false,
@@ -284,12 +284,12 @@ weaponDefs                 = {
 			single_hit            = "true",
 		},
 		damage                    = {
-			default               = 6000,
+			default               = 4000,
 		},
 	},
 
 	commrailgun_up3               = {
-		areaofeffect             = 100,
+		areaofeffect             = 25,
 		edgeeffectiveness        = 0.1,
 		hardstop                 = true,
 		avoidGround               = false,
@@ -334,12 +334,12 @@ weaponDefs                 = {
 			single_hit            = "true",
 		},
 		damage                    = {
-			default               = 52500,
+			default               = 30000,
 		},
 	},
 
 	commrailgun_up4               = {
-		areaofeffect             = 100,
+		areaofeffect             = 0,
 		edgeeffectiveness        = 0.1,
 		hardstop                 = true,
 		avoidGround               = false,
@@ -384,7 +384,7 @@ weaponDefs                 = {
 			single_hit            = "true",
 		},
 		damage                    = {
-			default               = 196875,
+			default               = 100000,
 		},
 	},
 }

@@ -146,7 +146,7 @@ function UnitDef_Post(name, uDef)
 			uDef.maxreversevelocity = uDef.maxvelocity * 0.85
 		end
 		if uDef.customparams and uDef.customparams.factionname == "Federation of Kala" then
-			uDef.maxreversevelocity = uDef.maxvelocity * 0.85
+			uDef.maxreversevelocity = uDef.maxvelocity * 0
 		end
 		if uDef.customparams and uDef.customparams.factionname == "Loz Alliance" then
 			uDef.maxreversevelocity = uDef.maxvelocity * 0.25
