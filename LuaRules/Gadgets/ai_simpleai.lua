@@ -114,7 +114,7 @@ end
 local function SimpleGetClosestMexSpot(x, z)
 	local bestSpot
 	local bestDist = math.huge
-	local metalSpots = GG.metalSpots
+	local metalSpots = GG.metalMakerSpots
 	if metalSpots then
 		for i = 1, #metalSpots do
 			local spot = metalSpots[i]

@@ -55,8 +55,8 @@ local cloak2 = "cloak"
 local decloak2 = "cloak"
 
 local alert = "alert sounds 3"
-local cancel = 'cantdo'
-local movefailed = 'cantdo'
+local cancel = 'sounds/ui/cantdo.wav'
+local movefailed = 'sounds/ui/cantdo.wav'
 
 local ADUnits = {}
 local CMD_SELFD = CMD.SELFD
