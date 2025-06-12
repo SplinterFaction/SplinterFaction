@@ -326,7 +326,17 @@ function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
 	RemoveUnit(unitID)
 end
 
-function gadget:UnitCreated(unitID, unitDefID, unitTeam)
+function gadget:UnitLoaded(unitID, unitDefID, unitTeam, transportID, transportTeam)
+	RemoveUnit(unitID)
+end
+
+function gadget:UnitUnloaded(unitID, unitDefID, unitTeam, transportID, transportTeam)
+	if shieldUnitDefs[unitDefID] then
+		AddUnit(unitID, unitDefID)
+	end
+end
+
+function gadget:UnitFinished(unitID, unitDefID, unitTeam)
 	if shieldUnitDefs[unitDefID] then
 		AddUnit(unitID, unitDefID)
 	end
@@ -382,7 +392,7 @@ function gadget:Initialize(n)
 	for i = 1, #allUnits do
 		local unitID = allUnits[i]
 		local unitDefID = Spring.GetUnitDefID(unitID)
-		gadget:UnitCreated(unitID, unitDefID)
+		gadget:UnitFinished(unitID, unitDefID, unitTeam)
 	end
 end
 
