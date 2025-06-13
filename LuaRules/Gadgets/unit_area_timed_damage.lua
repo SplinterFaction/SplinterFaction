@@ -11,6 +11,27 @@ function gadget:GetInfo()
     }
 end
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- ceg - ceg to spawn when explosion happens
+-- damageCeg - ceg to spawn when damage is dealt
+-- time - how long the effect should stay
+-- damage - damage per second
+-- range - from center to edge, in elmos
+-- resistance - defines which units are resistant to this type of damage when it matches with 'areadamageresistance' customparameter in a unit.
+
+
+--[[
+
+areadamage_ceg
+areadamage_damageCeg
+areadamage_time
+areadamage_damage
+areadamage_range
+areadamage_resistance
+
+]]--
+
 if not gadgetHandler:IsSyncedCode() then
     return
 end
