@@ -14,19 +14,25 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	wingDrag            = 0.07,
-	wingAngle           = 0.08,
-	frontToSpeed        = 0,    -- New Default
-	speedToFront        = 0.001,  -- New Default
-	crashDrag           = 0.005,
-	maxBank             = 0.85,  -- New Default
-	maxPitch            = 0.65, -- New Default
-	turnRadius          = 0,  -- New Default
-	verticalSpeed       = 3.0,
-	maxAileron          = 0.0125, -- New Default
-	maxElevator         = 0.01,
-	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
-	maxAcc          	= 1.2,    -- OG Default was 0.065
+	maxVelocity        = 16,     -- Your defined top speed
+	acceleration       = 0.42,    -- Slight bump to help it ramp to speed
+	maxAcc             = 1.2,     -- A little more responsive at higher speed
+
+	turnRadius         = 90,      -- Slightly wider circle due to higher speed
+
+	wingDrag           = 0.06,    -- Keep same for consistent glide behavior
+	wingAngle          = 0.08,    -- Leave unchanged unless it feels under-lifty
+
+	crashDrag          = 0.005,   -- Leave as-is
+
+	maxBank            = 0.72,    -- Slight increase to match faster banking needs
+	maxPitch           = 0.6,     -- Increase slightly for improved climb/dive
+
+	verticalSpeed      = 4.0,     -- Allow slightly faster vertical correction
+
+	maxAileron         = 0.013,   -- Slightly faster roll
+	maxElevator        = 0.013,   -- Slightly faster pitch
+	maxRudder          = 0.0022,  -- Slight yaw improvement to keep turning sharp
 
 	useSmoothMesh		= true,
 
@@ -55,7 +61,6 @@ unitDef                    = {
 	canLoopbackAttack            = true,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 16,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,

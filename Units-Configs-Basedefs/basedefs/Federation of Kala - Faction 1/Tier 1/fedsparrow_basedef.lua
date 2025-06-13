@@ -14,19 +14,26 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	wingDrag            = 0.07,
-	wingAngle           = 0.08,
-	frontToSpeed        = 0,    -- New Default
-	speedToFront        = 0.001,  -- New Default
-	crashDrag           = 0.005,
-	maxBank             = 0.85,  -- New Default
-	maxPitch            = 0.65, -- New Default
-	turnRadius          = 0,  -- New Default
-	verticalSpeed       = 3.0,
-	maxAileron          = 0.0125, -- New Default
-	maxElevator         = 0.01,
-	maxRudder           = 0.001, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
-	maxAcc          	= 1.2,    -- OG Default was 0.065
+	maxVelocity        = 14,     -- Your defined top speed
+	acceleration       = 0.4,    -- How quickly it reaches that speed
+	maxAcc             = 1.0,    -- Affects responsiveness to course corrections
+
+	turnRadius         = 80,     -- Lower = tighter turns. 80 is tight for this speed
+
+	wingDrag           = 0.06,   -- Too low = unrealistic glide; too high = stalls
+	wingAngle          = 0.07,   -- Lift. Higher = more responsive, but twitchier
+
+	crashDrag          = 0.005,  -- Fine to leave as-is
+
+	maxBank            = 0.7,   -- How far it tilts in turns. 0.7–0.8 = fast-fighter style
+	maxPitch           = 0.55,   -- How fast it can nose up/down
+
+	verticalSpeed      = 3.5,    -- Limits climbing/dive rate. Good value for quick altitude change
+
+	maxAileron         = 0.012,  -- Controls roll rate (used to bank). Don't go crazy high
+	maxElevator        = 0.012,  -- Controls pitch (up/down)
+	maxRudder          = 0.002,  -- Yaw rate — don't set too high or pathing breaks
+
 
 	useSmoothMesh		= true,
 
@@ -55,7 +62,6 @@ unitDef                    = {
 	canLoopbackAttack            = true,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 14,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,

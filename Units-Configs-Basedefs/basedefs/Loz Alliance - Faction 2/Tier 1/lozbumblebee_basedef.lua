@@ -14,19 +14,25 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	wingDrag            = 0.135,
-	wingAngle           = 0.06315,
-	-- frontToSpeed        = 0,    -- New Default
-	speedToFront        = 0.063,  -- New Default
-	-- crashDrag           = 0.005,
-	maxBank             = 0.8,  -- New Default
-	maxPitch            = 0.625, -- New Default
-	turnRadius          = 150,  -- New Default
-	verticalSpeed       = 3.0,
-	maxAileron          = 0.0144, -- New Default
-	maxElevator         = 0.01065,
-	maxRudder           = 0.00615, -- use this to control turn radius around Y axis - Best value for fighters is 0.01
-	maxAcc          	= 1.2,    -- OG Default was 0.065
+	maxVelocity        = 12,
+	acceleration       = 0.25,     -- Slower takeoff and sluggish momentum
+	maxAcc             = 0.7,      -- Slow to correct heading
+
+	turnRadius         = 160,      -- Big wide turns — can't easily circle back
+
+	wingDrag           = 0.07,     -- High drag to prevent glidey behavior
+	wingAngle          = 0.07,     -- Balanced lift to keep it from stalling
+
+	crashDrag          = 0.005,    -- Standard
+
+	maxBank            = 0.45,     -- Shallow rolls; avoids sharp tilting
+	maxPitch           = 0.4,      -- Sluggish pitch for slow climb/dive
+
+	verticalSpeed      = 2.5,      -- Reduced climb rate
+
+	maxAileron         = 0.008,    -- Slower roll
+	maxElevator        = 0.008,    -- Slower pitch
+	maxRudder          = 0.0015,   -- Barely turns without banking
 
 	useSmoothMesh		= true,
 
@@ -56,7 +62,6 @@ unitDef                    = {
 	canLoopbackAttack            = false,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 12,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -69,7 +74,7 @@ unitDef                    = {
 	smoothAnim                   = true,
 	stealth                      = false,
 	transportbyenemy             = false;
-	turnRate                     = 5,
+	turnRate                     = 1,
 	unitname                     = unitName,
 	upright						 = true,
 	workerTime                   = 0,
