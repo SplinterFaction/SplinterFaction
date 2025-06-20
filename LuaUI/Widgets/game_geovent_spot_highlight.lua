@@ -1,9 +1,9 @@
 
 function widget:GetInfo()
 	return {
-		name      = 'Highlight Geos',
-		desc      = 'Highlights geothermal spots when in metal map view',
-		author    = 'Niobium, modified by GoogleFrog',
+		name      = 'Geovent Spot Highlight',
+		desc      = 'Draws yellow column on Geothermal spots',
+		author    = 'Niobium, modified by GoogleFrog, heavily modified by Scary',
 		version   = '1.0',
 		date      = 'Mar, 2011',
 		license   = 'GNU GPL, v2 or later',
@@ -75,12 +75,6 @@ function widget:Shutdown()
 	end
 end
 
-function widget:RecvLuaMsg(msg, playerID)
-	if msg:sub(1,18) == 'LobbyOverlayActive' then
-		chobbyInterface = (msg:sub(1,19) == 'LobbyOverlayActive1')
-	end
-end
-
 function widget:DrawWorld()
 	if chobbyInterface then return end
 	if Spring.IsGUIHidden() then return end
@@ -100,29 +94,3 @@ function widget:DrawWorld()
 		glLineWidth(1)
 	--end
 end
---[[
-local function drawMinimapGeos(x,z)
-	gl.Vertex(x - size,0,z - size)
-	gl.Vertex(x + size,0,z + size)
-	gl.Vertex(x + size,0,z - size)
-	gl.Vertex(x - size,0,z + size)
-end
-
-function widget:DrawInMiniMap()
-
-		gl.LoadIdentity()
-		gl.Translate(0,1,0)
-		gl.Scale(mapXinv , -mapZinv, 1)
-		gl.Rotate(270,1,0,0)
-		gl.LineWidth(2)
-		gl.Lighting(false)
-		gl.Color(1,1,0,0.7)
-		for i = 1, #geos do
-			local geo = geos[i]
-			gl.BeginEnd(GL.LINES,drawMinimapGeos,geo.x,geo.z)
-		end
-		
-		gl.LineWidth(0.00000000001)
-		gl.Color(1,1,1,1)
-end
-]]--

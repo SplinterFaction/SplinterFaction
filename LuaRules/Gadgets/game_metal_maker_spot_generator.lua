@@ -8,9 +8,10 @@ Widgets:
 game_metal_spot_loader
 game_metal_spot_drawer
 game_metal_spot_minimap_drawer
+game_metal_maker_placement_snapping
 
 Tangentially related Gadgets:
-game_random_symmetric_geovents
+game_geovent_spot_generator
 
 ]]--
 
@@ -40,6 +41,7 @@ local Echo = Spring.Echo
 
 -- Config
 local FOOTPRINT = 5
+local MIN_SPOT_SPACING = 150  -- Minimum spacing in world units between metal spots
 local ELEVATION_TOLERANCE = 15
 local EDGE_MARGIN = 100  -- in world units; adjust as needed (100 = ~6 map squares)
 local allowWaterSpots = false
@@ -74,13 +76,13 @@ local function isFlatEnough(x, z)
 	return (maxY - minY) <= ELEVATION_TOLERANCE
 end
 
-local function isFarEnoughFromOthers(x, z, minDist)
+local function isFarEnoughFromOthers(x, z, MIN_SPOT_SPACING)
 	local wx = x * 16
 	local wz = z * 16
 	for _, spot in ipairs(metalSpots) do
 		local dx = spot.x - wx
 		local dz = spot.z - wz
-		if (dx * dx + dz * dz) < (minDist * minDist) then
+		if (dx * dx + dz * dz) < (MIN_SPOT_SPACING * MIN_SPOT_SPACING) then
 			return false
 		end
 	end
@@ -127,7 +129,7 @@ local function findNearbyValidSpot(startX, startZ, maxRadius)
 				local wz = tz * 16
 				if tx >= 0 and tx < slopeMapX and tz >= 0 and tz < slopeMapZ then
 					if isFlatEnough(tx, tz)
-							and isFarEnoughFromOthers(tx, tz, 100)
+							and isFarEnoughFromOthers(tx, tz, MIN_SPOT_SPACING)
 							and isWithinMapBounds(wx, wz)
 					then
 						return tx, tz
@@ -149,7 +151,7 @@ local function mirrorAndPlace(x, z)
 
 	local function tryPlace(mx, mz)
 		if mx >= 0 and mx < slopeMapX and mz >= 0 and mz < slopeMapZ then
-			if isFlatEnough(mx, mz) and isFarEnoughFromOthers(mx, mz, 100) and isWithinMapBounds(mx * 16, mz * 16) then
+			if isFlatEnough(mx, mz) and isFarEnoughFromOthers(mx, mz, MIN_SPOT_SPACING) and isWithinMapBounds(mx * 16, mz * 16) then
 				markSpot(mx, mz)
 			else
 				local fallbackX, fallbackZ = findNearbyValidSpot(mx, mz, 20)
@@ -183,7 +185,7 @@ function gadget:Initialize()
 
 	for x = scanMinX, scanMaxX do
 		for z = scanMinZ, scanMaxZ do
-			if isFlatEnough(x, z) and isFarEnoughFromOthers(x, z, 100) and isWithinMapBounds(x * 16, z * 16) then
+			if isFlatEnough(x, z) and isFarEnoughFromOthers(x, z, MIN_SPOT_SPACING) and isWithinMapBounds(x * 16, z * 16) then
 				table.insert(candidates, {x = x, z = z})
 			end
 		end

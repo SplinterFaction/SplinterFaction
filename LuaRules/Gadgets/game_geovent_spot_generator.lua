@@ -7,6 +7,8 @@ game_random_symmetric_geovents
 Widgets:
 game_geovent_spot_loader
 game_geovent_spot_drawer
+game_geovent_spot_highlight
+game_geovent_spot_minimap_drawer
 
 Tangentially related Gadgets:
 game_metal_maker_spot_generator

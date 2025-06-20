@@ -20,7 +20,7 @@ function widget:DrawWorldPreUnit()
 	gl.Color(1, 1, 1, 1)
 
 	local offsetX = 7
-	local offsetY = 0
+	local offsetY = 1
 	local offsetZ = 7
 
 	for _, spot in ipairs(WG.metalMakerSpots) do
