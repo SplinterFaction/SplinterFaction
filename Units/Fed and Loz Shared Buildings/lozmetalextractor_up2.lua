@@ -4,7 +4,7 @@ unitName = [[lozmetalextractor_up2]]
 
 --------------------------------------------------------------------------------
 
-metalMultiplier = 8
+metalMultiplier = 12
 
 buildCostMetal = 600
 energyUse = 50

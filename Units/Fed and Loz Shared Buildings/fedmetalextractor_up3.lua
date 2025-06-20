@@ -4,7 +4,7 @@ unitName = [[fedmetalextractor_up3]]
 
 --------------------------------------------------------------------------------
 
-metalMultiplier = 16
+metalMultiplier = 24
 
 buildCostMetal = 1200
 energyUse = 100
