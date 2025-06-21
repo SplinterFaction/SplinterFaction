@@ -98,7 +98,7 @@ if buildOrderUI == traditionalSmall then
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 5, columns = 5,
+            rows = 4, columns = 5,
             x = '0%', y = '50%',
             width = '50%', height = '50%',
             orientation = 'horizontal',
@@ -163,7 +163,7 @@ else
         },
         buildmenu = {
             name = 'buildmenu',
-            rows = 5, columns = 5,
+            rows = 4, columns = 5,
             x = '0%', y = '49.25%',
             width = '50%', height = '50%',
             orientation = 'horizontal',

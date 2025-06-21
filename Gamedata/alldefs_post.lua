@@ -619,6 +619,48 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 		for id,unitDef in pairs(UnitDefs) do
 
+			-------------------------------
+			-- Set Energy Converter amounts
+			-------------------------------
+
+			if unitDef.customparams and unitDef.customparams.metal_maker then
+				if unitDef.unitname == "lozmetalextractor" or unitDef.unitname == "fedmetalextractor" then
+					unitDef.makesmetal = 3
+					unitDef.energyuse = 5
+					unitDef.humanname = "E->M Converter (Tech 0)"
+					unitDef.description = "Extracts and Converts Energy to Metal. Upkeep: " .. unitDef.energyuse .. " E/s"
+				end
+				if unitDef.unitname == "lozmetalextractor_up1" or unitDef.unitname == "fedmetalextractor_up1" then
+					unitDef.makesmetal = 6
+					unitDef.energyuse = 25
+					unitDef.humanname = "E->M Converter (Tech 1)"
+					unitDef.description = "Extracts and Converts Energy to Metal. Upkeep: " .. unitDef.energyuse .. " E/s"
+				end
+				if unitDef.unitname == "lozmetalextractor_up2" or unitDef.unitname == "fedmetalextractor_up2" then
+					unitDef.makesmetal = 9
+					unitDef.energyuse = 50
+					unitDef.humanname = "E->M Converter (Tech 2)"
+					unitDef.description = "Extracts and Converts Energy to Metal. Upkeep: " .. unitDef.energyuse .. " E/s"
+				end
+				if unitDef.unitname == "lozmetalextractor_up3" or unitDef.unitname == "fedmetalextractor_up3" then
+					unitDef.makesmetal = 16
+					unitDef.energyuse = 100
+					unitDef.humanname = "E->M Converter (Tech 3)"
+					unitDef.description = "Extracts and Converts Energy to Metal. Upkeep: " .. unitDef.energyuse .. " E/s"
+				end
+				if unitDef.unitname == "lozmetalextractor_up4" or unitDef.unitname == "fedmetalextractor_up4" then
+					unitDef.makesmetal = 32
+					unitDef.energyuse = 250
+					unitDef.humanname = "E->M Converter (Tech 4)"
+					unitDef.description = "Extracts and Converts Energy to Metal. Upkeep: " .. unitDef.energyuse .. " E/s"
+				end
+				if unitDef.unitname == "geometalmaker" then
+					unitDef.makesmetal = 64
+					unitDef.energyuse = 500
+					unitDef.humanname = "Geothermal E->M Converter (Tech 4)"
+					unitDef.description = "Extracts and Converts Energy to Metal. Upkeep: " .. unitDef.energyuse .. " E/s"
+				end
+			end
 
 			if unitDef.customparams and unitDef.customparams.unitdefbuildtime == nil then
 				-- Set Rules for Neutral race

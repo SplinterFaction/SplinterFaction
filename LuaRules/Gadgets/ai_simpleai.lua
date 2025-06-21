@@ -218,7 +218,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 			SimpleConstructorDelay[unitTeam] = SimpleConstructorDelay[unitTeam]-1
 			local r = math.random(0, 20) -- Used: 8
 			local mexspotpos = SimpleGetClosestMexSpot(unitposx, unitposz)
-			if SimpleConstructorCount[unitTeam] < 4 then
+			if SimpleConstructorCount[unitTeam] < 2 then
 				local project = SimpleConstructorDefs[math.random(1, #SimpleConstructorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
