@@ -14,9 +14,6 @@ function script.Create()
 	StartThread(script.Skyhateceg)
 
 	mexSpinSpeed = math.random(20,100)
-	UnitScript.Spin(pivotpoint,y_axis,math.rad(mexSpinSpeed))
-
-	UnitScript.Spin(topspin1,y_axis,math.rad(mexSpinSpeed * 0.25))
 end
 
 function script.Skyhateceg()
@@ -31,6 +28,8 @@ function script.Activate()
 	if not skyhateThread then
 		skyhateThread = StartThread(script.Skyhateceg)
 	end
+	UnitScript.Spin(pivotpoint,y_axis,math.rad(mexSpinSpeed * 0.25),math.rad(mexSpinSpeed * 0.01))
+	UnitScript.Spin(topspin1,y_axis,math.rad(mexSpinSpeed * 0.25),math.rad(mexSpinSpeed * 0.01))
 end
 
 function script.Deactivate()
@@ -39,6 +38,8 @@ function script.Deactivate()
 		KillThread(skyhateThread)
 		skyhateThread = nil
 	end
+	UnitScript.StopSpin(pivotpoint,y_axis,math.rad(mexSpinSpeed * 0.01))
+	UnitScript.StopSpin(topspin1,y_axis,math.rad(mexSpinSpeed * 0.01))
 end
 
 sleep1 = math.random(2000,4000)
