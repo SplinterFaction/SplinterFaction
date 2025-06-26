@@ -16,12 +16,7 @@ function script.Create()
 	StartThread(script.Skyhateceg)
 
 	mexSpinSpeed = math.random(20,100)
-	UnitScript.Spin(pivotpoint,y_axis,math.rad(mexSpinSpeed))
-
-	UnitScript.Spin(topspin1,y_axis,math.rad(mexSpinSpeed * 0.25))
-	UnitScript.Spin(topspin2,y_axis,math.rad(-mexSpinSpeed * 0.50))
-	UnitScript.Spin(topspin3,y_axis,math.rad(mexSpinSpeed * 0.75))
-	end
+end
 
 function script.Skyhateceg()
 	while isOn do
@@ -35,6 +30,10 @@ function script.Activate()
 	if not skyhateThread then
 		skyhateThread = StartThread(script.Skyhateceg)
 	end
+	UnitScript.Spin(pivotpoint,y_axis,math.rad(mexSpinSpeed * 0.25),math.rad(mexSpinSpeed * 0.01))
+	UnitScript.Spin(topspin1,y_axis,math.rad(mexSpinSpeed * 0.25),math.rad(mexSpinSpeed * 0.01))
+	UnitScript.Spin(topspin2,y_axis,math.rad(mexSpinSpeed * 0.25),math.rad(mexSpinSpeed * 0.01))
+	UnitScript.Spin(topspin3,y_axis,math.rad(mexSpinSpeed * 0.25),math.rad(mexSpinSpeed * 0.01))
 end
 
 function script.Deactivate()
@@ -43,6 +42,10 @@ function script.Deactivate()
 		KillThread(skyhateThread)
 		skyhateThread = nil
 	end
+	UnitScript.StopSpin(pivotpoint,y_axis,math.rad(mexSpinSpeed * 0.01))
+	UnitScript.StopSpin(topspin1,y_axis,math.rad(mexSpinSpeed * 0.01))
+	UnitScript.StopSpin(topspin2,y_axis,math.rad(mexSpinSpeed * 0.01))
+	UnitScript.StopSpin(topspin3,y_axis,math.rad(mexSpinSpeed * 0.01))
 end
 
 function script.AimFromWeapon(weaponID)
