@@ -45,6 +45,12 @@ local MIN_SPOT_SPACING = 150  -- Minimum spacing in world units between metal sp
 local ELEVATION_TOLERANCE = 15
 local EDGE_MARGIN = 100  -- in world units; adjust as needed (100 = ~6 map squares)
 local allowWaterSpots = false
+if Spring.GetModOptions().allowmexesinwater == "disabled" then
+	allowWaterSpots = false
+elseif Spring.GetModOptions().allowmexesinwater == "enabled" then
+	allowWaterSpots = true
+end
+
 local spotsPerQuadrant = math.floor(5 * teamIDCount / 2 + 0.5)
 
 -- Map resolution

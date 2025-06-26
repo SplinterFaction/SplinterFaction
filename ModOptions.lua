@@ -107,81 +107,15 @@ local options= {
 
 	-- Resourcing
 	{
-		key    = 'resourcing',
-		name   = 'Resourcing Options',
-		desc   = 'Allows you to adjust how metal income is handled and how it is distributed',
-		type   = 'section',
-	},
-	{
-		key    = 'mexlayout',
-		name   = 'Default Metal Spot Layout',
-		desc   = 'If enabled, the default layout for metal spots will be used, if disabled, the metal spots defined by the map will be used.',
-		type="list",
-		def="enabled",
-		section= "resourcing",
-		items={
-			{key="disabled", name="Disabled", desc="Use the Metal Map Layout defined in the map"},
-			{key="enabled", name="Enabled", desc="Default Metal Map Layout"},
-		}
-	},
-	{
-		key    = 'maximummexelevationdifference',
-		name   = 'Standard Metal Spot Layout: Maximum elevation difference for Metal Spot locations',
-		desc   = 'This is used as an attempt to avoid placement on cliffs (only works on Standard Metal Spot Layout)',
-		type   = 'number',
-		section= 'resourcing',
-		def    = 50,
-		min    = 0,
-		max    = 200,
-		step   = 1,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
-	},
-	{
 		key    = 'allowmexesinwater',
 		name   = 'Standard Metal Spot Layout: Allow metal spots to be placed in water?',
-		desc   = 'Should metal spots be placed in water? Sometimes turning this off can be beneficial if the water on a map does damage. (only works on Standard Metal Spot Layout)',
+		desc   = 'Should metal spots be placed in water? Sometimes turning this off can be beneficial if the water on map does damage',
 		type="list",
 		def="disabled",
 		section= "resourcing",
 		items={
 			{key="disabled", name="Disabled", desc="Disallow metal spots being placed in water."},
 			{key="enabled", name="Enabled", desc="Allow metal spots to be placed in water."},
-		}
-	},
-	{
-		key    = 'dynamicmexoutput',
-		name   = 'Should metal spot output values be dynamic?',
-		desc   = 'Uses a sine to determine metal spot values based upon distance from the edge of the map and distance to the center.',
-		type="list",
-		def="disabled",
-		section= "resourcing",
-		items={
-			{key="disabled", name="Disabled", desc="All metal spot output values will be set to 1.0"},
-			{key="enabled", name="Enabled", desc="All metal spot output values will be automatically calculated"},
-		}
-	},
-	{
-		key    = 'mexSpotsPerPlayerOverride',
-		name   = 'Metal spot per player Override',
-		desc   = 'This value will override the default value for the amount of metal spots per player',
-		type   = 'number',
-		section= 'resourcing',
-		def    = 10,
-		min    = 4,
-		max    = 15,
-		step   = 1,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
-	},
-	{
-		key    = 'metalextractorcommunism',
-		name   = 'Metal Extractor Communism',
-		desc   = 'If enabled, then all metal income from Metal Extractors is split between allies. This means that it does not matter which ally owns the metal extractor, the entire team will benefit.',
-		type="list",
-		def="disabled",
-		section= "resourcing",
-		items={
-			{key="disabled", name="Disabled", desc="Metal Extractor income will NOT be split between allies."},
-			{key="enabled", name="Enabled", desc="Metal Extractor income will be split between allies."},
 		}
 	},
 	{
