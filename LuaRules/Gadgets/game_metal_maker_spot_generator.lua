@@ -173,14 +173,27 @@ end
 
 
 function gadget:Initialize()
+	Echo("[MetalSpotGen] Initializing")
+
+	local count = Spring.GetGameRulesParam("metalSpot_count")
+	if count then
+		Echo("[MetalSpotGen] Restoring from GameRulesParams")
+		GG.metalMakerSpots = {}
+		for i = 1, count do
+			local x = Spring.GetGameRulesParam("metalSpot_" .. i .. "_x")
+			local z = Spring.GetGameRulesParam("metalSpot_" .. i .. "_z")
+			local y = GetGroundHeight(x, z)
+			table.insert(GG.metalMakerSpots, {x = x, y = y, z = z})
+		end
+		return
+	end
+
 	Echo("[MetalSpotGen] Starting scan")
 
 	local midX = math.floor(slopeMapX / 2)
 	local midZ = math.floor(slopeMapZ / 2)
-
 	local scanMinX, scanMaxX = 1, math.floor(midX * 0.9)
 	local scanMinZ, scanMaxZ = 1, math.floor(midZ * 0.9)
-
 	local candidates = {}
 
 	for x = scanMinX, scanMaxX do
@@ -192,8 +205,6 @@ function gadget:Initialize()
 	end
 
 	Echo("[MetalSpotGen] Found " .. #candidates .. " flat candidates in top-left quadrant")
-
-	-- Randomize to spread distribution (or use deterministic spacing logic later)
 	math.random(); math.random(); math.random()
 	for i = #candidates, 2, -1 do
 		local j = math.random(i)
@@ -208,11 +219,9 @@ function gadget:Initialize()
 	Echo("[MetalSpotGen] Total spots placed: " .. #metalSpots)
 	GG.metalMakerSpots = metalSpots
 
-	-- This is fugly, but there are no good ways to get a table of data from gadgetland to widgetland
 	for i, spot in ipairs(metalSpots) do
 		Spring.SetGameRulesParam("metalSpot_" .. i .. "_x", spot.x)
 		Spring.SetGameRulesParam("metalSpot_" .. i .. "_z", spot.z)
 	end
 	Spring.SetGameRulesParam("metalSpot_count", #metalSpots)
-
 end
