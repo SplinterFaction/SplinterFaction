@@ -325,7 +325,7 @@ function widget:DrawWorld()
         end
 	end
   end
-  
+
   glAlphaTest(false)
   glColor(1,1,1,1)
   glDepthTest(false)
