@@ -1,4 +1,4 @@
-base, firepoint1 = piece('base', 'firepoint1')
+base, firepoint1, wake = piece('base', 'firepoint1', 'wake')
 
 local SIG_AIM = {}
 
@@ -23,7 +23,7 @@ end
 
 function script.Bubbles()
 	while isMoving do
-		common.CustomEmitter(base, "bubbles")
+		common.CustomEmitter(wake, "bubbles")
 		Sleep(100)
 	end
 end

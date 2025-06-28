@@ -1,5 +1,5 @@
 
-base, cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2 = piece('base', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'cannonturret2', 'cannonbarrel2', 'cannonfirepoint2', 'cannonturret3', 'cannonbarrel3', 'cannonfirepoint3', 'laserturret1', 'laserbarrel1', 'laserfirepoint1', 'laserturret2', 'laserbarrel2', 'laserfirepoint2')
+base, cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2, wake = piece('base', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'cannonturret2', 'cannonbarrel2', 'cannonfirepoint2', 'cannonturret3', 'cannonbarrel3', 'cannonfirepoint3', 'laserturret1', 'laserbarrel1', 'laserfirepoint1', 'laserturret2', 'laserbarrel2', 'laserfirepoint2','wake')
 
 
 common = include("headers/common_includes_lus.lua")
@@ -29,7 +29,7 @@ end
 
 function script.Bubbles()
 	while isMoving do
-		common.CustomEmitter(base, "bubbles")
+		common.CustomEmitter(wake, "bubbles")
 		Sleep(100)
 	end
 end

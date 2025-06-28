@@ -1,5 +1,5 @@
 
-base, railgunturret1, railgunbarrel1, railgunfirepoint1, laserbarrel1, laserfirepoint1 = piece ('base', 'railgunturret1', 'railgunbarrel1', 'railgunfirepoint1', 'laserbarrel1', 'laserfirepoint1')
+base, railgunturret1, railgunbarrel1, railgunfirepoint1, laserbarrel1, laserfirepoint1, wake = piece ('base', 'railgunturret1', 'railgunbarrel1', 'railgunfirepoint1', 'laserbarrel1', 'laserfirepoint1', 'wake')
 
 local SIG_AIM = {}
 local SIG_AIM2 = {}
@@ -25,7 +25,7 @@ end
 
 function script.Bubbles()
 	while isMoving do
-		common.CustomEmitter(base, "bubbles")
+		common.CustomEmitter(wake, "bubbles")
 		Sleep(100)
 	end
 end
