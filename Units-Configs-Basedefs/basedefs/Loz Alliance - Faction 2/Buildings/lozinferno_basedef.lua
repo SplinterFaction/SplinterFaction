@@ -72,7 +72,7 @@ unitDef                     = {
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = faction,
-		corpse                   = "energycore",
+		
 
 		-- Begin unit rings
 		ring_color = "1,0,0,0.5",

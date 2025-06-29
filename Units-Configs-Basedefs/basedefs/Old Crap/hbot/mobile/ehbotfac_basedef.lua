@@ -78,7 +78,7 @@ unitDef                     = {
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = "ateran",   
 		helptext                  = [[]],
-		corpse                   = "energycore",
+		
 	},
 	useGroundDecal                = true,
 	BuildingGroundDecalType       = "factorygroundplate.dds",

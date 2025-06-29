@@ -17,7 +17,7 @@ game_metal_maker_spot_generator
 
 function gadget:GetInfo()
 	return {
-		name      = "Random Symmetric Geovents",
+		name      = "Geovent Spot Generator",
 		desc      = "Places 0–8 geovents randomly and symmetrically",
 		author    = "",
 		date      = "2025",
@@ -29,6 +29,25 @@ end
 
 if not gadgetHandler:IsSyncedCode() then return end
 
+local function loadGeoventsFromRulesParams()
+	local count = Spring.GetGameRulesParam("customGeovent_count") or 0
+	if count == 0 then return false end
+
+	GG.customGeoventSpots = {}
+	for i = 1, count do
+		local x = Spring.GetGameRulesParam("customGeovent_" .. i .. "_x")
+		local z = Spring.GetGameRulesParam("customGeovent_" .. i .. "_z")
+		if x and z then
+			table.insert(GG.customGeoventSpots, {x = x, z = z})
+		end
+	end
+
+	Spring.Echo("[Geovent Spot Generator] Reloaded " .. #GG.customGeoventSpots .. " geovents from GameRulesParams.")
+	return true
+end
+
+
+local allowgeosinwater = (Spring.GetModOptions and Spring.GetModOptions().allowgeosinwater) or "disabled"
 local maxGeos = 8
 local geoFeatureDef = FeatureDefNames["geovent"]
 local mapX = Game.mapSizeX
@@ -46,6 +65,11 @@ local function biasedGeoCount()
 	if r < 0.88 then return 4 end
 	if r < 0.97 then return 6 end
 	return 8
+end
+
+local function isInWater(x, z)
+	local y = Spring.GetGroundHeight(x, z)
+	return y <= 0
 end
 
 local function isFlatEnough(x, z, radius)
@@ -78,15 +102,17 @@ local function getSymmetricPos(x, z)
 end
 
 function gadget:Initialize()
+	if loadGeoventsFromRulesParams() then return end -- if already populated, skip generation
+
 	if not geoFeatureDef then
-		Spring.Echo("[RandomSymmetricGeos] Missing geovent featuredef.")
+		Spring.Echo("[Geovent Spot Generator] Missing geovent featuredef.")
 		return
 	end
 
 	math.random(); math.random(); math.random()
 
 	local totalGeos = biasedGeoCount()
-	Spring.Echo("[RandomSymmetricGeos] Spawning " .. totalGeos .. " geovents.")
+	Spring.Echo("[Geovent Spot Generator] Spawning " .. totalGeos .. " geovents.")
 
 	local attempts = 0
 	local maxTries = 100
@@ -97,9 +123,11 @@ function gadget:Initialize()
 
 		if isFlatEnough(x, z, 32) and isFlatEnough(sx, sz, 32)
 				and not tooCloseToMetalSpot(x, z)
-				and not tooCloseToMetalSpot(sx, sz) then
+				and not tooCloseToMetalSpot(sx, sz)
+				and (not allowgeosinwater or (not isInWater(x, z) and not isInWater(sx, sz))) then
 			table.insert(geoPairs, {x = x, z = z})
 		end
+
 		attempts = attempts + 1
 	end
 

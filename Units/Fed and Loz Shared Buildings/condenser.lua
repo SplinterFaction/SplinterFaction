@@ -79,7 +79,7 @@ local unitDef                     = {
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = "Neutral",
 		helptext                  = [[]],
-		corpse                   = "energycore",
+		
 	},
 	useGroundDecal                = true,
 	BuildingGroundDecalType       = "factorygroundplate.dds",

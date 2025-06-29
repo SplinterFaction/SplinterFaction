@@ -52,8 +52,8 @@ unitDef                    = {
 	brakeRate                    = 0.05,
 	turninplace 				 = true,
 --	turninplacespeedlimit 		 = 10,
-	turnInPlaceAngleLimit		 = 45,
-	turnrate 				 	 = 400,
+	turnInPlaceAngleLimit		 = 90,
+	turnrate 				 	 = 500,
 	--------------
 	--------------
 	sfxtypes                     = { 
@@ -100,7 +100,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		corpse                   = "energycore",
+		corpse                   = "fedcrusader_dead",
 	},
 }
 

@@ -93,5 +93,36 @@ return {
     },
   },
 
+  ["bubblesunderwater"] = {
+    bubblesuw = {
+      class              = [[CSimpleParticleSystem]],
+      count              = 1,
+      underwater         = true,
+      water              = false,
+      air                = false,
+      properties = {
+        airdrag            = 0.7,
+        alwaysvisible      = false,
+        colormap           = [[1 1 1 0.5	0.5 0.5 1 0.8	0 0 0 0.0]],
+        directional        = true,
+        emitrot            = 0,
+        emitrotspread      = 0,
+        emitvector         = [[0, 1, 0]],
+        gravity            = [[0, 0.5, 0]],
+        numparticles       = 1,
+        particlelife       = 50,
+        particlelifespread = 20,
+        particlesize       = [[7 r4]],
+        particlesizespread = 2,
+        particlespeed      = 1,
+        particlespeedspread = 6,
+        pos                = [[r-0.5 r0.5, 1 r2, r-0.5 r0.5]],
+        sizegrowth         = -0.1,
+        sizemod            = 1.0,
+        texture            = [[bubbletexture]],
+        useairlos          = false,
+      },
+    },
+  },
 }
 

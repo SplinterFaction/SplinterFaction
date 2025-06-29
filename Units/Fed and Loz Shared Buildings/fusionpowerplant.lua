@@ -84,7 +84,7 @@ local unitDef                     = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = "Neutral",
-		corpse                   = "energycore",
+		
 --		groundtexselectimg        = ":nc:bitmaps/power/power.png",
 --		groundtexselectimg1       = ":nc:bitmaps/power/power1.png",
 --		groundtexselectimg2       = ":nc:bitmaps/power/power2.png",

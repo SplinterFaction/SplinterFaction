@@ -74,7 +74,7 @@ unitDef                     = {
 		armortype                 = "building", 
 		normaltex 				 = "unittextures/zarm_normals.dds",
 		factionname	              = "zaal",
-		corpse                   = "energycore",
+		
 	},
 	useGroundDecal                = true,
 	BuildingGroundDecalType       = "zgroundtexture.dds",

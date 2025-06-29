@@ -93,7 +93,7 @@ unitDef                    = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "ateran",
-		corpse                   = "energycore",
+		
 	}
 }
 

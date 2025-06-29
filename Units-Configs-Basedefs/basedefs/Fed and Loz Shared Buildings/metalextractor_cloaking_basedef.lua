@@ -86,7 +86,7 @@ unitDef                     = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = "Neutral",
-		corpse                   = "energycore",
+		
 
 		area_cloak = area_cloak, -- Can this unit emit a cloaking field?
 		area_cloak_upkeep = area_cloak_upkeep, -- How much energy does it cost to maintain the cloaking field?

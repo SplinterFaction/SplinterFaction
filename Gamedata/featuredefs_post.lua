@@ -1,93 +1,73 @@
 --------------------------------------------------------------------------------
---------------------------------------------------------------------------------
---
---  file:    featuredefs_post.lua
---  brief:   featureDef post processing
---  author:  Dave Rodgers
---
---  Copyright (C) 2008.
---  Licensed under the terms of the GNU GPL, v2 or later.
---
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
---
---  Per-unitDef featureDefs
---
-
-local function isbool(x)   return (type(x) == 'boolean') end
-local function istable(x)  return (type(x) == 'table')   end
-local function isnumber(x) return (type(x) == 'number')  end
-local function isstring(x) return (type(x) == 'string')  end
-local spGetModOptions   = Spring.GetModOptions
+-- featuredefs_post.lua
+-- Dynamically generate corpse features based on unitDefs
 --------------------------------------------------------------------------------
 
-if spGetModOptions then
+return function(featureDefs, unitDefs)
 
-for name, fd in pairs(FeatureDefs) do
-	
-	if fd["footprintz"] == 0 or fd["footprintz"] == nil then
-		fd["footprintz"] = 1
-	end
-	if fd["footprintx"] == 0 or fd["footprintx"] == nil then
-		fd["footprintx"] = 1
-	end
-	
-	if fd["footprintz"] ~= nil and fd["footprintx"] ~= nil then
-		if tonumber(fd["footprintz"]) <= 8 
-		or tonumber(fd["footprintx"]) <= 8 
-		or string.lower(fd["category"]) == "vegitation" 
-		or string.lower(fd["category"]) == "vegetation" then
+	-- STEP 1: Dynamically create corpse features
+	for unitName, ud in pairs(unitDefs) do
+		local corpseName = unitName .. "_dead"
 
-			fd["blocking"] = false
-			if (not fd.customparams) then 
-				fd.customparams = {}
-			end
-			
-			-- if (not fd.customparams.provide_cover) then
-			 -- fd.customparams.provide_cover = 1
-			-- end   
+		if not featureDefs[corpseName] then
+			local metal = math.floor((ud.buildCostMetal or 0) * 0.5)
+			local health = math.floor((ud.maxdamage or 1000) * 0.5)
+
+			featureDefs[corpseName] = {
+				blocking     = true,
+				category     = "corpses",
+				damage       = health,
+				description  = (ud.name or unitName) .. " Wreckage",
+				energy       = 0,
+				featureDead  = "",
+				footprintX   = ud.footprintX or 2,
+				footprintZ   = ud.footprintZ or 2,
+				height       = 20,
+				hitdensity   = 100,
+				metal        = metal,
+				object       = ud.objectname or "",
+				reclaimable  = true,
+				customParams = {
+					auto_generated = "true",
+				}
+			}
 		end
 	end
 
-	if tonumber(fd["metal"]) == nil then
-		fd.metal = 1
-	end
+	-- STEP 2: Additional post-processing for *all* features
+	local function isbool(x)   return (type(x) == 'boolean') end
+	local function istable(x)  return (type(x) == 'table')   end
+	local function isnumber(x) return (type(x) == 'number')  end
+	local function isstring(x) return (type(x) == 'string')  end
 
-	if tonumber(fd["energy"]) == nil then
-		fd.energy = 1
-	end
+	for name, fd in pairs(featureDefs) do
 
-	if tonumber(fd["metal"]) >= tonumber(fd["energy"]) then
-		fd.reclaimtime = fd.metal * 0.25
-		-- Spring.Echo("Based off of metal")
-		-- Spring.Echo(fd.name)
-		-- Spring.Echo(fd.reclaimtime)
+		-- Ensure footprints are sane
+		if fd.footprintZ == 0 or fd.footprintZ == nil then
+			fd.footprintZ = 1
+		end
+		if fd.footprintX == 0 or fd.footprintX == nil then
+			fd.footprintX = 1
+		end
 
-	else
-		fd.reclaimtime = fd.energy * 0.25
-		-- Spring.Echo("Based off of energy")
-		-- Spring.Echo(fd.name)
-		-- Spring.Echo(fd.reclaimtime)
+		-- Auto-unblock small features and vegetation
+		if fd.footprintX <= 8 or fd.footprintZ <= 8 then
+			local cat = string.lower(fd.category or "")
+			if cat == "vegitation" or cat == "vegetation" then
+				fd.blocking = false
+				fd.customParams = fd.customParams or {}
+				-- Optionally: fd.customParams.provide_cover = 1
+			end
+		end
+
+		-- Default reclaim values if missing
+		fd.metal  = tonumber(fd.metal)  or 1
+		fd.energy = tonumber(fd.energy) or 1
+
+		if fd.metal >= fd.energy then
+			fd.reclaimTime = fd.metal * 0.25
+		else
+			fd.reclaimTime = fd.energy * 0.25
+		end
 	end
-	
-	
-	-- Reset maximum feature values
-	-- if tonumber(fd["metal"]) == nil or tonumber(fd["metal"]) == 0 then
-		-- fd.metal = 100
-	-- end
-	-- if tonumber(fd["metal"]) > 100 then
-		-- fd.metal =  100
-	-- end
-	-- if tonumber(fd["energy"]) == nil or tonumber(fd["energy"]) == 0 then
-		-- fd.energy = 100
-	-- end
-	-- if tonumber(fd["energy"]) > 1 then
-		-- fd.energy = 100
-	-- end
 end
-
-
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------

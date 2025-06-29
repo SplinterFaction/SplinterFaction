@@ -86,7 +86,7 @@ unitDef                    = {
 		nofriendlyfire	         = "1",
 		supply_cost              = supply,
 		factionname	             = "zaal",
-		corpse                   = "energycore",
+		
 		normaltex 				 = "unittextures/z_normals.dds",
 		retreatRangeDAI			 = 0,
 	},

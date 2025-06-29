@@ -86,7 +86,7 @@ local unitDef                     = {
 		armortype                 = armortype,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
-		corpse                   = "energycore",
+		
 		factionname	              = "Federation of Kala",
 		
 		area_cloak = 1, -- Can this unit emit a cloaking field?

@@ -44,69 +44,116 @@ if gadgetHandler:IsSyncedCode() then
 		return x/N, y/N, z/N
 	end
 
+	local sinkingFeatures = {}
+	function gadget:GameFrame(n)
+		for featureID, sinkData in pairs(sinkingFeatures) do
+			local x, y, z = Spring.GetFeaturePosition(featureID)
+
+			if x and y and z then
+				local newY = y - sinkData.sinkRate
+				Spring.SetFeaturePosition(featureID, x, newY, z)
+
+				if n % 30 == 0 then
+					Spring.SpawnCEG("bubblesunderwater", x, y, z, 0, 1, 0)
+				end
+
+				sinkData.timer = sinkData.timer - 1
+			else
+				sinkingFeatures[featureID] = nil  -- clean up if feature no longer exists
+			end
+		end
+	end
+
 	function gadget:UnitDestroyed(unitID, unitDefID, unitTeam)
-		local lessGooooo
-		if UnitDefs[unitDefID].customParams.requiretech == "tech0" then
-			if math.random(1,4) == 1 then
-				lessGooooo = true
-			end
-		elseif UnitDefs[unitDefID].customParams.requiretech == "tech1" then
-			if math.random(1,2) == 1 then
-				lessGooooo = true
-			end
-		elseif UnitDefs[unitDefID].customParams.requiretech == "tech2" then
-				lessGooooo = true
-		elseif UnitDefs[unitDefID].customParams.requiretech == "tech3" then
-			lessGooooo = true
-		elseif UnitDefs[unitDefID].customParams.requiretech == "tech4" then
-			lessGooooo = true
+		local unitDef = UnitDefs[unitDefID]
+		local tech = unitDef.customParams.requiretech
+		local unitRole = unitDef.customParams.unitrole
+		local unitType = unitDef.customParams.unittype
+		local spawnWreck = false
+
+		-- Tech-based spawn chance
+		-- Commander exception
+		if unitRole == "Commander" then
+			spawnWreck = false
 		end
 
-		-- Commanders never drop reclaim so that when they upgrade they won't drop reclaim. Ofc this means that when you kill them they won't drop it either, but I'm ok with this outcome.
-		if UnitDefs[unitDefID].customParams.unitrole == "Commander" then
-			lessGooooo = false
+		-- Ship Exception
+		if unitType == "ship" then
+			spawnWreck = true
 		end
 
-		if lessGooooo == true then
-			_, _, _, _, buildProgress = Spring.GetUnitHealth(unitID)
+		if tech == "tech0" and math.random(1, 4) == 1 then
+			spawnWreck = true
+		elseif tech == "tech1" and math.random(1, 2) == 1 then
+			spawnWreck = true
+		elseif tech == "tech2" or tech == "tech3" or tech == "tech4" then
+			spawnWreck = true
+		end
+
+
+
+		if spawnWreck then
+			local _, _, _, _, buildProgress = Spring.GetUnitHealth(unitID)
 			if buildProgress == 1 then
-				local unitName = UnitDefs[unitDefID].name
-				local unitCostMetal = UnitDefs[unitDefID].metalCost
-				local unitCostEnergy = UnitDefs[unitDefID].energyCost
-				local unit = UnitDefs[unitDefID]
-				posx, posy, posz = Spring.GetUnitPosition(unitID)
-				-- Spring.Echo("[Death Spawns] Unit Name is " .. unitName)
-				local featureID = Spring.CreateFeature (partsList[math.random(1,#partsList)], posx, posy, posz, 0, unitTeam)
+				local corpseFeature = unitDef.customParams.corpse
+				local posx, posy, posz = Spring.GetUnitPosition(unitID)
+				local featureName = corpseFeature or partsList[math.random(1, #partsList)]
+				local isCorpse = (corpseFeature ~= nil)
+				local teamID = isCorpse and -1 or unitTeam
+				local featureID = Spring.CreateFeature(featureName, posx, posy, posz, 0, teamID)
+
+
 				if featureID then
-					-- Spring.Echo("[Death Spawns] Unit Cost is " .. unitCostMetal)
-					local featureValueMetal = unit.metalCost * 0.75
-					local featureValueEnergy = unit.energyCost * 0.75
-					local reclaimTime
-					if featureValueMetal ~= nil then
-						reclaimTime = featureValueMetal * 0.75
-					else
-						reclaimTime = featureValueEnergy * 0.75
-					end
-					-- Spring.Echo(featureValueMetal)
-					-- Spring.Echo(featureValueEnergy)
+					local featureValueMetal = unitDef.metalCost * 0.75
+					local featureValueEnergy = unitDef.energyCost * 0.75
+					local reclaimTime = featureValueMetal * 0.75
+
 					Spring.SetFeatureResources(featureID, featureValueMetal, featureValueEnergy, reclaimTime, 1.0, featureValueMetal, featureValueEnergy)
-					Spring.SetFeaturePosition(featureID, posx, posy, posz,  false)
+					Spring.SetFeaturePosition(featureID, posx, posy, posz, false)
 
-					-- local newx, newy, newz = Normalize(x,y,z)
 
-					local dirx
-					local diry
-					local dirz
+					local isCorpse = corpseFeature ~= nil
+					local isShip = unitType == "ship"
 
-					dirx = math.random(-100,100)
-					diry = math.random(-100,100)
-					dirz = math.random(-100,100)
-					-- Spring.Echo("[DeathContainer Spawn] Feature direction before normalization is: x: " .. dirx .. ", y: " .. diry .. ", z: " .. dirz)
-					local dirx, diry, dirz = Normalize(dirx,diry,dirz)
-					-- Spring.Echo("[DeathContainer Spawn] Feature direction after normalization is: x: " .. dirx .. ", y: " .. diry .. ", z: " .. dirz)
-					Spring.SetFeatureDirection(featureID, dirx, diry, dirz)
+					if isCorpse and isShip then
+						sinkingFeatures[featureID] = {
+							sinkRate = 0.25,
+							timer = 150,
+							rotationProgress = math.random() * 2 * math.pi,
+							rotationSpeed = (math.random() * 0.04 + 0.01),
+						}
+					end
+
+
+
+					if corpseFeature and corpseFeature ~= "" then
+						-- Spring.Echo("[Death Spawns] Spawning a corpse feature: ".. "| " .. corpseFeature .. " |")
+						-- Use original unit velocity and heading
+						local vx, vy, vz = Spring.GetUnitVelocity(unitID)
+						-- Spring.Echo("[Death Spawns] Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
+						local heading = Spring.GetUnitHeading(unitID)
+						-- Convert heading to direction vector
+						local radians = (heading / 32768.0) * math.pi
+						local dirx = math.sin(radians)
+						local dirz = math.cos(radians)
+
+						Spring.SetFeatureVelocity(featureID, vx, vy, vz)
+						Spring.SetFeatureDirection(featureID, dirx, 0, dirz)
+					else
+						-- Spring.Echo("[Death Spawns] Spawning a part feature")
+						local vx, vy, vz = Spring.GetUnitVelocity(unitID)
+						-- Spring.Echo("Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
+						-- Random junk parts with random spin direction
+						local dx = math.random(-100, 100)
+						local dy = math.random(-100, 100)
+						local dz = math.random(-100, 100)
+						local norm = math.sqrt(dx * dx + dy * dy + dz * dz)
+						Spring.SetFeatureVelocity(featureID, vx, vy, vz)
+						Spring.SetFeatureDirection(featureID, dx / norm, dy / norm, dz / norm)
+					end
 				end
 			end
 		end
 	end
 end
+

@@ -87,7 +87,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	Explode(rocketturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	Explode(rocketbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	Explode(gatlingbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)

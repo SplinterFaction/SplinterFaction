@@ -108,75 +108,27 @@ local options= {
 	-- Resourcing
 	{
 		key    = 'allowmexesinwater',
-		name   = 'Standard Metal Spot Layout: Allow metal spots to be placed in water?',
+		name   = 'Allow metal spots to be placed in water?',
 		desc   = 'Should metal spots be placed in water? Sometimes turning this off can be beneficial if the water on map does damage',
 		type="list",
 		def="disabled",
 		section= "resourcing",
 		items={
-			{key="disabled", name="Disabled", desc="Disallow metal spots being placed in water."},
+			{key="disabled", name="Disabled", desc="Disallow metal spots from being placed in water."},
 			{key="enabled", name="Enabled", desc="Allow metal spots to be placed in water."},
 		}
 	},
 	{
-		key    = 'mincome',
-		name   = 'Automatic Metal Income',
-		desc   = 'Determines the amount of metal income you start with per second. It increases every <Basic Metal Income Increase Interval> (2.5 minutes, is the default) by this amount until it hits <Maximum Basic Income> income.',
+		key    = 'allowgeosinwater',
+		name   = 'Allow geo spots to be placed in water?',
+		desc   = 'Should geo spots be placed in water? Generally you want geos to only spawn on land.',
 		type="list",
 		def="disabled",
 		section= "resourcing",
 		items={
-			{key="disabled", name="Disabled", desc="Turn off the automatic metal income"},
-			{key="enabled", name="Enabled", desc="Metal income is automatic and graduates as the game goes along."},
+			{key="disabled", name="Disabled", desc="Disallow geo spots from being placed in water."},
+			{key="enabled", name="Enabled", desc="Allow geo spots to be placed in water."},
 		}
-	},
-	{
-		key    = 'basicincome',
-		name   = 'Basic Metal Income Amount',
-		desc   = 'Determines the amount of metal income you start with per second.',
-		type   = 'number',
-		section= 'resourcing',
-		def    = 1,
-		min    = 0,
-		max    = 5,
-		step   = 1,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
-	},
-	{
-		key    = 'basicincomeinterval',
-		name   = 'Basic Metal Income Increase Interval',
-		desc   = 'Determines how often your basic metal income is increased.',
-		type   = 'number',
-		section= 'resourcing',
-		def    = 2.5,
-		min    = 0.5,
-		max    = 5,
-		step   = 0.5,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
-	},
-	{
-		key    = 'basicincomeincrease',
-		name   = 'Basic Metal Income Increase',
-		desc   = 'Your basic metal income increases every <Basic Metal Income Increase Interval> (1 minutes, is the default) by this amount until it hits <Maximum Basic Income> income.',
-		type   = 'number',
-		section= 'resourcing',
-		def    = 1,
-		min    = 0,
-		max    = 5,
-		step   = 1,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
-	},
-	{
-		key    = 'maxbasicincome',
-		name   = 'Maximum Basic Metal Income',
-		desc   = 'Determines the maximum amount that your basic metal income level can reach.',
-		type   = 'number',
-		section= 'resourcing',
-		def    = 10,
-		min    = 0,
-		max    = 30,
-		step   = 1,  -- quantization is aligned to the def value
-		-- (step <= 0) means that there is no quantization
 	},
 
 	{

@@ -107,7 +107,7 @@ unitDef                    = {
 		nofriendlyfire	         = "1",
 		normaltex 				 = "unittextures/z_normals.dds", 
 		factionname	             = "zaal",
-		--corpse                   = "energycore",
+		--
 	},
 }
 

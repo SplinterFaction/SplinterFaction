@@ -61,7 +61,7 @@ unitDef                     = {
 		noenergycost			  = true,
 		normaltex                = "unittextures/ztiberium_normals.dds", 
 		factionname	              = "zaal",
-		corpse                   = "energycore",
+		
 	},
 	useGroundDecal                = true,
 	BuildingGroundDecalType       = "zgroundtexture.dds",

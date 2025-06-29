@@ -418,11 +418,6 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 		for id,unitDef in pairs(UnitDefs) do
 
-			--Disabled due to boxcollector cpu costs
-			-- if unitDef.customparams.corpse == "energycore" then
-			-- unitDef.corpse = "ammobox"
-			-- end
-
 			--Shield handling
 			if unitDef.weapondefs then
 				for _, weaponDef in pairs(unitDef.weapondefs) do
@@ -1277,4 +1272,26 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 		end
 	end
+end
+
+return function(unitDefs, weaponDefs, modOptions)
+	-- store into globals
+	UnitDefs = unitDefs
+	WeaponDefs = weaponDefs
+
+	-- run post-processors
+	for name, ud in pairs(unitDefs) do
+		UnitDef_Post(name, ud)
+		if ud.weapondefs then
+			for wname, wd in pairs(ud.weapondefs) do
+				WeaponDef_Post(wname, wd)
+			end
+		end
+	end
+
+	for name, wd in pairs(weaponDefs) do
+		WeaponDef_Post(name, wd)
+	end
+
+	ModOptions_Post(unitDefs, weaponDefs)
 end
