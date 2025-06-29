@@ -48,16 +48,10 @@ if gadgetHandler:IsSyncedCode() then
 	function gadget:GameFrame(n)
 		for featureID, sinkData in pairs(sinkingFeatures) do
 			local x, y, z = Spring.GetFeaturePosition(featureID)
-
 			if x and y and z then
-				local newY = y - sinkData.sinkRate
-				Spring.SetFeaturePosition(featureID, x, newY, z)
-
 				if n % 30 == 0 then
 					Spring.SpawnCEG("bubblesunderwater", x, y, z, 0, 1, 0)
 				end
-
-				sinkData.timer = sinkData.timer - 1
 			else
 				sinkingFeatures[featureID] = nil  -- clean up if feature no longer exists
 			end
@@ -116,12 +110,7 @@ if gadgetHandler:IsSyncedCode() then
 					local isShip = unitType == "ship"
 
 					if isCorpse and isShip then
-						sinkingFeatures[featureID] = {
-							sinkRate = 0.25,
-							timer = 150,
-							rotationProgress = math.random() * 2 * math.pi,
-							rotationSpeed = (math.random() * 0.04 + 0.01),
-						}
+						sinkingFeatures[featureID] = {}
 					end
 
 
@@ -137,7 +126,7 @@ if gadgetHandler:IsSyncedCode() then
 						local dirx = math.sin(radians)
 						local dirz = math.cos(radians)
 
-						Spring.SetFeatureVelocity(featureID, vx, vy, vz)
+						--Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
 						Spring.SetFeatureDirection(featureID, dirx, 0, dirz)
 					else
 						-- Spring.Echo("[Death Spawns] Spawning a part feature")
@@ -148,7 +137,7 @@ if gadgetHandler:IsSyncedCode() then
 						local dy = math.random(-100, 100)
 						local dz = math.random(-100, 100)
 						local norm = math.sqrt(dx * dx + dy * dy + dz * dz)
-						Spring.SetFeatureVelocity(featureID, vx, vy, vz)
+						--Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
 						Spring.SetFeatureDirection(featureID, dx / norm, dy / norm, dz / norm)
 					end
 				end
