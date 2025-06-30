@@ -664,6 +664,22 @@ local moveDefs = {
         flowMapping=flowMappingToggle,
     },
 
+    SHIP15 = {
+        submarine = false,
+        speedModClass=3,
+        footprintx=15,
+        footprintz=15,
+        maxslope=60,
+        maxwaterslope=60,
+        badwaterslope=0,
+        crushstrength=20,
+        minwaterdepth=minWaterDepth,
+        heatmod=unitHeat,
+        slopemod=0,
+        allowRawMovement=allowRawMovement,
+        flowMapping=flowMappingToggle,
+    },
+
 }
 
 --------------------------------------------------------------------------------

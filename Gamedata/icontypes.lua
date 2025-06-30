@@ -206,6 +206,11 @@ local icontypes = {
 		size=iconSize,
 		--radiusadjust=true,
 	},
+	shipassaultt3 = {
+		bitmap='icons/supcomish/shipassaultt3.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
 	shipfiresupportt2 = {
 		bitmap='icons/supcomish/shipfiresupportt2.png',
 		size=iconSize,
