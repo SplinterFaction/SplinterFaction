@@ -103,21 +103,30 @@ unitDef                    = {
 			def                  = "plasmacannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
+			mainDir = "1 0 0",
+			maxAngleDif = 180,
+
 		},
 		[3]                      = {
 			def                  = "plasmacannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
+			mainDir = "1 0 0",
+			maxAngleDif = 180,
 		},
 		[4]                      = {
 			def                  = "plasmacannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
+			mainDir = "-1 0 0",
+			maxAngleDif = 180,
 		},
 		[5]                      = {
 			def                  = "plasmacannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
+			mainDir = "-1 0 0",
+			maxAngleDif = 180,
 		},
 		[6]                      = {
 			def                  = "missile",
@@ -128,6 +137,8 @@ unitDef                    = {
 			def                  = "particlebeamcannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
+			mainDir = "0 0 1",
+			maxAngleDif = 120,
 		},
 
 	},

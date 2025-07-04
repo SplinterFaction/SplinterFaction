@@ -1195,6 +1195,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 			end
 
+			-----Set Unit Mass
+			unitDef.mass = totalValueInMetal
+
 			----- Gadgetized HP Regen
 			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then
 				unitDef.customparams.health_regen_delay = 5  -- Time in seconds the unit needs to be undamaged before regeneration starts

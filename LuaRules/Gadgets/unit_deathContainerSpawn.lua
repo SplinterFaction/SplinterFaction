@@ -91,7 +91,7 @@ if gadgetHandler:IsSyncedCode() then
 			if buildProgress == 1 then
 				local corpseFeature = unitDef.customParams.corpse
 				local posx, posy, posz = Spring.GetUnitPosition(unitID)
-				local featureName = corpseFeature or partsList[math.movectrlrandom(1, #partsList)]
+				local featureName = corpseFeature or partsList[math.random(1, #partsList)]
 				local isCorpse = (corpseFeature ~= nil)
 				local teamID = isCorpse and -1 or unitTeam
 				local featureID = Spring.CreateFeature(featureName, posx, posy, posz, 0, teamID)
@@ -126,7 +126,18 @@ if gadgetHandler:IsSyncedCode() then
 						local dirx = math.sin(radians)
 						local dirz = math.cos(radians)
 
-						--Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
+						---------------------------------------------
+						--This Block Exists only for testing purposes
+						---------------------------------------------
+						--vx = vx * 100
+						--vy = vy * 100
+						--vz = vz * 100
+						--Spring.Echo("[Death Spawns] Unit Velocity is modified to: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
+						-----
+						-----
+
+						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
+						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
 						Spring.SetFeatureDirection(featureID, dirx, 0, dirz)
 					else
 						-- Spring.Echo("[Death Spawns] Spawning a part feature")
@@ -137,7 +148,8 @@ if gadgetHandler:IsSyncedCode() then
 						local dy = math.random(-100, 100)
 						local dz = math.random(-100, 100)
 						local norm = math.sqrt(dx * dx + dy * dy + dz * dz)
-						--Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
+						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
+						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
 						Spring.SetFeatureDirection(featureID, dx / norm, dy / norm, dz / norm)
 					end
 				end

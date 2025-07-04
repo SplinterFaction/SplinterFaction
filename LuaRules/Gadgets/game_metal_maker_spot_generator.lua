@@ -42,7 +42,7 @@ local Echo = Spring.Echo
 -- Config
 local FOOTPRINT = 5
 local MIN_SPOT_SPACING = 150  -- Minimum spacing in world units between metal spots
-local ELEVATION_TOLERANCE = 15
+local ELEVATION_TOLERANCE = 20
 local EDGE_MARGIN = 100  -- in world units; adjust as needed (100 = ~6 map squares)
 local allowWaterSpots = false
 if Spring.GetModOptions().allowmexesinwater == "disabled" then

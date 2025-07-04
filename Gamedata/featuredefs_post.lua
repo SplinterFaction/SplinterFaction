@@ -42,6 +42,17 @@ return function(featureDefs, unitDefs)
 
 	for name, fd in pairs(featureDefs) do
 
+		--Cascading statements to catch any screwups
+		if fd.metal then
+			fd.mass = fd.metal
+			if fd.energy then
+				local totalFeatureValueInMetal
+				local energyMetalWorth = 10
+				totalFeatureValueInMetal = fd.metal + (fd.energy / energyMetalWorth)
+				fd.mass = totalFeatureValueInMetal
+			end
+		end
+
 		-- Ensure footprints are sane
 		if fd.footprintZ == 0 or fd.footprintZ == nil then
 			fd.footprintZ = 1
