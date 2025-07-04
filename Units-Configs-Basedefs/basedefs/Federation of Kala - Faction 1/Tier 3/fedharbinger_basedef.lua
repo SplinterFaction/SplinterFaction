@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 1.6,
+	maxVelocity                  = 2.5,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -95,7 +95,7 @@ unitDef                    = {
 			}
 		]]--
 		[1]                      = {
-			def                  = "plasmacannon",
+			def                  = "mainplasmacannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
 		},
@@ -115,20 +115,21 @@ unitDef                    = {
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
 		},
 		[5]                      = {
-			def                  = "missile",
+			def                  = "plasmacannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
 		},
 		[6]                      = {
-			def                  = "particlebeamcannon",
+			def                  = "missile",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
 		},
 		[7]                      = {
-			def                  = "mainplasmacannon",
+			def                  = "particlebeamcannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "SHIP BUILDING GROUND",
 		},
+
 	},
 	customParams                 = {
 		unittype				 = "ship",
@@ -164,7 +165,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
-		range                  = 1550,
+		range                  = 1400,
 		reloadtime             = 8,
 		size				   = 5,
 		weaponType		       = "Cannon",
@@ -204,7 +205,7 @@ weaponDefs                 = {
 
 		model                    = "neutralmissilex3.s3o",
 		name                     = "Rocket",
-		range                    = 1000,
+		range                    = 1400,
 		reloadtime               = 1,
 		weaponType		         = "MissileLauncher",
 
@@ -250,7 +251,7 @@ weaponDefs                 = {
 		minintensity             = 1,
 		impulseFactor            = 0,
 		name                     = "Something with Flames",
-		range                    = 630,
+		range                    = 1400,
 		reloadtime               = 0.1,
 		WeaponType               = [[LaserCannon]],
 		rgbColor                 = "1 0.5 0",
@@ -289,7 +290,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
-		range                  = 750,
+		range                  = 1400,
 		reloadtime             = 2.6,
 		size					 = 8,
 		--projectiles			   = projectiles,

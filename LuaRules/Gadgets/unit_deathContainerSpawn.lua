@@ -91,7 +91,7 @@ if gadgetHandler:IsSyncedCode() then
 			if buildProgress == 1 then
 				local corpseFeature = unitDef.customParams.corpse
 				local posx, posy, posz = Spring.GetUnitPosition(unitID)
-				local featureName = corpseFeature or partsList[math.random(1, #partsList)]
+				local featureName = corpseFeature or partsList[math.movectrlrandom(1, #partsList)]
 				local isCorpse = (corpseFeature ~= nil)
 				local teamID = isCorpse and -1 or unitTeam
 				local featureID = Spring.CreateFeature(featureName, posx, posy, posz, 0, teamID)
