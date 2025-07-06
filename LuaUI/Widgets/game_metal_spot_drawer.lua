@@ -10,8 +10,11 @@ function widget:GetInfo()
 	}
 end
 
+for k,v in pairs(Spring.GetGroundDecalTextures()) do Spring.Echo("[Metal Spot Drawer] ",k,v) end
+for k,v in pairs(Spring.GetGroundDecalTextures(false)) do Spring.Echo("[Metal Spot Drawer] ",k,v) end
+
 -- NOTE: Texture must be part of the decal atlas (e.g., used in unitdefs or sfx)
-local decalTexture = "mexspots1"
+local decalTexture = "maindecal_1"
 local decalSize = 85
 
 local decalIDs = {}

@@ -1,5 +1,7 @@
 local resources = {
       graphics = {
+          decals = {
+          },
          trees = {
 			bark     = 'default/Bark.bmp',
             leaf     = 'default/bleaf.bmp',
@@ -72,9 +74,11 @@ end
 AutoAdd("caustics", false)
 AutoAdd("smoke", false, "tga")
 AutoAdd("scars", false)
+AutoAdd("decals", false)
 -- Add mod groundfx and projectiletextures
 AutoAdd("groundfx", true)
 AutoAdd("projectiletextures", true)
+
 
 return resources
 
