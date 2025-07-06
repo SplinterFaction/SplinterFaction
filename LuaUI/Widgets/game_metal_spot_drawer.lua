@@ -10,34 +10,31 @@ function widget:GetInfo()
 	}
 end
 
-local imageFile = "bitmaps/default/mexspots1.dds"
-local imageSize = 85
+-- NOTE: Texture must be part of the decal atlas (e.g., used in unitdefs or sfx)
+local decalTexture = "mexspots1"
+local decalSize = 85
 
-function widget:DrawWorldPreUnit()
+local decalIDs = {}
+
+function widget:Initialize()
 	if not WG.metalMakerSpots then return end
-
-	gl.Texture(imageFile)
-	gl.Color(1, 1, 1, 1)
-
-	local offsetX = 7
-	local offsetY = 1
-	local offsetZ = 7
 
 	for _, spot in ipairs(WG.metalMakerSpots) do
 		local x, z = spot.x, spot.z
-		local y = Spring.GetGroundHeight(x, z)
 
-		gl.PushMatrix()
-		gl.Translate(x + offsetX, y + offsetY, z + offsetZ)
-		gl.BeginEnd(GL.QUADS, function()
-			gl.TexCoord(0, 0); gl.Vertex(-imageSize, 0, -imageSize)
-			gl.TexCoord(1, 0); gl.Vertex( imageSize, 0, -imageSize)
-			gl.TexCoord(1, 1); gl.Vertex( imageSize, 0,  imageSize)
-			gl.TexCoord(0, 1); gl.Vertex(-imageSize, 0,  imageSize)
-		end)
-		gl.PopMatrix()
+		local decalID = Spring.CreateGroundDecal()
+		if decalID then
+			Spring.SetGroundDecalPosAndDims(decalID, x, z, decalSize, decalSize)
+			Spring.SetGroundDecalTexture(decalID, decalTexture, true)
+			Spring.SetGroundDecalAlpha(decalID, 1.0, 0.0)
+			Spring.SetGroundDecalTint(decalID, 0.5, 0.5, 0.5, 0.5) -- neutral tint
+			table.insert(decalIDs, decalID)
+		end
 	end
+end
 
-
-	gl.Texture(false)
+function widget:Shutdown()
+	for _, id in ipairs(decalIDs) do
+		Spring.DestroyGroundDecal(id)
+	end
 end

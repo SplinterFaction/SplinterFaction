@@ -111,7 +111,7 @@ local options= {
 		name   = 'Allow metal spots to be placed in water?',
 		desc   = 'Should metal spots be placed in water? Sometimes turning this off can be beneficial if the water on map does damage',
 		type="list",
-		def="disabled",
+		def="enabled",
 		section= "resourcing",
 		items={
 			{key="disabled", name="Disabled", desc="Disallow metal spots from being placed in water."},

@@ -116,7 +116,7 @@ if gadgetHandler:IsSyncedCode() then
 
 
 					if corpseFeature and corpseFeature ~= "" then
-						-- Spring.Echo("[Death Spawns] Spawning a corpse feature: ".. "| " .. corpseFeature .. " |")
+						Spring.Echo("[Death Spawns] Spawning a corpse feature: ".. "| " .. corpseFeature .. " |")
 						-- Use original unit velocity and heading
 						local vx, vy, vz = Spring.GetUnitVelocity(unitID)
 						-- Spring.Echo("[Death Spawns] Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
@@ -136,11 +136,11 @@ if gadgetHandler:IsSyncedCode() then
 						-----
 						-----
 
-						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
-						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
+						--Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
+						--Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
 						Spring.SetFeatureDirection(featureID, dirx, 0, dirz)
 					else
-						-- Spring.Echo("[Death Spawns] Spawning a part feature")
+						Spring.Echo("[Death Spawns] Spawning a part feature")
 						local vx, vy, vz = Spring.GetUnitVelocity(unitID)
 						-- Spring.Echo("Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
 						-- Random junk parts with random spin direction
@@ -148,8 +148,8 @@ if gadgetHandler:IsSyncedCode() then
 						local dy = math.random(-100, 100)
 						local dz = math.random(-100, 100)
 						local norm = math.sqrt(dx * dx + dy * dy + dz * dz)
-						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
-						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
+						--Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
+						--Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
 						Spring.SetFeatureDirection(featureID, dx / norm, dy / norm, dz / norm)
 					end
 				end
