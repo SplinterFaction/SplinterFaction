@@ -1,7 +1,7 @@
 function widget:GetInfo()
 	return {
 		name    = "Geovent Spot Drawer",
-		desc    = "Draws an image at each geovent spot from WG.customGeoventSpots",
+		desc    = "Places an engine decal at each geovent spot from WG.customGeoventSpots",
 		author  = "",
 		date    = "2025-06-10",
 		license = "GPLv2",
@@ -10,34 +10,37 @@ function widget:GetInfo()
 	}
 end
 
-local imageFile = "bitmaps/default/geovent4.png"
-local imageSize = 15
+-- Texture must already be part of the engine decal atlas
+local decalTexture = "maindecal_3"
+local decalTextureNormal = "normdecal_3"
+local decalSize = 15
 
-function widget:DrawWorldPreUnit()
+-- Optional offsets (for alignment tweak)
+local offsetX = 0
+local offsetZ = 0
+
+local decalIDs = {}
+
+function widget:Initialize()
 	if not WG.customGeoventSpots then return end
 
-	gl.Texture(imageFile)
-	gl.Color(1, 1, 1, 1)
-
-	local offsetX = 0
-	local offsetY = 1
-	local offsetZ = 0
-
 	for _, spot in ipairs(WG.customGeoventSpots) do
-		local x, z = spot.x, spot.z
-		local y = Spring.GetGroundHeight(x, z)
+		local x, z = spot.x + offsetX, spot.z + offsetZ
 
-		gl.PushMatrix()
-		gl.Translate(x + offsetX, y + offsetY, z + offsetZ)
-		gl.BeginEnd(GL.QUADS, function()
-			gl.TexCoord(0, 0); gl.Vertex(-imageSize, 0, -imageSize)
-			gl.TexCoord(1, 0); gl.Vertex( imageSize, 0, -imageSize)
-			gl.TexCoord(1, 1); gl.Vertex( imageSize, 0,  imageSize)
-			gl.TexCoord(0, 1); gl.Vertex(-imageSize, 0,  imageSize)
-		end)
-		gl.PopMatrix()
+		local decalID = Spring.CreateGroundDecal()
+		if decalID then
+			Spring.SetGroundDecalPosAndDims(decalID, x, z, decalSize, decalSize)
+			Spring.SetGroundDecalTexture(decalID, decalTexture, true)
+			Spring.SetGroundDecalTexture(decalID, decalTextureNormal, false)
+			Spring.SetGroundDecalAlpha(decalID, 1.0, 0.0)
+			Spring.SetGroundDecalTint(decalID, 0.5, 0.5, 0.5, 0.5) -- no tint
+			table.insert(decalIDs, decalID)
+		end
 	end
+end
 
-
-	gl.Texture(false)
+function widget:Shutdown()
+	for _, id in ipairs(decalIDs) do
+		Spring.DestroyGroundDecal(id)
+	end
 end
