@@ -198,8 +198,8 @@ function gadget:Initialize()
 
 	local midX = math.floor(slopeMapX / 2)
 	local midZ = math.floor(slopeMapZ / 2)
-	local scanMinX, scanMaxX = 1, math.floor(midX * 0.9)
-	local scanMinZ, scanMaxZ = 1, math.floor(midZ * 0.9)
+	local scanMinX, scanMaxX = 1, math.floor(midX)
+	local scanMinZ, scanMaxZ = 1, math.floor(midZ)
 	local candidates = {}
 
 	for x = scanMinX, scanMaxX do

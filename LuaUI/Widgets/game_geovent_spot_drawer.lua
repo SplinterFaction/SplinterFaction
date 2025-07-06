@@ -30,6 +30,11 @@ function widget:Initialize()
 		local decalID = Spring.CreateGroundDecal()
 		if decalID then
 			Spring.SetGroundDecalPosAndDims(decalID, x, z, decalSize, decalSize)
+
+			--Random Rotation
+			--local angle = math.random() * 2 * math.pi
+			--Spring.SetGroundDecalRotation(decalID, angle)
+
 			Spring.SetGroundDecalTexture(decalID, decalTexture, true)
 			Spring.SetGroundDecalTexture(decalID, decalTextureNormal, false)
 			Spring.SetGroundDecalAlpha(decalID, 1.0, 0.0)
