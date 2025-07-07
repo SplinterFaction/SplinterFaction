@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 8000,
+	buildCostMetal               = 18000,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozleviathan.png",
@@ -23,7 +23,7 @@ unitDef                    = {
 	leaveTracks                  = false,
 	maxDamage                    = 360,
 	maxSlope                     = 60,
-	maxVelocity                  = 1.4,
+	maxVelocity                  = 1,
 	maxWaterDepth                = 5000,
 	minWaterDepth                = 25,
 	metalStorage                 = 0,
@@ -48,10 +48,10 @@ unitDef                    = {
 	--------------
 	-- Movement --
 	--------------
-	acceleration 				 = 0.035,
-	brakeRate                    = 0.035,
+	acceleration 				 = 0.015,
+	brakeRate                    = 0.015,
 	turninplace 				 = true,
-	--	turninplacespeedlimit 		 = 10,
+	turninplacespeedlimit 		 = 1,
 	turnInPlaceAngleLimit		 = 90,
 	turnrate 				 	 = 500,
 	--------------
