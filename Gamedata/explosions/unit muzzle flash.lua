@@ -163,7 +163,7 @@ return {
         numparticles       = 1,
         particlelife       = 30,
         particlelifespread = 30,
-        particlesize       = 8,
+        particlesize       = 4,
         particlesizespread = 0,
         particlespeed      = 4,
         particlespeedspread = 0,
