@@ -79,6 +79,10 @@ AutoAdd("decals", false)
 AutoAdd("groundfx", true)
 AutoAdd("projectiletextures", true)
 
+--Spring.Echo("Decals table contents:")
+--for k, v in pairs(resources.graphics.decals) do
+--    Spring.Echo("  ", k, v)
+--end
 
 return resources
 
