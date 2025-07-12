@@ -100,9 +100,15 @@ if gadgetHandler:IsSyncedCode() then
 				if featureID then
 					local featureValueMetal = unitDef.metalCost * 0.75
 					local featureValueEnergy = unitDef.energyCost * 0.75
-					local reclaimTime = featureValueMetal * 0.75
+					local reclaimTime = featureValueMetal * 0.25
+					local featureHealth = unitDef.health
+					--Spring.Echo("[Death Spawns] Metal Value: " .. featureValueMetal)
+					--Spring.Echo("[Death Spawns] Energy Value: " .. featureValueEnergy)
+					--Spring.Echo("[Death Spawns] Max Health: " .. featureHealth)
+					--Spring.Echo("[Death Spawns] Unit Y Position: " .. posy)
 
-					Spring.SetFeatureResources(featureID, featureValueMetal, featureValueEnergy, reclaimTime, 1.0, featureValueMetal, featureValueEnergy)
+					Spring.SetFeatureHealth(featureID, featureHealth)
+					Spring.SetFeatureResources(featureID, featureValueMetal, featureValueEnergy, reclaimTime, 1, featureValueMetal, featureValueEnergy)
 					Spring.SetFeaturePosition(featureID, posx, posy, posz, false)
 
 
@@ -125,16 +131,6 @@ if gadgetHandler:IsSyncedCode() then
 						local radians = (heading / 32768.0) * math.pi
 						local dirx = math.sin(radians)
 						local dirz = math.cos(radians)
-
-						---------------------------------------------
-						--This Block Exists only for testing purposes
-						---------------------------------------------
-						--vx = vx * 100
-						--vy = vy * 100
-						--vz = vz * 100
-						--Spring.Echo("[Death Spawns] Unit Velocity is modified to: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
-						-----
-						-----
 
 						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
 						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work

@@ -14,12 +14,12 @@ return function(featureDefs, unitDefs)
 			local health = math.floor((ud.maxdamage or 1000) * 0.5)
 
 			featureDefs[corpseName] = {
-				blocking     = true,
+				blocking     = false,
 				category     = "corpses",
 				damage       = health,
 				description  = (ud.name or unitName) .. " Wreckage",
 				energy       = 0,
-				featureDead  = "",
+				--featureDead  = "",
 				footprintX   = ud.footprintX or 2,
 				footprintZ   = ud.footprintZ or 2,
 				height       = 20,
@@ -27,6 +27,7 @@ return function(featureDefs, unitDefs)
 				metal        = metal,
 				object       = ud.objectname or "",
 				reclaimable  = true,
+				indestructible = true,
 				customParams = {
 					auto_generated = "true",
 				}
