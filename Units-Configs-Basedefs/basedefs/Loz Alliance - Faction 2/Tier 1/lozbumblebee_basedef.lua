@@ -101,11 +101,11 @@ unitDef                    = {
 
 	weapons                      = {
 		[1]                      = {
-			def                  = "bomb",
+			def                  = "air2groundmissile",
 			badTargetCategory    = "GROUND",
 			onlyTargetCategory   = "GROUND BUILDING SHIP SUBMARINE",
-			--mainDir = "0 -1 0",
-			--maxAngleDif = 200,
+			mainDir = "0 -1 1",
+			maxAngleDif = 90,
 		},
 		[2]                      = {
 			def                  = "laser",
@@ -216,6 +216,56 @@ weaponDefs                 = {
 		soundstart               = "bombdrop",
 		soundHit                 = "Explosion Fireworks_01",
 		soundHitWet				 = "subhitbomb",
+
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+
+			areadamage_ceg          = "napalm",
+			areadamage_damageceg    = "blacksmokesmall",
+			areadamage_time         = 5,
+			areadamage_damage       = 100,
+			areadamage_range        = 200,
+			-- areadamage_reistance = ,
+		},
+		damage                   = {
+			default              = 600,
+		},
+	},
+
+	air2groundmissile               = {
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		--cegTag                   = "emissiletanktrail-optimized",
+
+		cylinderTargeting        = 100,
+
+		explosionGenerator       = "custom:genericshellexplosion-bomb",
+		energypershot            = 0,
+		fireStarter              = 70,
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		model                    = "neutralmissilex2.s3o",
+		name                     = "High Explosive Bomb",
+		range                    = 800,
+		reloadtime               = 15,
+		weaponType		         = "MissileLauncher",
+		smokeTrail               = false,
+		soundstart               = "bombdrop",
+		soundHit                 = "Explosion Fireworks_01",
+		soundHitWet				 = "subhitbomb",
+		tolerance                = 100,
+		turnrate                 = 10,
+		turret                   = true,
+		tracks                   = false,
+		startVelocity            = 300,
+		weaponAcceleration       = -50,
+		flightTime               = 10,
+		weaponVelocity           = 0,
 
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB

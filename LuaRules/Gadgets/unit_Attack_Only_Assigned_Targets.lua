@@ -10,12 +10,47 @@ function gadget:GetInfo()
 	}
 end
 
+--------------------------------------------------------------------------------
+-- Attack Only Assigned Targets
+--------------------------------------------------------------------------------
+-- This gadget restricts unit behavior so that units will only fire at targets
+-- they have been explicitly ordered to attack via the CMD.ATTACK command.
+--
+-- Units will:
+--   - Only engage a specific enemy unit or ground position if it was the target
+--     of a direct attack order.
+--   - Ignore all other nearby enemies, including those in range.
+--   - Stop attacking entirely once the assigned target is destroyed or the order
+--     is canceled.
+--
+-- How it works:
+--   - When a unit receives a CMD.ATTACK, its target (unit or ground position)
+--     is stored in a table.
+--   - While a target is stored, AllowWeaponTarget will block firing at any other
+--     unit or position.
+--   - If the unit is issued a different command (e.g., move, stop, patrol), the
+--     target is cleared and normal targeting behavior resumes.
+--   - If the assigned target is destroyed, the gadget will detect this and clear
+--     the target so the unit can return to normal behavior.
+--
+-- This is useful for:
+--   - Precise micro control in combat
+--   - Preventing distractions or auto-targeting during coordinated attacks
+--   - Forcing units to prioritize specific enemies or objectives
+--
+-- Weapons can be excluded from this behavior by setting:
+--   customParams = { nonexplicittargeting = "true" }
+-- in the weapon definition.
+--------------------------------------------------------------------------------
+
+
 if not gadgetHandler:IsSyncedCode() then return end
 
 local CMD_ATTACK = CMD.ATTACK
 local CMD_STOP = CMD.STOP
+local CMD_MOVE = CMD.MOVE
 
--- unitID -> targetID
+-- unitID -> { type = "unit"|"ground", target = unitID or {x, z} }
 local explicitTargets = {}
 
 
@@ -25,16 +60,21 @@ local function pushToArray(tablein, index, value)
 end
 
 function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions)
-	if cmdID == CMD_ATTACK and #cmdParams == 1 then
-		local targetID = cmdParams[1]
-		pushToArray(explicitTargets, unitID, targetID)
-		--Spring.Echo("[Explicit Attack Only] We have a new Explicit target! ", targetID)
+	if cmdID == CMD_ATTACK then
+		if #cmdParams == 1 then
+			-- Attack a unit or feature
+			explicitTargets[unitID] = { type = "unit", target = cmdParams[1] }
+		elseif #cmdParams >= 3 then
+			-- Attack ground location
+			local x, z = cmdParams[1], cmdParams[3]
+			explicitTargets[unitID] = { type = "ground", target = {x = x, z = z} }
+		end
 	elseif cmdID ~= CMD_ATTACK then
 		explicitTargets[unitID] = nil
-		--Spring.Echo("[Explicit Attack Only] Target has been cleared! ", explicitTargets[unitID])
 	end
 	return true
 end
+
 
 local function arrayContains(array, value)
 	for _,val in ipairs(array) do
@@ -44,25 +84,56 @@ local function arrayContains(array, value)
 end
 
 function gadget:AllowWeaponTarget(unitID, targetID, weaponNum, attackerID, attackerDefID, weaponDefID, defaultPriority)
-	local targets = explicitTargets[unitID]
+	local targetInfo = explicitTargets[unitID]
 
-	if targets then
-		--Spring.Echo("[Explicit Attack Only] Explicit Target is set! ", targets)
-		return arrayContains(targets, targetID)
+	if targetInfo then
+		Spring.Echo("[ExplicitTarget] Unit", unitID, "still has explicit target:", targetInfo.type, targetInfo.target)
+	else
+		Spring.Echo("[ExplicitTarget] Unit", unitID, "has no explicit target.")
 	end
-	return true -- allow default targeting if no explicit target set
+
+	-- existing logic...
+	if not targetInfo then return true end
+
+	if targetInfo.type == "unit" then
+		return targetID == targetInfo.target
+	end
+
+	return false
 end
+
 
 -- Spring Cleaning
 function gadget:UnitDestroyed(unitID, unitDefID, teamID)
+	-- Clean up units that had explicit targets assigned to them
 	explicitTargets[unitID] = nil
-end
 
-function gadget:UnitCmdDone(unitID, cmdID, cmdTag)
-	if cmdID == CMD_ATTACK then
-		explicitTargets[unitID] = nil
+	-- Check if this destroyed unit was a target of any unit
+	for ownerID, target in pairs(explicitTargets) do
+		if target.type == "unit" and target.target == unitID then
+			Spring.Echo("[ExplicitTarget] Clearing dead target from unit", ownerID)
+			explicitTargets[ownerID] = nil
+		end
 	end
 end
+
+
+--function gadget:UnitCmdDone(unitID, cmdID)
+--	if cmdID == CMD_ATTACK then
+--		local was = explicitTargets[unitID]
+--		explicitTargets[unitID] = nil
+--
+--		Spring.Echo("[ExplicitTarget] CMD_ATTACK complete for unit", unitID, ". Previous target was:", was and was.type or "none")
+--
+--		if was and was.type == "ground" then
+--			local x, _, z = Spring.GetUnitPosition(unitID)
+--			if x and z then
+--				Spring.GiveOrderToUnit(unitID, CMD.MOVE, {x, z, 0}, {"shift"})
+--			end
+--		end
+--	end
+--end
+
 
 function gadget:Initialize()
 	for weaponDefID,wDef in pairs(WeaponDefs) do
@@ -73,54 +144,3 @@ function gadget:Initialize()
 		end
 	end
 end
-
---[[
-Attack Only Assigned Targets
-============================
-
-Overview:
----------
-This gadget enforces strict fire discipline by disabling auto-targeting behavior
-for units. Units affected by this gadget will **only fire on targets that were
-explicitly ordered via a CMD.ATTACK command**. They will ignore any nearby enemies
-unless those targets match the command history.
-
-Purpose:
---------
-- Improves tactical control during combat by preventing units from being distracted.
-- Ideal for micro-intensive scenarios where maintaining focus on a specific enemy is important.
-- Supports use cases where unit behavior must be deterministic or scripted.
-
-How It Works:
--------------
-1. When a unit receives a CMD.ATTACK with a unitID as its target, that target is
-   stored in a per-unit table called `explicitTargets`.
-
-2. While a unit has one or more explicit targets stored, the engine will call
-   `AllowWeaponTarget` every time the unit tries to fire at something.
-
-3. The `AllowWeaponTarget` function checks:
-   - If the targetID matches one of the explicitly commanded targets for that unit.
-   - If it matches, the shot is allowed.
-   - If not, the target is rejected and the unit will not fire.
-
-4. Once the command completes (via UnitCmdDone) or is interrupted (by a non-attack
-   command), the explicit target list is cleared, restoring default behavior.
-
-5. During gadget initialization, the gadget enables `AllowWeaponTarget` monitoring
-   on all weaponDefs **except those explicitly excluded** using the
-   `customParams.nonexplicittargeting` tag in weaponDefs.
-
-Key Features:
--------------
-- Uses `Script.SetWatchAllowTarget()` during `gadget:Initialize()` to register
-  all relevant weapons for targeting logic.
-- Cleans up stored state when units are destroyed or their attack command completes.
-- Supports multiple simultaneous targets per unit (e.g., if using queued commands).
-
-Customization:
---------------
-You can add `customParams = { nonexplicittargeting = "true" }` to any weaponDef
-to exempt it from this logic (e.g., for defensive weapons, AA, etc).
-
---]]
