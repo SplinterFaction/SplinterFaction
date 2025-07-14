@@ -87,9 +87,9 @@ function gadget:AllowWeaponTarget(unitID, targetID, weaponNum, attackerID, attac
 	local targetInfo = explicitTargets[unitID]
 
 	if targetInfo then
-		Spring.Echo("[ExplicitTarget] Unit", unitID, "still has explicit target:", targetInfo.type, targetInfo.target)
+		--Spring.Echo("[ExplicitTarget] Unit", unitID, "still has explicit target:", targetInfo.type, targetInfo.target)
 	else
-		Spring.Echo("[ExplicitTarget] Unit", unitID, "has no explicit target.")
+		--Spring.Echo("[ExplicitTarget] Unit", unitID, "has no explicit target.")
 	end
 
 	-- existing logic...
@@ -111,7 +111,7 @@ function gadget:UnitDestroyed(unitID, unitDefID, teamID)
 	-- Check if this destroyed unit was a target of any unit
 	for ownerID, target in pairs(explicitTargets) do
 		if target.type == "unit" and target.target == unitID then
-			Spring.Echo("[ExplicitTarget] Clearing dead target from unit", ownerID)
+			--Spring.Echo("[ExplicitTarget] Clearing dead target from unit", ownerID)
 			explicitTargets[ownerID] = nil
 		end
 	end
