@@ -51,7 +51,7 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "AIR",
 	collide                      = false,
-	description                  = [[Combat Transport]],
+	description                  = [[Massive Transport]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -199,7 +199,7 @@ unitDef                    = {
 
 	customParams                 = {
 		unittype				 = "air",
-		unitrole				 = "Combat Transport",
+		unitrole				 = "Massive Transport",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,

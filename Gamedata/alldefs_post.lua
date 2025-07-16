@@ -872,7 +872,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.077
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -889,7 +889,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.077
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -906,7 +906,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.077
+						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -996,8 +996,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Combat Transport" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
+			if unitDef.customparams.unitrole == "Massive Transport" then
+				unitDef.maxdamage = unitDef.maxdamage * 0.5
+			end
 			if unitDef.customparams.unitrole == "Heavy Bomber" then
-				unitDef.maxdamage = unitDef.maxdamage * 1.3
+				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
 			if unitDef.customparams.unitrole == "Strategic Bomber" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.5

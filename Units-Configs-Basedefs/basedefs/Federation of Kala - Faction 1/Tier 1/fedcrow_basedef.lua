@@ -149,7 +149,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	machinegun                = {
-		accuracy               = 5000,
+		accuracy               = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -186,7 +186,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 0.5,
+			default              = 5,
 		},
 	},
 
