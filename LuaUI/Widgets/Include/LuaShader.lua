@@ -194,17 +194,17 @@ vec2 heighmapUVatWorldPos(vec2 worldpos){
 }
 
 // This does 'mirror' style tiling of UVs like the way the map edge extension works
-vec2 heighmapUVatWorldPosMirrored(vec2 worldpos) { 
+vec2 heighmapUVatWorldPosMirrored(vec2 worldpos) {
 	const vec2 inverseMapSize = 1.0 / mapSize.xy;
 	// Some texel magic to make the heightmap tex perfectly align:
 	const vec2 heightmaptexel = vec2(8.0, 8.0);
 	worldpos +=  vec2(-8.0, -8.0) * (worldpos * inverseMapSize) + vec2(4.0, 4.0) ;
 	vec2 uvhm = worldpos * inverseMapSize;
-	
+
 	return abs(fract(uvhm * 0.5 + 0.5) - 0.5) * 2.0;
 }
 
-// Note that this function does not check the Z or depth of the clip space, but in regular springrts top-down views, this isnt needed either. 
+// Note that this function does not check the Z or depth of the clip space, but in regular springrts top-down views, this isnt needed either.
 // the radius to cameradist ratio is a good proxy for visibility in the XY plane
 bool isSphereVisibleXY(vec4 wP, float wR){ //worldPos, worldRadius
 	vec3 ToCamera = wP.xyz - cameraViewInv[3].xyz; // vector from worldpos to camera
@@ -236,11 +236,11 @@ vec3 rgb2hsv(vec3 c){
 	local waterAbsorbColorR, waterAbsorbColorG, waterAbsorbColorB = gl.GetWaterRendering("absorb")
 	local waterMinColorR, waterMinColorG, waterMinColorB = gl.GetWaterRendering("minColor")
 	local waterBaseColorR, waterBaseColorG, waterBaseColorB = gl.GetWaterRendering("baseColor")
-	
+
 	--Spring.Echo(waterAbsorbColorR, waterAbsorbColorG, waterAbsorbColorB)
 	--Spring.Debug.TableEcho(waterAbsorbColor)
-	local waterUniforms = 
-[[ 
+	local waterUniforms =
+[[
 #define WATERABSORBCOLOR vec3(%f,%f,%f)
 #define WATERMINCOLOR vec3(%f,%f,%f)
 #define WATERBASECOLOR vec3(%f,%f,%f)
@@ -258,9 +258,9 @@ vec4 waterBlend(float fragmentheight){
 	return waterBlendResult;
 }
 ]]
-	waterUniforms = string.format(waterUniforms, 
+	waterUniforms = string.format(waterUniforms,
 		waterAbsorbColorR, waterAbsorbColorG, waterAbsorbColorB,
-		waterMinColorR, waterMinColorG, waterMinColorB, 
+		waterMinColorR, waterMinColorG, waterMinColorB,
 		waterBaseColorR, waterBaseColorG, waterBaseColorB
 	)
 
@@ -290,16 +290,16 @@ LuaShader.CreateShaderDefinesString = CreateShaderDefinesString
 
 local function CheckShaderUpdates(shadersourcecache, delaytime)
 	-- todo: extract shaderconfig
-	if shadersourcecache.forceupdate or shadersourcecache.lastshaderupdate == nil or 
-		Spring.DiffTimers(Spring.GetTimer(), shadersourcecache.lastshaderupdate) > (delaytime or 0.5) then 
+	if shadersourcecache.forceupdate or shadersourcecache.lastshaderupdate == nil or
+		Spring.DiffTimers(Spring.GetTimer(), shadersourcecache.lastshaderupdate) > (delaytime or 0.5) then
 		shadersourcecache.lastshaderupdate = Spring.GetTimer()
 		local vsSrcNew = (shadersourcecache.vssrcpath and VFS.LoadFile(shadersourcecache.vssrcpath)) or shadersourcecache.vsSrc
 		local fsSrcNew = (shadersourcecache.fssrcpath and VFS.LoadFile(shadersourcecache.fssrcpath)) or shadersourcecache.fsSrc
 		local gsSrcNew = (shadersourcecache.gssrcpath and VFS.LoadFile(shadersourcecache.gssrcpath)) or shadersourcecache.gsSrc
-		if vsSrcNew == shadersourcecache.vsSrc and 
-			fsSrcNew == shadersourcecache.fsSrc and 
-			gsSrcNew == shadersourcecache.gsSrc and 
-			not shadersourcecache.forceupdate then 
+		if vsSrcNew == shadersourcecache.vsSrc and
+			fsSrcNew == shadersourcecache.fsSrc and
+			gsSrcNew == shadersourcecache.gsSrc and
+			not shadersourcecache.forceupdate then
 			--Spring.Echo("No change in shaders")
 			return nil
 		else
@@ -311,15 +311,15 @@ local function CheckShaderUpdates(shadersourcecache, delaytime)
 			shadersourcecache.updateFlag = true
 			local engineUniformBufferDefs = LuaShader.GetEngineUniformBufferDefs()
 			local shaderDefines = LuaShader.CreateShaderDefinesString(shadersourcecache.shaderConfig)
-			if vsSrcNew then 
+			if vsSrcNew then
 				vsSrcNew = vsSrcNew:gsub("//__ENGINEUNIFORMBUFFERDEFS__", engineUniformBufferDefs)
 				vsSrcNew = vsSrcNew:gsub("//__DEFINES__", shaderDefines)
 			end
-			if fsSrcNew then 
+			if fsSrcNew then
 				fsSrcNew = fsSrcNew:gsub("//__ENGINEUNIFORMBUFFERDEFS__", engineUniformBufferDefs)
 				fsSrcNew = fsSrcNew:gsub("//__DEFINES__", shaderDefines)
 			end
-			if gsSrcNew then 
+			if gsSrcNew then
 				gsSrcNew = gsSrcNew:gsub("//__ENGINEUNIFORMBUFFERDEFS__", engineUniformBufferDefs)
 				gsSrcNew = gsSrcNew:gsub("//__DEFINES__", shaderDefines)
 			end
@@ -334,9 +334,9 @@ local function CheckShaderUpdates(shadersourcecache, delaytime)
 				shadersourcecache.shaderName
 			)
 			local shaderCompiled = reinitshader:Initialize()
-			
+
 			Spring.Echo(shadersourcecache.shaderName, " recompiled in ", Spring.DiffTimers(Spring.GetTimer(), compilestarttime, true), "ms at", Spring.GetGameFrame(), "success", shaderCompiled or false)
-			if shaderCompiled then 
+			if shaderCompiled then
 				reinitshader.ignoreUnkUniform = true
 				return reinitshader
 			else
@@ -360,7 +360,7 @@ end
 
 function LuaShader:CreateLineTable()
 	--[[
-	-- self.shaderParams == 
+	-- self.shaderParams ==
 			 ({[ vertex   = "glsl code" ,]
 		   [ tcs      = "glsl code" ,]
 		   [ tes      = "glsl code" ,]
@@ -376,30 +376,30 @@ function LuaShader:CreateLineTable()
 		   [ definitions = "string of shader #defines", ]
 		 })
 	]]--
-	
+
 	local numtoline = {}
-	
-	--try to translate errors that look like this into lines: 
+
+	--try to translate errors that look like this into lines:
 	--	0(31048) : error C1031: swizzle mask element not present in operand "ra"
 	--	0(31048) : error C1031: swizzle mask element not present in operand "ra"
 	--for k, v in pairs(self) do
 	--	Spring.Echo(k)
 	--end
-	
-	for _, shadertype in pairs({'vertex', 'tcs', 'tes', 'geometry', 'fragment', 'compute'}) do 
-		if self.shaderParams[shadertype] ~= nil then 
+
+	for _, shadertype in pairs({'vertex', 'tcs', 'tes', 'geometry', 'fragment', 'compute'}) do
+		if self.shaderParams[shadertype] ~= nil then
 			local shaderLines = (self.shaderParams.definitions or "") .. self.shaderParams[shadertype]
 			local currentlinecount = 0
 			for i, line in ipairs(lines(shaderLines)) do
 				numtoline[currentlinecount] = string.format("%s:%i %s", shadertype, currentlinecount, line)
 				--Spring.Echo(currentlinecount, numtoline[currentlinecount] )
-				if line:find("#line ", nil, true) then 
-					local defline = tonumber(line:sub(7)) 
-					if defline then 
+				if line:find("#line ", nil, true) then
+					local defline = tonumber(line:sub(7))
+					if defline then
 						currentlinecount = defline
 					end
 				else
-				
+
 					currentlinecount = currentlinecount + 1
 				end
 			end
@@ -408,26 +408,26 @@ function LuaShader:CreateLineTable()
 	return numtoline
 end
 
-local function translateLines(alllines, errorcode) 
-	if string.len(errorcode) < 3 then 
+local function translateLines(alllines, errorcode)
+	if string.len(errorcode) < 3 then
 		return ("The shader compilation error code was very short. This likely means a Linker error, check the [in] [out] blocks linking VS/GS/FS shaders to each other to make sure the structs match")
 	end
 	local result = ""
-	for _,line in pairs(lines(errorcode)) do 
+	for _,line in pairs(lines(errorcode)) do
 		local pstart = line:find("(", nil, true)
 		local pend = line:find(")", nil, true)
 		local found = false
-		if pstart and pend then 
+		if pstart and pend then
 			local lineno = line:sub(pstart +1,pend-1)
 			--Spring.Echo(lineno)
-			lineno = tonumber(lineno) 
+			lineno = tonumber(lineno)
 			--Spring.Echo(lineno, alllines[lineno])
-			if alllines[lineno] then 
+			if alllines[lineno] then
 				result = result .. string.format("%s\n ^^ %s \n", alllines[lineno], line)
 				found = true
 			end
 		end
-		if found == false then 
+		if found == false then
 			result = result .. line ..'\n'
 		end
 	end
@@ -444,8 +444,8 @@ function LuaShader:OutputLogEntry(text, isError)
 
 	message = string.format("LuaShader: [%s] shader %s(s):\n%s", self.shaderName, warnErr, text)
 	Spring.Echo(message)
-	
-	if isError then 
+
+	if isError then
 		local linetable = self:CreateLineTable()
 		Spring.Echo(translateLines(linetable, text))
 	end
@@ -692,23 +692,23 @@ local function isUpdateRequiredNoTable(uniform, u1, u2, u3, u4)
 
 	local update = false
 	local cachedValues = uniform.values
-	
-	if u1 and cachedValues[1] ~= u1 then 
-		update = true 
-		cachedValues[1] = val 	
-	end 
-	if u2 and cachedValues[2] ~= u2 then 
-		update = true 
-		cachedValues[2] = u2	
-	end 
-	if u3 and cachedValues[3] ~= u3 then 
-		update = true 
-		cachedValues[3] = u3 	
-	end 
-	if u4 and cachedValues[4] ~= u4 then 
-		update = true 
-		cachedValues[4] = u4 	
-	end 
+
+	if u1 and cachedValues[1] ~= u1 then
+		update = true
+		cachedValues[1] = val
+	end
+	if u2 and cachedValues[2] ~= u2 then
+		update = true
+		cachedValues[2] = u2
+	end
+	if u3 and cachedValues[3] ~= u3 then
+		update = true
+		cachedValues[3] = u3
+	end
+	if u4 and cachedValues[4] ~= u4 then
+		update = true
+		cachedValues[4] = u4
+	end
 
 	return update
 end
@@ -725,11 +725,11 @@ end
 
 --FLOAT UNIFORMS
 local function setUniformAlwaysImpl(uniform, u1, u2, u3, u4)
-	if u4 ~= nil then 
+	if u4 ~= nil then
 		glUniform(uniform.location, u1, u2, u3, u4)
-	elseif u3 ~= nil then 
+	elseif u3 ~= nil then
 		glUniform(uniform.location, u1, u2, u3)
-	elseif u2 ~= nil then 
+	elseif u2 ~= nil then
 		glUniform(uniform.location, u1, u2)
 	else
 		glUniform(uniform.location, u1)

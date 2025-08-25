@@ -19,6 +19,8 @@ CALLIN_LIST = {
 	"Save",
 	"Load",
 
+	"Pong",
+
 	-- called when Lua is disabled or this client exits
 	"Shutdown",
 
@@ -28,6 +30,7 @@ CALLIN_LIST = {
 	"GameStart",
 	"GameOver",
 	"GameFrame",
+	"GameFramePost", -- Called after all other Sim operations are completed
 	"GamePaused",
 	"GameProgress",
 	"GameID",
@@ -46,6 +49,7 @@ CALLIN_LIST = {
 	"UnitFinished",
 	"UnitFromFactory",
 	"UnitReverseBuilt",
+	"UnitConstructionDecayed",
 	"UnitDestroyed",
 	"RenderUnitDestroyed",
 	"UnitExperience",
@@ -69,11 +73,14 @@ CALLIN_LIST = {
 	"UnitFeatureCollision",
 	"UnitMoveFailed",
 	"UnitMoved",               -- FIXME: not exposed to Lua yet (as of 95.0)
-	"UnitEnteredAir",          -- FIXME: not implemented by base GH
-	"UnitLeftAir",             -- FIXME: not implemented by base GH
-	"UnitEnteredWater",        -- FIXME: not implemented by base GH
-	"UnitLeftWater",           -- FIXME: not implemented by base GH
+	"UnitEnteredAir",
+	"UnitLeftAir",
+	"UnitEnteredWater",
+	"UnitLeftWater",
+	"UnitEnteredUnderwater",
+	"UnitLeftUnderwater",
 	"UnitCommand",
+	"UnitHarvestStorageFull",
 
 	-- weapon callins
 	"StockpileChanged",
@@ -98,6 +105,13 @@ CALLIN_LIST = {
 	"AllowUnitCreation",
 	"AllowUnitTransfer",
 	"AllowUnitBuildStep",
+	"AllowUnitCaptureStep",
+	"AllowUnitTransport",
+	"AllowUnitTransportLoad",
+	"AllowUnitTransportUnload",
+	"AllowUnitCloak",
+	"AllowUnitDecloak",
+	"AllowUnitKamikaze",
 	"AllowFeatureBuildStep",
 	"AllowFeatureCreation",
 	"AllowResourceLevel",
@@ -124,30 +138,47 @@ CALLIN_LIST = {
 	"DrawGenesis",
 	"DrawWorld",
 	"DrawWorldPreUnit",
+	"DrawOpaqueUnitsLua",
+	"DrawOpaqueFeaturesLua",
+	"DrawAlphaUnitsLua",
+	"DrawAlphaFeaturesLua",
+	"DrawShadowUnitsLua",
+	"DrawShadowFeaturesLua",
+	"DrawPreDecals",
+	"DrawWorldPreParticles",
 	"DrawWorldShadow",
 	"DrawWorldReflection",
 	"DrawWorldRefraction",
 	"DrawGroundPreForward",
+	"DrawGroundPostForward",
 	"DrawGroundPreDeferred",
+	"DrawGroundDeferred",
 	"DrawGroundPostDeferred",
 	"DrawUnitsPostDeferred",
 	"DrawFeaturesPostDeferred",
 	"DrawScreenEffects",
+	"DrawScreenPost",
 	"DrawScreen",
 	"DrawInMiniMap",
-
-	"SunChanged",
 
 	"DrawUnit",
 	"DrawFeature",
 	"DrawShield",
 	"DrawProjectile",
+	"DrawMaterial",
+
+	"FontsChanged",
+
+	"SunChanged",
 
 	-- unsynced message callins
 	"RecvFromSynced",
 	"RecvSkirmishAIMessage",
 
 	"DefaultCommand",
+	"ActiveCommandChanged",
+	"CameraRotationChanged",
+	"CameraPositionChanged",
 	"CommandNotify",
 
 	"ViewResize", -- FIXME ?
@@ -161,6 +192,7 @@ CALLIN_LIST = {
 	"KeyPress",
 	"KeyRelease",
 	"TextInput",
+	"TextEditing",
 	"MousePress",
 	"MouseRelease",
 	"MouseMove",
