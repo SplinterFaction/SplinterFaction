@@ -14,11 +14,23 @@ local vsx, vsy = Spring.GetViewGeometry()
 local show = true
 local currentTab = "gfx"
 local draggingSlider = nil
+local scrollOffset = 0
+local maxScroll = 0
+local draggingScrollbar = false
+local scrollbarYStart = 0
+
 
 -------------------------------------------------------
 -- Draw order
 -------------------------------------------------------
-local optionOrder = {"gfxpreset","fullscreen","resolution","shadows","water","particles"}
+local optionOrder = {
+	"gfxpreset",
+	"fullscreen",
+	"resolution",
+	"shadows",
+	"water",
+	"particles"
+}
 local soundOptionOrder = {
 	"snd_volmaster",
 	"snd_volbattle",
@@ -27,6 +39,37 @@ local soundOptionOrder = {
 	"snd_volui",
 	"snd_volunitreply"
 }
+local uiOptionOrder = {
+	"ui_scale",
+	"ui_tooltips",
+	"ui_scrollspeed",
+	"ui_teamcolors"
+}
+local gameplayOptionOrder = {
+	"cmd_autofinish",
+	"autoassist",
+	"decayunits",
+	"decaltime",
+	"zoomlimit",
+	"iconfade",
+	"test_a",
+	"test_b",
+	"test_c",
+	"test_d",
+	"test_e",
+	"test_f",
+	"test_g"
+}
+local cameraOptionOrder = {
+	"cam_edgescroll",
+	"cam_invertzoom",
+	"cam_zoomspeed",
+	"cam_panspeed",
+	"cam_inertia",
+	"cam_reset"
+}
+
+
 
 -------------------------------------------------------
 -- Forward declare options
@@ -162,13 +205,146 @@ options = {
 		id="snd_volunitreply", group="sound", name="Unit Reply Volume", type="slider",
 		min=0, max=200, value=Spring.GetConfigInt("snd_volunitreply", 100) or 100,
 		onChange=function(v) Spring.SetConfigInt("snd_volunitreply", v) end
-	}
+	},
+
+	-- UI Options
+	ui_scale = {
+		id="ui_scale", group="ui", name="UI Scale", type="slider",
+		min=50, max=200, value=100,
+		onChange=function(v)
+		Spring.SendCommands("ui_scale "..v)
+		end
+	},
+
+	ui_tooltips = {
+		id="ui_tooltips", group="ui", name="Advanced Tooltips", type="bool", value=true,
+		onChange=function(v)
+		Spring.SendCommands("tooltip "..(v and 1 or 0))
+		end
+	},
+
+	ui_scrollspeed = {
+		id="ui_scrollspeed", group="ui", name="Mouse Scroll Speed", type="slider",
+		min=0, max=100, value=Spring.GetConfigInt("ScrollSpeed", 25),
+		onChange=function(v)
+		Spring.SetConfigInt("ScrollSpeed", v)
+		end
+	},
+
+	ui_teamcolors = {
+		id="ui_teamcolors", group="ui", name="Team Color Style", type="select",
+		options={"Default", "High Contrast", "Friendly/Enemy"}, value=1,
+		onChange=function(index)
+		-- Placeholder: Swap teamcolor mode
+		Spring.Echo("Teamcolor mode changed to: "..options.ui_teamcolors.options[index])
+		end
+	},
+
+	-- Gameplay Options
+	cmd_autofinish = {
+		id="cmd_autofinish", group="gameplay", name="Auto-Finish Commands", type="bool", value=false,
+		onChange=function(v) Spring.SetConfigInt("CmdAutoFinish", v and 1 or 0) end
+	},
+	autoassist = {
+		id="autoassist", group="gameplay", name="Auto-Assist Factories", type="bool", value=true,
+		onChange=function(v) Spring.Echo("Auto-Assist toggled: "..tostring(v)) end
+	},
+	decayunits = {
+		id="decayunits", group="gameplay", name="Decay Unused Units", type="bool", value=false,
+		onChange=function(v) Spring.Echo("Unit Decay toggled: "..tostring(v)) end
+	},
+	decaltime = {
+		id="decaltime", group="gameplay", name="Decal Fade Time", type="slider", min=5, max=60, value=30,
+		onChange=function(v) Spring.SetConfigInt("GroundDecals", v) end
+	},
+	zoomlimit = {
+		id="zoomlimit", group="gameplay", name="Max Zoom Distance", type="slider", min=1000, max=5000, value=2500,
+		onChange=function(v) Spring.Echo("Zoom limit set to: "..v) end
+	},
+
+	-- Test options to overflow gameplay tab
+	test_a = {
+		id="test_a", group="gameplay", name="Test Option A", type="bool", value=true,
+		onChange=function(v) Spring.Echo("Test A: "..tostring(v)) end
+	},
+	test_b = {
+		id="test_b", group="gameplay", name="Test Option B", type="slider", min=0, max=10, value=5,
+		onChange=function(v) Spring.Echo("Test B: "..v) end
+	},
+	test_c = {
+		id="test_c", group="gameplay", name="Test Option C", type="select", options={"One","Two","Three"}, value=1,
+		onChange=function(i) Spring.Echo("Test C: "..i) end
+	},
+	test_d = {
+		id="test_d", group="gameplay", name="Test Option D", type="bool", value=false,
+		onChange=function(v) Spring.Echo("Test D: "..tostring(v)) end
+	},
+	test_e = {
+		id="test_e", group="gameplay", name="Test Option E", type="slider", min=0, max=10, value=5,
+		onChange=function(v) Spring.Echo("Test E: "..v) end
+	},
+	test_f = {
+		id="test_f", group="gameplay", name="Test Option F", type="bool", value=true,
+		onChange=function(v) Spring.Echo("Test F: "..tostring(v)) end
+	},
+	test_g = {
+		id="test_g", group="gameplay", name="Test Option G", type="slider", min=0, max=10, value=5,
+		onChange=function(v) Spring.Echo("Test G: "..v) end
+	},
+
+
+	-- Camera Options
+	cam_edgescroll = {
+		id="cam_edgescroll", group="camera", name="Edge Scroll Enabled", type="bool", value=true,
+		onChange=function(v)
+			Spring.SetConfigInt("EdgeMove", v and 1 or 0)
+		end
+	},
+	cam_invertzoom = {
+		id="cam_invertzoom", group="camera", name="Invert Zoom Direction", type="bool", value=false,
+		onChange=function(v)
+			Spring.SetConfigInt("InvertZoom", v and 1 or 0)
+		end
+	},
+	cam_zoomspeed = {
+		id="cam_zoomspeed", group="camera", name="Zoom Speed", type="slider", min=1, max=100,
+		value=Spring.GetConfigInt("ZoomSpeed", 25),
+		onChange=function(v)
+			Spring.SetConfigInt("ZoomSpeed", v)
+		end
+	},
+	cam_panspeed = {
+		id="cam_panspeed", group="camera", name="Keyboard Pan Speed", type="slider", min=1, max=100,
+		value=Spring.GetConfigInt("ScrollSpeed", 25),
+		onChange=function(v)
+			Spring.SetConfigInt("ScrollSpeed", v)
+		end
+	},
+	cam_inertia = {
+		id="cam_inertia", group="camera", name="Camera Inertia", type="slider", min=0, max=100,
+		value=Spring.GetConfigInt("CamInertia", 50),
+		onChange=function(v)
+			Spring.SetConfigInt("CamInertia", v)
+		end
+	},
+	cam_reset = {
+		id="cam_reset", group="camera", name="Reset Camera on Respawn", type="bool", value=true,
+		onChange=function(v)
+			Spring.Echo("Camera reset on respawn: "..tostring(v)) -- placeholder
+		end
+	},
+
 }
 
 local tabs = {
 	{id="gfx", name="Graphics"},
-	{id="sound", name="Sound"}
+	{id="sound", name="Sound"},
+	{id="ui", name="UI"},
+	{id="gameplay", name="Gameplay"},
+	{id="camera", name="Camera"}
+
 }
+
 
 -------------------------------------------------------
 -- Helpers
@@ -183,7 +359,14 @@ end
 local function FindSlider(mx, my)
 	local winX, winY, winW, winH = vsx/2-250, vsy/2-200, 500, 400
 	local ox, oy = winX+20, winY+winH-70
-	local drawOrder = (currentTab == "gfx") and optionOrder or soundOptionOrder
+	local drawOrder = (
+			currentTab == "gfx" and optionOrder or
+					currentTab == "sound" and soundOptionOrder or
+					currentTab == "ui" and uiOptionOrder or
+					currentTab == "gameplay" and gameplayOptionOrder or
+					cameraOptionOrder
+	)
+
 	for _, id in ipairs(drawOrder) do
 		local opt = options[id]
 		if opt.group == currentTab and opt.type == "slider" then
@@ -245,12 +428,61 @@ local function MousePress(mx,my)
 		tabX = tabX + 85
 	end
 
-	-- Options
-	local ox, oy = winX+20, winY+winH-70
-	local drawOrder = (currentTab == "gfx") and optionOrder or soundOptionOrder
+	-- Recalculate visibleLines and maxScroll for scrollbar math
+	local drawOrder = (
+			currentTab == "gfx" and optionOrder or
+					currentTab == "sound" and soundOptionOrder or
+					currentTab == "ui" and uiOptionOrder or
+					currentTab == "gameplay" and gameplayOptionOrder or
+					cameraOptionOrder
+	)
+
+	local visibleLines = 0
 	for _, id in ipairs(drawOrder) do
 		local opt = options[id]
-		if opt.group == currentTab then
+		if opt and opt.group == currentTab then
+			visibleLines = visibleLines + 1
+		end
+	end
+
+	maxScroll = math.max(0, (visibleLines * 30) - (400 - 100)) -- winH is 400
+	scrollOffset = math.max(-maxScroll, math.min(0, scrollOffset))
+
+	local scrollTrackH = 400 - 100
+	local scrollBarHeight = math.max(20, scrollTrackH * (scrollTrackH / (visibleLines * 30)))
+	local scrollBarY = (vsy/2-200) + 30 + (scrollTrackH - scrollBarHeight) * (-scrollOffset / maxScroll)
+	local scrollTrackX = vsx/2+250 - 20
+
+
+	-- Scrollbar dragging
+	local scrollTrackX = winX + winW - 15
+	local scrollTrackY = winY + 30
+	local scrollTrackH = winH - 100
+	local scrollBarHeight = math.max(20, (scrollTrackH * (scrollTrackH / (visibleLines * 30))))
+	local scrollBarY = scrollTrackY + (scrollTrackH - scrollBarHeight) * (-scrollOffset / maxScroll)
+
+	if IsOnRect(mx, my, scrollTrackX, scrollBarY, scrollTrackX + 10, scrollBarY + scrollBarHeight) then
+		draggingScrollbar = true
+		scrollbarYStart = my - scrollBarY
+		return true
+	end
+
+
+	-- Options
+	local ox, oy = winX+20, winY+winH-70
+	local drawOrder = (
+			currentTab == "gfx" and optionOrder or
+					currentTab == "sound" and soundOptionOrder or
+					currentTab == "ui" and uiOptionOrder or
+					currentTab == "gameplay" and gameplayOptionOrder or
+					cameraOptionOrder
+	)
+
+
+
+	for _, id in ipairs(drawOrder) do
+		local opt = options[id]
+		if opt and opt.group == currentTab then
 			if opt.type == "bool" and IsOnRect(mx,my, ox+150, oy-4, ox+170, oy+16) then
 				opt.value = not opt.value
 				if opt.onChange then opt.onChange(opt.value) end
@@ -278,11 +510,23 @@ local function MouseMove(mx,my)
 		opt.value = math.floor(opt.min + rel * (opt.max - opt.min))
 		if opt.onChange then opt.onChange(opt.value) end
 	end
+	if draggingScrollbar and maxScroll > 0 then
+		local winX, winY, winW, winH = vsx/2-250, vsy/2-200, 500, 400
+		local scrollTrackH = winH - 100
+		local scrollTrackY = winY + 30
+
+		local relativeY = my - scrollTrackY - scrollbarYStart
+		local clampedY = math.max(0, math.min(scrollTrackH - 20, relativeY))
+		local scrollRatio = clampedY / (scrollTrackH - 20)
+		scrollOffset = math.floor(-scrollRatio * maxScroll)
+	end
 end
 
 local function MouseRelease()
 	draggingSlider = nil
+	draggingScrollbar = false
 end
+
 
 -------------------------------------------------------
 -- Draw window
@@ -307,24 +551,64 @@ local function DrawWindow()
 	end
 
 	-- Options
-	local ox, oy = winX+20, winY+winH-70
-	local drawOrder = (currentTab == "gfx") and optionOrder or soundOptionOrder
+	local ox, oy = winX+20, winY+winH-70 - scrollOffset
+	local drawOrder = (
+			currentTab == "gfx" and optionOrder or
+					currentTab == "sound" and soundOptionOrder or
+					currentTab == "ui" and uiOptionOrder or
+					currentTab == "gameplay" and gameplayOptionOrder or
+					cameraOptionOrder
+	)
+
+	local visibleLines = 0
 	for _, id in ipairs(drawOrder) do
 		local opt = options[id]
-		if opt.group == currentTab then
-			gl.Color(1,1,1,1)
-			gl.Text(opt.name, ox, oy, 12, "o")
-			if opt.type == "bool" then
-				DrawBool(opt, ox+150, oy-4)
-			elseif opt.type == "slider" then
-				DrawSlider(opt, ox+150, oy, 100)
-			elseif opt.type == "select" then
-				DrawSelect(opt, ox+150, oy-4, 100)
+		if opt and opt.group == currentTab then
+			visibleLines = visibleLines + 1
+		end
+	end
+	maxScroll = math.max(0, (visibleLines * 30) - (winH - 100))
+	scrollOffset = math.max(-maxScroll, math.min(0, scrollOffset))
+
+	local minY = winY + 30
+	local maxY = winY + winH - 70
+	for _, id in ipairs(drawOrder) do
+		local opt = options[id]
+		if opt and opt.group == currentTab then
+			if oy < maxY and oy > minY then
+				gl.Color(1,1,1,1)
+				gl.Text(opt.name, ox, oy, 12, "o")
+				if opt.type == "bool" then
+					DrawBool(opt, ox+150, oy-4)
+				elseif opt.type == "slider" then
+					DrawSlider(opt, ox+150, oy, 100)
+				elseif opt.type == "select" then
+					DrawSelect(opt, ox+150, oy-4, 100)
+				end
 			end
 			oy = oy - 30
 		end
 	end
+
+	-- Scrollbar
+	if maxScroll > 0 then
+		local trackX = winX + winW - 15
+		local trackY = winY + 30
+		local trackH = winH - 100
+		local scrollBarHeight = math.max(20, trackH * (trackH / (visibleLines * 30)))
+
+		-- FIXED: Proper scroll direction for handle movement
+		local scrollRatio = -scrollOffset / maxScroll
+		local scrollBarY = trackY + scrollRatio * (trackH - scrollBarHeight)
+
+		gl.Color(0.1, 0.1, 0.1, 0.6)
+		gl.Rect(trackX, trackY, trackX + 10, trackY + trackH)
+
+		gl.Color(1, 1, 1, 0.8)
+		gl.Rect(trackX, scrollBarY, trackX + 10, scrollBarY + scrollBarHeight)
+	end
 end
+
 
 -------------------------------------------------------
 -- Widget handlers
@@ -345,6 +629,16 @@ end
 function widget:MouseRelease(x,y,button)
 	if show then MouseRelease() end
 end
+
+function widget:MouseWheel(up, value)
+	if show then
+		local step = 30
+		scrollOffset = scrollOffset + (up and step or -step)
+		scrollOffset = math.max(-maxScroll, math.min(0, scrollOffset))
+		return true
+	end
+end
+
 
 function widget:KeyPress(key)
 	if key == 111 then -- F3
