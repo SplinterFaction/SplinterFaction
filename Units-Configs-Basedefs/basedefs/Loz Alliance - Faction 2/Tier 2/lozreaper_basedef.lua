@@ -83,7 +83,7 @@ unitDef                    = {
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
-			def                  = "lasercannon",
+			def                  = "pulsecannon",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -224,6 +224,39 @@ weaponDefs                 = {
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
+		weaponVelocity         = 800,
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 50,
+		},
+	},
+
+	pulsecannon                = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "plasmacannontrail-red",
+		explosionGenerator     = "custom:genericshellexplosion-small",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		impulseFactor          = 0,
+		highTrajectory         = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Electromagnetic Pulse Cannon",
+		model                  = "projectile/projectilered.s3o",
+		range                  = 850,
+		reloadtime             = 0.5,
+		--projectiles			   = 5,
+		weaponType		       = "Cannon",
+		soundStart             = "lozreaper-sideguns",
+		tolerance              = 10000,
+		turret                 = true,
 		weaponVelocity         = 800,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB

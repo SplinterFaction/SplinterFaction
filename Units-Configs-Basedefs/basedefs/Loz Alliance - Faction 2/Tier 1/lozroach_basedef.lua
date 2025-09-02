@@ -77,7 +77,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "railgun",
+			def                  = "railgunballistic",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -127,6 +127,39 @@ weaponDefs                 = {
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
+		weaponVelocity         = 1500,
+		customparams             = {
+			--single_hit		 	 = true,
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 60,
+		},
+	},
+
+	railgunballistic               = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "plasmacannontrail-blue-short",
+		explosionGenerator     = "custom:genericshellexplosion-medium",
+		energypershot          = 0,
+		impulseFactor          = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Railgun",
+		model                  = "projectile/projectileblue.s3o",
+		highTrajectory         = 0,
+		range                  = 620,
+		reloadtime             = 1.6,
+		--projectiles			   = 5,
+		weaponType		       = "Cannon",
+		soundStart             = "lozroach-maingun",
+		tolerance              = 10000,
+		turret                 = true,
 		weaponVelocity         = 1500,
 		customparams             = {
 			--single_hit		 	 = true,
