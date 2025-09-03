@@ -88,7 +88,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "sniper",
+			def                  = "rocket",
 --			mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 --			maxAngleDif = 70,
 			badTargetCategory     = "BUILDING",
@@ -150,6 +150,49 @@ weaponDefs                 = {
 		}, 
 		damage                    = {
 			default               = 80,
+		},
+	},
+
+	rocket             = {
+		AreaOfEffect             = 20,
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		cegTag                   = "amphibrocktrail-optimized",
+		explosionGenerator       = "custom:genericshellexplosion-small",
+		-- burst 					 = 16,
+		-- burstrate 				 = 0.25,
+		energypershot            = 0,
+		fireStarter              = 70,
+		tracks                   = true,
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		model                    = "neutralmissilex1.s3o",
+		name                     = "Rockets",
+		range                    = 500,
+		reloadtime               = 1.2,
+		weaponType		         = "MissileLauncher",
+		smokeTrail               = false,
+		soundStart               = "sabotlaunch",
+		soundHit                 = "explode5",
+		soundTrigger             = true,
+		startVelocity            = 500,
+		tolerance                = 2000,
+		turnrate                 = 5000,
+		turret                   = true,
+		trajectoryHeight		 = 1.5,
+		weaponAcceleration       = 500,
+		flightTime               = 5,
+		weaponVelocity           = 500,
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 80,
 		},
 	},
 }
