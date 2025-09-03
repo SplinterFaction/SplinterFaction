@@ -77,7 +77,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "railgunballistic",
+			def                  = "railgunbeam",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -100,7 +100,7 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	railgun               = {
+	railgunpulse               = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -170,6 +170,55 @@ weaponDefs                 = {
 		},
 		damage                   = {
 			default              = 60,
+		},
+	},
+
+	railgunbeam           = {
+		areaofeffect		      = 25,
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.5,
+		-- cegtag					  = "burnblack",
+		beamtime				  = 0.2,
+		beamttl                   = 4,
+		largebeamlaser			  = true,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Beam",
+		range                     = 620,
+		reloadtime                = 1.6,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = blue,
+		rgbColor2                 = "1 1 1",
+		soundTrigger              = true,
+		soundstart                = "lozroach-maingun",
+		-- soundHit                  = "explode5",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 3,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			--single_hit		 	 = true,
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                    = {
+			default               = 60,
 		},
 	},
 }
