@@ -117,7 +117,7 @@ local function SetIllumThreshold()
 	illumThreshold = illumThreshold*(0.8 * ambientIntensity) + (0.5 * diffuseIntensity) + (0.1 * specularIntensity)
 	illumThreshold = math.min(illumThreshold, 0.8)
 
-	illumThreshold = (0.5 + illumThreshold) / 2
+	illumThreshold = (1 + illumThreshold) / 2
 end
 
 local function RemoveMe(msg)
