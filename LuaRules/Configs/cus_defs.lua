@@ -38,9 +38,9 @@ local uniformBins = {
 	-- DEFAULT UNIFORM BINS
 	defaultunit = {
 		-- by default gadget will assign these options to every unit texture set bin
-		bitOptions = defaultBitShaderOptions + OPTION_VERTEX_AO + OPTION_FLASHLIGHTS + OPTION_HEALTH_DISPLACE,
+		bitOptions = defaultBitShaderOptions + OPTION_PBROVERRIDE + OPTION_HEALTH_DISPLACE,
 		baseVertexDisplacement = 0.0,
-		brightnessFactor = 1.5,
+		brightnessFactor = 1.0,
 	},
 	-- These are the default featureDef uniformBins, you probably don't want to mess with them unless you really know what you're doing
 	feature = {
