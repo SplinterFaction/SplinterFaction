@@ -20,7 +20,7 @@ return {
 	shortGame='SF',
 	modtype=1,
 	depend = {
-		"SplinterFaction Unittextures 3",
+		"SplinterFaction Unittextures 2",
 		-- "Dreamstate Logic Music Addon 1",
 		-- "Spring Features v1.9",
 	},
