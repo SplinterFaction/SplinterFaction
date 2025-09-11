@@ -51,7 +51,7 @@ local BLUR_SIGMA = 3 -- Gaussian sigma of a single blur pass, other factors like
 local OUTLINE_COLOR = {0.0, 0.0, 0.0, 1.0}
 local OUTLINE_STRENGTH = 2.0 -- make it much smaller for softer edges
 
-local USE_MATERIAL_INDICES = true -- for future material indices based SSAO evaluation
+local USE_MATERIAL_INDICES = false -- for future material indices based SSAO evaluation
 
 
 -----------------------------------------------------------------
