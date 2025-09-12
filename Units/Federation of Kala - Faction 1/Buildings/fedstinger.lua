@@ -6,7 +6,7 @@ unitName = [[fedstinger]]
 
 humanName = [[Stinger]]
 
-objectName = [[fedwasp.s3o]]
+objectName = [[fedstinger.s3o]]
 script = [[fedwasp_lus.lua]]
 
 tech = [[tech1]]
