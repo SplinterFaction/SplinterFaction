@@ -5,7 +5,7 @@ unitName = "fedstorm"
 --------------------------------------------------------------------------------
 humanName = [[Storm]]
 
-objectName = "ehbotsniper_legs.s3o"
+objectName = "fedstorm.s3o"
 script = "fed/hbot/fedstorm_lus.lua"
 
 tech = [[tech1]]

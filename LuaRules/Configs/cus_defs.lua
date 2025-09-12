@@ -39,9 +39,10 @@ local uniformBins = {
 	defaultunit = {
 		-- by default gadget will assign these options to every unit texture set bin
 		-- Tex2 guide: red is glow, green is metalicity, blue is roughness
-		bitOptions = OPTION_NORMALMAPPING + OPTION_VERTEX_AO + OPTION_HEALTH_DISPLACE,
+		bitOptions = OPTION_NORMALMAPPING + OPTION_VERTEX_AO + OPTION_HEALTH_DISPLACE + OPTION_SHADOWMAPPING,
 		baseVertexDisplacement = 0.0,
 		brightnessFactor = 1.3,
+		materialIndex = 1,
 	},
 	-- These are the default featureDef uniformBins, you probably don't want to mess with them unless you really know what you're doing
 	feature = {
