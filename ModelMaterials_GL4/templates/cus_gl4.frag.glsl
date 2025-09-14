@@ -78,7 +78,7 @@ uniform samplerCube reflectTex;		//7
 
 //uniform int shadowsQuality;
 int shadowsQuality = 0;
-uniform int materialIndex;
+uniform float materialIndex;
 
 //uniform vec3 rndVec;
 
