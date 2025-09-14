@@ -112,8 +112,8 @@ weaponDefs                 = {
 		avoidFeature             = false,
 		collideFriendly          = false,
 		collideFeature           = false,
-		
-		--cegTag                   = "artyshot2",
+
+		cegTag                   = "plasmacannontrail-purple-large",
 		avoidNeutral	         = false,
 		explosionGenerator       = "custom:genericshellexplosion-large",
 		energypershot            = 0,
@@ -121,6 +121,7 @@ weaponDefs                 = {
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		name                     = "High Explosive Plasma Cannon",
+		model                    = "projectile/projectilepurple.s3o",
 		range                    = 1300,
 		reloadtime               = 40,
 		size					 = 10,
@@ -136,11 +137,11 @@ weaponDefs                 = {
 		energypershot            = 0,
 		-----
 
-		trajectoryHeight	   = 2,
+		trajectoryHeight	     = 2,
 		turret                   = true,
 		weaponVelocity           = 450,
 		customparams             = {
-			expl_light_color	= orange, -- As a string, RGB
+			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
