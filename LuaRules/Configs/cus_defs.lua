@@ -34,6 +34,7 @@ local uniformBins = {
 		treadRect = {933, 0, 1024 - 933, 1024}, -- Pixels; left, top, width, height
 		treadLinkWidth = 22, -- single track link width in Pixels
 		treadSpeedMult = 4.0, -- TODO: double check with Behe what the point of texSpeedMult was
+		materialIndex = 0,
 	},
 	-- DEFAULT UNIFORM BINS
 	defaultunit = {
@@ -50,30 +51,35 @@ local uniformBins = {
 		bitOptions = defaultBitShaderOptions + OPTION_PBROVERRIDE,
 		baseVertexDisplacement = 0.0,
 		brightnessFactor = 1.3,
+		materialIndex = 0,
 	},
 	featurepbr = {
 		-- any feature with featureDef.customParams.cuspbr or with 'pilha_crystal' in the name
 		bitOptions = defaultBitShaderOptions,
 		baseVertexDisplacement = 0.0,
 		brightnessFactor = 1.3,
+		materialIndex = 0,
 	},
 	treepbr = {
 		-- Currently unused?
 		bitOptions = defaultBitShaderOptions + OPTION_TREEWIND + OPTION_PBROVERRIDE,
 		baseVertexDisplacement = 0.0,
 		brightnessFactor = 1.3,
+		materialIndex = 0,
 	},
 	tree = {
 		-- any whitelisted tree in ModelMaterials_GL4/known_feature_trees.lua or with featureDef.customParams.treeshader = 'yes'
 		bitOptions = defaultBitShaderOptions + OPTION_TREEWIND + OPTION_PBROVERRIDE,
 		baseVertexDisplacement = 0.0,
 		brightnessFactor = 1.3,
+		materialIndex = 0,
 	},
 	wreck = {
 		-- any feature referenced in a unitDef.corpse, or featureDef.featureDead or with '_x', '_dead' or '_heap' in the name
 		bitOptions = defaultBitShaderOptions + OPTION_VERTEX_AO,
 		baseVertexDisplacement = 0.0,
 		brightnessFactor = 1.3,
+		materialIndex = 0,
 	},
 } -- maps uniformbins to a table of uniform names/values
 
@@ -84,8 +90,9 @@ local texToPreload = {
 	"unittextures/Arm_normal.dds",
 	"unittextures/cor_color_wreck_normal.dds",
 	"unittextures/cor_normal.dds",--]]
-	--"unittextures/lego2skin_explorer.dds",
-	--"unittextures/lego2skin_explorerglowy.dds",
+	"unittextures/lego2skin_explorer.dds",
+	"unittextures/lego2skin_explorerglowy.dds",
+	"unittextures/lego2skin_explorernormal.dds",
 }
 -- BAR example of changing based on ModOption
 --[[if Spring.GetModOptions().experimentallegionfaction then
