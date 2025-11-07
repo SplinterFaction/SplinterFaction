@@ -12,6 +12,7 @@ game_metal_maker_placement_snapping
 
 Tangentially related Gadgets:
 game_geovent_spot_generator
+game_map_defined_metal_spot_finder.lua
 
 ]]--
 
