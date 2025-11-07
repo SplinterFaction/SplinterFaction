@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>SplinterFaction</title>
+		<div class="header">
+			<div data-include="/includes/navigation.html"></div>
+			<div data-include="/includes/header.html"></div>
+		</div>
+	</head>
+	<body>
+		<div id="maincontent">
+			<div class="contentcontainer">
+				<!-- Page name goes here -->
+				<div class="content">
+				
+					<h3>The War Has Evolved... Have You?</h3>
+					<p><em>A fresh RTS experience inspired by Total Annihilation, SupCom, and Earth 2150.</em></p>
+					<p><strong>SplinterFaction</strong> is a free and open-source real-time strategy game built for players who love deep strategic gameplay, large-scale battles, and tactical decision-making. If you’ve ever enjoyed <em>Total Annihilation</em>, <em>Supreme Commander</em>, or <em>Earth 2150</em>, you’ll feel right at home here. </p>
+					<p>In <em>SplinterFaction</em>, two opposing factions fight for dominance, each with its own philosophy of war: </p>
+					<p>🛡️ <strong>The Loz Alliance</strong> – Slow, heavily shielded, and hard-hitting. Their massive tanks dominate the battlefield with long-range firepower, relying on personal energy shields that regenerate quickly after combat. While their units lack innate health regeneration, their shields and defensive structures keep them standing. </p>
+					<p>⚡ <strong>The Federation of Kala</strong> – Fast, aggressive, and relentless. They favor mobility and area-of-effect firepower, using walkers, missiles, and plasma cannons to overwhelm enemies. Instead of shields, they have rapid hull regeneration, allowing them to recover between fights. Their cloaking technology makes them unpredictable, striking from unexpected angles. </p>
+					<h3>Strategic Depth, Streamlined Play</h3>
+					<ul>
+						<li><strong>Resource Management Without the Hassle</strong> – Metal is mined from key locations, energy is generated through structures, and supply acts as your army limiter. Simple to learn, but the way you control and protect these resources can make or break a battle. </li>
+						<li><strong>Tech Progression That Grows With You</strong> – Your commander is your key to victory. As you upgrade him, he becomes stronger, unlocks new tech tiers, and gains powerful weapons. </li>
+						<li><strong>Automated Assistance, Tactical Freedom</strong> – Tedious tasks like upgrading metal extractors and advancing tech can be automated, letting you focus on army control and strategic execution rather than micromanagement. </li>
+					</ul>
+					<h3>Fight Smarter, Not Harder</h3>
+					<p>Victory isn’t about who clicks the fastest, it’s about outmaneuvering your opponent. Positioning, flanking, timing, and controlling the battlefield are what win wars in <em>SplinterFaction</em>. And remember, if your commander falls, it’s game over. </p>
+					<p>So gather your forces, choose your faction, and command your army to victory! <br></p>
+					<p></p>
+					<h1><a aria-hidden="true" class="anchor" id="user-content-can-i-play-it" href="https://github.com/SplinterFaction/SplinterFaction#can-i-play-it"></a></h1>
+					<h1>Can I play it?</h1>
+					<p>Yes you can! However, the game is not ready for a prime release, so understand that what you are seeing is (a lot of the time) <em>very</em> WIP and not representative of the final game. </p>
+					<p>We have infrequent and impromptu playtest sessions that you are welcome to join as well. </p>
+					<p>For more information, join our Discord (<a rel="nofollow" href="https://discord.gg/7Bam847ykN">SplinterFaction</a>) and follow us on Itch.io (<a rel="nofollow" href="https://frozenyak.itch.io/splinterfaction">SplinterFaction by FrozenYak</a>) </p>
+					<p><br></p>
+								
+					<div data-include="includes/download.html"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div data-include="/includes/footer.html"></div>
+		<!-- Required Include Function -->
+		<script>
+			document.addEventListener("DOMContentLoaded", async () => {
+				const includeElements = document.querySelectorAll("[data-include]");
+				for (const el of includeElements) {
+					const file = el.getAttribute("data-include");
+					try {
+						const response = await fetch(file);
+						if (!response.ok) throw new Error(`Failed to load ${file}`);
+						el.innerHTML = await response.text();
+					} catch (err) {
+						el.innerHTML = `<p style="color:red;">Could not load ${file}</p>`;
+						console.error(err);
+					}
+				}
+			});
+		</script>
+	</body>
+</html>
