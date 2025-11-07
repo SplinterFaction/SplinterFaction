@@ -1,0 +1,228 @@
+/*********************************************
+* INDEX
+**********************************************
+1. Setup
+2. Links
+3. Copy & Lists
+4. Headings
+5. Tables
+6. Code blocks
+7. Leading paragraph text
+8. Hug the block above you
+9. Blockquote
+10. Preformatted Text
+**********************************************/
+
+/*********************************************
+* 1. Setup
+**********************************************/
+html {
+	/* Change default typefaces here */
+	font-family: sans-serif;
+	font-size: 137.5%;
+	-webkit-font-smoothing: antialiased;
+}
+
+/*********************************************
+* 2. Links
+**********************************************/
+a {
+	color: #1EAEDB;
+}
+a:hover {
+	color: #0FA0CE;
+}
+
+/*********************************************
+* 3. Copy & Lists
+**********************************************/
+p {
+	line-height: 1.5rem;
+	margin-top: 1vmin;
+	margin-bottom: 0;
+}
+ul,
+ol {
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+ul li,
+ol li {
+	line-height: 1.5rem;
+}
+ul ul,
+ol ul,
+ul ol,
+ol ol {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+/*********************************************
+* 4. Blockquote
+**********************************************/
+blockquote {
+	line-height: 1.5rem;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+blockquote{
+    font-size: 1.4em;
+    width:60%;
+    margin:50px auto;
+    font-style:italic;
+    color: #555555;
+    padding:1.2em 30px 1.2em 75px;
+    border-left:8px solid #999 ;
+    line-height:1.6;
+    position: relative;
+    background:#EDEDED;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+blockquote::before{
+    font-family:Arial;
+    content: "\201C";
+    color:#999;
+    font-size:4em;
+    position: absolute;
+    left: 10px;
+    top:-10px;
+}
+
+blockquote::after{
+    content: '';
+}
+
+blockquote span{
+    display:block;
+    color:#333333;
+    font-style: normal;
+    font-weight: bold;
+    margin-top:1em;
+}
+
+/*********************************************
+* 5. Headings
+**********************************************/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	/* Change heading typefaces here */
+	font-family: sans-serif;
+    margin-bottom: 0;
+	line-height: 1.5rem;
+	margin-top: 1.5rem;
+}
+h1 {
+	font-size: 6vmin;
+	line-height: 6.5vmin;
+}
+h2 {
+	font-size: 5.5vmin;
+	line-height: 6vmin;
+}
+h3 {
+	font-size: 5vmin;
+	line-height: 5.5vmin;
+}
+h4 {
+	font-size: 4.5vmin;
+	line-height: 5vmin;
+}
+h5 {
+	font-size: 4vmin;
+	line-height: 4.5vmin;
+}
+h6 {
+	font-size: 3.5vmin;
+	line-height: 4vmin;
+}
+
+@media only screen and (max-width : 480px) {
+/* Mobile */
+    h1 {
+        font-size: 8vmin;
+        line-height: 8.5vmin;
+    }
+    h2 {
+        font-size: 7.5vmin;
+        line-height: 8vmin;
+    }
+    h3 {
+        font-size: 7vmin;
+        line-height: 7.5vmin;
+    }
+    h4 {
+        font-size: 6.5vmin;
+        line-height: 7vmin;
+    }
+    h5 {
+        font-size: 6vmin;
+        line-height: 6.5vmin;
+    }
+    h6 {
+        font-size: 5.5vmin;
+        line-height: 6vmin;
+    }
+}
+
+/*********************************************
+* 6. Tables
+**********************************************/
+table {
+	margin-top: 1.5rem;
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+table td,
+table th {
+	padding: 10px;
+	line-height: 33px;
+}
+
+/*********************************************
+* 7. Code blocks
+**********************************************/
+code {
+	vertical-align: bottom;
+}
+
+p code {
+    text-shadow: #FC0 1px 0 10px;
+}
+
+/*********************************************
+* 8. Leading paragraph text
+**********************************************/
+.lead {
+	font-size: 1.414rem;
+}
+
+/*********************************************
+* 9. Hug the block above you
+**********************************************/
+.hug {
+	margin-top: 0;
+}
+
+/*********************************************
+* 10. Preformatted Text
+**********************************************/
+pre {
+	background-color: #f5f2f0;
+	padding: 10px 20px;
+	border: 1px solid #ccc;
+	white-space: pre-wrap;
+    word-break: keep-all;
+	font-size: 50%;
+}
+
+/*********************************************
+* END OF BASE CSS
+**********************************************/
