@@ -25,21 +25,6 @@ html {
 	background-color: rgba(50,50,50,1);
 }
 
-.header {
-    animation: fadeIn 2.5s;
-    margin: 0;
-}
-
-.content {
-    animation: fadeIn 2.5s;
-    margin: 0;
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
 /*********************************************
 * 2. Meta Information Overlay
 **********************************************/
@@ -243,6 +228,10 @@ ol, ul {
   margin-top: 0;
 }
 
+.content li {
+	padding-top: 20px;
+}
+
 /*********************************************
 * 12. Hero Elements
 **********************************************/
@@ -281,10 +270,10 @@ span.herotext {
 }
 
 .herodownarrowcontainer {
-    position: absolute;
+    position: relative;
     font-size: 10vmin;
-    left: 50%;
-    bottom: 0%;
+    left: 0%;
+    bottom: -40%;
 	text-shadow: 0px 0px 2px #000;
 	transition: text-shadow .5s ease-in-out;
 }
@@ -330,7 +319,7 @@ span.herotext {
 
 @media only screen and (max-width : 1000px) {
 	.contentcontainer {
-		padding: 10px;
+		padding: 20px;
 	}
 }
 
