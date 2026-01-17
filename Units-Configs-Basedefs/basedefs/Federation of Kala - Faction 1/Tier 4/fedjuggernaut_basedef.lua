@@ -130,7 +130,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype				 = "mobile",
-		unitrole				 = "Main Battle Tank - Tech 3",
+		unitrole				 = "Main Battle Tank - Tech 4",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",

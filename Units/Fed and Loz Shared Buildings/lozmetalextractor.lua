@@ -17,8 +17,8 @@ iconType = [[structuremetalgeneratort0]]
 
 explodeAsSelfSAs = [[largeBuildingExplosionGenericBlue]]
 
-objectName = [[metalextractort0.s3o]]
-script = [[metalextractor_lus.lua]]
+objectName = [[newmetalextractor.s3o]]
+script = [[newmetalextractor_lus.lua]]
 
 tech = [[tech0]]
 

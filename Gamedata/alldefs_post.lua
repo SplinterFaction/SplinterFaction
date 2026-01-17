@@ -937,6 +937,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Main Battle Tank - Tech 3" then
 				unitDef.maxdamage = unitDef.maxdamage * 1.4
 			end
+			if unitDef.customparams.unitrole == "Main Battle Tank - Tech 4" then
+				unitDef.maxdamage = unitDef.maxdamage * 1.4
+			end
 			if unitDef.customparams.unitrole == "Scout" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.4
 			end
