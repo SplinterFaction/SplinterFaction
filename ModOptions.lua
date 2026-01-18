@@ -170,6 +170,17 @@ local options= {
 		type   = 'section',
 	},
 	{
+		key="autoteamcolors",
+		name="Automatic Teamcolors",
+		type="list",
+		def="enabled",
+		section="gameplayoptions",
+		items={
+			{key="enabled", name="Enabled"},
+			{key="disabled", name="Disabled"},
+		}
+	},
+	{
 		key    = 'unithealthmodifier',
 		name   = 'Unit Health Modifier',
 		desc   = 'This acts as a percentage of base unit health. Setting to 200 would double unit hitpoints.',
