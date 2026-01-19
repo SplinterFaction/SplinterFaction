@@ -100,6 +100,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		--Spring.Echo("AimWeapon: FireWeapon")
 		return true
 	elseif WeaponID == 2 then
+		Sleep(300)
 		Signal(SIG_AIM2)
 		SetSignalMask(SIG_AIM2)
 		Turn(cannonturret2, y_axis, heading, 10)
@@ -110,6 +111,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		--Spring.Echo("AimWeapon: FireWeapon")
 		return true
 	elseif WeaponID == 3 then
+		Sleep(600)
 		Signal(SIG_AIM3)
 		SetSignalMask(SIG_AIM3)
 		Turn(cannonturret3, y_axis, heading, 10)
@@ -129,6 +131,7 @@ function script.AimWeapon(WeaponID, heading, pitch)
 		StartThread(RestoreAfterDelay)
 		return true
 	elseif WeaponID == 5 then
+		Sleep(400)
 		Signal(SIG_AIM5)
 		SetSignalMask(SIG_AIM5)
 		Turn(laserturret2, y_axis, heading, 10)

@@ -79,17 +79,17 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "lasercannon",
+			def                  = "plasmacannon",
 			badTargetCategory     = "SHIP GROUND",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[2]                      = {
-			def                  = "lasercannon",
+			def                  = "plasmacannon",
 			badTargetCategory     = "SHIP GROUND",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
 		[3]                      = {
-			def                  = "lasercannon",
+			def                  = "plasmacannon",
 			badTargetCategory     = "SHIP GROUND",
 			onlyTargetCategory    = "SHIP GROUND BUILDING",
 		},
@@ -131,8 +131,7 @@ weaponDefs                 = {
 		explosionGenerator       = "custom:genericshellexplosion-medium",
 		energypershot            = 0,
 
-		burst                    = 6,
-		burstrate                = 0.9,
+		model                    = "projectile/projectileorange1-5x.s3o",
 
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
@@ -154,7 +153,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 500,
+			default              = 571,
 		},
 	},
 
