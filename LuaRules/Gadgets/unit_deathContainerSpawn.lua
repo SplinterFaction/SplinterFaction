@@ -125,12 +125,17 @@ if gadgetHandler:IsSyncedCode() then
 						-- Spring.Echo("[Death Spawns] Spawning a corpse feature: ".. "| " .. corpseFeature .. " |")
 						-- Use original unit velocity and heading
 						local vx, vy, vz = Spring.GetUnitVelocity(unitID)
-						-- Spring.Echo("[Death Spawns] Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
+						Spring.Echo("[Death Spawns] Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
 						local heading = Spring.GetUnitHeading(unitID)
 						-- Convert heading to direction vector
 						local radians = (heading / 32768.0) * math.pi
 						local dirx = math.sin(radians)
 						local dirz = math.cos(radians)
+
+						-- For Testing ... This should  result in the feature flying off of the screen.
+						-- vx = vx * 100
+						-- vz = vz * 100
+						-- Spring.Echo("[Death Spawns] Feature Velocity is being set to: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
 
 						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
 						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
