@@ -1203,6 +1203,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-----Set Unit Mass
 			unitDef.mass = totalValueInMetal
+			-- Spring.Echo("[[AllDefsPost]] " .. unitDef.unitname .. " total mass is ".. unitDef.mass)
 
 			----- Gadgetized HP Regen
 			if unitDef.customparams and unitDef.customparams.factionname == "Federation of Kala" then

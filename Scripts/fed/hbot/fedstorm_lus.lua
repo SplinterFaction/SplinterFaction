@@ -1,4 +1,4 @@
-pelvis, turret, barrel1, firepoint1, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
+pelvis, turret, barrel1, missile1, firepoint1, missile2, firepoint2, missile3, firepoint3, missile4, firepoint4, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'missile1', 'firepoint1', 'missile2', 'firepoint2', 'missile3', 'firepoint3', 'missile4', 'firepoint4', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
 
 common = include("headers/common_includes_lus.lua")
 
@@ -12,7 +12,7 @@ terrainType = "terrainType"
 common.WalkScript()
 
 function script.Create()
-	StartThread(common.SmokeUnit, {pelvis, turret, barrel1, firepoint1, lthigh, rthigh, lleg, rleg, lfoot, rfoot})
+	StartThread(common.SmokeUnit, {pelvis, turret, barrel1, missile1, firepoint1, missile2, firepoint2, missile3, firepoint3, missile4, firepoint4, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot})
 end
 
 function thrust()
@@ -23,6 +23,16 @@ local function RestoreAfterDelay()
 	Sleep(2000)
 	Turn(turret, y_axis, 0, 5)
 	Turn(barrel1, x_axis, 0, 5)
+
+	--EmitSfx (missile1, "nano-small-animated")
+	--Spring.UnitScript.Show(missile1)
+	--EmitSfx (missile4, "nano-small-animated")
+	--Spring.UnitScript.Show(missile2)
+	--EmitSfx (missile3, "nano-small-animated")
+	--Spring.UnitScript.Show(missile3)
+	--EmitSfx (missile4, "nano-small-animated")
+	--Spring.UnitScript.Show(missile4)
+	--currentFirepoint = 1
 end		
 
 function script.AimFromWeapon(weaponID)
@@ -30,7 +40,7 @@ function script.AimFromWeapon(weaponID)
 	return turret
 end
 
-local firepoints = {firepoint1}
+local firepoints = {firepoint1, firepoint2, firepoint3, firepoint4}
 local currentFirepoint = 1
 
 function script.QueryWeapon(weaponID)
@@ -38,7 +48,32 @@ function script.QueryWeapon(weaponID)
 end
 
 function script.FireWeapon(weaponID)
-	EmitSfx (firepoints[currentFirepoint], 1024)
+	--Spring.Echo("Current firepoint is " .. firepoints[currentFirepoint])
+	--if firepoints[currentFirepoint] == firepoint1 then
+	--	Spring.UnitScript.Hide(missile1)
+	--	EmitSfx (missile4, "nano-tiny-animated")
+	--	Spring.UnitScript.Show(missile4)
+	--end
+	--if firepoints[currentFirepoint] == firepoint2 then
+	--	Spring.UnitScript.Hide(missile2)
+	--	EmitSfx (missile1, "nano-tiny-animated")
+	--	Spring.UnitScript.Show(missile1)
+	--end
+	--if firepoints[currentFirepoint] == firepoint3 then
+	--	Spring.UnitScript.Hide(missile3)
+	--	EmitSfx (missile4, "nano-tiny-animated")
+	--	Spring.UnitScript.Show(missile2)
+	--end
+	--if firepoints[currentFirepoint] == firepoint4 then
+	--	Spring.UnitScript.Hide(missile4)
+	--	EmitSfx (missile3, "nano-tiny-animated")
+	--	Spring.UnitScript.Show(missile3)
+	--end
+	currentFirepoint = currentFirepoint + 1
+	if currentFirepoint >= 5 then
+		currentFirepoint = 1
+	end
+	--Spring.Echo("Next firepoint is " .. firepoints[currentFirepoint])
 end
 
 function script.AimWeapon(weaponID, heading, pitch)
@@ -56,6 +91,10 @@ end
 function script.Killed()
 		Explode(barrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(missile1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(missile2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(missile3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		Explode(missile4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		Explode(pelvis, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		Explode(rthigh, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		Explode(rleg, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)

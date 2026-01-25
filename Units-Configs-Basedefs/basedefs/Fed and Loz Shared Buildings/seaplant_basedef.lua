@@ -53,10 +53,9 @@ unitDef                      = {
 			"deathceg3",
 			"deathceg4",
 		},
-
 		explosiongenerators        = {
-			"custom:nanoorb",
-			"custom:nano",
+			"custom:nano-animated",
+			"custom:nano-animated",
 			"custom:blacksmoke",
 			"custom:fusionreactionbasic",
 		},

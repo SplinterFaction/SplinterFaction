@@ -46,15 +46,11 @@ buildingfx()
       if (building) 
       {   
               emit-sfx 1024 from nanopoint1;
-              sleep 100;
               emit-sfx 1024 from nanopoint2;
-              sleep 330;
               emit-sfx 1024 from nanopoint3;
-              sleep 450;
               emit-sfx 1024 from nanopoint4;
-              sleep 575;
        }         
-   sleep 200;
+   sleep 425;
    }
 }
 

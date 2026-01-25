@@ -42,7 +42,7 @@ local unitDef                     = {
 	smoothAnim                    = true,
 	unitname                      = unitName,
 	workerTime                    = 0,
-	yardMap                       = "oooo oooo oooo oooo",
+	yardMap                       = "oggo oggo oggo oggo",
 
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {

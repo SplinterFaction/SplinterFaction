@@ -144,6 +144,23 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
+	--[[
+	local explosionPieces = {
+		base,
+		cannonturret1, cannonbarrel1, cannonfirepoint1,
+		cannonturret2, cannonbarrel2, cannonfirepoint2,
+		cannonturret3, cannonbarrel3, cannonfirepoint3,
+		laserturret1, laserbarrel1, laserfirepoint1,
+		laserturret2, laserbarrel2, laserfirepoint2,
+		wake,
+	}
+
+	for i = 1, #explosionPieces do
+		common.CustomEmitter(explosionPieces[i], "genericunitexplosion-small")
+		Sleep(math.random(50, 120)) -- stagger timing slightly
+	end
+	]]--
+
 	Explode(cannonturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 	Explode(cannonturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)

@@ -85,7 +85,14 @@ function script.StartBuilding(heading, pitch)
     SetSignalMask(SIG_AIM2)
     SetUnitValue(COB.INBUILDSTANCE, 1)
     building = true
-    --StartThread(BuildFX)
+    StartThread(BuildFX)
+end
+
+function BuildFX()
+    while(building == true) do
+        EmitSfx (nano1, "nano-animated")
+        Sleep(425)
+    end
 end
 
 function script.QueryNanoPiece()

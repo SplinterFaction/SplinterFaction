@@ -56,8 +56,8 @@ unitDef                     = {
 		}, 
 
 		explosiongenerators       = {
-			"custom:nanoorb",
-			"custom:nano",
+			"custom:nano-animated",
+			"custom:nano-animated",
 			"custom:blacksmoke",
 			"custom:fusionreactionbasic",
 		},

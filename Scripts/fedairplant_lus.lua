@@ -27,10 +27,9 @@ end
 
 function BuildFX()
 	while(building == true) do
-		EmitSfx (nanopoint1, 1024)
-		Sleep(200)
-		EmitSfx (nanopoint2, 1024)
-		Sleep(325)
+		EmitSfx (nanopoint1, "nano-animated")
+		EmitSfx (nanopoint2, "nano-animated")
+		Sleep(425)
 	end
 end
 

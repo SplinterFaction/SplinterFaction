@@ -1,4 +1,4 @@
-pelvis, turret, barrel1, firepoint1, firepoint2, firepoint3, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'firepoint2', 'firepoint3', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
+pelvis, turret, barrel1, firepoint1, firepoint2, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'barrel1', 'firepoint1', 'firepoint2', 'dirt',  'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
 
 common = include("headers/common_includes_lus.lua")
 
@@ -12,7 +12,7 @@ terrainType = "terrainType"
 common.WalkScript()
 
 function script.Create()
-	StartThread(common.SmokeUnit, {pelvis, turret, barrel1, firepoint1, firepoint2, firepoint3, lthigh, rthigh, lleg, rleg, lfoot, rfoot})
+	StartThread(common.SmokeUnit, {pelvis, turret, barrel1, firepoint1, firepoint2, lthigh, rthigh, lleg, rleg, lfoot, rfoot})
 end
 
 function thrust()
@@ -30,7 +30,7 @@ function script.AimFromWeapon(weaponID)
 	return turret
 end
 
-local firepoints = {firepoint1, firepoint2, firepoint3}
+local firepoints = {firepoint1, firepoint2}
 local currentFirepoint = 1
 
 function script.QueryWeapon(weaponID)
@@ -38,7 +38,7 @@ function script.QueryWeapon(weaponID)
 end
 
 function script.FireWeapon(weaponID)
-	currentFirepoint = 4 - currentFirepoint
+	currentFirepoint = 3 - currentFirepoint
 	EmitSfx (firepoints[currentFirepoint], 1024)
 end
 
