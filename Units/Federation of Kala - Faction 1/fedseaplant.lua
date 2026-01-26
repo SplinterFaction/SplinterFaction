@@ -8,8 +8,8 @@ buildCostMetal = 300
 
 humanName = [[Sea Factory]]
 
-objectName = "sharedseaplant2.s3o"
-script = "sharedseaplant.cob"
+objectName = "fedseaplant.s3o"
+script = "fedseaplant.cob"
 
 tech = [[tech1]]
 

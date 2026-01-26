@@ -20,8 +20,8 @@ workertime = 1 -- Baseline because this gets multiplied in the tech based factor
 
 movementclass = [[WALKERTANK4]]
 
-objectname = [[fedcommander_up1.s3o]]
-script = [[ecommander4-battle.cob]]
+objectname = [[fedcommander2_up1.s3o]]
+script = [[fed/hbot/fedcommander2_up1_lus.lua]]
 
 footprintx = 4
 footprintz = 4
