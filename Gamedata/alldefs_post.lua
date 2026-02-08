@@ -1138,6 +1138,12 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 			unitDef.buildtime = math.floor(totalValueInMetal + 0.5)
 
+			if unitDef.customparams then
+				if unitDef.customparams.buildtimemultiplier then
+					unitDef.buildtime = unitDef.buildtime * tonumber(unitDef.customparams.buildtimemultiplier)
+				end
+			end
+
 
 			-- Set global Buildspeed
 			if unitDef.customparams then
@@ -1159,6 +1165,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			-- Tier Based Buildtimes
+			if unitDef.customparams and unitDef.customparams.requiretech == "tech0" then
+				unitDef.buildtime = unitDef.buildtime * 0.5
+			end
+
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
 				unitDef.buildtime = unitDef.buildtime / 2
 			end

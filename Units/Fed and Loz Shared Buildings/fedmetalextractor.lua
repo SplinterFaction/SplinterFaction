@@ -8,6 +8,7 @@ metalMultiplier = 3
 
 buildCostMetal = 50
 energyUse = 0
+buildtimemultiplier = 2
 
 primaryCEG = "custom:fusionreactionnuclear-1color"
 

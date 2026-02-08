@@ -67,6 +67,7 @@ unitDef                     = {
 		unitrole				  = "Economy",
 		metal_maker               = true,
 		metal_extractor           = true, --Keeping this flag for compatibility
+		buildtimemultiplier       = buildtimemultiplier,
 		iseco                     = 1,
 		needed_cover              = 3,
 		death_sounds              = "generic",
