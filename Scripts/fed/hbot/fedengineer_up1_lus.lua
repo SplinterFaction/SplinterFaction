@@ -67,7 +67,6 @@ function script.QueryNanoPiece()
 end
 
 function script.Killed()
-		Explode(nanos, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		Explode(pelvis, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
 		Explode(nanoarm1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)

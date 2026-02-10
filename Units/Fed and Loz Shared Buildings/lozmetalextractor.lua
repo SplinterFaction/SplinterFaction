@@ -4,7 +4,7 @@ unitName = [[lozmetalextractor]]
 
 --------------------------------------------------------------------------------
 
-metalMultiplier = 3
+metalMultiplier = 0
 
 buildCostMetal = 50
 energyUse = 0
