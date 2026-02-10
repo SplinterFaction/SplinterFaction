@@ -3,15 +3,12 @@
 unitName = [[fedmetalextractor_up3]]
 
 --------------------------------------------------------------------------------
-
-metalMultiplier = 24
-
 buildCostMetal = 1200
-energyUse = 100
 
 primaryCEG = "custom:fusionreactionnuclear-4color"
 
-humanName = [[Metal Extractor - Tech 3]]
+humanName = [[E->M Converter (Tech 3)]]
+description = [[Converts energy to metal]]
 
 iconType = [[structuremetalgeneratort3]]
 

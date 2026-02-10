@@ -3,16 +3,12 @@
 unitName = [[lozmetalextractor]]
 
 --------------------------------------------------------------------------------
-
-metalMultiplier = 0
-
 buildCostMetal = 50
-energyUse = 0
-buildtimemultiplier = 2
 
 primaryCEG = "custom:fusionreactionnuclear-1color"
 
-humanName = [[Metal Extractor - Tech 0]]
+humanName = [[E->M Converter (Tech 0)]]
+description = [[Converts energy to metal]]
 
 iconType = [[structuremetalgeneratort0]]
 

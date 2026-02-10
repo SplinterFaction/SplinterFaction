@@ -17,8 +17,8 @@ end
 -- for k,v in pairs(Spring.GetGroundDecalTextures(nil,false)) do Spring.Echo("[Metal Spot Drawer] ",k,v) end
 
 -- NOTE: Texture must be part of the decal atlas (e.g., used in unitdefs or sfx)
-local decalTexture = "maindecal_1"
-local decalTextureNormal = "normdecal_1"
+local decalTexture = "maindecal_3"
+local decalTextureNormal = "normdecal_3"
 local decalSize = 85
 
 local decalIDs = {}

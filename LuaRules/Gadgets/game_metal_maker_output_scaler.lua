@@ -32,7 +32,7 @@ end
 local METAL_CHANNEL = "cmm"
 
 -- Energy consumption channel (this is the usual one used for upkeep)
-local ENERGY_USE_CHANNEL = "use"
+local ENERGY_USE_CHANNEL = "cue"
 
 -- Tier multipliers (metalSpot_value * multiplier)
 local multipliersByName = {

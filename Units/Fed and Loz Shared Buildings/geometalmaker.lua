@@ -3,15 +3,12 @@
 unitName = [[geometalmaker]]
 
 --------------------------------------------------------------------------------
-
-metalMultiplier = 64
-
 buildCostMetal = 4800
-energyUse = 500
 
 primaryCEG = "custom:fusionreactionnuclear-4color"
 
-humanName = [[Geothermal Metal Maker]]
+humanName = [[Geothermal E->M Converter (Tech 4)]]
+description = [[Converts energy to metal]]
 
 explodeAsSelfSAs = [[hugeBuildingExplosionGenericGreen]]
 
