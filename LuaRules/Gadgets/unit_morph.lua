@@ -806,6 +806,84 @@ if (gadgetHandler:IsSyncedCode()) then
     end
   end
 
+	-- ============================================================================
+	-- Command queue preservation (uses cmd.options.coded like engine expects)
+	-- ============================================================================
+
+	local function IsMorphCommand(cmdID)
+	  if cmdID == CMD_MORPH_STOP or cmdID == CMD_MORPH_PAUSE or cmdID == CMD_MORPH_QUEUE then
+		return true
+	  end
+	  return (cmdID >= CMD_MORPH and cmdID < (CMD_MORPH + MAX_MORPH))
+	end
+
+	local function NewUnitCanBuild(newUnitID)
+	  local newDefID = spGetUnitDefID(newUnitID)
+	  if not newDefID then return false end
+	  local ud = UnitDefs[newDefID]
+	  return (ud and ud.buildOptions and next(ud.buildOptions) ~= nil) or false
+	end
+
+	local function CopyCommandQueue_Coded(oldUnitID, newUnitID)
+	  if not oldUnitID or not newUnitID then return end
+
+	  local newCanBuild = NewUnitCanBuild(newUnitID)
+
+	  -- Pull the *full* command queue with rich options data
+	  local commandQueue = Spring.GetUnitCommands(oldUnitID, -1)
+	  if not commandQueue or not commandQueue[1] then return end
+
+	  -- Stop new unit so we can deterministically rebuild its queue
+	  SpGiveOrderToUnit(newUnitID, CMD.STOP, {}, 0)
+
+	  local teamID = spGetUnitTeam(oldUnitID)
+
+	  for i = 1, #commandQueue do
+		local command = commandQueue[i]
+		if command and command.id then
+		  local id = command.id
+
+		  -- Skip morph and queue-editing commands
+		  if (not IsMorphCommand(id)) and id ~= CMD.INSERT and id ~= CMD.REMOVE then
+			local opts = command.options or {}
+			-- Key bit: if this command does NOT already have SHIFT,
+			-- force SHIFT so re-adding it doesn’t wipe earlier commands.
+			local coded = (opts.coded or 0) + ((opts.shift and 0) or CMD.OPT_SHIFT)
+
+			-- Build commands are negative IDs. Only replay them if the new unit can build.
+			if id < 0 then
+			  if newCanBuild then
+				-- Optional “repair-case for construction” workaround (copied from your working gadget)
+				-- If the build target already exists on that spot, it becomes a repair order.
+				if command.params and command.params[1] and command.params[3] then
+				  local x = command.params[1]
+				  local z = command.params[3]
+				  local units = CallAsTeam(teamID, Spring.GetUnitsInRectangle, x - 16, z - 16, x + 16, z + 16, -3)
+				  local notFound = true
+				  for j = 1, #units do
+					local areaUnitID = units[j]
+					if Spring.GetUnitDefID(areaUnitID) == -id then
+					  Spring.GiveOrderToUnit(newUnitID, CMD.REPAIR, areaUnitID, coded)
+					  notFound = false
+					  break
+					end
+				  end
+				  if notFound then
+					Spring.GiveOrderToUnit(newUnitID, id, command.params, coded)
+				  end
+				else
+				  Spring.GiveOrderToUnit(newUnitID, id, command.params or {}, coded)
+				end
+			  end
+			else
+			  Spring.GiveOrderToUnit(newUnitID, id, command.params or {}, coded)
+			end
+		  end
+		end
+	  end
+	end
+
+
   --------------------------------------------------------------------------------
   --------------------------------------------------------------------------------
 
@@ -1151,24 +1229,8 @@ if (gadgetHandler:IsSyncedCode()) then
       { CMD.TRAJECTORY, { states.trajectory and 1 or 0 }, { } },
     })
 
-    --//Copy command queue        [deprecated]FIX : removed 04/2012, caused erros
-    -- Now copies only move/patrol commands from queue, shouldn't pose any issues
-    local cmdqueuesize = Spring.GetUnitCommands(unitID, 0)
-    if type(cmdqueuesize) == "number" then
-      local cmds = Spring.GetUnitCommands(unitID,100)
-      for i = 1, cmdqueuesize do  -- skip the first command (CMD_MORPH)
-        local cmd = cmds[i]
-        if istable(cmd) and cmd.id and (cmd.id == CMD.MOVE or cmd.id == CMD.PATROL) then
-          local m = { x = cmd.params[1], z = cmd.params[3] }
-          if m.x and m.z then
-            local y = Spring.GetGroundHeight(m.x, m.z)
-            Spring.GiveOrderToUnit(newUnit, CMD.INSERT,
-                                   {-1, cmd.id, CMD.OPT_SHIFT, m.x, y, m.z}, {"alt"}
-            )
-          end
-        end
-      end
-    end
+    --// Copy old unit's command queue to the new unit (full queue, coded options)
+	CopyCommandQueue_Coded(unitID, newUnit)
 
     --//reassign assist commands to new unit
     ReAssignAssists(newUnit, unitID)
