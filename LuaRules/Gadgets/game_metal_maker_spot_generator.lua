@@ -3,6 +3,7 @@ Files that are related and helpers for this Gadget
 
 Gadgets:
 game_metal_maker_spot_generator
+game_metal_maker_output_scaler
 luarules/configs/metalmakerspots/helpers.lua
 luarules/configs/metalmakerspots/algorithms/ <- This is where the various placement algorithms live.
 

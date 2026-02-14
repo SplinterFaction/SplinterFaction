@@ -1,9 +1,6 @@
 --[[
 Files that are related and helpers for this Gadget
 
-Gadgets:
-game_random_symmetric_geovents
-
 Widgets:
 game_geovent_spot_loader
 game_geovent_spot_drawer
