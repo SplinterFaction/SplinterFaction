@@ -5,7 +5,7 @@ function widget:GetInfo()
 		author  = "",
 		date    = "2025-06-10",
 		license = "GPLv2",
-		layer   = 0,
+		layer   = 9000,
 		enabled = true,
 	}
 end
