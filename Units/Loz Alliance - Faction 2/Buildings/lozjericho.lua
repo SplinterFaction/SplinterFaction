@@ -6,7 +6,7 @@ unitName = [[lozjericho]]
 
 humanName = [[Jericho]]
 
-buildtimemultiplier = 0.5
+buildtimemultiplier = 0.75
 
 objectName = [[lozjericho.s3o]]
 script = [[lozjericho_lus.lua]]

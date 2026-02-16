@@ -6,7 +6,7 @@ unitName = [[lozrazor]]
 
 humanName = [[Razor]]
 
-buildtimemultiplier = 0.5
+buildtimemultiplier = 0.75
 
 objectName = [[lozrazor.s3o]]
 script = [[lozrazor_lus.lua]]

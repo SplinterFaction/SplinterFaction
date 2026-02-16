@@ -6,7 +6,7 @@ unitName = [[fedstinger]]
 
 humanName = [[Stinger]]
 
-buildtimemultiplier = 0.5
+buildtimemultiplier = 0.75
 
 objectName = [[fedstinger.s3o]]
 script = [[fedwasp_lus.lua]]

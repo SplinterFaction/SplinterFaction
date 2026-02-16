@@ -6,7 +6,7 @@ unitName = [[fedmenlo]]
 
 humanName = [[Menlo]]
 
-buildtimemultiplier = 0.5
+buildtimemultiplier = 0.75
 
 objectName = [[fedmenlo.s3o]]
 script = [[fedmenlo_lus.lua]]
