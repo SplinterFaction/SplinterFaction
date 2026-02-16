@@ -129,6 +129,7 @@ weaponDefs                 = {
 		fallOffRate            = 0,
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
+		model                   = "projectile/projectileorange.s3o",
 		name                   = "MachineGun",
 		range                  = 850,
 		reloadtime             = 1,

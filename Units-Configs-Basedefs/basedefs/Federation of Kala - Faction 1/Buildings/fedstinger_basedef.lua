@@ -62,6 +62,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Short Range Anti-Air",
 		unitrole_sound            = "turret",
@@ -107,6 +108,7 @@ weaponDefs = {
 		fallOffRate            = 0,
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
+		model                  = "projectile/projectileorange.s3o",
 		name                   = "MachineGun",
 		range                  = 700,
 		reloadtime             = 1,

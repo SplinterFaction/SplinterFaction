@@ -66,6 +66,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Anti-Swarm Turret",
 		unitrole_sound            = "turret",

@@ -6,6 +6,8 @@ unitName = [[fedimmolator]]
 
 humanName = [[Immolator]]
 
+buildtimemultiplier = 0.5
+
 objectName = [[fedimmolator.s3o]]
 script = [[fedimmolator_lus.lua]]
 

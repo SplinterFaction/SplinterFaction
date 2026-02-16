@@ -6,6 +6,8 @@ unitName = [[fedjavelin]]
 
 humanName = [[Javelin]]
 
+buildtimemultiplier = 0.5
+
 objectName = [[fedjavelin.s3o]]
 script = [[fedjavelin_lus.lua]]
 

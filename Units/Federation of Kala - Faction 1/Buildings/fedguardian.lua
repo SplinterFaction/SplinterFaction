@@ -6,7 +6,7 @@ unitName = [[fedguardian]]
 
 humanName = [[Guardian]]
 
-objectName = [[fedguardian.s3o]]
+objectName = [[fedguardian2.s3o]]
 script = [[fedguardian_lus.lua]]
 
 tech = [[tech3]]

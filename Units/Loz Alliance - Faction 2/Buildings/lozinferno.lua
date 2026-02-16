@@ -6,6 +6,8 @@ unitName = [[lozinferno]]
 
 humanName = [[Inferno]]
 
+buildtimemultiplier = 0.5
+
 objectName = [[lozinferno.s3o]]
 script = [[lozinferno_lus.lua]]
 

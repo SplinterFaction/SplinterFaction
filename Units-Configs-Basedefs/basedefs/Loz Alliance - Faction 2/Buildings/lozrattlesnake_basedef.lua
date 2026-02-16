@@ -60,6 +60,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Medium Range Anti-Air",
 		unitrole_sound            = "turret",
@@ -99,6 +100,7 @@ weaponDefs                  = {
 		fireStarter              = 50,
 		impulseFactor            = 0,
 		minintensity             = "1",
+		model                   = "projectile/projectileorange.s3o",
 		name                     = "High Explosive Flak Cannon",
 		range                    = 1650,
 		reloadtime               = 3,

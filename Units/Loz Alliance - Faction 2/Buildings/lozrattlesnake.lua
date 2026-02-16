@@ -6,6 +6,8 @@ unitName = [[lozrattlesnake]]
 
 humanName = [[Rattlesnake]]
 
+buildtimemultiplier = 0.5
+
 objectName = [[lozrattlesnake.s3o]]
 script = [[lozrattlesnake_lus.lua]]
 

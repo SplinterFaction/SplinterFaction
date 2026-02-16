@@ -61,6 +61,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Single-Target Turret",
 		unitrole_sound            = "turret",
@@ -103,6 +104,7 @@ weaponDefs = {
 		highTrajectory		   = 2,
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
+		model                   = "projectile/projectileorange.s3o",
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 1200,
@@ -117,7 +119,7 @@ weaponDefs = {
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 2000,
+		weaponVelocity         = 1000,
 		customparams             = {
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos

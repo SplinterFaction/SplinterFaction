@@ -60,6 +60,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Medium Range Anti-Air",
 		unitrole_sound            = "turret",

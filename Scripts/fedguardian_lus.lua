@@ -11,7 +11,7 @@ end
 
 local function RestoreAfterDelay()
     Sleep(2000)
-    Turn(cannonturret1, y_axis, 0, 5)
+    Turn(cannonbarrel1, y_axis, 0, 5)
     Turn(cannonbarrel1, x_axis, 0, 5)
 end
 
@@ -35,9 +35,9 @@ end
 function script.AimWeapon(weaponID, heading, pitch)
     Signal(SIG_AIM)
     SetSignalMask(SIG_AIM)
-    Turn(cannonturret1, y_axis, heading, 2)
+    Turn(cannonbarrel1, y_axis, heading, 2)
     Turn(cannonbarrel1, x_axis, -pitch, 2)
-    WaitForTurn(cannonturret1, y_axis)
+    WaitForTurn(cannonbarrel1, y_axis)
     WaitForTurn(cannonbarrel1, x_axis)
     StartThread(RestoreAfterDelay)
     --Spring.Echo("AimWeapon: FireWeapon")
