@@ -14,7 +14,7 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	maxVelocity        = 12,
+	maxVelocity        = 6,
 	acceleration       = 0.25,     -- Slower takeoff and sluggish momentum
 	maxAcc             = 0.7,      -- Slow to correct heading
 
@@ -262,7 +262,7 @@ weaponDefs                 = {
 		turnrate                 = 10,
 		turret                   = true,
 		tracks                   = false,
-		startVelocity            = 300,
+		startVelocity            = 150,
 		weaponAcceleration       = -50,
 		flightTime               = 10,
 		weaponVelocity           = 0,

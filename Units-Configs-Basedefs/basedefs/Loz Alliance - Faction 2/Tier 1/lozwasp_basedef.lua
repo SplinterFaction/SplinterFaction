@@ -14,7 +14,7 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	maxVelocity        = 16,     -- Your defined top speed
+	maxVelocity        = 8,     -- Your defined top speed
 	acceleration       = 0.42,    -- Slight bump to help it ramp to speed
 	maxAcc             = 1.2,     -- A little more responsive at higher speed
 

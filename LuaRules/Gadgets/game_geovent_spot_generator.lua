@@ -49,9 +49,9 @@ local maxGeos = 8
 local geoFeatureDef = FeatureDefNames["geovent"]
 local mapX = Game.mapSizeX
 local mapZ = Game.mapSizeZ
-local minDistanceFromEdge = 256
+local minDistanceFromEdge = 512
 local maxElevationDiff = 25
-local geoMetalMinDist = 128 -- Minimum distance from any metal spot
+local geoMetalMinDist = 512 -- Minimum distance from any metal spot
 local geoPairs = {}  -- table to hold pairs of geo positions
 local geoSpots = {}
 

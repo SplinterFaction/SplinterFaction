@@ -173,7 +173,7 @@ function gadget:Initialize()
 
 	--Specify a minimum spot value and get rid of fractions
 	spotValue = math.floor(spotValue + 0.5)
-	if spotValue < 2 then
+	if spotValue < 1 then
 		spotValue = minimumSpotValue
 	end
 

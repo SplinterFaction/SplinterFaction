@@ -9,7 +9,7 @@ function widget:GetInfo()
         license   = "GNU GPL, v2 or later",
         version   = 1,
         layer     = 5,
-        enabled   = false  --  loaded by default?
+        enabled   = true  --  loaded by default?
     }
 end
 
@@ -52,41 +52,23 @@ end
 
 
 function switchAirpadToFlyMode(unitID, unitDefID)
-    -- if (unitDefID == UnitDefNames["eairengineer"].id or
-	-- unitDefID == UnitDefNames["ebomber"].id or
-	-- unitDefID == UnitDefNames["edrone"].id or
-	-- unitDefID == UnitDefNames["edrone_up1"].id or
-	-- unitDefID == UnitDefNames["edrone_up2"].id or
-	-- unitDefID == UnitDefNames["edrone_up3"].id or
-	-- unitDefID == UnitDefNames["efighter"].id or
-	-- unitDefID == UnitDefNames["egunship2"].id or
-	-- unitDefID == UnitDefNames["escout"].id or
-	-- unitDefID == UnitDefNames["eraider"].id or
-	-- unitDefID == UnitDefNames["eraider_up1"].id or
-	-- unitDefID == UnitDefNames["eraider_up2"].id or
-	-- unitDefID == UnitDefNames["eraider_up3"].id or
-	-- unitDefID == UnitDefNames["etransport"].id or
-	-- unitDefID == UnitDefNames["ebomber_up1"].id or
-	-- unitDefID == UnitDefNames["efighter_up1"].id or
-	-- unitDefID == UnitDefNames["egunship2_up1"].id or
-	-- unitDefID == UnitDefNames["escout_up1"].id or
-	-- unitDefID == UnitDefNames["etransport_up1"].id or
-	-- unitDefID == UnitDefNames["ebomber_up2"].id or
-	-- unitDefID == UnitDefNames["efighter_up2"].id or
-	-- unitDefID == UnitDefNames["egunship2_up2"].id or
-	-- unitDefID == UnitDefNames["escout_up2"].id or
-	-- unitDefID == UnitDefNames["etransport_up2"].id or	
-	-- unitDefID == UnitDefNames["ebomber_up3"].id or
-	-- unitDefID == UnitDefNames["efighter_up3"].id or
-	-- unitDefID == UnitDefNames["egunship2_up3"].id or
-	-- unitDefID == UnitDefNames["escout_up3"].id or
-	-- unitDefID == UnitDefNames["etransport_up3"].id or
-	-- unitDefID == UnitDefNames["ekrow"].id or
-	-- unitDefID == UnitDefNames["ekrow_up1"].id or
-	-- unitDefID == UnitDefNames["ekrow_up2"].id or
-	-- unitDefID == UnitDefNames["ekrow_up3"].id) then
-        -- spGiveOrderToUnit(unitID, CMD.IDLEMODE, { 0 }, {})
-    -- end
+     if (unitDefID == UnitDefNames["fedairplant"].id or
+         unitDefID == UnitDefNames["fedsparrow"].id or
+         unitDefID == UnitDefNames["fedcrow"].id or
+         unitDefID == UnitDefNames["fedhawk"].id or
+         unitDefID == UnitDefNames["fedcondor"].id or
+         unitDefID == UnitDefNames["fedeagle"].id or
+         unitDefID == UnitDefNames["fedfalcon"].id or
+         unitDefID == UnitDefNames["lozairplant"].id or
+         unitDefID == UnitDefNames["lozwasp"].id or
+         unitDefID == UnitDefNames["lozbumblebee"].id or
+         unitDefID == UnitDefNames["lozdragonfly"].id or
+         unitDefID == UnitDefNames["lozhornet"].id or
+         unitDefID == UnitDefNames["lozcrane"].id or
+         unitDefID == UnitDefNames["lozlocust"].id or
+         unitDefID == UnitDefNames["loztitan"].id) then
+         spGiveOrderToUnit(unitID, CMD.IDLEMODE, { 0 }, {})
+     end
 end
 
 function widget:PlayerChanged(playerID)
