@@ -66,7 +66,7 @@ local metalWarning = false
 
 local VOLUI = 0.015*Spring.GetConfigInt('snd_volui') or 1.0
 
-simplifiedResourceBar = Spring.GetConfigInt("evo_simplifiedresourcebar", 1)
+simplifiedResourceBar = Spring.GetConfigInt("evo_simplifiedresourcebar", 0)
 
 local energyWarningTimeout = 15
 local supplyWarningTimeout = 15
@@ -189,7 +189,7 @@ function widget:GameFrame(n)
 		local spectator = Spring.GetSpectatingState()
 		--Spring.Echo(spectator)
 		resourcePrompts = Spring.GetConfigInt("evo_resourceprompts", 1)
-		simplifiedResourceBar = Spring.GetConfigInt("evo_simplifiedresourcebar", 1)
+		simplifiedResourceBar = Spring.GetConfigInt("evo_simplifiedresourcebar", 0)
 
 		--Assume that if it isn't set, resourcePrompts is true
 		if resourcePrompts == nil then

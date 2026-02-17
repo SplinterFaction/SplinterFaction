@@ -2391,7 +2391,7 @@ function init()
 		{id="buildmenubigtooltip", group="ui", name=widgetOptionColor.."   extensive unit info", type="bool", value=(WG['red_buildmenu']~=nil and WG['red_buildmenu'].getConfigUnitBigTooltip~=nil and WG['red_buildmenu'].getConfigUnitBigTooltip()), description='Displays elaborative unit description when availible'},
 
 		{id="resourceprompts", group="ui", name="Audio/Visual Helper Prompts", type="bool", value=tonumber(Spring.GetConfigInt("evo_resourceprompts",1) or 1) == 1, description="If enabled, messages will be sent to the chat as well as\naudio cues when your resources need attention"},
-		{id="simplifiedresourcebar", group="ui", name="Simplified Resource Bar", type="bool", value=tonumber(Spring.GetConfigInt("evo_simplifiedresourcebar",1) or 1) == 1, description="Removes extra information from the resource bar"},
+		{id="simplifiedresourcebar", group="ui", name="Simplified Resource Bar", type="bool", value=tonumber(Spring.GetConfigInt("evo_simplifiedresourcebar",0) or 0) == 0, description="Removes extra information from the resource bar"},
 
 		--{id="fancyselunits", group="gfx", widget="Fancy Selected Units", name="Fancy Selected Units", type="bool", value=GetWidgetToggleValue("Fancy Selected Units"), description=''},
 
@@ -2463,8 +2463,8 @@ function init()
         {id="transportai", group="game", widget="Transport AI", name="Transport AI", type="bool", value=GetWidgetToggleValue("Transport AI"), description='Transport units automatically pick up new units going to factory waypoint.'},
 		{id="settargetdefault", group="game", widget="Set target default", name="Set-target as default", type="bool", value=GetWidgetToggleValue("Set target default"), description='Replace default attack command to a set-target command\n(when rightclicked on enemy unit)'},
 		{id="customrings", group="game", name="Range Rings Mode", type="select", options={'My Units','My Units + Allied Units','All Units'}, value=Spring.GetConfigInt("CustomUnitRingsMode",1) + 1, description='Rings are used to show common useful ranges of various units and abilities.\n\nExamples: Commander Skillshot Range, Healstation Radius, etc.'},
-		{id="autotechup", group="game", widget="Commander AutoUpgrade", name="Commander AutoUpgrade", type="bool", value=GetWidgetToggleValue("Commander AutoUpgrade"), description='Do Commanders Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
-		{id="mexautoupgrade", group="game", widget="MetalExtractor AutoUpgrade", name="MetalExtractor AutoUpgrade", type="bool", value=GetWidgetToggleValue("MetalExtractor AutoUpgrade"), description='Do Metal Extractors Automatically Upgrade? (Default: ON)\n\nGenerally, don\'t turn this off unless you have a *VERY* good reason.'},
+		{id="autotechup", group="game", widget="Commander AutoUpgrade", name="Commander AutoUpgrade", type="bool", value=GetWidgetToggleValue("Commander AutoUpgrade"), description='Do Commanders Automatically Upgrade? (Default: OFF)\n\nThis is meant as a helper so that if you understand the economy, you can effectively let the game handle your upgrades.'},
+		{id="mexautoupgrade", group="game", widget="MetalExtractor AutoUpgrade", name="MetalExtractor AutoUpgrade", type="bool", value=GetWidgetToggleValue("MetalExtractor AutoUpgrade"), description='Do Metal Extractors Automatically Upgrade? (Default: OFF)\n\nThis is meant as a helper so that if you understand the economy, you can effectively let the game handle your upgrades.'},
 		{id="usenetworksmoothing", group="game", name="Network Smoothing", type="bool", value=Spring.GetConfigInt("sf_useNetworkSmoothing",1) == 1, description='Network smoothing helps players with unstable internet. When enabled, it adds a 0.5s delay\nto commands. This delay feels like lag but remains consistent. Disabling it with a poor\nconnection causes choppy input. With a good connection, disabling it removes the 0.5s lag.'},
 	}
 
