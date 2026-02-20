@@ -41,7 +41,7 @@ local SetSquareBuildingMask = Spring.SetSquareBuildingMask
 local GetGroundHeight       = Spring.GetGroundHeight
 local Echo                  = Spring.Echo
 
-local minimumSpotValue      = 1 --The lowest amount of metal a spot is allowed to give
+local minimumSpotValue      = 2 --The lowest amount of metal a spot is allowed to give
 
 local Helpers = VFS.Include("luarules/configs/metalmakerspots/helpers.lua")
 
@@ -173,7 +173,7 @@ function gadget:Initialize()
 
 	--Specify a minimum spot value and get rid of fractions
 	spotValue = math.floor(spotValue + 0.5)
-	if spotValue < 1 then
+	if spotValue < minimumSpotValue then
 		spotValue = minimumSpotValue
 	end
 
