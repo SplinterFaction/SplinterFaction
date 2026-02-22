@@ -809,7 +809,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			--------------------------------------------------------------------------------
 
 			if unitDef.customparams.unittype == "mobile" or unitDef.customparams.unittype == "ship" then
-				unitDef.losemitheight = 300
+				unitDef.losemitheight = 50
 				unitDef.seismicsignature = 1
 				unitDef.seismicdistance = 1
 				if unitDef.sightdistance <= 850 then
