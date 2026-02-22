@@ -41,14 +41,19 @@ local SetSquareBuildingMask = Spring.SetSquareBuildingMask
 local GetGroundHeight       = Spring.GetGroundHeight
 local Echo                  = Spring.Echo
 
-local minimumSpotValue      = 2 --The lowest amount of metal a spot is allowed to give
+local minimumSpotValue      = 1.5 --The lowest amount of metal a spot is allowed to give
 
 local Helpers = VFS.Include("luarules/configs/metalmakerspots/helpers.lua")
 
 -- -------------------------
 -- Algorithm selection
 -- -------------------------
-local algorithm = "stratified_random" -- e.g. "mirrored_group_declumped", etc.
+
+local algorithm = "stratified_random" -- e.g. "mirrored_group", "stratified_random", "map_defined", etc.
+if Spring.GetModOptions() ~= nil then
+	algorithm = Spring.GetModOptions().placementalgo
+end
+
 local ALGO_PATH = "luarules/configs/metalmakerspots/algorithms/" .. algorithm .. ".lua"
 
 local algo = VFS.Include(ALGO_PATH)
@@ -172,7 +177,7 @@ function gadget:Initialize()
 	local spotValue = (INCOME_PER_PLAYER * playerCount) / spotsTarget
 
 	--Specify a minimum spot value and get rid of fractions
-	spotValue = math.floor(spotValue + 0.5)
+	spotValue = math.floor(spotValue * 2 + 0.5) / 2
 	if spotValue < minimumSpotValue then
 		spotValue = minimumSpotValue
 	end
@@ -211,6 +216,8 @@ function gadget:Initialize()
 		spotValue = spotValue,
 		playerCount = playerCount,
 		mapCommonSize = commonSize,
+		-- income policy
+		incomePerPlayer = INCOME_PER_PLAYER,
 	}
 
 	local helpers = Helpers.New(ctx)
@@ -221,6 +228,36 @@ function gadget:Initialize()
 	local stats = algo.Generate(ctx, helpers) or {}
 
 	local metalSpots = ctx.spots
+
+	-- -------------------------
+	-- Optional: recompute spotValue based on actual placed count (algo policy)
+	-- -------------------------
+	local placedCount = #metalSpots
+	local policy = algo.policy or algo.POLICY or {}  -- allow either style
+
+	-- Default: do NOT change spotValue after generation.
+	-- Some algos (map-defined) may want to preserve income budget when placing over/under.
+	local recalc = policy.recalcSpotValueOnActualCount == true
+
+	if recalc and placedCount > 0 and placedCount ~= spotsTarget then
+		local newSpotValue = (ctx.incomePerPlayer * playerCount) / placedCount
+		ctx.spotValue = newSpotValue
+
+		--Specify a minimum spot value and get rid of fractions
+		newSpotValue = math.floor(spotValue * 2 + 0.5) / 2
+		if newSpotValue < minimumSpotValue then
+			newSpotValue = minimumSpotValue
+		end
+
+		Spring.SetGameRulesParam("metalSpot_value", newSpotValue)
+		Spring.SetGameRulesParam("metalSpot_target_effective", placedCount)
+
+		Echo(string.format(
+				"[MetalSpotGen] Policy: recalculated spotValue using placedCount=%d (requested=%d) => %.3f",
+				placedCount, spotsTarget, newSpotValue
+		))
+	end
+
 	Echo(string.format(
 			"[MetalSpotGen] Done. total spots=%d (spotsTarget=%d groupsTarget=%d)",
 			#metalSpots, spotsTarget, groupsTarget

@@ -2,8 +2,8 @@
 --------------------------------------------------------------------------------
 function widget:GetInfo()
     return {
-        name      = "Aircraft plants on Fly",
-        desc      = "Setting aircraft plants on Fly mode",
+        name      = "Aircraft on Always Fly Mode",
+        desc      = "Setting aircraft on Fly mode",
         author    = "[teh]decay",
         date      = "29 sept 2013",
         license   = "GNU GPL, v2 or later",
@@ -12,11 +12,6 @@ function widget:GetInfo()
         enabled   = true  --  loaded by default?
     }
 end
-
--- project page on github: https://github.com/jamerlan/unit_air_allways_fly
-
---Changelog
---
 
 -------------------------------
 
@@ -33,26 +28,27 @@ end
 
 function widget:UnitCreated(unitID, unitDefID, teamID, builderID)
     if(teamID == spGetMyTeamId()) then
-        switchAirpadToFlyMode(unitID, unitDefID)
+        switchAircraftToFlyMode(unitID, unitDefID)
     end
 end
 
 function widget:UnitTaken(unitID, unitDefID, unitTeam, newTeam)
     if(newTeam == spGetMyTeamId()) then
-        switchAirpadToFlyMode(unitID, unitDefID)
+        switchAircraftToFlyMode(unitID, unitDefID)
     end
 end
 
 
 function widget:UnitGiven(unitID, unitDefID, unitTeam, oldTeam)
     if(unitTeam == spGetMyTeamId()) then
-        switchAirpadToFlyMode(unitID, unitDefID)
+        switchAircraftToFlyMode(unitID, unitDefID)
     end
 end
 
 
-function switchAirpadToFlyMode(unitID, unitDefID)
+function switchAircraftToFlyMode(unitID, unitDefID)
      if (unitDefID == UnitDefNames["fedairplant"].id or
+         unitDefID == UnitDefNames["fedairengineer"].id or
          unitDefID == UnitDefNames["fedsparrow"].id or
          unitDefID == UnitDefNames["fedcrow"].id or
          unitDefID == UnitDefNames["fedhawk"].id or
@@ -60,6 +56,7 @@ function switchAirpadToFlyMode(unitID, unitDefID)
          unitDefID == UnitDefNames["fedeagle"].id or
          unitDefID == UnitDefNames["fedfalcon"].id or
          unitDefID == UnitDefNames["lozairplant"].id or
+         unitDefID == UnitDefNames["lozairengineer"].id or
          unitDefID == UnitDefNames["lozwasp"].id or
          unitDefID == UnitDefNames["lozbumblebee"].id or
          unitDefID == UnitDefNames["lozdragonfly"].id or
@@ -88,7 +85,7 @@ function widget:Initialize()
     end
 
     for _, unitID in ipairs(spGetTeamUnits(teamId)) do  -- init existing labs
-        switchAirpadToFlyMode(unitID, spGetUnitDefID(unitID))
+        switchAircraftToFlyMode(unitID, spGetUnitDefID(unitID))
     end
 
     return true

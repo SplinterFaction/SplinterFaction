@@ -86,6 +86,11 @@ local icontypes = {
 	},
 
 	--aircraft
+	airengineert1 = {
+		bitmap='icons/supcomish/airengineert1.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
 	airintelt1 = {
 		bitmap='icons/supcomish/airintelt1.png',
 		size=iconSize,

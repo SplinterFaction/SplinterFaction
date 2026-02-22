@@ -23,6 +23,7 @@ Shared.buildListf1landfac = {
 
 Shared.buildListFedAirPlant = {
 	[[airscout]],
+	[[fedairengineer]],
 	[[fedsparrow]],
 	[[fedcrow]],
 	[[fedhawk]],
@@ -59,6 +60,7 @@ Shared.buildListf2landfac = {
 
 Shared.buildListLozAirPlant = {
 	[[airscout]],
+	[[lozairengineer]],
 	[[lozwasp]],
 	[[lozbumblebee]],
 	[[lozdragonfly]],

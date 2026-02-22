@@ -2,7 +2,7 @@ function widget:GetInfo()
 	return {
 		name    = "Combat Power Display",
 		desc    = "Displays aggregated Combat Power and implements persistence (handled unsynced)",
-		author  = "ChatGPT",
+		author  = "",
 		date    = "2025-03-25",
 		license = "GNU GPL v2",
 		layer   = 0,

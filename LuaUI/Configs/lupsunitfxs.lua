@@ -33,6 +33,11 @@ effectUnitDefs = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=30, piece="engine4", onActive=true}},
 	},
 
+	fedairengineer = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, width =  2, length=15, piece="thruster1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, width =  2, length=15, piece="thruster2", onActive=true}},
+	},
+
 	fedsparrow = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine1", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  2, length=15, piece="engine2", onActive=true}},
@@ -73,6 +78,15 @@ effectUnitDefs = {
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=40, piece="engine2", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=40, piece="engine3", onActive=true}},
 		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=40, piece="engine4", onActive=true}},
+	},
+
+	lozairengineer = {
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing1thrust1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing1thrust2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing2thrust1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing2thrust2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing3thrust1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing3thrust2", onActive=true}},
 	},
 
 	lozwasp = {

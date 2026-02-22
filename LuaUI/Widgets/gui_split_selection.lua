@@ -2,7 +2,7 @@ function widget:GetInfo()
 	return {
 		name      = "Split Selection Hotkeys",
 		desc      = "Hotkeys to split current selection in half and swap/recombine",
-		author    = "ChatGPT",
+		author    = "",
 		date      = "2026-02-16",
 		license   = "GPLv2",
 		layer     = 0,

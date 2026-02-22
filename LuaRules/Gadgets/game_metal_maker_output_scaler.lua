@@ -3,7 +3,7 @@ function gadget:GetInfo()
 		name    = "Metal Maker Income Scaler",
 		desc    = "Sets metal maker output from metalSpot_value via SetUnitResourcing (cmm + energy use)",
 		author  = "",
-		date    = "2026-02-09",
+		date    = "2026-02-21",
 		license = "GPLv2",
 		layer   = 5,
 		enabled = true,
@@ -25,14 +25,28 @@ local function round(x)
 	return math.floor(x + 0.5)
 end
 
--- Choose which metal channel to drive.
--- For makers that should stop producing when toggled off / insufficient conditions:
---   "cmm" is the usual choice.
--- If you ever want "always produces regardless", switch to "umm".
+-- ------------------------------------------------------------
+-- Channels / tuning
+-- ------------------------------------------------------------
+
+-- Metal output channel:
+-- "cmm" = conditional metal maker (stops when toggled off / no energy, etc. depending on engine behavior)
 local METAL_CHANNEL = "cmm"
 
--- Energy consumption channel (this is the usual one used for upkeep)
+-- Energy consumption channel:
+-- Typically "cue" is the conditional energy use channel.
 local ENERGY_USE_CHANNEL = "cue"
+
+-- IMPORTANT: In many setups, resource "use" is represented as NEGATIVE.
+-- If you find energy isn't being drained, flip this to -1.
+local ENERGY_SIGN = -1
+
+-- Your original balance numbers were tuned around metalSpot_value = 3.
+local BASE_SPOT_VALUE = 3
+
+-- ------------------------------------------------------------
+-- Tier multipliers / base energy
+-- ------------------------------------------------------------
 
 -- Tier multipliers (metalSpot_value * multiplier)
 local multipliersByName = {
@@ -54,8 +68,8 @@ local multipliersByName = {
 	geometalmaker         = 21.333,
 }
 
--- Energy upkeep base numbers by tier
-local energyUseByName = {
+-- Base energy upkeep by tier (these are the numbers for metalSpot_value == 3)
+local energyBaseByName = {
 	lozmetalextractor     = 5,
 	fedmetalextractor     = 5,
 
@@ -74,22 +88,35 @@ local energyUseByName = {
 	geometalmaker         = 500,
 }
 
--- Precompute unitDefID -> config
+-- ------------------------------------------------------------
+-- Precompute unitDefID -> config (store ONLY base values here)
+-- ------------------------------------------------------------
+
 local byDefID = {}
 for unitDefID, ud in pairs(UnitDefs) do
-	local name = ud.name
+	local name = ud and ud.name
 	local mult = name and multipliersByName[name]
 	if mult then
 		byDefID[unitDefID] = {
-			mult = mult,
-			energy = energyUseByName[name] or 0,
-			name = name,
+			name       = name,
+			mult       = mult,
+			energyBase = energyBaseByName[name] or 0,
 		}
 	end
 end
 
+-- ------------------------------------------------------------
+-- Runtime state
+-- ------------------------------------------------------------
+
 local metalSpotValue = nil
-local appliedValue = nil
+local appliedValue   = nil
+
+local function GetScaledEnergy(energyBase)
+	-- Scale linearly vs BASE_SPOT_VALUE to preserve your original balance curve.
+	-- Keep as float; SetUnitResourcing accepts floats.
+	return energyBase * (metalSpotValue / BASE_SPOT_VALUE)
+end
 
 local function ApplyToUnit(unitID)
 	local udid = GetUnitDefID(unitID)
@@ -99,20 +126,18 @@ local function ApplyToUnit(unitID)
 	if not cfg then return end
 	if not metalSpotValue then return end
 
-	local makes = round(metalSpotValue * cfg.mult)
+	-- Metal production
+	local makes = metalSpotValue * cfg.mult
 	if makes < 0 then makes = 0 end
-
-	-- Conditional metal output
 	SetUnitResourcing(unitID, METAL_CHANNEL, makes)
 
-	-- Energy upkeep while producing (and generally tied to on/off state)
-	-- If you ever want "only consume when producing", this is usually correct.
-	-- If your game wants always-on energy drain, we'd switch to a different channel/logic.
-	SetUnitResourcing(unitID, ENERGY_USE_CHANNEL, cfg.energy)
+	-- Energy drain (scaled)
+	local scaledEnergy = GetScaledEnergy(cfg.energyBase)
+	SetUnitResourcing(unitID, ENERGY_USE_CHANNEL, ENERGY_SIGN * scaledEnergy)
 
-	-- Optional for UI/widgets:
+	-- Optional UI debug (uncomment if useful)
 	-- Spring.SetUnitRulesParam(unitID, "maker_metal", makes, {public=true})
-	-- Spring.SetUnitRulesParam(unitID, "maker_energy", cfg.energy, {public=true})
+	-- Spring.SetUnitRulesParam(unitID, "maker_energy", ENERGY_SIGN * scaledEnergy, {public=true})
 end
 
 local function ApplyToAllExisting()
@@ -125,38 +150,44 @@ local function ApplyToAllExisting()
 	end
 end
 
-function gadget:GameFrame()
+-- ------------------------------------------------------------
+-- Events
+-- ------------------------------------------------------------
+
+function gadget:GameFrame(n)
 	-- Wait until metalSpot_value exists
 	if not metalSpotValue then
 		local v = GetGameRulesParam("metalSpot_value")
-		if v and type(v) == "number" then
+		if type(v) == "number" then
 			metalSpotValue = v
-			appliedValue = v
-			Echo(string.format("[MetalMakerScaler] metalSpot_value=%.3f (channel=%s), applying maker outputs",
-			                   metalSpotValue, METAL_CHANNEL))
+			appliedValue   = v
+			Echo(string.format(
+					"[MetalMakerScaler] metalSpot_value=%.3f (metal=%s, energy=%s sign=%d), applying maker outputs",
+					metalSpotValue, METAL_CHANNEL, ENERGY_USE_CHANNEL, ENERGY_SIGN
+			))
 			ApplyToAllExisting()
 		end
 		return
 	end
 
-	-- If it changes mid-game, reapply
+	-- If it changes mid-game, reapply (because energy is computed live from current metalSpotValue)
 	local v = GetGameRulesParam("metalSpot_value")
-	if v and type(v) == "number" and v ~= appliedValue then
+	if type(v) == "number" and v ~= appliedValue then
 		metalSpotValue = v
-		appliedValue = v
+		appliedValue   = v
 		Echo(string.format("[MetalMakerScaler] metalSpot_value changed to %.3f, reapplying maker outputs", v))
 		ApplyToAllExisting()
 	end
 end
 
-function gadget:UnitFinished(unitID)
+function gadget:UnitFinished(unitID, unitDefID, unitTeam)
 	ApplyToUnit(unitID)
 end
 
-function gadget:UnitGiven(unitID)
+function gadget:UnitGiven(unitID, unitDefID, newTeam, oldTeam)
 	ApplyToUnit(unitID)
 end
 
-function gadget:UnitTaken(unitID)
+function gadget:UnitTaken(unitID, unitDefID, oldTeam, newTeam)
 	ApplyToUnit(unitID)
 end

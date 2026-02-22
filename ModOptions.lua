@@ -49,6 +49,26 @@ local options= {
 	},
 
 	{
+		key    = 'resourceplacement',
+		name   = 'Resource Locations',
+		desc   = 'Allows players to define how resource locations are placed',
+		type   = 'section',
+	},
+	{
+		key    = 'placementalgo',
+		name   = 'Placement Algorithm',
+		desc   = 'This setting changes how resource locations are placed. Most are randomly generated, but there is also a setting for Map Defined.',
+		type   = "list",
+		def    = "stratified_random",
+		section= "resourceplacement",
+		items={
+			{key="stratified_random", name="Stratified Random", desc="Stratified Random is a random placement algorithm that is designed to evenly and randomly place resource locations around the map."},
+			{key="mirrored_group", name="Mirrored Quadrants", desc="Mirrored Quadrants will place resource locations in one quadrant, then mirror to an adjacent quadrant, then mirror the half so that you get a perfectly symmetrical resource map."},
+			{key="map_defined", name="Map Defined", desc="Map Defined resource locations used the locations that were originally defined by the map maker."},
+		}
+	},
+
+	{
 		key    = 'restrictions',
 		name   = 'Restrictions',
 		desc   = 'Engine limitations on game behavior',
