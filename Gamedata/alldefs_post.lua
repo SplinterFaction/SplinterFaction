@@ -201,6 +201,10 @@ function UnitDef_Post(name, uDef)
 		uDef.corpse = ""
 	end
 
+	if uDef.customparams and uDef.customparams.corpse	== nil then
+		uDef.customparams.corpse = uDef.unitname .. "_dead"
+	end
+
 	if string.find(name, '_scav') then
 		VFS.Include("gamedata/scavengers/unitdef_post.lua")
 		uDef = scav_Udef_Post(name, uDef)
@@ -615,7 +619,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 		for id,unitDef in pairs(UnitDefs) do
 
 			-------------------------------
-			-- Set Energy Converter amounts
+			-- Set Buildtime and Costs
 			-------------------------------
 
 			if unitDef.customparams and unitDef.customparams.unitdefbuildtime == nil then
@@ -1057,6 +1061,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Lets get rid of any funky decimal places
 			unitDef.maxdamage = math.floor(unitDef.maxdamage + 0.5)
+
+			if unitDef.customparams.unittype == "building" then
+				unitDef.customparams.heat_cooling_mult = 50
+				unitDef.customparams.heat_capacity_mult = 50
+			end
 
 
 			--------------------------------------------------------------------------------

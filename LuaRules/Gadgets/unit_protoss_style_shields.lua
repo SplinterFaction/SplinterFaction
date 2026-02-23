@@ -3,7 +3,7 @@ function gadget:GetInfo()
 	return {
 		name    = "Protoss style shields",
 		desc    = "Provides personal shields for selected units",
-		author  = "GoogleFrog and ChatGPT3",
+		author  = "GoogleFrog, ChatGPT3, and Scary le Poo",
 		date    = "21 May 2023",
 		license = "GNU GPL, v2 or later",
 		layer   = 0,

@@ -45,6 +45,7 @@ Shared.buildListf2landfac = {
 	[[lozdiamondback]],
 	[[lozroach]],
 	[[lozscorpion]],
+	[[lozflashpoint]],
 	[[lozreaper]],
 	[[lozluger]],
 	[[lozpulverizer]],

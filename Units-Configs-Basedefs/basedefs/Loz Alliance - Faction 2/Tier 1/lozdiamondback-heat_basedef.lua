@@ -1,0 +1,153 @@
+unitDef                    = {
+	buildCostEnergy              = 0,
+	buildCostMetal               = 90,
+	builder                      = false,
+	buildTime                    = 5,
+	buildpic					 = "lozdiamondback.png",
+	canAttack                    = true,
+	canGuard                     = true,
+	canMove                      = true,
+	canPatrol                    = true,
+	canstop                      = "1",
+	category                     = "GROUND",
+	description                  = [[Raider]],
+	energyMake                   = 0,
+	energyStorage                = 0,
+	energyUse                    = 0,
+	explodeAs                    = explodeAs,
+	footprintX                   = 2,
+	footprintZ                   = 2,
+	iconType                     = "tankraidert1",
+	idleAutoHeal                 = .5,
+	idleTime                     = 2200,
+	leaveTracks                  = false,
+	maxDamage                    = 120,
+	maxSlope                     = 28,
+	maxVelocity                  = 4,
+	maxReverseVelocity           = 1,
+	maxWaterDepth                = 5000,
+	metalStorage                 = 0,
+	movementClass                = "WHEELEDTANK2",
+	name                         = humanName,
+	noChaseCategory              = "VTOL",
+	objectName                   = objectName,
+	script			             = script,
+	radarDistance                = 0,
+	repairable		             = false,
+	selfDestructAs               = explodeAs,
+	sightDistance                = 650,
+	stealth			             = true,
+	seismicSignature             = 2,
+	smoothAnim                   = true,
+	transportbyenemy             = false,
+	unitname                     = unitName,
+	workerTime                   = 0,
+	--------------
+	-- Movement --
+	--------------
+	acceleration 				 = 2,
+	brakeRate                    = 0.1,
+	turninplace 				 = true,
+	turninplacespeedlimit 		 = 10,
+	turnInPlaceAngleLimit		 = 45,
+	turnrate 				 	 = 600,
+	--------------
+	--------------
+
+	sfxtypes                     = { 
+		pieceExplosionGenerators = { 
+			"deathceg3", 
+			"deathceg4", 
+		}, 
+
+		explosiongenerators      = {
+			"custom:factorysparks",
+			"custom:emptydirt",
+			"custom:blacksmoke",
+		},
+	},
+	sounds                       = {
+		underattack              = "units_under_attack",
+		ok                       = {
+			"ack",
+		},
+		select                   = {
+			"unitselect",
+		},
+	},
+	weapons                      = {
+		[1]                      = {
+			def                  = "flamethrower",
+			badTargetCategory     = "BUILDING",
+			onlyTargetCategory    = "GROUND BUILDING SHIP",
+		},
+	},
+	customParams                 = {
+		unittype				 = "mobile",
+		unitrole				 = "Scout",
+		sightdistanceoverride	 = true,
+		canbetransported 		 = "true",
+		needed_cover             = 1,
+		death_sounds             = "generic",
+		RequireTech              = tech,
+		armortype                = "light",
+		nofriendlyfire	         = "1",
+		supply_cost              = 1,
+		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
+		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
+		factionname	             = "Loz Alliance",
+		
+	},
+}
+
+weaponDefs                 = {
+	flamethrower           = {
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.3,
+		-- cegtag					  = "burnblack",
+		beamttl                   = 4,
+		beamtime				  = 0.1,
+		largebeamlaser			  = true,
+		sweepfire				  = true,
+		duration                  = 0.8,
+		energypershot             = 0,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Railgun",
+		range                     = 400,
+		reloadtime                = 0.25,
+		WeaponType                = "BeamLaser",
+		rgbColor                  = "0.5 0.25 0",
+		rgbColor2                 = "0.25 0.25 0.25",
+		soundTrigger              = true,
+		soundstart                = "laserbeam02-short",
+		-- soundHit                  = "explode5",
+		-- sprayangle				  = 500,
+		texture1                  = "flashside3",
+		texture2                  = "empty",
+		thickness                 = 4,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 750,
+		waterweapon				 = false,
+		customparams              = {
+			expl_light_color	= yellow, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+			heatweapon = "1",
+			heatmult   = "1.0", -- optional; higher = heats faster per damage
+		},
+		damage                    = {
+			default               = 7.5,
+		},
+	},
+}

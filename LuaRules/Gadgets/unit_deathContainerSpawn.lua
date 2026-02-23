@@ -63,12 +63,19 @@ if gadgetHandler:IsSyncedCode() then
 		local tech = unitDef.customParams.requiretech
 		local unitRole = unitDef.customParams.unitrole
 		local unitType = unitDef.customParams.unittype
+		local killedByHeat = Spring.GetUnitRulesParam(unitID, "killedByHeat")
 		local spawnWreck = false
 
 		-- Tech-based spawn chance
 		-- Commander exception
+
+
 		if unitRole == "Commander" then
 			spawnWreck = false
+		end
+
+		if killedByHeat == 1 then
+			spawnWreck = true
 		end
 
 		-- Ship Exception
@@ -84,76 +91,85 @@ if gadgetHandler:IsSyncedCode() then
 			spawnWreck = true
 		end
 
-
-
 		if spawnWreck then
 			local _, _, _, _, buildProgress = Spring.GetUnitHealth(unitID)
-			if buildProgress == 1 then
-				local corpseFeature = unitDef.customParams.corpse
-				local posx, posy, posz = Spring.GetUnitPosition(unitID)
-				local featureName = corpseFeature or partsList[math.random(1, #partsList)]
-				local isCorpse = (corpseFeature ~= nil)
-				local teamID = isCorpse and -1 or unitTeam
-				local featureID = Spring.CreateFeature(featureName, posx, posy, posz, 0, teamID)
+			if buildProgress ~= 1 then
+				return
+			end
 
+			local corpseName = unitDef.customParams and unitDef.customParams.corpse
+			local isShip     = (unitType == "ship")
+			local heatKill   = (killedByHeat == 1)
 
-				if featureID then
-					local featureValueMetal = unitDef.metalCost * 0.75
-					local featureValueEnergy = unitDef.energyCost * 0.75
-					local reclaimTime = featureValueMetal * 0.25
-					local featureHealth = unitDef.health
-					--Spring.Echo("[Death Spawns] Metal Value: " .. featureValueMetal)
-					--Spring.Echo("[Death Spawns] Energy Value: " .. featureValueEnergy)
-					--Spring.Echo("[Death Spawns] Max Health: " .. featureHealth)
-					--Spring.Echo("[Death Spawns] Unit Y Position: " .. posy)
+			-- Decide what we WANT to spawn first
+			-- Rule: spawn a if it matches these parameters and only if a corpse feature exists
+			local wantCorpse = (isShip or heatKill) and (corpseName ~= nil)
 
-					Spring.SetFeatureHealth(featureID, featureHealth)
-					Spring.SetFeatureResources(featureID, featureValueMetal, featureValueEnergy, reclaimTime, 1, featureValueMetal, featureValueEnergy)
-					Spring.SetFeaturePosition(featureID, posx, posy, posz, false)
+			-- Choose feature def based on intent
+			local featureName
+			local featureTeam
+			if wantCorpse then
+				featureName = corpseName
+				featureTeam = -1
+			else
+				featureName = partsList[math.random(1, #partsList)]
+				featureTeam = unitTeam
+			end
 
+			local posx, posy, posz = Spring.GetUnitPosition(unitID)
+			local featureID = Spring.CreateFeature(featureName, posx, posy, posz, 0, featureTeam)
+			if not featureID then
+				return
+			end
 
-					local isCorpse = corpseFeature ~= nil
-					local isShip = unitType == "ship"
+			-- Shared: set value/health/resources/position
+			local featureValueMetal  = unitDef.metalCost  * (heatKill and 1 or 0.75)
+			local featureValueEnergy = unitDef.energyCost * (heatKill and 1 or 0.75)
+			if heatKill then
+				--Spring.Echo("[Death Spawns] Unit was killed by heat! Corpse value: " .. featureValueMetal .. "/" .. featureValueEnergy)
+			end
 
-					if isCorpse and isShip then
-						sinkingFeatures[featureID] = {}
-					end
+			local reclaimTime  = featureValueMetal * 0.25
+			local featureHealth = unitDef.health
 
+			Spring.SetFeatureHealth(featureID, featureHealth)
+			Spring.SetFeatureResources(featureID, featureValueMetal, featureValueEnergy, reclaimTime, 1, featureValueMetal, featureValueEnergy)
+			Spring.SetFeaturePosition(featureID, posx, posy, posz, false)
 
+			-- Movement setup (your calls kept)
+			Spring.SetFeatureMoveCtrl(featureID, false, 1,1,1,1,1,1,1,1,1)
 
-					if corpseFeature and corpseFeature ~= "" then
-						-- Spring.Echo("[Death Spawns] Spawning a corpse feature: ".. "| " .. corpseFeature .. " |")
-						-- Use original unit velocity and heading
-						local vx, vy, vz = Spring.GetUnitVelocity(unitID)
-						-- Spring.Echo("[Death Spawns] Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
-						local heading = Spring.GetUnitHeading(unitID)
-						-- Convert heading to direction vector
-						local radians = (heading / 32768.0) * math.pi
-						local dirx = math.sin(radians)
-						local dirz = math.cos(radians)
+			-- Use original unit velocity for both cases (even if SetFeatureVelocity is flaky)
+			local vx, vy, vz = Spring.GetUnitVelocity(unitID)
 
-						-- For Testing ... This should result in the feature flying off of the screen.
-						-- vx = vx * 100
-						-- vz = vz * 100
-						-- Spring.Echo("[Death Spawns] Feature Velocity is being set to: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
+			if wantCorpse then
+				--Spring.Echo("[Death Spawns] Spawning a corpse feature: " .. tostring(corpseName))
 
-						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
-						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
-						Spring.SetFeatureDirection(featureID, dirx, 0, dirz)
-					else
-						-- Spring.Echo("[Death Spawns] Spawning a part feature")
-						local vx, vy, vz = Spring.GetUnitVelocity(unitID)
-						-- Spring.Echo("Unit Velocity is: vx " .. vx .. " | vy " ..  vy .. " | vz ".. vz)
-						-- Random junk parts with random spin direction
-						local dx = math.random(-100, 100)
-						local dy = math.random(-100, 100)
-						local dz = math.random(-100, 100)
-						local norm = math.sqrt(dx * dx + dy * dy + dz * dz)
-						Spring.SetFeatureMoveCtrl(featureID,false,1,1,1,1,1,1,1,1,1)
-						Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- Does not work
-						Spring.SetFeatureDirection(featureID, dx / norm, dy / norm, dz / norm)
-					end
+				-- Sink only for ship corpses (same logic as you intended)
+				if isShip then
+					sinkingFeatures[featureID] = {}
 				end
+
+				-- Heading-based direction for corpses
+				local heading = Spring.GetUnitHeading(unitID)
+				local radians = (heading / 32768.0) * math.pi
+				local dirx = math.sin(radians)
+				local dirz = math.cos(radians)
+
+				Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- may not work depending on engine
+				Spring.SetFeatureDirection(featureID, dirx, 0, dirz)
+			else
+				--Spring.Echo("[Death Spawns] Spawning a part feature")
+
+				-- Random direction for junk parts
+				local dx = math.random(-100, 100)
+				local dy = math.random(-100, 100)
+				local dz = math.random(-100, 100)
+				local norm = math.sqrt(dx*dx + dy*dy + dz*dz)
+				if norm == 0 then norm = 1 end
+
+				Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- may not work depending on engine
+				Spring.SetFeatureDirection(featureID, dx / norm, dy / norm, dz / norm)
 			end
 		end
 	end
