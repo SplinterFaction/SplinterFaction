@@ -893,6 +893,12 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			if unitDef.customparams.unitrole == "Builder" then
 				unitDef.maxdamage = unitDef.maxdamage * 3
 			end
+			if unitDef.customparams.unitrole == "Heatray Tank" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
+			if unitDef.customparams.unitrole == "Heatray Tank - Tech 2" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
 			if unitDef.customparams.unitrole == "Main Battle Tank" then
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
