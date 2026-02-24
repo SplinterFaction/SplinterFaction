@@ -23,8 +23,8 @@ local IN_LOS = { inlos = true }
 local IterableMap = VFS.Include("LuaRules/Gadgets/Include/IterableMap.lua")
 local heatedUnits = IterableMap.New()
 
--- Update frequency (frames). 5 = ~6 updates/sec at 30fps sim.
-local UPDATE_PERIOD = 5
+-- Update frequency (frames). 10 = ~3 updates/sec at 30fps sim.
+local UPDATE_PERIOD = 10 -- 3 times a second instead of 6. Trying to squeeze a little performance back
 
 local HEAT_DEATH_FLAG   = "killedByHeat"   -- numeric: 1 = heat, nil/0 otherwise
 local HEAT_DEATH_KILLER = "heatKiller"     -- optional: attacker unitID
@@ -33,7 +33,9 @@ local HEAT_DEATH_WDID   = "heatWeaponDef"  -- optional: weaponDefID
 --------------------------------------------------------------------------------
 -- Heat slow tuning
 --------------------------------------------------------------------------------
-local HEAT_SLOW_THRESHOLD = 50  -- percent
+-- These lopsided values are so that if for whatever reason a unit or units continually go above/below the threshold, it isn't triggering a million calls.
+local HEAT_SLOW_ON  = 55 --Percent
+local HEAT_SLOW_OFF = 45 --Percent
 
 local HEAT_SLOW_MAXSPEED_MULT = 0.70
 local HEAT_SLOW_ACCRATE_MULT  = 0.75
@@ -42,6 +44,8 @@ local HEAT_SLOW_TURNRATE_MULT = 0.85
 local MoveCtrl = Spring.MoveCtrl
 local SetGroundMoveTypeData = MoveCtrl and MoveCtrl.SetGroundMoveTypeData
 local GetGroundMoveTypeData = MoveCtrl and MoveCtrl.GetGroundMoveTypeData -- if available in your build
+
+local HEAT_RULES_UPDATE_THRESHOLD = 1  -- percent difference required to update
 
 --------------------------------------------------------------------------------
 -- Tuning (global defaults)
@@ -162,16 +166,11 @@ local function ClearHeatSlow(unitID, data)
 	data.slowApplied = false
 end
 
-local function UpdateSlowState(unitID, data, heatPct)
-	local shouldSlow = (heatPct > HEAT_SLOW_THRESHOLD)
-	if shouldSlow then
-		if not data.slowApplied then
-			ApplyHeatSlow(unitID, data)
-		end
-	else
-		if data.slowApplied then
-			ClearHeatSlow(unitID, data)
-		end
+local function UpdateSlowState(unitID, data, pct)
+	if (not data.slowApplied) and pct > HEAT_SLOW_ON then
+		ApplyHeatSlow(unitID, data)
+	elseif data.slowApplied and pct < HEAT_SLOW_OFF then
+		ClearHeatSlow(unitID, data)
 	end
 end
 
@@ -228,6 +227,8 @@ local function initHeatedUnit(unitID, unitDefID)
 		-- slow state
 		slowApplied     = false,
 		baseMove        = {},  -- cached maxSpeed/accRate/turnRate
+
+		lastHeatPercent = -1,
 	}
 
 	IterableMap.Add(heatedUnits, unitID, data)
@@ -237,8 +238,20 @@ end
 
 local function setHeatRulesParam(unitID, heatEnergy, heatCapacity, data)
 	local pct = 100 * clamp01(heatEnergy / heatCapacity)
-	Spring.SetUnitRulesParam(unitID, "heat", pct, IN_LOS)
 
+	-- Only update rulesparam if change exceeds threshold
+	if data then
+		local last = data.lastHeatPercent or -1
+		if math.abs(pct - last) >= HEAT_RULES_UPDATE_THRESHOLD then
+			Spring.SetUnitRulesParam(unitID, "heat", pct, IN_LOS)
+			data.lastHeatPercent = pct
+		end
+	else
+		-- fallback safety
+		Spring.SetUnitRulesParam(unitID, "heat", pct, IN_LOS)
+	end
+
+	-- Debug output (unchanged)
 	if DEBUG_HEAT and data then
 		local frame = Spring.GetGameFrame()
 		if math.abs(pct - (data.lastEchoValue or -1)) >= 0.5 then
@@ -251,7 +264,7 @@ local function setHeatRulesParam(unitID, heatEnergy, heatCapacity, data)
 		end
 	end
 
-	-- update slow state whenever heat changes
+	-- Update slow state whenever heat changes
 	if data then
 		UpdateSlowState(unitID, data, pct)
 	end
