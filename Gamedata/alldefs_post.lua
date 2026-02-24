@@ -1073,6 +1073,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.customparams.heat_capacity_mult = 50
 			end
 
+			if unitDef.customparams.unitrole == "Commander" then
+				unitDef.customparams.heat_cooling_mult = 5
+				unitDef.customparams.heat_capacity_mult = 5
+			end
+
 
 			--------------------------------------------------------------------------------
 			-- Automatically Calculating Buildtime -- !!!! THIS SECTION IS VERY IMPORTANT !!!!

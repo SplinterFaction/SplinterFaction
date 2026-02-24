@@ -31,6 +31,19 @@ local HEAT_DEATH_KILLER = "heatKiller"     -- optional: attacker unitID
 local HEAT_DEATH_WDID   = "heatWeaponDef"  -- optional: weaponDefID
 
 --------------------------------------------------------------------------------
+-- Heat slow tuning
+--------------------------------------------------------------------------------
+local HEAT_SLOW_THRESHOLD = 50  -- percent
+
+local HEAT_SLOW_MAXSPEED_MULT = 0.70
+local HEAT_SLOW_ACCRATE_MULT  = 0.75
+local HEAT_SLOW_TURNRATE_MULT = 0.85
+
+local MoveCtrl = Spring.MoveCtrl
+local SetGroundMoveTypeData = MoveCtrl and MoveCtrl.SetGroundMoveTypeData
+local GetGroundMoveTypeData = MoveCtrl and MoveCtrl.GetGroundMoveTypeData -- if available in your build
+
+--------------------------------------------------------------------------------
 -- Tuning (global defaults)
 --------------------------------------------------------------------------------
 
@@ -56,7 +69,6 @@ end
 local function GetUnitMetalCost(unitDefID)
 	local ud = UnitDefs[unitDefID]
 	if not ud then return 0 end
-	-- Spring defs vary; metalCost is the usual
 	return (ud.metalCost or ud.metal or 0)
 end
 
@@ -64,14 +76,109 @@ end
 -- Debug
 --------------------------------------------------------------------------------
 
-local DEBUG_HEAT = false         -- set false when done testing
+local DEBUG_HEAT = false
 local DEBUG_ECHO_INTERVAL = 15  -- frames between echo updates per unit
+
+--------------------------------------------------------------------------------
+-- Heat slow helpers
+--------------------------------------------------------------------------------
+
+local function CacheBaseMoveData(unitID, unitDefID, data)
+	-- This only matters for ground movers. If the call fails, we just skip slow.
+	data.baseMove = data.baseMove or {}
+
+	-- Prefer engine-provided move data if available.
+	if GetGroundMoveTypeData then
+		local ok, mtd = pcall(GetGroundMoveTypeData, unitID)
+		if ok and mtd then
+			data.baseMove.maxSpeed = mtd.maxSpeed
+			data.baseMove.accRate  = mtd.accRate
+			data.baseMove.turnRate = mtd.turnRate
+			return
+		end
+	end
+
+	-- Fallback: we can at least get a baseline maxSpeed from UnitDef.
+	-- (acc/turn might not be present here, so they may remain nil.)
+	local ud = UnitDefs[unitDefID]
+	if ud then
+		data.baseMove.maxSpeed = data.baseMove.maxSpeed or ud.speed
+		data.baseMove.turnRate = data.baseMove.turnRate or ud.turnRate
+		data.baseMove.accRate  = data.baseMove.accRate  or ud.accel
+	end
+end
+
+local function ApplyHeatSlow(unitID, data)
+	if not SetGroundMoveTypeData then return end
+	if not data or data.slowApplied then return end
+	if not Spring.ValidUnitID(unitID) or Spring.GetUnitIsDead(unitID) then return end
+
+	CacheBaseMoveData(unitID, data.unitDefID, data)
+
+	local bm = data.baseMove
+	if not bm or not bm.maxSpeed then
+		-- No baseline -> don’t apply.
+		return
+	end
+
+	local values = {
+		maxSpeed = bm.maxSpeed * HEAT_SLOW_MAXSPEED_MULT,
+	}
+
+	-- Only set keys we successfully cached (avoid stomping nil/unknown)
+	if bm.accRate then
+		values.accRate = bm.accRate * HEAT_SLOW_ACCRATE_MULT
+	end
+	if bm.turnRate then
+		values.turnRate = bm.turnRate * HEAT_SLOW_TURNRATE_MULT
+	end
+
+	pcall(SetGroundMoveTypeData, unitID, values)
+	data.slowApplied = true
+end
+
+local function ClearHeatSlow(unitID, data)
+	if not SetGroundMoveTypeData then return end
+	if not data or not data.slowApplied then return end
+	if not Spring.ValidUnitID(unitID) then return end
+
+	local bm = data.baseMove
+	if not bm or not bm.maxSpeed then
+		data.slowApplied = false
+		return
+	end
+
+	local values = {
+		maxSpeed = bm.maxSpeed,
+	}
+	if bm.accRate then
+		values.accRate = bm.accRate
+	end
+	if bm.turnRate then
+		values.turnRate = bm.turnRate
+	end
+
+	pcall(SetGroundMoveTypeData, unitID, values)
+	data.slowApplied = false
+end
+
+local function UpdateSlowState(unitID, data, heatPct)
+	local shouldSlow = (heatPct > HEAT_SLOW_THRESHOLD)
+	if shouldSlow then
+		if not data.slowApplied then
+			ApplyHeatSlow(unitID, data)
+		end
+	else
+		if data.slowApplied then
+			ClearHeatSlow(unitID, data)
+		end
+	end
+end
 
 --------------------------------------------------------------------------------
 -- Cache weapon heat params
 --------------------------------------------------------------------------------
 
--- weaponHeat[weaponDefID] = { mult=number }
 local weaponHeat = {}
 
 do
@@ -81,8 +188,6 @@ do
 		local cp = wd and wd.customParams
 		if cp and cp.heatweapon == "1" then
 			weaponHeat[weaponDefID] = {
-				-- Scales how much incoming "damage" becomes heat energy.
-				-- If omitted, 1.0 = damage -> heat energy 1:1
 				mult = tonumber(cp.heatmult) or 1.0,
 			}
 		end
@@ -96,11 +201,9 @@ end
 local function initHeatedUnit(unitID, unitDefID)
 	local metalCost = GetUnitMetalCost(unitDefID)
 	if metalCost <= 0 then
-		-- Still allow heating, but avoid division by zero / nonsense scaling.
 		metalCost = 1
 	end
 
-	-- Optional per-unit scaling (lets you special-case “heat sinks”, etc.)
 	local ud = UnitDefs[unitDefID]
 	local ucp = ud and ud.customParams or {}
 	local capacityMult = tonumber(ucp.heat_capacity_mult) or 1.0
@@ -118,8 +221,13 @@ local function initHeatedUnit(unitID, unitDefID)
 		coolingPower    = coolingPower,
 		lastFrameHeated = -100000,
 
-		lastEchoFrame   = -100000,   -- debug throttle
-		lastEchoValue   = -1,        -- only echo if value changed
+		-- debug throttle
+		lastEchoFrame   = -100000,
+		lastEchoValue   = -1,
+
+		-- slow state
+		slowApplied     = false,
+		baseMove        = {},  -- cached maxSpeed/accRate/turnRate
 	}
 
 	IterableMap.Add(heatedUnits, unitID, data)
@@ -133,21 +241,19 @@ local function setHeatRulesParam(unitID, heatEnergy, heatCapacity, data)
 
 	if DEBUG_HEAT and data then
 		local frame = Spring.GetGameFrame()
-
-		-- Only echo if value changed significantly
 		if math.abs(pct - (data.lastEchoValue or -1)) >= 0.5 then
 			if frame - (data.lastEchoFrame or 0) >= DEBUG_ECHO_INTERVAL then
 				local unitName = UnitDefs[data.unitDefID].name
-				Spring.Echo(string.format(
-						"[HEAT DEBUG] %s (ID %d): %.1f%%",
-						unitName,
-						unitID,
-						pct
-				))
+				Spring.Echo(string.format("[HEAT DEBUG] %s (ID %d): %.1f%%", unitName, unitID, pct))
 				data.lastEchoFrame = frame
 				data.lastEchoValue = pct
 			end
 		end
+	end
+
+	-- update slow state whenever heat changes
+	if data then
+		UpdateSlowState(unitID, data, pct)
 	end
 
 	return pct
@@ -158,30 +264,32 @@ end
 --------------------------------------------------------------------------------
 
 local function DestroyUnitSafe(unitID, attackerID)
-	-- Different engine builds have slightly different DestroyUnit signatures.
-	-- Try common ones without crashing.
 	if attackerID and attackerID > 0 then
 		local ok = pcall(Spring.DestroyUnit, unitID, false, false, attackerID)
 		if ok then return end
 	end
-	-- Fallback
 	pcall(Spring.DestroyUnit, unitID, false, false)
 end
 
 local function UpdateHeatedUnit(unitID, data, index, frame)
 	if not Spring.ValidUnitID(unitID) then
-		return true -- remove
+		return true
 	end
 
-	-- If unit is dead, remove.
 	if Spring.GetUnitIsDead(unitID) then
+		-- best effort restore (in case it matters for death pipeline)
+		if data.slowApplied then
+			ClearHeatSlow(unitID, data)
+		end
 		return true
 	end
 
 	if data.heatEnergy <= 0 then
-		-- Nothing to do; keep it around or remove to save iteration.
-		-- Removing is cheaper; it will re-add on next heat hit.
+		-- cooled out
 		Spring.SetUnitRulesParam(unitID, "heat", 0, IN_LOS)
+		if data.slowApplied then
+			ClearHeatSlow(unitID, data)
+		end
 		return true
 	end
 
@@ -190,7 +298,7 @@ local function UpdateHeatedUnit(unitID, data, index, frame)
 		return
 	end
 
-	local dt = UPDATE_PERIOD / 30 -- seconds
+	local dt = UPDATE_PERIOD / 30
 	local cool = data.coolingPower * dt
 	if cool > 0 then
 		data.heatEnergy = data.heatEnergy - cool
@@ -199,8 +307,11 @@ local function UpdateHeatedUnit(unitID, data, index, frame)
 
 	setHeatRulesParam(unitID, data.heatEnergy, data.heatCapacity, data)
 
-	-- If cooled out, remove from map
 	if data.heatEnergy <= 0 then
+		Spring.SetUnitRulesParam(unitID, "heat", 0, IN_LOS)
+		if data.slowApplied then
+			ClearHeatSlow(unitID, data)
+		end
 		return true
 	end
 end
@@ -221,8 +332,6 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 		return damage
 	end
 
-	-- If you want heat weapons to still paralyze etc, you can change this.
-	-- For now: treat all damage as heat energy, negate actual damage.
 	if damage <= 0 then
 		return 0
 	end
@@ -235,17 +344,16 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 	local frame = Spring.GetGameFrame()
 	data.lastFrameHeated = frame
 
-	-- Convert damage into heat energy
 	data.heatEnergy = data.heatEnergy + (damage * wh.mult)
 
-	-- Update rules param and check for overheat
 	local pct = setHeatRulesParam(unitID, data.heatEnergy, data.heatCapacity, data)
 
 	if pct >= 100 then
-		-- Boom.
+		-- Boom (your custom tech-based CEG selection)
 		local x, y, z = Spring.GetUnitPosition(unitID)
 		local ud = UnitDefs[data.unitDefID]
 		local cp = ud and ud.customParams or {}
+
 		if cp.requiretech == "tech0" then
 			Spring.SpawnCEG("genericunitexplosion-heatdeath-small", x, y+10, z, 0, 0, 0)
 		end
@@ -261,6 +369,8 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 		if cp.requiretech == "tech4" then
 			Spring.SpawnCEG("genericunitexplosion-heatdeath-huge", x, y+10, z, 0, 0, 0)
 		end
+
+		-- Mark death reason for other gadgets
 		Spring.SetUnitRulesParam(unitID, HEAT_DEATH_FLAG, 1)
 		if attackerID and attackerID > 0 then
 			Spring.SetUnitRulesParam(unitID, HEAT_DEATH_KILLER, attackerID)
@@ -269,11 +379,14 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 			Spring.SetUnitRulesParam(unitID, HEAT_DEATH_WDID, weaponDefID)
 		end
 
+		-- Best effort: restore move values (doesn't really matter, but keeps state clean)
+		if data.slowApplied then
+			ClearHeatSlow(unitID, data)
+		end
+
 		DestroyUnitSafe(unitID, attackerID)
-		-- Returning 0 prevents normal damage from also being applied.
 		return 0
 	end
 
-	-- Negate all real damage from heat weapons
 	return 0
 end
