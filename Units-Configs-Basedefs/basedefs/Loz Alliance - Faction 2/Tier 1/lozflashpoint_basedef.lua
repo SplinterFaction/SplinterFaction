@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 110,
+	buildCostMetal               = 275,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozflashpoint.png",

@@ -1146,9 +1146,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			-- Tier Based Buildtimes
-			if unitDef.customparams and unitDef.customparams.requiretech == "tech0" then
-				unitDef.buildtime = unitDef.buildtime * 0.5
-			end
+			--if unitDef.customparams and unitDef.customparams.requiretech == "tech0" then -- This broke the game, there is a reason stuff at this stage take a long time to build. Trust the process.
+			--	unitDef.buildtime = unitDef.buildtime * 0.5
+			--end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
 				unitDef.buildtime = unitDef.buildtime / 2

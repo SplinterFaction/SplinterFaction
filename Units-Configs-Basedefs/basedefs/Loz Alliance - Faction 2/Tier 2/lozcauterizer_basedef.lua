@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 1200,
+	buildCostMetal               = 1900,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozcauterizer.png",

@@ -15,7 +15,7 @@ local Sounds = {
 		MapPoint = {
 			file = "sounds/ui/mappoint.wav",    -- file now equal as blank.wav, is being called by chat ui widget now (so users can adjust its volume)
 			gain = 0.1,
-			pitchmod = 0.02,
+			--pitchmod = 0.02,
 			gainmod  = 0.2 * 0.3,
 			dopplerscale = 0,
 			maxconcurrent = 1,
@@ -165,7 +165,7 @@ local soundData = {
 
 	['ui'] = {
 		gain = 0.15,
-		pitchmod = 0,
+		--pitchmod = 0,
 		gainmod = 0,
 		dopplerscale = 0,
 		maxconcurrent = 8,
@@ -174,7 +174,7 @@ local soundData = {
 
 	['commands'] = {
 		gain = 0.3,
-		pitchmod = 0.02,
+		--pitchmod = 0.02,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 32,
@@ -184,7 +184,7 @@ local soundData = {
 
 	['unitselections'] = {
 		gain = 0.1,
-		pitchmod = 0.02,
+		--pitchmod = 0.02,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 2,
@@ -194,7 +194,7 @@ local soundData = {
 
 	['weapons'] = {
 		gain = 0.525,  -- 1.75 * 0.3 = 0.525
-		pitchmod = 0.17,
+		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
@@ -203,7 +203,7 @@ local soundData = {
 
 	['weaponsloud'] = {
 		gain = 1.5,  -- 5 * 0.3 = 1.5
-		pitchmod = 0.17,
+		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
@@ -212,7 +212,7 @@ local soundData = {
 
 	['impacts'] = {
 		gain = 0.9,  -- 3 * 0.3 = 0.9
-		pitchmod = 0.17,
+		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
@@ -221,7 +221,7 @@ local soundData = {
 
 	['impacts/generic'] = {
 		gain = 0.9,  -- 3 * 0.3 = 0.9
-		pitchmod = 0.17,
+		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
@@ -230,7 +230,7 @@ local soundData = {
 
 	['deathsounds/generic'] = {
 		gain = 1.2,  -- 4 * 0.3 = 1.2
-		pitchmod = 0.17,
+		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
@@ -239,7 +239,7 @@ local soundData = {
 
 	['deathsounds/commander'] = {
 		gain = 20,  -- 20 * 0.3 = 6
-		pitchmod = 0.17,
+		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
@@ -248,7 +248,7 @@ local soundData = {
 
 	['misc'] = {
 		gain = 0.36,  -- 1.2 * 0.3 = 0.36
-		pitchmod = 0.17,
+		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
 		dopplerscale = 1.0,
@@ -258,8 +258,8 @@ local soundData = {
 
 	['selfdcountdown'] = {
 		gain = 0.36,  -- 1.2 * 0.3 = 0.36
-		pitchmod = 0.02,
-		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
+		--pitchmod = 0.02,
+		--gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 1,
 		rolloff = 0,

@@ -36,7 +36,7 @@ unitDef                    = {
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	buildCostEnergy         = 2500,
+	buildCostEnergy         = 5000,
 	buildCostMetal          = 0.1,
 	buildDistance           = buildDistance,
 	builder                 = true,
