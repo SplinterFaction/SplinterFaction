@@ -36,27 +36,19 @@ function script.AimFromWeapon(WeaponID)
     return turret
 end
 
-local firepoints1 = {cannonfirepoint1, cannonfirepoint2}
-local currentFirepoint1 = 1
-local totalNumberofFirepoints1 = 2
-
 function script.QueryWeapon(WeaponID)
     if WeaponID == 1 then
-        return firepoints1[currentFirepoint1]
+        return cannonfirepoint1
     elseif WeaponID == 2 then
-        return missilefirepoint1
+        return cannonfirepoint2
     end
 end
 
 function script.FireWeapon(WeaponID)
     if WeaponID == 1 then
-        currentFirepoint1 = currentFirepoint1 + 1
-        if currentFirepoint1 == (totalNumberofFirepoints1 + 1) then -- when currentFirepoint gets to one more than the total number of firepoints, reset it to 1
-            currentFirepoint1 = 1
-        end
-        EmitSfx (firepoints1[currentFirepoint1], 1024)
+        EmitSfx (cannonfirepoint1, 1024)
     elseif WeaponID == 2 then
-       -- EmitSfx (missilefirepoint1, 1024)
+        EmitSfx (cannonfirepoint2, 1024)
     end
 end
 
@@ -76,6 +68,15 @@ function script.AimWeapon(WeaponID, heading, pitch)
         --Spring.Echo("AimWeapon: FireWeapon")
         return true
     elseif WeaponID == 2 then
+        Signal(SIG_AIM2)
+        SetSignalMask(SIG_AIM2)
+        WaitForTurn(turret, y_axis)
+        Turn(cannonbarrel1, x_axis, -pitch, 10)
+        Turn(cannonbarrel2, x_axis, -pitch, 10)
+        WaitForTurn(cannonbarrel1, x_axis)
+        WaitForTurn(cannonbarrel2, x_axis)
+        StartThread(RestoreAfterDelay)
+        --Spring.Echo("AimWeapon: FireWeapon")
         return true
     end
 end

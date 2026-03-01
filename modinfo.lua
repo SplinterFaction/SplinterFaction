@@ -13,14 +13,14 @@ return {
 	name='SplinterFaction',
 	description='SplinterFaction',
 	shortname='SF',
-	version='0.1.60', -- 0.1.60
+	version='$VERSION', -- 0.1.60
 	-- DON'T FORGET TO UPDATE THE AUTOHOST!
 	mutator='Official',
 	game='SplinterFaction',
 	shortGame='SF',
 	modtype=1,
 	depend = {
-		"SplinterFaction Unittextures 3",
+		-- "SplinterFaction Unittextures 3",
 		-- "Dreamstate Logic Music Addon 1",
 		-- "Spring Features v1.9",
 	},

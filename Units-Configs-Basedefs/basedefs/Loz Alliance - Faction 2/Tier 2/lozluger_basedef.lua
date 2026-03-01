@@ -88,7 +88,7 @@ unitDef                    = {
 		unitrole				 = "Artillery - Tech 2",
 		canbetransported 		 = "true",
 		canareaattack            ="1",
-		stockpileLimit           = 5,
+		-- stockpileLimit           = 5,
 		needed_cover             = 3,
 		death_sounds             = "generic",
 		RequireTech              = tech,
@@ -106,8 +106,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	Artilleryweapon              = {
-		commandfire              = true,
-		AreaOfEffect             = 100,
+		AreaOfEffect             = 50,
 		avoidFriendly            = false,
 		avoidFeature             = false,
 		collideFriendly          = false,
@@ -122,6 +121,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		name                     = "High Explosive Plasma Cannon",
 		model                    = "projectile/projectilepurple.s3o",
+		mygravity                = 0.05,
 		range                    = 1300,
 		reloadtime               = 40,
 		size					 = 10,
@@ -131,15 +131,15 @@ weaponDefs                 = {
 		sprayangle               = 500,
 
 		-----
-		stockpile                = true,
-		stockpiletime            = 90,
+		-- stockpile                = true,
+		-- stockpiletime            = 90,
 		metalpershot             = 0,
 		energypershot            = 0,
 		-----
 
 		trajectoryHeight	     = 2,
 		turret                   = true,
-		weaponVelocity           = 450,
+		weaponVelocity           = 250,
 		customparams             = {
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos

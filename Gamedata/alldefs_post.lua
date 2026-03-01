@@ -636,7 +636,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -654,7 +654,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -662,7 +662,15 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "building" then
-								unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+								if unitDef.customparams.unitrole == "Factory" then
+									if unitDef.unitname == "fedairplant" or unitDef.unitname == "lozairplant" then
+										unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30)
+									else
+										unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+									end
+								else
+									unitDef.buildcostenergy = unitDef.buildcostmetal * 3
+								end
 							end
 						end
 
@@ -672,7 +680,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -690,7 +698,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -708,7 +716,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy / 30
+								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -1151,19 +1159,19 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			--end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech1" then
-				unitDef.buildtime = unitDef.buildtime / 2
+				unitDef.buildtime = unitDef.buildtime * (1/2)
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
-				unitDef.buildtime = unitDef.buildtime / 4
+				unitDef.buildtime = unitDef.buildtime * (1/4)
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
-				unitDef.buildtime = unitDef.buildtime / 16
+				unitDef.buildtime = unitDef.buildtime * (1/16)
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
-				unitDef.buildtime = unitDef.buildtime / 32
+				unitDef.buildtime = unitDef.buildtime * (1/32)
 			end
 
 			-- Set Supply Costs
@@ -1239,23 +1247,23 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 					-- Set Regeration Rate Based upon tech level
 					if unitDef.customparams.requiretech == "tech0" or unitDef.unitname == "lozcommander" then
-						regenerationRate = maximumShieldStrength / 7.5 --This is how many seconds it will take to go from 0% - 100%
+						regenerationRate = maximumShieldStrength * (1/7.5) --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 					if unitDef.customparams.requiretech == "tech1" or unitDef.unitname == "lozcommander_up1" then
-						regenerationRate = maximumShieldStrength / 15 --This is how many seconds it will take to go from 0% - 100%
+						regenerationRate = maximumShieldStrength * (1/15) --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 					if unitDef.customparams.requiretech == "tech2" or unitDef.unitname == "lozcommander_up2" then
-						regenerationRate = maximumShieldStrength / 30 --This is how many seconds it will take to go from 0% - 100%
+						regenerationRate = maximumShieldStrength * (1/30) --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 					if unitDef.customparams.requiretech == "tech3" or unitDef.unitname == "lozcommander_up3" then
-						regenerationRate = maximumShieldStrength / 45 --This is how many seconds it will take to go from 0% - 100%
+						regenerationRate = maximumShieldStrength * (1/45) --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 					if unitDef.customparams.requiretech == "tech4" or unitDef.unitname == "lozcommander_up4" then
-						regenerationRate = maximumShieldStrength / 60 --This is how many seconds it will take to go from 0% - 100%
+						regenerationRate = maximumShieldStrength * (1/60) --This is how many seconds it will take to go from 0% - 100%
 						unitDef.customparams.shield_regeneration_rate = regenerationRate
 					end
 
