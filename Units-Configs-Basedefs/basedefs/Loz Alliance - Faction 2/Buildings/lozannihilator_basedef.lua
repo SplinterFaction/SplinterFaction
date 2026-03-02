@@ -100,6 +100,7 @@ weaponDefs                  = {
 		beamtime				  = 0.5,
 		beamttl                   = 10,
 		largebeamlaser			  = false,
+		laserFlareSize            = 5,
 		sweepfire				  = false,
 		duration                  = 0.8,
 		energypershot             = 0,

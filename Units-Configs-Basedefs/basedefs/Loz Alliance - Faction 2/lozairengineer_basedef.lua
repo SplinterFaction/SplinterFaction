@@ -119,7 +119,7 @@ unitDef                    = {
 	},
 	customParams                 = {
 		unittype         = "air",
-		unitrole		 = "Builder",
+		unitrole		 = "Air Builder",
 		area_mex_def     = areamexdef,
 		requiretech      = requiretech,
 		supply_cost      = 1,

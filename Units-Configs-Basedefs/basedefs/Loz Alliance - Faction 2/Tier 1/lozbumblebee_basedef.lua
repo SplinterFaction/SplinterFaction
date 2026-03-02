@@ -325,12 +325,12 @@ weaponDefs                 = {
 			areadamage_ceg          = "napalm",
 			areadamage_damageceg    = "blacksmokesmall",
 			areadamage_time         = 5,
-			areadamage_damage       = 100,
+			areadamage_damage       = 50,
 			areadamage_range        = 200,
 			-- areadamage_reistance = ,
 		},
 		damage                   = {
-			default              = 600,
+			default              = 300,
 		},
 	}
 }
