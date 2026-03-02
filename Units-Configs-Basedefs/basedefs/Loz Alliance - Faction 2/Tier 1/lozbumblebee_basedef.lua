@@ -101,11 +101,11 @@ unitDef                    = {
 
 	weapons                      = {
 		[1]                      = {
-			def                  = "air2groundmissile",
+			def                  = "air2groundmissile2",
 			badTargetCategory    = "GROUND",
 			onlyTargetCategory   = "GROUND BUILDING SHIP SUBMARINE",
 			mainDir = "0 -1 1",
-			maxAngleDif = 90,
+			maxAngleDif = 135,
 		},
 		[2]                      = {
 			def                  = "laser",
@@ -136,6 +136,7 @@ unitDef                    = {
 		unittype				 = "air",
 		unitrole				 = "Assault Bomber",
 		death_sounds             = "generic",
+		attacksafetydistance     = "300",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
 		nofriendlyfire	         = "1",
@@ -284,4 +285,52 @@ weaponDefs                 = {
 			default              = 600,
 		},
 	},
+	air2groundmissile2              = {
+		AreaOfEffect             = 250,
+		accuracy                 = 500,
+		avoidFriendly            = false,
+		avoidFeature             = false,
+		collideFriendly          = false,
+		collideFeature           = false,
+		--cegTag                   = "emissiletanktrail-optimized",
+
+		cylinderTargeting        = 100,
+		edgeeffectiveness		 = 0.5,
+
+		explosionGenerator       = "custom:genericshellexplosion-bomb",
+		energypershot            = 0,
+		fireStarter              = 70,
+		impulseFactor            = 0,
+		interceptedByShieldType  = 4,
+		model                    = "neutralmissilex1.s3o",
+		name                     = "High Explosive Bomb",
+		range                    = 300,
+		reloadtime               = 15,
+		weaponType		         = "MissileLauncher",
+		smokeTrail               = false,
+		soundstart               = "bombdrop",
+		soundHit                 = "Explosion Grenade_02",
+		soundHitWet				 = "subhitbomb",
+		tolerance                = 100,
+		turret                   = true,
+		weaponVelocity           = 175,
+		startVelocity            = 175,
+
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+
+			areadamage_ceg          = "napalm",
+			areadamage_damageceg    = "blacksmokesmall",
+			areadamage_time         = 5,
+			areadamage_damage       = 100,
+			areadamage_range        = 200,
+			-- areadamage_reistance = ,
+		},
+		damage                   = {
+			default              = 600,
+		},
+	}
 }
