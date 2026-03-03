@@ -77,7 +77,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "flamethrower",
+			def                  = "flamethrower2",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -140,6 +140,50 @@ weaponDefs                 = {
 		waterweapon				 = false,
 		customparams              = {
 			expl_light_color	= yellow, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                    = {
+			default               = 7.5,
+		},
+	},
+
+	flamethrower2           = {
+		edgeeffectiveness        = 0.1,
+		hardstop                 = false,
+		avoidGround               = false,
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.1,
+		duration                  = 0.1,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:burnblacksmall",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 1,
+		name                      = "Laser",
+		range                     = 400,
+		reloadtime                = 0.25,
+		WeaponType                = "LaserCannon",
+		rgbColor                  = "0.5 0.25 0",
+		rgbColor2                 = "1 1 0.5",
+		soundTrigger              = true,
+		soundstart                = "laserbeam02-short",
+		-- sprayangle				  = 500,
+		texture1                  = "shot",
+		texture2                  = "empty",
+		thickness                 = 10,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 2000,
+		waterweapon				 = false,
+		customparams              = {
+			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly

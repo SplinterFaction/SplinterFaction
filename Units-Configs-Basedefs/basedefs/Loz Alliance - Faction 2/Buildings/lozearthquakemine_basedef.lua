@@ -83,7 +83,7 @@ unitDef                     = {
 		death_sounds              = "generic",
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
-		factionname	              = "Federation of Kala",
+		factionname	              = "Loz Alliance",
 		
 
 		-- Begin unit rings

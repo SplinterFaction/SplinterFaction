@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 
-unitName = [[fedearthquakemine]]
+unitName = [[lozearthquakemine]]
 
 --------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ script = [[fedearthquakemine.cob]]
 tech = [[tech1]]
 
 VFS.Include("units-configs-basedefs/configs/explosion_lighting_configs.lua")
-VFS.Include("units-configs-basedefs/basedefs/Federation of Kala - Faction 1/buildings/fedearthquakemine_basedef.lua")
+VFS.Include("units-configs-basedefs/basedefs/Loz Alliance - Faction 1/buildings/lozearthquakemine_basedef.lua")
 
 unitDef.weaponDefs = weaponDefs
 --------------------------------------------------------------------------------

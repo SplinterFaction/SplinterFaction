@@ -3,6 +3,7 @@
 --Buildlists for factories
 
 Shared.buildListf1landfac = {
+	[[fedengineer_up1]],
 	[[fedak]],
 	[[fedstorm]],
 	[[fedthud]],
@@ -16,7 +17,6 @@ Shared.buildListf1landfac = {
 	[[fedgoliath]],
 	[[fedjuggernaut]],
 	-- [[fedengineer]],
-	[[fedengineer_up1]],
 	-- [[fedengineer_up2]],
 	-- [[fedengineer_up3]],
 }
@@ -41,6 +41,7 @@ Shared.buildListFedSeaPlant = {
 }
 
 Shared.buildListf2landfac = {
+	[[lozengineer_up1]],
 	[[lozflea]],
 	[[lozdiamondback]],
 	[[lozroach]],
@@ -55,7 +56,6 @@ Shared.buildListf2landfac = {
 	[[lozemperorscorpion]],
 	[[lozsilverback]],
 	-- [[lozengineer]],
-	[[lozengineer_up1]],
 	-- [[lozengineer_up2]],
 	-- [[lozengineer_up3]],
 }
@@ -177,17 +177,16 @@ Shared.buildListFedUniversalBuilder = {
 	-- [[largeshieldgenerator]],
 	[[fedmenlo]],
 	[[fedstinger]],
-	[[fedearthquakemine]],
 	[[fedimmolator]],
 	[[fedjavelin]],
 	[[fedguardian]],
 	-- [[fedbertha]],
 	[[healstation]],
 	-- [[fedanarchid]],
-	[[fedengineer_up1]],
 }
 
 Shared.buildListFedUniversalBuilderCommander = {
+	[[fedengineer_up1]],
 	[[f1landfac]],
 	[[fedairplant]],
 	[[fedseaplant]],
@@ -211,17 +210,16 @@ Shared.buildListFedUniversalBuilderCommander = {
 	-- [[largeshieldgenerator]],
 	[[fedmenlo]],
 	[[fedstinger]],
-	[[fedearthquakemine]],
 	[[fedimmolator]],
 	[[fedjavelin]],
 	[[fedguardian]],
 	-- [[fedbertha]],
 	[[healstation]],
 	-- [[fedanarchid]],
-	[[fedengineer_up1]],
 }
 
 Shared.buildListLozUniversalBuilder = {
+	[[lozengineer_up1]],
 	[[f2landfac]],
 	[[lozairplant]],
 	[[lozseaplant]],
@@ -242,6 +240,7 @@ Shared.buildListLozUniversalBuilder = {
 	-- [[cloakingtower]],
 	[[smallshieldgenerator]],
 	[[largeshieldgenerator]],
+	[[lozearthquakemine]],
 	[[lozjericho]],
 	[[lozrazor]],
 	[[lozinferno]],
@@ -250,10 +249,10 @@ Shared.buildListLozUniversalBuilder = {
 	-- [[lozintimidator]],
 	-- [[healstation]],
 	-- [[lozeurypterid]],
-	[[lozengineer_up1]],
 }
 
 Shared.buildListLozUniversalBuilderCommander = {
+	[[lozengineer_up1]],
 	[[f2landfac]],
 	[[lozairplant]],
 	[[lozseaplant]],
@@ -274,6 +273,7 @@ Shared.buildListLozUniversalBuilderCommander = {
 	-- [[cloakingtower]],
 	[[smallshieldgenerator]],
 	[[largeshieldgenerator]],
+	[[lozearthquakemine]],
 	[[lozjericho]],
 	[[lozrazor]],
 	[[lozinferno]],
@@ -282,7 +282,6 @@ Shared.buildListLozUniversalBuilderCommander = {
 	-- [[lozintimidator]],
 	-- [[healstation]],
 	-- [[lozeurypterid]],
-	[[lozengineer_up1]],
 }
 
 
