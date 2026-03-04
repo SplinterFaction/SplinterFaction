@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<style>
+			html {
+				background-color: #000;
+			}	
+			.header {
+				animation: fadeIn 2.5s;
+				margin: 0;
+			}
+
+			.content {
+				animation: fadeIn 2.5s;
+				margin: 0;
+			}
+
+			@keyframes fadeIn {
+				0% { opacity: 0; }
+				100% { opacity: 1; }
+			}
+		</style>
+		<title>Changelog - SplinterFaction</title>
+		<meta charset="UTF-8" />
+		<div class="header">
+			<div data-include="/includes/navigation.html"></div>
+			<div data-include="/includes/header_subpage.html"></div>
+		</div>
+	</head>
+	<body>
+		<div id="maincontent">
+			<div class="contentcontainer">
+				<!-- Page name goes here -->
+				<h1>Changelog</h1>
+				<hr />
+				<div class="content">
+					
+					These are the 10 latest commits on Github. You can have a look at the latest newsposts here:<br>
+					<a href="https://github.com/SplinterFaction/SplinterFaction/discussions/categories/announcements" target="_blank">Announcements Discussion Board</a>
+					<div id="commits">
+						  <div id="status">Loading commits…</div>
+							  <ul id="list"></ul>
+							</div>
+
+							<script>
+							(async () => {
+							  const owner = "SplinterFaction";
+							  const repo  = "SplinterFaction";
+							  const branch = "master";
+							  const perPage = 10;
+
+							  // Optional: add a GitHub token to raise rate limits for heavy traffic
+							  // const GITHUB_TOKEN = "ghp_..."; // <-- DON'T hardcode on public sites
+							  const GITHUB_TOKEN = "";
+
+							  const statusEl = document.getElementById("status");
+							  const listEl = document.getElementById("list");
+
+							  const escapeHtml = (str) =>
+								String(str).replace(/[&<>"']/g, (c) => ({
+								  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+								}[c]));
+
+							  function fmtDate(iso) {
+								const d = new Date(iso);
+								return isNaN(d) ? "" : d.toLocaleString(undefined, {
+								  year: "numeric", month: "short", day: "numeric",
+								  hour: "numeric", minute: "2-digit"
+								});
+							  }
+
+							  try {
+								statusEl.textContent = "Loading commits…";
+
+								const url = `https://api.github.com/repos/${owner}/${repo}/commits?sha=${encodeURIComponent(branch)}&per_page=${perPage}`;
+
+								const headers = {
+								  "Accept": "application/vnd.github+json",
+								  "X-GitHub-Api-Version": "2022-11-28",
+								};
+								if (GITHUB_TOKEN) headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`;
+
+								const res = await fetch(url, { headers, cache: "no-store" });
+
+								// Helpful rate-limit messaging
+								if (res.status === 403) {
+								  const remaining = res.headers.get("X-RateLimit-Remaining");
+								  if (remaining === "0") {
+									throw new Error("GitHub API rate limit hit (try again later, or use a server-side cache/proxy).");
+								  }
+								}
+
+								if (!res.ok) throw new Error(`GitHub API error: HTTP ${res.status}`);
+
+								const commits = await res.json();
+								if (!Array.isArray(commits) || commits.length === 0) {
+								  statusEl.textContent = "No commits found.";
+								  return;
+								}
+
+								statusEl.textContent = "";
+
+								listEl.innerHTML = commits.map(c => {
+								  const msg = c?.commit?.message || "(no message)";
+								  const author = c?.commit?.author?.name || c?.author?.login || "Unknown";
+								  const date = c?.commit?.author?.date || "";
+								  const link = c?.html_url || "#";
+								  const sha = (c?.sha || "").slice(0, 7);
+
+								  // Preserve line breaks
+								  const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
+
+								  return `
+									<li style="margin: 0 0 16px 0;list-style-type: none;">
+									  <b><a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
+										${escapeHtml(sha)}
+									  </a></b>
+
+									  <div style="margin-top:4px;">
+										${formattedMsg}
+									  </div>
+
+									  <div style="font-size: 12px; opacity: 0.75; margin-top:4px;">
+										${escapeHtml(author)}${date ? " · " + escapeHtml(fmtDate(date)) : ""}
+									  </div>
+									</li>
+								  `;
+								}).join("");
+
+							  } catch (err) {
+								console.error(err);
+								statusEl.textContent = "Failed to load commits.";
+							  }
+							})();
+							</script>
+									
+					<div data-include="/includes/download.html"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div data-include="includes/footer.html"></div>
+		<!-- Required Include Function -->
+		<script>
+			document.addEventListener("DOMContentLoaded", async () => {
+				const includeElements = document.querySelectorAll("[data-include]");
+				for (const el of includeElements) {
+					const file = el.getAttribute("data-include");
+					try {
+						const response = await fetch(file);
+						if (!response.ok) throw new Error(`Failed to load ${file}`);
+						el.innerHTML = await response.text();
+					} catch (err) {
+						el.innerHTML = `<p style="color:red;">Could not load ${file}</p>`;
+						console.error(err);
+					}
+				}
+			});
+		</script>
+	</body>
+</html>
