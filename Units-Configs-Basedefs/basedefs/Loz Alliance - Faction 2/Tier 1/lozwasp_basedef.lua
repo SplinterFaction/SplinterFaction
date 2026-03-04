@@ -15,24 +15,24 @@ unitDef                    = {
 -- Flight Characteristics Settings
 
 	maxVelocity        = 8,     -- Your defined top speed
-	acceleration       = 0.42,    -- Slight bump to help it ramp to speed
-	maxAcc             = 1.2,     -- A little more responsive at higher speed
+	acceleration        = 0.45,   -- was 0.4
+	maxAcc              = 1.35,   -- was 1.0  (biggest “snappy” lever)
 
-	turnRadius         = 90,      -- Slightly wider circle due to higher speed
+	turnRadius          = 70,     -- was 80   (starts committing to turns sooner)
 
-	wingDrag           = 0.06,    -- Keep same for consistent glide behavior
-	wingAngle          = 0.08,    -- Leave unchanged unless it feels under-lifty
+	wingDrag            = 0.062,  -- was 0.06 (tiny bump to keep it from gliding through turns)
+	wingAngle           = 0.075,  -- was 0.07 (slightly more lift/authority)
 
-	crashDrag          = 0.005,   -- Leave as-is
+	crashDrag           = 0.005,
 
-	maxBank            = 0.72,    -- Slight increase to match faster banking needs
-	maxPitch           = 0.6,     -- Increase slightly for improved climb/dive
+	maxBank             = 0.75,   -- was 0.7  (tighter circle)
+	maxPitch            = 0.60,   -- was 0.55
 
-	verticalSpeed      = 4.0,     -- Allow slightly faster vertical correction
+	maxAileron          = 0.016,  -- was 0.012 (faster roll-in to bank)
+	maxElevator         = 0.014,  -- was 0.012
+	maxRudder           = 0.0030, -- was 0.002 (more “bite” without getting weird)
 
-	maxAileron         = 0.013,   -- Slightly faster roll
-	maxElevator        = 0.013,   -- Slightly faster pitch
-	maxRudder          = 0.0022,  -- Slight yaw improvement to keep turning sharp
+	verticalSpeed       = 3.8,    -- was 3.5
 
 	useSmoothMesh		= true,
 

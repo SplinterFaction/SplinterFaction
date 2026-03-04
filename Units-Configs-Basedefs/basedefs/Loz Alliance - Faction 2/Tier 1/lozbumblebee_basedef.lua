@@ -15,24 +15,24 @@ unitDef                    = {
 -- Flight Characteristics Settings
 
 	maxVelocity        = 6,
-	acceleration       = 0.25,     -- Slower takeoff and sluggish momentum
-	maxAcc             = 0.7,      -- Slow to correct heading
+	acceleration       = 0.25,
+	maxAcc             = 1.2,
 
-	turnRadius         = 160,      -- Big wide turns — can't easily circle back
+	turnRadius         = 120,
 
-	wingDrag           = 0.07,     -- High drag to prevent glidey behavior
-	wingAngle          = 0.07,     -- Balanced lift to keep it from stalling
+	wingDrag           = 0.07,
+	wingAngle          = 0.07,
 
-	crashDrag          = 0.005,    -- Standard
+	crashDrag          = 0.005,
 
-	maxBank            = 0.45,     -- Shallow rolls; avoids sharp tilting
-	maxPitch           = 0.4,      -- Sluggish pitch for slow climb/dive
+	maxBank            = 0.65,
+	maxPitch           = 0.4,
 
-	verticalSpeed      = 2.5,      -- Reduced climb rate
+	verticalSpeed      = 2.5,
 
-	maxAileron         = 0.008,    -- Slower roll
-	maxElevator        = 0.008,    -- Slower pitch
-	maxRudder          = 0.0015,   -- Barely turns without banking
+	maxAileron         = 0.014,
+	maxElevator        = 0.010,
+	maxRudder          = 0.0045,
 
 	useSmoothMesh		= true,
 

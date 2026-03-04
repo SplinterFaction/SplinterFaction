@@ -14,26 +14,25 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	maxVelocity        = 7,     -- Your defined top speed
-	acceleration       = 0.4,    -- How quickly it reaches that speed
-	maxAcc             = 1.0,    -- Affects responsiveness to course corrections
+	maxVelocity         = 7,     -- Your defined top speed
+	acceleration        = 0.45,   -- was 0.4
+	maxAcc              = 1.35,   -- was 1.0  (biggest “snappy” lever)
 
-	turnRadius         = 80,     -- Lower = tighter turns. 80 is tight for this speed
+	turnRadius          = 70,     -- was 80   (starts committing to turns sooner)
 
-	wingDrag           = 0.06,   -- Too low = unrealistic glide; too high = stalls
-	wingAngle          = 0.07,   -- Lift. Higher = more responsive, but twitchier
+	wingDrag            = 0.062,  -- was 0.06 (tiny bump to keep it from gliding through turns)
+	wingAngle           = 0.075,  -- was 0.07 (slightly more lift/authority)
 
-	crashDrag          = 0.005,  -- Fine to leave as-is
+	crashDrag           = 0.005,
 
-	maxBank            = 0.7,   -- How far it tilts in turns. 0.7–0.8 = fast-fighter style
-	maxPitch           = 0.55,   -- How fast it can nose up/down
+	maxBank             = 0.75,   -- was 0.7  (tighter circle)
+	maxPitch            = 0.60,   -- was 0.55
 
-	verticalSpeed      = 3.5,    -- Limits climbing/dive rate. Good value for quick altitude change
+	maxAileron          = 0.016,  -- was 0.012 (faster roll-in to bank)
+	maxElevator         = 0.014,  -- was 0.012
+	maxRudder           = 0.0030, -- was 0.002 (more “bite” without getting weird)
 
-	maxAileron         = 0.012,  -- Controls roll rate (used to bank). Don't go crazy high
-	maxElevator        = 0.012,  -- Controls pitch (up/down)
-	maxRudder          = 0.002,  -- Yaw rate — don't set too high or pathing breaks
-
+	verticalSpeed       = 3.8,    -- was 3.5
 
 	useSmoothMesh		= true,
 
