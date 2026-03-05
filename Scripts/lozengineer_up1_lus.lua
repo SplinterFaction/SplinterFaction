@@ -1,4 +1,4 @@
-base, nanopoint1, nanopoint2, dirt = piece('base', 'nanopoint1', 'nanopoint2', 'dirt')
+base, nanopoint1, nanopoint2, frontwheels, rearwheels, dirt = piece('base', 'nanopoint1', 'nanopoint2', 'frontwheels', 'rearwheels', 'dirt')
 local SIG_AIM = {}
 
 local nanoPieces = {[0] = nanopoint1, nanopoint2}
@@ -11,7 +11,7 @@ terrainType = "terrainType"
 common = include("headers/common_includes_lus.lua")
 
 function script.Create()
-	StartThread(common.SmokeUnit, {base, nanopoint1, nanopoint2})
+	StartThread(common.SmokeUnit, {base, nanopoint1, nanopoint2, frontwheels, rearwheels, dirt})
 	StartThread(BuildFX)
 	building = false
 	Spring.SetUnitNanoPieces(unitID, nanoPieces)
@@ -20,10 +20,14 @@ end
 function script.StartMoving()
    isMoving = true
    	StartThread(thrust)
+	Spin( frontwheels, 1, 50)
+	Spin( rearwheels, 1, 50)
 end
 
 function script.StopMoving()
    isMoving = false
+	StopSpin( frontwheels, 1, 50)
+	StopSpin( rearwheels, 1, 50)
 end   
 
 function thrust()

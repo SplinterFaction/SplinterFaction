@@ -186,7 +186,6 @@ Shared.buildListFedUniversalBuilder = {
 }
 
 Shared.buildListFedUniversalBuilderCommander = {
-	[[fedengineer_up1]],
 	[[f1landfac]],
 	[[fedairplant]],
 	[[fedseaplant]],
@@ -219,7 +218,6 @@ Shared.buildListFedUniversalBuilderCommander = {
 }
 
 Shared.buildListLozUniversalBuilder = {
-	[[lozengineer_up1]],
 	[[f2landfac]],
 	[[lozairplant]],
 	[[lozseaplant]],
@@ -252,7 +250,6 @@ Shared.buildListLozUniversalBuilder = {
 }
 
 Shared.buildListLozUniversalBuilderCommander = {
-	[[lozengineer_up1]],
 	[[f2landfac]],
 	[[lozairplant]],
 	[[lozseaplant]],

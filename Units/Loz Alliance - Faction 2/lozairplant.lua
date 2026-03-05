@@ -4,14 +4,14 @@ unitName = "lozairplant"
 
 --------------------------------------------------------------------------------
 
-buildCostEnergy = 4500
+buildCostEnergy = 3000
 
 humanName = [[VTOL Factory]]
 
 objectName = "lozairplant.s3o"
 script = "lozairplant.cob"
 
-tech = [[tech1]]
+tech = [[tech0]]
 
 airPlantBuildList = Shared.buildListLozAirPlant
 

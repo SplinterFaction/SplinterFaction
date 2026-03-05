@@ -11,7 +11,7 @@ humanName = [[Land Factory]]
 objectName = "f1landfac.s3o"
 script = "eallterrfac2.cob"
 
-tech = [[tech1]]
+tech = [[tech0]]
 
 F1LandFacBuildList = Shared.buildListf1landfac
 

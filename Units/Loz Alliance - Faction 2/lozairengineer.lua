@@ -24,7 +24,7 @@ objectName = [[lozairengineer.s3o]]
 script = [[lozairengineer_lus.lua]]
 
 areamexdef = [[lozmetalextractor]]
-requiretech = [[tech1]]
+requiretech = [[tech0]]
 
 explodeAs = [[mediumexplosiongenericgreen]]
 

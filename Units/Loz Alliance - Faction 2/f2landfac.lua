@@ -12,7 +12,7 @@ humanName = [[Land Factory]]
 objectName = "f2landfac.s3o"
 script = "f2landfac.cob"
 
-tech = [[tech1]]
+tech = [[tech0]]
 
 explodeAs = [[largebuildingexplosiongeneric]]
 

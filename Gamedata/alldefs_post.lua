@@ -644,7 +644,15 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "building" then
-								unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+								if unitDef.customparams.unitrole == "Factory" then
+									if unitDef.unitname == "fedairplant" or unitDef.unitname == "lozairplant" then
+										unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30)
+									else
+										unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+									end
+								else
+									unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+								end
 							end
 						end
 
@@ -899,10 +907,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 5
 			end
 			if unitDef.customparams.unitrole == "Builder" then
-				unitDef.maxdamage = unitDef.maxdamage * 3
+				unitDef.maxdamage = unitDef.maxdamage * 1.5
 			end
 			if unitDef.customparams.unitrole == "Air Builder" then
-				unitDef.maxdamage = unitDef.maxdamage * 1
+				unitDef.maxdamage = unitDef.maxdamage * 1.5
 			end
 			if unitDef.customparams.unitrole == "Heatray Tank" then
 				unitDef.maxdamage = unitDef.maxdamage * 1

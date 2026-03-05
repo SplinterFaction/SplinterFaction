@@ -24,7 +24,7 @@ objectName = [[fedairengineer.s3o]]
 script = [[fedairengineer_lus.lua]]
 
 areamexdef = [[fedmetalextractor]]
-requiretech = [[tech1]]
+requiretech = [[tech0]]
 
 explodeAs = [[mediumexplosiongenericgreen]]
 
