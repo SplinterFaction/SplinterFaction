@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Tutorial:HeightMapWithPOVRay(RogerN) - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"5425fe4adb4ec4c044de3d51","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Tutorial:HeightMapWithPOVRay(RogerN)","wgTitle":"Tutorial:HeightMapWithPOVRay(RogerN)","wgCurRevisionId":28906,"wgRevisionId":28906,"wgArticleId":2091,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Tutorial","Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Tutorial:HeightMapWithPOVRay(RogerN)","wgRelevantArticleId":2091,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],
+"wgRestrictionMove":[],"wgRedirectedFrom":"Height_Map_Tutorial","wgInternalRedirectTargetUrl":"/wiki/Tutorial:HeightMapWithPOVRay(RogerN)"};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["mediawiki.action.view.redirect","site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<link href="https://springrts.com/wiki/Tutorial:HeightMapWithPOVRay(RogerN)" rel="canonical"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Tutorial_HeightMapWithPOVRay_RogerN rootpage-Tutorial_HeightMapWithPOVRay_RogerN skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Tutorial:HeightMapWithPOVRay(RogerN)</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"><span class="mw-redirectedfrom">(Redirected from <a class="mw-redirect" href="/mediawiki/index.php?title=Height_Map_Tutorial&amp;redirect=no" title="Height Map Tutorial">Height Map Tutorial</a>)</span></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; Tutorial:HeightMapWithPOVRay(RogerN)
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Required_Tools"><span class="tocnumber">2</span> <span class="toctext">Required Tools</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#A_Simple_Hill"><span class="tocnumber">3</span> <span class="toctext">A Simple Hill</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Viewing_in_3D"><span class="tocnumber">4</span> <span class="toctext">Viewing in 3D</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Making_it_realistic"><span class="tocnumber">5</span> <span class="toctext">Making it realistic</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Create_a_mountain_range"><span class="tocnumber">6</span> <span class="toctext">Create a mountain range</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>Most of the other Spring mapping tutorials focus primarily on the technical aspects of mapping related to compilation (e.g. how to compile your map, what size your height map should be, how to place features, etcÃ¢â‚¬Â¦). Consequently, this tutorial will not go into those details. Instead, this document will focus solely on some tips for creating height maps.
+</p>
+<h2><span class="mw-headline" id="Required_Tools">Required Tools</span></h2>
+<p>In order to make this tutorial accessible to everyone, the tools weÃ¢â‚¬â„¢ll be using are free, open source programs. WeÃ¢â‚¬â„¢re going to be using a generic painting / image processing program and a ray-tracer. These programs are:
+</p><p><a class="external text" href="http://www.gimp.org" rel="nofollow">GIMP</a>: Best described as a Photoshop clone, this is an extremely useful image processing tool. It offers many of the same features as Adobe Photoshop at a much more reasonable price ($0).
+</p><p><a class="external text" href="http://www.povray.org" rel="nofollow">POV-Ray</a>: As a ray-tracer, POV-Ray is primarily designed to render 3D images. WeÃ¢â‚¬â„¢ll be using it to preview our height map in 3D. However, the program also has some tricks we can use to tweak our height map directly. Eventually we can also use POV-Ray to render the final texture for our map (covered in a different tutorial).
+</p><p>Once youÃ¢â‚¬â„¢ve installed the above programs (or Photoshop instead of GIMP), thereÃ¢â‚¬â„¢s one other file you ought to download and extract:
+</p><p><a class="external text" href="http://webpages.charter.net/kgnorris/HeightMapTut/HeightMapTutorialFiles.zip" rel="nofollow">Tutorial POV-Ray files</a>: This archive contains some POV-Ray input files that weÃ¢â‚¬â„¢ll be using throughout the tutorial.
+</p>
+<h2><span class="mw-headline" id="A_Simple_Hill">A Simple Hill</span></h2>
+<table>
+<tbody><tr valign="top">
+<td>
+<p>In this first section of the tutorial weÃ¢â‚¬â„¢ll be creating a height map for a 4x4 Spring map. This means that our height map needs to be 257 x 257 pixels. So, start up GIMP and create a new image by clicking "File &gt; New".
+</p>
+</td>
+<td><a class="image" href="/wiki/File:RogerNTut1_CreateImage.png"><img alt="RogerNTut1 CreateImage.png" decoding="async" height="264" src="images/RogerNTut1_CreateImage.png" width="388"/></a>
+</td></tr></tbody></table>
+<table>
+<tbody><tr valign="top">
+<td>
+<p><a class="image" href="/wiki/File:RogerNTut1_BucketFill.png"><img alt="RogerNTut1 BucketFill.png" decoding="async" height="29" src="images/RogerNTut1_BucketFill.png" width="29"/></a>
+</p>
+</td>
+<td>To get our image ready for use, fill the entire image with black. Select black as your foreground color and then use the bucket fill tool to paint the whole thing black.
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<table>
+<tbody><tr valign="top">
+<td>
+<p><a class="image" href="/wiki/File:RogerNTut1_Lasso.png"><img alt="RogerNTut1 Lasso.png" decoding="async" height="22" src="images/RogerNTut1_Lasso.png" width="23"/></a>
+</p>
+</td>
+<td>Now we want to create a simple hill in the center of our map. Begin by selecting white as your foreground color. Next, we want to select the region which is going to be the top of our hill. Activate the lasso tool.
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<table>
+<tbody><tr valign="top">
+<td>
+<p>Use the lasso tool to outline a region in the center of the height map. This will be the top of our hill. DonÃ¢â‚¬â„¢t make your selection too close to any of the sides because weÃ¢â‚¬â„¢ll need some space around the edges later (the slopes going up our hill need space).
+</p>
+</td>
+<td><a class="image" href="/wiki/File:RogerNTut1_SelectRegion.png"><img alt="RogerNTut1 SelectRegion.png" decoding="async" height="377" src="images/RogerNTut1_SelectRegion.png" width="315"/></a>
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<table>
+<tbody><tr valign="top">
+<td>
+<p>Before we fill our selected region we want to ensure that our hill has gradual slopes (rather than a sheer face). Right-click the image and click "Select &gt; Feather..." WeÃ¢â‚¬â„¢re going to use 30 pixels here to give a very gradual slope.
+</p>
+</td>
+<td><a class="image" href="/wiki/File:RogerNTut1_Feather.png"><img alt="RogerNTut1 Feather.png" decoding="async" height="166" src="images/RogerNTut1_Feather.png" width="299"/></a>
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<table>
+<tbody><tr valign="top">
+<td>
+<p>Now weÃ¢â‚¬â„¢re ready to draw the hill. Select white as your foreground color. Then right-click the image and click "Edit &gt; Fill with FG color." Now we ought to have a hill in the center of our image with a nice gradient for the slopes.
+</p>
+</td>
+<td><a class="image" href="/wiki/File:RogerNTut1_Feathered.png"><img alt="RogerNTut1 Feathered.png" decoding="async" height="386" src="images/RogerNTut1_Feathered.png" width="322"/></a>
+</td></tr></tbody></table>
+<p>Our relatively simple hill is complete for now, so save the image as a bitmap in the same folder as the tutorial files downloaded previously. Right-click the image and click "File &gt; Save as..."
+</p>
+<h2><span class="mw-headline" id="Viewing_in_3D">Viewing in 3D</span></h2>
+<p>Before we continue to tweak our hill, weÃ¢â‚¬â„¢d like to know what it looks like in 3D. POV-Ray can help us quickly render the height map in 3D.
+</p><p>Start up POV-Ray. Open the provided tutorial file, "Render3DHeight.pov". We have a few settings we want to check before we click run.
+</p><p>Near the top of the POV-Ray file you should see a section for Spring settings. We need to modify these settings for our current project. Specifically, we need to change the height map file name, the map size, and the altitude settings.
+</p><p>Change the height map file to match the name of the bitmap we saved in step 1. The next setting, ViewAngle, is fine at the default for now. The altitude settings need to match what weÃ¢â‚¬â„¢ll eventually use for the map compiler Ã¢â‚¬â€œ for now, choose 100 for the min and 500 for the max. Our Spring map size should be set to 4 x 4.
+</p><p><a class="image" href="/wiki/File:RogerNTut1_SpringSettings1.png"><img alt="RogerNTut1 SpringSettings1.png" decoding="async" height="275" src="images/RogerNTut1_SpringSettings1.png" width="562"/></a>
+</p><p>WeÃ¢â‚¬â„¢re almost ready to render the 3D image. The last thing to do is pick the render resolution. Either use the drop-down box in the toolbar to select one of the common resolutions, or use the adjacent text box to type the resolution options directly:
+</p><p><a class="image" href="/wiki/File:RogerNTut1_Resolution.png"><img alt="RogerNTut1 Resolution.png" decoding="async" height="92" src="images/RogerNTut1_Resolution.png" width="261"/></a>
+</p><p>Now click the Run button on the tool bar. You ought to get a 3D picture of our simple hill.
+</p><p><a class="image" href="/wiki/File:RogerNTut1_SimpleHill3D.jpg"><img alt="RogerNTut1 SimpleHill3D.jpg" decoding="async" height="215" src="images/RogerNTut1_SimpleHill3D.jpg" width="498"/></a>
+</p>
+<h2><span class="mw-headline" id="Making_it_realistic">Making it realistic</span></h2>
+<p>Unfortunately, our simple hill looks quite unrealistic at the moment. The slopes are too regular to be believable. There are many techniques we can use to spice it up a bit. In this step weÃ¢â‚¬â„¢ll be examining a simple POV-Ray trick for improving our height map.
+</p><p>Using POV-Ray again, open the provided tutorial file "RenderTurbulence.pov". This file will help us add some entropy to our height map to make it look more natural.
+</p><p>Once again, we need to modify some settings near the top of the file. Locate the Spring settings near the top and modify them to match our current project. We need to set the name of our height map file, and the map size:
+</p><p><a class="image" href="/wiki/File:RogerNTut1_SpringSettings2.png"><img alt="RogerNTut1 SpringSettings2.png" decoding="async" height="102" src="images/RogerNTut1_SpringSettings2.png" width="364"/></a>
+</p><p>Immediately below the map size are settings for turbulence and noise. These settings control the style and amount of randomness or distortion that will be added to our height map. The default values ought to work fine. However, feel free to play around with the settings to get results that you like.
+</p><p>One important task remains before rendering a new height map. We need to ensure that POV-Ray is set to use the correct resolution! Remember that our height map needs to be 257 x 257 pixels. Use the text box in the POV-Ray tool bar to specify the output resolution:
+</p><p><a class="image" href="/wiki/File:RogerNTut1_OverrideRes.png"><img alt="RogerNTut1 OverrideRes.png" decoding="async" height="27" src="images/RogerNTut1_OverrideRes.png" width="255"/></a>
+</p><p>When you click the Run button in the tool bar, you should see a new version of the height map for our simple hill. POV-Ray has taken our original height map as input and added some turbulence to the image:
+</p><p><a class="image" href="/wiki/File:RogerNTut1_Turbulence.jpg"><img alt="RogerNTut1 Turbulence.jpg" decoding="async" height="189" src="images/RogerNTut1_Turbulence.jpg" width="187"/></a>
+</p><p>Note that POV-Ray has saved the new image as "RenderTurbulence.bmp", and has not overwritten our original height map. Also, after applying turbulence in this fashion it is sometimes necessary to apply a small Gaussian blur to smooth out the rough edges (using GIMP, choose "Filters &gt; Blur &gt; Gaussian Blur...", radius 2). If POV-Ray renders the height map in 3D with small holes in some areas then the height map ought to be smoothed / blurred.
+</p><p>So what does our height map look like in 3D now that weÃ¢â‚¬â„¢ve added turbulence? Return to "Render3DHeight.pov" in order to find out. Remember that our original height map hasnÃ¢â‚¬â„¢t changed, so we need to update the file name to "RenderTurbulence.bmp".
+</p><p>The new height map looks something like this when rendered in 3D:
+</p><p><a class="image" href="/wiki/File:RogerNTut1_Turbulence3d.jpg"><img alt="RogerNTut1 Turbulence3d.jpg" decoding="async" height="218" src="images/RogerNTut1_Turbulence3d.jpg" width="361"/></a>
+</p><p>Not bad! ItÃ¢â‚¬â„¢s definitely more realistic than our first attempt. At this point I recommend that you play around with the various turbulence / noise settings, to see how they affect the results. The default values use only turbulence; be sure to try increasing the NoiseAmplitude.
+</p>
+<h2><span class="mw-headline" id="Create_a_mountain_range">Create a mountain range</span></h2>
+<p>In creating the template for our simple hill (step #1) we used a feathered selection to generate a rounded hilltop. This section of the tutorial will demonstrate a slightly different approach which may yield better results for mountains (not hills). Mountains differ from hills in that they tend to be pointed at the top and more angular in shape.
+</p><p>Start up GIMP and create another 257 x 257 height map. Fill the image with black, as before.
+</p><p>Now, using the lasso tool, select a roughly triangular region:
+</p><p><a class="image" href="/wiki/File:RogerNTut1_Triangle.png"><img alt="RogerNTut1 Triangle.png" decoding="async" height="383" src="images/RogerNTut1_Triangle.png" width="319"/></a>
+</p><p>Next we want to use the gradient tool to fill in our triangular region. First, select the gradient tool.
+</p><p><a class="image" href="/wiki/File:RogerNTut1_Gradient.png"><img alt="RogerNTut1 Gradient.png" decoding="async" height="29" src="images/RogerNTut1_Gradient.png" width="28"/></a>
+</p><p>Ensure that the foreground color is set to white, and that the background color is set to black. With the gradient tool selected, ensure that the Shape is set to "Shaped (angular)."
+</p><p><a class="image" href="/wiki/File:RogerNTut1_GradientSettings.png"><img alt="RogerNTut1 GradientSettings.png" decoding="async" height="219" src="images/RogerNTut1_GradientSettings.png" width="210"/></a>
+</p><p>Click anywhere inside the selected region and drag the mouse a short distance. When you release the mouse button, the gradient tool will fill our selection:
+</p><p><a class="image" href="/wiki/File:RogerNTut1_FilledTriangle.png"><img alt="RogerNTut1 FilledTriangle.png" decoding="async" height="383" src="images/RogerNTut1_FilledTriangle.png" width="319"/></a>
+</p><p>By itself this would be a pretty poor (and lonely) mountain, even with turbulence and noise added. But by repeating the process several times (with different shades of gray) we can make a nice mountain range. Use GIMP layers set to Screen in order to overlay mountains effectively.
+</p><p><a class="image" href="/wiki/File:RogerNTut1_mount1.jpg"><img alt="RogerNTut1 mount1.jpg" decoding="async" height="257" src="images/RogerNTut1_mount1.jpg" width="257"/></a>
+</p><p><a class="image" href="/wiki/File:RogerNTut1_mount2.jpg"><img alt="RogerNTut1 mount2.jpg" decoding="async" height="251" src="images/RogerNTut1_mount2.jpg" width="379"/></a>
+</p><p>In the 3D screenshot note that weÃ¢â‚¬â„¢ve added some turbulence (settings were tweaked to get good results) and blurred the results a bit.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223528
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.029 seconds
+Real time usage: 0.036 seconds
+Preprocessor visited node count: 35/1000000
+Post‐expand include size: 36/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2091-0!canonical and timestamp 20260309223528 and revision id 28906
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Tutorial:HeightMapWithPOVRay(RogerN)&amp;oldid=28906">https://springrts.com/mediawiki/index.php?title=Tutorial:HeightMapWithPOVRay(RogerN)&amp;oldid=28906</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a class="new" href="/mediawiki/index.php?title=Category:Tutorial&amp;action=edit&amp;redlink=1" title="Category:Tutorial (page does not exist)">Tutorial</a></li><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Tutorial_HeightMapWithPOVRay(RogerN).html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Tutorial:HeightMapWithPOVRay(RogerN)&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Tutorial:HeightMapWithPOVRay(RogerN)&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Tutorial:HeightMapWithPOVRay(RogerN)&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Tutorial_HeightMapWithPOVRay(RogerN).html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Tutorial:HeightMapWithPOVRay(RogerN)&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Tutorial%3AHeightMapWithPOVRay%28RogerN%29" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Tutorial:HeightMapWithPOVRay(RogerN)" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Tutorial:HeightMapWithPOVRay(RogerN)" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Tutorial:HeightMapWithPOVRay(RogerN)&amp;oldid=28906" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Tutorial:HeightMapWithPOVRay(RogerN)&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 18 October 2014, at 22:53.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.029","walltime":"0.036","ppvisitednodes":{"value":35,"limit":1000000},"postexpandincludesize":{"value":36,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223528","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":108});});</script></body></html>

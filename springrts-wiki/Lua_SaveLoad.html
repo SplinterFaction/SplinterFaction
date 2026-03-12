@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua SaveLoad - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"07c690c4bcc762f5550d81b9","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_SaveLoad","wgTitle":"Lua SaveLoad","wgCurRevisionId":30330,"wgRevisionId":30330,"wgArticleId":2844,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_SaveLoad","wgRelevantArticleId":2844,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready",
+"user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_SaveLoad rootpage-Lua_SaveLoad skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua SaveLoad</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua SaveLoad
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Lua_Save.2FLoad_support"><span class="tocnumber">1</span> <span class="toctext">Lua Save/Load support</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Motivation"><span class="tocnumber">1.1</span> <span class="toctext">Motivation</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Idea"><span class="tocnumber">1.2</span> <span class="toctext">Idea</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Chat_commands"><span class="tocnumber">1.3</span> <span class="toctext">Chat commands</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Lua_API_documentation"><span class="tocnumber">1.4</span> <span class="toctext">Lua API documentation</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Load_.28_zip_.29_-.3E_nil"><span class="tocnumber">1.4.1</span> <span class="toctext"><b>Load</b> ( zip ) -&gt; nil</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Save_.28_zip_.29_-.3E_nil"><span class="tocnumber">1.4.2</span> <span class="toctext"><b>Save</b> ( zip ) -&gt; nil</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Example_gadgets"><span class="tocnumber">1.5</span> <span class="toctext">Example gadgets</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span id="Lua_Save/Load_support"></span><span class="mw-headline" id="Lua_Save.2FLoad_support">Lua Save/Load support</span></h1>
+<h2><span class="mw-headline" id="Motivation">Motivation</span></h2>
+<p>Engine save/load has been broken/unstable for a very long time. I believe the major reasons for this were:
+</p>
+<ul><li>In particular for loading too much special code paths were traversed, that were not used for anything else (e.g. creg_Serialize and creg_PostLoad functions in many classes);</li>
+<li>Each class was responsible for it's own saving and loading;</li>
+<li>The code for loading was spread out over many classes;</li>
+<li>Save/load using CREG was extremely slow.</li>
+<li>Savegames created using CREG were bound to be incompatible between different Spring versions because they relied inherently on the implementation details of every single class involved;</li>
+<li>The save/load system strived to be 100% perfect, saving every single detail.</li>
+<li>No clear way to save Lua states (without making Lua aware of it)</li></ul>
+<p>I realised we have a pretty decent and reasonably stable Lua interface. So why use this for save/load:
+</p>
+<ul><li>The code has been tested in practice (it's used in widgets and gadgets);</li>
+<li>The interface is reasonably stable, so savegames can be compatible between different Spring versions;</li>
+<li>Not a single class needs special support for save/load, as save/load uses existing APIs.</li>
+<li>By simply using the standard call-in mechanism any gadgets can save some state if that is desired. The save/load gadget does not need to get special treatment at all.</li></ul>
+<p><a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=23&amp;t=21805" rel="nofollow">Argh</a> and <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=23&amp;t=21836" rel="nofollow">zwzsg</a> had this idea too and implement save/load using Lua only. This is a little bit hacky and it is slow when saving large amounts of data such as e.g. the modified terrain heightmap.
+</p><p>Hence Lua save/load brings engine support for Lua save/load :-)
+</p>
+<h2><span class="mw-headline" id="Idea">Idea</span></h2>
+<p>Instead of having the engine be responsible for serializing every bit of gamestate to disk, Lua save/load transfers most of the responsibility to the game (developer). The game developer can decide what objects and what properties are important to save, and ultimately a gadget could be created that could be drag 'n dropped in nearly any game. (Argh's and zwzsg's code would be useful for this.)
+</p><p>There are two new call-ins: Load and Save, that allow a Lua save/load system to seamlessly integrate with other interfaces of the engine (e.g. commandline, lobby). Load is called by the engine if it has been instructed to load a game. Save is called by the engine whenever the chat command '/save &lt;filename&gt;' or '/savegame' is given. Both get a userdatum as argument. Using the methods open, read and write on this userdatum the Lua code can read/write chunks of data.
+</p><p>At this moment existing code for reading and writing zip files has been re-used for Lua save/load, so savegames are simply renamed zip files (.ssf)
+</p>
+<h2><span class="mw-headline" id="Chat_commands">Chat commands</span></h2>
+<ul><li><code>/save [-y] &lt;filename&gt;</code>: Write a savegame to &lt;filename&gt;. The file is placed in the 'Saves' folder and the '.ssf' extension is automatically added. If -y is given the file is overwritten if it already exists. Filename cannot have spaces.</li>
+<li><code>/savegame</code>: Write a savegame to 'Saves/QuickSave.ssf'.</li>
+<li><code>/reloadgame</code>: Reload the savegame that was loaded when the engine was started. Useful for testing. Note that no cleanup is performed by the engine; i.e. Lua code should erase all units from the battlefield.</li></ul>
+<h2><span class="mw-headline" id="Lua_API_documentation">Lua API documentation</span></h2>
+<p>Lua save/load brings two new call-ins:
+</p>
+<h3><span id="Load_(_zip_)_-&gt;_nil"></span><span class="mw-headline" id="Load_.28_zip_.29_-.3E_nil"><code><b>Load</b> ( zip ) -&gt; nil</code></span></h3>
+<p>This <b>SYNCED</b> call-in is called after GamePreload and before GameStart. The single argument is a userdatum respresenting a zip file from which the game is being loaded.
+</p><p>On this userdatum the following methods are defined:
+</p>
+<ul><li><code>zip:open(filename)</code>: Opens a file within the zip file. Next calls to <code>zip:read</code> will read from this file.</li>
+<li><code>zip:read(...)</code>: Reads data from the file that is currently open. Arguments and return values are similar to <a class="external text" href="http://www.lua.org/pil/21.1.html" rel="nofollow">io.read</a>, although only "*all" and <i>num</i> are supported. The special case io.read(0) should work.</li></ul>
+<p>Note that currently loading multiplayer games is not supported: the Load call-in is only called on the client loading the game.
+</p>
+<h3><span id="Save_(_zip_)_-&gt;_nil"></span><span class="mw-headline" id="Save_.28_zip_.29_-.3E_nil"><code><b>Save</b> ( zip ) -&gt; nil</code></span></h3>
+<p>This <b>UNSYNCED</b> call-in is called when a chat command '/save' or '/savegame' is received. The single argument is a userdatum representing the savegame zip file.
+</p><p>On this userdatum the following methods are defined:
+</p>
+<ul><li><code>zip:open(filename)</code>: Opens a new file within the zip file. Next calls to <code>zip:write</code> will write to this file.</li>
+<li><code>zip:write(...)</code>: Writes data to the file that is currently open. Arguments are same as <a class="external text" href="http://www.lua.org/pil/21.1.html" rel="nofollow">io.write</a>.</li></ul>
+<p>Usually when this call-in is called you'd do something like this (pseudocode) in one savegame gadget:
+</p>
+<pre> function gadget:Save(zip)
+   zip:open("units.lua")
+   for each unit do
+     write some properties about the unit in zip, e.g. position, heading, health
+   end
+ end
+</pre>
+<p>Note that Spring writes files into this zip file too. Any files in the directory 'Spring' are reserved for use by the engine.
+</p>
+<h2><span class="mw-headline" id="Example_gadgets">Example gadgets</span></h2>
+<ul><li>Zero-K: <a class="external text" href="https://github.com/ZeroK-RTS/Zero-K/blob/master/LuaRules/Gadgets/api_saveload.lua" rel="nofollow">api_saveload.lua</a>
+<ul><li>For an example of a gadget that interacts with this API gadget, see <a class="external text" href="https://github.com/ZeroK-RTS/Zero-K/blob/master/LuaRules/Gadgets/start_unit_setup.lua" rel="nofollow">start_unit_setup.lua</a></li></ul></li></ul>
+<p>If you have made a gadget that implements this interface, please add a link.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223556
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.006 seconds
+Real time usage: 0.008 seconds
+Preprocessor visited node count: 28/1000000
+Post‐expand include size: 12/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2844-0!canonical and timestamp 20260309223556 and revision id 30330
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_SaveLoad&amp;oldid=30330">https://springrts.com/mediawiki/index.php?title=Lua_SaveLoad&amp;oldid=30330</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_SaveLoad.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_SaveLoad&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_SaveLoad&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_SaveLoad&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_SaveLoad.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_SaveLoad&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+SaveLoad" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_SaveLoad" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_SaveLoad" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_SaveLoad&amp;oldid=30330" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_SaveLoad&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 13 January 2017, at 08:19.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.006","walltime":"0.008","ppvisitednodes":{"value":28,"limit":1000000},"postexpandincludesize":{"value":12,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223556","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":121});});</script></body></html>

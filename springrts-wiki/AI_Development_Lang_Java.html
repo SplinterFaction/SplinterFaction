@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>AI:Development:Lang:Java - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"9fd447837161e388bf628a88","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"AI:Development:Lang:Java","wgTitle":"AI:Development:Lang:Java","wgCurRevisionId":29688,"wgRevisionId":29688,"wgArticleId":2663,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AI Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"AI:Development:Lang:Java","wgRelevantArticleId":2663,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AI_Development_Lang_Java rootpage-AI_Development_Lang_Java skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">AI:Development:Lang:Java</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a href="AI_Development.html" title="AI:Development">AI Development</a> &lt; Java AI Development
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Getting_Started_on_your_own_Java_AI"><span class="tocnumber">1</span> <span class="toctext">Getting Started on your own Java AI</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Setting_up_a_Java_Project"><span class="tocnumber">1.1</span> <span class="toctext">Setting up a Java Project</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Importing_the_interface_libraries"><span class="tocnumber">1.1.1</span> <span class="toctext">Importing the interface libraries</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Creating_the_main_class"><span class="tocnumber">1.1.2</span> <span class="toctext">Creating the main class</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-5"><a href="#Adding_your_AI_to_Spring"><span class="tocnumber">1.2</span> <span class="toctext">Adding your AI to Spring</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Creating_an_AI_folder"><span class="tocnumber">1.2.1</span> <span class="toctext">Creating an AI folder</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Telling_the_Engine_about_your_AI"><span class="tocnumber">1.2.2</span> <span class="toctext">Telling the Engine about your AI</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Test_your_AI"><span class="tocnumber">1.3</span> <span class="toctext">Test your AI</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Getting_your_AI_to_Do_Something"><span class="tocnumber">2</span> <span class="toctext">Getting your AI to Do Something</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Events"><span class="tocnumber">2.1</span> <span class="toctext">Events</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Getting_a_reference_to_the_callback"><span class="tocnumber">2.2</span> <span class="toctext">Getting a reference to the callback</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Getting_a_reference_to_the_commander"><span class="tocnumber">2.3</span> <span class="toctext">Getting a reference to the commander</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Getting_a_reference_to_the_solar_plant_definition"><span class="tocnumber">2.4</span> <span class="toctext">Getting a reference to the solar plant definition</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Telling_the_commander_to_build_the_solar_plant"><span class="tocnumber">2.5</span> <span class="toctext">Telling the commander to build the solar plant</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Building_a_metal_extractor"><span class="tocnumber">2.6</span> <span class="toctext">Building a metal extractor</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Frequently_Asked_Questions"><span class="tocnumber">3</span> <span class="toctext">Frequently Asked Questions</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Getting_Started_on_your_own_Java_AI">Getting Started on your own Java AI</span></h2>
+<p><i>Note:</i> This tutorial assumes you have Spring working on your machine. The Spring directory will be referred to as 'Spring' from here on.
+</p><p>You will also need to make sure that Java AI's run properly on your machine. This is most easily done by running a Spring game with the <i>NullOOJavaAI</i> that comes with the engine. You will need the JRE 1.5 or greater, and to set the <i>JAVA_HOME</i> environment variable on your system to point to the correct location.
+</p><p><i>Note:</i> If you're using a <i>64 bit</i> version of <i>Windows</i>, you will need a 32 bit Java Runtime Environment/Java Development Kit anyway, because Spring is (as of May 2014) not yet available as a 64bit version for Windows.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Setting_up_a_Java_Project">Setting up a Java Project</span></h3>
+<p>To start working on your own Java AI, you should first set up a project in your favorite Java IDE. You need to import the Spring Java AI Interface libraries, and then create an AI class and an AI Factory.
+</p><p><b>OUTDATED</b> If you are using <b>Netbeans IDE</b>, you can find a detailed tutorial <a class="external text" href="http://springrts.com/phpbb/download/file.php?id=4970" rel="nofollow">here</a> (from <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?p=448743#p448743" rel="nofollow">this forum thread</a>). Otherwise, please continue reading this page.
+</p>
+<h4><span class="mw-headline" id="Importing_the_interface_libraries">Importing the interface libraries</span></h4>
+<p>In order to use the Java Interface, you will need to import the Java Interface libraries (optionally, you can attach the sources for JavaDoc support in your editor) 
+</p>
+<ul><li><code>Spring/AI/Interfaces/Java/[version]/AIInterface.jar</code> (sources: jlib/AIInterface-src.jar)</li>
+<li><code>Spring/AI/Skirmish/NullOOJavaAI/0.1/jlib/vecmath.jar</code> (sources: vecmath-src.jar)</li>
+<li><code>JavaOO-AIWrapper.jar</code> (sources: TODO)</li></ul>
+<h4><span class="mw-headline" id="Creating_the_main_class">Creating the main class</span></h4>
+<p>Now that you have the libraries, the next step is to create your AI's main class. Firstly, you may want to create a package to put your classes in, for example, <i>myjavaai</i>. Create a new class, named MyJavaAI (or whatever you would like your AI to be called). MyJavaAI should extend com.springrts.ai.oo.AbstractOOAI.
+</p>
+<h3><span class="mw-headline" id="Adding_your_AI_to_Spring">Adding your AI to Spring</span></h3>
+<p>Your AI needs to have its own folder, and the engine will need to know your AI's attributes.
+</p><p><br/>
+</p>
+<h4><span class="mw-headline" id="Creating_an_AI_folder">Creating an AI folder</span></h4>
+<p>Every Spring AI is stored in <i>Spring/AI/Skirmish</i>. You will have to create a folder for your AI as well. It is easiest to go to the directory <i>Spring/AI/Skirmish</i>, make a copy of the folder <i>NullOOJavaAI</i>, and rename the copy to <i>MyJavaAI</i>.
+</p><p><br/>
+</p>
+<h4><span class="mw-headline" id="Telling_the_Engine_about_your_AI">Telling the Engine about your AI</span></h4>
+<p>The <i>MyJavaAI</i> folder you created contains the different versions of your AI. As of this writing, the <i>NullOOJavaAI</i> only has a version <i>0.1</i>, so there should be a folder <i>0.1</i> inside the <i>MyJavaAI</i> folder. Inside you will find a number of files.
+These files are:
+</p>
+<ul><li><i>SkirmishAI.jar</i>: the jar file that contains the AI code.</li>
+<li><i>AIInfo.lua</i>: contains information about the AI.</li>
+<li><i>AIOptions.lua</i>: you can specify your AI's options in here.</li>
+<li>Possibly some text files: these are log files generated by the <i>NullOOJavaAI</i>. If you don't plan on using the same files, you may as well delete these.</li></ul>
+<p>Additionally, there is a folder named <i>jlib</i>. This is where you should place any additional libraries you use in your AI.
+</p><p>In order to let Spring recognize your AI, you will have to edit <i>AIInfo.lua</i>. You can do this with any regular text editor.
+When you open it, the file will look something like this:
+</p>
+<code><pre>local infos = {
+   {
+      key    = 'shortName',
+      value  = 'NullOOJavaAI',
+      desc   = 'machine conform name.',
+   },
+   {
+      key    = 'version',
+      value  = '0.1', -- AI version - !This comment is used for parsing!
+   },
+   {
+      key    = 'className',
+      value  = 'nulloojavaai.NullOOJavaAI',
+      desc   = 'fully qualified name of a class that implements interface com.springrts.ai.AI',
+   },
+   {
+      key    = 'name',
+      value  = 'high-level Java stub Skirmish AI',
+      desc   = 'human readable name.',
+   },
+   {
+      key    = 'loadSupported',
+      value  = 'no',
+      desc   = 'whether this AI supports loading or not',
+   },
+   {
+      key    = 'interfaceShortName',
+      value  = 'Java', -- AI Interface name - !This comment is used for parsing!
+      desc   = 'the shortName of the AI interface this AI needs',
+   },
+   {
+      key    = 'interfaceVersion',
+      value  = '0.1', -- AI Interface version - !This comment is used for parsing!
+      desc   = 'the minimum version of the AI interface required by this AI',
+   },
+}
+
+return infos
+</pre></code>
+<p><br/>
+The file describes a number of attributes. Each attribute has a key, a value and a desc(ription). The key is the name of the attribute, the description tells you what the attribute is used for, and the value is what you will want to edit.
+</p><p>The shortName attribute is the name used for your AI internally. It's most logical to change this into to the same name you gave your AI class. (MyJavaAI.) The shortName needs to agree with the folder name (see below) and cannot contain the char '_'.
+</p><p>'version' tells the engine which version of your AI this is. If you're in the 0.1 folder, make this 0.1. Your AI should be located at AI/Skirmish/<i>shortName</i>/<i>version</i>/.
+</p><p>'classname' tells the interface which class is your AIFactory class. Take care that you use the fully qualified class name, or it won't work. In this example, this should be myjavaai.MyJavaAIFactory.
+</p><p>'name' describes your AI to the user. In this example, you might put 'A simple Java AI to learn about AI programming in Spring.'
+</p><p>'loadSupported' is rather self-explanatory. Since you have just started working on your AI, you may not get around to implementing loading support for some time, so it's best to put 'no,' for now.
+</p><p>'interfaceShortName' and 'interfaceversion' tell the engine about the interface your AI uses. Since MyJavaAI uses the same interface as the NullOOJavaAI, leave these as they are.
+</p><p><br/>
+Finally, the last thing you should do is exporting your AI to SkirmishAI.jar. The way to do this varies depending on your Java editor.
+</p>
+<h3><span class="mw-headline" id="Test_your_AI">Test your AI</span></h3>
+<p>After following all the above steps, you should be able to run your AI. Either use SpringLobby to start a new game and see if you can add your AI as a bot, or run <i>spring.exe</i> to see if you can start the script MyJavaAI Test.
+Of course, since you haven't told the AI what to do, your starting unit(s) will sit there doing nothing.
+</p>
+<h2><span class="mw-headline" id="Getting_your_AI_to_Do_Something">Getting your AI to Do Something</span></h2>
+<p>After getting your AI running, you will want to make it do something. Traditionally, the first thing to get your AI to is to build a solar plant, assuming you want it to play BA. If not, it is quite straightforward to build other units once you have the general idea.
+You will need four things to get your AI to build a solar plant:
+</p>
+<ul><li>A reference to the callback</li>
+<li>A reference to the commander (your starting unit in BA)</li>
+<li>A reference to the solar plant definition object</li>
+<li>To tell the commander to build the solar plant</li></ul>
+<p>However, before we go about building solar plants, first you should know about events. We will use these to get the required object references.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Events">Events</span></h3>
+<p>Nearly everything that happens in the game is an event. When a unit is created, this is an event. Enemy spotted? Also an event. A player sends your AI a message? You got it, this is an event as well.
+</p><p>Every event is made known to your AI. Have a look at the <code>MyJavaAI</code> class again. <code>MyJavaAI</code> extends <code>AbstractOOA</code>. <code>AbstractOOAI</code> implements a number of methods like <code>unitCreated()</code>, <code>enemyEnterRadar()</code> and <code>message()</code>.
+Sound familiar? The method <code>unitCreated(Unit unit, Unit builder)</code> is called every time a unit is created, and tells you the unit that was created and the unit that built it. Similarly, enemyEnterRadar(Unit enemy) and message(int player, String message) tell you about an enemy unit entering radar range and receiving a message from another player respectively.
+There are many other events that all have corresponding methods. To have your AI respond to these events, simply override the method in your <code>MyJavaAI</code> class.
+The return type of these methods is an integer. The return value can be used for debugging. 0 means that no errors occurred, while any other value is threated as an error. This system can be used for debugging, but is it much easier to implement proper logging.
+</p><p>In the sections below you will see an example of the use of these events.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Getting_a_reference_to_the_callback">Getting a reference to the callback</span></h3>
+<p>The callback is the object through which the AI communicates with the engine. All information that does not change the state of the engine can be retrieved through individual methods in the callback, and state changing commands (eg to units) will go through a single, specialized method, which is in the callback as well.
+Getting a reference to the callback is easy.
+First create a class field <code>OOAICallback callback</code> to put the reference in, then overwrite the method <code>init(int teamId, OOAICallback callback)</code>. The init method is called at the start of every game (right at the end of the countdown).
+As you can see, all that you need to do is set the parameter value callback to the field callback:
+</p>
+<code><pre>@Override
+public int init(int teamId, OOAICallback callback)
+{
+    this.callback = callback;
+    return 0;
+}
+</pre></code>
+<h3><span class="mw-headline" id="Getting_a_reference_to_the_commander">Getting a reference to the commander</span></h3>
+<p>Whenever a unit has been built, the engine sends a unitFinished event. At the start of the game, the engine will send a UnitFinished event for every starting unit. When playing BA, this means you will get a UnitFinished event for the commander. Therefore, the most straightforward way of finding the reference to the commander is overriding the <code>unitFinished()</code> method:
+</p>
+<code><pre>@Override
+public int unitFinished(Unit unit) {
+    if (unit.getDef().getName().equals("armcom")) {
+        commander = unit;
+    }
+
+    return 0;
+}
+</pre></code>
+<h3><span class="mw-headline" id="Getting_a_reference_to_the_solar_plant_definition">Getting a reference to the solar plant definition</span></h3>
+<p>Every unit in Spring has a UnitDef (a 'unit defintion'). This object tells you all there is to know about the properties of the unit type, such as maximum speed, turn rate and what weapons it carries.
+One way to get the reference to the definition of a solar plant is to use <code>callback.getUnitDefs()</code>. This will give you a list of all the available unit types in the game that is currently being played.
+The name of the unit def we are looking for is 'armsolar', so we can just iterate through the list and find the one named armsolar, like this:
+</p>
+<code><pre>List&lt;UnitDef&gt; unitDefs = this.callback.getUnitDefs();
+UnitDef solarPlant = null;
+for (UnitDef def : unitDefs)
+   if (def.getName().equals("armsolar"))
+   {
+       solarPlant = def;
+       break;
+   }
+</pre></code>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Telling_the_commander_to_build_the_solar_plant">Telling the commander to build the solar plant</span></h3>
+<p>Now, the only thing left to do is to tell the commander that we want it to build the solar plant, and where to place it. In short, we need to give the commander a build command.
+</p><p>We want to give this command only once at the first frame of the game. For this we can use the <code>update()</code> method, which is called at every frame of the game. All we need to do is overwrite the <code>update(int frame)</code> method and give the command if the frame is 1. This results in the following code:
+</p>
+<code><pre>@Override
+public int update(int frame)
+{
+    if (frame == 0)
+    {
+        // give command here
+    }
+
+    return 0;
+}
+</pre></code>
+<p>Commands are issued by invoking the respective method on the <code>Unit</code> (or <code>Group</code>). In our case, that's the <code>build</code> method, which takes the following arguments:
+</p>
+<ul><li><code>UnitDef toBuildUnitDef</code>: the kind of unit to build</li>
+<li><code>AIFLoat3 buildPos</code>: the location the unit should be built at (in our case, we use the commander's current position)</li>
+<li><code>int facing</code>: the direction the new unit will be facing (mostly matters for buildings, which can not turn after being constructed)</li>
+<li><code>short options</code>: a set of UnitCommandOptions. 0 means no option.</li>
+<li><code>int timeout</code>: the number of frames after which the command times out. We don't want a timeout, and therefore specify a suitably high number :-)</li></ul>
+<p>Therefore, our command looks like this:
+</p><p><code>
+</code></p><code><pre>   commander.build(solarDef, commander.getPos(), 0, (short) 0, Integer.MAX_VALUE);
+</pre></code><code></code><p><code></code>
+</p><p>At this point you will want to see if your AI actually works. Export your code to <i>Spring/AI/Skirmish/MyJavaAI/SkirmishAI.jar</i> and start up a game. Your AI should now build a solar plant at its start position.
+</p>
+<h3><span class="mw-headline" id="Building_a_metal_extractor">Building a metal extractor</span></h3>
+<p>Building a metal extractor is slightly more complicated. Assuming you're not on a metal map, you will need to find a suitable site to place the extractor. Generally, it's preferable to select a site closest to wherever your construction unit (commander) is located.
+</p><p>Modify your code that got a reference to the solar plant by making the following changes:
+</p>
+<code><pre>List&lt;UnitDef&gt; unitDefs = this.callback.getUnitDefs(); UnitDef solarPlant = null; for (UnitDef def : unitDefs)
+
+  if (def.getName().equals("armsolar"))
+  {
+      solarPlant = def;
+  }
+  else if (def.getName().equals("armmex"))
+  {
+       metalExtractor=def;
+  }
+</pre></code>
+<p>Again, you will need to create a Unitdef metalExtractor field by where you declared your solarPlant field.
+</p><p>Next, you need a method for determining the distance between two 3D coordinates (since Spring locations are three dimensional). A slightly modified version of a distance function is found below.
+</p>
+<code><pre>public float calculateDistance(AIFloat3 a, AIFloat3 b)
+    {
+    float xDistance = a.x - b.x;
+    float yDistance = a.y - b.y;
+    float zDistance = a.z - b.z;
+    float totalDistanceSquared = xDistance*xDistance + yDistance*yDistance + zDistance*zDistance;
+    return totalDistanceSquared;
+    } 
+</pre></code>
+<p>The above code actually returns the distance squared, but it will work for our purposes. In your init function, you will want to add the following code above the return statement but below the line defining the callback:
+</p>
+<code><pre>checkForMetal();
+</pre></code>
+<p>This will call the following function you need to place in your code:
+</p>
+<code><pre>public void checkForMetal()
+    {
+    Resource metal=Resource.getInstance(clb, 0);
+    availablemetalspots=clb.getMap().getResourceMapSpotsPositions(metal);
+    if(availablemetalspots.isEmpty())
+        {
+        sendTextMsg("This is a map with no metal spots");
+        metalmap=false;
+        }
+    else
+        {metalmap=true;
+        sendTextMsg("This is a map with metal spots. Listing Values...");
+        for (AIFloat3 metalspot : availablemetalspots) {
+            sendTextMsg("Metal Spot at X: "+metalspot.x + ", Y: "+metalspot.y +", Z: "+metalspot.z);
+        }
+        }
+    }
+</pre></code>
+<p>For the above code to function properly, you will need to create a Boolean named metalmap and a List&lt;AIFloat3&gt; availablemetalspots. You will now have a function set up for calculating distance between two points, and a data structure holding a list of positions of metal spots. The next step is to tie these two together:
+</p>
+<code><pre>public AIFloat3 closestMetalSpot(AIFloat3 unitposition)
+    {
+    AIFloat3 closestspot=null;
+    for (AIFloat3 metalspot : availablemetalspots) {
+            if (closestspot==null)
+                {
+                closestspot=metalspot;
+                }
+        else if(calculateDistance(metalspot, unitposition) &lt; calculateDistance(closestspot, unitposition) &amp;&amp; metalspot.hashCode()!=unitposition.hashCode())
+                    {
+                    closestspot=metalspot;
+                    }
+        }
+    availablemetalspots.remove(closestspot);
+    return closestspot;
+
+    }
+</pre></code>
+<p>The above function accepts an AIFloat3 containing the location of your construction unit (commander). It will then find the closest metal spot and return that location. The next step is to have your commander make use of this.
+</p>
+<code><pre>  if (frame == 600)
+  {
+       if(metalmap){       sendTextMsg("About to build mex at frame " + frame);
+       AIFloat3 closestspot=closestMetalSpot(commander.getPos());
+       commander.build(metalExtractor, closestspot, 0, (short) 0, Integer.MAX_VALUE);
+  }
+</pre></code>
+<p>Place the above code in your update() method. When the frame count reaches 600, your commander will start to build a metal extractor at the closest metal spot. The extractor may not be right on top of where the metal spot appears to be, but you can mouse over the extractor to make sure it's drawing the metal properly.
+</p>
+<h2><span class="mw-headline" id="Frequently_Asked_Questions">Frequently Asked Questions</span></h2>
+<p><b>Q:</b> What is the difference between <code>unitCreated()</code> and <code>unitFinished()</code>?
+</p><p><b>A:</b> The difference is that <code>unitCreated()</code> is called when construction of a unit starts, while <code>unitFinished()</code> when construction on the unit has been completed. Any number of things may happen in-between, including the unit under construction being destroyed, so it is important to remember this distinction.
+</p><p><b>Q:</b> Do I have to copy and paste my jar file to the directory in Spring/AI/Skirmish/MyAI/0.1 each time I want to test my AI out?
+</p><p><b>A:</b> Yes, but it is much easier if you automate the process. In Windows, a simple batch file can be created to move the files over for you. For example
+</p>
+<code><pre>copy C:\Users\msm8bball\Documents\NetBeansProjects\MyAI\dist\MyAI.jar "C:\Program Files (x86)\Spring\AI\Skirmish\MyAI\0.1"
+
+del "C:\Program Files (x86)\Spring\AI\Skirmish\MyAI\0.1\SkirmishAI.jar"
+rename "C:\Program Files (x86)\Spring\AI\Skirmish\MyAI\0.1\MyAI.jar" SkirmishAI.jar
+</pre></code>
+<p>Modify the above code to match your computer's directories. Place it in a text file and save it as MoveAI.bat. This will create a batch file that you can double click and it will automatically move your AI to the proper location and rename it. You might wish to put a shortcut to this in your Start menu or taskbar. 
+</p><p><b>Q:</b> I have problems with the class-loader in my AI, any idea? 
+</p><p><b>A:</b> Each Java AI implementation is loaded by a separate class loader. This is used to load all the AI's class files and dependency libraries (in the <i>jlib</i> dir). Some libraries though, use the Thread contexts class loader, instead of the one of the current class. Therefore, if you want to load something from the AI's own class-path, make sure to let these libraries use the class-path of your AI classes, eg:
+</p>
+<code><pre>ClassLoader myClassLoader = AIFactory.class.getClassLoader();
+MySpecialUtil msp = new MySpecialUtil();
+msp.setClassLoader(myClassLoader);
+</pre></code>
+<p>Please do not set this class-loader on the thread with <code>Thread.currentThread().setContextClassLoader(myClassLoader)</code>, because all AI's are run in the same Java thread, and therefore this will cause problems.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Links">Links</span></h2>
+<ul><li><a href="AIInterface_Java.html" title="AIInterface:Java">Java AI Interface</a></li>
+<li><a class="external text" href="https://springrts.com/dl/buildbot/doc/100.0.1-225-ga4855e7/JavaOO/" rel="nofollow">Javadoc of the Java AI OO Wrapper</a></li>
+<li><b>OUTDATED</b> <a class="external text" href="http://springrts.com/phpbb/download/file.php?id=4970" rel="nofollow">Netbeans Java Skirmish AI Tutorial</a> (from <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?p=448743#p448743" rel="nofollow">this forum thread</a>)</li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20260309223624
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.011 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 117/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4253/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2663-0!canonical and timestamp 20260309223624 and revision id 29688
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=AI:Development:Lang:Java&amp;oldid=29688">https://springrts.com/mediawiki/index.php?title=AI:Development:Lang:Java&amp;oldid=29688</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_AI_Dev.html" title="Category:AI Dev">AI Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="AI_Development_Lang_Java.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:AI:Development:Lang:Java&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=AI:Development:Lang:Java&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=AI:Development:Lang:Java&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="AI_Development_Lang_Java.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:AI:Development:Lang:Java&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=AI%3ADevelopment%3ALang%3AJava" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/AI:Development:Lang:Java" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/AI:Development:Lang:Java" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=AI:Development:Lang:Java&amp;oldid=29688" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=AI:Development:Lang:Java&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 3 November 2015, at 19:45.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.011","walltime":"0.012","ppvisitednodes":{"value":117,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":4253,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223624","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":133});});</script></body></html>

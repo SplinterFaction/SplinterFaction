@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua MoveCtrl - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"a26efe8e8492d44e0c77a066","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_MoveCtrl","wgTitle":"Lua MoveCtrl","wgCurRevisionId":31614,"wgRevisionId":31614,"wgArticleId":2424,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_MoveCtrl","wgRelevantArticleId":2424,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready",
+"user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi52YWx1ZSB7CiAgICBjb2xvcjojZTY1YzAwOwogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi50eXBlIHsKICAgIGNvbG9yOiMwMDk5Y2M7IAogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi5wcmVmaXggewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogIH0gICAKICBzcGFuLm5hbWUgewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogICAgZm9udC13ZWlnaHQ6Ym9sZDsKICB9CiAgc3Bhbi52YXIgewogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9" rel="stylesheet"/><!-- End Extension:CSS -->
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi52YWx1ZSB7CiAgICBjb2xvcjojZTY1YzAwOwogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi50eXBlIHsKICAgIGNvbG9yOiMwMDk5Y2M7IAogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi5wcmVmaXggewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogIH0gICAKICBzcGFuLm5hbWUgewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogICAgZm9udC13ZWlnaHQ6Ym9sZDsKICB9CiAgc3Bhbi52YXIgewogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9" rel="stylesheet"/><!-- End Extension:CSS -->
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi52YWx1ZSB7CiAgICBjb2xvcjojZTY1YzAwOwogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi50eXBlIHsKICAgIGNvbG9yOiMwMDk5Y2M7IAogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi5wcmVmaXggewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogIH0gICAKICBzcGFuLm5hbWUgewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogICAgZm9udC13ZWlnaHQ6Ym9sZDsKICB9CiAgc3Bhbi52YXIgewogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9" rel="stylesheet"/><!-- End Extension:CSS -->
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi52YWx1ZSB7CiAgICBjb2xvcjojZTY1YzAwOwogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi50eXBlIHsKICAgIGNvbG9yOiMwMDk5Y2M7IAogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi5wcmVmaXggewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogIH0gICAKICBzcGFuLm5hbWUgewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogICAgZm9udC13ZWlnaHQ6Ym9sZDsKICB9CiAgc3Bhbi52YXIgewogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9" rel="stylesheet"/><!-- End Extension:CSS -->
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi52YWx1ZSB7CiAgICBjb2xvcjojZTY1YzAwOwogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi50eXBlIHsKICAgIGNvbG9yOiMwMDk5Y2M7IAogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi5wcmVmaXggewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogIH0gICAKICBzcGFuLm5hbWUgewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogICAgZm9udC13ZWlnaHQ6Ym9sZDsKICB9CiAgc3Bhbi52YXIgewogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9" rel="stylesheet"/><!-- End Extension:CSS -->
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_MoveCtrl rootpage-Lua_MoveCtrl skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua MoveCtrl</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua MoveCtrl
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#ScriptMoveType"><span class="tocnumber">1</span> <span class="toctext">ScriptMoveType</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Enable.2FDisable"><span class="tocnumber">1.1</span> <span class="toctext">Enable/Disable</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Tags"><span class="tocnumber">1.2</span> <span class="toctext">Tags</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Physics"><span class="tocnumber">1.3</span> <span class="toctext">Physics</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Options"><span class="tocnumber">1.4</span> <span class="toctext">Options</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#MoveType-Controlling"><span class="tocnumber">2</span> <span class="toctext">MoveType-Controlling</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="ScriptMoveType">ScriptMoveType</span></h1>
+<h2><span id="Enable/Disable"></span><span class="mw-headline" id="Enable.2FDisable">Enable/Disable</span></h2>
+<p><b>Spring.MoveCtrl.Enable</b>
+</p>
+<pre> ( number unitID ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.Disable</b>
+</p>
+<pre> ( number unitID ) -&gt; nil
+</pre>
+<h2><span class="mw-headline" id="Tags">Tags</span></h2>
+<p><b>Spring.MoveCtrl.SetTag</b>
+</p>
+<pre> ( number unitID, number tag ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.GetTag</b>
+</p>
+<pre> ( number unitID ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetProgressState</b>
+</p>
+<pre> ( number unitID, number state | "done" | "active" | "failed" ) -&gt; nil
+</pre>
+<h2><span class="mw-headline" id="Physics">Physics</span></h2>
+<p><b>Spring.MoveCtrl.SetGravity</b>
+</p>
+<pre> ( number unitID, number gravity ) -&gt; nil
+</pre>
+<p><span class="note">N.B. gravity here is a multiplier to Game.gravity</span>
+</p><p><b>Spring.MoveCtrl.SetDrag</b>
+</p>
+<pre> ( number unitID, number drag ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetGroundOffset</b>
+</p>
+<pre> ( number unitID, number offset ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetWindFactor</b>
+</p>
+<pre> ( number unitID, number windFactor ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetPhysics</b>
+</p>
+<pre> ( number unitID,
+   number posX, number posY, number posZ,
+   number velX, number velY, number velZ,
+   number rotX, number rotY, number rotZ ) -&gt; nil 
+</pre>
+<p><b>Spring.MoveCtrl.SetPosition</b>
+</p>
+<pre> ( number unitID,
+   number posX, number posY, number posZ ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetVelocity</b>
+</p>
+<pre> ( number unitID,
+   number velX, number velY, number velZ ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetRelativeVelocity</b>
+</p>
+<pre> ( number unitID,
+   number relvelX, number relvelY, number relvelZ ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetRotation</b>
+</p>
+<pre> ( number unitID,
+   number rotX, number rotY, number rotZ ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetRotationVelocity</b>
+</p>
+<pre> ( number unitID,
+   number rotVelX, number rotVelY, number rotVelZ ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetRotationOffset</b>
+</p>
+<pre> ( number unitID,
+   number rotOffX, number rotOffY, number rotOffZ ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetHeading</b>
+</p>
+<pre> ( number unitID, number heading ) -&gt; nil
+</pre>
+<h2><span class="mw-headline" id="Options">Options</span></h2>
+<p><b>Spring.MoveCtrl.SetNoBlocking</b>
+</p>
+<pre> ( number unitID, boolean noblock ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetLimits</b>
+</p>
+<pre> ( number unitID,
+   number minX, number minY, number minZ,
+   number maxX, number maxY, number maxZ ) -&gt; nil 
+</pre>
+<p><b>Spring.MoveCtrl.SetTrackSlope</b>
+</p>
+<pre> ( number unitID, boolean trackslope ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetTrackGround</b>
+</p>
+<pre> ( number unitID, boolean noblock ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetExtrapolate</b>
+</p>
+<pre> ( number unitID, boolean on ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetShotStop</b> <span class="warning">Currently a no-op</span>
+</p>
+<pre> ( number unitID, boolean shotstop ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetSlopeStop</b> <span class="warning">Currently a no-op</span>
+</p>
+<pre> ( number unitID, boolean slopestop ) -&gt; nil
+</pre>
+<p><b>Spring.MoveCtrl.SetCollideStop</b>
+</p>
+<pre> ( number unitID, boolean collidestop ) -&gt; nil
+</pre>
+<p><span class="note">Enable both SetCollideStop and SetTrackGround to enable MoveCtrlNotify(unitID, unitDefID, unitTeam, data) call-in, data was supposed to indicate the type of notification but currently never has a value other than 1 (where 1 means "unit hit the ground")</span>
+</p>
+<h1><span class="mw-headline" id="MoveType-Controlling">MoveType-Controlling</span></h1>
+<p><b>Spring.MoveCtrl.SetMoveDef</b> <span class="warning">New in version 94.0</span>
+</p>
+<pre> ( number unitID, number moveDefID | string moveDefName ) -&gt; boolean success
+</pre>
+<p><span class="note">NOTE: string moveDefName needs to be in <b>lowercase</b>, notwithstanding the fact that it may be in another case in the movedef table.
+</span>
+</p>
+<pre><span class="note">NOTE: all Set*MoveTypeData functions support the following number keys:
+maxSpeed
+maxWantedSpeed
+repairBelowHealth
+</span>
+</pre>
+<p><b>Spring.MoveCtrl.SetAirMoveTypeData</b> <span class="warning">New in version 0.81</span>
+</p>
+<pre> ( number unitID, string key, value  ) -&gt; nil
+ ( number unitID, table values ) -&gt; nil
+ <span class="note">supported keys:
+ numbers:
+   maxSpeed
+   maxWantedSpeed
+   repairBelowHealth
+   wantedHeight
+   myGravity
+   maxBank
+   maxPitch
+   turnRadius
+   maxAcc
+   maxAileron
+   maxElevator
+   maxRudder
+   waterline
+   attackSafetyDistance       -- since 100.0 : fighters abort dive toward target if within attackSafetyDistance and try to climb back to normal altitude while still moving toward target  
+   maneuverBlockTime          -- since 104.0.1+(FIXME) : number of frames aircraft will try to keep flying straight past the target after firing 
+ booleans:
+   collide
+   useSmoothMesh
+ NOTE: not all keys and not all values may work correctly.
+ <a href="SetMoveTypeDataExample.html" title="SetMoveTypeDataExample">Example usage</a></span>
+</pre>
+<p><b>Spring.MoveCtrl.SetGroundMoveTypeData</b> <span class="warning">New in version 0.81</span>
+</p>
+<pre> ( number unitID, string key, value  ) -&gt; nil
+ ( number unitID, table values ) -&gt; nil
+ <span class="note">supported keys:
+ numbers:
+   baseTurnRate
+   turnRate
+   accRate
+   decRate
+   maxSpeed
+   maxWantedSpeed
+   repairBelowHealth
+   maxReverseDist
+   maxReverseSpeed
+   minReverseAngle
+   requestedSpeed
+   requestedTurnRate
+   sqSkidSpeedMult
+   waterline
+ booleans:
+   floatOnWater
+   pushResistant
+ NOTE: not all keys and not all values may work correctly.
+ <a href="SetMoveTypeDataExample.html" title="SetMoveTypeDataExample">Example usage</a></span>
+</pre>
+<p><span class="warning">New in version 101.0</span> <span class="var">maxReverseDist</span> &amp; <span class="var">minReverseAngle</span> keys
+</p><p><span class="warning">New in version 104.0</span> <span class="var">sqSkidSpeedMult</span>, <span class="var">pushResistant</span> &amp; <span class="var">waterline</span> keys
+</p><p><b>Spring.MoveCtrl.SetGunshipMoveTypeData</b> <span class="warning">New in version 0.81</span>
+</p>
+<pre> ( number unitID, string key, value  ) -&gt; nil
+ ( number unitID, table values ) -&gt; nil
+ <span class="note">supported keys:
+ numbers:
+   maxSpeed
+   maxWantedSpeed
+   repairBelowHealth
+   wantedHeight
+   turnRate
+   accRate
+   decRate
+   altitudeRate
+   currentBank
+   currentPitch
+   waterline
+ booleans:
+   collide
+   useSmoothMesh
+   bankingAllowed
+   dontLand
+   airStrafe
+ NOTE: not all keys and not all values may work correctly.
+ <a href="SetMoveTypeDataExample.html" title="SetMoveTypeDataExample">Example usage</a></span>
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223602
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.012 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 101/1000000
+Post‐expand include size: 493/2097152 bytes
+Template argument size: 92/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.331      1 -total
+ 65.20%    4.128      5 Template:Var
+ 36.93%    2.338      5 Template:CodeStyle
+ 28.45%    1.801      6 Template:New
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2424-0!canonical and timestamp 20260309223602 and revision id 31614
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_MoveCtrl&amp;oldid=31614">https://springrts.com/mediawiki/index.php?title=Lua_MoveCtrl&amp;oldid=31614</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_MoveCtrl.html" title="View the content page [c]">Page</a></li><li id="ca-talk"><a accesskey="t" href="/wiki/Talk:Lua_MoveCtrl" rel="discussion" title="Discussion about the content page [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_MoveCtrl&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_MoveCtrl&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_MoveCtrl.html" title="Page">Page</a></li><li id="ca-talk-mobile"><a href="/wiki/Talk:Lua_MoveCtrl" rel="discussion" title="Discussion">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+MoveCtrl" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_MoveCtrl" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_MoveCtrl" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_MoveCtrl&amp;oldid=31614" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_MoveCtrl&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 17 August 2021, at 00:34.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.012","walltime":"0.015","ppvisitednodes":{"value":101,"limit":1000000},"postexpandincludesize":{"value":493,"limit":2097152},"templateargumentsize":{"value":92,"limit":2097152},"expansiondepth":{"value":4,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    6.331      1 -total"," 65.20%    4.128      5 Template:Var"," 36.93%    2.338      5 Template:CodeStyle"," 28.45%    1.801      6 Template:New"]},"cachereport":{"timestamp":"20260309223602","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":107});});</script></body></html>

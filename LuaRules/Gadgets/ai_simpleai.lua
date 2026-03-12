@@ -218,18 +218,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 			SimpleConstructorDelay[unitTeam] = SimpleConstructorDelay[unitTeam]-1
 			local r = math.random(0, 20) -- Used: 8
 			local mexspotpos = SimpleGetClosestMexSpot(unitposx, unitposz)
-			if SimpleConstructorCount[unitTeam] < 2 then
-				local project = SimpleConstructorDefs[math.random(1, #SimpleConstructorDefs)]
-				for i2 = 1,#buildOptions do
-					if buildOptions[i2] == project then
-						local x, y, z = Spring.GetUnitPosition(unitID)
-						Spring.GiveOrderToUnit(unitID, -project, { x+math.random(-64,64), y, z+math.random(-64,64), 0 }, 0)
-						--Spring.Echo("Success! Project Type: Constructor.")
-						success = true
-						break
-					end
-				end
-			elseif mexspotpos and (SimpleT1Mexes[unitTeam] < 6) then
+			if mexspotpos and (SimpleT1Mexes[unitTeam] < 3) then
 				local project = SimpleExtractorDefs[math.random(1, #SimpleExtractorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then
@@ -239,7 +228,7 @@ local function SimpleConstructionProjectSelection(unitID, unitDefID, unitName, u
 						break
 					end
 				end
-			elseif ecurrent < estorage*0.50 or eincome <= 200 then
+			elseif ecurrent < estorage*0.50 or eincome <= 100 then
 				local project = SimpleGeneratorDefs[math.random(1, #SimpleGeneratorDefs)]
 				for i2 = 1,#buildOptions do
 					if buildOptions[i2] == project then

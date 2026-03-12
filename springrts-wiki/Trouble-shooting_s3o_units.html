@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Trouble-shooting s3o units - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"2e47ee2c7d21a09a3df28fd8","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Trouble-shooting_s3o_units","wgTitle":"Trouble-shooting s3o units","wgCurRevisionId":26996,"wgRevisionId":26996,"wgArticleId":2395,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["3D Models"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Trouble-shooting_s3o_units","wgRelevantArticleId":2395,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":
+"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Trouble-shooting_s3o_units rootpage-Trouble-shooting_s3o_units skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Trouble-shooting s3o units</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p>This page assumes you have a working knowledge of Spring unit creation, and will address some common pitfalls in creating s30 units.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Invisible_Unit"><span class="tocnumber">1</span> <span class="toctext">Invisible Unit</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Not_even_emited_effects_are_visible"><span class="tocnumber">1.1</span> <span class="toctext">Not even emited effects are visible</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Disappearing_Unit"><span class="tocnumber">2</span> <span class="toctext">Disappearing Unit</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Messed_up_unit_texture"><span class="tocnumber">3</span> <span class="toctext">Messed up unit texture</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Unit_orientation_is_wrong"><span class="tocnumber">4</span> <span class="toctext">Unit orientation is wrong</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Model_is_all_white"><span class="tocnumber">5</span> <span class="toctext">Model is all white</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Model_is_all_black"><span class="tocnumber">6</span> <span class="toctext">Model is all black</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Model_is_all_blue_or_another_solid_color"><span class="tocnumber">7</span> <span class="toctext">Model is all blue or another solid color</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Edges_supposed_to_be_rounded.2Fsmooth_are_angular"><span class="tocnumber">8</span> <span class="toctext">Edges supposed to be rounded/smooth are angular</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Spawning_the_unit_crashes_the_engine_.28pre_85.0.29"><span class="tocnumber">9</span> <span class="toctext">Spawning the unit crashes the engine (pre 85.0)</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Invisible_Unit">Invisible Unit</span></h1>
+<p><b>Problem:</b>
+Unit spawns projectiles, engine flare, and other fx, as well as functioning correctly, but the model is invisible at any view distance.
+</p><p><b>Check:</b>
+</p>
+<ul><li>That your s3o has both a radius and height set in <a href="Upspring.html" title="Upspring">upspring</a>.</li></ul>
+<h2><span class="mw-headline" id="Not_even_emited_effects_are_visible">Not even emited effects are visible</span></h2>
+<p>Make sure the model offset is centered and above ground in <a href="Upspring.html" title="Upspring">upspring</a>.
+</p>
+<h1><span class="mw-headline" id="Disappearing_Unit">Disappearing Unit</span></h1>
+<p><b>Problem:</b>
+Unit operates correctly, including being visible at low zoom levels, but disappears at higher zoom levels, often leaving a small grey blob. Example:
+<img alt="problemga6.jpg" src="http://img54.imageshack.us/img54/1278/problemga6.jpg"/>
+</p><p><b>Check:</b>
+</p>
+<ul><li>The reduction to grey blob is done by the LOD (Level Of Detail) process in spring. For 3do units, this nicely scales down a full 3d unit to a sprite as you scale out. For s3o, this doesn't work as nicely. There are two things you can do:
+<ul><li>1: Make sure your unit has a radius that reflect the model size accurately. The view distance at which LOD kicks in is proportional to unit radius.</li>
+<li>2: Make sure your LOD setting in Spring is high enough to actually display the unit correctly.</li></ul></li></ul>
+<h1><span class="mw-headline" id="Messed_up_unit_texture">Messed up unit texture</span></h1>
+<p><b>Problem:</b>
+Unit looks normal in Upspring but in the game the textures is messed up.
+</p><p><b>Solution:</b>
+in Upspring, open this menu:
+Texture Mapping -&gt; Show UV mapping -&gt; Edit -&gt; Flip UV
+</p><p>This will make the model look strange in Upspring but ingame it will actually look normal.
+</p>
+<h1><span class="mw-headline" id="Unit_orientation_is_wrong">Unit orientation is wrong</span></h1>
+<p><b>Problem</b>:
+Unit drives sidewards or backwards.
+</p><p><b>Solution:</b>
+In Upspring rotate your model like this:
+<img alt="767px-UnitInUpspring_4views.jpg" src="http://springrts.com/mediawiki/images/thumb/1/1d/UnitInUpspring_4views.jpg/767px-UnitInUpspring_4views.jpg"/>
+</p>
+<h1><span class="mw-headline" id="Model_is_all_white">Model is all white</span></h1>
+<p><b>Problem</b>:
+The unit is all white.
+</p><p><b>Solution:</b>
+Check if the .s3o has a texture assigned to it and if that texture exists.
+Upspring usually deletes texture assigment on loading a .s3o, so you have to reassign the texture every time you edit the model.
+</p>
+<h1><span class="mw-headline" id="Model_is_all_black">Model is all black</span></h1>
+<p><b>Problem</b>:
+The unit is all black. Turning off shadows fixes it.
+</p><p><b>Solution:</b>
+Normals on model are wrong. Invert the normals in <a href="Upspring.html" title="Upspring">Upspring</a>
+</p>
+<h1><span class="mw-headline" id="Model_is_all_blue_or_another_solid_color">Model is all blue or another solid color</span></h1>
+<p><b>Problem</b>:
+The unit is completly covered in team color.
+</p><p><b>Solution:</b>
+No alpha channel on texture, add one.
+</p>
+<h1><span id="Edges_supposed_to_be_rounded/smooth_are_angular"></span><span class="mw-headline" id="Edges_supposed_to_be_rounded.2Fsmooth_are_angular">Edges supposed to be rounded/smooth are angular</span></h1>
+<p><b>Problem</b>:
+On cylinders, spheres, cones etc. hard edges are visible.
+</p><p><b>Solution:</b>
+Try the advice from this thread: <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?t&amp;t=27122" rel="nofollow">round edges on models</a>
+</p>
+<h1><span id="Spawning_the_unit_crashes_the_engine_(pre_85.0)"></span><span class="mw-headline" id="Spawning_the_unit_crashes_the_engine_.28pre_85.0.29">Spawning the unit crashes the engine (pre 85.0)</span></h1>
+<p><b>Problem</b>:
+If the unit is spawned, Spring crashes. It works fine with a different .s3o file.
+</p><p><b>Solution:</b>
+Check if the .s3o has a texture assigned to it and if that texture exists.
+Upspring usually deletes texture assigment on loading a .s3o, so you have to reassign the texture every time you edit the model.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309224112
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.011 seconds
+Preprocessor visited node count: 43/1000000
+Post‐expand include size: 74/2097152 bytes
+Template argument size: 26/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.358      1 Template:Forumlink
+100.00%    2.358      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2395-0!canonical and timestamp 20260309224112 and revision id 26996
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Trouble-shooting_s3o_units&amp;oldid=26996">https://springrts.com/mediawiki/index.php?title=Trouble-shooting_s3o_units&amp;oldid=26996</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_3D_Models.html" title="Category:3D Models">3D Models</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Trouble-shooting_s3o_units.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Trouble-shooting_s3o_units&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Trouble-shooting_s3o_units&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Trouble-shooting_s3o_units&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Trouble-shooting_s3o_units.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Trouble-shooting_s3o_units&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Trouble-shooting+s3o+units" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Trouble-shooting_s3o_units" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Trouble-shooting_s3o_units" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Trouble-shooting_s3o_units&amp;oldid=26996" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Trouble-shooting_s3o_units&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 13 April 2013, at 09:48.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.008","walltime":"0.011","ppvisitednodes":{"value":43,"limit":1000000},"postexpandincludesize":{"value":74,"limit":2097152},"templateargumentsize":{"value":26,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    2.358      1 Template:Forumlink","100.00%    2.358      1 -total"]},"cachereport":{"timestamp":"20260309224112","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":138});});</script></body></html>

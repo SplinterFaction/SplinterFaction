@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Building Spring on Windows - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"6271845150dfea5708e11649","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Building_Spring_on_Windows","wgTitle":"Building Spring on Windows","wgCurRevisionId":31266,"wgRevisionId":31266,"wgArticleId":2617,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiling"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Building_Spring_on_Windows","wgRelevantArticleId":2617,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":
+"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,Y29kZSAqIHttYXJnaW46aW5oZXJpdDt9" rel="stylesheet"/><!-- End Extension:CSS -->
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Building_Spring_on_Windows rootpage-Building_Spring_on_Windows skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Building Spring on Windows</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a href="Building_spring.html" title="Building spring">Building Spring</a> &lt; Building Spring on Windows
+</p><p><br/>
+If you only want to produce your own Spring game and not contribute to the core engine, compilation is not necessary. Check out <a href="Gamedev_Main.html" title="Gamedev:Main">Gamedev:Main</a>.
+</p><p><span class="warning">Warning:</span> Compiling Spring on Windows often causes problems, it is heavily recommended to use <a href="Building_Spring_on_Linux.html" title="Building Spring on Linux">Linux</a> for developing the Spring RTS Engine if possible.
+</p><p>Some reasons for this:
+</p>
+<ul><li>Of the active developers nobody uses windows for developing. So they might not be able to help as effectively as on Linux.</li>
+<li>Setting up a build environment takes a lot more time on windows</li>
+<li>Compiling is often slower on windows</li>
+<li>Compiling on windows is poorly tested (which possibly leads to some random / unknown / weird errors)</li></ul>
+<p>That said, if you do wish to use Windows, the best place to get real-time help is the #sy lobby channel, or #sy on <a href="IRC.html" title="IRC">IRC</a>.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Compiling_with_MinGW"><span class="tocnumber">1</span> <span class="toctext">Compiling with MinGW</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Requirements"><span class="tocnumber">1.1</span> <span class="toctext">Requirements</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Installing_MinGW-w64"><span class="tocnumber">1.2</span> <span class="toctext">Installing MinGW-w64</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Adding_to_PATH"><span class="tocnumber">1.3</span> <span class="toctext">Adding to PATH</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Get_the_Source_Code"><span class="tocnumber">2</span> <span class="toctext">Get the Source Code</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#configure_using_CMake"><span class="tocnumber">2.1</span> <span class="toctext">configure using CMake</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Generating_the_AI_Sources.2FWrappers"><span class="tocnumber">2.1.1</span> <span class="toctext">Generating the AI Sources/Wrappers</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Possible_Problems"><span class="tocnumber">2.1.2</span> <span class="toctext">Possible Problems</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Notes"><span class="tocnumber">2.1.3</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Compiling_with_Visual_Studio_.28not_officially_supported.21.29"><span class="tocnumber">3</span> <span class="toctext">Compiling with Visual Studio (not officially supported!)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#General_Visual_Studio_Notes"><span class="tocnumber">3.1</span> <span class="toctext">General Visual Studio Notes</span></a>
+<ul>
+<li class="toclevel-3 tocsection-12"><a href="#2012_.28v11.29"><span class="tocnumber">3.1.1</span> <span class="toctext">2012 (v11)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Compiling_with_MinGW">Compiling with MinGW</span></h1>
+<h2><span class="mw-headline" id="Requirements">Requirements</span></h2>
+<p>Install <a class="external text" href="http://www.cmake.org/" rel="nofollow">CMake</a> and <a class="external text" href="http://msysgit.github.io/" rel="nofollow">msysGit</a> and MinGW-w64:
+</p><p>When installing msysGit you should select the option to "Run Git from the Windows Command Prompt":
+</p><p><a class="image" href="/wiki/File:Msysgit6.png"><img alt="Msysgit6.png" decoding="async" height="312" src="images/400px-Msysgit6.png" srcset="/mediawiki/images/b/b0/Msysgit6.png 1.5x" width="400"/></a>
+</p><p>This is in order to automatically add Git to PATH making it easy for CMake to find.
+</p>
+<h2><span class="mw-headline" id="Installing_MinGW-w64">Installing MinGW-w64</span></h2>
+<p>Download and run the "Mingw-builds project - native toolchains using trunk" installer from <a class="external autonumber" href="http://mingw-w64.org/doku.php/download/mingw-builds" rel="nofollow">[1]</a>, more specifically from here: <a class="external autonumber" href="https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe/download" rel="nofollow">[2]</a>
+</p><p><br/>
+Select the following options:
+</p><p><a class="image" href="/wiki/File:InstallingMinGW-w64.png"><img alt="InstallingMinGW-w64.png" decoding="async" height="294" src="images/400px-InstallingMinGW-w64.png" srcset="/mediawiki/images/f/f2/InstallingMinGW-w64.png 1.5x" width="400"/></a>
+</p>
+<ul><li><b>Version:</b> Any version above 4.8.x should work, 4.9.x+ may not have been tested as thoroughly. In 2020, version 8.1.0 works fine!</li>
+<li><b>Architecture:</b> i686</li>
+<li><b>Threads:</b> posix</li>
+<li><b>Exception:</b> sjlj <span class="note">This is the only setting which needs to be changed from the default</span></li>
+<li><b>Build Revision:</b> The latest one</li></ul>
+<h2><span class="mw-headline" id="Adding_to_PATH">Adding to PATH</span></h2>
+<p>Once installed, you should add the MinGW directory to your PATH variable so that Cmake can find the relevant binaries. 
+</p>
+<ul><li>Go to System properties (either via Control Panel\System and Security\System or by right clicking 'Computer' on the desktop), then click 'Advanced System Settings'.</li>
+<li>Click the 'Environment Variables' button at the bottom.</li>
+<li>Find Path in the 'System Variables' scrollbox, add an extra <code>;</code> to the end and then copy-paste in the MinGW directory (e.g. default is <code>C:\Program Files (x86)\mingw-w64\i686-4.9.1-posix-sjlj-rt_v3-rev0\mingw32\bin</code>).</li>
+<li>Alternative instructions with images are easy to find online, for example <a class="external text" href="http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx" rel="nofollow">here</a>.</li></ul>
+<h1><span class="mw-headline" id="Get_the_Source_Code">Get the Source Code</span></h1>
+<ul><li>use git's bash (you find it in the right click context menu when clicking the folder), <code>cd</code> into your spring source dir</li></ul>
+<code><pre>git clone --recursive git://github.com/spring/spring.git -b develop
+cd spring
+git clone https://github.com/spring/mingwlibs
+</pre></code>
+<ul><li>update it from time to time with: <code>git pull --rebase</code></li></ul>
+<ul><li>Make sure you install the package in the checkout directory, so the path is: /spring/mingwlibs. If done right, it will look like:
+<ul><li>*/spring/</li>
+<li>*/spring/...</li>
+<li>*/spring/mingwlibs</li>
+<li>*/spring/rts</li></ul></li></ul>
+<ul><li>Note: if you install the package somewhere else (preferably outside of the source tree), and pass its location with the <i>MINGDIR</i> option to CMake in the configure step (see further down, in the quick instructions).</li></ul>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="configure_using_CMake">configure using CMake</span></h2>
+<p>Note, as of 2020, cmake-3.10.1-win64-x64.msi from <a class="external free" href="https://cmake.org/files/v3.10/" rel="nofollow">https://cmake.org/files/v3.10/</a> works, 3.18 has issues detecting zlib.
+</p>
+<ul><li>run the <i>cmake-gui</i> and select a source and a build directory</li>
+<li>press <b>Configure</b> and follow the instructions</li>
+<li>specify native compilers by entering the paths to gcc.exe and g++.exe from your mingw64-builds directory</li>
+<li>if you wish to build the full portable version (install-spring), then make sure to set the CMAKE_INSTALL_PREFIX as well</li>
+<li>In case of configuration errors make sure AI_TYPES variable is set to NONE (default is ALL). This should remedy the issues press <b>Configure</b> again (Remark: Setting NATIVE works as well (tested in commit 9108cae116))</li>
+<li>This is where you can specify the build type, REL for release, DEBUG for debug build, and RELWITHDEBINFO for a mix</li>
+<li>press <b>Generate</b></li>
+<li>open a console (<i>cmd.exe</i>), <i>cd</i> into your <b>build</b> directory</li>
+<li><i>optional:</i> for multi-threaded compilation, the <i>mingw32-make</i> part may differ on your system: <code><i><pre>set MAKE_COMMAND=mingw32-make -j2</pre></i></code> (use -j4 for 4 threads). For codeblocks configure CMAKE_CODEBLOCKS_MAKE_ARGUMENTS as -j4</li>
+<li>compile with: <code><i><pre>mingw32-make install-spring</pre></i></code></li>
+<li>compile just the engine (spring.exe) with: <code><i><pre>mingw32-make engine-legacy</pre></i></code></li></ul>
+<h3><span id="Generating_the_AI_Sources/Wrappers"></span><span class="mw-headline" id="Generating_the_AI_Sources.2FWrappers">Generating the AI Sources/Wrappers</span></h3>
+<p>you can either build the wrapper:
+</p><p><code>make Cpp-AIWrapper</code>
+</p><p>or generate all sources, in case you don't need the binary:
+</p><p><code>make generateSources</code>
+</p>
+<h3><span class="mw-headline" id="Possible_Problems">Possible Problems</span></h3>
+<ul><li>If you have successfully compiled but don't have an ingame graphical user interface and no widgets working, you could try downloading and compiling from the maintenance branch instead develop.</li></ul>
+<p><code>
+git clone --recursive <a class="external free" href="git://github.com/spring/spring.git" rel="nofollow">git://github.com/spring/spring.git</a> -b maintenance
+</code>
+</p>
+<ul><li>If you get <span class="warning">undefined reference to `_Unwind_Resume'</span> linking errors, deinstall <i>whole</i> MinGW and reinstall it with <i>sjlj</i>.</li></ul>
+<ul><li>When you installed an old version of MinGW/TDM and forgot to deinstall it correctly, <code>gcc.exe</code> &amp; <code>g++.exe</code> will be named <code>gcc-dw2.exe</code>/<code>g++-dw2.exe</code>. CMake will then fail to find the correct one, first try to deinstall anything mingw related and reinstall everything. If that didn't helped just rename the files. If even that doesn't help open cmake-gui and click the advanced button and set the paths to the correct files yourself (<code>CMAKE_C_COMPILER</code> &amp; <code>CMAKE_CXX_COMPILER</code>).</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Notes">Notes</span></h3>
+<p>You can still use Visual Studio 2012 as described below to edit the code. This is very useful because it allows excellent code navigation, and it highlights syntax errors and trivial mistakes before compiling. 
+</p><p>For debugging mingw builds, you can aquire a windows build of gdb from <a class="external free" href="http://www.equation.com/servlet/equation.cmd?fa=gdb" rel="nofollow">http://www.equation.com/servlet/equation.cmd?fa=gdb</a>
+</p><p>To start debugging, copy <i>gdb.exe</i> to your build output directory, and launch it with <i>gdb spring.exe</i>. You can supply command line arguments to <i>spring.exe</i> with <i>gdb --args spring.exe myreplayfile.sdf</i>
+</p>
+<h1><span id="Compiling_with_Visual_Studio_(not_officially_supported!)"></span><span class="mw-headline" id="Compiling_with_Visual_Studio_.28not_officially_supported.21.29">Compiling with Visual Studio (not officially supported!)</span></h1>
+<p>Currently Visual Studio lacks some c++ features it doesn't compile spring!
+</p>
+<h2><span class="mw-headline" id="General_Visual_Studio_Notes">General Visual Studio Notes</span></h2>
+<p>When developing using Visual Studio keep in mind:
+</p>
+<ul><li><span class="warning">It's experimental and not proved to compile or run!</span></li>
+<li><span class="warning">Your VS build won't sync with GCC builds in multiplayer mode</span></li>
+<li>AIs built with Visual Studio will work with the mingw32 release builds thanks to the C AI Interface, however this interface may change when newer releases are made</li>
+<li>Running any non-LUA AI on VS built Spring will crash it</li></ul>
+<h3><span id="2012_(v11)"></span><span class="mw-headline" id="2012_.28v11.29">2012 (v11)</span></h3>
+<p>Install <a class="external text" href="http://www.microsoft.com/visualstudio/eng/downloads#d-express-windows-desktop" rel="nofollow">Visual Studio 2012 Express for Windows Desktop</a>, <a class="external text" href="http://www.microsoft.com/en-us/download/confirmation.aspx?id=35515" rel="nofollow">Visual C++ Compiler November 2012 CTP</a>, <a class="external text" href="http://www.cmake.org/" rel="nofollow">cmake</a>, <a class="external text" href="http://www.7-zip.org" rel="nofollow">7-zip</a> and <a class="external text" href="http://msysgit.github.io/" rel="nofollow">msysgit</a>.
+</p><p><br/>
+</p><p>From the Startmenu run "VS2012 x86 Native Tools Command Prompt" and type:
+</p>
+<code><pre>set PATH=%PATH%;%PROGRAMFILES%\git\bin;%PROGRAMFILES%\cmake 2.8\bin\
+git clone --recursive git://github.com/spring/spring.git -b develop
+cd spring
+git clone git://github.com/spring/vclibs11.git vclibs
+cmake -G "Visual Studio 11" .
+</pre></code>
+<p>Now start visual studio &amp; open Spring.sln. Select "engine-legacy" as default project, as AIs and ofter stuff are known to fail to compile on visual studio.
+</p><p>In the Project Properties, make sure to <a class="external text" href="http://stackoverflow.com/questions/13238408/variadic-template-in-vs-2012-visual-c-november-2012-ctp" rel="nofollow">select the Microsoft Visual C++ Compiler Nov 2012 CTP</a>.
+</p><p>Note: Visual Studio 2012 Express for Windows Desktop is for free, but requires a registration after 30 days (to get a free license).
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223618
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.021 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 76/1000000
+Post‐expand include size: 26/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 498/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2617-0!canonical and timestamp 20260309223618 and revision id 31266
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Building_Spring_on_Windows&amp;oldid=31266">https://springrts.com/mediawiki/index.php?title=Building_Spring_on_Windows&amp;oldid=31266</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiling.html" title="Category:Compiling">Compiling</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Building_Spring_on_Windows.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Building_Spring_on_Windows&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Building_Spring_on_Windows&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Building_Spring_on_Windows&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Building_Spring_on_Windows.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Building_Spring_on_Windows&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Building+Spring+on+Windows" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Building_Spring_on_Windows" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Building_Spring_on_Windows" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Building_Spring_on_Windows&amp;oldid=31266" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Building_Spring_on_Windows&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 22 July 2020, at 14:53.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.021","walltime":"0.024","ppvisitednodes":{"value":76,"limit":1000000},"postexpandincludesize":{"value":26,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":498,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223618","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":136});});</script></body></html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>LuaCallinReturn - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"31f3f1e47801d16ad493631b","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"LuaCallinReturn","wgTitle":"LuaCallinReturn","wgCurRevisionId":31792,"wgRevisionId":31792,"wgArticleId":2580,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Deprecated"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"LuaCallinReturn","wgRelevantArticleId":2580,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-LuaCallinReturn rootpage-LuaCallinReturn skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">LuaCallinReturn</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; LuaCallinReturn
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Engine_Source"><span class="tocnumber">1</span> <span class="toctext">Engine Source</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#What_is_a_callin_anyway.3F"><span class="tocnumber">2</span> <span class="toctext">What is a callin anyway?</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Blocking_events_with_return_values"><span class="tocnumber">2.1</span> <span class="toctext">Blocking events with return values</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Commands.2C_general-purpose:"><span class="tocnumber">3</span> <span class="toctext">Commands, general-purpose:</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Unit-Specific:"><span class="tocnumber">4</span> <span class="toctext">Unit-Specific:</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Feature-Specific:"><span class="tocnumber">5</span> <span class="toctext">Feature-Specific:</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Drawing:"><span class="tocnumber">6</span> <span class="toctext">Drawing:</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Game_Events:"><span class="tocnumber">7</span> <span class="toctext">Game Events:</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Projectiles:"><span class="tocnumber">8</span> <span class="toctext">Projectiles:</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Engine_Source">Engine Source</span></h2>
+<p>If you can understand Lua code well and wish to get the most up to date info, you can refer to:
+<a class="external text" href="https://github.com/spring/spring/blob/106.0/cont/base/springcontent/LuaGadgets/actions.lua" rel="nofollow">cont/base/springcontent/LuaGadgets/actions.lua</a> , 
+<a class="external text" href="https://github.com/spring/spring/blob/106.0/cont/LuaUI/widgets.lua" rel="nofollow">cont/LuaUI/widgets.lua</a>  and <br/>
+<a class="external text" href="https://github.com/spring/spring/blob/106.0/cont/base/springcontent/LuaGadgets/gadgets.lua" rel="nofollow">cont/base/springcontent/LuaGadgets/gadgets.lua</a> <br/>
+to see how widget/gadget call-ins are distributed, find call-in and widgetHandler function definitions, see how they are processed and what values should be returned from some call ins
+(are these the only files?)
+</p>
+<h2><span id="What_is_a_callin_anyway?"></span><span class="mw-headline" id="What_is_a_callin_anyway.3F">What is a callin anyway?</span></h2>
+<p>Call-ins are calls from the engine, into the gadget or widget script. In other words, these functions are called when a particular <i>event</i> happens.
+Some call-in functions can return values to the engine.
+</p>
+<h3><span class="mw-headline" id="Blocking_events_with_return_values">Blocking events with return values</span></h3>
+<p>The call-in functions named <i><b>Allow</b></i>XXX can block their event by returning <i>false</i>.<br/>
+For example <i>AllowUnitTransfer()</i><br/>
+<code>return true</code> = allow transfer <br/>
+<code>return false</code> = deny transfer
+</p>
+<h2><span id="Commands,_general-purpose:"></span><span class="mw-headline" id="Commands.2C_general-purpose:">Commands, general-purpose:</span></h2>
+<p><font color="#55ee99">Initialize()</font> --&gt; none.<br/>
+called when widget/gadget gets (re-)loaded.
+</p><p><font color="#55ee99">Shutdown()</font> --&gt; none.
+</p><p><font color="#55ee99">PlayerChanged</font> --&gt; (playerID).
+gadget/widget: Use this to check whether a player has become spectator for instance.
+</p><p><font color="#55ee99">LayoutButtons()</font> --&gt; unknown, please document.
+</p><p><font color="#55ee99">ConfigureLayout()</font> --&gt; "command".
+</p><p><font color="#55ee99">CommandNotify()</font> --&gt; "id, params, options", where id = the CommandID
+</p><p><font color="#55ee99">KeyPress()</font> --&gt; "key, mods, isRepeat", where key = keymap, mods = SHIFT, etc.
+</p><p><font color="#55ee99">KeyRelease()</font> --&gt; "key"
+</p><p><font color="#55ee99">MouseMove()</font> --&gt; "x, y, dx, dy, button"
+</p><p><font color="#55ee99">MousePress()</font> --&gt; "x, y, button"<br/>
+<font color="#dd9944">button parameter values: left - 1, middle - 2, right - 3</font>
+</p><p><span class="warning">New in version &gt;96.0</span> buttom param removed  <a class="external text" href="https://github.com/spring/spring/commit/4c104344e92256e33d79820e9012c5e1178e212b" rel="nofollow">4c104344</a>
+</p><p><br/>
+<font color="#55ee99">MouseRelease()</font> --&gt; "x, y, button"<br/>
+<font color="#dd9944">Please note that in order to have Spring call MouseRelease, you need to have a MousePress call-in in the same widget that returns true.</font>
+</p><p><font color="#55ee99">MouseWheel()</font> --&gt; "up, value"
+</p><p><font color="#55ee99">IsAbove()</font> --&gt; "x, y" where x,y = screen coordinates.
+</p><p><font color="#55ee99">GetTooltip()</font> --&gt; "x, y" where x,y = screen coordinates.  Returns WorldTooltip.
+</p><p><font color="#55ee99">AddConsoleLine()</font> --&gt; "msg, priority"
+</p><p><font color="#55ee99">MapDrawCmd()</font> --&gt; "playerID, cmdType, px, py, pz, labeltext"
+</p><p><font color="#55ee99">AllowCommand()</font> --&gt; "unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag, synced"<br/>
+<font color="#dd9944">Synced only.</font>
+</p><p><font color="#55ee99">CommandFallback()</font> --&gt; "unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag"
+</p><p><font color="#55ee99">CommandsChanged()</font> --&gt; unknown (none?)
+</p><p><font color="#55ee99">AllowUnitCreation()</font> --&gt; "unitDefID, builderID, builderTeam, x, y, z, facing"
+</p><p><font color="#55ee99">AllowUnitTransfer()</font> --&gt; "unitID, unitDefID, oldTeam, newTeam, capture"
+</p><p><font color="#55ee99">AllowUnitBuildStep()</font> --&gt; "builderID, builderTeam, unitID, unitDefID, part"
+</p><p><font color="#55ee99">AllowFeatureCreation()</font> --&gt; "featureDefID, teamID, x, y, z"
+</p><p><font color="#55ee99">AllowFeatureBuildStep()</font> --&gt; "builderID, builderTeam, featureID, featureDefID, part"<br/>
+<font color="#dd9944">Called just before a feature updates its build percentage. Returns a bool to allow the change.</font>
+</p><p><font color="#55ee99">AllowResourceLevel()</font> --&gt; "teamID, res, level"
+</p><p><font color="#55ee99">AllowResourceTransfer()</font> --&gt; "teamID, res, level"
+</p><p><font color="#55ee99">Update()</font> --&gt; "dt"<br/>
+<font color="#dd9944">called every screenframe. dt is the time since the last screenframe</font>
+</p><p><font color="#55ee99">DefaultCommand()</font> --&gt; "type,id"<br/>
+<font color="#dd9944">can return an <a href="Lua_CMDs.html" title="Lua CMDs">CMD</a> to change cursor and command. <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?t&amp;t=26438" rel="nofollow">example usage</a></font>
+</p><p><font color="#55ee99">AllowDirectUnitControl(unitID, unitDefID, unitTeam, playerID)   </font> -&gt; allowFpsControl<br/>
+<i>return true</i> allows fps mode, <i>return false</i> blocks it.
+</p>
+<h2><span class="mw-headline" id="Unit-Specific:">Unit-Specific:</span></h2>
+<p><font color="#55ee99">UnitPreDamaged()</font> --&gt; "unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, attackerID, attackerDefID, attackerTeam" <span class="warning">(prior to 94.0)</span>
+</p><p><font color="#55ee99">UnitPreDamaged()</font> --&gt; "unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam" <span class="warning">(as of 94.0)</span>
+</p><p><font color="#55ee99">UnitDamaged()</font> --&gt; "unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam" <span class="warning">(as of 95.0)</span> <br/>
+<font color="#dd9944">Can overwrite the taken damage by returning a new number value.<br/>
+</font></p><p><font color="#dd9944">As of 88.0 for both UnitDamaged and UnitPreDamaged:
+</font></p><font color="#dd9944"><pre>    weaponDefID -1 --&gt; debris collision
+    weaponDefID -2 --&gt; ground collision
+    weaponDefID -3 --&gt; object collision
+    weaponDefID -4 --&gt; fire damage
+    weaponDefID -5 --&gt; water damage
+    weaponDefID -6 --&gt; kill damage
+    weaponDefID -7 --&gt; crush damage
+</pre></font><font color="#dd9944"></font><p><font color="#dd9944">As of 96.0 {Unit,Feature}{Pre}Damaged events receive the 'attacker' ID when object is crushed</font>
+</p><p><font color="#55ee99">UnitExperience()</font> --&gt; "unitID, unitDefID, unitTeam, experience, oldExperience"<br/>
+<font color="#dd9944">Spring.SetExperienceGrade must be called first to determine how often it is called</font>
+</p><p><font color="#55ee99">UnitCreated()</font> --&gt; "unitID, unitDefID, teamID, builderID"<br/>
+<font color="#dd9944">Unit started being built (it's in wireframe mode)</font>
+</p><p><font color="#55ee99">UnitFinished()</font> --&gt; "unitID, unitDefID, teamID"
+</p><p><font color="#55ee99">UnitFromFactory()</font> --&gt; "unitID, unitDefID, unitTeam, factID, factDefID, userOrders"
+</p><p><font color="#55ee99">UnitDestroyed()</font> --&gt; "unitID, unitDefID, teamID, attackerID, attackerDefID, attackerTeamID"
+</p><p><font color="#55ee99">UnitTaken()</font> --&gt; "unitID, unitDefID, unitTeam, newTeam"<br/>
+<font color="#dd9944">Unit still belongs to old team</font>
+</p><p><font color="#55ee99">UnitGiven()</font> --&gt; "unitID, unitDefID, unitTeam, oldTeam"<br/>
+<font color="#dd9944">Unit now belongs to new team</font>
+</p><p><font color="#55ee99">UnitIdle()</font> --&gt; "unitID, unitDefID, teamID"<br/>
+<font color="#dd9944">No commands in this unit's queue. Beware, might be fired while 'guarding'.</font>
+</p><p><font color="#55ee99">UnitCommand()</font> --&gt; "unitID, unitDefID, unitTeam, cmdID, cmdOpts, cmdParams, cmdTag" <span class="warning">(cmdTag only available from version 95.0)</span>
+</p><p><br/>
+<font color="#55ee99">UnitSeismicPing()</font> --&gt; "x, y, z, strength"
+</p><p><font color="#55ee99">UnitEnteredRadar()</font> --&gt; "unitID, unitTeam"
+</p><p><font color="#55ee99">UnitEnteredLos()</font> --&gt; "unitID, teamID"
+</p><p><font color="#55ee99">UnitLeftRadar()</font> --&gt; "unitID, unitTeam"
+</p><p><font color="#55ee99">UnitLeftLos()</font> --&gt; "unitID, unitDefID, teamID"
+</p><p><font color="#55ee99">UnitLoaded()</font> --&gt; "unitID, unitDefID, unitTeam, transportID, transportTeam"
+</p><p><font color="#55ee99">UnitUnloaded()</font> --&gt; "unitID, unitDefID, teamID, transportID"
+</p><p><font color="#55ee99">UnitCloaked()</font> --&gt; "unitID, unitDefID, teamID"
+</p><p><font color="#55ee99">UnitDecloaked)</font>--&gt; "unitID, unitDefID, teamID"
+</p><p><font color="#55ee99">UnitMoveFailed()</font> --&gt; "unitID, unitDefID, unitTeam"
+<br/><font color="#dd9944">Only called for unitDefIDs registered via <a href="Lua_System.html#Synced" title="Lua System">Script.SetWatchUnit</a> since 85.0</font>
+</p><p><font color="#55ee99">StockpileChanged()</font> --&gt; "unitID, unitDefID, unitTeam, weaponNum, oldCount, newCount"
+</p><p><font color="#55ee99">UnitEnteredWater()</font> --&gt; "unitID, unitDefID, teamID"
+<span class="warning">(as of 95.0)</span>
+</p><p><font color="#55ee99">UnitEnteredAir()</font> --&gt; "unitID, unitDefID, teamID"
+<span class="warning">(as of 95.0)</span>
+</p><p><font color="#55ee99">UnitLeftWater()</font> --&gt; "unitID, unitDefID, teamID"
+<span class="warning">(as of 95.0)</span>
+</p><p><font color="#55ee99">UnitLeftAir()</font> --&gt; "unitID, unitDefID, teamID"
+<span class="warning">(as of 95.0)</span>
+</p><p><font color="#55ee99">ShieldPreDamaged()</font> --&gt; "proID, shieldEmitterWeaponNum, shieldCarrierUnitID, boolBounceProjectile, beamEmitterWaponNumber, beamCarrierUnitID, startx, starty, startz, hitx, hity, hitz"
+</p><p><font color="#55ee99">UnitUnitCollision(colliderID, collideeID)</font> -- needs SetWatchUnit enabled for both parties
+</p><p><font color="#55ee99">AllowWeaponTargetCheck(attackerID, attackerWeaponNum, attackerWeaponDefID)</font><br/><font color="#dd9944">Only called for weaponDefIDs registered via <a href="Lua_System.html#Synced" title="Lua System">Script.SetWatchWeapon</a> since 92.0</font>
+</p><p><font color="#55ee99">AllowWeaponTarget(attackerID, targetID, attackerWeaponNum, attackerWeaponDefID, defaultPriority)</font>
+</p>
+<pre>--&gt; <code>return "targetAllowed, targetPriority"</code>
+</pre>
+<p><span class="warning">defaultPriority new in 89.0</span><br/>
+</p><p><font color="#dd9944">Only called for weaponDefIDs registered via <a href="Lua_System.html#Synced" title="Lua System">Script.SetWatchWeapon</a> since 92.0</font>
+</p><p><font color="#55ee99">DrawShield(number unitID, number weaponID)</font> --&gt; boolean
+</p><p><i>true</i> (&lt;-?) skips Spring's own drawing of shield &lt;weaponID&gt; owned by unit &lt;unitID&gt;
+</p><p><a class="external text" href="https://github.com/spring/spring/commit/7bbfd9464d4f74c12163ea0740c8c60d1ba978f1" rel="nofollow">maybe new in 86.0+</a>
+</p>
+<h2><span class="mw-headline" id="Feature-Specific:">Feature-Specific:</span></h2>
+<p><font color="#55ee99">FeatureCreated()</font> --&gt; "featureID, allyTeam"
+</p><p><font color="#55ee99">FeatureDestroyed()</font> --&gt; "featureID, allyTeam"
+</p><p><font color="#55ee99">TerraformComplete()</font> --&gt; "unitID, unitDefID, unitTeam, buildUnitID, buildUnitDefID, buildUnitTeam"
+</p><p><font color="#55ee99">UnitCmdDone()</font> --&gt; "unitID, unitDefID, unitTeam, cmdID, cmdTag, cmdParams, cmdOptions" <span class="warning">cmdParams and cmdOptions are only available from version 95.0</span>
+</p><p><font color="#55ee99">UnitFeatureCollision(colliderID, collideeID, crushKilled)</font> -- needs SetWatchUnit for first and SetWatchFeature for second party
+</p><p><span class="warning">New in version 95.0</span> <font color="#55ee99">FeatureDamaged()</font> --&gt; "featureID, featureDefID, featureTeam, damage, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam"
+</p><p><span class="warning">New in version 95.0</span> <font color="#55ee99">FeaturePreDamaged()</font> --&gt; "featureID, featureDefID, featureTeam, damage, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam"
+</p><p><code>--&gt; return newDamage, impulseMult (=0)</code>
+</p>
+<h2><span class="mw-headline" id="Drawing:">Drawing:</span></h2>
+<p>Inside these functions, you can use the <a href="Lua_OpenGL_Api.html" title="Lua OpenGL Api"> Lua OpenGL Api</a> to draw graphics.
+</p>
+<ul><li><font color="#55ee99">DrawGenesis()</font> --&gt; none.  Don't render here.</li></ul>
+<pre>Spring draws the sky, the map, some water types, and unit selection.
+</pre>
+<ul><li><font color="#55ee99">DrawWorldPreUnit()</font> --&gt; none.</li></ul>
+<pre>Spring draws units, features, some water types, cloaked units, and the sun.
+</pre>
+<ul><li><font color="#55ee99">DrawWorld()</font> --&gt; none.</li></ul>
+<pre>Spring draws command queues, 'map stuff', and map marks.
+</pre>
+<p>Each unit might also have a DrawUnit call, <a href="Lua_UnitRendering.html" title="Lua UnitRendering">enabled here.</a>
+</p><p><font color="#55ee99">DrawUnit(unitID,DrawMode)</font><br/>
+With enum DrawMode {<br/>
+	notDrawing     = 0,<br/>
+	normalDraw     = 1,<br/>
+	shadowDraw     = 2,<br/>
+	reflectionDraw = 3,<br/>
+	refractionDraw = 4<br/>
+	};
+</p><p><font color="#55ee99">DrawFeature(featureID, DrawMode)</font><br/>
+</p><p><font color="#55ee99">DrawShield(unitID, weaponID, DrawMode)</font><br/>
+</p><p><font color="#55ee99">DrawProjectile(projectileID, DrawMode)</font><br/>
+</p><p><font color="#55ee99">DrawScreenEffects()</font> --&gt; "vsx, vsy" where vsx, vsy are screen coords.
+</p><p><font color="#55ee99">DrawScreen()</font> --&gt; none.
+</p><p><font color="#55ee99">DrawInMiniMap()</font> --&gt; "sx, sy" where sx,sy are values relative to the minimap's position and scale.
+</p><p><font color="#55ee99">DrawWorldShadow()</font> --&gt; none.
+</p><p><font color="#55ee99">DrawWorldReflection()</font> --&gt; none.
+</p><p><font color="#55ee99">DrawWorldRefraction()</font> --&gt; none.
+</p><p><font color="#55ee99">DrawLoadScreen()</font> --&gt; none. <span class="warning">New in version 95.0</span>
+</p><p>Only available to LuaIntro, draws custom load screens.
+</p>
+<h2><span class="mw-headline" id="Game_Events:">Game Events:</span></h2>
+<p><font color="#55ee99">GameID()</font> --&gt; "gameID" <span class="warning">New in version 89.0</span>
+</p><p><font color="#55ee99">Explosion()</font> --&gt; "weaponID, px, py, pz, ownerID"
+<br/><font color="#dd9944">Only called for weaponDefIDs registered via Script.SetWatchWeapon</font>
+<br/>return true to hide the weapon's CEG
+</p><p><font color="#55ee99">ShockFront()</font> --&gt; "power, dx, dy, dz" <span class="warning">Not yet implemented!</span>
+</p><p><font color="#55ee99">GameFrame()</font> --&gt; "frameNum"
+</p><p><font color="#55ee99">CobCallback()</font> --&gt; unknown, marked FIXME.
+</p><p><font color="#55ee99">GroupChanged()</font> --&gt; "groupID" where groupID is the value of Group whose table value changed.
+</p><p><font color="#55ee99">WorldTooltip()</font> --&gt; "ttType, data1, data2, data3" special, should be documented in detail. <span class="warning">Not yet implemented!</span>
+</p><p><font color="#55ee99">GamePreload()</font>  --&gt; none.
+</p><p><font color="#55ee99">GameStart()</font> --&gt; none.
+</p><p><font color="#55ee99">GameProgress()</font> --&gt; "serverFrameNum" ( called every 60 frames, calculating delta between GameFrame and GameProgress can give an ETA about catching up with simulation )<span class="warning"> Not yet implemented!</span>
+</p><p><font color="#55ee99">GameOver()</font> --&gt;  "[ [1] = allyTeamID1, [2] = allyTeamID2, ... ]",  a list of winning allyteams, if empty the game result was undecided ( like when dropping from an host )<span class="warning">   Will return nil in pre 0.83.x</span>
+</p><p><font color="#55ee99">TeamDied()</font> --&gt; "TeamID" where TeamID = the team that has been eliminated.
+</p><p><font color="#55ee99">AllowStartPosition()</font> --&gt; 
+</p>
+<pre>  number clampedPos.x, number clampedPos.y, number clampedPos.z,
+  number playerID,
+  number readyState,
+  number rawPickPos.x, number rawPickPos.y, number rawPickPos.z
+</pre>
+<p>FIXME: apparently the above is incorrect and parameters are AllowStartPosition(playerID, teamID, readyState, cx, cy, cz, rx, ry, rz)
+</p><p>clampedPos = coordinates clamped into startbox, rawPickPos = where player tried to start
+</p><p><span class="warning">New in version 95.0</span> the default 'failed to choose' start-position is now just (0,0,0), not (0,-500,0) 
+</p><p><br/>
+readyState can be any one of:
+</p>
+<pre>   PLAYER_RDYSTATE_UPDATED = 0 -- player picked a position
+   PLAYER_RDYSTATE_READIED = 1 -- player clicked ready
+   PLAYER_RDYSTATE_FORCED = 2 -- game was force-started (player did not click ready)
+   PLAYER_RDYSTATE_FAILED = 3
+</pre>
+<p><br/>
+<font color="#55ee99">GameSetup()</font> --&gt; string "state", boolean "ready", table "playerStates" 
+<br/>return success, newReady
+</p><p><font color="#55ee99">GamePaused()</font> --&gt; "playerID, paused" 
+</p><p><font color="#55ee99">PlayerAdded()</font> --&gt; "playerID" 
+</p><p><font color="#55ee99">PlayerRemoved()</font> --&gt; "playerID, reason"
+</p>
+<h2><span class="mw-headline" id="Projectiles:">Projectiles:</span></h2>
+<p><font color="#55ee99">ProjectileCreated()</font> --&gt; "proID, proOwnerID, weaponDefID"
+<br/><font color="#dd9944">Only called for weaponDefIDs registered via Script.SetWatchWeapon</font>
+</p><p><font color="#55ee99">ProjectileDestroyed()</font> --&gt; "proID"
+<br/><font color="#dd9944">Only called for weaponDefIDs registered via Script.SetWatchWeapon</font>
+</p><p><font color="#55ee99">AllowWeaponInterceptTarget</font> --&gt; "number interceptorUnitID, number interceptorWeaponID, number targetProjectileID"
+returns boolean
+<br/><font color="#dd9944">Only called for weaponDefIDs registered via Script.SetWatchWeapon</font>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223940
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.026 seconds
+Real time usage: 0.034 seconds
+Preprocessor visited node count: 290/1000000
+Post‐expand include size: 876/2097152 bytes
+Template argument size: 392/2097152 bytes
+Highest expansion depth: 6/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   16.471      1 -total
+ 60.49%    9.963      3 Template:Sourcelink
+ 42.15%    6.943      3 Template:EngineVersion:Stable
+ 18.25%    3.006      1 Template:Sourcelinkhash
+ 10.24%    1.687      3 Template:EngineVersion:Stable:Major
+ 10.03%    1.652      6 Template:New
+  9.90%    1.630      3 Template:EngineVersion:Stable:Minor
+  9.01%    1.484      3 Template:EngineVersion:Stable:Patchset
+  8.94%    1.473      1 Template:Str_left
+  8.49%    1.399      1 Template:Forumlink
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2580-0!canonical and timestamp 20260309223940 and revision id 31792
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=LuaCallinReturn&amp;oldid=31792">https://springrts.com/mediawiki/index.php?title=LuaCallinReturn&amp;oldid=31792</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Deprecated.html" title="Category:Deprecated">Deprecated</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="LuaCallinReturn.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:LuaCallinReturn&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=LuaCallinReturn&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=LuaCallinReturn&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="LuaCallinReturn.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:LuaCallinReturn&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=LuaCallinReturn" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/LuaCallinReturn" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/LuaCallinReturn" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=LuaCallinReturn&amp;oldid=31792" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=LuaCallinReturn&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 24 May 2022, at 20:52.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.026","walltime":"0.034","ppvisitednodes":{"value":290,"limit":1000000},"postexpandincludesize":{"value":876,"limit":2097152},"templateargumentsize":{"value":392,"limit":2097152},"expansiondepth":{"value":6,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%   16.471      1 -total"," 60.49%    9.963      3 Template:Sourcelink"," 42.15%    6.943      3 Template:EngineVersion:Stable"," 18.25%    3.006      1 Template:Sourcelinkhash"," 10.24%    1.687      3 Template:EngineVersion:Stable:Major"," 10.03%    1.652      6 Template:New","  9.90%    1.630      3 Template:EngineVersion:Stable:Minor","  9.01%    1.484      3 Template:EngineVersion:Stable:Patchset","  8.94%    1.473      1 Template:Str_left","  8.49%    1.399      1 Template:Forumlink"]},"cachereport":{"timestamp":"20260309223940","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":138});});</script></body></html>

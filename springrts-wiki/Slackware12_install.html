@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Slackware install - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"1f6c735a422166d64c7762c5","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Slackware_install","wgTitle":"Slackware install","wgCurRevisionId":28634,"wgRevisionId":28634,"wgArticleId":2490,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Slackware_install","wgRelevantArticleId":2490,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgRedirectedFrom":"Slackware12_install",
+"wgInternalRedirectTargetUrl":"/wiki/Slackware_install"};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["mediawiki.action.view.redirect","site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<link href="https://springrts.com/wiki/Slackware_install" rel="canonical"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Slackware_install rootpage-Slackware_install skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Slackware install</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"><span class="mw-redirectedfrom">(Redirected from <a class="mw-redirect" href="/mediawiki/index.php?title=Slackware12_install&amp;redirect=no" title="Slackware12 install">Slackware12 install</a>)</span></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Linux.html" title="Linux">Linux Setup Guide</a> &lt; Slackware install
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Slackware"><span class="tocnumber">1</span> <span class="toctext">Slackware</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Installing_using_script"><span class="tocnumber">1.1</span> <span class="toctext">Installing using script</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Installing_using_SlackBuilds_packages"><span class="tocnumber">1.2</span> <span class="toctext">Installing using SlackBuilds packages</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#maps"><span class="tocnumber">1.2.1</span> <span class="toctext">maps</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#packages"><span class="tocnumber">1.2.2</span> <span class="toctext">packages</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#How_to_choose_the_correct_installer_file.3F"><span class="tocnumber">1.2.3</span> <span class="toctext">How to choose the correct installer file?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-7"><a href="#Install_using_script"><span class="tocnumber">1.3</span> <span class="toctext">Install using script</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Install_by_package"><span class="tocnumber">2</span> <span class="toctext">Install by package</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#See_Also:"><span class="tocnumber">3</span> <span class="toctext">See Also:</span></a></li>
+</ul>
+</div>
+<p><a class="image" href="/wiki/File:Slackware.png"><img alt="Slackware.png" decoding="async" height="61" src="images/Slackware.png" width="61"/></a>
+</p><p>For packaging <font color="#00DD00">requests</font> or <font color="#FF0000">complaints</font>, please contact <a href="Linux_Packaging.html#Slackware" title="Linux:Packaging"> the packagers</a>.
+</p>
+<h1><span class="mw-headline" id="Slackware">Slackware</span></h1>
+<p>version 89.0 for Slackware 13.37 and 14.00 x86_64 (there is an update for boost libraries for 13.37)
+</p><p>There is 3 ways to install springrts for Slackware, compiling from scratch, downloading slackbuild packages, or running a script that download the slackware packages and set the game for you.
+</p>
+<h2><span class="mw-headline" id="Installing_using_script">Installing using script</span></h2>
+<p>There is a script named <a class="external text" href="http://corec.cl/spring/spring_slackware_64b_installer.sh" rel="nofollow">spring_slackware_64b_installer.sh</a>, you must download it and run:
+</p><p><code>
+chmod +x spring_slackware_64b_installer.sh
+</code></p><p><code>su -c spring_slackware_64b_installer.sh
+</code>
+</p><p>The command will ask for the root password, detect Slackware version and operative system architecture. The script will create the folder <code>sb_packages</code> to save files, and then install files. (just x86_64 is ready now).
+</p><p>At the end you just need to run springlobby to start to play.
+</p><p><code>
+springlobby
+</code>
+</p>
+<h2><span class="mw-headline" id="Installing_using_SlackBuilds_packages">Installing using SlackBuilds packages</span></h2>
+<p>Download packages from next links and install them running as root: 
+</p><p><code>
+upgradepkg --reinstall --install-new *.t?z
+</code>
+</p><p>The packages are:
+</p><p><a class="external text" href="http://corec.cl/spring/DevIL-1.6.8_rc2-x86_64-3_SBo.tgz" rel="nofollow">DevIL-1.6.8_rc2-x86_64-3_SBo.tgz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/icu4c-4.6.1-x86_64-1_SBo.tgz" rel="nofollow">icu4c-4.6.1-x86_64-1_SBo.tgz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/libtorrent-rasterbar-0.15.9-x86_64-1_SBo.tgz" rel="nofollow">libtorrent-rasterbar-0.15.9-x86_64-1_SBo.tgz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/OpenAL-1.13-x86_64-1_SBo.tgz" rel="nofollow">OpenAL-1.13-x86_64-1_SBo.tgz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/p7zip-9.20.1-x86_64-1_SBo.tgz" rel="nofollow">p7zip-9.20.1-x86_64-1_SBo.tgz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/spring-89.0-x86_64-1_SBo.tgz" rel="nofollow">spring-89.0-x86_64-1_SBo.tgz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/wxGTK-2.8.12-x86_64-2_SBo.tgz" rel="nofollow">wxGTK-2.8.12-x86_64-2_SBo.tgz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/boost-1.49.0-x86_64-1.txz" rel="nofollow">boost-1.49.0-x86_64-1.txz</a>
+</p><p><a class="external text" href="http://corec.cl/spring/springlobby-0.147-x86_64-1_SBo.tgz" rel="nofollow">springlobby-0.147-x86_64-1_SBo.tgz</a>
+</p><p>The <b>gcc 4.7.1</b> force us to upgrade boost library at least to 1.48 version, we choose 1.49 to distribute with spring because that will be the version of boost in Slackware 14 (not released yet), and until know there is no problems with libraries in 13.37 slackware version.
+</p>
+<h3><span class="mw-headline" id="maps">maps</span></h3>
+<p>Here is some maps that you want 
+</p>
+<ul><li><a class="external text" href="http://springfiles.com/spring/spring-maps/deltasiegedry" rel="nofollow">DeltaSiegeDry.sd7</a></li>
+<li>FolsomDamFinal.sd7</li>
+<li>LLTAComplexV2.sd7</li>
+<li>Small_Supreme_Battlefield_V2.sd7</li>
+<li>SpeedMetal.sd7</li>
+<li>Tabula-v2.sd7</li>
+<li>TheRockFinal.sd7</li>
+<li>Tropical.sd7</li>
+<li>Wide Pass v3.2.sd7</li>
+<li>folsomdamdeluxev4.sd7</li></ul>
+<h3><span class="mw-headline" id="packages">packages</span></h3>
+<p>Depending on both, architecture and version of Slackware you are using, there are different versions of packages. this is an example for Slackware 13.37.0 64bits.
+</p>
+<ul><li>DevIL-1.6.8_rc2-x86_64-3_SBo.tgz</li>
+<li>OpenAL-1.12.854-x86_64-1_SBo.tgz</li>
+<li>icu4c-4.6.1-x86_64-1_SBo.tgz</li>
+<li>libtorrent-rasterbar-0.15.5-x86_64-1_SBo.tgz</li>
+<li>p7zip-9.13-x86_64-1_SBo.tgz</li>
+<li>spring-0.82.7.1-x86_64-1_SBo.tgz</li>
+<li>springlobby-0.131-x86_64-1_SBo.tgz</li>
+<li>wxGTK-2.8.12-x86_64-1_SBo.tgz</li></ul>
+<h3><span id="How_to_choose_the_correct_installer_file?"></span><span class="mw-headline" id="How_to_choose_the_correct_installer_file.3F">How to choose the correct installer file?</span></h3>
+<p>You need to know just 3 things: what version of spring do you want, what version of Slackware is running, and what kind of architecture you have. To know what version of spring, you just need to go to <a class="external text" href="http://www.springrts.com" rel="nofollow">http://www.springrts.com</a> and check the last version. if this page is missing the latest version, just send us a mail. To get the Slackware version of your system, you just need to type this:
+</p><p><code>
+cat /etc/slackware-version
+</code>
+</p><p>and to get the architecture of your CPU, just type:
+</p><p><code>
+uname -m
+</code>
+</p><p>Architectures <b>i686</b>, <b>i486</b> and any other different from <b>x86_64</b> are 32bits and should work with <b>i486</b>.
+</p><p>For example, this Slackware version is <b>13.1.0</b> and the architecture is <b>i686</b>, and I know that the last version of spring is 0.82.7.1, so the required file is:
+</p><p>Spring-&lt;SPRING_VERSION&gt;-Slackware-&lt;SLACKWARE_VERSION&gt;-&lt;ARCHITECTURE&gt;.tar.gz
+</p><p>Spring-0.82.7.1-Slackware-13.1.0-i486.tar.gz
+</p>
+<h2><span class="mw-headline" id="Install_using_script">Install using script</span></h2>
+<p>After having downloaded the file, you have to decompress it with:
+</p><p><code>
+tar xzvf Spring-0.82.7.1-Slackware-13.1.0-i486.tar.gz
+</code>
+</p><p>This should create a directory with the same name as the file:
+</p><p><code>
+cd Spring-0.82.7.1-Slackware-13.1.0-i486/
+</code>
+</p><p>And there you just run:
+</p><p><code>
+./spring_slackware_32b_install.sh
+</code>
+</p><p>The script will ask for the root password, install packages, copy maps and games, and check a boost symbolic link that this distribution needs to make to run springlobby properly.
+</p>
+<h1><span class="mw-headline" id="Install_by_package">Install by package</span></h1>
+<p>For a full install, the dependencies in precompiled tgz's for <b>32 bits</b>:
+</p><p><a class="external text" href="http://dl.dropbox.com/u/1277376/slackware/spring-0.82.7.1-i486-1.tgz" rel="nofollow">spring 0.82.7.1</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=S3NH7Q0S" rel="nofollow">openAL 1.12.854</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=QOE461J6" rel="nofollow">DevIL-1.6.8_rc2</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=HY45ITXC" rel="nofollow">icu4c-4.4.1-i486</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=60WU4Q9X" rel="nofollow">p7zip-9.13</a>
+</p><p>There is all dependencies in precompiled tgz's for <b>64 bits</b> (Slackware 13.0, working on 13.1):
+</p><p><a class="external text" href="http://www.megaupload.com/?d=MMB8HTQU" rel="nofollow">spring 0.82.6.1</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=AC75YZ1S" rel="nofollow">openAL 1.10.622</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=WQ2DGUS8" rel="nofollow">DevIL-1.6.8_rc2</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=774C313B" rel="nofollow">boost-1.38.0</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=HC4OMM5J" rel="nofollow">icu4c-4.2.1</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=OY1P3ME0" rel="nofollow">glew-1.5.1</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=2Q09GME2" rel="nofollow">libtorrent-rasterbar-0.14.9</a>
+</p><p>Assuming that all .tgz are saved in the same directory, open a console and cd inside that directory; then do this:
+</p>
+<code><pre>su -c "installpkg *.tgz"
+</pre></code>
+<p>When asked for the root password, enter it.
+</p><p>A menu entry for spring and another for springlobby will apear in KDE, XFCE and GNOME.
+</p><p>Depending on your distribution/package, you still need a Multiplayer Lobby. For Linux, the most common one is SpringLobby, which you can get <a class="external text" href="http://springlobby.info/wiki/springlobby/Install" rel="nofollow">here</a>. For Slackware 13.1, the binaries required for SpringLobby:
+</p><p><b>32bits</b>:
+</p><p><a class="external text" href="http://www.megaupload.com/?d=Q8X69Q01" rel="nofollow">libtorrent-rasterbar-0.15.0-i486</a>
+</p><p><a class="external text" href="http://www.megaupload.com/?d=AGSWZCUM" rel="nofollow">boost-1.42.0-i686</a>
+</p>
+<ul><li>NOTE: By default, Slackware don't have *-mt libraries, so, if you want compile/run springlobby, you must make symbolic links to <b>libboost_*.so</b> libraries in this way:<code><pre>##ln -s /usr/lib/libboost_system.so /usr/lib/libboost_system-mt.so</pre></code></li></ul>
+<p><a class="external text" href="http://www.megaupload.com/?d=K6GIVCQE" rel="nofollow">wxGTK-2.8.11-i486</a>
+</p>
+<ul><li>NOTE: If you have problems compiling/runing springlobby, you must be sure that you are using UNICODE config, to do that, you must run:<code><pre>##wx-config --selected-config</pre></code>, and, if you have a response different to <code>gtk2-unicode-release-2.8</code> you have a problem, and you must compile/install correct package.</li></ul>
+<p><a class="external text" href="http://www.megaupload.com/?d=K3OUFTL5" rel="nofollow">springlobby-0.114-i686</a> (out of date now on v0.120)
+</p><p><br/>
+</p>
+<h1><span class="mw-headline" id="See_Also:">See Also:</span></h1>
+<ul><li><a href="Finalizing_linux_install.html" title="Finalizing linux install">Finalizing_linux_install</a></li>
+<li><a href="Troubleshooting_linux.html" title="Troubleshooting linux">Troubleshooting_linux</a></li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20260309223159
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.012 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 49/1000000
+Post‐expand include size: 17/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 154/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2490-0!canonical and timestamp 20260309223159 and revision id 28634
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Slackware_install&amp;oldid=28634">https://springrts.com/mediawiki/index.php?title=Slackware_install&amp;oldid=28634</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Slackware_install.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Slackware_install&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Slackware_install&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Slackware_install&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Slackware_install.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Slackware_install&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Slackware+install" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Slackware_install" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Slackware_install" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Slackware_install&amp;oldid=28634" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Slackware_install&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 14 June 2014, at 13:23.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.012","walltime":"0.014","ppvisitednodes":{"value":49,"limit":1000000},"postexpandincludesize":{"value":17,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":154,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223159","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":81});});</script></body></html>

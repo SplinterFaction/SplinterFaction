@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Mapdev:normal - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"dccddca1ca922540bcf51843","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Mapdev:normal","wgTitle":"Mapdev:normal","wgCurRevisionId":30846,"wgRevisionId":30846,"wgArticleId":3418,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Map Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Mapdev:normal","wgRelevantArticleId":3418,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":
+"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Mapdev_normal rootpage-Mapdev_normal skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Mapdev:normal</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Normal_Texture"><span class="tocnumber">1</span> <span class="toctext">Normal Texture</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Important_Info"><span class="tocnumber">2</span> <span class="toctext">Important Info</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Specification"><span class="tocnumber">3</span> <span class="toctext">Specification</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#mapinfo.lua"><span class="tocnumber">3.1</span> <span class="toctext">mapinfo.lua</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Image_File"><span class="tocnumber">3.2</span> <span class="toctext">Image File</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Normal_Texture">Normal Texture</span></h1>
+<p>Gives the terrain a normal map. This can be used to suggest small surface details while keeping terrain flat. The RGB channels determine the XYZ of the new surface normal (in tangent space), while the alpha channel determines how much of the original surface normal is kept.
+</p><p><a class="external text" href="https://code.google.com/p/gimp-normalmap/" rel="nofollow">This GIMP plugin</a> provides various ways to convert heightmaps into normal maps.
+</p>
+<center>
+<table cellpadding="5" style="margin-top:15px; background:rgba(255,0,0,0.1); border: 1px solid rgba(0,0,0,0.5); border-radius: 12px 12px 12px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 10px 8px rgba(255,255,255,0.3);">
+<tbody><tr>
+<td rowspan="2"><a class="image" href="/wiki/File:Icon-caution.png"><img alt="Icon-caution.png" decoding="async" height="48" src="images/48px-Icon-caution.png" srcset="/mediawiki/images/thumb/1/1a/Icon-caution.png/72px-Icon-caution.png 1.5x, /mediawiki/images/thumb/1/1a/Icon-caution.png/96px-Icon-caution.png 2x" width="48"/></a>
+</td>
+<th style="font-size:large">Caution
+</th></tr>
+<tr>
+<td>Requires clients to have GLSL-spec hardware
+</td></tr></tbody></table></center>
+<center>
+<table class="wikitable">
+<caption>Example
+</caption>
+<tbody><tr>
+<td><span style="color:yellow;font-weight:bold">FIXME: </span> needs image file</td>
+<td><span style="color:yellow;font-weight:bold">FIXME: </span> needs image file
+</td></tr>
+<tr>
+<th>Without Normal Map</th>
+<th>With Normal Map
+</th></tr></tbody></table></center>
+<h1><span class="mw-headline" id="Important_Info">Important Info</span></h1>
+<ul><li>The normal map effect will *not* be shown unless you have a specular map defined. It can be as simple as a full-black with full-black alpha image, TGA 32-bit format is recommended.<br/></li>
+<li>If you want to merge two normal maps, for instance, one for the terrain and one for the resources (metal, geo vents), it's not as simple as it might sound if you want to do it properly. You can read about it in detail <a class="external text" href="http://wiki.polycount.com/wiki/Normal_map" rel="nofollow">here</a>. The "Whiteout" technique is recommended, there is a Photoshop action available for it <a class="external text" href="https://polycount.com/discussion/163801/udn-and-whiteout-normal-map-blending-photoshop-actions" rel="nofollow">here</a><br/></li></ul>
+<h1><span class="mw-headline" id="Specification">Specification</span></h1>
+<h2><span class="mw-headline" id="mapinfo.lua">mapinfo.lua</span></h2>
+<p>The relevant sections of the <a href="Mapdev_mapinfo.lua.html" title="Mapdev:mapinfo.lua">mapinfo.lua</a>
+</p>
+<pre>local mapinfo = {
+   ...
+   resources = {
+      ...
+      detailNormalTex = "normal.png",
+      ...
+   },
+   ...
+}</pre>
+<h2><span class="mw-headline" id="Image_File">Image File</span></h2>
+<table class="wikitable" width="100%">
+<tbody><tr>
+<th width="15%">File Location
+</th>
+<td>./maps/
+</td></tr>
+<tr>
+<th>File Format
+</th>
+<td>PNG, TGA
+</td></tr>
+<tr>
+<th>Colour Depth
+</th>
+<td>8bpp
+</td></tr>
+<tr>
+<th>Channels
+</th>
+<td>RGBA
+</td></tr>
+<tr>
+<th>Resolution
+</th>
+<td>Any, recommended powers of two, will be stretched over the terrain.
+</td></tr></tbody></table>
+<pre>Modifies the shading normal as follows
+
+shadingNormal.xyz = NORMALIZE(terrainNormal.xyz * (1 - detailNormalTex.a) 
+                               + detailNormalTex.rgb)
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223425
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.022 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 57/1000000
+Post‐expand include size: 940/2097152 bytes
+Template argument size: 128/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 307/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   17.134      1 -total
+ 76.46%   13.100      1 Template:Caution
+ 30.75%    5.268      1 Template:Infobox
+ 22.18%    3.800      2 Template:FIXME
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3418-0!canonical and timestamp 20260309223425 and revision id 30846
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Mapdev:normal&amp;oldid=30846">https://springrts.com/mediawiki/index.php?title=Mapdev:normal&amp;oldid=30846</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Map_Dev.html" title="Category:Map Dev">Map Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Mapdev_normal.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Mapdev:normal&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Mapdev:normal&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Mapdev:normal&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Mapdev_normal.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Mapdev:normal&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Mapdev%3Anormal" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Mapdev:normal" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Mapdev:normal" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Mapdev:normal&amp;oldid=30846" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Mapdev:normal&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 18 December 2018, at 16:39.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.022","walltime":"0.032","ppvisitednodes":{"value":57,"limit":1000000},"postexpandincludesize":{"value":940,"limit":2097152},"templateargumentsize":{"value":128,"limit":2097152},"expansiondepth":{"value":5,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":307,"limit":5000000},"timingprofile":["100.00%   17.134      1 -total"," 76.46%   13.100      1 Template:Caution"," 30.75%    5.268      1 Template:Infobox"," 22.18%    3.800      2 Template:FIXME"]},"cachereport":{"timestamp":"20260309223425","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":129});});</script></body></html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>LUA ComonPitfalls - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"3e3283715753e8d3264ad69e","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"LUA_ComonPitfalls","wgTitle":"LUA ComonPitfalls","wgCurRevisionId":26439,"wgRevisionId":26439,"wgArticleId":3231,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"LUA_ComonPitfalls","wgRelevantArticleId":3231,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-LUA_ComonPitfalls rootpage-LUA_ComonPitfalls skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">LUA ComonPitfalls</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p>This page mentions some common problems and their solutions, and should not be treated as a tutorial page. 
+</p><p>You can also visit #moddev or #lua channels on the spring lobby. You are advised to post the infolog and a code snippet describing your problem to www.pastebin.com or similar sites. 
+These are some of the more common pitfalls:
+</p><p><b>1. Variable declaration instead of assignment:</b>
+</p><p>In some cases you might make a typo in variable assignments in the form of:
+myWariable = [ value ]
+instead of the intended:
+myVariable = [ value ]
+which will create a new variable "myWariable" instead of the intended assignment to an existing variable "myVariable".
+</p><p>A solution would be to print variable's value often with Spring.Echo("MyVariableName:", variableName) and to enforce properly spelled variable names.
+</p><p><b>2. Keep it simple!:</b>
+</p><p>If its to big for you to understand (who built it), break it down. Do not copy and paste code. Doing that is wrong, wrong - and wrong. Get code out into special functions only dedicated to checking.
+</p><p><span style="color:#ff0000"><i>if (boolOne == true and x &gt; 3.14) or (foo==bar) then</i></span><span style="color:#f0ffff"><i>can be converted into</i></span>
+</p><p><span style="color:#00ff00"><i>function checkThem(boolOne,x,foo,bar) </i>
+return (boolOne == true and x &gt; 3.14) or (foo==bar)</span>
+<span style="color:#00ff00"><i>end</i></span>
+</p><p>Delete unnecessary stuff.Do not keep code in your work that has reached its exparation date. Plan ahead, it might sound stupid to draw a sketch of a program, but you will come into situation were you coded yourself into a corner, and 2 hours go to waste. So planning if you have a complex task is never wasted time.
+</p><p><b>3. Use existing tools:</b>
+</p><p>There are tools available which may ease some of your development. Some examples are: Toolbox and springposer. These may take some time to setup but it will be worth it.
+</p><p><br/><b>4. Use Includes:</b>
+</p><p>Parts of your unitscript are used allover again? In different units? Have sort of a function toolkit, you want to reuse, without copy and pasting it?
+</p><p><b>include "MyToolkit.lua"</b> will add all the functions of the MyToolkit.lua to the program(only used ones). Good way to separate complex programs into easier understandable pieces.
+</p><p><b>5. Locals:</b>
+</p><p>It's advisable to use local variables (prefixed by the "local" keyword) instead of global variables (no prefix by default) where possible. Doing so may increase Lua performance as well as keep you from polluting the global namespace - which may be a problem as your project grows.
+</p><p><br/>
+<b>6. Variable scope:</b> The scope of your variable is limited by the blocks of code (between then/do/else and end). Everything deeper down can see your variable, everything outside of this scope cant. Check them Twice- if you were the function.. could you see it at the point it is needed? If a function gets handed a value that has the same name then a global, this local "copy" hides the global variable till function end. What maybe obvious to the programmer, is invisible to the program.
+</p><p><b>7. Comments:</b> Every time you have to return to work, and don't know what something does, and you read it again - write it down as a comment above. Comments are not only for other people, they can also help you. Even with a carefully worked out plan, you will lose the oversight with larger projects.
+</p><p><br/><b>8. No wreckage Info/No such Unit</b> If you get this message, spring might have finished parsing the unitdef and skipped it, so it won't show up to the party. Check for missing comma, typos, comment pieces out, until its loaded. [[Something|] , is just a different way of writing "something". So within double braces is just another string.
+</p><p><b>9.Object Orientated Thinking:</b>
+</p><p>Its way more efficient to bundle data together with objects, then store it en mass in huge tables, getting it together on demand. For example:
+</p><p><span style="color:#ff0000">for i=1, 9000,1 do</span>
+</p><p><span style="color:#ff0000">if unit[i] == weapon[i] then doSomething() end</span>
+</p><p><span style="color:#ff0000">end</span>
+</p><p>is slow. Every time the first table is called the value is taken, then the second big value is called, rising the chance to push the first table out of memory. Thus a constant loading and writing occurs in the background.
+</p><p><span style="color:#00ff00">ArmedUnits -- a table that contains the unit and the weapon bundled together</span>
+</p><p><span style="color:#00ff00">for i=1, 9000,1 do</span>
+</p><p><br/><span style="color:#00ff00">ArmedUnits[i].unit</span>
+</p><p><span style="color:#00ff00">weapon=ArmedUnits[i].weapon</span>
+</p><p><span style="color:#00ff00">if unit== weapon then doSomething() end</span>
+</p><p><span style="color:#00ff00">end</span>
+</p><p>This approach takes a little time to get used to, but especially for large tables its a big performance safer.
+</p><p><b>10. Use Text Replacement:</b>
+</p><p>Many beginners use compares like if booleanDeBug ==true then Spring.Echo("Testvalue",blabla) end
+</p><p>Do not leave this useless compares in the code. Instead use the Spring.Echo alone.  Then if the release is closing in use Text Replacement to Replace Spring.Echo with --Spring.Echo.
+</p><p><b>11. Syntactical Insecuritys?</b>
+</p><p>Spring has over time incorporated scripts from different languages (cob/bos/lua) and some of those calls are rather vague described in the wiki. So how does this COB Get/Set work? Best solution, google it. Really. Somewhere someone already has used it, and you can see it, working.
+</p><p><b>12.Forgotten Globals</b>
+</p><p>Declared eons ago, forgotten by you and used in the assumption they never existed. And now you fill them with different values in a function, wondering at the strange sideeffects.
+</p><p><b>13. Nil</b>
+</p><p>Nil is Nihilistic. It takes functions with it it, everything that touches it becomes unstable, antimatter. A Variable initialized with nil will resolve in a 0 no matter what you put in through other functions. You know the checks. Use them.
+</p><p><br/><b>14. Backup</b>
+</p><p>Not against data loss through hardware failure or viruses, but to have a safecopy should you screw up. There is stuff that will crawl into a overworked tired mind at 4 in the morning that you will find brilliant. And the next moment, you want to go back, all you find is a NeedMoreSleep() function with a lame pun in it. Use a Subversion control system, use a simple on for the start (like Mecurial). Advanced people will recommend you advanced tools. There is no shame in using the easier option if that one allows you to archieve your goals.
+</p><p><b>15. Don't Poison the Well</b> Sometimes you need Information for a Unit, and you create a Sensor-Thread such as this.
+</p>
+<pre><span style="color:#00ff00">local function senSoricLoop()
+</span>
+</pre>
+<pre><span style="color:#00ff00">  while(true) do
+info=Spring.GetMyInfo(unitID)
+  if info == true then
+  --do this
+     else 
+     --do that
+     end
+Sleep(150)
+end
+</span>
+</pre>
+<pre><span style="color:#00ff00">end
+</span>
+</pre>
+<p>Poisoning the well means, instead of writting a second while loop to give in to the temptation to just falsify the sensoric data. In this case making the info global, and setting it to false every Sleep(20). This thing is nasty, it will result in unpredictable behaviour, a unit that seemingly at random sometimes spasms. Avoid at all cost.
+</p><p><br/><b>16. SignalMasks for Threads (Thx to Tobi for this one)</b>
+</p><p><b>SIG_ONE=1</b>
+</p><p><b>SIG_SOMETHING=2</b>
+</p><p><b>SIG_ANYTHING=4</b>
+</p><p>Threads are Started and if you use SetSignalMask(SIG_SOMETHING) you assing them a unique Number, that must be the power of two(1,2,4,8,16,32...). To understand SignalMasks you need to understand the <u><b>binary</b></u>representation of this numbers.
+</p><p>SIG_ONE = 1            SIG_SOMETHING= 10            SIG_ANYTHING= 100
+</p><p>Notice the difference? Every one of this 1s represent a Switch, that can be either on, or off. If you Send a Signal Signal(SIG_ONE) this will find the thread (and its decendants) and pull the plug.  What happens if we would use a uneven number? Signal(3) for example?  It would result into Signal(11) (3 beeing 11 in binary) and pull the plugs of all threads marked by the SignalMasks 2 and 1. Now if you assign a threads decendant thread another number, it becomes independent from the father Thread. Handle with care.
+</p><p><b>17. Internal Language Changes:</b>
+</p><p>Now that sounds like something made up to impress. But well, this occurs mainly if you do complicated math or call external functions. You write something down, which is in the language you are currenty thinking in quite accurate. But meanwhile you have forgotte all about the LUA-Syntax. Example?
+</p><p><span style="color:#00ff00">x=32+ math.sin(phi) * x</span>
+</p><p><span style="color:#00ff00">y=64 + 12 *math.cos(phi)^x</span>
+</p><p>If you write this.. its pure truth. Written down on paper its pure truth. If you calc it back, its still pure truth. Executed in Lua it will do strange things, you wont find easily without debugger. Thats because the x is allready changed when it goes into the second line. So a accurate Version of this would look like:
+</p><p><span style="color:#00ff00">tempXofOld=x</span>
+</p><p><span style="color: rgb(0, 255, 0)">x=32+ math.sin(phi) * x</span>
+</p><p><span style="color:#00ff00">y=64 + 12 *math.cos(phi)^tempXofOld</span>
+</p><p>And thats a hardone to find. Because if you read it up again, you will switch languages in your head.. its one of those things you do without thinking. Same stuff can happen if you are fluent with several languages, and translate your variables, because you are distracted for a moment.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223718
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.004 seconds
+Real time usage: 0.004 seconds
+Preprocessor visited node count: 25/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 15/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3231-0!canonical and timestamp 20260309223718 and revision id 26439
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=LUA_ComonPitfalls&amp;oldid=26439">https://springrts.com/mediawiki/index.php?title=LUA_ComonPitfalls&amp;oldid=26439</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="LUA_ComonPitfalls.html" title="View the content page [c]">Page</a></li><li id="ca-talk"><a accesskey="t" href="/wiki/Talk:LUA_ComonPitfalls" rel="discussion" title="Discussion about the content page [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=LUA_ComonPitfalls&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=LUA_ComonPitfalls&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="LUA_ComonPitfalls.html" title="Page">Page</a></li><li id="ca-talk-mobile"><a href="/wiki/Talk:LUA_ComonPitfalls" rel="discussion" title="Discussion">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=LUA+ComonPitfalls" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/LUA_ComonPitfalls" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/LUA_ComonPitfalls" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=LUA_ComonPitfalls&amp;oldid=26439" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=LUA_ComonPitfalls&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 9 March 2013, at 22:27.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.004","walltime":"0.004","ppvisitednodes":{"value":25,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":15,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223718","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":179});});</script></body></html>

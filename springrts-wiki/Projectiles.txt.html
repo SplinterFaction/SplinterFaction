@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Projectiles.txt - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"b374af679e2346fa40b19966","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Projectiles.txt","wgTitle":"Projectiles.txt","wgCurRevisionId":26807,"wgRevisionId":26807,"wgArticleId":1502,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["CEG"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Projectiles.txt","wgRelevantArticleId":1502,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":
+"ready","user":"ready","user.options":"loading","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Projectiles_txt rootpage-Projectiles_txt skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Projectiles.txt</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><pre>Class: CSimpleGroundFlash.  Scriptname: CSimpleGroundFlash
+	sizeGrowth: float
+	ttl: int
+	colorMap: CColorMap*
+	texture: GroundFXTexture*
+	size: float
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSeismicGroundFlash.  Scriptname: CSeismicGroundFlash
+	size: float
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CStandardGroundFlash.  Scriptname: CStandardGroundFlash
+	flashSize: float
+	circleAlpha: float
+	flashAlpha: float
+	circleGrowth: float
+	color: uchar[3]
+	size: float
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CGroundFlash.  Scriptname: CGroundFlash
+	size: float
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CProjectile.  Scriptname: CProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CPieceProjectile.  Scriptname: CPieceProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CFlareProjectile.  Scriptname: CFlareProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CExpGenSpawner.  Scriptname: CExpGenSpawner
+	delay: int
+	dir: float3
+	damage: float
+	explosionGenerator: CExplosionGenerator*
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CFireProjectile.  Scriptname: CFireProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CTorpedoProjectile.  Scriptname: CTorpedoProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CEmgProjectile.  Scriptname: CEmgProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CBeamLaserProjectile.  Scriptname: CBeamLaserProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CFireBallProjectile.  Scriptname: CFireBallProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CLightningProjectile.  Scriptname: CLightningProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CStarburstProjectile.  Scriptname: CStarburstProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CFlameProjectile.  Scriptname: CFlameProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CWeaponProjectile.  Scriptname: CWeaponProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CMissileProjectile.  Scriptname: CMissileProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CLargeBeamLaserProjectile.  Scriptname: CLargeBeamLaserProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CExplosiveProjectile.  Scriptname: CExplosiveProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CLaserProjectile.  Scriptname: CLaserProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CBitmapMuzzleFlame.  Scriptname: CBitmapMuzzleFlame
+	sideTexture: AtlasedTexture*
+	frontTexture: AtlasedTexture*
+	dir: float3
+	colorMap: CColorMap*
+	size: float
+	length: float
+	sizeGrowth: float
+	ttl: int
+	frontOffset: float
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CGenericParticleProjectile.  Scriptname: CGenericParticleProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSmokeTrailProjectile.  Scriptname: CSmokeTrailProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CMuzzleFlame.  Scriptname: CMuzzleFlame
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CGeoThermSmokeProjectile.  Scriptname: CGeoThermSmokeProjectile
+	color: float
+	size: float
+	startSize: float
+	sizeExpansion: float
+	ageSpeed: float
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CTracerProjectile.  Scriptname: CTracerProjectile
+	length: float
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CDirtProjectile.  Scriptname: CDirtProjectile
+	alpha: float
+	alphaFalloff: float
+	size: float
+	sizeExpansion: float
+	slowdown: float
+	color: float3
+	texture: AtlasedTexture*
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSphereParticleSpawner.  Scriptname: CSphereParticleSpawner
+	emitVector: float3
+	emitMul: float3
+	gravity: float3
+	colorMap: CColorMap*
+	texture: AtlasedTexture*
+	airdrag: float
+	particleLife: float
+	particleLifeSpread: float
+	numParticles: int
+	particleSpeed: float
+	particleSpeedSpread: float
+	particleSize: float
+	particleSizeSpread: float
+	emitRot: float
+	emitRotSpread: float
+	directional: bool
+	sizeGrowth: float
+	sizeMod: float
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSimpleParticleSystem.  Scriptname: CSimpleParticleSystem
+	emitVector: float3
+	emitMul: float3
+	gravity: float3
+	colorMap: CColorMap*
+	texture: AtlasedTexture*
+	airdrag: float
+	particleLife: float
+	particleLifeSpread: float
+	numParticles: int
+	particleSpeed: float
+	particleSpeedSpread: float
+	particleSize: float
+	particleSizeSpread: float
+	emitRot: float
+	emitRotSpread: float
+	directional: bool
+	sizeGrowth: float
+	sizeMod: float
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CExploSpikeProjectile.  Scriptname: CExploSpikeProjectile
+	length: float
+	width: float
+	alpha: float
+	alphaDecay: float
+	lengthGrowth: float
+	dir: float3
+	color: float3
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CWreckProjectile.  Scriptname: CWreckProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSmokeProjectile2.  Scriptname: CSmokeProjectile2
+	color: float
+	ageSpeed: float
+	size: float
+	startSize: float
+	sizeExpansion: float
+	wantedPos: float3
+	glowFalloff: float
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CWakeProjectile.  Scriptname: CWakeProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CHeatCloudProjectile.  Scriptname: CHeatCloudProjectile
+	heat: float
+	maxheat: float
+	heatFalloff: float
+	size: float
+	sizeGrowth: float
+	sizemod: float
+	sizemodmod: float
+	texture: AtlasedTexture*
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSpherePartSpawner.  Scriptname: CSpherePartSpawner
+	alpha: float
+	ttl: int
+	expansionSpeed: float
+	color: float3
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSpherePartProjectile.  Scriptname: CSpherePartProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CRepulseGfx.  Scriptname: CRepulseGfx
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CGfxProjectile.  Scriptname: CGfxProjectile
+	creationTime: int
+	lifeTime: int
+	color: uchar[4]
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CSmokeProjectile.  Scriptname: CSmokeProjectile
+	color: float
+	size: float
+	startSize: float
+	sizeExpansion: float
+	ageSpeed: float
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CBubbleProjectile.  Scriptname: CBubbleProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CGeoSquareProjectile.  Scriptname: CGeoSquareProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+
+Class: CShieldPartProjectile.  Scriptname: CShieldPartProjectile
+	speed: float3
+	pos: float3
+	useAirLos: bool
+	alwaysVisible: bool
+
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309224321
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.002 seconds
+Real time usage: 0.002 seconds
+Preprocessor visited node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7428/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1502-0!canonical and timestamp 20260309224321 and revision id 26807
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Projectiles.txt&amp;oldid=26807">https://springrts.com/mediawiki/index.php?title=Projectiles.txt&amp;oldid=26807</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_CEG.html" title="Category:CEG">CEG</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Projectiles.txt.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Projectiles.txt&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Projectiles.txt&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Projectiles.txt&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Projectiles.txt.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Projectiles.txt&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Projectiles.txt" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Projectiles.txt" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Projectiles.txt" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Projectiles.txt&amp;oldid=26807" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Projectiles.txt&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 21 March 2013, at 11:59.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.002","walltime":"0.002","ppvisitednodes":{"value":4,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":7428,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224321","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":71});});</script></body></html>

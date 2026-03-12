@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Chili:Tutorial - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"3ded8703895e27ba47b4f7f6","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Chili:Tutorial","wgTitle":"Chili:Tutorial","wgCurRevisionId":30038,"wgRevisionId":30038,"wgArticleId":3708,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Libraries","Tutorial"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Chili:Tutorial","wgRelevantArticleId":3708,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Chili_Tutorial rootpage-Chili_Tutorial skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Chili:Tutorial</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a href="Main_Page.html" title="Main Page">Wiki</a> &lt; <a href="Chili.html" title="Chili">Chili</a> &lt; Chili Tutorial
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_Basics"><span class="tocnumber">1</span> <span class="toctext">The Basics</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Creating_a_Chili_Component"><span class="tocnumber">2</span> <span class="toctext">Creating a Chili Component</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Modifying_components"><span class="tocnumber">3</span> <span class="toctext">Modifying components</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Making_a_GUI_from_multiple_components"><span class="tocnumber">4</span> <span class="toctext">Making a GUI from multiple components</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Children_and_Showing.2FHiding"><span class="tocnumber">5</span> <span class="toctext">Children and Showing/Hiding</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="The_Basics">The Basics</span></h2>
+<p>In Chili, every element of the GUI has properties that control how it looks, and functions it can call when special events (such as a double click, or mouseover) affect it.
+</p><p>To use Chili inside a Lua widget, your <code>widget:Initialize</code> function should include the following code:
+&lt;syntaxhighlight lang="lua"&gt;
+</p>
+<pre> function widget:Initialize()
+   Chili = WG.Chili
+   Screen0 = Chili.Screen0
+ end
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+Now, <code>Chili</code> is your route to creating new GUI elements, and <code>Screen0</code> is the screen in which you add them.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Creating_a_Chili_Component">Creating a Chili Component</span></h2>
+<p>To create a Chili component, you use its <code>New</code> function, for example:
+&lt;syntaxhighlight lang="lua"&gt;
+</p>
+<pre> Chili.Window:New{parent=Screen0, width='20%', height='20%'}
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+This creates a square window, taking up 1/5th of the screen. See the <a href="Chili_Example_Hello_World.html" title="Chili:Example Hello World">Hello World</a> example for how to fit this code into a Chili widget.
+</p><p>If you forget to include <code>parent=Screen0</code>, your window will exist, but it won't be drawn anywhere. This is the instruction that tells Chili that you want your component to appear inside Screen0 - your screen.
+</p><p>If you look at the properties of a <a class="external text" href="http://gajop.github.io/chiliui/modules/controls.window.html" rel="nofollow">Window</a>, you won't find any. But, Window inherits from <a class="external text" href="http://gajop.github.io/chiliui/modules/controls.control.html" rel="nofollow">Control</a> - this means that a Window also has all the properties that a Control has. By looking at the properties of Control you can see that a Window actually has many options. Any properties that you don't specify are set to their default values. 
+</p><p>The hierarchy of inheritance for all Chili objects can be found <a href="Chili.html#Documentation:_Chili_Component_Hierarchy" title="Chili">here</a>.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Modifying_components">Modifying components</span></h2>
+<p>Once a component exists you can modify its properties, whenever you like. When you do so, Chili will react and automatically change how the component is drawn. For example,
+&lt;syntaxhighlight lang="lua"&gt;
+</p>
+<pre> local myWindow = Chili.Window:New{parent=Screen0, width='20%', height='20%'}
+ myWindow.x = 100
+ myWindow.y = 100
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+results in the window above being placed on the screen at (100,100). 
+</p><p>Many properties, such as x and y can be modified directly as though the component was a Lua table. Sometimes there are also functions to help you, for example in the properties of a <a class="external text" href="http://gajop.github.io/chiliui/modules/controls.checkbox.html" rel="nofollow">CheckBox</a> you can find a <code>Toggle()</code> function, which you would call as <code>myCheckBox:Toggle()</code>
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Making_a_GUI_from_multiple_components">Making a GUI from multiple components</span></h2>
+<p>Components can have children. Child components are placed inside of their parent components (and are drawn in front of it). The x-y coords, width, height, etc, of a component are relative to the area covered by its parent component. 
+</p><p>For example:
+&lt;syntaxhighlight lang="lua"&gt;
+</p>
+<pre> window = Chili.Window:New{parent = Screen0,   x='25%', y='25%', width='50%', height='50%'}
+ textBox = Chili.TextBox:New{parent = window,  x='10%', y='10%', width='80%', height='30%', text="Is the sky blue?"}
+ yesButton = Chili.Button:New{parent = window, x='10%', y='60%', width='30%', height='30%', caption="Yes"}
+ noButton = Chili.Button:New{parent = window,  x='60%', y='60%', width='30%', height='30%', caption="No"}
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+draws a Window in the center of the screen, containing a TextBox with the words "Is the sky blue?", and two clickable Buttons, for yes and no. It looks like
+</p><p>(TODO: picture). 
+</p><p>See the <a href="Chili_Examples.html" title="Chili:Examples">example widgets</a> page for how to make stuff happen when the buttons are clicked.
+</p><p><br/>
+</p>
+<h2><span id="Children_and_Showing/Hiding"></span><span class="mw-headline" id="Children_and_Showing.2FHiding">Children and Showing/Hiding</span></h2>
+<p>A component is drawn only when it is a child of another component that is drawn. Screen0 is a component of type <a class="external text" href="http://gajop.github.io/chiliui/modules/controls.screen.html" rel="nofollow">Screen</a>, and is always drawn, by default. A component that has no parent will never be drawn; it is said to be orphaned.
+</p><p>In a GUI, it's common to want components to sometimes be visible and sometimes be hidden. You can control this in two ways.
+</p>
+<ul><li>Every component has Show() and Hide() functions, e.g. <code>myWindow:Hide()</code></li>
+<li>Components can be orphaned/reattached to their parent.</li></ul>
+<p>Of course, Show() will only cause a component to be drawn if it is not orphaned.
+</p><p>There are many ways to specify (and change!) which components are children of which other components. 
+</p>
+<ul><li>To match the <code>parent=</code> used above, each component has a <code>children={[1]=firstChild, [2]=secondChild, ...}</code> table.</li>
+<li>There are the functions <code>AddChild, RemoveChild, SetParent, ClearChildren</code> and others.</li></ul>
+<p>A child component can have at most one parent, and a parent cannot have the same child more than once. However, a child can be removed from its original parent and then added to a new parent.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223606
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.005 seconds
+Real time usage: 0.006 seconds
+Preprocessor visited node count: 19/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3708-0!canonical and timestamp 20260309223606 and revision id 30038
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Chili:Tutorial&amp;oldid=30038">https://springrts.com/mediawiki/index.php?title=Chili:Tutorial&amp;oldid=30038</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Libraries.html" title="Category:Libraries">Libraries</a></li><li><a class="new" href="/mediawiki/index.php?title=Category:Tutorial&amp;action=edit&amp;redlink=1" title="Category:Tutorial (page does not exist)">Tutorial</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Chili_Tutorial.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Chili:Tutorial&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Chili:Tutorial&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Chili:Tutorial&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Chili_Tutorial.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Chili:Tutorial&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Chili%3ATutorial" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Chili:Tutorial" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Chili:Tutorial" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Chili:Tutorial&amp;oldid=30038" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Chili:Tutorial&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 11 June 2016, at 01:19.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.005","walltime":"0.006","ppvisitednodes":{"value":19,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223606","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":88});});</script></body></html>

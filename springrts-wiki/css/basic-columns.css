@@ -1,0 +1,454 @@
+#globalwrapper {
+	width: 100%;
+}
+
+#column-content {
+	float: left;
+	width: 80%;
+}
+#column-one {
+	float: right;
+}
+#footer	{
+	float: left;
+	width: 100%;
+}
+
+/* =========================================================
+   Gamedev / UnitDefs readable documentation theme
+   Focus: readability, code clarity, clean docs layout
+   ========================================================= */
+
+:root {
+  --bg: #f6f8fb;
+  --surface: #ffffff;
+  --surface-alt: #f1f4f8;
+  --text: #1f2937;
+  --muted: #5b6472;
+  --border: #d8e0ea;
+  --border-strong: #c4ceda;
+
+  --link: #1d4ed8;
+  --link-hover: #1e40af;
+
+  --heading: #0f172a;
+
+  --code-bg: #0f172a;
+  --code-text: #e5edf7;
+  --inline-code-bg: #eef2f7;
+
+  --type: #0f766e;
+  --name: #7c2d12;
+  --value: #b45309;
+  --warning: #92400e;
+  --warning-bg: #fff7ed;
+  --warning-border: #fdba74;
+
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --radius: 12px;
+  --content-width: 90%;
+}
+
+/* Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1.25rem 4rem;
+  background:
+    linear-gradient(to bottom, #f8fafc 0%, #f6f8fb 100%);
+  color: var(--text);
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  line-height: 1.7;
+  text-rendering: optimizeLegibility;
+}
+
+/* Main readable column */
+body > * {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* If this is a MediaWiki export, these help center the real content area too */
+#content,
+#bodyContent,
+.mw-body,
+.mw-parser-output {
+  margin: 0 auto;
+}
+
+/* Optional content card feel */
+.mw-parser-output,
+#content,
+#bodyContent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 2rem clamp(1.1rem, 2vw, 2.25rem);
+}
+
+/* Title */
+h1 {
+  color: var(--heading);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border);
+}
+
+/* Section headings */
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--heading);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+}
+
+h2 {
+  font-size: 1.7rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+h4 {
+  font-size: 1.12rem;
+  color: #1e293b;
+}
+
+/* Paragraph rhythm */
+p,
+ul,
+ol,
+dl,
+table,
+pre,
+blockquote {
+  margin-top: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+p,
+li,
+dd {
+  max-width: 75ch;
+}
+
+/* Links */
+a {
+  color: var(--link);
+  text-decoration: none;
+  text-underline-offset: 0.15em;
+}
+
+a:hover,
+a:focus {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+/* Lists */
+ul,
+ol {
+  padding-left: 1.5rem;
+}
+
+li + li {
+  margin-top: 0.35rem;
+}
+
+/* Definition lists are important in this doc */
+dl {
+  margin-left: 0;
+}
+
+dt {
+  margin-top: 1rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+dd {
+  margin-left: 1.25rem;
+  color: var(--text);
+}
+
+/* Code */
+code,
+kbd,
+samp {
+  font-family:
+    "Cascadia Code",
+    "Consolas",
+    "SFMono-Regular",
+    "Liberation Mono",
+    monospace;
+  font-size: 0.92em;
+}
+
+code {
+  background: var(--inline-code-bg);
+  color: #111827;
+  padding: 0.14em 0.4em;
+  border-radius: 6px;
+  border: 1px solid #dde5ef;
+}
+
+/* Prevent double styling for code blocks */
+pre code,
+code pre,
+pre > code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
+/* Big code examples */
+pre {
+  overflow-x: auto;
+  background: var(--code-bg);
+  color: var(--code-text);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  border: 1px solid #1e293b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  line-height: 1.55;
+  tab-size: 2;
+  white-space: pre;
+}
+
+pre::-webkit-scrollbar {
+  height: 10px;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 999px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: block;
+  overflow-x: auto;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--surface-alt);
+  color: var(--heading);
+  font-weight: 700;
+}
+
+tr:nth-child(even) td {
+  background: #fbfcfe;
+}
+
+/* Blockquotes / notes */
+blockquote {
+  margin-left: 0;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid #93c5fd;
+  background: #eff6ff;
+  color: #1e3a8a;
+  border-radius: 0 10px 10px 0;
+}
+
+/* TOC if present */
+#toc,
+.toc {
+  background: linear-gradient(180deg, #fbfdff 0%, #f5f8fc 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  margin: 1.25rem 0 2rem;
+}
+
+#toc .toctitle,
+.toc .toctitle {
+  margin-bottom: 0.6rem;
+}
+
+#toc h2,
+.toc h2 {
+  font-size: 1.05rem;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+#toc ul,
+.toc ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.2rem;
+}
+
+#toc li,
+.toc li {
+  margin: 0.2rem 0;
+}
+
+/* Inline semantic spans used in this page */
+span.type {
+  color: var(--type) !important;
+  font-weight: 700;
+}
+
+span.name {
+  color: var(--name) !important;
+  font-weight: 700;
+}
+
+span.value {
+  color: var(--value) !important;
+  font-weight: 600;
+}
+
+span.prefix,
+span.var,
+span.mono {
+  font-family:
+    "Cascadia Code",
+    "Consolas",
+    "SFMono-Regular",
+    monospace;
+}
+
+/* Warning badges */
+span.warning {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--warning);
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Horizontal rules */
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+  margin: 2rem 0;
+}
+
+/* Improve anchor jump positioning */
+:target {
+  scroll-margin-top: 1.2rem;
+}
+
+/* Selection */
+::selection {
+  background: #bfdbfe;
+  color: #0f172a;
+}
+
+/* Mobile tuning */
+@media (max-width: 720px) {
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .mw-parser-output,
+  #content,
+  #bodyContent {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  pre {
+    padding: 0.9rem;
+  }
+}
+
+/* Print-friendly */
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+    padding: 0;
+  }
+
+  .mw-parser-output,
+  #content,
+  #bodyContent {
+    box-shadow: none;
+    border: 0;
+    padding: 0;
+    max-width: none;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  pre {
+    background: #f3f4f6;
+    color: #111;
+    border: 1px solid #ccc;
+  }
+}

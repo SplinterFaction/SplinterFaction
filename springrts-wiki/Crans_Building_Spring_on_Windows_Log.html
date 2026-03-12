@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Crans Building Spring on Windows Log - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"c7a61169cc0051bb93ecfe96","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Crans_Building_Spring_on_Windows_Log","wgTitle":"Crans Building Spring on Windows Log","wgCurRevisionId":28853,"wgRevisionId":28853,"wgArticleId":3089,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Deprecated"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Crans_Building_Spring_on_Windows_Log","wgRelevantArticleId":3089,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[
+]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Crans_Building_Spring_on_Windows_Log rootpage-Crans_Building_Spring_on_Windows_Log skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Crans Building Spring on Windows Log</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><table style="border:1px solid #888; color:#FFFFFF; background:#BB2525;padding:.2em; padding:15px;text-align:justify;width:90%; margin:10px 30px; -webkit-border-radius: 10px; -moz-border-radius: 10px;border-radius: 10px;">
+<tbody><tr>
+<td style="width:50px;"><a class="image" href="/wiki/File:172px-Symbol_comment_vote.svg.png"><img alt="172px-Symbol comment vote.svg.png" decoding="async" height="51" src="images/50px-172px-Symbol_comment_vote.svg.png" srcset="/mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/75px-172px-Symbol_comment_vote.svg.png 1.5x, /mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/100px-172px-Symbol_comment_vote.svg.png 2x" width="50"/></a>
+</td>
+<td style="padding-left:.2em;"><b>Warning!</b> This page is <b>outdated</b>! The information displayed may no longer be valid, or has not been updated in a long time. Please refer to a <a href="Spring_CategoryStructure.html" title="Spring:CategoryStructure">different page</a> for current information.
+</td></tr></tbody></table>
+<p><br/>
+NOTE:
+Learned much since, so need to redo.
+</p>
+<ul><li>dos2unix.exe part of minglibs, but not picked up on clean install (it's called from a batch file expecting it in PATH, %MINGWLIBS%, or the third argument to the batch file, which isn't passed atm. Should have a find*.cmake file for that really). BUT, dos2unix is only used if git's core.autocrlf is set to false, so instead use:  core.safecrlf = false + core.autocrlf = true.</li>
+<li>TDM with dwarf2 is preferred over 'plain' mingw, and has a properly working collect2.exe. Only there's a little naming thing then 'gcc-dw2'.</li></ul>
+<p><br/>
+Right, the current building on windows with MinGW instructions for master seem outdated/broken/etc. :)
+</p><p>Since the new MinGW versions, things have become easier and more reliable.
+So to help others, I'll log here how I can make a working windows build from scratch.
+</p><p>I know this initial page isn't well formatted, I'll leave that to when I feel like it, or someone else does. Right now it seems more important to have some working instructions.
+</p><p>I can't test on anything other then my own system, which is Windows7, 64 bit.
+The date of all this is April 30, 2011.
+</p><p>Although this builds, and runs, you may have issues, since it is master. I certainly have some :) But since the buildbot windows builds have the same issues at the moment, I assume this is due to master having some issues, and not the build procedure.
+</p><p>Keep in mind that these steps describe using the latest available versions of everything. Currently this works pretty well, and is by far the easiest. But this may certainly change in the future.
+</p><p>Steps:
+</p>
+<ul><li>For the Java AI bits, you'll want to have a 32 bit JDK installed, I'm currently using jdk1.6.0_24. Things may build without, but I'm doing a Java AI, so not gonna test without Java :)</li>
+<li>You'll need a working MinGW, this used to be a pain, but with recent updates this has become a lot better.
+<ul><li>Read the page on <a class="external free" href="http://www.mingw.org/wiki/Getting_Started" rel="nofollow">http://www.mingw.org/wiki/Getting_Started</a>, just to get your bearings.</li>
+<li>Grab the lastest mingw-get-inst from <a class="external free" href="http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/mingw-get-inst" rel="nofollow">http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/mingw-get-inst</a>. I'm using mingw-get-inst-20110316.exe.</li>
+<li>Run the installer, choose to download the latest repository catalogues, accept the license</li>
+<li>I'd recommend using the default install location of C:\MinGW, check if you didn't already have something there before installing :)</li>
+<li>Whether you create start menu folders/desktop links/etc. is up to you.</li>
+<li>From the available packages, select at least C++ compiler, adding MinGW Developer Toolkit works quite well, but is a rather big download. Not adding it means we need to add some more packages later.</li>
+<li>Now the installer will do it's work, this will take some time. I usually get some errors/warnings about files which couldn't be downloaded (sourceforge hickups I figure), but as far as I can tell it'll retry them.</li>
+<li>You'll need to add the bin sub folder where you installed MinGW to the PATH environment variable, most reading this will know what to do, otherwise the MinGW getting started page covers it well.</li>
+<li>If all went well, you should now have some working tools. Open a cmd.exe (windows command shell), and type 'g++ --version', this should tell you you've now got a 4.5.2 or higher g++ compiler.</li>
+<li>Spring needs the dos2unix tool to build, which is not installed by default. Use the command 'mingw-get install cygutils-dos2unix' to grab it.</li>
+<li>If you did not install the MinGW Developer Toolkit, you'll have to install mingw32-make, use: 'mingw-get install mingw32-make'</li>
+<li>Because of a 'bug' (See <a class="external free" href="https://sourceforge.net/tracker/?func=detail&amp;aid=3295175&amp;group_id=2435&amp;atid=102435" rel="nofollow">https://sourceforge.net/tracker/?func=detail&amp;aid=3295175&amp;group_id=2435&amp;atid=102435</a>), we'll have to replace the installed collect2.exe. Get the gcc-4.5.2-tdm-1-core.zip from: <a class="external free" href="https://sourceforge.net/projects/tdm-gcc/files/TDM-GCC%204.5%20series/4.5.2-tdm-1%20SJLJ/" rel="nofollow">https://sourceforge.net/projects/tdm-gcc/files/TDM-GCC%204.5%20series/4.5.2-tdm-1%20SJLJ/</a> (or a newer version in the same location. These are TDM MinGW builds, alternative builds of MinGW, and he's got a fix in for this issue), unpack the zip file to a temporary location, and copy the contained libexec\gcc\mingw32\4.5.2\collect2.exe to C:\MinGW\libexec\gcc\mingw32\4.5.2 or similar, replacing the existing collect2.exe. Hopefully they'll do something with the bug report and fix this :)</li></ul></li>
+<li>I'm assuming you'll want to use git to get master, so you'll need the git client.
+<ul><li>Get the latest client from: <a class="external free" href="http://code.google.com/p/msysgit/downloads/list" rel="nofollow">http://code.google.com/p/msysgit/downloads/list</a> Currently the most recent is 'Git-1.7.4-preview20110204.exe', detailing all the settings is a bit out of scope here, I have found that choosing for it to do no newline conversions tends to work the best with Spring :)</li>
+<li>We'll get the source now, start with 'git clone <a class="external free" href="git://github.com/spring/spring.git'" rel="nofollow">git://github.com/spring/spring.git'</a> This will create a 'spring' folder in the folder you execute the command from. This spring folder will contain the source.</li>
+<li>If at a later time you want to update this source, go to the spring folder, and use 'git pull --rebase'.</li></ul></li>
+<li>Ok, we're nearly done, we now need the 'mingwlibs', our own collection of libraries and stuff needed to build on windows. Your best bet is to get it from <a class="external free" href="https://github.com/spring/mingwlibs" rel="nofollow">https://github.com/spring/mingwlibs</a> (which always is the most recent, we need the latest for master), it has a big Downloads button. Use that to get a zip, and put the zip's content under out spring folder, in a subfolder 'mingwlibs'.</li>
+<li>Well, nearlyish, we need CMake now, get and install the latest from <a class="external free" href="http://www.cmake.org/cmake/resources/software.html" rel="nofollow">http://www.cmake.org/cmake/resources/software.html</a>. 2.8.4 works fine for me atm.</li>
+<li>Now run cmake-ui (it should have put a icon on the desktop).
+<ul><li>Select the source folder, it's the spring folder you got with git.</li>
+<li>Choose a build folder, it doesn't have to exist yet, I use a 'build' folder next to the 'spring' folder.</li>
+<li>Hit the configure button. Use defaults in the generator dialog, which should be MinGW Makefiles, and use default native compilers.</li>
+<li>There's now lots of configuration values, luckily defaults work fine normally. The only change I'd recommend is to change CMAKE_INSTALL_PREFIX to something like 'C:/Spring.master' Windows7/VIsta do not like anyone changing stuff under the Program Files folder, so keep spring in the root of C: (or so) tends to prevent a lot of problems. If you've changed anything, hit configure once more.</li>
+<li>Now hit generate, this should create all needed makefiles and stuff.</li>
+<li>If that went well, we're done with CMake, close it.</li></ul></li>
+<li>Open a new cmd.exe, and go to the new 'build' folder.</li>
+<li>Optionally, type 'set MAKE_COMMAND=mingw32-make -j2', if you have more then one core and want to try multi-processed building (it's faster).</li>
+<li>Cross your fingers and type 'mingw32-make install DESTDIR=C:\' (the DESTDIR part will heed the 'CMAKE_INSTALL_PREFIX' you set earlier).</li></ul>
+<p>If things build well, one way to testing things is:
+</p>
+<ul><li>Get the BA mod from: <a class="external free" href="http://spring-portal.com/index.php/docman/doc_details/314-balanced-annihilation-v71" rel="nofollow">http://spring-portal.com/index.php/docman/doc_details/314-balanced-annihilation-v71</a></li>
+<li>Get and install abma's test 'game' from: <a class="external free" href="https://github.com/abma/spring-test-game" rel="nofollow">https://github.com/abma/spring-test-game</a> (you want all contents as zip, the big download button). There's a README included.</li>
+<li>Now start spring.exe, pick a map of your liking, set the 'ai' to Commanders (which only spawns an idle commander for each side), and pick the game/mod name 'Balanced Annihilation modtest-V7.31' notice the 'modtest' bit :)</li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20260309223900
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.007 seconds
+Real time usage: 0.009 seconds
+Preprocessor visited node count: 9/1000000
+Post‐expand include size: 568/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.843      1 Template:Deprecated
+100.00%    1.843      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3089-0!canonical and timestamp 20260309223900 and revision id 28853
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Crans_Building_Spring_on_Windows_Log&amp;oldid=28853">https://springrts.com/mediawiki/index.php?title=Crans_Building_Spring_on_Windows_Log&amp;oldid=28853</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Deprecated.html" title="Category:Deprecated">Deprecated</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Crans_Building_Spring_on_Windows_Log.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Crans_Building_Spring_on_Windows_Log&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Crans_Building_Spring_on_Windows_Log&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Crans_Building_Spring_on_Windows_Log&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Crans_Building_Spring_on_Windows_Log.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Crans_Building_Spring_on_Windows_Log&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Crans+Building+Spring+on+Windows+Log" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Crans_Building_Spring_on_Windows_Log" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Crans_Building_Spring_on_Windows_Log" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Crans_Building_Spring_on_Windows_Log&amp;oldid=28853" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Crans_Building_Spring_on_Windows_Log&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 11 October 2014, at 16:29.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.007","walltime":"0.009","ppvisitednodes":{"value":9,"limit":1000000},"postexpandincludesize":{"value":568,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.843      1 Template:Deprecated","100.00%    1.843      1 -total"]},"cachereport":{"timestamp":"20260309223900","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":115});});</script></body></html>

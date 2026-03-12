@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Gamedev:Structure - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"e19ca9cbcc0266e01939581f","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Gamedev:Structure","wgTitle":"Gamedev:Structure","wgCurRevisionId":29947,"wgRevisionId":29947,"wgArticleId":2990,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Game Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Gamedev:Structure","wgRelevantArticleId":2990,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi5tb25vIHsKICAgICAgIGZvbnQtZmFtaWx5OiBjb3VyaWVyLCBtb25vc3BhY2U7CiAgIH0KICAgc3Bhbi52YWx1ZSB7CiAgICAgICBjb2xvcjogI2ZmNjYwMDsKICAgfQ==" rel="stylesheet"/><!-- End Extension:CSS -->
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi5tb25vIHsKICAgICAgIGZvbnQtZmFtaWx5OiBjb3VyaWVyLCBtb25vc3BhY2U7CiAgIH0KICAgc3Bhbi52YWx1ZSB7CiAgICAgICBjb2xvcjogI2ZmNjYwMDsKICAgfQ==" rel="stylesheet"/><!-- End Extension:CSS -->
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Gamedev_Structure rootpage-Gamedev_Structure skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Gamedev:Structure</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Game_Structure"><span class="tocnumber">1</span> <span class="toctext">Game Structure</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.sd7_or_.sdz"><span class="tocnumber">1.1</span> <span class="toctext">.sd7 or .sdz</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.sdd_directories"><span class="tocnumber">1.2</span> <span class="toctext">.sdd directories</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Directory_Structure"><span class="tocnumber">1.3</span> <span class="toctext">Directory Structure</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#root_of_game_folder"><span class="tocnumber">1.3.1</span> <span class="toctext"><b>root of game folder</b></span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#anims.5C"><span class="tocnumber">1.3.2</span> <span class="toctext"><b>anims\</b></span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#bitmaps.5C"><span class="tocnumber">1.3.3</span> <span class="toctext"><b>bitmaps\</b></span></a>
+<ul>
+<li class="toclevel-4 tocsection-8"><a href="#bitmaps.5Cloadpictures"><span class="tocnumber">1.3.3.1</span> <span class="toctext"><b>bitmaps\loadpictures</b></span></a></li>
+<li class="toclevel-4 tocsection-9"><a href="#bitmaps.5Ctracks"><span class="tocnumber">1.3.3.2</span> <span class="toctext"><b>bitmaps\tracks</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-10"><a href="#features.5C"><span class="tocnumber">1.3.4</span> <span class="toctext"><b>features\</b></span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#gamedata.5C"><span class="tocnumber">1.3.5</span> <span class="toctext"><b>gamedata\</b></span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#icons.5C"><span class="tocnumber">1.3.6</span> <span class="toctext"><b>icons\</b></span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#LuaRules.5C"><span class="tocnumber">1.3.7</span> <span class="toctext"><b>LuaRules\</b></span></a>
+<ul>
+<li class="toclevel-4 tocsection-14"><a href="#LuaRules.5CGadgets"><span class="tocnumber">1.3.7.1</span> <span class="toctext"><b>LuaRules\Gadgets</b></span></a></li>
+<li class="toclevel-4 tocsection-15"><a href="#LuaRules.5CConfigs"><span class="tocnumber">1.3.7.2</span> <span class="toctext"><b>LuaRules\Configs</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-16"><a href="#LuaUI.5C"><span class="tocnumber">1.3.8</span> <span class="toctext"><b>LuaUI\</b></span></a>
+<ul>
+<li class="toclevel-4 tocsection-17"><a href="#LuaUI.5Cwidgets"><span class="tocnumber">1.3.8.1</span> <span class="toctext"><b>LuaUI\widgets</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-18"><a href="#objects3d.5C"><span class="tocnumber">1.3.9</span> <span class="toctext"><b>objects3d\</b></span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#scripts.5C"><span class="tocnumber">1.3.10</span> <span class="toctext"><b>scripts\</b></span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#sidepics.5C"><span class="tocnumber">1.3.11</span> <span class="toctext"><b>sidepics\</b></span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#sounds.5C"><span class="tocnumber">1.3.12</span> <span class="toctext"><b>sounds\</b></span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#units.5C"><span class="tocnumber">1.3.13</span> <span class="toctext"><b>units\</b></span></a></li>
+<li class="toclevel-3 tocsection-23"><a href="#unitpics.5C"><span class="tocnumber">1.3.14</span> <span class="toctext"><b>unitpics\</b></span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#unittextures.5C"><span class="tocnumber">1.3.15</span> <span class="toctext"><b>unittextures\</b></span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#weapons.5C"><span class="tocnumber">1.3.16</span> <span class="toctext"><b>weapons\</b></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Game_Structure">Game Structure</span></h1>
+<h2><span class="mw-headline" id=".sd7_or_.sdz">.sd7 or .sdz</span></h2>
+<p>A mod is presented as an <a class="mw-redirect" href="Sd7.html" title="Sd7">sd7</a> or sdz file.  This is just a zip file of the individual files comprising the game.
+</p><p>You can unzip the sd7 or sdz file by renaming it to .zip, and using a zip tool to unzip it.
+</p><p>sd7 / sdz files are created using 7zip.
+</p>
+<h2><span class="mw-headline" id=".sdd_directories">.sdd directories</span></h2>
+<p>You can avoid using the archives altogether by storing the whole mod directory structure in an .sdd directory. This is useful for game development because the changes you make are visible without any additional step.
+</p><p>On Linux one can also symlink the development directories from the Spring's mod directory:
+</p>
+<pre> ln -s ~/projects/caspring/games/zk ~/.spring/games/zk.sdd
+</pre>
+<h2><span class="mw-headline" id="Directory_Structure">Directory Structure</span></h2>
+<h3><span class="mw-headline" id="root_of_game_folder"><b><code>root of game folder</code></b></span></h3>
+<p><a href="Modinfo.lua.html" title="Modinfo.lua">Modinfo.lua</a> and can also contain <a href="Modoptions.lua.html" title="Modoptions.lua">Modoptions.lua</a>, <a href="AI_Development_Lang_Lua.html" title="AI:Development:Lang:Lua">LuaAI.lua</a>, and <a href="Springignore.txt.html" title="Springignore.txt">springignore.txt</a>
+</p>
+<h3><span id="anims\"></span><span class="mw-headline" id="anims.5C"><b><code>anims\</code></b><br/></span></h3>
+<p>image files for <a class="mw-redirect" href="MouseCursors.html" title="MouseCursors">mouse cursors</a>
+</p>
+<h3><span id="bitmaps\"></span><span class="mw-headline" id="bitmaps.5C"><b><code>bitmaps\</code></b><br/></span></h3>
+<h4><span id="bitmaps\loadpictures"></span><span class="mw-headline" id="bitmaps.5Cloadpictures"><b><code>bitmaps\loadpictures</code></b><br/></span></h4>
+<p>pictures that will be displayed when the game loads.
+</p>
+<h4><span id="bitmaps\tracks"></span><span class="mw-headline" id="bitmaps.5Ctracks"><b><code>bitmaps\tracks</code></b><br/></span></h4>
+<p>images that are used for the <a href="Gamedev_UnitDefs.html#Decals" title="Gamedev:UnitDefs">unit tracks</a>
+</p>
+<h3><span id="features\"></span><span class="mw-headline" id="features.5C"><b><code>features\</code></b><br/></span></h3>
+<p>.lua <a href="Gamedev_FeatureDefs.html" title="Gamedev:FeatureDefs">FeatureDef</a> files
+</p>
+<dl><dd>Corpse and map-static feature definitions. The corpse files are similar to <a href="Gamedev_UnitDefs.html" title="Gamedev:UnitDefs">UnitDefs</a> but usually contain a less data, such as what model to use as the wreckage, how much metal the wreck will give if reclaimed, etc. Some games choose to subsume these into the <a href="Gamedev_UnitDefs.html" title="Gamedev:UnitDefs">UnitDef</a> instead of having separate files.Subfolders are allowed.</dd></dl>
+<h3><span id="gamedata\"></span><span class="mw-headline" id="gamedata.5C"><b><code>gamedata\</code></b><br/></span></h3>
+<p><a href="Category_Gamedata.html" title="Category:Gamedata">Various files</a> that control global things or setup graphic &amp; sound resources.
+</p>
+<h3><span id="icons\"></span><span class="mw-headline" id="icons.5C"><b><code>icons\</code></b><br/></span></h3>
+<p>images for <a href="Icontypes.lua.html" title="Icontypes.lua">unit symbols and radar icons</a>
+</p>
+<h3><span id="LuaRules\"></span><span class="mw-headline" id="LuaRules.5C"><b><code>LuaRules\</code></b><br/></span></h3>
+<p>various files to make Lua scripts work such as gadget handler
+</p>
+<h4><span id="LuaRules\Gadgets"></span><span class="mw-headline" id="LuaRules.5CGadgets"><b><code>LuaRules\Gadgets</code></b><br/></span></h4>
+<p><a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua gadgets</a>: scripts that control the gameplay
+</p>
+<h4><span id="LuaRules\Configs"></span><span class="mw-headline" id="LuaRules.5CConfigs"><b><code>LuaRules\Configs</code></b><br/></span></h4>
+<p>config files read by Lua gadgets
+</p>
+<h3><span id="LuaUI\"></span><span class="mw-headline" id="LuaUI.5C"><b><code>LuaUI\</code></b><br/></span></h3>
+<h4><span id="LuaUI\widgets"></span><span class="mw-headline" id="LuaUI.5Cwidgets"><b><code>LuaUI\widgets</code></b><br/></span></h4>
+<p><a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua widget</a>: scripts that make up the user interface or do other unsynced things
+</p>
+<h3><span id="objects3d\"></span><span class="mw-headline" id="objects3d.5C"><b><code>objects3d\</code></b><br/></span></h3>
+<p>.3do, <a href="About_s3o.html" title="About s3o">.s3o</a> or <a href="Assimp.html" title="Assimp">Assimp</a> compatible 3D model files
+</p>
+<dl><dd>This contains the actual 3D model that units and features use in-game. Most units have a variety of different pieces that are put together in a hierarchy type form (for instance, a tank has a hull, a turret attached to that, and a barrel attached to that). The <a href="Gamedev_UnitDefs.html#model" title="Gamedev:UnitDefs">model</a> tag determines what model is used.</dd></dl>
+<h3><span id="scripts\"></span><span class="mw-headline" id="scripts.5C"><b><code>scripts\</code></b><br/></span></h3>
+<p><a href="Animation-LuaScripting.html" title="Animation-LuaScripting">.lua</a> or <a href="Animation-CobOverview.html" title="Animation-CobOverview">.cob </a> animation script files
+</p>
+<dl><dd>This contains all of the animation scripting for the units. Scripts work by calling on pieces of the unit's model to do things, such as rotate a turret to aim at a target, or emit smoke when the unit is damaged. The pieces named in the script file must reflect actual parts of the unit's.</dd></dl>
+<h3><span id="sidepics\"></span><span class="mw-headline" id="sidepics.5C"><b><code>sidepics\</code></b><br/></span></h3>
+<p><a href="Sidedata.lua.html" title="Sidedata.lua">Faction icons</a> read by lobby etc.
+</p>
+<h3><span id="sounds\"></span><span class="mw-headline" id="sounds.5C"><b><code>sounds\</code></b><br/></span></h3>
+<p><a href="Sounds.lua.html" title="Sounds.lua">sound files</a>
+</p>
+<h3><span id="units\"></span><span class="mw-headline" id="units.5C"><b><code>units\</code></b><br/></span></h3>
+<p>.lua <a href="Gamedev_UnitDefs.html" title="Gamedev:UnitDefs">UnitDef</a> files
+</p>
+<dl><dd>Contains most of the active data that a unit uses, such as its health, a list of which weapons it has, speed, metal/energy cost, whether it is a construction unit or not, so on and so forth. Subfolders are allowed.</dd></dl>
+<h3><span id="unitpics\"></span><span class="mw-headline" id="unitpics.5C"><b><code>unitpics\</code></b><br/></span></h3>
+<p>.dds or .png <a href="Gamedev_Buildpics.html" title="Gamedev:Buildpics">buildmenu pictures</a>
+</p>
+<dl><dd>Unit pictures are those little thumbnails which show up in the build menus of units in-game. They're just a little graphical representation of the unit so people know what they're building when they click it. Assigned via the <a href="Gamedev_UnitDefs.html#buildpic" title="Gamedev:UnitDefs">buildpic</a> tag.</dd></dl>
+<h3><span id="unittextures\"></span><span class="mw-headline" id="unittextures.5C"><b><code>unittextures\</code></b><br/></span></h3>
+<p>.dds, .tga or .png image <a href="3DModels_Textures.html" title="3DModels:Textures">texture</a> files. 
+</p>
+<dl><dd>Image files which are stretched over the unit. Texture 1 contains the diffuse and team colour and texture 2 controls reflectivity, specular, glow and 1-bit transparency. Subfolders are allowed.</dd></dl>
+<h3><span id="weapons\"></span><span class="mw-headline" id="weapons.5C"><b><code>weapons\</code></b><br/></span></h3>
+<p>.lua <a href="Gamedev_WeaponDefs.html" title="Gamedev:WeaponDefs">WeaponDef</a> files
+</p>
+<dl><dd>Most units have weapons. The characteristics of these weapons, from its behaviour to how it acts in the air, is determined in the weapon file. Some games choose to subsume these into the <a href="Gamedev_UnitDefs.html" title="Gamedev:UnitDefs">UnitDef</a> instead of having separate files. Subfolders are allowed.</dd></dl>
+<!-- 
+NewPP limit report
+Cached time: 20260309223235
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.031 seconds
+Real time usage: 0.041 seconds
+Preprocessor visited node count: 125/1000000
+Post‐expand include size: 70/2097152 bytes
+Template argument size: 58/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   10.477      1 -total
+ 97.52%   10.217      2 Template:Xtaglink
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2990-0!canonical and timestamp 20260309223235 and revision id 29947
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Gamedev:Structure&amp;oldid=29947">https://springrts.com/mediawiki/index.php?title=Gamedev:Structure&amp;oldid=29947</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Game_Dev.html" title="Category:Game Dev">Game Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Gamedev_Structure.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Gamedev:Structure&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Gamedev:Structure&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Gamedev:Structure&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Gamedev_Structure.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Gamedev:Structure&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Gamedev%3AStructure" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Gamedev:Structure" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Gamedev:Structure" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Gamedev:Structure&amp;oldid=29947" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Gamedev:Structure&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 7 April 2016, at 22:41.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.031","walltime":"0.041","ppvisitednodes":{"value":125,"limit":1000000},"postexpandincludesize":{"value":70,"limit":2097152},"templateargumentsize":{"value":58,"limit":2097152},"expansiondepth":{"value":4,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%   10.477      1 -total"," 97.52%   10.217      2 Template:Xtaglink"]},"cachereport":{"timestamp":"20260309223235","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":194});});</script></body></html>

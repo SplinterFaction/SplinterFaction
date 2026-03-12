@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Tutorial:BasicMapMaking(Maelstrom) - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"6be7490b045732a37995432f","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Tutorial:BasicMapMaking(Maelstrom)","wgTitle":"Tutorial:BasicMapMaking(Maelstrom)","wgCurRevisionId":28921,"wgRevisionId":28921,"wgArticleId":1073,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Tutorial","Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Tutorial:BasicMapMaking(Maelstrom)","wgRelevantArticleId":1073,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],
+"wgRestrictionMove":[],"wgRedirectedFrom":"Maps:Tutorial","wgInternalRedirectTargetUrl":"/wiki/Tutorial:BasicMapMaking(Maelstrom)"};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["mediawiki.action.view.redirect","site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<link href="https://springrts.com/wiki/Tutorial:BasicMapMaking(Maelstrom)" rel="canonical"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Tutorial_BasicMapMaking_Maelstrom rootpage-Tutorial_BasicMapMaking_Maelstrom skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Tutorial:BasicMapMaking(Maelstrom)</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"><span class="mw-redirectedfrom">(Redirected from <a class="mw-redirect" href="/mediawiki/index.php?title=Maps:Tutorial&amp;redirect=no" title="Maps:Tutorial">Maps:Tutorial</a>)</span></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; Tutorial:BasicMapMaking(Maelstrom)
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Basic_Map_making"><span class="tocnumber">1</span> <span class="toctext">Basic Map making</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Step_1:_Concept_Drawing"><span class="tocnumber">1.1</span> <span class="toctext">Step 1: Concept Drawing</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Step_2:_Making_Tiles"><span class="tocnumber">1.2</span> <span class="toctext">Step 2: Making Tiles</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Step_3:_Setting_up_the_Texture_layers"><span class="tocnumber">1.3</span> <span class="toctext">Step 3: Setting up the Texture layers</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Step_4:_Placing_the_major_features"><span class="tocnumber">1.4</span> <span class="toctext">Step 4: Placing the major features</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Step_5:_Making_a_height_map"><span class="tocnumber">1.5</span> <span class="toctext">Step 5: Making a height map</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Step_6:_Metal_Map"><span class="tocnumber">1.6</span> <span class="toctext">Step 6: Metal Map</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Feature_Map"><span class="tocnumber">1.7</span> <span class="toctext">Feature Map</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Compiling"><span class="tocnumber">2</span> <span class="toctext">Compiling</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Basic_Map_making">Basic Map making</span></h2>
+<p>This tutorial is designed to help people make a basic map in an image editor like Photoshop. Things covered in this tutorial include:
+</p>
+<ul><li>Making a basic concept drawing</li>
+<li>Making and using tiles</li>
+<li>Placing major map features</li>
+<li>Making use of layers to easily design and modify the map</li></ul>
+<p>First things first, we need to set up some folders and stuff to make all our lives easier. As the map compiler does not accept path names with spaces in them, it is easier if we just place the files in a folder straight on the C:\ drive. So, heres what folders to make:
+</p>
+<ul><li>C:\Maps\
+<ul><li>MapName\
+<ul><li>Tiles\</li>
+<li>Texture\</li>
+<li>Metal\</li>
+<li>Height\</li></ul></li></ul></li></ul>
+<p>When we save each file, save them to the relevant folder. When we have finished that file, export it as a .bmp into the MapName folder for convinience. Remeber to save regularly, so as not to loose any work!
+</p><p>Whenever you create another map, make the same folders again. It makes life just that little bit easier.
+</p>
+<h3><span class="mw-headline" id="Step_1:_Concept_Drawing">Step 1: Concept Drawing</span></h3>
+<p>First things first, we need an idea of what the map will be about. For this map, I have made the following picture:<br/>
+<a class="image" href="/wiki/File:Rough_Design.jpg"><img alt="Rough Design.jpg" decoding="async" height="512" src="images/Rough_Design.jpg" width="512"/></a>
+</p><p>Green areas will be grass, Grey is mountains and Blue is water. This design does not need to be a major work of art, it just needs to convey the basic idea of the map, so that you have something to work off later.
+</p>
+<h3><span class="mw-headline" id="Step_2:_Making_Tiles">Step 2: Making Tiles</span></h3>
+<p>The secret to small file sizes for maps is tiles. A Tile is a small picture that is repeated on the texture many times. This texture is then tiled by the map converter, and a 400mb 10240x10240 pixel big bitmap is transformed into a 200kb map file. The tiling system is very powerfull and very handy, but we still need to give it a hand.
+</p><p>Tiles in spring are based on 32x32 peices of the texture. Therefore, for our tiling to work correctly, our tile needs to be a size that is a multiple of 32. Sizes include:
+</p>
+<ul><li>A basic, but boring looking 32x32 pixels</li>
+<li>A slightly better, but still slightly repetetive 64x64 pixels</li>
+<li>A good size of 128x128 pixels</li>
+<li>A large 256x256 pixels</li></ul>
+<p>Tiles can also be rectangular, and can be anything between the numbers mentioned above, but still need to be multiples of 32. To look good, tiles also need to be seamless, so when they are repeated no obvious join can be seen between the tiles.
+</p><p>For my map, as it has grass, mountains and a river I need three tiles.
+</p>
+<ul><li>A green Grass Tile</li></ul>
+<p><a class="image" href="/wiki/File:Grass.jpg"><img alt="Grass.jpg" decoding="async" height="128" src="images/Grass.jpg" width="128"/></a>
+</p>
+<ul><li>A grey Mountain Tile</li></ul>
+<p><a class="image" href="/wiki/File:Rock.jpg"><img alt="Rock.jpg" decoding="async" height="128" src="images/Rock.jpg" width="128"/></a>
+</p>
+<ul><li>A blue River tile</li></ul>
+<p><a class="image" href="/wiki/File:Water.jpg"><img alt="Water.jpg" decoding="async" height="128" src="images/Water.jpg" width="128"/></a>
+</p>
+<h3><span class="mw-headline" id="Step_3:_Setting_up_the_Texture_layers">Step 3: Setting up the Texture layers</span></h3>
+<p>A textures needs to be a certain size for it to work in the Spring engine. Textures must always be a size that is a multiple of 1024 pixels. 1024 pixels will equal 2 map 'size units' in the Spring engine, so a map of 5120x5120 pixels will be a 10x10 map. For a better description, go to one of the other pages.
+</p><p>We will need 4 layers for our map texture. One layer for our Grass texture, one for our Mountains, one for the River and one for the Concept drawing. First things first, make 4 layers. Fill the very bottom layer with the Water texture. The next layer is for the mountain texture, and the next is for the grass layer. Then, over all that, you draw in your concept again, but this time only the borders of the area's. Doing all this will make your life alot easier, and will help out alot in the long run.
+</p><p>Your texture should now look something like this, but just alot bigger:<br/>
+<a class="image" href="/wiki/File:Texture1.jpg"><img alt="Texture1.jpg" decoding="async" height="512" src="images/Texture1.jpg" width="512"/></a>
+</p>
+<h3><span class="mw-headline" id="Step_4:_Placing_the_major_features">Step 4: Placing the major features</span></h3>
+<p>Now that you have your layers set up, you can start placing things like mountains and rivers. To do this, select the grass layer, and grab the eraser tool. Following the outline from your Concept design, rub out an area for the mountain to poke through.<br/>
+<a class="image" href="/wiki/File:Texture2.jpg"><img alt="Texture2.jpg" decoding="async" height="512" src="images/Texture2.jpg" width="512"/></a>
+</p><p>Then, do the other mountain:<br/>
+<a class="image" href="/wiki/File:Texture3.jpg"><img alt="Texture3.jpg" decoding="async" height="512" src="images/Texture3.jpg" width="512"/></a>
+</p><p>Now, we need to do the river. As the river layer is 'below' the gras layer AND the mountain layer, we need to rub a hole in each of them. So, pull out the eraser again, and get rubbing!<br/>
+<a class="image" href="/wiki/File:Texture4.jpg"><img alt="Texture4.jpg" decoding="async" height="512" src="images/Texture4.jpg" width="512"/></a>
+</p><p>After that, turn the concept drawing off, and there you have one tile base, small filesize texture! With a bit of playing around, blurring the edges, adding more layers, and little stuff like that you can make a really good looking map by just using an image editor. Just look at River Dale for an example!
+</p>
+<h3><span class="mw-headline" id="Step_5:_Making_a_height_map">Step 5: Making a height map</span></h3>
+<p>This is one of the tricker bits to get right. But without a good height map, your map is also no good. So, down to buisness!
+</p><p>A height map is a picture that the Spring uses to work out the height of different bits of land. Hence, a height map. A height map looks a little strange at first, but you get the hang of the pretty quickly. A height map will be a greyscale image (an image made up of shades of grey, as opposed to colours), where white represents mountains, and black valleys, or water. 
+</p><p>First off, the height map needs to be a different size to the texture. The height map needs to be 1/8th of the size of the texture, plus one pixel. So, to make this easier, here is a nice formula!
+</p>
+<pre>Height map size = (Texture size / 8)   1
+</pre>
+<p>For this tutorial my height map will be the same size as my texture, but thats just so I can show you how to make it easier.
+</p><p>OK, now onto the height map! Make 2 layers. On the bottom layer, put your Texture, just resized to the right size. The top layer will be where we are going to draw our height map. To help us do this, we need to set the Opcaity (how transparent an image is) of the height map layer to around 50%. Some people like more, some people like less.
+</p><p>Grab the paint bucket tool and fill the whole of the height map dark grey. This will be the flat, grassy bit of our map. Then, grab the paint brush tool, set it to White, make it big and make the edges soft. When you paint with this brush you should get a white dot in the middle, with a steady fall off towards the grey that you have as your grass. Use this brush to paint in some mountains, with the White in the center, slowly fading out to the grey grass on the out side. 
+</p><p><a class="image" href="/wiki/File:Maelstrom-Height2.jpg"><img alt="Maelstrom-Height2.jpg" decoding="async" height="512" src="images/Maelstrom-Height2.jpg" width="512"/></a>
+</p><p>Then, make the same brush black, and draw a big long line for the river.
+</p><p><a class="image" href="/wiki/File:Maelstrom-Height3.jpg"><img alt="Maelstrom-Height3.jpg" decoding="async" height="512" src="images/Maelstrom-Height3.jpg" width="512"/></a>
+</p><p>When this is done, make the Opacity of the Height map 100% again, and save the picture. The Height map is done! It may require some tweaking later, but its fine for now.
+</p><p><a class="image" href="/wiki/File:Maelstrom-Height.jpg"><img alt="Maelstrom-Height.jpg" decoding="async" height="512" src="images/Maelstrom-Height.jpg" width="512"/></a>
+</p>
+<h3><span class="mw-headline" id="Step_6:_Metal_Map">Step 6: Metal Map</span></h3>
+<p>The metal map is alot like the height map. It is 1/8th the size   one pixel. You can still underlay the texture for reference. It is still just a simple picture, like the height map. But this time, you need to do it in 'redscale', instead of greyscale. That is, using only red, and no green or blue. The more red the colour, the more metal is given. Depending on the style of map you want is how you make your metal map. For this map, we are going with an OTA style map with metal patches.
+</p><p>Make 2 layers. On the bottom layer, we will have our texture. On the top layer we will draw in the metal. For now, we can leave the metal layer empty, with full opacity, unlike the metal map.
+</p><p>Grab a brush. Make it about 3 pixels big and square. Make the colour about half red, with all the other colours all the way down. This will be some low metal patches for the starting positions. Place a couple of patches around the corners, enough to start with, like so:
+</p><p><a class="image" href="/wiki/File:Maelstrom-Metal1.jpg"><img alt="Maelstrom-Metal1.jpg" decoding="async" height="129" src="images/Maelstrom-Metal1.jpg" width="129"/></a>
+</p><p>Then, make the brush full red. Place some more patches in places like the mountains, and the middle of the map. Places that will be under constant attack. These will be the good spots for the players willing to risk it for the extra metal.
+</p><p><a class="image" href="/wiki/File:Maelstrom-Metal2.jpg"><img alt="Maelstrom-Metal2.jpg" decoding="async" height="129" src="images/Maelstrom-Metal2.jpg" width="129"/></a>
+</p><p>Now we need to hide the texture. To do this, grab the paint bucket tool and fill in the empty area black. You have now finished your metal map. Save the picture and your done!
+</p><p><a class="image" href="/wiki/File:Maelstrom-Metal.jpg"><img alt="Maelstrom-Metal.jpg" decoding="async" height="129" src="images/Maelstrom-Metal.jpg" width="129"/></a>
+</p>
+<h3><span class="mw-headline" id="Feature_Map">Feature Map</span></h3>
+<p>A feature map is used to place Grass, Trees, Geovents and Features on a map. The tutorial will not cover how to make this, however the file is still needed. So we will just make a blank Feature map.
+</p><p>Feature maps are a bit like the other maps, however instead of being one eighth of the texture   1 pixel, they are just one eighth of the texture. So, for example, instead of being 129x129 pixels, your Feature map will be 128x128 pixels. Create a picture that is the required size, and fill it black. If you fill it white, you will overload the game, and it will probably crash. Which is a bad thing.
+</p>
+<h2><span class="mw-headline" id="Compiling">Compiling</span></h2>
+<p>For compiling, see the <a href="Maps_Compiling.html" title="Maps:Compiling">compiling tutorial</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223511
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 45/1000000
+Post‐expand include size: 34/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1073-0!canonical and timestamp 20260309223511 and revision id 28921
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Tutorial:BasicMapMaking(Maelstrom)&amp;oldid=28921">https://springrts.com/mediawiki/index.php?title=Tutorial:BasicMapMaking(Maelstrom)&amp;oldid=28921</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a class="new" href="/mediawiki/index.php?title=Category:Tutorial&amp;action=edit&amp;redlink=1" title="Category:Tutorial (page does not exist)">Tutorial</a></li><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Tutorial_BasicMapMaking(Maelstrom).html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Tutorial:BasicMapMaking(Maelstrom)&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Tutorial:BasicMapMaking(Maelstrom)&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Tutorial:BasicMapMaking(Maelstrom)&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Tutorial_BasicMapMaking(Maelstrom).html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Tutorial:BasicMapMaking(Maelstrom)&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Tutorial%3ABasicMapMaking%28Maelstrom%29" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Tutorial:BasicMapMaking(Maelstrom)" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Tutorial:BasicMapMaking(Maelstrom)" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Tutorial:BasicMapMaking(Maelstrom)&amp;oldid=28921" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Tutorial:BasicMapMaking(Maelstrom)&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 19 October 2014, at 10:04.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.020","walltime":"0.025","ppvisitednodes":{"value":45,"limit":1000000},"postexpandincludesize":{"value":34,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223511","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":91});});</script></body></html>

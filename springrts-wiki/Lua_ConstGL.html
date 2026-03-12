@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua ConstGL - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"76204d76d7a9c00ca6321a12","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_ConstGL","wgTitle":"Lua ConstGL","wgCurRevisionId":30724,"wgRevisionId":30724,"wgArticleId":2432,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_ConstGL","wgRelevantArticleId":2432,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":
+"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_ConstGL rootpage-Lua_ConstGL skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua ConstGL</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua ConstGL
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Drawing_Primitives"><span class="tocnumber">1</span> <span class="toctext">Drawing Primitives</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#BlendingFactorDest"><span class="tocnumber">2</span> <span class="toctext">BlendingFactorDest</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#BlendingFactorSrc"><span class="tocnumber">3</span> <span class="toctext">BlendingFactorSrc</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#AlphaFunction_and_DepthFunction"><span class="tocnumber">4</span> <span class="toctext">AlphaFunction and DepthFunction</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#LogicOp"><span class="tocnumber">5</span> <span class="toctext">LogicOp</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Culling"><span class="tocnumber">6</span> <span class="toctext">Culling</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#PolygonMode"><span class="tocnumber">7</span> <span class="toctext">PolygonMode</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Clear_Bits"><span class="tocnumber">8</span> <span class="toctext">Clear Bits</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#ShadeModel"><span class="tocnumber">9</span> <span class="toctext">ShadeModel</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#MatrixMode"><span class="tocnumber">10</span> <span class="toctext">MatrixMode</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Texture_Filtering"><span class="tocnumber">11</span> <span class="toctext">Texture Filtering</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Texture_Clamping"><span class="tocnumber">12</span> <span class="toctext">Texture Clamping</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Texture_Environment"><span class="tocnumber">13</span> <span class="toctext">Texture Environment</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Texture_Generation"><span class="tocnumber">14</span> <span class="toctext">Texture Generation</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#glPushAttrib.28.29_bits"><span class="tocnumber">15</span> <span class="toctext">glPushAttrib() bits</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#glHint.28.29_targets"><span class="tocnumber">16</span> <span class="toctext">glHint() targets</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#glHint.28.29_modes"><span class="tocnumber">17</span> <span class="toctext">glHint() modes</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Light_Specification"><span class="tocnumber">18</span> <span class="toctext">Light Specification</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#Shader_types"><span class="tocnumber">19</span> <span class="toctext">Shader types</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="#Geometry_shader_parameters"><span class="tocnumber">20</span> <span class="toctext">Geometry shader parameters</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#Tesselation_control_shader_parameters"><span class="tocnumber">21</span> <span class="toctext">Tesselation control shader parameters</span></a></li>
+<li class="toclevel-1 tocsection-22"><a href="#Usefull.2C_but_not_included_constants"><span class="tocnumber">22</span> <span class="toctext">Usefull, but not included constants</span></a>
+<ul>
+<li class="toclevel-2 tocsection-23"><a href="#Texture_Formats"><span class="tocnumber">22.1</span> <span class="toctext">Texture Formats</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#RBO_Formats"><span class="tocnumber">22.2</span> <span class="toctext">RBO Formats</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#FBO_Targets"><span class="tocnumber">22.3</span> <span class="toctext">FBO Targets</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#FBO_Status"><span class="tocnumber">22.4</span> <span class="toctext">FBO Status</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#FBO_Attachments"><span class="tocnumber">22.5</span> <span class="toctext">FBO Attachments</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Drawing_Primitives">Drawing Primitives</span></h2>
+<p><b>GL.POINTS</b><br/>
+<b>GL.LINES</b><br/>
+<b>GL.LINE_LOOP</b><br/>
+<b>GL.LINE_STRIP</b><br/>
+<b>GL.TRIANGLES</b><br/>
+<b>GL.TRIANGLE_STRIP</b><br/>
+<b>GL.TRIANGLE_FAN</b><br/>
+<b>GL.QUADS</b><br/>
+<b>GL.QUAD_STRIP</b><br/>
+<b>GL.POLYGON</b><br/>
+<b>GL.PATCHES</b> <font color="#0000ee">Available for spring versions &gt;= 104.0.1-596 (maintenance).</font>
+</p>
+<h2><span class="mw-headline" id="BlendingFactorDest">BlendingFactorDest</span></h2>
+<p><b>GL.ZERO</b><br/>
+<b>GL.ONE</b><br/>
+<b>GL.SRC_COLOR</b><br/>
+<b>GL.ONE_MINUS_SRC_COLOR</b><br/>
+<b>GL.SRC_ALPHA</b><br/>
+<b>GL.ONE_MINUS_SRC_ALPHA</b><br/>
+<b>GL.DST_ALPHA</b><br/>
+<b>GL.ONE_MINUS_DST_ALPHA</b>
+</p>
+<h2><span class="mw-headline" id="BlendingFactorSrc">BlendingFactorSrc</span></h2>
+<p><b>GL.ZERO</b><br/>
+<b>GL.ONE</b><br/>
+<b>GL.SRC_COLOR</b><br/>
+<b>GL.ONE_MINUS_SRC_COLOR</b><br/>
+<b>GL.SRC_ALPHA</b><br/>
+<b>GL.ONE_MINUS_SRC_ALPHA</b><br/>
+<b>GL.DST_ALPHA</b><br/>
+<b>GL.ONE_MINUS_DST_ALPHA</b><br/>
+<b>GL.DST_COLOR</b><br/>
+<b>GL.ONE_MINUS_DST_COLOR</b><br/>
+<b>GL.SRC_ALPHA_SATURATE</b>
+</p>
+<h2><span class="mw-headline" id="AlphaFunction_and_DepthFunction">AlphaFunction and DepthFunction</span></h2>
+<p><b>GL.NEVER</b><br/>
+<b>GL.LESS</b><br/>
+<b>GL.EQUAL</b><br/>
+<b>GL.LEQUAL</b><br/>
+<b>GL.GREATER</b><br/>
+<b>GL.NOTEQUAL</b><br/>
+<b>GL.GEQUAL</b><br/>
+<b>GL.ALWAYS</b>
+</p>
+<h2><span class="mw-headline" id="LogicOp">LogicOp</span></h2>
+<p><b>GL.CLEAR</b><br/>
+<b>GL.AND</b><br/>
+<b>GL.AND_REVERSE</b><br/>
+<b>GL.COPY</b><br/>
+<b>GL.AND_INVERTED</b><br/>
+<b>GL.NOOP</b><br/>
+<b>GL.XOR</b><br/>
+<b>GL.OR</b><br/>
+<b>GL.NOR</b><br/>
+<b>GL.EQUIV</b><br/>
+<b>GL.INVERT</b><br/>
+<b>GL.OR_REVERSE</b><br/>
+<b>GL.COPY_INVERTED</b><br/>
+<b>GL.OR_INVERTED</b><br/>
+<b>GL.NAND</b><br/>
+<b>GL.SET</b>
+</p>
+<h2><span class="mw-headline" id="Culling">Culling</span></h2>
+<p><b>GL.BACK</b><br/>
+<b>GL.FRONT</b><br/>
+<b>GL.FRONT_AND_BACK</b>
+</p>
+<h2><span class="mw-headline" id="PolygonMode">PolygonMode</span></h2>
+<p><b>GL.POINT</b><br/>
+<b>GL.LINE</b><br/>
+<b>GL.FILL</b>
+</p>
+<h2><span class="mw-headline" id="Clear_Bits">Clear Bits</span></h2>
+<p><b>GL.DEPTH_BUFFER_BIT</b><br/>
+<b>GL.ACCUM_BUFFER_BIT</b><br/>
+<b>GL.STENCIL_BUFFER_BIT</b><br/>
+<b>GL.COLOR_BUFFER_BIT</b>
+</p>
+<h2><span class="mw-headline" id="ShadeModel">ShadeModel</span></h2>
+<p><b>GL.FLAT</b><br/>
+<b>GL.SMOOTH</b>
+</p>
+<h2><span class="mw-headline" id="MatrixMode">MatrixMode</span></h2>
+<p><b>GL.MODELVIEW</b><br/>
+<b>GL.PROJECTION</b><br/>
+<b>GL.TEXTURE</b>
+</p>
+<h2><span class="mw-headline" id="Texture_Filtering">Texture Filtering</span></h2>
+<p><b>GL.NEAREST</b><br/>
+<b>GL.LINEAR</b><br/>
+<b>GL.NEAREST_MIPMAP_NEAREST</b><br/>
+<b>GL.LINEAR_MIPMAP_NEAREST</b><br/>
+<b>GL.NEAREST_MIPMAP_LINEAR</b><br/>
+<b>GL.LINEAR_MIPMAP_LINEAR</b>
+</p>
+<h2><span class="mw-headline" id="Texture_Clamping">Texture Clamping</span></h2>
+<p><b>GL.REPEAT</b><br/>
+<b>GL.MIRRORED_REPEAT</b><br/>
+<b>GL.CLAMP</b><br/>
+<b>GL.CLAMP_TO_EDGE</b><br/>
+<b>GL.CLAMP_TO_BORDER</b>
+</p>
+<h2><span class="mw-headline" id="Texture_Environment">Texture Environment</span></h2>
+<p><b>GL.TEXTURE_ENV</b><br/>
+<b>GL.TEXTURE_ENV_MODE</b><br/>
+<b>GL.TEXTURE_ENV_COLOR</b><br/>
+<b>GL.MODULATE</b><br/>
+<b>GL.DECAL</b><br/>
+<b>GL.BLEND</b><br/>
+<b>GL.REPLACE</b><br/>
+</p><p><b>GL_TEXTURE_FILTER_CONTROL</b><br/>
+<b>GL_TEXTURE_LOD_BIAS</b>
+</p>
+<h2><span class="mw-headline" id="Texture_Generation">Texture Generation</span></h2>
+<p><b>GL.TEXTURE_GEN_MODE</b><br/>
+<b>GL.EYE_PLANE</b><br/>
+<b>GL.OBJECT_PLANE</b><br/>
+<b>GL.EYE_LINEAR</b><br/>
+<b>GL.OBJECT_LINEAR</b><br/>
+<b>GL.SPHERE_MAP</b><br/>
+<b>GL.NORMAL_MAP</b><br/>
+<b>GL.REFLECTION_MAP</b><br/>
+<b>GL.S</b><br/>
+<b>GL.T</b><br/>
+<b>GL.R</b><br/>
+<b>GL.Q</b>
+</p>
+<h2><span id="glPushAttrib()_bits"></span><span class="mw-headline" id="glPushAttrib.28.29_bits">glPushAttrib() bits</span></h2>
+<p><b>GL.CURRENT_BIT</b><br/>
+<b>GL.POINT_BIT</b><br/>
+<b>GL.LINE_BIT</b><br/>
+<b>GL.POLYGON_BIT</b><br/>
+<b>GL.POLYGON_STIPPLE_BIT</b><br/>
+<b>GL.PIXEL_MODE_BIT</b><br/>
+<b>GL.LIGHTING_BIT</b><br/>
+<b>GL.FOG_BIT</b><br/>
+<b>GL.DEPTH_BUFFER_BIT</b><br/>
+<b>GL.ACCUM_BUFFER_BIT</b><br/>
+<b>GL.STENCIL_BUFFER_BIT</b><br/>
+<b>GL.VIEWPORT_BIT</b><br/>
+<b>GL.TRANSFORM_BIT</b><br/>
+<b>GL.ENABLE_BIT</b><br/>
+<b>GL.COLOR_BUFFER_BIT</b><br/>
+<b>GL.HINT_BIT</b><br/>
+<b>GL.EVAL_BIT</b><br/>
+<b>GL.LIST_BIT</b><br/>
+<b>GL.TEXTURE_BIT</b><br/>
+<b>GL.SCISSOR_BIT</b><br/>
+<b>GL.ALL_ATTRIB_BITS</b>
+</p>
+<h2><span id="glHint()_targets"></span><span class="mw-headline" id="glHint.28.29_targets">glHint() targets</span></h2>
+<p><b>GL.FOG_HINT</b><br/>
+<b>GL.LINE_SMOOTH_HINT</b><br/>
+<b>GL.POINT_SMOOTH_HINT</b><br/>
+<b>GL.POLYGON_SMOOTH_HINT</b><br/>
+<b>GL.PERSPECTIVE_CORRECTION_HINT</b>
+</p>
+<h2><span id="glHint()_modes"></span><span class="mw-headline" id="glHint.28.29_modes">glHint() modes</span></h2>
+<p><b>GL.DONT_CARE</b><br/>
+<b>GL.FASTEST</b><br/>
+<b>GL.NICEST</b>
+</p>
+<h2><span class="mw-headline" id="Light_Specification">Light Specification</span></h2>
+<p><b>GL.AMBIENT</b><br/>
+<b>GL.DIFFUSE</b><br/>
+<b>GL.SPECULAR</b><br/>
+<b>GL.POSITION</b><br/>
+<b>GL.SPOT_DIRECTION</b><br/>
+<b>GL.SPOT_EXPONENT</b><br/>
+<b>GL.SPOT_CUTOFF</b><br/>
+<b>GL.CONSTANT_ATTENUATION</b><br/>
+<b>GL.LINEAR_ATTENUATION</b><br/>
+<b>GL.QUADRATIC_ATTENUATION</b>
+</p>
+<h2><span class="mw-headline" id="Shader_types">Shader types</span></h2>
+<p><font color="#0000ee">Available for spring versions &gt;= 104.0.1-596 (maintenance).</font><br/>
+<b>GL.VERTEX_SHADER</b><br/>
+<b>GL.TESS_CONTROL_SHADER</b><br/>
+<b>GL.TESS_EVALUATION_SHADER</b><br/>
+<b>GL.GEOMETRY_SHADER</b><br/>
+<b>GL.FRAGMENT_SHADER</b><br/>
+</p>
+<h2><span class="mw-headline" id="Geometry_shader_parameters">Geometry shader parameters</span></h2>
+<p><font color="#0000ee">Available for spring versions &gt;= 104.0.1-596 (maintenance).</font><br/>
+<b>GL.GEOMETRY_INPUT_TYPE</b><br/>
+<b>GL.GEOMETRY_OUTPUT_TYPE</b><br/>
+<b>GL.GEOMETRY_VERTICES_OUT</b><br/>
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Tesselation_control_shader_parameters">Tesselation control shader parameters</span></h2>
+<p><font color="#0000ee">Available for spring versions &gt;= 104.0.1-596 (maintenance).</font><br/>
+<b>GL.PATCH_VERTICES</b><br/>
+<b>GL.PATCH_DEFAULT_OUTER_LEVEL</b><br/>
+<b>GL.PATCH_DEFAULT_INNER_LEVEL</b><br/>
+</p>
+<h2><span id="Usefull,_but_not_included_constants"></span><span class="mw-headline" id="Usefull.2C_but_not_included_constants">Usefull, but not included constants</span></h2>
+<h3><span class="mw-headline" id="Texture_Formats">Texture Formats</span></h3>
+<pre> <b>GL_RGBA16F_ARB</b> = 0x881A
+ <b>GL_RGBA32F_ARB</b> = 0x8814
+ <b>GL_DEPTH_COMPONENT</b>   = 0x1902
+ <b>GL_DEPTH_COMPONENT16</b> = 0x81A5
+ <b>GL_DEPTH_COMPONENT24</b> = 0x81A6
+ <b>GL_DEPTH_COMPONENT32</b> = 0x81A7
+</pre>
+<h3><span class="mw-headline" id="RBO_Formats">RBO Formats</span></h3>
+<pre> <b>GL_RGB</b>             = 0x1907
+ <b>GL_RGBA</b>            = 0x1908
+ <b>GL_DEPTH_COMPONENT</b> = 0x1902
+ <b>GL_STENCIL_INDEX</b>   = 0x1901
+</pre>
+<h3><span class="mw-headline" id="FBO_Targets">FBO Targets</span></h3>
+<pre> <b>GL_FRAMEBUFFER_EXT</b>      = 0x8D40
+ <b>GL_READ_FRAMEBUFFER_EXT</b> = 0x8CA8
+ <b>GL_DRAW_FRAMEBUFFER_EXT</b> = 0x8CA9
+</pre>
+<h3><span class="mw-headline" id="FBO_Status">FBO Status</span></h3>
+<pre> <b>GL_FRAMEBUFFER_COMPLETE_EXT</b>                        = 0x8CD5
+ <b>GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT</b>           = 0x8CD6
+ <b>GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT</b>   = 0x8CD7
+ <b>GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT</b> = 0x8CD8
+ <b>GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT</b>           = 0x8CD9
+ <b>GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT</b>              = 0x8CDA
+ <b>GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT</b>          = 0x8CDB
+ <b>GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT</b>          = 0x8CDC
+ <b>GL_FRAMEBUFFER_UNSUPPORTED_EXT</b>                     = 0x8CDD
+ <b>GL_FRAMEBUFFER_STATUS_ERROR_EXT</b>                    = 0x8CDE
+</pre>
+<h3><span class="mw-headline" id="FBO_Attachments">FBO Attachments</span></h3>
+<pre> <b>GL_COLOR_ATTACHMENT0_EXT</b>  = 0x8CE0
+ ..
+ <b>GL_COLOR_ATTACHMENT15_EXT</b> = 0x8CEF
+ <b>GL_DEPTH_ATTACHMENT_EXT</b>   = 0x8D00
+ <b>GL_STENCIL_ATTACHMENT_EXT</b> = 0x8D20
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223601
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 89/1000000
+Post‐expand include size: 11/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2432-0!canonical and timestamp 20260309223601 and revision id 30724
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_ConstGL&amp;oldid=30724">https://springrts.com/mediawiki/index.php?title=Lua_ConstGL&amp;oldid=30724</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_ConstGL.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_ConstGL&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_ConstGL&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_ConstGL&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_ConstGL.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_ConstGL&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+ConstGL" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_ConstGL" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_ConstGL" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_ConstGL&amp;oldid=30724" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_ConstGL&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 13 August 2018, at 19:04.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.015","walltime":"0.016","ppvisitednodes":{"value":89,"limit":1000000},"postexpandincludesize":{"value":11,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223601","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":81});});</script></body></html>

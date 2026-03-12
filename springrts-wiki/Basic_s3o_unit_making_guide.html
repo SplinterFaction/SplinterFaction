@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Basic s3o unit making guide - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"712ff77218cb056dc1499ca9","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Basic_s3o_unit_making_guide","wgTitle":"Basic s3o unit making guide","wgCurRevisionId":26791,"wgRevisionId":26791,"wgArticleId":1371,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["3D Models"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Basic_s3o_unit_making_guide","wgRelevantArticleId":1371,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":
+"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Basic_s3o_unit_making_guide rootpage-Basic_s3o_unit_making_guide skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Basic s3o unit making guide</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#What_you_need:"><span class="tocnumber">1</span> <span class="toctext">What you need:</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_Model"><span class="tocnumber">2</span> <span class="toctext">The Model</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#The_UV_map"><span class="tocnumber">3</span> <span class="toctext">The UV map</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#The_Textures"><span class="tocnumber">4</span> <span class="toctext">The Textures</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#The_Script"><span class="tocnumber">5</span> <span class="toctext">The Script</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#The_unit_FBI_file"><span class="tocnumber">6</span> <span class="toctext">The unit FBI file</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Common_Troubles"><span class="tocnumber">7</span> <span class="toctext">Common Troubles</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Related_Threads"><span class="tocnumber">8</span> <span class="toctext">Related Threads</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="What_you_need:">What you need:</span></h2>
+<ul><li>The Model</li>
+<li>The UV map</li>
+<li>The Textures</li>
+<li>The Script</li>
+<li><a href="Upspring.html" title="Upspring">Upspring</a></li></ul>
+<h2><span class="mw-headline" id="The_Model">The Model</span></h2>
+<p>You can make it in any of the 3d modelling programs mentioned <a class="external text" href="http://taspring.clan-sy.com/wiki/Map%2C_Mod%2C_And_Unit_Development_Programs#3d_Modeling" rel="nofollow">here.</a>
+</p><p>Upspring will import .OBJ, and .3DS, (.3DO is supported as well but we are supposed to be working from scratch here and not converting old units).
+</p><p><br/>
+Importing 3DS files will have some sort of hierarchy, but with all pieces at the same level you will have to re-arrange them into the correct order using cut-paste commands.
+</p><p><br/>
+If I'm not mistaken, .OBJ files don't have hierarchy, so there is no distinction between parts of the unit.
+</p><p><br/>
+So for using this format you must save each part of the unit in separate files and import them individually from UpSpring. You must have at least one existing object to import to, so create an "empty" object if needed, then import the pieces following the hierarchy, or you can manually arrange them later.
+</p><p><br/>
+For moving object origins, move part using the move tool, and then use "Apply transformation" button in object tab.
+</p><p><br/>
+Put the saved .S3O file in the "Objects3D" folder in your mod structure files.
+</p><p><br/>
+<b>IMPORTANT</b>
+<b>All part names in s3o must be in lower case in UpSpring.</b>
+</p><p>This will avoid issues with the script.
+</p>
+<h2><span class="mw-headline" id="The_UV_map">The UV map</span></h2>
+<p>Only one UV map image is allowed, so you must make all parts use the same UV map.
+</p><p>It's reported that the biggest texture size of the UV map is 2048x2048.
+</p><p><br/>
+A guide on Skinning (UV mapping) can be found <a class="external text" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=3511" rel="nofollow">here</a>.
+</p><p><b>**Added by TA 3D:</b> When you want to bring in UV coordinates, go to the Texture Mapping menu again and click on Import UV coordinates from model. Since the texture is flipped vertically you have to flip the UV coordinates. Only use 3ds files for this as obj files don't have UV coordinates. I hope this helps.<b>**</b>
+</p><p><b>**Added by Mehere101:</b> This may be out of date, using Blender 2.42 RC3 I can get UV coordinates exported into the OBJ file.  Make sure that you are exporting to Wavefront OBJ, and that whatever exporter you have has the UV Mapping Box checked (In blender its off by default for some reason)<b>**</b>
+</p><p>You can import .3DS models already UV mapped into UpSpring.
+</p><p>(But in my tests the UV map results incorrectly displayed, please fix this part if you know how to do it right)
+</p><p><br/>
+Another way of making the UV map is importing the model first to UpSpring, either by using one .3DS file or the separate .OBJ files method.
+</p><p>Once you have the model imported and in the right place, use "Export Model for UV mapping" in UpSpring.
+</p><p><br/>
+Then UV map that .OBJ file with whatever UV mapping tool of your liking, save, and then import back the UV using the "load UV map from file".
+</p>
+<h2><span class="mw-headline" id="The_Textures">The Textures</span></h2>
+<p>Quote
+</p><p><br/>
+"There are two textures for each model, texture1 is the standard skin texture but the alpha is used for teamcolor. Texture2 uses the green channel for reflectivity and the red channel for self illumination, blue is unused so far."
+</p><p><br/>
+(In The GIMP, what is texture will show completely black, and what is teamcolor will show transparent, showing the texture under the alpha. Which is a bit awkward if you ask me.. as you wont be able to see what is supposed to be texture, but what wont. buh!)
+</p><p><br/>
+The value of the alpha will blend with the texture, so you can make cool teamcolor/texture transitions ;) .
+</p><p>(I've tested DDS format several times in The GIMP, using the export plugin, and have not been able to make these files work so far. Hopefully someone can add more information on this.). <b>**Edit: I will do some digging to find out what the exact formats are that DDS is supposed to be saved as. TA 3D**</b>
+</p><p><br/>
+UpSpring 1.3 has a built it texture builder that works great. Use bmps.
+</p><p><b>**Added by TA 3D:</b> Spring will use TGA  and PNG files, but if you want the textures to work better and run more efficiently, use DDS files which is a native image format for videocards made by Nvidia. It works on any videocard, not just Nvidia's cards.
+NOTE: UpSpring makes the files flipped vertically so you will have to flip the UV coordinates in UpSpring. <b>Do not use any other format for making DDS files with UpSpring than bmp otherwise you will have problems. If you use anything else the alpha channel will screw it up. Note: The following images are png to conserve bandwith.</b>
+Here's an example of a DDS file I made for a model recently.
+Texture 1 Texture and Team color:
+Texture RGB-channels of the first dds texture file:
+</p><p><img alt="fc1.png" src="http://www.majhost.com/gallery/3dbricks/TASPRING/fc1.png"/>
+</p><p>Team color-the alpha channel of the first dds texture file:
+</p><p><img alt="fc2.png" src="http://www.majhost.com/gallery/3dbricks/TASPRING/fc2.png"/>
+</p><p>Texture 2 Reflectivity and Illumination:
+Reflection green-channel of the second dds texture file:
+</p><p><img alt="fc3.png" src="http://www.majhost.com/gallery/3dbricks/TASPRING/fc3.png"/>
+</p><p>Illumination red-channel of the second dds texture file:
+</p><p><img alt="fc4.png" src="http://www.majhost.com/gallery/3dbricks/TASPRING/fc4.png"/>
+</p><p>Upspring can make dds files using the S3O Texture Builder option under the Texture menu.
+</p><p><img alt="menu.png" src="http://www.majhost.com/gallery/3dbricks/TASPRING/menu.png"/>
+</p><p>Making the first dds file.
+</p><p><img alt="texture_builder.png" src="http://www.majhost.com/gallery/3dbricks/TASPRING/texture_builder.png"/>
+</p><p>And making the second.
+</p><p><img alt="texture_builder2.png" src="http://www.majhost.com/gallery/3dbricks/TASPRING/texture_builder2.png"/>
+</p><p>When you want to bring in UV coordinates, go to the Texture Mapping menu again and click on Import UV coordinates from model. Since the texture is flipped vertically you have to flip the UV coordinates. If the Team color doesn't work try inverting the the Team color image using the invert box. I hope this helps. As soon as I have a working model, then I will post a pic of the above textures applied to it.<b>**</b>
+</p><p><br/>
+Put the finished files in "unittextures" folder inside your mod structure.
+</p><p><br/>
+some other words on the textures:
+</p><p><br/>
+"alpha is a greyscale... black = no team color, white = all team colour... because Photoshop is dumb stick to 1% balck or 99% black... anything in between is "blended"... like transparency in the team colour mapped over the main texture..."
+</p>
+<h2><span class="mw-headline" id="The_Script">The Script</span></h2>
+<p>A common script, see other wiki resources for information on what is new/changed in spring.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="The_unit_FBI_file">The unit FBI file</span></h2>
+<p>In this file goes the usual information, plus one change:
+</p><p><br/>
+the usual
+	Objectname=UNITNAME;
+</p><p>must be 
+	Objectname=UNITNAME<b>.s3o</b>;
+</p>
+<h2><span class="mw-headline" id="Common_Troubles">Common Troubles</span></h2>
+<ul><li>The unit doesn't show up in game, although the "/give unitname" will work and you can see the selected base.</li></ul>
+<p>This is caused because the unit is underground. In the Model tab you must give your unit a center, collision sphere radius and heigth in UpSpring, you can use "estimate" which shall be fine.
+</p>
+<ul><li>The unit texture is all black in game!</li></ul>
+<p>Read the texture section here. 3DOs cant be UV textured. Use .TGA format. Don't forget alpha.
+</p>
+<ul><li>The UV seems wrong in game..</li></ul>
+<p>Flip the UV. In UpSpring go to, Texture Mapping&gt;Show UV Maps, then, edit&gt;Flip UVs.
+</p>
+<ul><li>I get a "missing part" error, and the unit doesn't aim turrets or animate as indicated in the script.</li></ul>
+<p>See last lines in The Model part.
+</p>
+<h2><span class="mw-headline" id="Related_Threads">Related Threads</span></h2>
+<p><a class="external autonumber" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=4519" rel="nofollow">[1]</a>
+<a class="external autonumber" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=2660" rel="nofollow">[2]</a>
+<a class="external autonumber" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=3766" rel="nofollow">[3]</a>
+<a class="external autonumber" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=3641" rel="nofollow">[4]</a>
+</p><p><a class="external text" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=4536" rel="nofollow">Complementary information</a>
+</p><p><br/>
+</p>
+<ul><li>Credits</li></ul>
+<p>Its all stolen from the above threads.
+</p><p><br/>
+<b>extra notes:</b>
+</p><p>Texture filename can be anything; you allocate the texture to the model when you save it as a .s3o object
+</p><p>Object filename can be anything; the unit fbi/lua file you allocate which model to use. 
+</p><p>Script filename must be the same name as the unit fbi/lua filename, unless you are using lua animation scripts, in which case you can use the script tag in the unitdef file.
+</p><p><i>In the fbi/lua file:</i>
+</p><p>unitname is the name game refers to. ie. the one you type in the console to /give the unit.
+</p><p>name is the name that players will see.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309224112
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.007 seconds
+Real time usage: 0.008 seconds
+Preprocessor visited node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1371-0!canonical and timestamp 20260309224112 and revision id 26791
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Basic_s3o_unit_making_guide&amp;oldid=26791">https://springrts.com/mediawiki/index.php?title=Basic_s3o_unit_making_guide&amp;oldid=26791</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_3D_Models.html" title="Category:3D Models">3D Models</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Basic_s3o_unit_making_guide.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Basic_s3o_unit_making_guide&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Basic_s3o_unit_making_guide&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Basic_s3o_unit_making_guide&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Basic_s3o_unit_making_guide.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Basic_s3o_unit_making_guide&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Basic+s3o+unit+making+guide" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Basic_s3o_unit_making_guide" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Basic_s3o_unit_making_guide" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Basic_s3o_unit_making_guide&amp;oldid=26791" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Basic_s3o_unit_making_guide&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 21 March 2013, at 11:38.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.007","walltime":"0.008","ppvisitednodes":{"value":24,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224112","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":95});});</script></body></html>

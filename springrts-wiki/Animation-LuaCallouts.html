@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Animation-LuaCallouts - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"ed100337913c0f4d244b5395","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Animation-LuaCallouts","wgTitle":"Animation-LuaCallouts","wgCurRevisionId":30473,"wgRevisionId":30473,"wgArticleId":2756,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Animation","Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Animation-LuaCallouts","wgRelevantArticleId":2756,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Animation-LuaCallouts rootpage-Animation-LuaCallouts skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Animation-LuaCallouts</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Animation"><span class="tocnumber">2</span> <span class="toctext">Animation</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Threads"><span class="tocnumber">3</span> <span class="toctext">Threads</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Effects"><span class="tocnumber">4</span> <span class="toctext">Effects</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Other"><span class="tocnumber">5</span> <span class="toctext">Other</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Internal"><span class="tocnumber">6</span> <span class="toctext">Internal</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Localized_functions_for_less_typing"><span class="tocnumber">7</span> <span class="toctext">Localized functions for less typing</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Introduction">Introduction</span></h2>
+<p>The new callouts are defined in the Spring.UnitScript table.
+</p><p>Types for arguments are only shown where they're ambiguous. For a number of (common) arguments, the types are:
+</p>
+<ul><li>unitID: number</li>
+<li>piece: number</li>
+<li>axis: number (1 = x axis, 2 = y axis, 3 = z axis)</li>
+<li>destination: number (<a class="mw-redirect" href="Elmo.html" title="Elmo">elmos</a> (linear), <a class="mw-redirect" href="Radian.html" title="Radian">radians</a> (angular))</li>
+<li>speed: number (<a class="mw-redirect" href="Elmo.html" title="Elmo">elmos</a> per second (linear), <a class="mw-redirect" href="Radian.html" title="Radian">radians</a> per second (angular))</li>
+<li>accel/decel: number (<a class="mw-redirect" href="Radian.html" title="Radian">radians</a> per second per frame)</li></ul>
+<p>You may also get the unit's "type" or def, which is the tag of each unit.lua file - and also what you use to spawn a certain unit using a console command. Both the UnitDefs global table and the unitDefID unit instance identifier are available in your lua animation script, so you can simply do:
+</p>
+<pre>    Spring.Echo(UnitDefs[unitDefID].name)
+
+</pre>
+<h2><span class="mw-headline" id="Animation">Animation</span></h2>
+<p><b>Spring.UnitScript.SetPieceVisibility</b> ( piece, boolean visible ) -&gt; nil<br/>
+<b>Spring.UnitScript.Show</b> ( piece ) -&gt; nil<br/>
+<b>Spring.UnitScript.Hide</b> ( piece ) -&gt; nil
+</p><p>These may be used to show/hide pieces of the unit's model.
+</p><p><br/>
+<b>Spring.UnitScript.Move</b> ( piece, axis, destination[, speed] ) -&gt; nil
+</p><p>Move piece along axis to the destination position. If speed is given, the piece isn't moved immediately, but will move there at the desired speed. The X axis is mirrored compared to BOS/COB scripts, to match the direction of the X axis in Spring world space.
+</p><p><br/>
+<b>Spring.UnitScript.Turn</b> ( piece, axis, destination[, speed] ) -&gt; nil
+</p><p>Turn piece around axis to the destination angle. If speed is given, the piece isn't rotated immediately, but will turn at the desired angular velocity. Angles are in radians.
+Always uses the shortest angular towards destination degree, and if at exactly 180 degrees opposite, will go counter-clockwise.
+</p><p><br/>
+<b>Spring.UnitScript.Spin</b> ( piece, axis, speed[, accel] ) -&gt; nil
+</p><p>Makes piece spin around axis at the desired angular velocity. If accel is given, the piece does not start at this velocity at once, but will accelerate to it. Both negative and positive angular velocities are supported. Accel should always be positive, even if speed is negative.
+</p><p>Beware gimbal lock: <a class="external free" href="http://en.wikipedia.org/wiki/Gimbal_lock" rel="nofollow">http://en.wikipedia.org/wiki/Gimbal_lock</a>
+</p><p><br/>
+<b>Spring.UnitScript.StopSpin</b> ( piece, axis[, decel] ) -&gt; nil
+</p><p>Stops a piece from spinning around the given axis. If decel is given, the piece does not stop at once, but will decelerate to it. Decel should always be positive. This function is similar to Spin(piece, axis, 0, decel), however, StopSpin also frees up the animation record.
+</p><p><br/>
+<b>Spring.UnitScript.IsInTurn</b> (number piece, number axis) -&gt; boolean<br/>
+<b>Spring.UnitScript.IsInMove</b> (number piece, number axis) -&gt; boolean<br/>
+<b>Spring.UnitScript.IsInSpin</b> (number piece, number axis) -&gt; boolean
+</p><p>Returns true if such an animation exists, false otherwise.
+</p><p><br/>
+<b>Spring.UnitScript.GetPieceTranslation</b> ( piece ) -&gt; number x, y, z<br/>
+<b>Spring.UnitScript.GetPieceRotation</b> ( piece ) -&gt; number x, y, z
+</p><p>Get the current translation/rotation of a piece. The returned numbers match the values passed into Move and Turn.
+</p><p><br/>
+<b>Spring.UnitScript.GetPiecePosDir</b> ( piece ) -&gt; number px, py, pz, dx, dy, dz
+</p><p>Get the piece's position (px, py, pz) and direction (dx, dy, dz) in <b>unit space</b>. This is quite similar to <i>Spring.GetUnitPiecePosDir</i>, however that function returns in <b>world space</b>.
+</p>
+<h2><span class="mw-headline" id="Threads">Threads</span></h2>
+<p><b>Spring.UnitScript.StartThread</b> ( function fun, ... ) -&gt; nil
+</p><p>Starts a new (animation) thread, which will execute the function 'fun'. All arguments except the function to run are passed as-is as arguments to 'fun'. <a href="Animation-CobThreads.html" title="Animation-CobThreads">COB-Threads</a> has a decent description on COB threads, which are mimicked here in Lua using coroutines.
+</p><p><br/>
+<b>Spring.UnitScript.SetSignalMask</b> ( number mask ) -&gt; nil<br/>
+<b>Spring.UnitScript.Signal</b> ( number signal ) -&gt; nil
+</p><p>These two support functions offer a powerful way to kill running threads. SetSignalMask assigns a mask to the currently running thread (any new threads started by this one will inherit the signal mask). Signal immediately stops all threads of this unit for which the bitwise and of mask and signal is not zero.
+</p><p><a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=14&amp;t=26274&amp;start=2%7C" rel="nofollow">What signal will stop which threads?</a>
+</p><p><br/>
+<b>Spring.UnitScript.WaitForMove</b> ( piece, axis ) -&gt; nil<br/>
+<b>Spring.UnitScript.WaitForTurn</b> ( piece, axis ) -&gt; nil
+</p><p>Waits until the piece has stopped moving along / turning around the axis. If the piece is not animating, this functions return at once. You can not wait for a spin, because a spin does never finish.
+</p><p><br/>
+<b>Spring.UnitScript.Sleep</b> ( number milliseconds ) -&gt; nil
+</p><p>Waits a number of milliseconds before returning.
+</p>
+<h2><span class="mw-headline" id="Effects">Effects</span></h2>
+<p><b>Spring.UnitScript.EmitSfx</b> ( piece, number id ) -&gt; nil
+</p><p>Emits a <a class="mw-redirect" href="CEG.html" title="CEG">CEG</a> effect or weapon from the given piece. The id is based on one of the effect or weapon ids defined in the units unitdef.<br/>
+</p><p>If the piece has no geometry, then the sfx is emitted in the +z direction from the origin of the piece.
+</p><p>If the piece has 1 vertex, the emit dir is the vector from the origin to the the position of the first vertex the emit position is the origin of the piece.
+</p><p>If there is more than one vertex in the piece, then the emit vector is the vector pointing from v[0] to v[1], and the emit position is v[0].
+</p><p>Example:
+</p>
+<pre>--get the id of the CEG effects:
+local smokecloud = SFX.CEG   --the first effect from the list in the unitdef
+local smokecloud2 = SFX.CEG +1   --the second effect from the list in the unitdef
+local fire = SFX.CEG +2   --the third effect from the list in the unitdef
+--get the id of the emiter piece:
+local turret = piece "turret"
+EmitSfx(turret, smokecloud)   --emit the first effect
+</pre>
+<p><br/>
+<b>Spring.UnitScript.ShowFlare</b> ( number piece ) -&gt; nil
+</p><p>Same as COB's show _inside_ FireWeaponX.
+</p><p><br/>
+<b>Spring.UnitScript.Explode</b> ( piece, number flags ) -&gt; nil
+</p><p>Explodes a piece, optionally creating a particle which flies off. Typically used inside Killed. Explode does not hide the piece by itself; if using it outside Killed you may want to Hide the piece immediately after. The flags may be any combination of:
+</p>
+<ul><li><b>SFX.NONE</b>: do nothing after creating a heatcloud. Other flags have no effect, except NO_HEATCLOUD. If that is given too, the call is a no-op.</li>
+<li><b>SFX.SHATTER</b>: shatter the piece in many fragments. Only the NO_HEATCLOUD flag has any effect if this is present.</li>
+<li><b>SFX.EXPLODE</b> | <b>SFX.EXPLODE_ON_HIT</b>: the piece that flies of should explode when it hits something.</li>
+<li><b>SFX.FALL</b>: the piece should be affected by gravity (this is currently always forced on by Spring, to prevent pieces that float in air indefinitely).</li>
+<li><b>SFX.SMOKE</b>: leave smoke trail.</li>
+<li><b>SFX.FIRE</b>: the piece is on fire when it flies off.</li>
+<li><b>SFX.NO_CEG_TRAIL</b>: disable a CEG trail, if present.</li>
+<li><b>SFX.NO_HEATCLOUD</b>: suppress the heat cloud that's shown by default.</li></ul>
+<h2><span class="mw-headline" id="Other">Other</span></h2>
+<p><b>Spring.UnitScript.AttachUnit</b> ( piece, passengerID ) -&gt; nil<br/>
+<b>Spring.UnitScript.DropUnit</b> ( passengerID ) -&gt; nil
+</p><p>Attaches or detaches another unit (a passenger, as this is designed for transports) to this unit. For AttachUnit, piece specifies the attachment point. Attaching to piece <code>-1</code> makes the passenger unit enter a void state whereby it will never:
+</p>
+<ol><li>take damage, even from Lua (but can be killed by Lua)</li>
+<li>be rendered through any engine path (nor their icons)</li>
+<li>be intersect-able by either synced or unsynced rays</li>
+<li>block any other objects from existing on top of them</li>
+<li>be selectable</li></ol>
+<p><br/>
+<b>Spring.UnitScript.GetUnitValue</b> ( ... ) -&gt; number | number, number | bool<br/>
+<b>Spring.UnitScript.SetUnitValue</b> ( ... ) -&gt; nil
+</p><p>This may be used instead of COB's get and set codes. It is recommended however, to use dedicated Lua functions (e.g. Spring.GetUnitHealth(unitID) instead of GetUnitValue(4)): these functions should be considered a relic of the past. As of 97.0 SetUnitValue now accepts lua booleans as well as numbers to set the value.
+</p><p>Note that these are identical to Spring.GetUnitCOBValue and Spring.SetUnitCOBValue (see also <a href="Lua_SyncedCtrl.html#Lua_to_COB" title="Lua SyncedCtrl">Lua_SyncedCtrl#Lua_to_COB</a> for the signature of those functions), except that an unitID argument shouldn't be passed to the versions in the Spring.UnitScript table.
+</p><p><br/>
+<b>Spring.UnitScript.GetLongestReloadTime</b> ( unitID ) -&gt; number reloadTime
+</p><p>Returns max(reload time) of all the unit's weapons in milliseconds. This utility function exists to aid in porting BOS scripts, which have a SetMaxReloadTime call-in that is called immediately after Create.
+</p>
+<h2><span class="mw-headline" id="Internal">Internal</span></h2>
+<p>You generally shouldn't need any of the following call-outs, they are provided by the engine to allow the Lua framework to do it's work.
+</p><p><br/>
+<b>Spring.UnitScript.CreateScript</b> ( unitID, table callIns ) -&gt; nil
+</p><p>This deletes the unit's current script (whether it's a COB or Lua script doesn't matter), and sets it up with a brand new Lua unit script, initially registering the call-ins given in the table as (string, function) pairs.
+</p><p><br/>
+<b>Spring.UnitScript.UpdateCallIn</b> ( unitID, string name[, function callIn] ) -&gt; nil
+</p><p>This updates a single call-in for the unit's current <b>Lua</b> unit script. If the unit does not currently have a Lua unit script, an error is raised. If the callIn argument is not given (or nil), the call-in with the given name is removed.
+</p><p><br/>
+<b>Spring.UnitScript.CallAsUnit</b> ( unitID, function fun, ... ) -&gt; nil
+</p><p>As none of the call-outs takes a unitID, the engine needs to know the <i>active unit</i> when one of those is called. Using this function another function can be called with the active unit set arbitrarily.
+</p><p><br/>
+<b>Spring.UnitScript.SetDeathScriptFinished</b> ( [number wreckLevel] )
+</p><p>Tells Spring the Killed script finished, and which wreckLevel to use. If wreckLevel is not given no wreck is created. May only be called after Killed has been called. DO NOT USE, the framework handles this transparently (it passes the return value of Killed into this function.)
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Localized_functions_for_less_typing">Localized functions for less typing</span></h2>
+<p>In unitscript enviroment some of the <b>Spring.UnitScript.xxxxx()</b> functions are already localized*.
+So unless doing anything special, you can save keystrokes:
+</p>
+<pre> Show (piece)
+</pre>
+<p>instead of the longer:
+</p>
+<pre> Spring.UnitScript.Show (piece)
+</pre>
+<p>'Localization:' Localization is a important way to speed up lua scripts. Every time a variable or function in Lua is used, the Lua-VM has to search for this function first, find it and then put it to use. This slows your script down, especially if a function is called repeatedly (e.g. in a loop). To Avoid such searches, Lua allows you to localize 64 variables or functions per script.
+</p><p><font color="#ee0000">
+</font></p><font color="#ee0000"><pre>    for i=1,128, 1 do
+</pre></font><font color="#ee0000"><pre>    x,y,z= Spring.GetUnitPosition(unitID)
+</pre></font><font color="#ee0000"></font><pre><font color="#ee0000">    end</font>
+</pre>
+<ul><li>This function is searched and found 128 Times in the table Spring, where it resides</li></ul>
+<p><font color="#55ee99">
+local fastVersionOfTheSameFunction=Spring.GetUnitPosition
+</font></p><font color="#55ee99"><pre>    for i=1,128, 1 do
+</pre></font><font color="#55ee99"><pre>    x,y,z= fastVersionOfTheSameFunction(unitID)
+</pre></font><font color="#55ee99"></font><pre><font color="#55ee99">    end</font>
+</pre>
+<ul><li>This function is near instantaneously found and thus faster</li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20260309223217
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.027 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 42/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 439/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2756-0!canonical and timestamp 20260309223217 and revision id 30473
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Animation-LuaCallouts&amp;oldid=30473">https://springrts.com/mediawiki/index.php?title=Animation-LuaCallouts&amp;oldid=30473</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Animation.html" title="Category:Animation">Animation</a></li><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Animation-LuaCallouts.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Animation-LuaCallouts&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Animation-LuaCallouts&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Animation-LuaCallouts&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Animation-LuaCallouts.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Animation-LuaCallouts&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Animation-LuaCallouts" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Animation-LuaCallouts" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Animation-LuaCallouts" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Animation-LuaCallouts&amp;oldid=30473" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Animation-LuaCallouts&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 23 September 2017, at 01:53.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.027","walltime":"0.033","ppvisitednodes":{"value":42,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":439,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223217","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":123});});</script></body></html>

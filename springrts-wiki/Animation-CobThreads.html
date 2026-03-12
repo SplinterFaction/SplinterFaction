@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Animation-CobThreads - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"b92eb15b9d7ada40f2dac029","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Animation-CobThreads","wgTitle":"Animation-CobThreads","wgCurRevisionId":26802,"wgRevisionId":26802,"wgArticleId":2516,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Animation"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Animation-CobThreads","wgRelevantArticleId":2516,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":
+"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Animation-CobThreads rootpage-Animation-CobThreads skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Animation-CobThreads</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Source"><span class="tocnumber">1</span> <span class="toctext">Source</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Introduction"><span class="tocnumber">2</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Why_Concurrency.3F"><span class="tocnumber">2.1</span> <span class="toctext">Why Concurrency?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Dealing_With_Concurrency"><span class="tocnumber">3</span> <span class="toctext">Dealing With Concurrency</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Sleeping"><span class="tocnumber">4</span> <span class="toctext">Sleeping</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Signals"><span class="tocnumber">5</span> <span class="toctext">Signals</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#call-script"><span class="tocnumber">6</span> <span class="toctext">call-script</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#start-script"><span class="tocnumber">7</span> <span class="toctext">start-script</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Source">Source</span></h2>
+<p><a class="external text" href="https://github.com/spring/spring/blob/106.0/rts/Sim/Units/Scripts/CobThread.cpp" rel="nofollow">rts/Sim/Units/Scripts/CobThread.cpp</a>
+</p>
+<h2><span class="mw-headline" id="Introduction">Introduction</span></h2>
+<p>Much of the time you can expect your script to execute sequentially; that is, looking through your code, the system progresses from statement to statement without anything "strange" (variables being changed, threads being started, etc.) between them. HOWEVER, "strange" things do happen, and in fact they happen quite regularly in scripts. We say that the script system has "concurrency" when things can happen between statements.
+</p>
+<h3><span id="Why_Concurrency?"></span><span class="mw-headline" id="Why_Concurrency.3F">Why Concurrency?</span></h3>
+<p>So why go to all this trouble with concurrency? The script system has concurrency because we never know when things are going to happen. The player could give a command to the unit, the unit could run into a wall, rocks could fall out of the sky and kill the unit, and so forth. Without concurrency we would have to check very often whether which of all possible events had happened recently in order to determine what to do next. This would suck.
+</p>
+<h2><span class="mw-headline" id="Dealing_With_Concurrency">Dealing With Concurrency</span></h2>
+<p>Every time a callin is called or a start-script statement is executed, a "thread" is created. At any one time, only one thread is being executed at a time, but sometimes a thread will stop executing for a while and continue later, while several other threads will execute in the meantime. Most of the time your script is guaranteed to execute sequentially. If you say x = 1;, it will stay 1 unless you change it again. The exceptions are as follows:
+</p>
+<ul><li>Before a script starts.</li>
+<li>After a wait-for-move or wait-for-turn statement.</li>
+<li>After a sleep statement.</li></ul>
+<p>During these times, any other thread has the ability to come in and change all your static variables, tell your pieces to move, turn, and spin, and so forth. Therefore, you cannot always assume these things will be the way you left them when execution of the thread resumes. If it is possible that another thread will change something that you need to know about, you need to check it after any of these times.
+</p>
+<h2><span class="mw-headline" id="Sleeping">Sleeping</span></h2>
+<p>You can have a thread sleep by using a sleep statement:
+</p>
+<pre>sleep [time in ms];
+</pre>
+<p>This is useful for delaying events and in making loops execute every so often. If you want to wait until a piece moves into position, use wait-for-move or wait-for-turn instead.
+</p>
+<h2><span class="mw-headline" id="Signals">Signals</span></h2>
+<p>Signals provide a way to kill threads in their sleep. Signals are bitmasks. There are two statement types dealing with signals: signal and set-signal-mask.
+</p>
+<pre>signal [bitmask];
+</pre>
+<p>kills all sleeping threads that overlap the bitmask.
+</p>
+<pre>set-signal-mask [bitmask];
+</pre>
+<p>sets what signals kill the current thread.
+</p><p>This has several applications. For functions that are called regularly, such as AimWeaponX(), this prevents multiple copies of the same thread from running at the same time. It is also a way (but not the only or necessarily best way) to interrupt another thread.
+</p>
+<h2><span class="mw-headline" id="call-script">call-script</span></h2>
+<p>Use as follows:
+</p>
+<pre>call-script [function]([args]);
+</pre>
+<p>This does not start a new thread! The calling function will not continue until the called function returns.
+</p>
+<h2><span class="mw-headline" id="start-script">start-script</span></h2>
+<p>At first glance, this is similar to call-script:
+</p>
+<pre>start-script [function]([args]);
+</pre>
+<p>However, start-script <i>does</i> create a new thread, and the calling function <i>doesn't</i> wait until the started function returns before continuing. By default, the new thread shares the same signal mask as its parent, although you can set it manually if you like. Apart from this, the two threads execute completely independently.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223220
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.009 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 39/1000000
+Post‐expand include size: 127/2097152 bytes
+Template argument size: 70/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    8.278      1 Template:Sourcelink
+100.00%    8.278      1 -total
+ 70.14%    5.806      1 Template:EngineVersion:Stable
+ 18.48%    1.530      1 Template:EngineVersion:Stable:Major
+ 16.03%    1.327      1 Template:EngineVersion:Stable:Minor
+ 15.62%    1.293      1 Template:EngineVersion:Stable:Patchset
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2516-0!canonical and timestamp 20260309223220 and revision id 26802
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Animation-CobThreads&amp;oldid=26802">https://springrts.com/mediawiki/index.php?title=Animation-CobThreads&amp;oldid=26802</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Animation.html" title="Category:Animation">Animation</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Animation-CobThreads.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Animation-CobThreads&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Animation-CobThreads&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Animation-CobThreads&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Animation-CobThreads.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Animation-CobThreads&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Animation-CobThreads" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Animation-CobThreads" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Animation-CobThreads" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Animation-CobThreads&amp;oldid=26802" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Animation-CobThreads&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 21 March 2013, at 11:55.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.009","walltime":"0.014","ppvisitednodes":{"value":39,"limit":1000000},"postexpandincludesize":{"value":127,"limit":2097152},"templateargumentsize":{"value":70,"limit":2097152},"expansiondepth":{"value":4,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    8.278      1 Template:Sourcelink","100.00%    8.278      1 -total"," 70.14%    5.806      1 Template:EngineVersion:Stable"," 18.48%    1.530      1 Template:EngineVersion:Stable:Major"," 16.03%    1.327      1 Template:EngineVersion:Stable:Minor"," 15.62%    1.293      1 Template:EngineVersion:Stable:Patchset"]},"cachereport":{"timestamp":"20260309223220","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":84});});</script></body></html>

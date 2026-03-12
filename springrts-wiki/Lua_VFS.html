@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua VFS - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"ea9cd2940fa47a77160a985d","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_VFS","wgTitle":"Lua VFS","wgCurRevisionId":31842,"wgRevisionId":31842,"wgArticleId":2429,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_VFS","wgRelevantArticleId":2429,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready",
+"user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_VFS rootpage-Lua_VFS skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua VFS</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua VFS
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Modes"><span class="tocnumber">2</span> <span class="toctext">Modes</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Files"><span class="tocnumber">3</span> <span class="toctext">Files</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Generic_hash"><span class="tocnumber">4</span> <span class="toctext">Generic hash</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Archives"><span class="tocnumber">5</span> <span class="toctext">Archives</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Packing"><span class="tocnumber">6</span> <span class="toctext">Packing</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Zlib"><span class="tocnumber">7</span> <span class="toctext">Zlib</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Overview">Overview</span></h1>
+<p>Although Spring can access the filesystem directly (via os module) it is more common that you
+would want to access files included with your game or Spring. Trouble is, most of these files are
+compressed into archives (.sdz/.sd7) so random access would generally be a difficult procedure.
+Fortunately, the Spring Lua system automatically provides access to mod and base files via the VFS module.
+</p><p>The VFS module doesn't simply open archives though. What it does is map your game files, game 
+dependencies and Spring content onto a virtual file tree. All archives start from the 'roots' of the tree
+and share the same virtual space, meaning that if two or more archives contain the same resource
+file name the resources overlap and only one of the files will be retrieved. Overlapping directories
+on the other hand are merged so the resulting virtual directory contains the contents of both. Here is
+an example of how this works:
+</p><p><b>Archive 1 (games/mygame.sd7)</b>
+</p><p>textures<br/>
+|__ texture1.png<br/>
+models<br/>
+|__ model1.mdl<br/>
+</p><p><b>Archive 2 (base/springcontent.sdz</b>
+</p><p>textures<br/>
+|__ texture1.png<br/>
+|__ texture2.png<br/>
+|__ texture3.png<br/>
+</p><p><b>VFS</b>
+</p><p>textures<br/>
+|__ texture1.png<br/>
+|__ texture2.png<br/>
+|__ texture3.png<br/>
+models<br/>
+|__ model1.mdl<br/>
+</p><p>This raises the question: If both archives have a texture1.png then which texture1.png is retreived
+via the VFS? The answer depends on the order the archives are loaded and the VFS mode (more on
+modes below). Generally however, each archive loaded overrides any archives loaded
+before it. The standard order of loading (from first to last) is:
+</p>
+<ol><li>The main Spring/ game directory.</li>
+<li>The automatic dependencies springcontent.sdz and maphelper.sdz.</li>
+<li>Dependencies listed in your modinfo.lua (or modinfo.tdf), in the order listed.</li>
+<li>Your mod archive.</li></ol>
+<h1><span class="mw-headline" id="Modes">Modes</span></h1>
+<p>These modes are constants passed to VFS.Include() and friends to control the order that archives are
+searched for a given file. They are case-sensitive.
+</p><p><b>VFS.RAW</b> Only select uncompressed files.
+</p><p><b>VFS.MOD</b> <span class="warning">New in version 104.0</span>
+</p><p><b>VFS.MAP</b> <span class="warning">New in version 104.0</span>
+</p><p><b>VFS.BASE</b> <span class="warning">New in version 104.0</span>
+</p><p><b>VFS.MENU</b> <span class="warning">New in version 104.0</span>
+</p><p><b>VFS.ZIP</b>   Only select compressed files (.sdz,.sd7).
+</p><p><b>VFS.RAW_FIRST</b>  Try uncompressed files first, then compressed.
+</p><p><b>VFS.ZIP_FIRST</b>  Try compressed files first, then uncompressed.
+</p><p><b>VFS.RAW_ONLY</b> <font color="#55ee99">(Deprecated. Same as VFS.RAW)</font>
+</p><p><b>VFS.ZIP_ONLY</b> <font color="#55ee99">(Deprecated. Same as VFS.ZIP.)</font>
+</p><p>See also: <a class="external free" href="https://github.com/spring/spring/blob/develop/rts/System/FileSystem/VFSModes.h" rel="nofollow">https://github.com/spring/spring/blob/develop/rts/System/FileSystem/VFSModes.h</a>
+</p>
+<h1><span class="mw-headline" id="Files">Files</span></h1>
+<p><b>VFS.Include</b> <span class="note">(if enviroment=nil then use current one)</span>
+</p>
+<pre> ( string "filename" [, table enviroment = nil [, number mode ] ] ) -&gt;
+</pre>
+<p><span class="note">The environment arg sets the global environment (see generic lua refs). In almost all cases, this should be left nil to preserve Springs default.  
+</span></p><p>If nil then the env will be _G (global environment) If the optional env argument is provided any non-local variables and functions defined in
+filename.lua are then accessable via env or _G. Vise-versa, any variables defined in env prior to
+passing to VFS.Include are available to code in the included file. Code running in filename.lua will
+see the contents of env in place of the normal _G environment. 
+</p><p><span class="note">This loads and compiles the lua code from a file in the VFS. The path is relative to the main Spring directory, e.g. VFS.Include('LuaUI/includes/filename.lua', nil, [vfsmode]) </span>
+</p><p><span class="note">VFS modes are single char strings and can be concatenated; doing specifies an order of preference for the mode (=location) from which to include files.</span>
+</p><p><b>VFS.LoadFile</b>
+</p>
+<pre> ( string "filename" [, number mode ] ) -&gt; nil | string data
+</pre>
+<p>This is used for loading raw text data, as it will not execute the file, like VFS.Include does, just returns a string of the file contents. 
+</p><p><b>VFS.FileExists</b>
+</p>
+<pre> ( string "filename" [, number mode ] ) -&gt; boolean
+</pre>
+<p><span class="note">example usage: if VFS.FileExists("maps/Castles.sdz") then ... end </span>
+</p><p><b>VFS.DirList</b>
+</p>
+<pre> ( string "directory" [, string "pattern" = "*"  [, number mode ] ] )
+   -&gt; { [1] = string filename, ... }
+</pre>
+<p><b>VFS.SubDirs</b>
+</p>
+<pre> ( string "directory", [, string "pattern" = "*"  [, number mode ] ] )
+   -&gt; { [1] = string subdir1, ... }
+</pre>
+<p><b>VFS.GetAvailableAIs</b>
+</p>
+<pre> ( [ string gameName] [, string mapName ] )
+   -&gt; { ai1, ai2, ... }
+</pre>
+<p><span class="note">Gets a list of all Spring AIs. The optional gameName and mapName parameters can be used to include game/map specific LuaAIs in the list.</span>
+</p><p><b>VFS.UseArchive</b> <span class="warning">unsynced only!</span>
+</p>
+<pre> ( string "filename" [, number mode ], lua_function [, arg1 [,arg2 ]] )
+   -&gt; result1,result2,... of the given lua_function
+</pre>
+<p><span class="note">Loads an archive <b>temporarely</b> in the VFS and then runs the given lua_function,<br/>which can make usage of the files in the archive.</span>
+</p><p><b>VFS.MapArchive</b> <span class="warning">unsynced only!</span>
+</p>
+<pre> ( string "filename/modname of archive", [string checksum of archive] )
+   -&gt; bool
+</pre>
+<p><span class="note">Permanently loads an archive into the VFS (to load zipped music collections etc.). <br/> Does nothing if the archive is already loaded in the VFS (won't reload even if there are <br/> changes made to the archive). If checksum is given it checks if the to be loaded file is correct,<br/>if not then it won't load it and return false.</span>
+</p><p><b>VFS.UnmapArchive</b> <span class="warning">unsynced only! available in 98.0</span>
+</p>
+<pre> ( string "filename/modname of archive")
+   -&gt; bool
+</pre>
+<p><span class="note">Removes an already loaded archive (see VFS.MapArchive)</span>
+</p><p><b>VFS.CompressFolder</b> <span class="warning">unsynced only!</span>
+</p>
+<pre> ( string "folderPath" [, string "archiveType" ] [, string "compressedFilePath" ] <br/> [, bool includeFolder ] [, number mode ] ) -&gt; nil
+</pre>
+<p><span class="note">Compresses the specified folder. <br/>archiveType defines the compression type which can currently be only "zip" <br/>includeFolder specifies whether the archive should have the specified folder as root (defaults to false) </span>
+</p><p><b>VFS.GetFileAbsolutePath</b> <span class="warning">unsynced only! available in 105.0</span>
+</p>
+<pre> ( string "filename" [, number mode ] ) -&gt; absPath | nil
+</pre>
+<p><b>VFS.GetArchiveContainingFile</b> <span class="warning">unsynced only! available in 105.0</span>
+</p>
+<pre> ( string "filename" [, number mode ] ) -&gt; archiveNameWithVersion | nil
+</pre>
+<h1><span class="mw-headline" id="Generic_hash">Generic hash</span></h1>
+<p><b>VFS.CalculateHash</b> <span class="warning">New in version 101.0</span>
+</p>
+<pre> ( string input, number hashType)
+   -&gt; string md5hash
+</pre>
+<p>Calculates hash (in base64 form) of a given string (with md5 support initially). Note supplying 0 (MD5) as hashType is mandatory
+</p>
+<h1><span class="mw-headline" id="Archives">Archives</span></h1>
+<p><b>VFS.GetMaps</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( ) -&gt; {
+  [1] = string mapName, ...
+}
+</pre>
+<p><b>VFS.GetGames</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( ) -&gt; {
+  [1] = string gameName, ...
+}
+</pre>
+<p><b>VFS.GetAllArchives</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( ) -&gt; {
+  [1] = string archiveName, ...
+}
+</pre>
+<p><b>VFS.GetLoadedArchives</b> <span class="warning">New in version 105.0</span>
+</p>
+<pre> ( ) -&gt; {
+  [1] = string archiveName, ...
+}
+</pre>
+<p><b>VFS.GetArchivePath</b> <span class="warning">New in version 105.0</span>
+</p>
+<pre> ( string archiveName ) -&gt; string archivePathOnDisk
+</pre>
+<p><b>VFS.GetNameFromRapidTag</b> <span class="warning">New in version 105.0</span>
+</p>
+<pre> ( string rapidTag ) -&gt; string archiveName
+</pre>
+<p><b>VFS.HasArchive</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( string archiveName ) -&gt; boolean
+</pre>
+<p><b>VFS.GetArchiveInfo</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( string archiveName ) - &gt;
+    {        
+         name = string,
+         shortname = string,
+         version = string,
+         mutator = string,
+         game = string,
+         shortgame = string,
+         description = string,
+         mapfile = string,
+         modtype = number,     
+     }
+</pre>
+<p><span class="note">modtype values:1=primary, 0=hidden, 3=map</span>
+</p><p><b>VFS.GetArchiveChecksum</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( string archiveName ) -&gt; string singleArchiveChecksum, string completeArchiveChecksum
+</pre>
+<p><b>VFS.GetArchiveDependencies</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( string archiveName ) -&gt; { 
+   [1] = string archiveName, ... 
+ }
+</pre>
+<p><b>VFS.GetArchiveReplaces</b> <span class="warning">New in version 98.0</span>
+</p>
+<pre> ( string archiveName ) -&gt; { 
+   [1] = string archiveName, ... 
+ }
+</pre>
+<p><b>VFS.DownloadArchive</b> <span class="warning">New in version 101.0</span>
+</p>
+<pre> ( name, category ) -&gt; nil
+</pre>
+<p>Category must be one of: map, game, engine.
+</p><p><b>VFS.AbortDownload</b> <span class="warning">New in version 104.0</span>
+</p>
+<pre> ( id ) -&gt; boolean foundAndRemoved
+</pre>
+<p>Additional functions are available as part of the <a href="Lua_UnsyncedCtrl.html#.28Virtual-.29FileSystem" title="Lua UnsyncedCtrl">unsynced ctrl</a>.
+</p>
+<h1><span class="mw-headline" id="Packing">Packing</span></h1>
+<p><span class="note" style="font-size:110%">The Pack- and Unpack-functions are used to convert numbers-&gt;strings and strings-&gt;numbers.
+So you can read a binary file and then convert the received strings back to numbers and the other way around. Also you can use it in combination with the SendLuaXYZMsg-functions.</span>
+</p><p><br/>
+<b>VFS.PackU8</b>
+</p><p><b>VFS.PackU16</b>
+</p><p><b>VFS.PackU32</b>
+</p><p><b>VFS.PackS8</b>
+</p><p><b>VFS.PackS16</b>
+</p><p><b>VFS.PackS32</b>
+</p><p><b>VFS.PackF32</b>
+</p><p><span class="note">arguments are:</span>
+</p><p><b>VFS.PackX( number arg1, number arg2, number arg3, ... )</b> -&gt; string
+</p><p><b>VFS.PackX( {[1]=number,[2]=number,..} )</b> -&gt; string
+</p><p><br/>
+<b>VFS.UnpackU8</b>
+</p><p><b>VFS.UnpackU16</b>
+</p><p><b>VFS.UnpackU32</b>
+</p><p><b>VFS.UnpackS8</b>
+</p><p><b>VFS.UnpackS16</b>
+</p><p><b>VFS.UnpackS32</b>
+</p><p><b>VFS.UnpackF32</b>
+</p><p><span class="note">arguments are:</span>
+</p><p><b>VFS.UnpackX( string "binary" [, number position = 1] [, number count] )</b>
+</p>
+<pre> -&gt; number | table { [1]=number,[2]=number,.. }
+</pre>
+<h1><span class="mw-headline" id="Zlib">Zlib</span></h1>
+<p><b>VFS.ZlibCompress</b> <span class="warning">unsynced only!</span>
+</p>
+<pre> ( string "uncompressedStr" )
+   -&gt; nil | string "compressedStr"
+</pre>
+<p><b>VFS.ZlibDecompress</b> <span class="note">available in synced, too!</span>
+</p>
+<pre> ( string "compressedStr" [, number uncompressed size = 65500] )
+   -&gt; nil | string "uncompressedStr"
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223603
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 176/1000000
+Post‐expand include size: 881/2097152 bytes
+Template argument size: 82/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.096      1 -total
+ 80.62%    4.915     18 Template:New
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2429-0!canonical and timestamp 20260309223603 and revision id 31842
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_VFS&amp;oldid=31842">https://springrts.com/mediawiki/index.php?title=Lua_VFS&amp;oldid=31842</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_VFS.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_VFS&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_VFS&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_VFS&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_VFS.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_VFS&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+VFS" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_VFS" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_VFS" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_VFS&amp;oldid=31842" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_VFS&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 8 August 2022, at 10:53.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.020","walltime":"0.025","ppvisitednodes":{"value":176,"limit":1000000},"postexpandincludesize":{"value":881,"limit":2097152},"templateargumentsize":{"value":82,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    6.096      1 -total"," 80.62%    4.915     18 Template:New"]},"cachereport":{"timestamp":"20260309223603","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":175});});</script></body></html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Tutorial:MapMakingGuide(aGorm) - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"97d083788758452f785491c3","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Tutorial:MapMakingGuide(aGorm)","wgTitle":"Tutorial:MapMakingGuide(aGorm)","wgCurRevisionId":28915,"wgRevisionId":28915,"wgArticleId":1200,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Tutorial","Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Tutorial:MapMakingGuide(aGorm)","wgRelevantArticleId":1200,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};
+RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Tutorial_MapMakingGuide_aGorm rootpage-Tutorial_MapMakingGuide_aGorm skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Tutorial:MapMakingGuide(aGorm)</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; Tutorial:MapMakingGuide(aGorm)
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#aGorm.27s_Ultimate_Map_Making_Guide"><span class="tocnumber">1</span> <span class="toctext">aGorm's Ultimate Map Making Guide</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Stage_A_.C3.83.C2.A2.C3.A2.E2.80.9A.C2.AC.C3.A2.E2.82.AC.C5.93_Pre-Preparation"><span class="tocnumber">1.1</span> <span class="toctext">Stage A Ã¢â‚¬â€œ Pre-Preparation</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Have_you_the_Time.3F"><span class="tocnumber">1.1.1</span> <span class="toctext">Have you the Time?</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Have_you_the_Hardware.3F"><span class="tocnumber">1.1.2</span> <span class="toctext">Have you the Hardware?</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Have_you_the_Software.3F"><span class="tocnumber">1.1.3</span> <span class="toctext">Have you the Software?</span></a>
+<ul>
+<li class="toclevel-4 tocsection-6"><a href="#Mapconv:"><span class="tocnumber">1.1.3.1</span> <span class="toctext">Mapconv:</span></a></li>
+<li class="toclevel-4 tocsection-7"><a href="#Art_Program:"><span class="tocnumber">1.1.3.2</span> <span class="toctext">Art Program:</span></a></li>
+<li class="toclevel-4 tocsection-8"><a href="#Terrain_Generators:"><span class="tocnumber">1.1.3.3</span> <span class="toctext">Terrain Generators:</span></a></li>
+<li class="toclevel-4 tocsection-9"><a href="#3D_software:"><span class="tocnumber">1.1.3.4</span> <span class="toctext">3D software:</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-10"><a href="#Beverages:"><span class="tocnumber">1.1.4</span> <span class="toctext">Beverages:</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Music:"><span class="tocnumber">1.1.5</span> <span class="toctext">Music:</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-12"><a href="#Stage_B_.C3.83.C2.A2.C3.A2.E2.80.9A.C2.AC.C3.A2.E2.82.AC.C5.93_Preparation"><span class="tocnumber">1.2</span> <span class="toctext">Stage B Ã¢â‚¬â€œ Preparation</span></a>
+<ul>
+<li class="toclevel-3 tocsection-13"><a href="#Concepts:"><span class="tocnumber">1.2.1</span> <span class="toctext">Concepts:</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#What_makes_it_special:"><span class="tocnumber">1.2.2</span> <span class="toctext">What makes it special:</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Very_First_Steps:"><span class="tocnumber">1.2.3</span> <span class="toctext">Very First Steps:</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-16"><a href="#Stage_C_.C3.83.C2.A2.C3.A2.E2.80.9A.C2.AC.C3.A2.E2.82.AC.C5.93_Height_Map"><span class="tocnumber">1.3</span> <span class="toctext">Stage C Ã¢â‚¬â€œ Height Map</span></a>
+<ul>
+<li class="toclevel-3 tocsection-17"><a href="#Basic_heightmap:"><span class="tocnumber">1.3.1</span> <span class="toctext">Basic heightmap:</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Adding_a_mountain:"><span class="tocnumber">1.3.2</span> <span class="toctext">Adding a mountain:</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Making_Some_Variation:"><span class="tocnumber">1.3.3</span> <span class="toctext">Making Some Variation:</span></a>
+<ul>
+<li class="toclevel-4 tocsection-20"><a href="#Noise:"><span class="tocnumber">1.3.3.1</span> <span class="toctext">Noise:</span></a></li>
+<li class="toclevel-4 tocsection-21"><a href="#Sharpness:"><span class="tocnumber">1.3.3.2</span> <span class="toctext">Sharpness:</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span id="aGorm's_Ultimate_Map_Making_Guide"></span><span class="mw-headline" id="aGorm.27s_Ultimate_Map_Making_Guide">aGorm's Ultimate Map Making Guide</span></h1>
+<h2><span id="Stage_A_Ã¢â‚¬â€œ_Pre-Preparation"></span><span class="mw-headline" id="Stage_A_.C3.83.C2.A2.C3.A2.E2.80.9A.C2.AC.C3.A2.E2.82.AC.C5.93_Pre-Preparation">Stage A Ã¢â‚¬â€œ Pre-Preparation</span></h2>
+<p>So you want to make a map? Want to give something back? Good! However there are several things you're going to have to make sure you know before you start. And that's what this section is about.
+</p>
+<h3><span id="Have_you_the_Time?"></span><span class="mw-headline" id="Have_you_the_Time.3F">Have you the Time?</span></h3>
+<p>Believe me when I say, making a map will take a lot of your time. Hours. Days. Some take weeks to finish. So make sure you want to commit yourself to it first (this isn't a StarCraft style, make a map in 5 minuets sort of situation)
+</p>
+<h3><span id="Have_you_the_Hardware?"></span><span class="mw-headline" id="Have_you_the_Hardware.3F">Have you the Hardware?</span></h3>
+<p>Making a map unfortunately requires a computer better than that need to actually play spring. Sounds daft? You're dealing with very large images, which take up a lot of ram. Seeing as Windows needs 512 just to run, you'll need at least a gig if you want any joy. Also you'll need a half decent processor, or compiling will take forever. Some people will disagree, but honestly, at least a 2 GHz and a gig of ram would be useful.
+</p>
+<h3><span id="Have_you_the_Software?"></span><span class="mw-headline" id="Have_you_the_Software.3F">Have you the Software?</span></h3>
+<p>First off, you will need Several Different pieces of software.
+</p>
+<h4><span class="mw-headline" id="Mapconv:">Mapconv:</span></h4>
+<p>There are actually two versions; however, I will strongly recommend that you use Mothers Mapconv program. All the advice given below will assume you will be using it. And whilst the vast majority of this will be relevant for the original one, there are a few vital differences in what does what etc.
+</p>
+<h4><span class="mw-headline" id="Art_Program:">Art Program:</span></h4>
+<p>You will need an art program. Paint will not be sufficient. You can use whatever you are comfortable with, but this guild is written with Photoshop in mind. However many of the options are the same, they all do the same thing in the end.
+Suggestions of programs to use:
+</p>
+<ul><li>Photoshop</li>
+<li>Paint shop Pro</li>
+<li>GIMP</li>
+<li>Fireworks</li></ul>
+<p>The following are not required, but are useful, or needed for more advanced maps.
+</p>
+<h4><span class="mw-headline" id="Terrain_Generators:">Terrain Generators:</span></h4>
+<p>Terragen / TerrTexGen both of these programs take a height map, and create a realistic render of terrain based of it, using values you input.
+</p>
+<h4><span class="mw-headline" id="3D_software:">3D software:</span></h4>
+<p>There are HUNDREDS of different 3D packages out there, any one of them can be used to make a feature for you map, however you'll only be able to finish the model off in ONE program, named 3DO Builder. In this program you can create the final file that spring can read.
+</p>
+<h3><span class="mw-headline" id="Beverages:">Beverages:</span></h3>
+<p>Making a map sucks you in; I suggest you keep <a class="external text" href="http://www.onebob.co.uk/darren/pics/water.jpg" rel="nofollow">water handy</a> at all times, along with a light snack.
+</p>
+<h3><span class="mw-headline" id="Music:">Music:</span></h3>
+<p>I Suggest you put your favourite Music on, that way your doing two things at once. However If you gonna head bang put down the mouse first...
+</p><p><br/>
+</p>
+<h2><span id="Stage_B_Ã¢â‚¬â€œ_Preparation"></span><span class="mw-headline" id="Stage_B_.C3.83.C2.A2.C3.A2.E2.80.9A.C2.AC.C3.A2.E2.82.AC.C5.93_Preparation">Stage B Ã¢â‚¬â€œ Preparation</span></h2>
+<p>Now you have prepared your self of the task ahead, its time to actually think about making the map. This section is about map concepts, ideas, and to help you decided what sections of this tutorial your going top want to read (After all, not all maps require the same things, most maps have no features, don't use a custom skybox, and may not make use of the terrain type map. So you will not want to bother with those sections!)
+</p>
+<h3><span class="mw-headline" id="Concepts:">Concepts:</span></h3>
+<p>This is something all maps need in one degree or another. What purpose do you want your map to serve? This can be as simple as "I want the map to be really huge so that we can enjoy huge battles" to something more conceptual like "I want to make a platform style map, with limited access and lots of cover, with most of the resources in the middle". It doesn't matter too much what your concept is, as long as you have one. Maps made without a concept tend to be boring, dull, uneven, and unplayed. And you don't want that, do you?
+</p>
+<h3><span class="mw-headline" id="What_makes_it_special:">What makes it special:</span></h3>
+<p>So what do you want your map to include? For instance, say I was going to take the first concept and just make a really huge map. What am I going to do to make it special? Shall I use custom features? Or a radical skybox? Maybe there should be reclaimable wreckages strewn over the battle field. There are many different things you can add to a map to make it unique, and often it's a case of striking a balance between them all. All the different things you can add to a map have there own section in this tutorial, so once you know what you want you'll be able to go and read up on how to make your dream a reality.
+</p>
+<h3><span class="mw-headline" id="Very_First_Steps:">Very First Steps:</span></h3>
+<p>No turning back now!! Before we get to the nitty gritty, you need to make several key decisions:
+</p>
+<ul><li>How Big is your map? A small map would be between 10 x 10 and 16 x 16. Medium maps are 16x 16 to 24 x 24, anything over that can be safely called big, and If you manage to make one over 32 x 32 then its Huge!</li>
+<li>Rough drawing. Which is self explanatory, make a rough drawing of what you are imagining. I can be as crap as you like, but believe me its much easier to map when you have a reference. Only people with a vivid imagination can skip this...</li></ul>
+<h2><span id="Stage_C_Ã¢â‚¬â€œ_Height_Map"></span><span class="mw-headline" id="Stage_C_.C3.83.C2.A2.C3.A2.E2.80.9A.C2.AC.C3.A2.E2.82.AC.C5.93_Height_Map">Stage C Ã¢â‚¬â€œ Height Map</span></h2>
+<p>Some people will be thinking, hold on, why is Height Map first! We'll, it's quite simple... textures may change, but heightmaps don't! Let me explain that... Two maps with the same heightmap will play exactly the same as each other, irrespective of what texture you use. For instance, when making a map I once made a snowy Mountain one. However while it played nicely, I decided it looked crap, so I changed it to being a sandy island. Lots of maps out there have had several revisions of texture map!
+</p><p>Now I'm going to explain the stages of making a heightmap (for which you'll need a graphics program, I use Photoshop, and an Idea of were your mountains and valleys are.)
+</p>
+<h3><span class="mw-headline" id="Basic_heightmap:">Basic heightmap:</span></h3>
+<p>First things first, make a black canvas with the following dimensions:
+X dimension: (map width) x 64   1
+Y dimension: (map height) x 64   1
+For instance a 16 x 16 map will need a 102<b>5</b> x 102<b>5</b> heightmap.
+</p><p><a class="image" href="/wiki/File:Height1.jpg"><img alt="Height1.jpg" decoding="async" height="512" src="images/Height1.jpg" width="512"/></a>
+</p><p>Black is the lowest point on the map. So valleys, or on water maps, water are going to be in these areas. 
+White is the highest point on the map. So the top of a mountain will be white.
+Greys are the levels in between, of which there are 256 levels.
+</p>
+<h3><span class="mw-headline" id="Adding_a_mountain:">Adding a mountain:</span></h3>
+<p>To add a mountain (all be it, a very unnatural one) take a paint brush and put down a splodge of white were the mountain will be. Tada! In game that will already be a mountain! Now your probably thinking, wait it can't be that easy... Well as I said early, that will make a mountain, but It won't look very natural. However we'll deal with that later. For now, you want to paint on roughly were your highest points are. If you want smaller hills, use a shade of grey to draw with.
+</p><p><a class="image" href="/wiki/File:Height2.jpg"><img alt="Height2.jpg" decoding="async" height="512" src="images/Height2.jpg" width="512"/></a>
+</p>
+<h3><span class="mw-headline" id="Making_Some_Variation:">Making Some Variation:</span></h3>
+<p>So the land looks like a kids rendition of a landscape, with perfect hills, and smoth valleys. Not to realistic right? Well there are several techniques to add that bit of variation to the land. Bare in mind these steps will work in other software besides photoshop, but that you may have to go about them in a different way...
+</p>
+<h4><span class="mw-headline" id="Noise:">Noise:</span></h4>
+<p>Create a New layer on top of your current heightmap and fill it black. Next, drop down the filters menu, go to noise, add noise, and it will open the noise dialogue box. Make sure you select "Monochromatic" (for black and white)and drag the slider till it looks about half and half. Click OK and you should have noise!
+Now go to filters, blur, gaussian blur. Set it to between 2 and 4 pixels and click OK again. Now you should have a greyish black mess.
+Now mess around with the layer blending settings (in photoshop there in the drop down just above the layers, and start with normal) I normally use something like a "linear dodge", and set the opacity to 50% ish, but Its best to play around.
+</p><p><a class="image" href="/wiki/File:Height3.jpg"><img alt="Height3.jpg" decoding="async" height="512" src="images/Height3.jpg" width="512"/></a>
+</p><p>What this will have done Is lightened small areas of your map by a small amount, causing minor variations in the height, which means your land wont be entirely flat. And because its only a minor variation you can normally still build on it (if you cant build on the land, drop the opacity a bit more, which of course means make sure you save with layers ON)
+</p>
+<h4><span class="mw-headline" id="Sharpness:">Sharpness:</span></h4>
+<p>OK, so you got all that, but your still thinking that those mountains are a bit... odd? Well that's because most mountains are in fact not perfectly rounded hills. They have steep sides, sharp transitions, sheer drops, as well as the pleasant rolling hills that you get.
+To begin to get the effect, go to the layer below the layer with your noise on it (else it will overwrite it!) and get a black brush. Make sure you turn the hardness up a bit (50% should do for a basic test). Then carve out a section on the hill. That makes a shear drop! But you may not want that, so turn down the opacity of that layer.
+</p><p><a class="image" href="/wiki/File:Height4.jpg"><img alt="Height4.jpg" decoding="async" height="512" src="images/Height4.jpg" width="512"/></a>
+</p><p>I then generally build up these layers (each with maybe 20%-40% opacity) till I have made the sort of hills I'd like. Bear in mind this is all personal preference!
+</p><p><a class="image" href="/wiki/File:Height5.jpg"><img alt="Height5.jpg" decoding="async" height="512" src="images/Height5.jpg" width="512"/></a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223507
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.017 seconds
+Real time usage: 0.020 seconds
+Preprocessor visited node count: 70/1000000
+Post‐expand include size: 30/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1200-0!canonical and timestamp 20260309223507 and revision id 28915
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Tutorial:MapMakingGuide(aGorm)&amp;oldid=28915">https://springrts.com/mediawiki/index.php?title=Tutorial:MapMakingGuide(aGorm)&amp;oldid=28915</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a class="new" href="/mediawiki/index.php?title=Category:Tutorial&amp;action=edit&amp;redlink=1" title="Category:Tutorial (page does not exist)">Tutorial</a></li><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Tutorial_MapMakingGuide(aGorm).html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Tutorial:MapMakingGuide(aGorm)&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Tutorial:MapMakingGuide(aGorm)&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Tutorial:MapMakingGuide(aGorm)&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Tutorial_MapMakingGuide(aGorm).html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Tutorial:MapMakingGuide(aGorm)&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Tutorial%3AMapMakingGuide%28aGorm%29" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Tutorial:MapMakingGuide(aGorm)" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Tutorial:MapMakingGuide(aGorm)" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Tutorial:MapMakingGuide(aGorm)&amp;oldid=28915" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Tutorial:MapMakingGuide(aGorm)&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 19 October 2014, at 09:33.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.017","walltime":"0.020","ppvisitednodes":{"value":70,"limit":1000000},"postexpandincludesize":{"value":30,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223507","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":62});});</script></body></html>

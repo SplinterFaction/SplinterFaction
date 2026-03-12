@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Tutorial:MapWithPOVRay(Tinnut) - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"85bc1490d01bc51af4f13350","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Tutorial:MapWithPOVRay(Tinnut)","wgTitle":"Tutorial:MapWithPOVRay(Tinnut)","wgCurRevisionId":28909,"wgRevisionId":28909,"wgArticleId":2475,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Tutorial","Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Tutorial:MapWithPOVRay(Tinnut)","wgRelevantArticleId":2475,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[],
+"wgRedirectedFrom":"Create_map_texture_with_povray","wgInternalRedirectTargetUrl":"/wiki/Tutorial:MapWithPOVRay(Tinnut)"};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["mediawiki.action.view.redirect","site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<link href="https://springrts.com/wiki/Tutorial:MapWithPOVRay(Tinnut)" rel="canonical"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Tutorial_MapWithPOVRay_Tinnut rootpage-Tutorial_MapWithPOVRay_Tinnut skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Tutorial:MapWithPOVRay(Tinnut)</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"><span class="mw-redirectedfrom">(Redirected from <a class="mw-redirect" href="/mediawiki/index.php?title=Create_map_texture_with_povray&amp;redirect=no" title="Create map texture with povray">Create map texture with povray</a>)</span></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; Tutorial:MapWithPOVRay(Tinnut)
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Howto"><span class="tocnumber">1</span> <span class="toctext">Howto</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Intro"><span class="tocnumber">1.1</span> <span class="toctext">Intro</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Initial_Steps"><span class="tocnumber">1.2</span> <span class="toctext">Initial Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Advanced_stuff"><span class="tocnumber">2</span> <span class="toctext">Advanced stuff</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Complex_Texture_Map_Combinations"><span class="tocnumber">2.1</span> <span class="toctext">Complex Texture Map Combinations</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Procedural_Textures"><span class="tocnumber">2.2</span> <span class="toctext">Procedural Textures</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Placing_Metal_Textures"><span class="tocnumber">2.3</span> <span class="toctext">Placing Metal Textures</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Howto">Howto</span></h2>
+<p><b>Create a map's texture using Povray to generate the texture</b>
+</p><p><br/>
+!! This is currently a work in progress and make take some time to complete. !!
+</p>
+<h3><span class="mw-headline" id="Intro">Intro</span></h3>
+<p>This guide will take you through creating a texture for a Spring map using the freeware Povray program.  Povray is an excellent <a class="external text" href="http://en.wikipedia.org/wiki/Ray_tracing" rel="nofollow">raytracing</a> application that generates "scene" images using a scene definition language in a text file.  We can use it to create a map's texture by creating a heightfield object, putting our "camera" directly over the object, setting the camera to orthographic, and rendering a bitmap at our map's dimension.  The steps below will give you an easy enough to follow process to generate a nice map, but if you want to create different maps you'll need to learn Povray's scene definition language.  This language is easy enough to follow, but depending on your tastes you could be better off using a tool that specialises in maps and map textures, such as the excellent <a class="external text" href="http://www.bundysoft.com/L3DT/" rel="nofollow">L3DT</a>.  
+</p><p>The guide does not cover other aspects of map creation (heighmaps, features, metal, compiling, etc), but there are a few excellent guides within the Wiki that already cover those steps.
+</p><p>Povray is available for both Windows and Linux.  I have only tested these steps under Windows, but they should work under Linux.
+</p><p>Please note that a lot of the maths used in the scene definition file has only been tested on a 16x16 map (8192x8192 pixels).
+</p><p>Warning:  The base textures I use in this example are all mostly rubbish that I created in a couple of minutes.  I would suggest that you do not use them in your own maps :)
+</p>
+<h3><span class="mw-headline" id="Initial_Steps">Initial Steps</span></h3>
+<p>1) Download and install Povray: <a class="external text" href="http://www.povray.org/" rel="nofollow">Povray Site</a>
+</p><p>2) Create a working folder for your map, for this example, we'll make C:\PovMap
+</p><p>3) Create a heightmap using whatever program (I like <a class="external text" href="http://www.gimp.org/" rel="nofollow">The GIMP</a>, which is good, and it's free).  Here is the one we'll use for our map (I created this in a hurry and it was quite a mistake that it ended up so similar to Altered Divide):
+</p><p><a class="external text" href="http://img441.imageshack.us/my.php?image=povmapheightbp9.png" rel="nofollow"><img alt="povmapheightbp9.th.png" src="http://img441.imageshack.us/img441/8862/povmapheightbp9.th.png"/></a>
+</p><p>Your map will need to be named povmap_height.png, but if you want to use another name, just update the pov script below to use your heightmap's actual name.
+</p><p>4) For our example, we'll be defining three different elevation levels for which there are different terrain textures, these will be (each at 512x512):
+</p><p>4.1) Lowest elevation (low lying areas):
+</p><p><a class="external text" href="http://img176.imageshack.us/my.php?image=level1zd7.png" rel="nofollow"><img alt="level1zd7.th.png" src="http://img176.imageshack.us/img176/953/level1zd7.th.png"/></a>
+</p><p>4.2) Middle elevation (main map surface):
+</p><p><a class="external text" href="http://img170.imageshack.us/my.php?image=level2pf6.png" rel="nofollow"><img alt="level2pf6.th.png" src="http://img170.imageshack.us/img170/6473/level2pf6.th.png"/></a>
+</p><p>4.3) Highest elevation (mountains):
+</p><p><a class="external text" href="http://img176.imageshack.us/my.php?image=level3wv7.png" rel="nofollow"><img alt="level3wv7.th.png" src="http://img176.imageshack.us/img176/6159/level3wv7.th.png"/></a>
+</p><p>5) Now also for our example, we'll be defining two different textures to be used by sloping areas, one for slopes in the lower elevation areas of the map, and another for slopes in the higher elevations:
+</p><p>5.1) Lower elevations:
+</p><p><a class="external text" href="http://img411.imageshack.us/my.php?image=slope1on6.png" rel="nofollow"><img alt="slope1on6.th.png" src="http://img411.imageshack.us/img411/2153/slope1on6.th.png"/></a>
+</p><p>5.2) Higher elevations:
+</p><p><a class="external text" href="http://img411.imageshack.us/my.php?image=slope2fk7.png" rel="nofollow"><img alt="slope2fk7.th.png" src="http://img411.imageshack.us/img411/8908/slope2fk7.th.png"/></a>
+</p><p>6) Create an empty text file in your C:\Povmap folder named gen_pov_texture.pov
+</p><p>7) Copy the following povray scene code into the above file:
+</p>
+<table class="wikitable" style="font-style:italic; font-size:90%; border:1px dashed white; background-color: rgb(56, 70, 79);">
+<tbody><tr>
+<td>
+<pre>
+
+// Setup some parameters that we will use within the script
+#declare MAP_WIDTH=8192;
+#declare MAP_HEIGHT=8192;
+#declare MAP_EL=600; // elevation
+
+global_settings { 
+  // ambient light level
+  ambient_light rgb&lt;1,1,1&gt; 
+}
+
+// Set a directional light
+light_source {
+  &lt;100,-100,100&gt; * 20, color rgb 1
+  parallel
+  point_at &lt;1, 0, 0&gt;
+}
+
+// Set the background colour
+background {rgb&lt;1,1,1&gt;}
+
+// Define our camera position, and set it to "orthographic" (important :)
+camera {
+  orthographic
+  location &lt;0,0,MAP_EL + 90&gt;    // position &amp; direction of view
+  look_at  &lt;0,0,0&gt;
+  right MAP_WIDTH*x            // horizontal size of view
+  up MAP_HEIGHT*z               // vertical size of view
+}
+
+// ** Define our primary textures **
+ 
+// lowest texture (512 x 512)
+// Found in low lying areas of the heightfield
+#declare level1_texture =
+texture {
+  pigment {
+    image_map {
+      png "level1.png"
+    }
+  }
+  finish {ambient 1 diffuse 0}
+  scale &lt;512/MAP_WIDTH, 512/MAP_WIDTH, 512/MAP_WIDTH&gt;
+}
+
+// middle texture (512 x 512)
+// Found in the middle areas of the heightfield
+#declare level2_texture =
+texture {
+  pigment {
+    image_map {
+      png "level2.png"
+    }
+  }
+  finish {ambient 1 diffuse 0}
+  scale &lt;512/MAP_WIDTH, 512/MAP_WIDTH, 512/MAP_WIDTH&gt;
+}
+
+// highest texture (512 x 512)
+// Found in the peaks / hills / mountains of the heightfield
+#declare level3_texture =
+texture {
+  pigment {
+    image_map {
+      png "level3.png"
+    }
+  }
+  finish {ambient 1 diffuse 0}
+  scale &lt;512/MAP_WIDTH, 512/MAP_WIDTH, 512/MAP_WIDTH&gt;
+}
+
+// Define a texture that blends from one level's texture to the next, 
+// depending on elevation:
+#declare levels_elevation_texture=
+texture {
+  gradient z
+  
+  texture_map {
+    [0.00 level1_texture]  // from 0.0 to 0.1 we have just level1.png
+    [0.10 level1_texture]
+                    // from 0.1 to 0.2 we blend from level1.png to level2.png
+    [0.30 level2_texture]  // from 0.2 to 0.5 we have just level2.png
+    [0.40 level2_texture]
+                    // from 0.5 to 0.6 we blend from level2.png to level3.png
+    [0.60  level3_texture]  // from 0.6 to 1.0 we have just level2.png
+    [1.00  level3_texture]
+  }
+}
+
+
+// ** Define textures used on areas of slope
+
+// lower slope texture (512 x 512)
+#declare slope1_texture =
+texture {
+  pigment {
+    image_map {
+      png "slope1.png"
+    }
+  }
+  finish {ambient 1 diffuse 0}
+  scale &lt;512/MAP_WIDTH, 512/MAP_WIDTH, 512/MAP_WIDTH&gt;
+}
+
+// upper slope texture (512 x 512)
+#declare slope2_texture =
+texture {
+  pigment {
+    image_map {
+      png "slope2.png"
+    }
+  }
+  finish {ambient 1 diffuse 0}
+  scale &lt;512/MAP_WIDTH, 512/MAP_WIDTH, 512/MAP_WIDTH&gt;
+}
+
+// Define a texture that blends from one slope's texture to the next, 
+// depending on elevation:
+#declare slopes_elevation_texture=
+texture {
+  gradient z
+  
+  texture_map {
+    [0.00 slope1_texture]
+    [0.30 slope1_texture]
+    
+    [0.65  slope2_texture]
+    [1.00  slope2_texture]
+  }
+}
+
+// ** Now define the final texture blending between the height textures 
+// and the slope textures:
+#declare final_texture = 
+texture {
+  slope {
+    &lt;0,0,-1&gt;, 0, 0.5
+  } 
+  texture_map {
+    [0.00    levels_elevation_texture]
+    [0.06    levels_elevation_texture]
+    [0.40    slopes_elevation_texture]
+    [1.00    slopes_elevation_texture]
+  }
+}  
+
+// ***!! Now we declare our heightfield object that uses this texture
+#declare primaryHF=
+height_field {
+  png "povmap_height.png"                                  
+  smooth              // smooth the heightfield
+  no_shadow           // you may want to remove this
+  translate &lt;-.5, -.5, -.5&gt;
+  rotate &lt;90,0,0&gt;     // rotate it so that the projection of the texture is correct
+  scale &lt;1,-1,1&gt;      // invert the y axis
+  translate &lt;0.5, 0.5, 0.5&gt;
+  texture {
+    final_texture
+  }
+  
+  // now scale to the maps height x width
+  scale &lt;MAP_WIDTH, MAP_HEIGHT, MAP_EL&gt;    
+  // and center it for the camera
+  translate &lt;-MAP_WIDTH/2, -MAP_HEIGHT/2, -MAP_EL/2&gt;   
+}
+
+
+// ** If you're going to add the metal placement stuff
+// ** described below, you need to put it here!
+
+
+object {primaryHF}
+
+</pre>
+</td></tr></tbody></table>
+<p>What we're essentially doing above is:
+</p>
+<ul><li>Setting up scene parameters: lighting, the orthographic camera, etc.</li></ul>
+<ul><li>Defining a set of textures to display at different elevations and different slopes; and</li></ul>
+<ul><li>Defining a heightmap that uses our png image and applies our texture to this object</li></ul>
+<p>8) Double click on your gen_pov_texture.pov file so that it opens up in Povray.
+</p><p>9) Add a new render size (8192 x 8192):
+</p><p>9.1)	Drop down menu "Render" &gt; "Edit Settings/Render" &gt; Click "Edit" button
+</p><p>9.2)	Add text at bottom of file:
+</p>
+<table class="wikitable" style="font-style:italic; font-size:90%; border:1px dashed white; background-color: rgb(56, 70, 79);">
+<tbody><tr>
+<td>
+<pre>[8192x8192, No AA  Spring]
+Width=8192
+Height=8192
+Antialias=Off
+</pre>
+</td></tr></tbody></table>
+<p>9.3) Save file
+</p><p>10) Restart Povray so that it re-reads the ini-file
+</p><p>11) Select your new render size and click Render.  This creates a bitmap file: gen_pov_texture.bmp
+</p><p>12) Convert to gen_pov_texture.bmp to a png file if you're using the new mapconv (it doesn't seem to like bitmaps).  I personally use <a class="external text" href="http://www.imagemagick.org/" rel="nofollow">imagemagick</a> to do this as it has a simple command line program "convert.exe" that will convert an image from one format to another and it works well with the very large bitmap image that comes out of the above steps.
+</p><p>13) Do all the other map stuff: metal placement bitmap, feature placement bitmap, smd file
+</p><p>14) Compile your map with mapconv
+</p><p>15) Test it :)
+</p>
+<h2><span class="mw-headline" id="Advanced_stuff">Advanced stuff</span></h2>
+<p>Check out your help file that came with Povray.  There is a LOT that you can do!
+</p>
+<h3><span class="mw-headline" id="Complex_Texture_Map_Combinations">Complex Texture Map Combinations</span></h3>
+<p>As you can see from the pov code above, a "texture" declaration can be an image (called an "image_map"), but it can also be a definition of a blend between any number of earlier defined textures (called a "texture_map"), which is based on a function.  In the above example, it uses the "gradient" function for changes in elevation, and the "slope" function for changes in slope.  It is possible to define much more complex sets of textures than those defined above, such as mixing different combination of slope mapings with combinations of elevation mapings.
+</p><p>Our blend function could actually be an image if you wanted finer control of a map's texture, by having sections of metal mixed with sections of wilderness, for example.  To do this, you would:
+</p><p>1) Create a new png image the same size as your heightmap (although you could make it larger or smaller) and paint sections of the map that are to use your wilderness textures in white, and the sections that are to use your metal texture in black.  For effect you could do a slight blur on the image to create grey coloured transitions where the two sections meet.  For our example I created this:
+</p><p><a class="external text" href="http://img185.imageshack.us/my.php?image=texturedistributionpa8.png" rel="nofollow"><img alt="texturedistributionpa8.th.png" src="http://img185.imageshack.us/img185/2641/texturedistributionpa8.th.png"/></a>
+</p><p>3) Change the "final_texture" texture name in your script to "final_nature_texture"
+</p><p>4) Define a set of textures in a similar manner that define your metal textures (based on heights and slopes), with the final blended metal texture named "final_metal_texture".  Don't forget to give them different names than the wilderness texture names are.
+</p><p>5) Create a new "final_texture" that is:
+</p>
+<table class="wikitable" style="font-style:italic; font-size:90%; border:1px dashed white; background-color: rgb(56, 70, 79);">
+<tbody><tr>
+<td>
+<pre>#declare final_texture = 
+texture {
+  image_pattern { png "texture_distribution.png" }
+  texture_map {
+    [0.00    final_metal_texture]
+    [1.00    final_nature_texture]
+  }
+}  
+</pre>
+</td></tr></tbody></table>
+<p>Here is a screen shot of our map using this:
+</p><p><a class="external text" href="http://img341.imageshack.us/my.php?image=screen000wd0.png" rel="nofollow"><img alt="screen000wd0.th.png" src="http://img341.imageshack.us/img341/43/screen000wd0.th.png"/></a>
+</p>
+<h3><span class="mw-headline" id="Procedural_Textures">Procedural Textures</span></h3>
+<p>It is also possible to use "procedural textures" instead of image_map textures.  These can be quite useful for areas on your map that have a high slope as they can create a better looking texture, including effects such as the layered rock textures - like "Painted Rock".  Unfortunately these types of textures can result in larger map sizes, but if you just use them on the high slope areas of your map it should not be too bad.
+</p><p>Some good examples used in terrains can be found at the <a class="external text" href="http://geomorph.sourceforge.net/povray/en/Geomorph%20-%20Predefined%20Povray%20Scripts.html" rel="nofollow">Geomorph website</a>.
+</p><p>The povray install also includes a number of nice example procedural textures.
+</p>
+<h3><span class="mw-headline" id="Placing_Metal_Textures">Placing Metal Textures</span></h3>
+<p>There are quite a few posible ways to have Povray place metal textures for you.  One approach that I have used is:
+</p><p>1) Define a function that will return the current metal locations in a pov kind of way:
+</p>
+<table class="wikitable" style="font-style:italic; font-size:90%; border:1px dashed white; background-color: rgb(56, 70, 79);">
+<tbody><tr>
+<td>
+<pre>  #declare getMetal = function {
+    pigment {
+      image_map {
+        png "metallocations.png"
+      }
+      scale &lt;1,-1,1&gt;
+    }
+  }
+</pre>
+</td></tr></tbody></table>
+<p>This function, when called for a given coordinate (0 to 1), returns a vector of the three colours for that point.
+</p><p>2) We now define a texture that we'll use for our metal (this is made up of a number of subcomponent textures):
+</p>
+<table class="wikitable" style="font-style:italic; font-size:90%; border:1px dashed white; background-color: rgb(56, 70, 79);">
+<tbody><tr>
+<td>
+<pre>// A transparent texture
+#declare Transparent_Texture=
+texture {
+	pigment {color rgbt&lt;0,0,0,1&gt;}
+}
+
+// A simple brownish texture
+#declare dirt_Texture=
+texture {
+  pigment { rgb &lt;0.75,0.55,0.35&gt;*0.7 }
+  normal {
+    granite 0.5  // for use with normal{} (0...1 or more)
+    //scale MAP_WIDTH
+  }
+  finish {
+    ambient 0.5
+    diffuse .9
+  }
+}
+
+// A shiny metalish texture
+#declare metal_TextureBase = 
+texture { 
+  pigment {
+    rgb&lt;1,1,1&gt;    
+  }
+  normal {
+      granite 0.9  // for use with normal{} (0...1 or more)
+    scale 80/5
+  }
+  finish {
+    ambient 0.6
+    brilliance 4
+    diffuse 1
+    specular 0.90
+    roughness 1/80
+  }
+}
+
+// A combination of the metal_TextureBase, the dirt_Texture and the
+// Transparent_Texture
+#declare metal_Texture=
+texture {
+  bozo              // very smooth, random noise function
+  turbulence 0.3  // turbulence often useful
+
+  texture_map {
+    [0.0  metal_TextureBase]  //T_Silver_3B
+    [0.42  metal_TextureBase]
+    [0.47  dirt_Texture]
+    [0.50  dirt_Texture]
+    [0.55  Transparent_Texture]
+    [1.0  Transparent_Texture]
+  }
+  //scale &lt;16, 16, 16&gt; //even
+  scale &lt;7, 32, 16&gt; //stretched 
+  rotate z*40  //set it at an angle so it looks betterer ;)
+}
+
+#declare blob_Texture=
+texture {
+  slope { z, 0.0, 0.5 }
+  texture_map {
+    [0.0  Transparent_Texture]
+    [0.6  Transparent_Texture]
+    [1.0  metal_Texture]
+  }
+}  
+</pre>
+</td></tr></tbody></table>
+<p>3) Finally, we define a "blob" object that adds a sphere object to the master blob object for each point in the metal map: 
+</p>
+<table class="wikitable" style="font-style:italic; font-size:90%; border:1px dashed white; background-color: rgb(56, 70, 79);">
+<tbody><tr>
+<td>
+<pre>  #declare metalBlob=
+  blob {
+  #declare geos=0;
+  #declare ix=4.0;
+  #declare num=0;
+  #while (ix &lt; MAP_WIDTH)
+    #declare iy=0.0;
+    #while (iy &lt; MAP_WIDTH)
+      #declare metal=getMetal(ix/MAP_WIDTH, iy/MAP_WIDTH, 0);
+      #if (metal.red)
+        #declare Pos = trace(primaryHF,&lt;ix-MAP_WIDTH/2, -iy+MAP_WIDTH/2, MAP_EL*2&gt;,-z);
+        sphere {
+            //Pos-&lt;0,0,5&gt;, 8*6, 8  
+            Pos-&lt;0,0,5&gt;, 8*2, 8  
+        }
+      #end 
+      #declare iy=iy+8;
+    #end
+    #declare ix=ix+8;
+  #end
+  
+    texture {
+      blob_Texture
+    }
+    scale &lt;1,1,0.5&gt;  
+  }  //metalBlob
+
+  object {metalBlob}</pre>
+</td></tr></tbody></table>
+<p>This all adds some time to the rendering time, but seems to work well enough (although it could be nicer).
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223542
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.011 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 49/1000000
+Post‐expand include size: 30/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6683/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2475-0!canonical and timestamp 20260309223542 and revision id 28909
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Tutorial:MapWithPOVRay(Tinnut)&amp;oldid=28909">https://springrts.com/mediawiki/index.php?title=Tutorial:MapWithPOVRay(Tinnut)&amp;oldid=28909</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a class="new" href="/mediawiki/index.php?title=Category:Tutorial&amp;action=edit&amp;redlink=1" title="Category:Tutorial (page does not exist)">Tutorial</a></li><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Tutorial_MapWithPOVRay(Tinnut).html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Tutorial:MapWithPOVRay(Tinnut)&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Tutorial:MapWithPOVRay(Tinnut)&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Tutorial:MapWithPOVRay(Tinnut)&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Tutorial_MapWithPOVRay(Tinnut).html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Tutorial:MapWithPOVRay(Tinnut)&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Tutorial%3AMapWithPOVRay%28Tinnut%29" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Tutorial:MapWithPOVRay(Tinnut)" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Tutorial:MapWithPOVRay(Tinnut)" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Tutorial:MapWithPOVRay(Tinnut)&amp;oldid=28909" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Tutorial:MapWithPOVRay(Tinnut)&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 18 October 2014, at 22:57.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.011","walltime":"0.013","ppvisitednodes":{"value":49,"limit":1000000},"postexpandincludesize":{"value":30,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":6683,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223542","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":152});});</script></body></html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>AI:Development:Lang:Lua - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"fb00ebc7182a89a30a094ab3","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"AI:Development:Lang:Lua","wgTitle":"AI:Development:Lang:Lua","wgCurRevisionId":28718,"wgRevisionId":28718,"wgArticleId":2670,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AI Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"AI:Development:Lang:Lua","wgRelevantArticleId":2670,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AI_Development_Lang_Lua rootpage-AI_Development_Lang_Lua skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">AI:Development:Lang:Lua</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a href="AI_Development.html" title="AI:Development">AI Development</a> &lt; Lua AI Development
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1"><a href="#Writing_a_Lua_AI"><span class="tocnumber">1</span> <span class="toctext">Writing a Lua AI</span></a>
+<ul>
+<li class="toclevel-2 tocsection-1"><a href="#Introduction"><span class="tocnumber">1.1</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-3 tocsection-2"><a href="#Lua_AIs_are_different"><span class="tocnumber">1.1.1</span> <span class="toctext">Lua AIs are different</span></a></li>
+<li class="toclevel-3 tocsection-3"><a href="#Things_to_know"><span class="tocnumber">1.1.2</span> <span class="toctext">Things to know</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-4"><a href="#How_to_start"><span class="tocnumber">1.2</span> <span class="toctext">How to start</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Integrating_the_AI_Gadget"><span class="tocnumber">1.2.1</span> <span class="toctext">Integrating the AI Gadget</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="#References"><span class="tocnumber">1.3</span> <span class="toctext">References</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Writing_a_Lua_AI">Writing a Lua AI</span></h1>
+<h2><span class="mw-headline" id="Introduction">Introduction</span></h2>
+<h3><span class="mw-headline" id="Lua_AIs_are_different">Lua AIs are different</span></h3>
+<p>Lua for AIs is quite different from all the other AI languages supported by spring. Lua AIs use a completely different interface, and they can not be shipped separately, but only bundled with a mod.
+</p>
+<h3><span class="mw-headline" id="Things_to_know">Things to know</span></h3>
+<ul><li>They have to be bundled with a mod. Therefore, you should consider contacting the mod developer(s) in question early, to see if they are at all interested in an AI.</li>
+<li>A Lua AI is actually a regular gadget. The difference is just that it is listed in the mods LuaAI.lua file. See <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> for details.</li>
+<li>This brings up the problem that AIs can "accidentally" cheat or even move units of the enemy! It is up to the AI writer to avoid that. All AI players of the same type also share the same variables and tables. One way to avoid that is to put everything into a teamdata[teamID] table. Or the use of classes.</li></ul>
+<h2><span class="mw-headline" id="How_to_start">How to start</span></h2>
+<p>For a start, choose a single mod you want your AI to work with.
+You will also want to contact the mods developer(s) before you start to code,
+or soon thereafter.
+</p><p>Things you need to get comfortable with:
+</p>
+<ul><li>the Lua scripting language</li>
+<li>Lua scripting for spring (gadgets)</li></ul>
+<p>You may combine learning Lua for spring with writing simplistic gadgets or widgets for spring, and publishing them <a class="external text" href="http://springrts.com/phpbb/viewforum.php?f=23" rel="nofollow">in the forum</a>,
+as this way you get practical training and feedback about your code from the pros, plus the community eventually gets a usefull addon.
+When you start feeling comfortable, you should inspect the code of Lua AIs that are already available.
+Source code of these AIs can be found in the mod archives, which you may open with 7zip, or it may be available separately (see <a href="#References">References</a>).
+</p>
+<h3><span class="mw-headline" id="Integrating_the_AI_Gadget">Integrating the AI Gadget</span></h3>
+<p>This section explains everything you have to do to integrate your Lua AI into a mod. Which at the same time is everything that separates a Lua AI form a gadget.
+</p><p>In the root of the mods archive, you need the file <i>LuaAI.lua</i>,
+which should look about like this:
+<code>
+</code></p><code><pre>-- file: LuaAI.lua
+local listOfLuaAIs = {
+    {
+        name = "MyFirstAI",
+        desc = "Beats even the best players with Core, most others with Arm too",
+    },
+}
+return listOfLuaAIs
+</pre></code><code></code><p><code></code>
+</p><p>Besides all the other stuff you need for a gadget (you should know this by now),
+you will need something like this in your code (eg under <i>{mod_root}/LuaRules/Gadgets/MyFirstAI_v01.lua</i>):
+<code>
+</code></p><code><pre>function gadget:GetInfo()
+    return {
+        name    = "MyFirstAI",
+        desc    = "An AI that knows how to play Mod X",
+        author  = "John Doe",
+        date    = "2020-12-31",
+        license = "Public Domain",
+        layer   = 82,
+        enabled = true
+    }
+end
+
+function gadget:GameStart() 
+    -- Initialise AI for all teams that are set to use it
+    for _,t in ipairs(Spring.GetTeamList()) do
+        local _,_,_,isAI,side = Spring.GetTeamInfo(t)
+        if Spring.GetTeamLuaAI(t) == gadget:GetInfo().name then
+            Spring.Echo("Team "..t.." assigned to "..gadget:GetInfo().name)
+            local pos = {}
+            local home_x,home_y,home_z = Spring.GetTeamStartPosition(t)
+        end
+    end
+end
+</pre></code><code></code><p><code></code>
+<b>Note:</b>
+The above example will not work if your AI controls multiple teams because <i>home_x,home_y,home_z</i> are not stored <i>per team.</i>
+</p><p>That's it, the rest of the game is using regular gadget functions, and in particular <a class="external text" href="Lua_SyncedCtrl.html#Give_Order" rel="nofollow">Spring.GiveOrderToUnit()</a>. Now you should be able to use this AI when starting the modified mod in the lobby, when you click on the <i>Add Bot</i> button. From Spring 95.0 onwards, lua AIs can be selected from the Spring.exe menu.
+</p><p>Enjoy!
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li>NOE AI: <a class="external free" href="http://springrts.com/phpbb/viewtopic.php?f=55&amp;t=28259" rel="nofollow">http://springrts.com/phpbb/viewtopic.php?f=55&amp;t=28259</a></li>
+<li>ST AI source: <a class="external free" href="http://pastebin.com/v1kNRBDj" rel="nofollow">http://pastebin.com/v1kNRBDj</a></li>
+<li>KP AI source: <a class="external free" href="http://pastebin.com/f771164a0" rel="nofollow">http://pastebin.com/f771164a0</a></li>
+<li>CRAIG source:
+<ul><li>to browse: <a class="external free" href="http://github.com/tvo/craig/tree/master" rel="nofollow">http://github.com/tvo/craig/tree/master</a></li>
+<li>for git: <a class="external free" href="git://github.com/tvo/craig.git" rel="nofollow">git://github.com/tvo/craig.git</a></li></ul></li>
+<li>C.R.A.I.G. is inside S44 and SWIW</li>
+<li>forum thread: <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=15&amp;t=25639" rel="nofollow">LuaAI information</a></li>
+<li>forum threads about an AI for the game Conflict Terra: <a class="external autonumber" href="http://springrts.com/phpbb/viewtopic.php?f=63&amp;t=26148" rel="nofollow">[1]</a> <a class="external autonumber" href="http://springrts.com/phpbb/viewtopic.php?f=63&amp;t=26214" rel="nofollow">[2]</a> <a class="external autonumber" href="http://springrts.com/phpbb/viewtopic.php?f=15&amp;t=26207" rel="nofollow">[3]</a> (among the OT, some more or less common LuaAI problems are discussed)</li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20260309223625
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.006 seconds
+Real time usage: 0.008 seconds
+Preprocessor visited node count: 21/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2670-0!canonical and timestamp 20260309223625 and revision id 28718
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=AI:Development:Lang:Lua&amp;oldid=28718">https://springrts.com/mediawiki/index.php?title=AI:Development:Lang:Lua&amp;oldid=28718</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_AI_Dev.html" title="Category:AI Dev">AI Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="AI_Development_Lang_Lua.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:AI:Development:Lang:Lua&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=AI:Development:Lang:Lua&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=AI:Development:Lang:Lua&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="AI_Development_Lang_Lua.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:AI:Development:Lang:Lua&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=AI%3ADevelopment%3ALang%3ALua" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/AI:Development:Lang:Lua" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/AI:Development:Lang:Lua" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=AI:Development:Lang:Lua&amp;oldid=28718" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=AI:Development:Lang:Lua&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 25 August 2014, at 02:54.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.006","walltime":"0.008","ppvisitednodes":{"value":21,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223625","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":120});});</script></body></html>

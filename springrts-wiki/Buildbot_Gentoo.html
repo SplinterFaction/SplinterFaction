@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Buildbot:Gentoo - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"38ac082148c134253da0d9bc","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Buildbot:Gentoo","wgTitle":"Buildbot:Gentoo","wgCurRevisionId":30276,"wgRevisionId":30276,"wgArticleId":3359,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Buildbot"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Buildbot:Gentoo","wgRelevantArticleId":3359,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Buildbot_Gentoo rootpage-Buildbot_Gentoo skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Buildbot:Gentoo</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p>This page is WIP! (don't expect these instructions to work, they only give a hint, how it should/could work...)
+</p><p>Its best to run a 64 bit gentoo, as x32 can be easily compiled, too.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#buildbot-slave_.28for_interacting_with_spring.27s_buildbot.29"><span class="tocnumber">1</span> <span class="toctext">buildbot-slave (for interacting with spring's buildbot)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Setup_gentoo_win32_buildslave"><span class="tocnumber">2</span> <span class="toctext">Setup gentoo win32 buildslave</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#stuff_that_needs_to_be_compiled_native_.28not_with_mingw.29"><span class="tocnumber">2.1</span> <span class="toctext">stuff that needs to be compiled native (not with mingw)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#mingw64_32_bit"><span class="tocnumber">3</span> <span class="toctext">mingw64 32 bit</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Setup_static_linux"><span class="tocnumber">4</span> <span class="toctext">Setup static linux</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#set_compile_flags_on_64_bit_gentoo"><span class="tocnumber">4.1</span> <span class="toctext">set compile flags on 64 bit gentoo</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#install_needed_programs_and_libs"><span class="tocnumber">4.2</span> <span class="toctext">install needed programs and libs</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#tune"><span class="tocnumber">4.3</span> <span class="toctext">tune</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#32_bit_buildbot_on_a_64_bit_slave"><span class="tocnumber">5</span> <span class="toctext">32 bit buildbot on a 64 bit slave</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#patches"><span class="tocnumber">6</span> <span class="toctext">patches</span></a></li>
+</ul>
+</div>
+<h1><span id="buildbot-slave_(for_interacting_with_spring's_buildbot)"></span><span class="mw-headline" id="buildbot-slave_.28for_interacting_with_spring.27s_buildbot.29">buildbot-slave (for interacting with spring's buildbot)</span></h1>
+<p>on springrts.com in /home/buildbot/master/passwords.py a user and password must be added. this username is needed to connect the buildslave client to the master.
+</p><p>install buildbot on the slave:
+</p>
+<code><pre>emerge dev-util/buildbot-slave
+</pre></code>
+<p>add a local user which is used to build:
+</p>
+<code><pre>useradd -s /bin/false -d /home/buildslave -m buildslave
+</pre></code>
+<p>create the buildslave config
+</p>
+<code><pre>buildslave create-slave /home/buildslave springrts.com:9989 &lt;buildbot user in passwords.py&gt; &lt;password in passwords.py&gt;
+</pre></code>
+<p>make it autostart:
+</p>
+<code><pre>rc-update add buildslave default
+</pre></code>
+<p>adjust config
+</p>
+<code><pre>nano /etc/conf.d/buildslave
+</pre></code>
+<p><br/>
+</p><p>warning! you should use an ssh-tunnel to connect to the master as the password is sent in cleartext!
+</p>
+<h1><span class="mw-headline" id="Setup_gentoo_win32_buildslave">Setup gentoo win32 buildslave</span></h1>
+<p>Note: boost and spring has to be compiled with the same compiler! If you get weird linker errors then this could be the cause!
+</p><p>tools required for compiling
+</p>
+<code><pre>emerge layman mercurial app-arch/p7zip-9.13 dev-util/cmake app-arch/zip wine crossdev app-portage/portage-utils
+layman -a ohnobinki
+echo "source /var/lib/layman/make.conf" &gt;&gt; /etc/portage/make.conf
+CHOST=i686-mingw32 ROOT=/usr/i686-mingw32 emerge pthreads-win32
+USE="openmp cxx -fortran" crossdev i686-mingw32 --env 'EXTRA_ECONF="--disable-sjlj-exceptions --with-dwarf --enable-gomp --disable-shared"'
+</pre></code>
+<p>for java ai's / interface install a jdk
+</p>
+<code><pre>emerge -va oracle-jdk-bin
+</pre></code>
+<p>Install i686-mingw32 compiler, then pthreads, then recompile i686-mingw32 with pthreads enabled
+</p>
+<code><pre>USE="openmp cxx -fortran" crossdev i686-mingw32 --env 'EXTRA_ECONF="--disable-sjlj-exceptions --with-dwarf"'
+CHOST=i686-mingw32 ROOT=/usr/i686-mingw32 emerge -va pthreads-win32
+USE="openmp cxx -fortran" crossdev i686-mingw32 --env 'EXTRA_ECONF="--disable-sjlj-exceptions --with-dwarf --disable-shared"'
+emerge-wrapper --init
+</pre></code>
+<h2><span id="stuff_that_needs_to_be_compiled_native_(not_with_mingw)"></span><span class="mw-headline" id="stuff_that_needs_to_be_compiled_native_.28not_with_mingw.29">stuff that needs to be compiled native (not with mingw)</span></h2>
+<code><pre>emerge ncurses cmake eselect eselect-boost
+ACCEPT_KEYWORDS="~x86" emerge boost-build
+</pre></code>
+<h1><span class="mw-headline" id="mingw64_32_bit">mingw64 32 bit</span></h1>
+<code><pre>USE="openmp cxx -fortran -multilib static-libs" crossdev --env 'EXTRA_ECONF="--disable-shared"' -t i686-w64-mingw32
+</pre></code>
+<p>TODO: see <a class="external free" href="http://sourceforge.net/apps/trac/mingw-w64/wiki/Cross%20Win32%20and%20Win64%20compiler" rel="nofollow">http://sourceforge.net/apps/trac/mingw-w64/wiki/Cross%20Win32%20and%20Win64%20compiler</a>
+</p>
+<h1><span class="mw-headline" id="Setup_static_linux">Setup static linux</span></h1>
+<p>create /etc/portage/package.use/spring-static-buildslave:
+</p>
+<code><pre>sys-libs/zlib static-libs minizip
+media-libs/devil static-libs opengl png jpeg tiff gif X
+media-libs/giflib static-libs
+media-libs/tiff static-libs
+dev-libs/boost static-libs python
+media-libs/jpeg  static-libs
+media-libs/libsdl2 -audio opengl static-libs X
+media-libs/libvorbis static-libs
+media-libs/libogg static-libs
+media-libs/freetype static-libs autohinter
+media-libs/glew static-libs
+media-libs/libpng static-libs
+x11-libs/libXcursor static-libs
+app-arch/bzip2 static-libs
+x11-libs/libXdmcp static-libs
+x11-libs/libXrender static-libs
+x11-libs/libX11 static-libs
+x11-libs/libXfixes static-libs
+x11-libs/libxcb static-libs
+x11-libs/libXau static-libs
+net-misc/curl static-libs
+dev-libs/openssl static-libs
+sys-libs/libunwind static-libs
+</pre></code>
+<h2><span class="mw-headline" id="set_compile_flags_on_64_bit_gentoo">set compile flags on 64 bit gentoo</span></h2>
+<p>this is only required on 64bit gentoo!
+</p><p>if you don't add -fPIC you mostly will get errors like his:
+</p>
+<code><pre>relocation R_X86_64_32 against `a local symbol' can not be used when making a
+shared object; recompile with -fPIC
+/usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/../../../../lib64/libfl.a: could not
+read symbols: Bad value
+</pre></code>
+<p><br/>
+/etc/portage/env/spring-static-buildslave:
+</p>
+<code><pre>CFLAGS="${CFLAGS} -fPIC"
+CXXFLAGS="${CXXFLAGS} -fPIC"
+LDFLAGS="${LDFLAGS} -fPIC"
+</pre></code>
+<p>/etc/portage/package.env/spring-static-buildslave:
+</p>
+<code><pre>sys-libs/zlib spring-static-buildslave
+media-libs/devil spring-static-buildslave
+media-libs/giflib spring-static-buildslave
+media-libs/tiff spring-static-buildslave
+dev-libs/boost spring-static-buildslave
+media-libs/jpeg spring-static-buildslave
+media-libs/libsdl2 spring-static-buildslave
+media-libs/libvorbis spring-static-buildslave
+media-libs/freetype spring-static-buildslave
+media-libs/glew spring-static-buildslave
+sys-devel/gcc spring-static-buildslave
+media-libs/libpng spring-static-buildslave
+x11-libs/libXcursor spring-static-buildslave
+</pre></code>
+<h2><span class="mw-headline" id="install_needed_programs_and_libs">install needed programs and libs</span></h2>
+<p>Emerge gcc-4.7.2
+</p>
+<code><pre>emerge -va =sys-devel/gcc-4.7.2
+</pre></code>
+<p>enable / use it
+</p>
+<code><pre>gcc-config x86_64-pc-linux-gnu-4.7.2
+env-update &amp;&amp; source /etc/profile
+</pre></code>
+<p>re-install required libs with changed use flags:
+</p>
+<code><pre>emerge -va sys-libs/zlib media-libs/devil dev-libs/boost media-libs/jpeg media-libs/libsdl2 \
+media-libs/libvorbis media-libs/freetype media-libs/glew media-libs/libpng x11-libs/libXcursor \
+app-arch/bzip2 x11-libs/libXdmcp x11-libs/libXrender x11-libs/libX11 x11-libs/libXfixes \
+x11-libs/libxcb x11-libs/libXau net-misc/curl sys-libs/libunwind
+
+</pre></code>
+<h2><span class="mw-headline" id="tune">tune</span></h2>
+<p>use ld.gold for linking:
+</p>
+<code><pre>binutils-config --linker ld.gold
+</pre></code>
+<h1><span class="mw-headline" id="32_bit_buildbot_on_a_64_bit_slave">32 bit buildbot on a 64 bit slave</span></h1>
+<p>switch back to the standard linker as glibc doesn't compile with ld.gold if you get this error:
+"These critical programs are missing or too old: as ld"
+</p>
+<code><pre>binutils-config --libc 2.11.3 --linker ld.bfd
+</pre></code>
+<code><pre>USE="openmp cxx -fortran" crossdev --target i686 --gcc 4.8.5 --libc 2.17
+mkdir -p /usr/i686-pc-linux-gnu/etc/portage/package.use/
+vi /usr/i686-pc-linux-gnu/etc/portage/package.use/spring-static-buildslave
+
+sys-libs/zlib static-libs minizip
+media-libs/devil static-libs opengl png jpeg tiff gif X
+media-libs/giflib static-libs
+media-libs/tiff static-libs -cxx
+dev-libs/boost static-libs -python
+media-libs/jpeg  static-libs
+media-libs/libsdl2 -audio opengl static-libs X
+media-libs/libvorbis static-libs
+media-libs/libogg static-libs
+media-libs/freetype static-libs autohinter
+media-libs/glew static-libs
+media-libs/libpng static-libs
+x11-libs/libXcursor static-libs
+app-arch/bzip2 static-libs
+x11-libs/libXdmcp static-libs
+x11-libs/libXrender static-libs
+x11-libs/libX11 static-libs
+x11-libs/libXfixes static-libs
+x11-libs/libxcb static-libs
+x11-libs/libXau static-libs
+dev-libs/gmp static-libs
+dev-libs/mpfr static-libs
+dev-libs/mpc static-libs
+net-misc/curl static-libs
+dev-libs/openssl static-libs
+dev-java/oracle-jdk-bin -X -fontconfig
+sys-libs/libunwind static-libs
+</pre></code>
+<code><pre>(
+  echo PYTHON_TARGETS="python2_7"
+  echo USE="${USE} -pam -llvm -tools -uuid -kmod -classic -dri3 -egl -gallium -gbm -nptl -udev -fortran"
+)&gt;&gt; /usr/i686-pc-linux-gnu/etc/portage/make.conf
+</pre></code>
+<p>force old version of glibc for more compatibility of the generated executable:
+</p>
+<code><pre>mkdir -p /usr/i686-pc-linux-gnu/etc/portage/package.mask
+echo '&gt;sys-libs/glibc-2.17' &gt; /usr/i686-pc-linux-gnu/etc/portage/package.mask/glibc
+emerge-i686-pc-linux-gnu -va --nodeps dev-libs/libffi =dev-lang/python-2.7.11-r2
+i686-pc-linux-gnu-emerge -va dev-util/pkgconfig x11-misc/util-macros
+</pre></code>
+<p>build all libs: (we use --nodeps as else it would pull in A LOT of dependencies which aren't required. because of --nodeps, the order of parameters matters!)
+</p>
+<code><pre>emerge-i686-pc-linux-gnu -va --nodeps \
+sys-libs/zlib \
+app-arch/bzip2 \
+dev-libs/boost \
+media-libs/tiff \
+media-libs/jpeg \
+media-libs/libvorbis \
+media-libs/freetype \
+media-libs/libpng \
+media-libs/openal \
+dev-libs/openssl \
+net-misc/curl \
+=sys-libs/libunwind-0.99-r1 \
+x11-libs/libXdmcp \ 
+x11-libs/libXau \
+=x11-libs/libxcb-1.10 \
+x11-libs/libX11 \
+x11-libs/libXrender \
+x11-proto/fixesproto \
+x11-libs/libXfixes \
+x11-libs/libXcursor \
+x11-libs/libdrm \
+x11-proto/glproto \
+x11-libs/libXext  \
+x11-libs/libXdamage \
+x11-proto/dri2proto \
+media-libs/mesa \
+media-libs/glu \
+media-libs/glew \
+media-libs/devil \
+media-libs/libsdl2
+</pre></code>
+<h1><span class="mw-headline" id="patches">patches</span></h1>
+<p>gcc omp patch: <a class="external free" href="http://gcc.gnu.org/bugzilla/attachment.cgi?id=28752" rel="nofollow">http://gcc.gnu.org/bugzilla/attachment.cgi?id=28752</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309224132
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.011 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 145/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5833/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3359-0!canonical and timestamp 20260309224132 and revision id 30276
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Buildbot:Gentoo&amp;oldid=30276">https://springrts.com/mediawiki/index.php?title=Buildbot:Gentoo&amp;oldid=30276</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Buildbot.html" title="Category:Buildbot">Buildbot</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Buildbot_Gentoo.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Buildbot:Gentoo&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Buildbot:Gentoo&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Buildbot:Gentoo&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Buildbot_Gentoo.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Buildbot:Gentoo&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Buildbot%3AGentoo" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Buildbot:Gentoo" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Buildbot:Gentoo" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Buildbot:Gentoo&amp;oldid=30276" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Buildbot:Gentoo&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 17 October 2016, at 22:43.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.011","walltime":"0.013","ppvisitednodes":{"value":145,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":5833,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224132","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":99});});</script></body></html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua sync to unsync - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"84958ea3114d229761f38f41","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_sync_to_unsync","wgTitle":"Lua sync to unsync","wgCurRevisionId":31762,"wgRevisionId":31762,"wgArticleId":2933,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_sync_to_unsync","wgRelevantArticleId":2933,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_sync_to_unsync rootpage-Lua_sync_to_unsync skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua sync to unsync</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Synced_-.3E_Unsynced_Communication"><span class="tocnumber">1</span> <span class="toctext">Synced -&gt; Unsynced Communication</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Using_SendToUnsynced"><span class="tocnumber">1.1</span> <span class="toctext">Using SendToUnsynced</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Using_globals_.2896.0_and_previous.29"><span class="tocnumber">1.2</span> <span class="toctext">Using globals (96.0 and previous)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#97.0.2B"><span class="tocnumber">1.3</span> <span class="toctext">97.0+</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span id="Synced_-&gt;_Unsynced_Communication"></span><span class="mw-headline" id="Synced_-.3E_Unsynced_Communication">Synced -&gt; Unsynced Communication</span></h1>
+<h2><span class="mw-headline" id="Using_SendToUnsynced">Using SendToUnsynced</span></h2>
+<p>Currently, the recommended way is to use the SendToUnsynced call-in to send an event to the unsynced portion of a gadget. It's also possible to send an event from a gadget to a Widget. First, you send an 'internal event' from synced to unsynced space, within the gadget, then you can create an event which may be subscribed to by any widget. Follows an image showcasing that flow and working/tested code:
+</p><p><a class="image" href="/wiki/File:Sync_unsync_comm.png"><img alt="Sync unsync comm.png" decoding="async" height="399" src="images/670px-Sync_unsync_comm.png" srcset="/mediawiki/images/thumb/9/9f/Sync_unsync_comm.png/1005px-Sync_unsync_comm.png 1.5x, /mediawiki/images/thumb/9/9f/Sync_unsync_comm.png/1340px-Sync_unsync_comm.png 2x" width="670"/></a>
+<br/>
+<a class="external free" href="https://pastebin.com/b1eVWn1d" rel="nofollow">https://pastebin.com/b1eVWn1d</a>
+</p><p><br/>
+<br/>Bear in mind that only one widget can hook to one LuaUI event at once, trying to listen to it in multiple widgets will lead to erratic behavior. Workaround here would be firing multiple LuaUI events, one for each consuming widget.
+<br/><br/>The first parameter in the event handler (in the example, it's named 'cmd' in HandleCommCountEvent) is rarely used. It holds the name of the synced event, so you know what synced event fired the function, as in the following example:
+</p><p>&lt;syntaxhighlight lang="lua"&gt;local function func(str)
+</p>
+<pre>   if str == "abcd" then
+       -- do something
+   elseif str == "efgh"
+       -- do another thing
+   end
+</pre>
+<p>end
+</p><p>gadgetHandler:AddSyncAction("abcd", func)
+gadgetHandler:AddSyncAction("efgh", func)
+</p><p>SendToUnsynced("abcd")
+&lt;/syntaxhighlight&gt;
+</p><p>Futher reading in the following forum thread: 
+<a class="external free" href="https://springrts.com/phpbb/viewtopic.php?t&amp;t=11408" rel="nofollow">https://springrts.com/phpbb/viewtopic.php?t&amp;t=11408</a>
+</p>
+<h2><span id="Using_globals_(96.0_and_previous)"></span><span class="mw-headline" id="Using_globals_.2896.0_and_previous.29">Using globals (96.0 and previous)</span></h2>
+<p>When making a gadget you will sometimes want to combine synced and unsynced code.
+</p><p>For example if you do some things with units, that code will need to be synced.
+</p><p>The UnitDestroyed, UnitFinished etc. callins can only be called in synced code. Using them inside unsynced code is not going to work.
+</p><p>If you want to draw on the screen (for example to mark units) then the drawing will have to happen in unsynced code.
+</p><p>The following example demonstrates how to change the value inside the synced block of code and read the value in the unsynced block of code:
+</p><p>&lt;syntaxhighlight lang="lua"&gt;
+if (gadgetHandler:IsSyncedCode()) then
+</p>
+<pre>  --SYNCED CODE
+  local number = 10               -- declaring local variable 'number'
+  function gadget:SomeSyncedCallin(...)
+     number=number+1              -- increment variable's value by one
+     _G.number=number             -- save the new value into a global variable
+  end
+</pre>
+<p>else
+</p>
+<pre>  --UNSYNCED CODE
+  function gadget:SomeUnsyncedCallin(...)
+     Spring.Echo(SYNCED.number)   -- print the global variable's value on screen
+  end
+</pre>
+<p>end
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span id="97.0+"></span><span class="mw-headline" id="97.0.2B">97.0+</span></h2>
+<p>As of 97.0 unsynced gets most of the <a href="Lua_Callins.html" title="Lua:Callins">callins</a> available to synced (excepting those which control synced actions e.g. AllowUnitCreation etc) which means that forwarding data from synced to unsynced is now not always required. Additionally in 97.0 there were changes to the behaviour of the <code>SYNCED</code> table described above.
+</p><p>Change 1: <code>SYNCED</code> does a copy on access now and so is slow:<br/><br/>
+<b>Bad:    </b>
+&lt;syntaxhighlight lang="lua"&gt;for i=1,100 do ... SYNCED.foo[i] ... end&lt;/syntaxhighlight&gt;
+<b>Good:   </b>
+&lt;syntaxhighlight lang="lua"&gt;local foo = SYNCED.foo; for i=1,100 do ... foo[i] ... end&lt;/syntaxhighlight&gt;
+Change 2: <code>SYNCED.</code> can't be localized in global scope anymore:<br/><br/>
+<b>Bad:    </b>
+&lt;syntaxhighlight lang="lua"&gt;local foo = SYNCED.foo;    function gadget:DrawWorld() ... foo ... end&lt;/syntaxhighlight&gt;
+<b>Good:   </b>
+&lt;syntaxhighlight lang="lua"&gt;function gadget:DrawWorld() local foo = SYNCED.foo; ... foo ... end&lt;/syntaxhighlight&gt;
+</p><p><br/><br/>
+Here is a (older) description by quantum:
+</p>
+<pre>[LCC]quantum[0K] every time there  is a new target, i send "addTarget" and its number to unsynced
+[LCC]quantum[0K] when a target is removed from the list, i send "removeTarget" and its number
+[LCC]quantum[0K] this wierd stuff:
+[LCC]quantum[0K]   _G.laserEventArgs = eventArgs
+[LCC]quantum[0K]   SendToUnsynced("LaserEvent")
+[LCC]quantum[0K]   _G.laserEventArgs = nil
+[LCC]quantum[0K] puts the eventArgs table somewhere were unsynced can find it
+[LCC]quantum[0K] sends a signal to unsynced called "LaserEvent"
+[LCC]quantum[0K] and removes the table
+[LCC]quantum[0K] on the unsynced side, _G.laserEventArgs becomes SYNCED.laserEventArgs
+[LCC]quantum[0K] this copies it to another table, ready for reuse:   for k, v in spairs(SYNCED.laserEventArgs) do
+[LCC]quantum[0K]     eventArgs[k] = v
+[LCC]quantum[0K]   end
+[LCC]quantum[0K] also, this: gadgetHandler:AddSyncAction("LaserEvent", HandleLaserEvent)
+[LCC]quantum[0K] means that i want the HandleLaserEvent function to be called every time i do SendToUnsynced("LaserEvent")
+</pre>
+<p><a class="external free" href="http://pastebin.com/hMHv3Lrf" rel="nofollow">http://pastebin.com/hMHv3Lrf</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223719
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.007 seconds
+Real time usage: 0.009 seconds
+Preprocessor visited node count: 25/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1033/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2933-0!canonical and timestamp 20260309223719 and revision id 31762
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_sync_to_unsync&amp;oldid=31762">https://springrts.com/mediawiki/index.php?title=Lua_sync_to_unsync&amp;oldid=31762</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_sync_to_unsync.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_sync_to_unsync&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_sync_to_unsync&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_sync_to_unsync&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_sync_to_unsync.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_sync_to_unsync&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+sync+to+unsync" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_sync_to_unsync" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_sync_to_unsync" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_sync_to_unsync&amp;oldid=31762" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_sync_to_unsync&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 5 March 2022, at 05:37.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.007","walltime":"0.009","ppvisitednodes":{"value":25,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1033,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223719","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":82});});</script></body></html>

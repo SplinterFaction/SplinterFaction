@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Tutorial:MapDevWithBlueprint(Forb) - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"86ec6a9d56ad69a614034fef","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Tutorial:MapDevWithBlueprint(Forb)","wgTitle":"Tutorial:MapDevWithBlueprint(Forb)","wgCurRevisionId":30282,"wgRevisionId":30282,"wgArticleId":3402,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages with broken file links","Tutorial","Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Tutorial:MapDevWithBlueprint(Forb)","wgRelevantArticleId":3402,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,
+"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Tutorial_MapDevWithBlueprint_Forb rootpage-Tutorial_MapDevWithBlueprint_Forb skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Tutorial:MapDevWithBlueprint(Forb)</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; Tutorial:MapDevWithBlueprint(Forb)
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Getting_Started_.28Tools.29"><span class="tocnumber">1</span> <span class="toctext">Getting Started (Tools)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_Components_of_a_Map"><span class="tocnumber">2</span> <span class="toctext">The Components of a Map</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Texture_Map"><span class="tocnumber">2.1</span> <span class="toctext">Texture Map</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Heightmap"><span class="tocnumber">2.2</span> <span class="toctext">Heightmap</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Metal_Map"><span class="tocnumber">2.3</span> <span class="toctext">Metal Map</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Feature_Map"><span class="tocnumber">2.4</span> <span class="toctext">Feature Map</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#A_brief_history_of_featuremaps"><span class="tocnumber">2.4.1</span> <span class="toctext">A brief history of featuremaps</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Compiling_a_Map_.28MapConv.29"><span class="tocnumber">3</span> <span class="toctext">Compiling a Map (MapConv)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Texture_Specifications"><span class="tocnumber">3.1</span> <span class="toctext">Texture Specifications</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Using_MapConv"><span class="tocnumber">3.2</span> <span class="toctext">Using MapConv</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Utilizing_Blueprint"><span class="tocnumber">4</span> <span class="toctext">Utilizing Blueprint</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#mapcontainer.sdd"><span class="tocnumber">4.1</span> <span class="toctext">mapcontainer.sdd</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Texture_Splatting_using_SSMF"><span class="tocnumber">5</span> <span class="toctext">Texture Splatting using SSMF</span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="#Distribution_Map"><span class="tocnumber">5.1</span> <span class="toctext">Distribution Map</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Detail_Textures"><span class="tocnumber">5.2</span> <span class="toctext">Detail Textures</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Specular_Map"><span class="tocnumber">5.3</span> <span class="toctext">Specular Map</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Grass_Shading_Map"><span class="tocnumber">5.4</span> <span class="toctext">Grass Shading Map</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Normal_Map"><span class="tocnumber">5.5</span> <span class="toctext">Normal Map</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#Placing_Features"><span class="tocnumber">6</span> <span class="toctext">Placing Features</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#Feature_Placer"><span class="tocnumber">6.1</span> <span class="toctext">Feature Placer</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Configuring_Map_Parameters_.28Mapinfo.lua.29"><span class="tocnumber">7</span> <span class="toctext">Configuring Map Parameters (Mapinfo.lua)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#MapInfo.lua"><span class="tocnumber">7.1</span> <span class="toctext">MapInfo.lua</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-23"><a href="#Skyboxes"><span class="tocnumber">8</span> <span class="toctext">Skyboxes</span></a></li>
+<li class="toclevel-1 tocsection-24"><a href="#Mutators"><span class="tocnumber">9</span> <span class="toctext">Mutators</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Archiving_a_Map"><span class="tocnumber">10</span> <span class="toctext">Archiving a Map</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#Tools"><span class="tocnumber">11</span> <span class="toctext">Tools</span></a></li>
+<li class="toclevel-1 tocsection-27"><a href="#Minimal_barebones_template_with_no_extras"><span class="tocnumber">12</span> <span class="toctext">Minimal barebones template with no extras</span></a></li>
+</ul>
+</div>
+<h1><span id="Getting_Started_(Tools)"></span><span class="mw-headline" id="Getting_Started_.28Tools.29">Getting Started (Tools)</span></h1>
+<p><b>Blueprint: </b><a class="external text" href="https://github.com/jk3064/Map-Blueprint" rel="nofollow">https://github.com/jk3064/Map-Blueprint</a> 
+</p><p>The only other tool really needed is "Mapconv". The other tools available are there simply to make your life easier. A list of common mapping tools are as follows:
+</p><p><br/>
+<a href="MapConv.html" title="MapConv">Mapconv</a>
+</p><p><br/>
+<a href="MapConvNG.html" title="MapConvNG">MapConvNG - For use with Linux</a>
+</p><p><br/>
+SMFED <b>(Deprecated, no longer useful)</b>
+</p><p><br/>
+Grout <b>(Deprecated, no longer useful unless texture was generated with L3dt utilizing tiles)</b>
+</p><p><br/>
+SMD Creator <b>(Deprecated, no longer useful)</b>
+</p><p><br/>
+<a class="external text" href="http://springfiles.com/spring/tools/mapping-tools" rel="nofollow">Start Position Editor</a>
+</p><p><br/>
+<a class="external text" href="http://springfiles.com/spring/tools/mapping-tools" rel="nofollow">Das Bruce's Mapconv frontend</a>
+</p><p><br/>
+These tools have been compiled into a zip available here: <a class="external text" href="http://springfiles.com/spring/tools/mapping-tools" rel="nofollow">http://springfiles.com/spring/tools/mapping-tools</a>
+</p><p><br/>
+Keep in mind that mapconv is still being developed, so it may be necessary to update the included Mapconv to a later version, located here: <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=56&amp;t=21458" rel="nofollow">http://springrts.com/phpbb/viewtopic.php?f=56&amp;t=21458</a>
+</p>
+<h1><span class="mw-headline" id="The_Components_of_a_Map">The Components of a Map</span></h1>
+<h2><span class="mw-headline" id="Texture_Map">Texture Map</span></h2>
+<p><code><b>Texture map size is related in pixels and in spring map size. 2x2 MapSquares in spring are equal to 1024x1024 Pixels. Texture maps mus be in multiples of 2. I.E. 2x2, 6x10, 12x16, 16x16, etc. No odd sizes are allowed (Example: 15x10).</b></code>
+</p><p>This guide assumes that you understand how to make a texture map and it also assumes that you know how to use terrain generation software.
+</p><p>Commonly used terrain generation programs are:
+</p><p>Spring Map Edit (Does not work on 64bit machines)
+</p><p>L3DT
+</p><p>WorldMachine
+</p><p>Bryce3D
+</p><p>Carrara
+</p><p><br/>
+</p><p>Example Texture Map (generated by Carrara):
+</p><p><a class="image" href="/wiki/File:Exampletexturemap.jpg"><img alt="Exampletexturemap.jpg" decoding="async" height="512" src="images/Exampletexturemap.jpg" width="512"/></a>
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Heightmap">Heightmap</span></h2>
+<p><code><b>Height Maps are Texture Map size / 8 + 1 pixel. In other words, if your texture map is 8192x8192 (16x16), 8192 / 8 + 1 = 1025x1025</b></code>
+</p><p>You will need a good image editing program to make heightmaps. Many of the aforementioned terrain generation programs will also generate heightmaps as well, but you can draw them by hand. They can be either 8bit or 16bit greyscale PNG. If you have photoshop or the gimp, you can use these programs to help you create your heightmap.
+</p><p><br/>
+</p><p>Here is an example of a 16bit heightmap:
+</p><p><a class="image" href="/wiki/File:Heightmapexample.png"><img alt="Heightmapexample.png" decoding="async" height="512" src="images/Heightmapexample.png" width="512"/></a>
+</p><p>Heightmaps work upon the idea of height according to color values. Black is the lowest, white is the heighest. In spring mapping, the waterline is defined by a negative height value. In other words, you define the heights of the map,  anything below 0 is under water. So on this heightmap, you might use -50 for the lowest value and 300 for the highest height value. The aforementioned tool "Mapconv Gui (a.k.a Das Bruce's MapConv Gui) has a waterline calculator that will help you calculate the correct waterline for your map.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Metal_Map">Metal Map</span></h2>
+<p><code><b>Metal Map dimensions are Texture Map size / 8 + 1 pixel. In other words, if your texture map is 8192x8192 (16x16), 8192 / 8 + 1 = 1025x1025</b></code>
+</p><p><br/>
+In Spring, metal maps are used for the built in resourcing scheme (Metal/Energy). You do not have to use this scheme. In fact, there are several games for Spring who use their own resourcing systems added on using Lua. If you are creating this map for one of those games, a metal map is not strictly necessary (in other words you can just us a black image), however, it is always nice if you can make your maps as compatible with other games as possible, but this is a choice left entirely up to you.
+</p><p><br/>
+Metalmaps show metal areas on a map based upon the amount of red on the image (make sure red is the only color used!). On this map you can see that the "Patch Technique" is used, which is pretty common among spring maps, but you are not limited to using this scheme.
+</p><p><br/>
+If you do want perfect metal patches, use a 6x6 pixel pencil in your image editor with a red value of 255. This combined with setting the "MaxMetal" tag in the definitions to 1, will result in a perfect 2.0 metal generation per patch (using Balanaced Annihilation values). The game use isn't the point however. The fact is that if you can predict how much each spot will output (typically), using the "MaxMetal" parameter, you can easily scale the values up and down. As an example of another extreme, Evolution RTS dictates that all metal patches will output 0.5 metal regardless of the map settings. So whether you need to put a lot of thought into your metal map values depends entirely upon the game for which you are creating the map.
+</p><p><br/>
+</p><p>Example Metal Map:
+</p><p><a class="image" href="/wiki/File:Examplemetal.jpg"><img alt="Examplemetal.jpg" decoding="async" height="512" src="images/Examplemetal.jpg" width="512"/></a>
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Feature_Map">Feature Map</span></h2>
+<p>This part is easy...
+</p><p><b>DO NOT USE THIS FOR ANY REASON WHATSOEVER!!!</b> Just use a flat black image for the featuremap.
+</p><p><code><b>Feature Map dimensions are Texture Map size / 8. In other words, if your texture map is 8192x8192 (16x16), 8192 / 8 = 1024x1024</b></code>
+</p><p>Feature maps used to be quite complicated, but all that changed with the advent of Smoth's FeaturePlacer (short featuremap history below).
+</p><p>Now featuremaps are use simply for the purpose of placing grass. Grass coverage is defined by blue pixels on the feature map. The more blue the pixel is (the closer to blue 255 it is), the thicker grass will be at that location. Grass is entirely optional, but can be customized via map parameters and adds a nice touch to your map.
+</p><p><br/>
+</p><p>Example Feature Map:
+</p><p><a class="image" href="/wiki/File:Examplefeature.jpg"><img alt="Examplefeature.jpg" decoding="async" height="512" src="images/Examplefeature.jpg" width="512"/></a>
+</p>
+<h3><span class="mw-headline" id="A_brief_history_of_featuremaps">A brief history of featuremaps</span></h3>
+<p>Feature maps were (and still are) a single RGB image where features such as grass, geothermal vents and trees, as well as structures, etc were "placed" using pixels on the image. This method was extremely imprecise and involved recompiling the map many times in order to simply move a tree from one location to another.
+</p>
+<h1><span id="Compiling_a_Map_(MapConv)"></span><span class="mw-headline" id="Compiling_a_Map_.28MapConv.29">Compiling a Map (MapConv)</span></h1>
+<h2><span class="mw-headline" id="Texture_Specifications">Texture Specifications</span></h2>
+<p>Texture map size is related in pixels and in spring map size. 2x2 MapSquares in spring are equal to 1024x1024 Pixels. Texture maps must be in multiples of 2. I.E. 2x2, 6x10, 12x16, 16x16, etc. No odd sizes are allowed (Example: 15x10).
+</p><p><br/>
+</p><p>Height Map dimensions are Texture Map size / 8 + 1 pixel. In other words, if your texture map is 8192x8192 (16x16), 8192 / 8 + 1 = 1025x1025
+</p><p><br/>
+</p><p>Metal Map dimensions are Texture Map size / 16 pixel. In other words, if your texture map is 8192x8192 (16x16), 8192 / 16 = 512x512
+</p><p><br/>
+</p><p>Feature Map dimensions are Texture Map size / 8. In other words, if your texture map is 8192x8192 (16x16), 8192 / 8 = 1024x1024
+</p>
+<h2><span class="mw-headline" id="Using_MapConv">Using MapConv</span></h2>
+<p><a href="MapConv.html" title="MapConv">MapConv</a> is a command line program that is generally started via a batch file .
+</p><p>Below is an example set of parameters given to mapconv:
+</p><p><code><b>MapConv -i -l -c 0 -x 101 -n 100 -o EvoRTS-Craggy_Creek-v01.smf -t terrain.png -a height6.png -m metal.png -f feature.png -z "nvdxt.exe -dxt1a -nmips 4 -Sinc -quality_highest -file"</b></code>
+</p><p>Once compiled, you will get 2 new files: &lt;mapname.smt&gt; and &lt;mapname.smf&gt;
+</p>
+<h1><span class="mw-headline" id="Utilizing_Blueprint">Utilizing Blueprint</span></h1>
+<p>Unzip the blueprint archive into your Spring Maps folder.
+</p><p><a class="image" href="/wiki/File:Mapcontainer.jpg"><img alt="Mapcontainer.jpg" decoding="async" height="210" src="images/Mapcontainer.jpg" width="477"/></a>
+</p><p>You will notice a new folder called "mapcontainer.sdd". The .sdd ending on the folder name is very important for testing as &lt;foldername&gt;.sdd tells spring to load map files from that folder. This way you can work on your maps without having to zip them up over and over again.
+</p>
+<h2><span class="mw-headline" id="mapcontainer.sdd">mapcontainer.sdd</span></h2>
+<p>Inside the map container folder you have the following file/folder structure.
+</p><p><br/>
+</p>
+<div><b><code>LuaGaia</code></b></div><div><b><code>mapconfig</code></b></div><div><b><code>maphelper</code></b></div><div><b><code>maps</code></b></div><div><b><code>mapinfo.lua</code></b></div><div><b><code>mapoptions.lua</code></b></div><div><br/></div>
+<p>Now, copy your compiled map files (the <code>.smt</code> and <code>.smf</code> files) into the "maps" folder.
+</p>
+<h1><span class="mw-headline" id="Texture_Splatting_using_SSMF">Texture Splatting using SSMF</span></h1>
+<p>SSMF mapping is adding detail textures all over the map based upon specified distribution areas. This will make your map infinitely more detailed and beautiful.
+</p><p>Adding SSMF to a map consists of the following steps:
+</p>
+<h2><span class="mw-headline" id="Distribution_Map">Distribution Map</span></h2>
+<p>The Distribution map is essentially an atlas telling spring where to spread your detail textures. Lets have a look at an example distribution map:
+</p><p><img alt="examplesplatdistribution.jpg" src="images/examplesplatdistribution.jpg"/>
+</p><p>Each channel corresponds to a different texture referenced in the detail texture map. These areas are set using the channels of the image and are generally saved using the Targa format ( .tga ), sized at 1024x1024.
+</p><p><img alt="examplechannels.jpg" src="images/examplechannels.jpg"/>
+</p><p>Save your distribution map as splatdistribution.tga, and place it in the maps folder alongside the smf and smt files.
+</p><p>Once you have your distribution map, you need to set up your detail textures
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Detail_Textures">Detail Textures</span></h2>
+<p>Detail textures are made by adding a texture to each channel of an image.
+</p><p><img alt="examplesplattex.jpg" src="images/examplesplattex.jpg"/>
+</p><p>There are a total of 4 texture slots available. One for R, G, B, and one for the Alpha Channel. When you have your detail textures ready, save the file as splattex.tga (Targa - 1024x1024) and place it in the maps folder alongside splatdistribution.tga
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Specular_Map">Specular Map</span></h2>
+<p>A specular map controls brightness and "shinyness" of your map. The more light you add to a particular portion of your specular map, the brighter and more reflective that portion of the map will be. Specular maps should be 1024x1024 and saved as specularmap.bmp. Of course placed in the maps folder with the other ssmf maps.
+</p><p>A specular map can cause your map to look like molten plastic. Most of us don't really use specular maps except for certain circumstances.
+</p><p><img alt="examplespecularmap.jpg" src="images/examplespecularmap.jpg"/>
+</p>
+<h2><span class="mw-headline" id="Grass_Shading_Map">Grass Shading Map</span></h2>
+<p>By default spring's grass pulls the minimap to use for coloration of the grass patches. You can override this with <i>grassShadingTex</i>. Below is an example
+</p><p><br/>
+</p>
+<table><tbody><tr><td colspan="2">Grass map</td><td>Grass map in game</td></tr>
+<tr><td><a class="new" href="/mediawiki/index.php?title=Special:Upload&amp;wpDestFile=Grassmap_Map_example.jpeg%C3%A2%E2%82%AC%C5%BD" title="File:Grassmap Map example.jpegâ€Ž">grassmap</a></td><td>This is a section of grassmap image. This image applied to the entire map which determines the color of grass.</td><td><a class="new" href="/mediawiki/index.php?title=Special:Upload&amp;wpDestFile=Grassmap_Map_ingame.jpg%C3%A2%E2%82%AC%C5%BD" title="File:Grassmap Map ingame.jpgâ€Ž">in game</a></td></tr><tr><td colspan="2">Click image for larger picture</td><td>Click image for larger picture</td></tr></tbody></table>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Normal_Map">Normal Map</span></h2>
+<p>Normal maps (in this case) are used to add "fake" 3d detail to a flat 2d image. It is a technique of manipulating lighting to give the appearance of looking at a 3d object, when actually it is just 2D.
+</p><p>This is what a normal map looks like:
+<a class="image" href="/wiki/File:Examplenormalmap.jpg"><img alt="Examplenormalmap.jpg" decoding="async" height="512" src="images/Examplenormalmap.jpg" width="512"/></a>
+</p>
+<h1><span class="mw-headline" id="Placing_Features">Placing Features</span></h1>
+<p>As previously mentioned, features can now be placed via LUA based upon a coordinate system that looks similar to this:
+</p><p><br/>
+</p>
+<div><code>local features = { </code></div>
+<div><code>		unitlist = {</code></div>
+<div><code>		},</code></div>
+<div><code>		buildinglist = {</code></div>
+<div><code>		},</code></div>
+<div><code>		objectlist = {</code></div>
+<div><code>			{ name = 'btreeclo_4', x = 7760, z = 112, rot = "0" },</code></div>
+<div><code>			{ name = 'btreea_3', x = 2520, z = 6904, rot = "0" },</code></div>
+<div><code>			{ name = 'btreeblo_5', x = 7736, z = 536, rot = "0" },</code></div>
+<div><code>			{ name = 'btreeclo_1', x = 2504, z = 7112, rot = "0" },</code></div>
+<div><code>			{ name = 'geovent', x = 177, z = 192, rot = "0" },</code></div>
+<div><code>		},</code></div>
+<div><code>},</code></div>
+<div><code>return features</code></div>
+<p><br/>
+</p>
+<div>Of course, features can be placed by editing the set.lua file in a text editor, but that would take an extremely long time. Enter FeaturePlacer.</div><div><br/></div>
+<h2><span class="mw-headline" id="Feature_Placer">Feature Placer</span></h2>
+<ul><li><a href="Map_Making__Feature_Placer.html" title="Map Making: Feature Placer">Feature Placer</a></li></ul>
+<h1><span id="Configuring_Map_Parameters_(Mapinfo.lua)"></span><span class="mw-headline" id="Configuring_Map_Parameters_.28Mapinfo.lua.29">Configuring Map Parameters (Mapinfo.lua)</span></h1>
+<p>Admittedly, the default values used in blueprint mapinfo are awful. It may be wise for you to download another map that has used blueprint and copy and paste it's mapinfo contents into yours. However, you are also free to use the default or use the provided example.
+</p><p>In time, the mapinfo tags will be documented and this will like to that page. As it is the tags and values are pretty easy to figure out for the most part.
+</p>
+<h2><span class="mw-headline" id="MapInfo.lua">MapInfo.lua</span></h2>
+<ul><li><a class="mw-redirect" href="Map_Making_mapinfo.lua.html" title="Map Making:mapinfo.lua">MapInfo.lua</a></li></ul>
+<h1><span class="mw-headline" id="Skyboxes">Skyboxes</span></h1>
+<ul><li><a class="mw-redirect" href="Skyboxcreation.html" title="Skyboxcreation">Notes about skyboxes</a> notes on a prerendered sky box or cube map.</li></ul>
+<p><br/>
+</p>
+<h1><span class="mw-headline" id="Mutators">Mutators</span></h1>
+<p>Mutators are files that add new content to exiting game files. "<a class="external text" href="http://springfiles.com/spring/tools/spring-features" rel="nofollow">Spring Features</a>" is an example of a mutator.
+</p><p>This section needs a proper description.
+</p><p><a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=13&amp;t=21808" rel="nofollow">http://springrts.com/phpbb/viewtopic.php?f=13&amp;t=21808</a>
+</p>
+<h1><span class="mw-headline" id="Archiving_a_Map">Archiving a Map</span></h1>
+<div>Spring reads two different archive formats, 7zip and zip. Both archives are named sd7 and sdz, respectively. 7zip files are made by The 7zip archive program, available at <a class="external text" href="http://www.7-zip.org/" rel="nofollow">http://www.7-zip.org/</a></div><div><br/></div><div>Navigate to your mapcontainer.sdd folder and zip it's contents into either a .7z file or .zip (7zip format is <b>HIGHLY RECOMMENDED</b>!), usually naming schemes follow the actual mapname (&lt;mapname.sd7&gt;, such as EvoRTS-Craggy_Creek-v08.sd7</div><div><br/></div><div>
+<p><span style="color:red"><b>Make sure that the archive is non-solid!</b> </span>
+</p><p><br/>
+</p>
+<a class="image" href="/wiki/File:Examplearchivewith7zip.jpg"><img alt="Examplearchivewith7zip.jpg" decoding="async" height="464" src="images/Examplearchivewith7zip.jpg" width="717"/></a><br/></div><div><br/></div><div>Once completed, copy the sd7/sdz file to your maps folder. At this point, be sure to remove the .sdd ending from your mapcontainer.sdd folder (or change the map name/version contained withing), otherwise you might get sync errors because spring is reading from the wrong archive source.</div>
+<p><br/>
+</p>
+<h1><span class="mw-headline" id="Tools">Tools</span></h1>
+<ul><li><a href="Maps_SpringMapEdit.html" title="Maps:SpringMapEdit">Frostregen's SpringMapEdit</a>. 3D editing, Compiles and import SM2 directly. Beginner friendly but still powerful.</li>
+<li><a href="MapConv.html" title="MapConv">MapConv</a> Map converter program, compiles maps.</li>
+<li><a href="MapConvNG.html" title="MapConvNG">MapConvNG</a> Rewrite of MapConv that works on linux / 64 bit.</li>
+<li><a href="Maps_Map_Designer.html" title="Maps:Map Designer">Maps:Map Designer</a> <b>(Outdated, Deprecated)</b> Hugh's 3D map designer. Splatting, heightmap editing, splat painting, SM3</li>
+<li><a class="external text" href="http://www.springfiles.com/show_file.php?id=1679" rel="nofollow">Starting position creator</a>: Or you can always find out the hard way which x/y coordinates are good by starting spring and having a look at the mouse cursor coordinates.</li>
+<li><a class="external text" href="http://code.google.com/p/conflictterra/source/browse/games/CT/luaui/widgets/tp_coordinate_help.lua" rel="nofollow">Coordinate Helper widget</a> A small widget that helps you with finding coordinates ie for start positions. Every time you put down a marker it will log its position in <a href="Infolog.txt.html" title="Infolog.txt">Infolog.txt</a> and also in MAPNAME_coordinates.txt Helpfull if you need to get lots of map coordinates and do not want to write them down by hand. (it writes SpawnResource in front of the coordinates but you can ignore or edit the widget)</li></ul>
+<h1><span class="mw-headline" id="Minimal_barebones_template_with_no_extras">Minimal barebones template with no extras</span></h1>
+<p>If you want a completely barebones template with no extra configuration needed (useful for testing), Extract the  blueprint files, then delete everything except mapinfo.lua and everything in maps folder (except your .smf and .smt files). Next copy paste following to mapinfo.lua (not the most minimal but minimal enough):
+</p>
+<pre>local mapinfo = {
+   name        = "MyMap",
+   shortname   = "",
+   description = "",
+   author      = "",
+   version     = "",
+   modtype     = 3, --// 3=map
+
+   teams = {
+      [0] = {startPos = {x = 8, z = 8}},
+      [1] = {startPos = {x = 16, z = 16}},   
+   },
+}
+return mapinfo
+</pre>
+<p>In summary: maps folder with .smf.and .smt files and single mapinfo.lua file. You should be now able to test your map immediately (if files are placed to mapcontainer.sdd).
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309224322
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.024 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 110/1000000
+Post‐expand include size: 34/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 295/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3402-0!canonical and timestamp 20260309224321 and revision id 30282
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Tutorial:MapDevWithBlueprint(Forb)&amp;oldid=30282">https://springrts.com/mediawiki/index.php?title=Tutorial:MapDevWithBlueprint(Forb)&amp;oldid=30282</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a class="new" href="/mediawiki/index.php?title=Category:Pages_with_broken_file_links&amp;action=edit&amp;redlink=1" title="Category:Pages with broken file links (page does not exist)">Pages with broken file links</a></li><li><a class="new" href="/mediawiki/index.php?title=Category:Tutorial&amp;action=edit&amp;redlink=1" title="Category:Tutorial (page does not exist)">Tutorial</a></li><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Tutorial_MapDevWithBlueprint(Forb).html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Tutorial:MapDevWithBlueprint(Forb)&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Tutorial:MapDevWithBlueprint(Forb)&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Tutorial:MapDevWithBlueprint(Forb)&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Tutorial_MapDevWithBlueprint(Forb).html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Tutorial:MapDevWithBlueprint(Forb)&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Tutorial%3AMapDevWithBlueprint%28Forb%29" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Tutorial:MapDevWithBlueprint(Forb)" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Tutorial:MapDevWithBlueprint(Forb)" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Tutorial:MapDevWithBlueprint(Forb)&amp;oldid=30282" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Tutorial:MapDevWithBlueprint(Forb)&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 18 November 2016, at 02:34.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.024","walltime":"0.028","ppvisitednodes":{"value":110,"limit":1000000},"postexpandincludesize":{"value":34,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":295,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224322","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":107});});</script></body></html>

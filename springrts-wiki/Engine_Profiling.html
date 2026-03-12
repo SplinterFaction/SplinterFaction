@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Engine Profiling - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"46bc0f2d56d6920c15ff6f49","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Engine_Profiling","wgTitle":"Engine Profiling","wgCurRevisionId":30356,"wgRevisionId":30356,"wgArticleId":2989,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Engine Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Engine_Profiling","wgRelevantArticleId":2989,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Engine_Profiling rootpage-Engine_Profiling skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Engine Profiling</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; Engine Profiling
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Engine_Profiling"><span class="tocnumber">1</span> <span class="toctext">Engine Profiling</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Linux"><span class="tocnumber">1.1</span> <span class="toctext">Linux</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Intro"><span class="tocnumber">1.1.1</span> <span class="toctext">Intro</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Setting_up_oprof"><span class="tocnumber">1.1.2</span> <span class="toctext">Setting up <i>oprof</i></span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Using_oprof"><span class="tocnumber">1.1.3</span> <span class="toctext">Using <i>oprof</i></span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Post_processing_oprof_data"><span class="tocnumber">1.1.4</span> <span class="toctext">Post processing <i>oprof</i> data</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Using_perf"><span class="tocnumber">1.1.5</span> <span class="toctext">Using <i>perf</i></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Windows"><span class="tocnumber">1.2</span> <span class="toctext">Windows</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Engine_Profiling">Engine Profiling</span></h1>
+<h2><span class="mw-headline" id="Linux">Linux</span></h2>
+<h3><span class="mw-headline" id="Intro">Intro</span></h3>
+<p>There are several ways to profile an application.
+</p><p><b>gprof</b>
+</p><p>The compiler injects special code in the binary that self profiles it when it runs. this is what <code>cmake -DCMAKE_BUILD_TYPE=PROFILING</code> is here for. We are not going to use this. It does not interfere with normal program's work-flow. With spring, it gets so slow that it is unusable for profiling anything in late game (which is where it is needed the most). It requires special compiling options.
+</p><p><br/>
+<b>oprof</b>
+</p><p>OProfile uses statistical sampling. It is a kernel module, which every n clock ticks, registers which function is currently being processed. It is lightweight; it may run with almost 0 performance impact. This method always profiles your profiles your whole system; relevant info has to be filtered out after the profiling run has finished.
+The downside of statistical profiling, is that it requires at least a certain sample size to achieve good accuracy. Also remember, that <i>oprof</i> still requires the debug symbols, to resolve addresses into function names.
+It can be turned on/off at any time, so for instance, you may skip spring loading so you would only profile in-game runtime. You can also merge multiple profiling sessions.
+</p><p><br/>
+<b>perf</b>
+</p><p>Powerful and lightweight Linux performance profiler based on perf events. Part of linux kernel from version 2.6.31. 
+</p>
+<h3><span class="mw-headline" id="Setting_up_oprof">Setting up <i>oprof</i></span></h3>
+<p>Required stuff:
+</p>
+<ul><li><i>oprof</i> kernel module</li>
+<li><i>oprof</i> package</li></ul>
+<h3><span class="mw-headline" id="Using_oprof">Using <i>oprof</i></span></h3>
+<center>
+<table style="margin-top: 15px; padding: 10px; border: 1px solid rgba(0,0,0,0.5); border-radius: 6px 6px 6px 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 10px 8px rgba(255,255,255,0.3);">
+<tbody><tr>
+<td>Note: Modern CPUs have special statistical sampling timing functions to make profiling with software like <i>oprof</i> fast.
+</td></tr></tbody></table>
+</center>
+<p>You will have to load the kernel module.
+The profiling daemon is controlled using <i>opcontrol</i> as root.
+As regular user, you can do post-processing using <i>opreport</i>.
+</p><p><br/>
+<b>Recommended settings</b>
+</p>
+<ul><li>use a call-graph depth of size 16</li>
+<li>disable kernel profiling &amp; enable user-space profiling</li>
+<li>separate each application in its own profile</li>
+<li>separate each thread in its own profile; you can always merge them later, using <i>opreport</i></li></ul>
+<p><br/>
+<b>A typical profiling session</b>
+</p>
+<code><pre># We need to be root
+su -
+
+# In case the kernel module is not already loaded ...
+modprobe -v oprofile
+
+# This has to be sent only once; it will be saved
+opcontrol --event=CPU_CLK_UNHALTED:1000000:0x0:0:1 \
+          --callgraph=16 \
+          --separate=thread,library \
+          --no-vmlinux
+
+# -- Bring spring into a state where you want to start profiling --
+
+# start the profiler
+opcontrol --start
+
+# -- In spring, do whatever you want to profile --
+
+# stop the profiler
+opcontrol --stop
+
+# in order to make the profile data available to user-space,
+# you have to dump the data
+opcontrol --dump
+</pre></code>
+<h3><span class="mw-headline" id="Post_processing_oprof_data">Post processing <i>oprof</i> data</span></h3>
+<p><a class="image" href="/wiki/File:Oprof_engine_part.png"><img alt="Oprof engine part.png" decoding="async" height="285" src="images/710px-Oprof_engine_part.png" srcset="/mediawiki/images/e/e3/Oprof_engine_part.png 1.5x" width="710"/></a>
+</p><p>We will first explain the post processing steps, and then give a script that should work for most general spring profiling tasks.
+</p><p><br/>
+<b>Extract the data</b>
+</p><p>The data is now stored in <i>oprofile</i>s cache, and we need to extract the parts of it that we are interested in, and write them to a file.
+With the settings we used above, <i>oprofile</i> indexes stuff by thread- and process-ID. In order to generate a report, we will have to tell which program, which threads and which sampling sessions to include.
+If you do not care much, you can just merge thread data and sampling data, as we do here too.
+</p><p><br/>
+<b>Converting the data file to a dot-graph file</b>
+</p><p><a class="external text" href="https://code.google.com/p/jrfonseca/wiki/Gprof2Dot" rel="nofollow">gprof2dot</a> takes <i>oprof</i> data and outputs a nice dot-graph. We use it to generate the dot graph out of <i>oprofile</i>s <code>--callgraph</code> version.
+</p><p><br/>
+<b>Finalizing (Creating an image out of the graph file)</b>
+</p><p>Then you can either use <a class="external text" href="https://code.google.com/p/jrfonseca/wiki/XDot" rel="nofollow">XDot</a> to view it directly, or create an image out of the graph file. We will use <a class="external text" href="http://www.graphviz.org/" rel="nofollow">GraphViz</a>'s <i>dot</i> utility to render to an image.
+</p><p><br/>
+<b>Post Processing Script</b>
+</p>
+<code><pre>#!/bin/bash
+
+SPRING_INSTALL_PATH=$(dirname $(which spring))
+BIN_ENGINE=${SPRING_INSTALL_PATH}/spring
+BIN_AIS=$(ls ${SPRING_INSTALL_PATH}/AI/Skirmish/*/*/libSkirmishAI.so)
+
+SETTINGS_CREATE_TABLE=0
+SETTINGS_CREATE_CALLGRAPH=1
+SETTINGS_CREATE_PNG=1
+SETTINGS_CREATE_SVG=1
+SETTINGS_CLEANUP=1
+
+function profileBins() {
+	BASE_OUT_FILE_PATH=$1
+	MY_BINARIES="$2"
+
+	# extract relevant oprof data as table
+	if [ ${SETTINGS_CREATE_TABLE} == 1 ]; then
+		opreport \
+				--long-filenames \
+				--demangle=smart \
+				--merge=tid,tgid \
+				--symbols ${MY_BINARIES} \
+				--output-file ${BASE_OUT_FILE_PATH}.txt
+	fi
+
+	if [ ${SETTINGS_CREATE_CALLGRAPH} == 1 ]; then
+		# extract relevant oprof data as callgraph
+		opreport \
+				--long-filenames \
+				--callgraph \
+				--demangle=smart \
+				--merge=tid,tgid \
+				--symbols ${MY_BINARIES} \
+				--output-file ${BASE_OUT_FILE_PATH}.oprof
+
+		# create graph file
+		gprof2dot --format=oprofile --output=${BASE_OUT_FILE_PATH}.dot ${BASE_OUT_FILE_PATH}.oprof
+
+		# create images
+		if [ ${SETTINGS_CREATE_PNG} == 1 ]; then
+			dot -Tpng ${BASE_OUT_FILE_PATH}.dot &gt; ${BASE_OUT_FILE_PATH}.png
+		fi
+		if [ ${SETTINGS_CREATE_SVG} == 1 ]; then
+			dot -Tsvg ${BASE_OUT_FILE_PATH}.dot &gt; ${BASE_OUT_FILE_PATH}.svg
+		fi
+		# ... likewise for other formats
+
+		if [ ${SETTINGS_CLEANUP} == 1 ]; then
+			rm ${BASE_OUT_FILE_PATH}.oprof
+			rm ${BASE_OUT_FILE_PATH}.dot
+		fi
+	fi
+}
+
+#profileBins ./profiling_engine         "${BIN_ENGINE}"
+profileBins ./profiling_ais            "${BIN_AIS}"
+profileBins ./profiling_engine_and_ais "${BIN_ENGINE} ${BIN_AIS}"
+</pre></code>
+<p>This will leave you with these graph files:
+</p>
+<code><pre>./profiling_ais.png
+./profiling_ais.svg
+./profiling_engine_and_ais.png
+./profiling_engine_and_ais.svg
+</pre></code>
+<h3><span class="mw-headline" id="Using_perf">Using <i>perf</i></span></h3>
+<p><b>Setup</b>
+</p><p>For ubuntu install linux-tools-common using apt-get. In fedora the package's name is perf.
+Make sure <code>/proc/sys/kernel/kptr_restrict</code> contains value <b>0</b>
+</p><p><b>Useful commands</b>
+</p>
+<ul><li>perf top - shows statistics in real time</li>
+<li>perf record - save statistics to file for further insight</li>
+<li>perf report - read previously generated data</li>
+<li>perf diff a.data b.data - show differences between two report files</li></ul>
+<p><b>Example</b>
+</p>
+<ul><li>Get data of running spring proccess for 10 seconds. Pay attention to frequency parameter -F. At this rate the output takes about 17 mb of space. Parameter call-graph dwarf unwinds the stack even when frame pointer optimization is on.</li></ul>
+<p><code>perf record -F 99 -p PID_NUMBER -o my_output1.data --call-graph dwarf sleep 10</code>
+</p>
+<ul><li>Read the report. Press / and type symbol to narrow list to e.g "air"</li></ul>
+<p><code>perf report -i my_output1.data -g</code>
+</p>
+<code><pre>  Children      Self  Command  Shared  Symbol                                                                                   
++  132.33%    29.15%  unknown  spring  [.] CStrafeAirMoveType::Update
++   71.36%     3.35%  unknown  spring  [.] CStrafeAirMoveType::UpdateFlying
++   52.01%    32.48%  unknown  spring  [.] CStrafeAirMoveType::UpdateAirPhysics
++   36.42%     0.00%  unknown  spring  [.] CAirCAI::ExecuteFight
+    34.50%    12.55%  unknown  spring  [.] CommandDrawer::DrawAirCAICommands
++   32.11%     0.00%  unknown  spring  [.] CStrafeAirMoveType::UpdateLanding
+    26.65%    12.90%  unknown  spring  [.] CGameHelper::GetClosestEnemyAircraft
+    16.73%     0.00%  unknown  spring  [.] CAirCAI::GiveCommandReal
+    15.91%     0.00%  unknown  spring  [.] CStrafeAirMoveType::FindLandingPos
+    15.91%     6.42%  unknown  spring  [.] CStrafeAirMoveType::BrakingDistance
+     9.82%     0.00%  unknown  spring  [.] CAirCAI::AirAutoGenerateTarget
+     9.82%     0.00%  unknown  spring  [.] CAirCAI::SlowUpdate
+     3.28%     0.00%  unknown  spring  [.] CAirCAI::ExecuteMove
+     3.26%     0.00%  unknown  spring  [.] CStrafeAirMoveType::HandleCollisions
+     3.17%     3.17%  unknown  spring  [.] AAirMoveType::UseSmoothMesh                                                
+</pre></code>
+<p><b>Flamegraph</b>
+</p>
+<ul><li><code>perf script -i a.data | ./stackcollapse-perf.pl &gt; out.perf-folded</code> - convert perf stacks data to text representation</li>
+<li><code>./flamegraph.pl out.perf-folded &gt; my_idle_air.svg</code> - create flamegraph from perf data</li></ul>
+<p>or
+</p>
+<ul><li><code>grep -i air out.perf-folded | ./flamegraph.pl &gt; my_idle_air.svg</code> - same as above, but it ignores stacks that do not contain "air" in symbol names</li></ul>
+<p><a class="image" href="/wiki/File:Flamegraph-grepped-example.png" title="flamegraph-grepped-example.png"><img alt="flamegraph-grepped-example.png" decoding="async" height="594" src="images/Flamegraph-grepped-example.png" width="1200"/></a>
+</p><p><b>Links</b>
+</p><p><a class="external text" href="https://perf.wiki.kernel.org/index.php/Tutorial" rel="nofollow">perf kernel wiki tutorial</a>
+</p><p><a class="external text" href="http://www.brendangregg.com/perf.html" rel="nofollow">perf examples by Brendan Gregg</a>
+</p><p><a class="external text" href="https://eclipse.org/linuxtools/projectPages/perf/" rel="nofollow">Eclipse perf plugin</a>
+</p><p><a class="external text" href="https://github.com/brendangregg/FlameGraph" rel="nofollow">Flamegraph</a>
+</p>
+<h2><span class="mw-headline" id="Windows">Windows</span></h2>
+<p>&lt;Please add&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223613
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.012 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 46/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3599/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2989-0!canonical and timestamp 20260309223613 and revision id 30356
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Engine_Profiling&amp;oldid=30356">https://springrts.com/mediawiki/index.php?title=Engine_Profiling&amp;oldid=30356</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Engine_Dev.html" title="Category:Engine Dev">Engine Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Engine_Profiling.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Engine_Profiling&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Engine_Profiling&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Engine_Profiling&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Engine_Profiling.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Engine_Profiling&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Engine+Profiling" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Engine_Profiling" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Engine_Profiling" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Engine_Profiling&amp;oldid=30356" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Engine_Profiling&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 17 May 2017, at 23:29.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.012","walltime":"0.015","ppvisitednodes":{"value":46,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3599,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223613","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":128});});</script></body></html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Simple Game Tutorial - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"4bc2aba11eadca06ee088d18","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Simple_Game_Tutorial","wgTitle":"Simple Game Tutorial","wgCurRevisionId":27915,"wgRevisionId":27915,"wgArticleId":1305,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Deprecated"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Simple_Game_Tutorial","wgRelevantArticleId":1305,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgRedirectedFrom":"Simple_Mod_Tutorial",
+"wgInternalRedirectTargetUrl":"/wiki/Simple_Game_Tutorial"};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["mediawiki.action.view.redirect","site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<link href="https://springrts.com/wiki/Simple_Game_Tutorial" rel="canonical"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Simple_Game_Tutorial rootpage-Simple_Game_Tutorial skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Simple Game Tutorial</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"><span class="mw-redirectedfrom">(Redirected from <a class="mw-redirect" href="/mediawiki/index.php?title=Simple_Mod_Tutorial&amp;redirect=no" title="Simple Mod Tutorial">Simple Mod Tutorial</a>)</span></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><table style="border:1px solid #888; color:#FFFFFF; background:#BB2525;padding:.2em; padding:15px;text-align:justify;width:90%; margin:10px 30px; -webkit-border-radius: 10px; -moz-border-radius: 10px;border-radius: 10px;">
+<tbody><tr>
+<td style="width:50px;"><a class="image" href="/wiki/File:172px-Symbol_comment_vote.svg.png"><img alt="172px-Symbol comment vote.svg.png" decoding="async" height="51" src="images/50px-172px-Symbol_comment_vote.svg.png" srcset="/mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/75px-172px-Symbol_comment_vote.svg.png 1.5x, /mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/100px-172px-Symbol_comment_vote.svg.png 2x" width="50"/></a>
+</td>
+<td style="padding-left:.2em;">This page is out of date and has been marked for review.
+</td></tr></tbody></table>
+<p>This Tutorial Aims to get a person from knowing nothing about Spring to the point where they can create and edit mods.
+</p><p>Right now I am working from memory so you may want to correct me when I'm wrong, I will try to cross link from my summaries to the appropriate articles available in other places.
+</p><p>I will not go too deep into making 3do's because they are old and dumb... but I'll try to make note of the differences here.
+</p><p>I don't know anything about scripting right now, so that section is likely to be sparse when I write it, I hope that someone will expand on it.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Book_1:_The_First_Unit"><span class="tocnumber">1</span> <span class="toctext">Book 1: The First Unit</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Step_1:Planning"><span class="tocnumber">1.1</span> <span class="toctext">Step 1:Planning</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Step_2:Getting_The_Tools"><span class="tocnumber">1.2</span> <span class="toctext">Step 2:Getting The Tools</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Step_3:Making_a_3D_Model"><span class="tocnumber">1.3</span> <span class="toctext">Step 3:Making a 3D Model</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Step_4:Fixing_Your_Images"><span class="tocnumber">1.4</span> <span class="toctext">Step 4:Fixing Your Images</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Step_5:Upspring"><span class="tocnumber">1.5</span> <span class="toctext">Step 5:Upspring</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Importing_Your_3ds"><span class="tocnumber">1.5.1</span> <span class="toctext">Importing Your 3ds</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Importing_Your_UV_and_Glowmaps"><span class="tocnumber">1.5.2</span> <span class="toctext">Importing Your UV and Glowmaps</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Exporting_Your_s3o"><span class="tocnumber">1.5.3</span> <span class="toctext">Exporting Your s3o</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#Step_6:_Lua_files"><span class="tocnumber">1.6</span> <span class="toctext">Step 6: Lua files</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#UnitName.lua"><span class="tocnumber">1.6.1</span> <span class="toctext">UnitName.lua</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#modinfo.lua"><span class="tocnumber">1.6.2</span> <span class="toctext">modinfo.lua</span></a>
+<ul>
+<li class="toclevel-4 tocsection-13"><a href="#Making_a_New_Mod_with_your_unit.2Funits"><span class="tocnumber">1.6.2.1</span> <span class="toctext">Making a New Mod with your unit/units</span></a></li>
+<li class="toclevel-4 tocsection-14"><a href="#Adding_Your_Unit_to_an_Existing_Mod"><span class="tocnumber">1.6.2.2</span> <span class="toctext">Adding Your Unit to an Existing Mod</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-15"><a href="#armorDefs.lua"><span class="tocnumber">1.6.3</span> <span class="toctext">armorDefs.lua</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#sidedata.lua"><span class="tocnumber">1.6.4</span> <span class="toctext">sidedata.lua</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#moveDefs.lua"><span class="tocnumber">1.6.5</span> <span class="toctext">moveDefs.lua</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#sounds.lua"><span class="tocnumber">1.6.6</span> <span class="toctext">sounds.lua</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-19"><a href="#Step_7:Adding_a_Build_Pic"><span class="tocnumber">1.7</span> <span class="toctext">Step 7:Adding a Build Pic</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Step_8:Adding_a_Side_Pic"><span class="tocnumber">1.8</span> <span class="toctext">Step 8:Adding a Side Pic</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Step_9:Scriptor"><span class="tocnumber">1.9</span> <span class="toctext">Step 9:Scriptor</span></a>
+<ul>
+<li class="toclevel-3 tocsection-22"><a href="#Stealing_a_Script"><span class="tocnumber">1.9.1</span> <span class="toctext">Stealing a Script</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-23"><a href="#Step_10:Compiling_Your_Mod"><span class="tocnumber">1.10</span> <span class="toctext">Step 10:Compiling Your Mod</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Step_11:Testing_Your_Mod"><span class="tocnumber">1.11</span> <span class="toctext">Step 11:Testing Your Mod</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Book_1:_The_First_Unit">Book 1: The First Unit</span></h1>
+<h2><span class="mw-headline" id="Step_1:Planning">Step 1:Planning</span></h2>
+<p>Who cares about planning, you know what you're doing... just come up with an idea for a mod... I made a chess set... if you don't have a real idea and just want to make a model show up in the game... then yeah... this is the place to start... I'd do that if I were you.
+</p><p>Another good thing to do at this point is to creat a "working directory", and inside it create a directory with the name that your mod will have... after many headaches I decided it's best to put this in the root directory of your system so it's really easy to find when you are switching around back and forth between folders and keep having to find your files over and over again.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Step_2:Getting_The_Tools">Step 2:Getting The Tools</span></h2>
+<p>You will need a bunch of stuff... here's the list (I assume you are using windows)
+</p><p><i>Want:</i>
+</p>
+<ul><li><a class="external text" href="Download.html" rel="nofollow">Spring</a> - The main program, you will likely need this to test if you've screwed up</li>
+<li>A Tiny Map (2x2) - to test your mod fast</li></ul>
+<p><i>Need:</i>
+</p>
+<ul><li><b>Program listings can be found here:</b> <b><a class="external text" href="Map,_Mod,_And_Unit_Development_Programs.html" rel="nofollow">Map, Mod, And Unit Development Programs</a></b></li>
+<li>3D Modeling Program - <b>See above link</b></li>
+<li>Notepad - to edit all the myriad of text files</li>
+<li>A Graphical Editing Program - needs to handle RGBA TGAs (aka TGA's with alpha channels), I suggest Photoshop if you have it, or The GIMP... needed for all of the texture making for UVmapping stuff... <b>See above link</b></li>
+<li>Upspring 1.3 - To convert your models to the appropriate s3o format (if you want to fight with 3do builder, then go ahead... a good trick is to get your model into Upspring first and adjust all the hierarchy, then save it as an 3do... but why bother?). <b>See above link</b></li>
+<li>Scriptor - to make and compile your units "animation script"... or steal someone else's and make it work for your unit. <b>See above link</b></li>
+<li>Compression Utility - (I suggest <a class="external text" href="http://www.7-zip.org/" rel="nofollow">7zip</a> - even if you are using zip compression and not 7zip, it's still good to have)</li></ul>
+<h2><span class="mw-headline" id="Step_3:Making_a_3D_Model">Step 3:Making a 3D Model</span></h2>
+<p>Go into your 3D modeling program and make a 3D model, <a class="external text" href="http://taspring.clan-sy.com/w/images/b/b4/WingsCombine.PNG" rel="nofollow">combine</a> all the objects and UV map the model, then separate it out into any parts that need to move independently of each other.  Then Export the UV map as an Image File and Export the whole thing as a 3ds file.  Put the original wings file, the UVMap image and the 3ds file into your working directory so you can find them later.
+</p><p>Wings 3D UV Mapping tutorial has been started here - <a href="3DModels_Wings3DTutorial.html" title="3DModels:Wings3DTutorial">3DModels:Wings3DTutorial</a>
+</p>
+<h2><span class="mw-headline" id="Step_4:Fixing_Your_Images">Step 4:Fixing Your Images</span></h2>
+<p><a href="Basic_s3o_unit_making_guide.html" title="Basic s3o unit making guide">This Article includes a UVMapping Guide</a>
+</p><p>Open up your UVMap in Photoshop (or whatever) go to the layer/chooser dialog box and go to the Channels Tab, add a new layer (it should default to alpha) and fill it with 99% black so you can see your texture in upspring.  If you want to can paint the UVmap and put white (1% black) on the alpha channel where you want your team colors to show up (you can use something between 1% and 99% to get a blend of your team color along with the texture... for example 50% will give you your texture with 50% of the team color mixed in...)
+</p><p>I don't know how to do glow maps... XXreminder for someone to create a Glowmapping tutorial... you don't actually need one for the model to show up.
+</p><p>Save these images both in the working directory.
+</p><p>Save a copy of these images in tga format into &lt;working directory&gt;/&lt;mod name&gt;/unittextures
+</p>
+<h2><span class="mw-headline" id="Step_5:Upspring">Step 5:Upspring</span></h2>
+<h3><span class="mw-headline" id="Importing_Your_3ds">Importing Your 3ds</span></h3>
+<p>Open <a href="Upspring.html" title="Upspring">upspring</a>, go to file&gt;load model and navigate to and open your 3DS model you exported, you should see the model in upspring as a 3d mesh.  Go to the model tab and set the radius and height values to something other then zero... this defines where the health bar will show up, and more importantly, how big the collision sphere will be.
+</p><p>You will also need to use all of the other tools on those tabs to resize and rotate and move your model to the right place... wings makes models that are 90 degrees off and about 30 times smaller than most spring models... make sure you click the "apply transform" button after any changes that you actually want to show up in the game.
+</p><p>Also, you will want to make the hierarchy work using the cut, paste, and add empty buttons.  You will need an object called "base" that all the other objects are connected to... the "origin object"... sometimes you get lucky and wings exports it properly... usually not.
+</p>
+<h3><span class="mw-headline" id="Importing_Your_UV_and_Glowmaps">Importing Your UV and Glowmaps</span></h3>
+<p>Go to the textures tab and make your UV/texture/team-color map as "texture1" and your UV/glow/reflectivity map as "texture2"... it should show up correctly in the preview pane.
+</p>
+<h3><span class="mw-headline" id="Exporting_Your_s3o">Exporting Your s3o</span></h3>
+<p>Choose File&gt;Save Model As then in the drop down select "s3o" and type an appropriate name. This model should be saved to your working directory, and a copy of it made to &lt;working directory&gt;/&lt;mod name&gt;/objects3d/
+</p>
+<h2><span class="mw-headline" id="Step_6:_Lua_files">Step 6: Lua files</span></h2>
+<h3><span class="mw-headline" id="UnitName.lua">UnitName.lua</span></h3>
+<pre>unitDef = {
+  unitname           = [[arm_spider]],
+  name               = [[Weaver]],
+  description        = [[Cloaking Construction Spider, Builds at 9 m/s]],
+  acceleration       = 0.15,
+  bmcode             = [[1]],
+  brakeRate          = 0.15,
+  buildCostEnergy    = 230,
+  buildCostMetal     = 230,
+  buildDistance      = 80,
+  builder            = true,
+
+  buildoptions       = {
+  },
+
+  buildPic           = [[arm_spider.png]],
+  buildTime          = 230,
+  canAttack          = false,
+  canGuard           = true,
+  canMove            = true,
+  canPatrol          = true,
+  canreclamate       = [[1]],
+  canstop            = [[1]],
+  category           = [[LAND UNARMED]],
+  cloakCost          = 1,
+  cloakCostMoving    = 2,
+  corpse             = [[DEAD]],
+
+  customParams       = {
+    description_bp = [[Aranha e de construÃƒÂ§?o, ConstrÃƒÂ³i a 6 m/s]],
+    description_es = [[Ara?a de construcciÃƒÂ³n, construye a 6 m/s]],
+    description_fi = [[Rakentaja/kaikuluotainkiipeilij?, rakentaa 6m/s nopeudella]],
+    description_fr = [[Araign?e de Construction, Construit ? 6 m/s]],
+    description_it = [[Ragno do costruzione occultante, costruisce a 6 m/s]],
+    description_pl = [[Paj?k konstruktor, buduje z pr?dko?ci? 6m/s]],
+    helptext       = [[The Weaver is a constructor that can climb over any obstacle and build defenses on high ground.]],
+    helptext_bp    = [[Weaver ÃƒÂ© o construtor escalador camuflÃƒÂ¡vel de NOVA. Pode subir qualquer obstÃƒÂ¡culo, mas constrÃƒÂ³i mais devagar que construtores normais.]],
+    helptext_es    = [[El Weaver es el constructor que puede treparse sobre qualquier obstÃƒÂ¡culo y construir defensas en terreno alto]],
+    helptext_fi    = [[Weaver pystyy liikkumaan vaikeakulkuisimmassakin maastossa ja rakentamaan vaivatta my?s useimmille muille rakentajille saavuttamattomiin paikkoihin.]],
+    helptext_fr    = [[Le weaver est un robot de construction tout terrain qui peut batir des d?fenses en terrain ?lev?.]],
+    helptext_it    = [[Il Weaver ÃƒÂ© un costruttore che puo arrampicarsi su qualunque ostacolo e costruire difese nel terreno alto]],
+    helptext_pl    = [[Weaver jest konstruktorem mog?cym wspina? si? po ka?dej powierzchni oraz posiadaj?cym mo?liwo?? maskowania si?]],
+  },
+
+  defaultmissiontype = [[Standby]],
+  designation        = [[ARM-MLSPD]],
+  energyMake         = 0.15,
+  energyUse          = 0,
+  explodeAs          = [[BIG_UNITEX]],
+  footprintX         = 3,
+  footprintZ         = 3,
+  iconType           = [[builder]],
+  mass               = 115,
+  maxDamage          = 750,
+  maxslope           = 16,
+  maxSlope           = 72,
+  maxVelocity        = 1.7,
+  maxWaterDepth      = 22,
+  metalMake          = 0.15,
+  movementClass      = [[TKBOT3]],
+  noAutoFire         = false,
+  noChaseCategory    = [[TERRAFORM SATELLITE FIXEDWING GUNSHIP HOVER SHIP SWIM SUB LAND FLOAT SINK]],
+  objectName         = [[ARMMLSPD]],
+  radarDistanceJam   = 256,
+  seismicSignature   = 16,
+  selfDestructAs     = [[BIG_UNITEX]],
+  showNanoSpray      = false,
+  side               = [[ARM]],
+  sightDistance      = 295,
+  smoothAnim         = true,
+  steeringmode       = [[1]],
+  TEDClass           = [[CNSTR]],
+  terraformSpeed     = 450,
+  threed             = [[1]],
+  turninplace        = 0,
+  turnRate           = 1020,
+  workerTime         = 9,
+  zbuffer            = [[1]],
+
+  featureDefs        = {
+
+    DEAD  = {
+      description      = [[Wreckage - Weaver]],
+      blocking         = true,
+      category         = [[arm_corpses]],
+      damage           = 850,
+      featureDead      = [[DEAD2]],
+      featurereclamate = [[smudge01]],
+      footprintX       = 3,
+      footprintZ       = 3,
+      height           = [[40]],
+      hitdensity       = [[100]],
+      metal            = 92,
+      object           = [[ARMMLSPD_dead]],
+      reclaimable      = true,
+      reclaimTime      = 92,
+      seqnamereclamate = [[tree1reclamate]],
+      world            = [[All Worlds]],
+    },
+
+
+    DEAD2 = {
+      description      = [[Debris - Weaver]],
+      blocking         = false,
+      category         = [[heaps]],
+      damage           = 850,
+      featureDead      = [[HEAP]],
+      featurereclamate = [[smudge01]],
+      footprintX       = 3,
+      footprintZ       = 3,
+      height           = [[4]],
+      hitdensity       = [[100]],
+      metal            = 92,
+      object           = [[debris3x3b.s3o]],
+      reclaimable      = true,
+      reclaimTime      = 92,
+      seqnamereclamate = [[tree1reclamate]],
+      world            = [[All Worlds]],
+    },
+
+
+    HEAP  = {
+      description      = [[Debris - Weaver]],
+      blocking         = false,
+      category         = [[heaps]],
+      damage           = 850,
+      featurereclamate = [[smudge01]],
+      footprintX       = 3,
+      footprintZ       = 3,
+      height           = [[4]],
+      hitdensity       = [[100]],
+      metal            = 46,
+      object           = [[debris3x3b.s3o]],
+      reclaimable      = true,
+      reclaimTime      = 46,
+      seqnamereclamate = [[tree1reclamate]],
+      world            = [[All Worlds]],
+    },
+
+  },
+
+}
+
+return lowerkeys({ arm_spider = unitDef })
+</pre>
+<p>Save this file as a lua file in &lt;working directory&gt;/&lt;mod name&gt;/units/
+</p>
+<h3><span class="mw-headline" id="modinfo.lua">modinfo.lua</span></h3>
+<p>modinfo.lua is a lua file that defines a number of things that are used when loading a mod, most of the information is self explanatory but basically what you are doing is defining what is going to show up in whatever mod-selection interface you use as well as what other files need to be loaded into memory in order for your mod to work.
+</p>
+<h4><span id="Making_a_New_Mod_with_your_unit/units"></span><span class="mw-headline" id="Making_a_New_Mod_with_your_unit.2Funits">Making a New Mod with your unit/units</span></h4>
+<p>The following is an example of what will be in your <a href="Modinfo.lua.html" title="Modinfo.lua">modinfo.lua</a> file if you are starting from scratch and making your own mod. This is also good when you are just testing one unit to see if it works.
+</p>
+<pre>return {
+		-- The name is shown in the selection interface
+		game = "MyMod",
+		shortGame = "MM",
+		name = "My Mod",
+		shortName = "MM",
+		version = "4.0",
+		mutator = "Heroes",
+		-- These can be shown by the selection interface
+		description = "My Mod That I Made",
+		url = "http://www.theplacepeoplecangetthelatestversionofyourmod.com",
+		-- What kind of mod this is 
+		--  0 - Hidden (support mod that can't be selected, such as OTA_textures) 
+		--  1 - Normal, only one can be selected at a time 
+		--  2 - Addon, any number of these can be selected. Could be used 
+		--      for single units for example. 
+		--  others - perhaps mutators and addon races that can be 
+		--           enabled in addition to XTA for example? 
+		modtype = "1",
+		-- Number of other archives this one depends on 
+		depend= {
+			"Spring content v1",
+			"Spring Cursors",
+			"Spring Bitmaps",
+			-- Number of other content names this one replaces
+                        added comment about filename vs unitsync name for dependency
+		},
+	}
+</pre>
+<h4><span class="mw-headline" id="Adding_Your_Unit_to_an_Existing_Mod">Adding Your Unit to an Existing Mod</span></h4>
+<p>The following is an example of what will be in your modinfo.lua file if you are adding new units to an existing mod (in this case XTA SE v066), this is good for adding units to the build tree of an existing mod or adding a whole new team.
+</p>
+<pre>-- Description of the mod control file recognized by spring:
+return {
+		-- The name is shown in the selection interface
+		game = "XTASE_MyUnits",
+		shortGame = "XTASEMU",
+		name = "XTASEv0.66 with+My Units",
+		shortName = "XTASEMU",
+		version = "4.0",
+		mutator = "Heroes",
+		-- These can be shown by the selection interface
+		description = "xta_se_v066 with the cool tank I made",
+		url = "http://www.fileuniverse.com/exactlocationblahblahblah",
+		-- What kind of mod this is 
+		--  0 - Hidden (support mod that can't be selected, such as OTA_textures) 
+		--  1 - Normal, only one can be selected at a time 
+		--  2 - Addon, any number of these can be selected. Could be used 
+		--      for single units for example. 
+		--  others - perhaps mutators and addon races that can be 
+		--           enabled in addition to xta for example? 
+		modtype = "1",
+		-- Number of other archives this one depends on 
+		depend= {
+			"XTAsev066",
+                        "Spring Cursors",
+                        "Spring content v1",
+			-- Number of other archives this one replaces
+                                        --do not used filenames, use the internal name, or downloader programs will fail to download the dependencies automatically
+		},
+	}
+</pre>
+<p>If you are not depending on OTA files, you will have to supply your own cursors.
+</p><p>There are some extra bits in these examples, but I work on the "better safe than sorry" principle... which is to wait for someone who knows what they are doing to fix my articles. 
+</p><p>You will want to save this file as plain text in &lt;working directory&gt;/&lt;mod name&gt;/
+</p>
+<h3><span class="mw-headline" id="armorDefs.lua">armorDefs.lua</span></h3>
+<p>I'm not exactly sure how this works, but the file needs to exist, so either steal one from another mod and modify it... or just make a file that looks like this.
+</p>
+<pre>local armorDefs = {
+}
+</pre>
+<p>You will want to save this file as a lua file in &lt;working directory&gt;/&lt;mod name&gt;/gamedata
+</p>
+<h3><span class="mw-headline" id="sidedata.lua">sidedata.lua</span></h3>
+<p>Start by stealing the sidedata.lua file from your dependency mod if you have one, then edit it to include your units/side.
+</p><p>Basically this file is in the form:
+</p>
+<pre>local sideData = {
+	[1] = {
+		name      = 'Good Guys',
+		startunit = 'GG_comm',
+	},
+}
+</pre>
+<p>There are also additional "[X]" entries for each side/team/commander-choice available in the mod-selector you choose.
+</p><p>You will save this file as lua file in &lt;working directory&gt;/&lt;mod name&gt;/gamedata/
+</p>
+<hr/>
+<p>Coolfile:
+</p><p>The engine will stop spawning start units and resources anymore. 
+Please read this<a class="external autonumber" href="http://springrts.com/phpbb/viewtopic.php?f=14&amp;t=21883" rel="nofollow">[1]</a> for more information.
+</p><p>(annotated on 2010-10-23)
+</p><p>Moved the buildOptions definitions into the unitDef definitions, LuaParser 
+Please read the change log line 77 <a class="external autonumber" href="The_Talking_Changelog.html" rel="nofollow">[2]</a> for more information.
+</p><p>(annotated on 2010-10-24)
+</p>
+<h3><span class="mw-headline" id="moveDefs.lua">moveDefs.lua</span></h3>
+<p>This file determines the footprint of your units, the angle of slopes they can climb and in how deep water they can drive. It contains several entries, all in the following format:
+</p>
+<pre>local moveDefs = {
+	KBOT1 = { -- This is the name. Unit files refer to this name.
+		footprintx = 1, -- This is how big the X dimension is of the footprint in Spring units probably?
+		footprintz = 1, -- This is how big the Y dimension is of the footprint in Spring units probably?
+		maxwaterdepth = 15, -- This is how big the Y dimension is of the footprint in Spring units probably?
+		maxslope = 36, -- The maximum angle of slopes this unit can climb.
+		crushstrength = 5, -- This determines if the unit/unit class can crush certain features
+	},
+	-- etc..
+}
+</pre>
+<h3><span class="mw-headline" id="sounds.lua">sounds.lua</span></h3>
+<p>This file refers to all the sounds your units make, so Spring knows which sound file is linked to what action. It contains entries in the following format.
+</p>
+<pre>local Sounds = {
+   SoundItems = {
+      IncomingChat = {
+         file = "sounds/nexuiz/talk.wav",
+         priority = 15,
+         preload = true,
+      },
+      MultiSelect = {
+         file = "sounds/ota/button9.wav",
+         priority = 15,
+         preload = true,
+         rolloff = 0.1,
+      },
+      MapPoint = {
+         file = "sounds/bzflag/teamgrab.wav",
+         priority = 15,
+         preload = true,
+         rolloff = 0.1,
+      },
+      FailedCommand = {
+         file = "sounds/openQuarz/pkup.wav",
+         gain = 0.75,
+         priority = 15,
+         preload = true,
+         in3d = false,
+      },
+}
+</pre>
+<p>}
+</p>
+<h2><span class="mw-headline" id="Step_7:Adding_a_Build_Pic">Step 7:Adding a Build Pic</span></h2>
+<p>Add a 96x96 BMP to your &lt;working directory&gt;/&lt;mod name&gt;/unitpics/ folder named either "UnitName.bmp" or whatever you specified in the "BuildPic=" line of your fbi.
+</p>
+<h2><span class="mw-headline" id="Step_8:Adding_a_Side_Pic">Step 8:Adding a Side Pic</span></h2>
+<p>Add a 16x16 BMP to your &lt;working directory&gt;/&lt;mod name&gt;/sidepics/ folder named "teamname.bmp" or whatever you specified in the "name=" line of your SIDEDATA.TDF for each side/team you have added.
+</p>
+<h2><span class="mw-headline" id="Step_9:Scriptor">Step 9:Scriptor</span></h2>
+<h3><span class="mw-headline" id="Stealing_a_Script">Stealing a Script</span></h3>
+<p>Open someone else's script in scriptor that works the way you want your script to work, look at the top where it's talking about "piece names"... then change those piece names to be the piece names of your unit and do a find/replace to make all the places where those pieces show up to be your pieces too.  Compile it so its name is the same as the "UnitName=" value in your "UnitName.fbi".
+</p><p>XXreminder to someone to link to a proper scripting tutorial
+</p><p>Put the bos and cob files for your unit script in &lt;working directory&gt;/&lt;mod name&gt;/scripts
+</p>
+<h2><span class="mw-headline" id="Step_10:Compiling_Your_Mod">Step 10:Compiling Your Mod</span></h2>
+<p>You may want to check your mod directory and make sure it follows the structure defined <a class="mw-redirect" href="Mod_Development_Archives.html" title="Mod Development:Archives">here</a>.
+</p><p>navigate to your &lt;working directory&gt;/&lt;mod name&gt; and select everything and choose "add to archive &lt;mod name&gt;.7z".
+</p><p>make a copy of this file called &lt;mod name&gt;v0.7z in your working directory so you don't screw anything up later, then make a copy of it called &lt;mod name&gt;.sd7 in the mods directory of spring.
+</p><p>An alternative, added in more recent versions is the ".SDD" folder, to use this, copy the entire &lt;mod name&gt; folder in the mods directory of spring and rename it as "&lt;mod name&gt;.SDD".  The advantage to the ".SDD" method is that you can tweak settings and add files without recompressing your mod all the time.  When it comes time to distribute your mod use ".sd7".
+</p><p>EXAMPLES:
+If your mod is called JoesMod you will have a file called "JoesMod.sd7" or a folder called "JoesMod.SDD" in your spring mods directory.
+</p>
+<h2><span class="mw-headline" id="Step_11:Testing_Your_Mod">Step 11:Testing Your Mod</span></h2>
+<p>Open Up your lobby client, pick your mod from the drop-down list of the games in host battle or singleplayer mode if your lobby supports it(if it doesn't show up you screwed up your modinfo.txt), choose your tiny map from the map list and press start.  If it doesn't break and your unit shows up, you have created all the neccessary files... yay!
+</p><p>Gotchas:
+</p>
+<ul><li>If it doesn't work, check you didn't zip the folder itself, but the contents, ie if you open mymod.sd7 with 7zip, you should see folders such as "unittextures" rather than a folder "mymod" containing unittextures.</li></ul>
+<p>Old Category:Game development
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309204330
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 125/1000000
+Post‐expand include size: 404/2097152 bytes
+Template argument size: 56/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8820/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.123      1 Template:Deprecated
+100.00%    2.123      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1305-0!canonical and timestamp 20260309204330 and revision id 27915
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Simple_Game_Tutorial&amp;oldid=27915">https://springrts.com/mediawiki/index.php?title=Simple_Game_Tutorial&amp;oldid=27915</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Deprecated.html" title="Category:Deprecated">Deprecated</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Simple_Game_Tutorial.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Simple_Game_Tutorial&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Simple_Game_Tutorial&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Simple_Game_Tutorial&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Simple_Game_Tutorial.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Simple_Game_Tutorial&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Simple+Game+Tutorial" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Simple_Game_Tutorial" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Simple_Game_Tutorial" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Simple_Game_Tutorial&amp;oldid=27915" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Simple_Game_Tutorial&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 29 October 2013, at 19:14.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.020","walltime":"0.024","ppvisitednodes":{"value":125,"limit":1000000},"postexpandincludesize":{"value":404,"limit":2097152},"templateargumentsize":{"value":56,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":8820,"limit":5000000},"timingprofile":["100.00%    2.123      1 Template:Deprecated","100.00%    2.123      1 -total"]},"cachereport":{"timestamp":"20260309204330","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":109});});</script></body></html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua Fonts - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"f4e5c310811a10704aa10533","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_Fonts","wgTitle":"Lua Fonts","wgCurRevisionId":31220,"wgRevisionId":31220,"wgArticleId":2869,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_Fonts","wgRelevantArticleId":2869,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":
+"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_Fonts rootpage-Lua_Fonts skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua Fonts</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua Fonts
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Load.2FDelete"><span class="tocnumber">1</span> <span class="toctext">Load/Delete</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Userdata_Functions"><span class="tocnumber">2</span> <span class="toctext">Userdata Functions</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Userdata_Properties_.28ReadOnly.29"><span class="tocnumber">3</span> <span class="toctext">Userdata Properties (ReadOnly)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Inlined_ColorCodes"><span class="tocnumber">4</span> <span class="toctext">Inlined ColorCodes</span></a></li>
+</ul>
+</div>
+<h1><span id="Load/Delete"></span><span class="mw-headline" id="Load.2FDelete">Load/Delete</span></h1>
+<p><b>gl.LoadFont</b>
+</p>
+<pre> ( string fontfilename, number size = 14,
+   number outlineWidth = 2, number outlineWeight = 15 ) -&gt; userdata font
+</pre>
+<p><b>gl.DeleteFont</b>
+</p>
+<pre> ( userdata font ) -&gt; nil
+</pre>
+<h1><span class="mw-headline" id="Userdata_Functions">Userdata Functions</span></h1>
+<p><b>font:Print</b>
+</p>
+<pre> (string "text", number x, number y [, number size [, string <span class="note">"options"</span>] ] ) -&gt; nil
+</pre>
+<p><span class="note">
+</span></p>
+<pre> options are:
+   horizontal alignment:
+      'c' = center
+      'r' = right
+   vertical alignment:
+      'a' = ascender (is a font specific value)
+      't' = top (depends on text)
+      'v' = vertical center
+      'x' = baseline
+      'b' = bottom
+      'd' = descender
+   decorations:
+      'o' = black outline
+      'O' = white outline
+      's' = shadow
+   other:
+      'n' = don't round vertex coords to nearest integer (font may get blurry)
+</pre>
+<p>
+<img alt="fontlines.png" src="http://home.arcor.de/jkei/fontlines.png"/>
+</p><p><br/>
+<b>font:SetTextColor</b>
+</p>
+<pre> ( number r, number g, number b [, number a ] ) -&gt; nil
+ ( {r,g,b,a} ) -&gt; nil
+</pre>
+<p><b>font:SetOutlineColor</b>
+</p>
+<pre> ( number r, number g, number b [, number a ] ) -&gt; nil
+ ( {r,g,b,a} ) -&gt; nil
+</pre>
+<p><b>font:SetAutoOutlineColor</b>
+</p>
+<pre> ( boolean enable ) -&gt; nil
+</pre>
+<p><br/>
+<b>font:GetTextWidth</b>
+</p>
+<pre> (string "text") -&gt; number width  <span class="note">(in pixels, with a font size of 1.0)</span>
+</pre>
+<p><b>font:GetTextHeight</b>
+</p>
+<pre> ( string "text" ) -&gt; nil | number height, number descender, number numlines
+ <span class="note">(height &amp; descender in pixels, with a font size of 1.0)</span>
+ <span class="note">further descriptions here: <a href="GetTextHeight.html" title="GetTextHeight">GetTextHeight</a></span>
+</pre>
+<p><br/>
+<b>font:WrapText</b>
+</p>
+<pre> ( string "text", number max_width [, number max_height [, number size ] ])
+   -&gt; nil | string wrappedText, number lines
+</pre>
+<p><b>font:BindTexture</b>
+</p>
+<pre> (  ) -&gt; nil
+</pre>
+<p><br/>
+</p><p><span class="note"><b>If you have multiple font:Print calls, then you can bunch them between a font:Begin() and font:End() to speedup the rendering.</b></span><br/>
+<b>font:Begin</b>
+</p>
+<pre> (  ) -&gt; nil
+</pre>
+<p><b>font:End</b>
+</p>
+<pre> (  ) -&gt; nil
+</pre>
+<h1><span id="Userdata_Properties_(ReadOnly)"></span><span class="mw-headline" id="Userdata_Properties_.28ReadOnly.29">Userdata Properties (ReadOnly)</span></h1>
+<p>string <b>font.path</b><br/>
+string <b>font.family</b><br/>
+string <b>font.style</b><br/>
+number <b>font.size</b><br/>
+number <b>font.height</b> a.k.a. <b>font.lineheight</b><br/>
+number <b>font.descender</b><br/>
+number <b>font.outlinewidth</b><br/>
+number <b>font.outlineweight</b><br/>
+number <b>font.texturewidth</b><br/>
+number <b>font.textureheight</b>
+</p>
+<h1><span class="mw-headline" id="Inlined_ColorCodes">Inlined ColorCodes</span></h1>
+<p><span class="info"> Whole Spring FontRendering supports `inlined colorcodes`, there are 2 special chars to indicate those '<code>\255\$r\$g\$b</code>' &amp; '<code>\b</code>':</span>
+</p>
+<pre>local black = "\255\001\001\001"
+local blue = "\255\001\001\255"
+local reset = "\b " -- !space after "\b " is necessary if you put it at the end of the string you want to print, otherwise the parsing will break
+font:Print(blue .. "bluetext" .. black .. "blacktext" .. reset .. blue .. "bluetext again" .. reset, 0, 0)
+</pre>
+<p>From 98.0 onwards inlined colorcodes reuse the currently set alpha value.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223601
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.005 seconds
+Real time usage: 0.006 seconds
+Preprocessor visited node count: 27/1000000
+Post‐expand include size: 9/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 330/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2869-0!canonical and timestamp 20260309223601 and revision id 31220
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_Fonts&amp;oldid=31220">https://springrts.com/mediawiki/index.php?title=Lua_Fonts&amp;oldid=31220</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_Fonts.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_Fonts&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_Fonts&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_Fonts&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_Fonts.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_Fonts&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+Fonts" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_Fonts" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_Fonts" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_Fonts&amp;oldid=31220" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_Fonts&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 12 April 2020, at 02:00.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.005","walltime":"0.006","ppvisitednodes":{"value":27,"limit":1000000},"postexpandincludesize":{"value":9,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":330,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223601","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":104});});</script></body></html>

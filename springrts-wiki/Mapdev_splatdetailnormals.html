@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Mapdev:splatdetailnormals - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"1ea12e13b779fa89e7dce2f1","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Mapdev:splatdetailnormals","wgTitle":"Mapdev:splatdetailnormals","wgCurRevisionId":31088,"wgRevisionId":31088,"wgArticleId":3737,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Map Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Mapdev:splatdetailnormals","wgRelevantArticleId":3737,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Mapdev_splatdetailnormals rootpage-Mapdev_splatdetailnormals skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Mapdev:splatdetailnormals</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Detail_Normal_Texture_Splatting_.28DNTS.29"><span class="tocnumber">1</span> <span class="toctext">Detail Normal Texture Splatting (DNTS)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Distribution_Image"><span class="tocnumber">1.1</span> <span class="toctext">Distribution Image</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Detail_Normal_Textures"><span class="tocnumber">1.2</span> <span class="toctext">Detail Normal Textures</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Specification"><span class="tocnumber">2</span> <span class="toctext">Specification</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#mapinfo.lua"><span class="tocnumber">2.1</span> <span class="toctext">mapinfo.lua</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span id="Detail_Normal_Texture_Splatting_(DNTS)"></span><span class="mw-headline" id="Detail_Normal_Texture_Splatting_.28DNTS.29">Detail Normal Texture Splatting (DNTS)</span></h1>
+<p>This extends the existing functionality of SSMF splatted detail textures <a href="Mapdev_splatdetail.html" title="Mapdev:splatdetail">Mapdev:splatdetail</a>, with the option of specifying 4 different (normal map + greyscale diffuse map) detail textures.
+</p><p>Splatted detail textures only allowed grayscale textures to be overlayed on the map, while DNTS also allows normal maps as well.
+</p><p>Instead of creating a combined detail texture of 4 different single-channel diffuse detail textures stored in a single RGBA image, it uses four separate normal textures. 
+</p><p>The textures must contain the normal maps in the RGB channel (standard normal maps), with an optional diffuse luminance in the alpha channel. 
+</p><p>Beherith recommends using a high-pass filter on the luminance diffuse (alpha) channel, to avoid visible banding when zoomed out. When using PBR materials as DNTS sources, he also recommends mixing the diffuse and ambient occlusion parts of the textures into the diffuse alpha, as well as keeping the alpha channel centered around 50% greyscale, and with preferably a low spread to make sure that diffuse doesnt overpower the nice normals you have added.
+</p><p>The system uses the same splatDistributionTexture as regular SSMF.
+</p><p><br/>
+<b>You cannot specify these options in .smd files, only .lua!</b>
+</p><p>Example result:
+</p><p><a class="image" href="/wiki/File:Dnts_example.jpg"><img alt="Dnts example.jpg" decoding="async" height="458" src="images/960px-Dnts_example.jpg" srcset="/mediawiki/images/e/ee/Dnts_example.jpg 1.5x" width="960"/></a>
+</p>
+<h2><span class="mw-headline" id="Distribution_Image">Distribution Image</span></h2>
+<table class="wikitable" width="100%">
+<tbody><tr>
+<th width="15%">File Location
+</th>
+<td>./maps/
+</td></tr>
+<tr>
+<th>File Format
+</th>
+<td>PNG, TGA, DDS
+</td></tr>
+<tr>
+<th>Colour Depth
+</th>
+<td>8bpp
+</td></tr>
+<tr>
+<th>Channels
+</th>
+<td>RGBA
+</td></tr>
+<tr>
+<th>Resolution
+</th>
+<td>Any, recommended powers of two, will be stretched over the terrain.
+</td></tr></tbody></table>
+<p>The RGBA Channels are individual greyscale distribution maps which define which detail textures to splat onto the ground. The intensity of the splatted textures is multipled by the pixel values for the corresponding channels.
+</p>
+<center>
+<table class="wikitable">
+<caption>Example
+</caption>
+<tbody><tr>
+<td><a class="image" href="/wiki/File:Mapdev-ddist.gif"><img alt="Mapdev-ddist.gif" decoding="async" height="256" src="images/Mapdev-ddist.gif" width="256"/></a></td>
+<td><a class="image" href="/wiki/File:Mapdev-ddist.png"><img alt="Mapdev-ddist.png" decoding="async" height="256" src="images/Mapdev-ddist.png" width="256"/></a>
+</td></tr>
+<tr>
+<th>Detail Distribution maps</th>
+<th>Combined Result
+</th></tr></tbody></table></center>
+<h2><span class="mw-headline" id="Detail_Normal_Textures">Detail Normal Textures</span></h2>
+<table class="wikitable" width="100%">
+<tbody><tr>
+<th width="15%">File Location
+</th>
+<td>./maps/
+</td></tr>
+<tr>
+<th>File Format
+</th>
+<td>PNG, TGA, DDS
+</td></tr>
+<tr>
+<th>Colour Depth
+</th>
+<td>8bpp
+</td></tr>
+<tr>
+<th>Channels
+</th>
+<td>RGB for normal maps only, RGBA for normal map + diffuse map in alpha channel. The Y (green) channel of normal maps should be inverted.
+</td></tr>
+<tr>
+<th>Resolution
+</th>
+<td>Any, recommended powers of two, will be tiled over the terrain.
+</td></tr></tbody></table>
+<center>
+<table class="wikitable">
+<caption>Detail Normal Texture Example
+</caption>
+<tbody><tr>
+<td><a class="image" href="/wiki/File:Mapdev-dnts-normal.jpg"><img alt="Mapdev-dnts-normal.jpg" decoding="async" height="400" src="images/400px-Mapdev-dnts-normal.jpg" srcset="/mediawiki/images/thumb/e/ee/Mapdev-dnts-normal.jpg/600px-Mapdev-dnts-normal.jpg 1.5x, /mediawiki/images/thumb/e/ee/Mapdev-dnts-normal.jpg/800px-Mapdev-dnts-normal.jpg 2x" width="400"/></a></td>
+<td><a class="image" href="/wiki/File:Mapdev-dnts-diffuse-alpha.jpg"><img alt="Mapdev-dnts-diffuse-alpha.jpg" decoding="async" height="400" src="images/Mapdev-dnts-diffuse-alpha.jpg" width="400"/></a>
+</td></tr>
+<tr>
+<th>Normal texture in RGB channel</th>
+<th>greyscale diffuse in ALPHA channel
+</th></tr></tbody></table></center>
+<h1><span class="mw-headline" id="Specification">Specification</span></h1>
+<p>Specify splatDetailNormalTex1 .. splatDetailNormalTex4 in the MAP resources section. splatDetailTex will be unused if and of splatDetailNormalTex[1-4] are present. 
+</p><p>Specify splatDetailNormalDiffuseAlpha=1 to enable diffuse textures stored in alpha channels.
+</p><p>splatDetailNormalDiffuseAlpha=0 is the default value, and will ignore all and any alpha channels in the splatDetailNormalTex's, resulting in a purely normal mapped surface, with no extra diffuse texturing. 
+</p><p>texScales and texMults work identically to <a href="Mapdev_splatdetail.html" title="Mapdev:splatdetail">Mapdev:splatdetail</a>
+</p>
+<h2><span class="mw-headline" id="mapinfo.lua">mapinfo.lua</span></h2>
+<pre>local mapinfo = {
+   ...
+   resources = {
+      ...
+      splatDistrTex = "splatDistributionTex.tga",
+      splatDetailNormalDiffuseAlpha = 1,
+      splatDetailNormalTex = {
+         "sandpebbles_NORM.tga",
+         "crystal_245_dnts.dds",
+         "grass_91_dnts.dds",
+         "pebbles_250_dnts_u8888.dds",
+          alpha = true,
+      },
+      ...
+   },
+   ...
+   splats = {
+      texScales = {0.02, 0.02, 0.02, 0.02},
+      texMults = {1.0, 1.0, 1.0, 1.0},
+   },
+   ...
+}</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223415
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.032 seconds
+Real time usage: 0.042 seconds
+Preprocessor visited node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 488/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3737-0!canonical and timestamp 20260309223415 and revision id 31088
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Mapdev:splatdetailnormals&amp;oldid=31088">https://springrts.com/mediawiki/index.php?title=Mapdev:splatdetailnormals&amp;oldid=31088</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Map_Dev.html" title="Category:Map Dev">Map Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Mapdev_splatdetailnormals.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Mapdev:splatdetailnormals&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Mapdev:splatdetailnormals&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Mapdev:splatdetailnormals&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Mapdev_splatdetailnormals.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Mapdev:splatdetailnormals&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Mapdev%3Asplatdetailnormals" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Mapdev:splatdetailnormals" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Mapdev:splatdetailnormals" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Mapdev:splatdetailnormals&amp;oldid=31088" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Mapdev:splatdetailnormals&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 18 November 2019, at 12:57.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.032","walltime":"0.042","ppvisitednodes":{"value":24,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":488,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223415","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":212});});</script></body></html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Animation-CobAnimation - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"622ea02e94d14c8345f1d01c","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Animation-CobAnimation","wgTitle":"Animation-CobAnimation","wgCurRevisionId":26797,"wgRevisionId":26797,"wgArticleId":2517,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Animation"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Animation-CobAnimation","wgRelevantArticleId":2517,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Animation-CobAnimation rootpage-Animation-CobAnimation skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Animation-CobAnimation</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Pieces"><span class="tocnumber">1</span> <span class="toctext">Pieces</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Linear_Units"><span class="tocnumber">2</span> <span class="toctext">Linear Units</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Angular_Units"><span class="tocnumber">3</span> <span class="toctext">Angular Units</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Axes"><span class="tocnumber">4</span> <span class="toctext">Axes</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#move"><span class="tocnumber">5</span> <span class="toctext">move</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#turn"><span class="tocnumber">6</span> <span class="toctext">turn</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#spin"><span class="tocnumber">7</span> <span class="toctext">spin</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Pieces">Pieces</span></h2>
+<p>Each unit has a root piece and a tree of other pieces attached to the root piece. At the top of each file you'll need to put the following line:
+</p>
+<pre>piece [names of pieces of the model separated by commas];
+</pre>
+<p>As usual, capitalization does not matter; neither does the order of the pieces. You do not need to name every piece that the model actually has, although you should do so, and you cannot do anything to a piece that you have not named. If you try to do something to a piece that doesn't exist, Spring will throw an error. Generally it will not crash but you'll probably get lots of chat spam, so avoid this.
+</p><p>Every piece starts in the position as it appears in any modeling program, such as <a href="Upspring.html" title="Upspring">upspring</a>. This is defined to be zero position and zero rotation.
+</p><p>Pieces are really numbers, although Scriptor usually throws a fit if you try to use them as numbers (it will not accept a number in places where it expects a piece name, although for functions that involve a piecenum you can use the piece's number instead of the piece name if you so desire). The first piece you list is 0, and it counts from there.
+</p>
+<h2><span class="mw-headline" id="Linear_Units">Linear Units</span></h2>
+<p>Everything linear <i>really</i> happens in a unit I'll call Spring distance (sd). This is a tiny distance--there are 2<sup>16</sup> = 65536 sd in an elmo, which is the unit that is most commonly used. For example, weapon ranges are specified in elmos. Fortunately, Scriptor can automatically convert elmos to sd: just put the number of elmos you want in brackets ([]). Sometimes you'll see scripts that use 2.5 * 2<sup>16</sup> = 163840 instead. I recommend not doing this since it makes conversion more difficult.
+</p>
+<h2><span class="mw-headline" id="Angular_Units">Angular Units</span></h2>
+<p>Likewise, everything angular <i>really</i> happens in a unit I'll call Spring angle (sa). There are 2<sup>16</sup> sa in a full circle. Generally you'll be working in degrees. There are 182 and 2/45 sa in a degree. Again, Scriptor can automatically convert from degrees to sa; just put the number of degrees you want in angles (&lt;&gt;).
+</p>
+<h2><span class="mw-headline" id="Axes">Axes</span></h2>
+<p>All COB animation statements specify an axis. There are three axes, "x-axis", "y-axis", and "z-axis". Positive x is to the unit's right (the left if you are looking at the unit from the front). Positive y is to the unit's top. Positive z is to the unit's front.
+</p><p>The position and rotation of each piece defines the coordinate system for all of its child pieces. So, if you move or rotate a piece, all of its child pieces will move and rotate with it.
+</p><p>Rotations around x-axis and z-axis are left-handed and rotations around the y-axis is right-handed. To comprehend this more easily, positive angles are shown graphically in the following figure:
+</p>
+<center>
+<p><a class="image" href="/wiki/File:Cob_Rotation_System.jpg"><img alt="Cob Rotation System.jpg" decoding="async" height="768" src="images/Cob_Rotation_System.jpg" width="512"/></a>
+</p>
+</center>
+<h2><span class="mw-headline" id="move">move</span></h2>
+<pre>move [piece] to [axis] [distance] now;
+</pre>
+<p>This moves the piece immediately. The piece will be in its new position along the axis before the next statement is executed.
+</p>
+<pre>move [piece] to [axis] [distance] speed [speed];
+</pre>
+<p>This moves the piece at some speed until it reaches its destination, or the piece is told to move to a different distance along the same axis, whichever comes first. After this statement, the piece moves independent of the script; indeed, the script proceeds immediately to the next statement after it sets the piece moving.
+</p><p>Speed is always positive, even if you are moving the piece to a negative distance. It is measured in Spring distance/second (sd/s).
+</p>
+<pre>wait-for-move [piece] along [axis];
+</pre>
+<p>Makes the thread sleep until the piece stops moving along the axis.
+</p>
+<h2><span class="mw-headline" id="turn">turn</span></h2>
+<p>These are similar to movement in behavior, except they rotate the piece.
+</p>
+<pre>turn [piece] to [axis] [angle] now;
+</pre>
+<p>Turns the piece to the specified angle around the axis immediately. The piece will be in its new rotation around the axis before the next statement is executed. Pieces rotate around their <u>own</u> center, not their parent's (although if the parent rotates, they do as well). If the piece moves, the center moves with it, so a piece's movement occurs "before" its rotation in determining its final position.
+</p>
+<pre>turn [piece] to [axis] [angle] speed [angular speed];
+</pre>
+<p>This turns the piece at some angular speed until it reaches its destination, or the piece is told to turn to a different distance around the same axis, whichever comes first. Angular speed is always positive, even if the angle is negative. The speed is in Spring angles/second (sa/s).
+</p>
+<pre>wait-for-turn [piece] around [axis];
+</pre>
+<p>Makes the thread sleep until the piece stops turning around the axis.
+</p>
+<h2><span class="mw-headline" id="spin">spin</span></h2>
+<pre>spin [piece] around [axis] speed [angular speed];
+</pre>
+<p>This starts the piece spinning at a constant speed immediately. Again, the speed is in Spring angles/second (sa/s); however, it can be negative if you want it to spin in that direction.
+</p>
+<pre>spin [piece] around [axis] speed [angular speed] accelerate [angular acceleration];
+</pre>
+<p>The angular acceleration should always be positive, even if you are spinning the piece at a negative angular speed. It is measured in Spring angles per frame-second (sa/f*s); in other words, the speed of the piece will increase by that amount every <i>frame</i>, not every second. There are 30 frames per second.
+</p>
+<pre>stop-spin [piece] around [axis];
+</pre>
+<p>Stops the piece from spinning immediately, regardless of its orientation.
+</p>
+<pre>stop-spin [piece] around [axis] decelerate [angular deceleration];
+</pre>
+<p>Slows the piece's spinning down until it stops. As with angular acceleration, the angular deceleration should always be positive and is measured in Spring angles per frame-second.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223218
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.010 seconds
+Preprocessor visited node count: 22/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2517-0!canonical and timestamp 20260309223218 and revision id 26797
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Animation-CobAnimation&amp;oldid=26797">https://springrts.com/mediawiki/index.php?title=Animation-CobAnimation&amp;oldid=26797</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Animation.html" title="Category:Animation">Animation</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Animation-CobAnimation.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Animation-CobAnimation&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Animation-CobAnimation&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Animation-CobAnimation&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Animation-CobAnimation.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Animation-CobAnimation&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Animation-CobAnimation" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Animation-CobAnimation" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Animation-CobAnimation" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Animation-CobAnimation&amp;oldid=26797" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Animation-CobAnimation&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 21 March 2013, at 11:48.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.008","walltime":"0.010","ppvisitednodes":{"value":22,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223218","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":106});});</script></body></html>

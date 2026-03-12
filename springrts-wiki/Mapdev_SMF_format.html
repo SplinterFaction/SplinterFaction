@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Mapdev:SMF format - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"68c161fc4dfa57a22da5ebfc","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Mapdev:SMF_format","wgTitle":"Mapdev:SMF format","wgCurRevisionId":28765,"wgRevisionId":28765,"wgArticleId":3370,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Map Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Mapdev:SMF_format","wgRelevantArticleId":3370,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Mapdev_SMF_format rootpage-Mapdev_SMF_format skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Mapdev:SMF format</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#SMF.28Spring_Map_File.29_Reference"><span class="tocnumber">1</span> <span class="toctext">SMF(Spring Map File) Reference</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#File_location"><span class="tocnumber">1.1</span> <span class="toctext">File location</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Data_Map"><span class="tocnumber">1.2</span> <span class="toctext">Data Map</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Optional_Extra_Headers_.26_data"><span class="tocnumber">1.3</span> <span class="toctext">Optional Extra Headers &amp; data</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span id="SMF(Spring_Map_File)_Reference"></span><span class="mw-headline" id="SMF.28Spring_Map_File.29_Reference">SMF(Spring Map File) Reference</span></h1>
+<p>SMF is a binary format
+</p>
+<ul><li><a class="external text" href="https://github.com/spring/spring/blob/2e5bc43dc464ec27d6b880d105f0c618e07c4ff8/rts/Map/SMF/mapfile.h" rel="nofollow">mapfile.h</a></li>
+<li><a class="external text" href="https://github.com/spring/spring/blob/2e5bc43dc464ec27d6b880d105f0c618e07c4ff8/rts/Map/SMF/SmfMapFile.cpp" rel="nofollow">SmfMapFile.cpp</a></li></ul>
+<h2><span class="mw-headline" id="File_location">File location</span></h2>
+<p>maparchive.sd7/maps/mymapname.smf
+</p>
+<h2><span class="mw-headline" id="Data_Map">Data Map</span></h2>
+<ul><li>smu = spring map unit, the size you see when in the lobby. roughly between 2 and 64.</li></ul>
+<table class="wikitable" width="100%">
+<caption align="left">Header
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>16</td>
+<td><code>char[]</code></td>
+<td>Magic number; "spring map file\0"
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Version number; "1"
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>unsigned int</code></td>
+<td>ID, should be as unique as possible.
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Width; smu * 64
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Length; smu * 64
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Square size; 8
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Texels per square size; 8
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Tile size; 32
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>float</code></td>
+<td>Depth/min height; 512 = 1*smu
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>float</code></td>
+<td>Height/max height; 512 = 1*smu
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Byte offset to start of height map
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Byte offset to start of type map
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Byte offset to start of tile index
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Byte offset to start of mini map
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Byte offset to start of metal map
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Byte offset to start of features map
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>No of extra headers
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Extra Headers
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Size of the header
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Type of header
+</td></tr>
+<tr>
+<td>*</td>
+<td>*</td>
+<td>Data of header
+</td></tr></tbody></table>
+<ul><li class="mw-empty-elt"></li>
+<li class="mw-empty-elt"></li>
+<li class="mw-empty-elt"></li></ul>
+<table class="wikitable" width="100%">
+<caption align="left">+ Height Map
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>(width+1)*(length+1)</td>
+<td><code>unsigned short[]</code></td>
+<td>Data for height map.
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Type Map
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>(width/2)*(length/2)</td>
+<td><code>char[]</code></td>
+<td>Data for type map.
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Mini Map
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>699048</td>
+<td><code>char[]</code></td>
+<td>raw DXT1 compressed 1024x1024 image.
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Tile Index Header
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Number of tile files
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Total number of tiles in all files.
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ SMT File Infos
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Number of tiles in this file
+</td></tr>
+<tr>
+<td>size of filename</td>
+<td><code>char[]</code></td>
+<td>The filename of the smt.
+</td></tr></tbody></table>
+<ul><li class="mw-empty-elt"></li>
+<li class="mw-empty-elt"></li>
+<li class="mw-empty-elt"></li></ul>
+<table class="wikitable" width="100%">
+<caption align="left">+ Tile Index
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>(width / 4) * (length / 4)</td>
+<td><code>int[]</code></td>
+<td>Index numbers of tiles in SMT's
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Metal Map
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>(width / 2) * (length / 2)</td>
+<td><code>char[]</code></td>
+<td>Metal Density
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Features Header
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Number of features
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Number of feature types
+</td></tr>
+<tr>
+<td>*</td>
+<td><code>char[]</code></td>
+<td>List of feature names delimited by null
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Features
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Type of feature, corresponds with feature name list.
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>float</code></td>
+<td>X Position (along the width of the map)
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>float</code></td>
+<td>Y Position (Up into the sky)
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>float</code></td>
+<td>Z Position (along the length of the map)
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>float</code></td>
+<td>rotation, not sure of scale
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>float</code></td>
+<td>relative size (not implemented); 1
+</td></tr></tbody></table>
+<ul><li class="mw-empty-elt"></li>
+<li class="mw-empty-elt"></li>
+<li class="mw-empty-elt"></li></ul>
+<h2><span id="Optional_Extra_Headers_&amp;_data"></span><span class="mw-headline" id="Optional_Extra_Headers_.26_data">Optional Extra Headers &amp; data</span></h2>
+<table class="wikitable" width="100%">
+<caption align="left">+ Grass Extra header
+</caption>
+<tbody><tr>
+<th style="width: 20%">Bytes
+</th>
+<th style="width: 20%">Type</th>
+<th>Description
+</th></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Size of the header; 12
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Type of header; 1
+</td></tr>
+<tr>
+<td>4</td>
+<td><code>int</code></td>
+<td>Byte offset to beginning of grass map
+</td></tr></tbody></table>
+<table class="wikitable" width="100%">
+<caption align="left">+ Grass Data
+</caption>
+<tbody><tr>
+<td style="width: 20%">(width / 4) * (length / 4)
+</td>
+<td style="width: 20%"><code>unsigned char</code>
+</td>
+<td>Map defining the grass on the map. not sure what 256 available values mean.
+</td></tr></tbody></table>
+<!-- 
+NewPP limit report
+Cached time: 20260309223412
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.011 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 11/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3370-0!canonical and timestamp 20260309223412 and revision id 28765
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Mapdev:SMF_format&amp;oldid=28765">https://springrts.com/mediawiki/index.php?title=Mapdev:SMF_format&amp;oldid=28765</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Map_Dev.html" title="Category:Map Dev">Map Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Mapdev_SMF_format.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Mapdev:SMF_format&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Mapdev:SMF_format&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Mapdev:SMF_format&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Mapdev_SMF_format.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Mapdev:SMF_format&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Mapdev%3ASMF+format" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Mapdev:SMF_format" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Mapdev:SMF_format" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Mapdev:SMF_format&amp;oldid=28765" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Mapdev:SMF_format&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 3 October 2014, at 07:53.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.011","walltime":"0.012","ppvisitednodes":{"value":11,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223412","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":125});});</script></body></html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>SM3 Map Format - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"91883f3d5a8137f2ae63b6ea","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"SM3_Map_Format","wgTitle":"SM3 Map Format","wgCurRevisionId":27815,"wgRevisionId":27815,"wgArticleId":1702,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Deprecated"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"SM3_Map_Format","wgRelevantArticleId":1702,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles"
+:"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-SM3_Map_Format rootpage-SM3_Map_Format skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">SM3 Map Format</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><table style="border:1px solid #888; color:#FFFFFF; background:#BB2525;padding:.2em; padding:15px;text-align:justify;width:90%; margin:10px 30px; -webkit-border-radius: 10px; -moz-border-radius: 10px;border-radius: 10px;">
+<tbody><tr>
+<td style="width:50px;"><a class="image" href="/wiki/File:172px-Symbol_comment_vote.svg.png"><img alt="172px-Symbol comment vote.svg.png" decoding="async" height="51" src="images/50px-172px-Symbol_comment_vote.svg.png" srcset="/mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/75px-172px-Symbol_comment_vote.svg.png 1.5x, /mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/100px-172px-Symbol_comment_vote.svg.png 2x" width="50"/></a>
+</td>
+<td style="padding-left:.2em;"><b>Warning!</b> This page is <b>outdated</b>! The information displayed may no longer be valid, or has not been updated in a long time. Please refer to a <a href="Spring_CategoryStructure.html" title="Spring:CategoryStructure">different page</a> for current information.
+</td></tr></tbody></table>
+<p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; SM3 Map Format
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Map_specification"><span class="tocnumber">2</span> <span class="toctext">Map specification</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Heightmap_specification"><span class="tocnumber">3</span> <span class="toctext">Heightmap specification</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Texturing_method_specification_.28how_are_the_textures_applied.29"><span class="tocnumber">4</span> <span class="toctext">Texturing method specification (how are the textures applied)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Texture_stages.2Flayers"><span class="tocnumber">4.1</span> <span class="toctext">Texture stages/layers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Operation_Add"><span class="tocnumber">4.1.1</span> <span class="toctext">Operation Add</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Operation_Multiply"><span class="tocnumber">4.1.2</span> <span class="toctext">Operation Multiply</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Operation_Blend"><span class="tocnumber">4.1.3</span> <span class="toctext">Operation Blend</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#Textures"><span class="tocnumber">4.2</span> <span class="toctext">Textures</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Tiled_textures"><span class="tocnumber">4.2.1</span> <span class="toctext">Tiled textures</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Blendmap_specification"><span class="tocnumber">4.2.2</span> <span class="toctext">Blendmap specification</span></a>
+<ul>
+<li class="toclevel-4 tocsection-12"><a href="#Blendmaps_from_file"><span class="tocnumber">4.2.2.1</span> <span class="toctext">Blendmaps from file</span></a></li>
+<li class="toclevel-4 tocsection-13"><a href="#Generated_blendmaps"><span class="tocnumber">4.2.2.2</span> <span class="toctext">Generated blendmaps</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Infomaps"><span class="tocnumber">5</span> <span class="toctext">Infomaps</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Image_file_sizes"><span class="tocnumber">6</span> <span class="toctext">Image file sizes</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Feature_placement"><span class="tocnumber">7</span> <span class="toctext">Feature placement</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Minimap"><span class="tocnumber">8</span> <span class="toctext">Minimap</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#TODO"><span class="tocnumber">9</span> <span class="toctext">TODO</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Introduction">Introduction</span></h2>
+<p>As opposed to the original SMF renderer, the SM3 map renderer allows multiple texture layers rendered on the terrain. This allows for higher texture resolutions and improved lighting such as bumpmapping/specular mapping.
+</p><p>Hugh Perkins has been working on a <a href="Maps_Map_Designer.html" title="Maps:Map Designer">SM3 map editor</a>
+</p>
+<h2><span class="mw-headline" id="Map_specification">Map specification</span></h2>
+<p>Instead of a binary SMF file and a SMD file, all map information is now stored in a text based .SM3 file. This has the same basic layout as the original .SMD file, but it includes a [TERRAIN] section and an [INFOMAPS] section. It also has  an extra tag in LIGHT (GroundSpecularColor):
+</p>
+<pre>[MAP]
+{
+		// regular smd information, such as start positions,
+		// [WATER] and [ATMOSPHERE] sections...
+
+	[LIGHT]
+	{
+			// specular color, defaults to 0.1 0.1 0.1
+		GroundSpecularColor=0.3 0.3 0.3;
+
+			// other standard tags shared with SMF (such as GroundSunColor)...
+
+	}
+</pre>
+<pre>	[INFOMAPS]
+	{
+		metal=Maps/dry_data/metalmap.png;
+		type=Maps/dry_data/typemap.png;
+	}
+	[TERRAIN]
+	{
+		HeightScale=400.0;
+		HeightOffset=10.0;
+		Heightmap=Maps/dry_data/1026.png;
+		
+		NumTextureStages=2; // all texture stages are multiplied
+		SpecularExponent=16; // specular exponent AKA 
+			//shininess or polishedness.  defaults to 8
+	
+		[texstage0]
+	 	{
+				// the first texture stage operation is ignored
+			source=Snow;
+		}
+		[texstage1]
+		{
+				// use the incoming alpha to blend between 2 textures
+			operation=blend; 
+			source=CrackedDirt;
+			blender=RockBlender1026;
+		}
+			/* texture definitions */
+		[CrackedDirt]
+		{
+			File=Maps/dry_data/dirt2.jpg;
+			Bumpmap=Maps/dry_data/dirt2_bm.jpg;
+			TileSize=50;
+		}
+		[Snow]
+		{
+			File=Maps/dry_data/Snow_Sand.jpg;
+			TileSize=20;
+		}
+	
+			/* blender definition, all blenders have "Blendmap=1" */
+			// a rock blender loaded from file for a specific map
+		[RockBlender1026]
+		{
+			Blendmap=1;
+			File=Maps/dry_data/1026_bm_small.png;
+		}
+	}
+}
+</pre>
+<h2><span class="mw-headline" id="Heightmap_specification">Heightmap specification</span></h2>
+<p>The heightmap is specified with 3 tags located in the [TERRAIN] section:
+</p><p><b>Heightmap:</b> This should be either:
+</p>
+<ul><li>An 8 or 16 bit image file readable by DevIL</li>
+<li>A 8 or 16 bit RAW file, such as generated by Terragen</li></ul>
+<p><b>HeightScale and HeightOffset:</b> The actual height of a heightmap pixel is calculated scaled by HeightScale, after which HeightOffset is added to it (height = pixel * HeightScale + HeightOffset)
+</p>
+<h2><span id="Texturing_method_specification_(how_are_the_textures_applied)"></span><span class="mw-headline" id="Texturing_method_specification_.28how_are_the_textures_applied.29">Texturing method specification (how are the textures applied)</span></h2>
+<h3><span id="Texture_stages/layers"></span><span class="mw-headline" id="Texture_stages.2Flayers">Texture stages/layers</span></h3>
+<p>Texturing of SM3 terrains works by a series of texture layers that are applied on top of eachother. These layers are called "texture stages". The stages can be added, multiplied, or alpha blended with the previous stage. This is defined by the stage operation. 
+</p><p>The number of stages is given with the tag NumTextureStages like:
+</p>
+<pre>NumTextureStages=2;
+</pre>
+<p>Keep in mind that the stages are directly executed on your videocard. This means the more stages you make the slower the map will render. 
+</p><p>The first stage never has an operation:
+</p>
+<pre>	[texstage0]
+	{
+		source=Snow;
+	}
+</pre>
+<p>Following stages can have "operation=add", "operation=mul", "operation=blend"
+</p>
+<h4><span class="mw-headline" id="Operation_Add">Operation Add</span></h4>
+<p>The add operation needs a texture to add to the previous stage, which is specified with the "source=TextureName" tag. The texture specification is explained below.
+</p>
+<pre>	[texstage1]
+	{
+		operation=add;
+		source=CrackedDirt;
+	}
+</pre>
+<h4><span class="mw-headline" id="Operation_Multiply">Operation Multiply</span></h4>
+<p>Same as add, but with operation=mul
+</p>
+<pre>	[texstage1]
+	{
+		operation=mul;
+		source=CrackedDirt;
+	}
+</pre>
+<h4><span class="mw-headline" id="Operation_Blend">Operation Blend</span></h4>
+<p>The blend operation does alpha blending with an extra grayscale alpha texture. Specification of these alpha textures ("Blendmaps") is explained later in this doc. The blend operation needs a "blender=BlenderName" tag to work. I'm guessing most maps will only be using this operation. 
+</p>
+<pre>	[texstage1]
+	{
+		operation=blend; 
+		source=CrackedDirt;
+		blender=RockBlender1026;
+	}
+</pre>
+<p>The avaiable operations are limited to add/mul/blend for techical reasons:
+This way even the most complex maps can be executed with multipass operations on any card with at least 2 textures units. It would even work on a Riva TNT I think.
+</p><p>Obviously because the first stage doesn't have any previous stage, the operation of the first stage is ignored
+</p>
+<h3><span class="mw-headline" id="Textures">Textures</span></h3>
+<h4><span class="mw-headline" id="Tiled_textures">Tiled textures</span></h4>
+<p>The operations usually have "source=texturename" in them, which points to the name of a tiled texture.
+</p><p>Example:
+</p>
+<pre>	NumTextureStages=1;
+	[texstage0]
+	{
+		source=Snow;
+	}
+</pre>
+<pre>	[Snow]
+	{
+		File=Maps/dry_data/Snow_Sand.jpg;
+		TileSize=20;
+	}
+</pre>
+<p>Tilesize is how big a single tile is in the 3D spring world, when the texture is tiled across the map. Imagine a heightmap of 1025x1025 (In spring world space this is 1024*8= 8192x8192 units). 
+When you set tilesize=4096, you will see the complete texture 4 times on the map (2 by 2). Set it to 8192 and you'll see the map completely covered. 
+</p><p><br/>
+</p>
+<h4><span class="mw-headline" id="Blendmap_specification">Blendmap specification</span></h4>
+<p>Blendmaps can either be loaded from file or generated from the terrain. They are stretched across the full terrain, so in combination with the blend operation you can specify exactly where you want to see a specific texture on the terrain.
+</p>
+<h5><span class="mw-headline" id="Blendmaps_from_file">Blendmaps from file</span></h5>
+<p>Blendmaps can be loaded from any grayscale file that DevIL can load:
+</p>
+<pre>	[RockBlender]
+	{
+		Blendmap=1;
+		File=Maps/dry_data/1026_bm_small.png;
+	}
+</pre>
+<h5><span class="mw-headline" id="Generated_blendmaps">Generated blendmaps</span></h5>
+<p>Blendmaps can be generated from the heightmap. The final value is computed by
+</p>
+<pre>blendmap_value = SlopeTerm * HeightTerm * coverage * noise
+</pre>
+<p>The slope of the terrain is a value between 0 and 1, with 0 being flat and 1 being completely steep. Ofcourse with a heightmap the slope can only be near 1 and not exactly 1
+</p><p>The height of the terrain is between 0 and 1 (the minimum and maximum height value)
+If the height is between minHeight and maxHeight, HeightTerm will be 1. maxHeightFuzzy and minHeightFuzzy determine the "border" size between having a HeightTerm of 0 and a HeightTerm of 1. 
+</p><p><br/>
+GeneratorLOD indicates at which resolution the blendmap should be generated. The blendmap size will be (heightmapsize-1) / (2 ^ generatorLOD). For example with a heightmap width of 1025 and a generatorlod of 2, the blendmap size will be 1024/4=256.
+</p><p>(Images illustrating this will be added later)
+</p>
+<h2><span class="mw-headline" id="Infomaps">Infomaps</span></h2>
+<p>The infomaps section defines the metal map and typemap. Both should be 8 bit images in any format DevIL accepts.
+</p>
+<h2><span class="mw-headline" id="Image_file_sizes">Image file sizes</span></h2>
+<ul><li>The heightmap has to be square and its dimensions have to be a power-of-two + 1, like 257x257, 513x513, 1025x1025</li>
+<li>The blendmaps have to be square too, with power-of-two dimensions like: 256x256, 512x512, 1024x1024.  They should be smaller than the heightmap.</li>
+<li>The tiled textures should have power-of-two dimensions, but don't have to be square</li>
+<li>The minimap can be anything, but it will be resized to an image of 1024x1024. Specifying a 1024x1024 will allow faster loading because no resizing is needed.</li>
+<li>Typemap and metalmaps dimensions should be (heightmapsize - 1) / 2, so when the heightmap is 1025x1025, the typemap is 512x512.</li>
+<li>The heightmap can be any <a class="external text" href="http://openil.sourceforge.net/features.php" rel="nofollow">DevIL</a> supported format, or RAW such as exported by terragen. All the other maps/texture files can only be a DevIL format.</li></ul>
+<h2><span class="mw-headline" id="Feature_placement">Feature placement</span></h2>
+<p>The feature specification is done with a list of feature type names in the SM3 itself, and with a binary datafile that contains all the feature positions, orientations.
+Feature types are specified like this:
+</p>
+<pre>	[FeatureTypes]
+	{
+		NumTypes=4;
+		type0=TreeType0;     // a tree
+		type1=MyFeature; 
+		type2=MyOtherFeature;
+		type3=GeoVent;            // a geothermal	
+	}
+</pre>
+<p>The feature binary file should be made with an editor. I'm hoping Maelstrom will add feature placing to his startpoint editor, but until then there's only <a class="external free" href="http://user.supradigital.org/jcnossen/FeaturePlacer.zip" rel="nofollow">http://user.supradigital.org/jcnossen/FeaturePlacer.zip</a>
+</p><p><a class="image" href="/wiki/File:Featureplacer.png"><img alt="Featureplacer.png" decoding="async" height="331" src="images/Featureplacer.png" width="357"/></a>
+</p><p>The "Pos:" fields are ment to enter the feature X,Y,Z. You can use zero for Y because spring will automatically put the feature on the ground when it loads.
+Type is the index into the feature type list specified in the SM3 file.
+</p><p>The feature data file should be linked to the SM3 with:
+</p>
+<pre>[MAP]
+{
+		// other map tags ...
+	featuredata=FeatureDataFileName;
+}
+</pre>
+<h2><span class="mw-headline" id="Minimap">Minimap</span></h2>
+<p>The minimap is loaded from an image file that you have to set in the MAP section of the sm3 file.
+Example:
+</p>
+<pre>[MAP]
+{
+		// other map tags ...
+	minimap=maps/data/minimap.png;
+}
+</pre>
+<h2><span class="mw-headline" id="TODO">TODO</span></h2>
+<ul><li>fix bugs</li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20260309223957
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 69/1000000
+Post‐expand include size: 582/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.203      1 Template:Deprecated
+100.00%    2.203      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1702-0!canonical and timestamp 20260309223957 and revision id 27815
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=SM3_Map_Format&amp;oldid=27815">https://springrts.com/mediawiki/index.php?title=SM3_Map_Format&amp;oldid=27815</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Deprecated.html" title="Category:Deprecated">Deprecated</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="SM3_Map_Format.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:SM3_Map_Format&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=SM3_Map_Format&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=SM3_Map_Format&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="SM3_Map_Format.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:SM3_Map_Format&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=SM3+Map+Format" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/SM3_Map_Format" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/SM3_Map_Format" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=SM3_Map_Format&amp;oldid=27815" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=SM3_Map_Format&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 27 October 2013, at 20:28.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.014","walltime":"0.018","ppvisitednodes":{"value":69,"limit":1000000},"postexpandincludesize":{"value":582,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    2.203      1 Template:Deprecated","100.00%    2.203      1 -total"]},"cachereport":{"timestamp":"20260309223957","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":96});});</script></body></html>

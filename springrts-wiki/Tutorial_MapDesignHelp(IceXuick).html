@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Tutorial:MapDesignHelp(IceXuick) - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"1604db43c8910621c3a09025","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Tutorial:MapDesignHelp(IceXuick)","wgTitle":"Tutorial:MapDesignHelp(IceXuick)","wgCurRevisionId":28899,"wgRevisionId":28899,"wgArticleId":1440,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Tutorial","Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Tutorial:MapDesignHelp(IceXuick)","wgRelevantArticleId":1440,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]
+};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Tutorial_MapDesignHelp_IceXuick rootpage-Tutorial_MapDesignHelp_IceXuick skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Tutorial:MapDesignHelp(IceXuick)</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; Tutorial:MapDesignHelp(IceXuick)
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#How_to_build_a_map"><span class="tocnumber">1</span> <span class="toctext">How to build a map</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#What_do_you_need:"><span class="tocnumber">2</span> <span class="toctext">What do you need:</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#What_are_you_going_to_make:"><span class="tocnumber">3</span> <span class="toctext">What are you going to make:</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#The_Heightmap:"><span class="tocnumber">4</span> <span class="toctext">The Heightmap:</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#The_Metalmap:"><span class="tocnumber">5</span> <span class="toctext">The Metalmap:</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#The_Featuremap:"><span class="tocnumber">6</span> <span class="toctext">The Featuremap:</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#The_Typemap:"><span class="tocnumber">7</span> <span class="toctext">The Typemap:</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Test_Texture:"><span class="tocnumber">8</span> <span class="toctext">Test Texture:</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Compiling_your_map:"><span class="tocnumber">9</span> <span class="toctext">Compiling your map:</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#The_Testing_Phase"><span class="tocnumber">10</span> <span class="toctext">The Testing Phase</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#The_Texture:"><span class="tocnumber">11</span> <span class="toctext">The Texture:</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#you_can_now_play_it.21.21"><span class="tocnumber">12</span> <span class="toctext">you can now play it!!</span></a></li>
+</ul>
+</div>
+<h3><span class="mw-headline" id="How_to_build_a_map">How to build a map</span></h3>
+<p>Hello, welcome to the IceXuick map Design help. On this wiki page i will try to make a complete and organized 'topic' how to build a map, from A-Z. Tips, add-ons or other suggestions are always welcome. OKAY.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="What_do_you_need:">What do you need:</span></h3>
+<p>First of all i'll sum up the thing you need:
+</p><p>- Photoshop / Gimp (or other image editor)<br/>
+- Bryce / L3dT (optional, if you don't want a great looking texture)<br/>
+- <a href="MapConv.html" title="MapConv">MapConv</a> (map converter program)<br/>
+- Patience &amp; passion<br/>
+</p><p>If you have most of these things, you can start thinking about the map you want to make. It is very smart to make sketches of your map, before creating it. Try to design the map, so that in your 'mind' it could play well. Think of possible problems as porcing probabilities, turtling, strategic important places, but also metal layouts, geo-vent locations, and maybe even feature-placement.
+</p>
+<h3><span class="mw-headline" id="What_are_you_going_to_make:">What are you going to make:</span></h3>
+<p>Well, how much different things you might have read, these are the things i use, and work very well, so i suggest you use this, and nothing else :). To know how big your map will be, the factor is 512 times the TA:S size: here are some (total)map sizes and corresponding dimensions:
+</p><p><b>TA Spring ---- Actual Pixels</b><br/>
+32 x 24 ------ 16384 x 12288<br/>
+16 x 12 ------ 8192  x 6144<br/>
+8 x 4 -------- 4096  x 2048<br/>
+<br/>
+</p><p>This is the best order in which you should work:<br/>
+<br/>
+</p><p>- <b>Heightmap</b> ... bmp 24-bit - 1/8 +1 of Total map size<br/>
+- <b>Metalmap</b> ..... bmp 24-bit - 1/8 +1 of Total map size<br/>
+- <b>Featuremap</b> .. bmp 24-bit - 1/8 of Total map size<br/>
+- <b>Typemap</b> ...... bmp 24-bit - 1/16 of Total map size<br/>
+- <b>TestTexture</b> .. bmp 24-bit - Total map size<br/>
+- <b>Compiling</b> ..... your maps with Mothers MapConv<br/>
+- <b>SMD file</b> ........ script of all kinds of things, including atmosfear, colors of sky and water, fog settings, but more important, metaloutput, winds, tidal, start locations and terraintypes.<br/>
+- <b>Test Phase</b> ... debug your map a much as possible<br/>
+- <b>Texturemap</b> .. bmp 24-bit - Total map size<br/>
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="The_Heightmap:">The Heightmap:</span></h3>
+<p>Here are in following order the things that are to be done:<br/>
+</p><p>- roughly outlining large mountains/valleys<br/>
+- go deeper into detail by lowering size of drawing brush<br/>
+- finalize details with 15px brush (in Photoshop)<br/>
+- make slopes/passages on your map with smudge/blur tools<br/>
+- Texturemap - bmp 24-bit - Total map size<br/>
+<br/>
+</p><p>The heightmap is one the the most important things you make for a map, and therefor i always start with it. After you have drawn your concept of your map (sketches) you may want to digitize them (if you don't already have that) and you should think which mapsize would be best. If you want your map to be a 8x8 map you should (first) also make the heightmap this size. By doing so, you can use Bryce or L3dT to render your texture at the highest possible quality.<br/>
+<br/>
+</p><p>So you now are going to start working in Photoshop (or other image program). Try to remake your sketch by drawing different shades of grey. White is the highest (255) and black (0) is the lowest. You can start drawing roughly, to outline every hill or valley. After that, try and go deeper into detail, and finally use  a brush size of 15px in Photoshop for the final details.<br/>
+<br/>
+</p><p>To make your map work for all the units, it should have passable slopes and passages: use a 'Smudge'-tool (optionally also Blur-tool). A lot of programs have this, so you should be able to figure it out. For every slope or passage that needs to be passable, the gradient from the lowest to the brightest color of that slope should be as smooth as possible. You need to get the feel of the smudge-tool in Photoshop, but after a while you'll get the hang of it. Also try to make slopes that have a big difference in highest and lowest point, long and smooth.<br/>
+<br/>
+</p><p>When you think everything is smooth and detailed, save that image as FullHeight.bmp, at the same size as the Total Map. After that, scale down this file to 1/8th of the size of the Total map, +1 pixel (x and y), and save this one as Height.bmp<br/>
+<br/>
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="The_Metalmap:">The Metalmap:</span></h3>
+<p><br/>
+</p><p>Okay, for playtesting value, you can now make your metal map. This is at first quite simple, and easily done, but the placement and balance is very hard. You can only try and think of good locations, and the output should be 15 metal per player (non-moho), if they have their part of the map (on a four player map, this would be 1/4th of the map)
+</p><p>In Photoshop, make another layer onto your heightmap, and put metal places around the map. Use a 6 or 8px <b>PENCIL</b> for the metal patches, and paint with red 255 (make sure there is no antialiasing, so that every pixel is RED 255.
+</p><p>When done, you can save this file as Metal.bmp (1/8th of Total map size +1).<br/>
+<br/>
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="The_Featuremap:">The Featuremap:</span></h3>
+<p><br/>
+</p><p>In the featuremap you can place Geo-vents, Trees, grass, and extra features like rocks,  palms, energy spires. You need to have these 'extra' features, later to be compiled within the map. Geo's, tree's and grass will work automatically. For the extra features, you need to get the whole pack, which consists of a couple of maps with files for the model, the texture and the script. Check the "maps" forum for features that were created.<br/>
+<br/>
+</p><p><b>Geo's</b> are represented by <b>GREEN</b> (255), single pixels. Every green (255), pixel will (most likely) be compiled as a geo-vent.<br/>
+<br/>
+The shades 200-215 of GREEN are different <b>Tree-types</b>. Remember to use 1 single pixel for tree's as well. 200-206 seem to be coniferous tree, 207-215 seem to be decidious.<br/>
+<br/>
+<b>BLUE</b> represents the ammount of <b>Grass</b> to be placed, where black means none, and BLUE (255) means full spreading of grass)<br/>
+<br/>
+Than Last but not least, <b>RED</b>, for the <b>Features</b>. In the FS.txt file (that comes with Mothers MapConv, you can list all your features, that you want to use. The first feature that is listed in this file, will be represented as RED 255. The second feature will be RED 254, the third RED 253, and so on. Also features will need only one pixel.<br/>
+<br/>
+Try to make sure that no one of those pixel are next to each other within 4-5 pixels. This may crash during compiling, or gives strange results in-game.<br/>
+<br/>
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="The_Typemap:">The Typemap:</span></h3>
+<p><br/>
+</p><p>Okay, the Typemap, also known as the TerrainType map, let'a you set the <b>terrain name</b>, the unit categories <b>speed multipliers</b>, and also the <b>hardness multiplier</b>. This map works again with RED only. Every Shade of RED can be set in the SMD file, on which i'll return later on. The Typemap that worked for me is <b>NOT</b> the same as the height- and metalmap, but is <b>1/16th</b> of the Total Map size.<br/>
+<br/>
+So an 8x8 map is Total 4096 x 4096 pixels. If we then do the math: 4096 /16 = 256. (otherwise there will be a default terraintype (that you did not set) between different terraintypes, and this can be very annoying)<br/>
+<br/>
+</p><p>Draw your 'terrain' onto your heightmap (make sure you again use the <b>PENCIL</b> mode, without antialiasing around your pixels), and save it as a BMP in 1/16th of the Total Map size (Typemap.bmp).<br/>
+<br/>
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Test_Texture:">Test Texture:</span></h3>
+<p><br/>
+</p><p>You need to have a 'test'-texture in order to compile, so you can simply make a big grey image, that has the <b>right dimensions</b> (for 16x16 it will be 8192x8192). Save this as Texture.bmp<br/>
+<br/>
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Compiling_your_map:">Compiling your map:</span></h3>
+<p><br/>
+</p><p>Before rendering your final, huge, super shweet texture, you want to know if your map plays okay, and that's why we first going to compile the map:<br/>
+<br/>
+- how is the heightmap, <b>check it for all units</b> if everything works<br/>
+- is the metal placing and spacing okay? are there spots on slopes or unbuildable terrain, or unreachable.<br/>
+- are the geo's working, and also well placed (no clusters of geo's?)<br/>
+- do units move quite right, or do they get stuck all the time<br/>
+- how is the water level (if there is any)<br/>
+- are the starting locations allright?<br/>
+- maybe you already want to check the other features, as grass, trees or extra's?<br/>
+<br/>
+</p><p>Therefor, we are going to compile this thing first, to check all these things in-game. This will save you numerous re-renderings. And changes in the heightmap after the render, is <b>NOT</b> recommended. Esspecially for the people that play in <b>TA-cam mode</b>, because they have to be able to tell from above what the terrain is like.<br/>
+<br/>
+</p><p>Okay, if you did all of the above, and did it perfect, than this will be your first and second last compile... but trust me, you will compile a <b>couple of times</b> more, if you want the map to play well!<br/>
+<br/>
+</p><p>Although there is a mapcompiler in the works as i type this, for now we need to do it the old fashioned way, by DOS.<br/>
+<br/>
+</p><p>Unpack the files of <a href="MapConv.html" title="MapConv">MapConv</a> into your directory with all your previously saved files. <b>Make sure</b> that all the (sub-)directories to this location <b>DON'T have SPACES</b> in them! After this being said, you will need to go to DOS mode.<br/>
+<br/>
+In Windows, go to "start", and then "run", and type 'cmd' (without the quotes). This will bring up the commandline prompt. Navigate to your directory in which all bmp's and Mothers Mapconv are located. I ain't gonna explain how you navigate is DOS, if you got this far, you probably know your way around with computers.<br/>
+<br/>
+</p><p>Once in the right directory/folder, type 'MapConv --help' for a explaination of all parameters. This is not nescesary if you use it as following:<br/>
+<br/>
+</p><p><b>MapConv -f Features.bmp -i -l -c 0.5 -x 300 -n -150 -o YourMapName.smf -y Typemap.bmp -m Metal.bmp -a Height.bmp -t Texture.bmp</b><br/>
+<br/>
+</p><p>This line will compile your map will the above created files, and compresses it only half (normal compression is 0.8), what will leave a bit more of your original texture in tact, however your filesize will be higher.<br/>
+<br/>
+</p>
+<ul><li>The -i -l commands are nescesary.<br/></li>
+<li>The 0.5 compression can be altered to 0.8 or for high quality to 0.2 or 0.3<br/></li>
+<li>the -x is the maximum height and -n the, yes, minimum<br/></li></ul>
+<p><br/>
+</p><p>To get the water level right you can <b>calculate the best values</b> for the max. and min. height. Check your height.bmp and look which grey value you like to be the surface of the water (darker is submerged, higher is land). If this is grey 80, than you know that 80/(255/100) = 31.4% should be submerged. Depending on what total height you want to use, be sure that the zero-0-point (which is the water level) is at 31.4%. So if you want around 600 height difference in total, then you should use -x 412 -n -188 (you may do the math yourself). This should get near the water altitude that you want. Otherwise recompile and test again!<br/>
+<br/>
+</p><p>If all went well, you should now have <b>4 new files</b> in that same directory.<br/>
+<br/>
+</p>
+<ul><li><b>mini.bmp</b> - absolete, you don't need this.<br/></li>
+<li><b>mini.dds</b> - needed for minimap 1024x1024 (texture in DirectX format DTX1)<br/></li>
+<li><b>YourMapName.smf</b> - Feature file<br/></li>
+<li><b>YourMapName.smt</b> - Texture file<br/></li></ul>
+<p>Now you have the basic files that TA:Spring can read, BUT you need to '<b>sd7'</b> them. SD7-ing kind of 'zips' these files into 'one map-zip-file-archive'. How you do this, is quite important.<br/>
+<br/>
+First make a <b>new</b> sub-directory, i always name it after the version, so 'v01' wil be right. In this directory, you need to make <b>another sub-directory</b> called 'maps'. In THIS directory, you need to place your .dds, .smf and .smt files. If you have downloaded extra features (with directories included such as 'features', 'objects3d' and 'unittextures') you need to copy them to the 'v01' directory as well, so it's <b>next</b> to your 'maps' subdirectory, not in the 'maps' dir. Also do <b>NOT forget</b> to copy your <b>fs.txt</b> file from your 'edit' directory, into the 'v01' directory.<br/>
+<br/>
+</p><p><br/>
+<b>Create or Edit an SMD file:</b><br/>
+<br/>
+</p><p>Now you have to create (or copy paste) a .smd file, that will be put next to the other files in the 'maps' sub-directory. I will post the most important stuff needed. You may also use the <b>SMD Creator</b>, which is also available for download somewhere, and quite <b>handy for sun direction and colors</b>, but 'sometimes' a bit buggy when opening and re-saving a file <b>(crashes)</b>. The most important stuff,<b>--</b> means that i've deleted something, and the <b>//</b> + remarks are to be removed:<br/>
+<br/>
+</p><p>[MAP]<br/>
+{<br/>
+Description=Describe your map shortly, it can be seen in the lobby;<br/>
+TidalStrength=10; //Energy that Tidal generators will give. (10-30)<br/>
+Gravity=120; //variable, 120-150 is kinda standard, test on map<br/>
+MaxMetal=1.2; //metal output rate. &lt;1 is more OTA, &gt;1 is more XTA<br/>
+ExtractorRadius=100; // radius of mexxes, 40-50 tiny, <b>100 desirable</b><br/>
+MapHardness=100; // Global hardness of terrain 100 will deform from shots<br/>
+<br/>
+[ATMOSPHERE]<br/>
+{<br/>
+--<br/>
+MinWind=1; // minimum wind<br/>
+MaxWind=25; // max wind, know that a <b>average of 10 is almost equal to solar</b><br/>
+}<br/>
+<br/>
+--<br/>
+<br/>
+[TERRAINTYPE50]<br/>
+{<br/>
+name=SoftTerrain; // name that will be shown in-game on mouse-hover<br/>
+hardness=2; // multiplier of Global MapHardness<br/>
+tankmovespeed=0.9; // The speed multiplier of the different units<br/>
+kbotmovespeed=1; <br/>
+hovermovespeed=1; <br/>
+shipmovespeed=0; // <b>0 means impassable</b><br/>
+}<br/>
+<br/>
+[TEAM0]<br/>
+{<br/>
+StartPosX=250; // start x-coord. of player 1<br/>
+StartPosZ=250; // start y-coord. of player 1<br/>
+}<br/>
+[TEAM1] // <b>TEAM0 is player 1 and TEAM1 is player 2</b><br/>
+{<br/>
+StartPosX=4950;<br/>
+StartPosZ=4950;<br/>
+}<br/>
+<br/>
+etc..<br/>
+<br/>
+</p><p>After you are satisfied with all the settings, you can then save this file as 'YourMapName.smd'. PLace it <b>next</b> to the other YourMapName.* files, in the 'maps' subdirectory, so that there are now <b>4 files</b> there.<br/>
+<br/>
+</p><p>Assuming you have downloaded a <b>7z zip program</b> (which you can (re)name to .sd7) you then go into your 'v01' directory, and zip all those directories, including the fs.txt file if you use extra features. Three important things:<br/>
+<br/>
+</p>
+<ul><li>name your map 'YourMapName.sd7' and <b>NOT else</b> (use <b>exact</b> same name as with compile)<br/></li>
+<li>Compression can be set to <b>ultra</b><br/></li>
+<li>Dictionary Size = 32 mb<br/></li>
+<li>Word size = 64 mb<br/></li>
+<li>do <b>NOT</b> make it an <b>SOLID</b> archive<br/></li>
+<li>Multi-threading, if you like<br/></li></ul>
+<p><br/>
+</p><p>When this is done, copy 'YourMapName.sd7' into the maps folder of TA Spring, and off you go! <b>You can now start your game from within TA:Spring!!</b><br/>
+<br/>
+</p>
+<h3><span class="mw-headline" id="The_Testing_Phase">The Testing Phase</span></h3>
+<p><br/>
+</p><p>Start up your map. If you did everything i told you to, <b>it should work</b>! The things i always do is build the following units to test the 'pathfinding' and movement areas:<br/>
+<br/>
+</p>
+<ul><li><b>Peewee's</b> - k-bot footprint - same movement for all k-bots<br/></li>
+<li><b>Flashes</b> - Tank footpring<br/></li>
+<li><b>Hover Tank</b> - Hover footpring<br/></li>
+<li>Build <b>all metal spots</b> with mexxes to check if their location is buildable<br/></li>
+<li>If watermap, build boats and subs<br/></li>
+<li>Optionally build exp. bots like Krogoth &amp; Orcone<br/></li></ul>
+<p><br/>
+</p><p>When you've build these units, select one, and <b>press F2</b>. You can now see where that unit can go (GREEN), where it will move slow (or fast downhill)(ORANGE), and where it <b>CAN'T move</b>(RED). This last one is particulary important. Test all units this way, and check the whole map, if some type or more types of units can't go somewhere. If this is so, you need to <b>smoothen out that slope</b> in your heightmap (and make it probably longer as well, or change the <b>heightdifference</b>). It can also be that units <b>CAN</b> pass certain 'ridges' that it weren't supposed to do. You can always do 2 things. <b>OR</b> you change the <b>heightdifference</b> (bigger is higher ridges), this is often the easiest way, <b>OR</b> you <b>change your heightmap</b>, and make it right, what very often is the way to do it best.<br/>
+<br/>
+</p><p>Make sure you <b>check</b> these things as well:<br/>
+<br/>
+</p>
+<ul><li>is the <b>water level</b> right?<br/></li>
+<li>How does the water look, do you need to change the colors?<br/></li>
+<li>How is the <b>wind</b>, do you like it, is it too much or too little<br/></li>
+<li>How is the <b>sun</b> working out (more on this after Final Texture)<br/></li>
+<li>Can <b>hovercrafts</b> go onto the water easily</li>
+<li>Do all the <b>boats</b> work fine (maybe water level too deep)<br/></li>
+<li>How does your map look in FPS or sort of view?<br/></li>
+<li>are the <b>Geo's</b> working?<br/></li>
+<li>Do all <b>features</b> work?<br/></li>
+<li>Is the <b>metal output</b> okay, too much, too little?<br/></li></ul>
+<p><br/>
+</p><p>You see, there is a <b>LOT</b> to test and check, So do play and test and play and test alot! <b>If</b> one or more of these things aren't working allright, you need to change it in the SMD or in your bmp's and recompile. If you are playing against AAI as a testing method, be <b>SURE</b> that if you recompile a <b>changed height, metal or feature map</b>, you need to <b>delete all cached and cfg files</b> in the AAI folders. Otherwise the AAI won't see the difference.<br/>
+<br/>
+</p><p>After multiple testrounds, you should have a good working map. If you like to 'organic-ize' your map, you can/must do it now. If you make it too organic, the pathfinding and passable slopes could be distorted, and you don't want that! So you can heighten or lower certain parts, or even throw in a noize overlay, but be <b>SURE</b> that you check if the map still plays okay!<br/>
+<br/>
+</p>
+<h3><span class="mw-headline" id="The_Texture:">The Texture:</span></h3>
+<p><br/>
+</p><p>Remember the heightmap "fullHeight.bmp" we made bigger than we eventually will need? Well now you will see. Personally i use Bryce for rendering maps. I makes them nice and gives a perfect OTA feel to them. If you have Bryce, you must do the following steps:<br/>
+<br/>
+</p><p>- create a terrain<br/>
+- edit the terrain, go to the picture tab, and load "FullHeight.bmp"<br/>
+- optionally add some height- or slopenoise, but do not overdo this<br/>
+- set the material, choose one, alter it a bit, so you like it!<br/>
+- set the atmosfear, light angle, and play with the icons and colors<br/>
+- last but not least, make the camera settings right!<br/>
+<br/>
+</p><p>To do this you need to enter camera mode (you'll a camera icon). Then you must click the grey triangle next to the round sphere thing. There you can click on "edit current camera". In this menu, you must set the following where <b>A</b> an <b>B</b> are variables:<br/>
+<br/>
+</p><p>- - - - - <b>x</b> --- <b>y</b> --- <b>z</b><br/>
+origin -- 0 --- <b>A</b> --- 0<br/>
+pos - -- 0 --- <b>A</b> --- 0<br/>
+rotate - 90 -- 0 --- 0<br/>
+</p><p>FOV: 1 degree
+Scale: <b>B</b>
+</p><p>Only the first time, you need to tweak this, then you can save it as an template. The scale <b>B</b> should at least be 100% (but bigger ain't a problem).<br/>
+<br/>
+After that, you need to set the 'altitude' of the camera with <b>A</b>. You need to tweak this, so that you terrain completely fills the map. It will be a <b>large number</b>, my template uses 25600. If you have a square map, set your document settings to square (800x800 for example). If it's not, make that change, just make sure the map fits the scene/screen.<br/>
+<br/>
+When you are sure your map 'fits' you can start your render. You must "Render to Disk" and you should also set the antialiasing to ultrafine for the best results (you can do this also in "document setup").<br/>
+<br/>
+If you are not sure the map fits 100% (in any case, don't make it TOO big, because you will <b>loose map</b> that way), than you should consider rendering a bit larger, let's say 3-5% bigger (for a render of 8192, render to 8500) and you can then later cut of the edges and change it to the desired size of your image in Photoshop. (Although this is <b>NOT recommended</b>)<br/>
+<br/>
+</p><p><b>Voila</b>, after a couple of hours (depending on your system en scene settings) you'll probably have a nice render. (on which you can work later, to add more details...)<br/>
+<br/>
+</p><p>Now you can open this file again in Photoshop, and start working on the details. Most important of all, is that you add the metalspots. The best way to do this, is to open your Metal.bmp, scale it to you Total Map size (8192x8192 for example) and put this image in a layer on top of your final texture layer, and set the opacity to 30-50%. Now you can see where the metal is supposed to be, and you can start drawing these in the map. (You can also download the original TA Metal patches somewhere, and add these)
+</p><p>After you have done all this, and are <b>satisfied</b> with the result, save your texture as Texture.bmp. You are now ready to compile it. You should use the settings that you now know (min. &amp; max. height and compression setting). After Compiling, copy the files to your 'maps' directory, SD7 them, and finally place the final 'YourMapName.sd7' in your TA:Spring 'maps' folder,<br/>
+<br/>
+</p>
+<h3><span id="you_can_now_play_it!!"></span><span class="mw-headline" id="you_can_now_play_it.21.21">you can now play it!!</span></h3>
+<p><br/>
+</p><p>If you also want to play it against other people, you should upload this sd7 file.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223511
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.013 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 42/1000000
+Post‐expand include size: 32/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1440-0!canonical and timestamp 20260309223511 and revision id 28899
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Tutorial:MapDesignHelp(IceXuick)&amp;oldid=28899">https://springrts.com/mediawiki/index.php?title=Tutorial:MapDesignHelp(IceXuick)&amp;oldid=28899</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a class="new" href="/mediawiki/index.php?title=Category:Tutorial&amp;action=edit&amp;redlink=1" title="Category:Tutorial (page does not exist)">Tutorial</a></li><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Tutorial_MapDesignHelp(IceXuick).html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Tutorial:MapDesignHelp(IceXuick)&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Tutorial:MapDesignHelp(IceXuick)&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Tutorial:MapDesignHelp(IceXuick)&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Tutorial_MapDesignHelp(IceXuick).html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Tutorial:MapDesignHelp(IceXuick)&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Tutorial%3AMapDesignHelp%28IceXuick%29" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Tutorial:MapDesignHelp(IceXuick)" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Tutorial:MapDesignHelp(IceXuick)" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Tutorial:MapDesignHelp(IceXuick)&amp;oldid=28899" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Tutorial:MapDesignHelp(IceXuick)&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 18 October 2014, at 21:35.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.013","walltime":"0.014","ppvisitednodes":{"value":42,"limit":1000000},"postexpandincludesize":{"value":32,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223511","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":92});});</script></body></html>

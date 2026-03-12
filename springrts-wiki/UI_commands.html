@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>UI commands - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"d8041c1c440db65320218558","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"UI_commands","wgTitle":"UI commands","wgCurRevisionId":31306,"wgRevisionId":31306,"wgArticleId":2563,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Help"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"UI_commands","wgRelevantArticleId":2563,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user"
+:"ready","user.options":"loading","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-UI_commands rootpage-UI_commands skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">UI commands</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; UI commands
+</p>
+<h1><span class="mw-headline" id="How_to_use_the_console">How to use the console</span></h1>
+<p>The ingame chat is the console. Open with hitting the `<code>return</code>` or `<code>enter</code>` key.
+If you want to enter a command into ingame chat, you must add a <code>/</code> in front<br/>
+for example: <code>/commandhelp</code><br/>
+Some commands will also autocomplete if you press <code>TAB</code>. So if you enter "/com" and then to press TAB, it will complete it to `/command` and tells you there is `/commandhelp` &amp; `/commandlist`, if you now enter either `l` or `h` and press TAB again it will complete to one of them.
+</p><p>Also commands are not case-sensitive.
+</p>
+<h1><span id="Lists_of_commands,_some_are_even_explained"></span><span class="mw-headline" id="Lists_of_commands.2C_some_are_even_explained">Lists of commands, some are even explained</span></h1>
+<p>For a complete (excluding Lua commands &amp; some engine `actions`) use:
+<code>/commandlist</code>
+</p><p>Example output (104.0):
+</p>
+<pre style="overflow:auto; width:auto;">Chat commands plus description
+==============================
+/Atm                             (synced)    Gives 1000 metal and 1000 energy to the issuing players team
+/Cheat                           (synced)    Enables/Disables cheating, which is required for a lot of other commands to be usable
+/Destroy                         (synced)    Destroys one or multiple units by unit-ID, instantly
+/DevLua                          (synced)    Enables/Disables Lua dev-mode (can cause desyncs if enabled)
+/EditDefs                        (synced)    Allows/Disallows editing of unit-, feature- and weapon-defs through Lua
+/Give [amount] &lt;objectName|'all'&gt;(synced)    Places one or multiple units of a single or multiple types on the map, instantly; by default to your own team.
+                                             Example: /give 10 corkrog 3 - gives team 3 10 corkrogs.
+/GlobalLOS                       (synced)    Enables/Disables global line-of-sight, which makes the whole map permanently visible to everyone or to a specific allyteam
+/GodMode                         (synced)    Enables/Disables god-mode, which allows all players (even spectators) to control all units (even during replays, which will DESYNC them)
+/LuaGaia                         (synced)    Allows reloading or disabling LuaGaia, and to send a chat message to LuaGaia scripts
+/LuaRules                        (synced)    Allows reloading or disabling LuaRules, and to send a chat message to LuaRules scripts
+/NoCost                          (synced)    Enables/Disables everything-for-free, which allows everyone to build everything for zero resource costs
+/NoHelp                          (synced)    Enables/Disables widgets (LuaUI control)
+/NoSpecDraw                      (synced)    Allows/Disallows spectators to draw on the map
+/NoSpectatorChat                 (synced)    Enables/Disables spectators to use the chat
+/ReloadCEGs                      (synced)    Reloads CEG scripts
+/ReloadCOB                       (synced)    Reloads COB scripts
+/Skip                            (synced)    Fast-forwards to a given frame, or stops fast-forwarding
+/Take                            (synced)    Transfers all units of allied teams without any active players to the team of the issuing player
+/AdvMapShading                   (unsynced)  Set or toggle advanced map shading mode
+/AdvModelShading                 (unsynced)  Set or toggle advanced model shading mode
+/AIControl                       (unsynced)  Creates a new instance of a Skirmish AI, to let it controll a specific team
+/AIKill                          (unsynced)  Kills the Skirmish AI controlling a specified team
+/AIList                          (unsynced)  Prints a list of all currently active Skirmish AIs
+/AIReload                        (unsynced)  Reloads the Skirmish AI controlling a specified team
+/AirMesh                         (unsynced)  Show/Hide the smooth air-mesh map overlay
+/AllMapMarks                     (unsynced)  Show/Hide all map marks drawn so far
+/Ally                            (unsynced)  Starts/Ends alliance of the local players ally-team with another ally-team
+/ATM                             (unsynced)  Redirects command /ATM to its synced processor
+/BufferText                      (unsynced)  Write the argument string(s) directly to the console history, but not anywhere else. This is useful for fast manual issuing of the command,
+                                             later on
+/Chat                            (unsynced)  Starts waiting for intput to be sent to 
+/ChatAll                         (unsynced)  Starts waiting for intput to be sent to All
+/ChatAlly                        (unsynced)  Starts waiting for intput to be sent to Ally
+/ChatSpec                        (unsynced)  Starts waiting for intput to be sent to Spec
+/ClearMapMarks                   (unsynced)  Remove all map marks drawn so far
+/Clock                           (unsynced)  Shows a small digital clock indicating the local time
+/CmdColors                       (unsynced)  Reloads cmdcolors.txt
+/CommandHelp                     (unsynced)  Prints info about a specific chat command (so far only synced/unsynced and the description)
+/CommandList                     (unsynced)  Prints all the available chat commands with description (if available) to the console
+/Console                         (unsynced)  Enables/Disables the in-game console
+/ControlUnit                     (unsynced)  Start to first-person-control a unit
+/Crash                           (unsynced)  Invoke an artificial crash through a NULL-pointer dereference (SIGSEGV)
+/CreateVideo                     (unsynced)  Start/Stop capturing a video of the game in progress
+/Cross                           (unsynced)  Allows one to exchange and modify the appearance of the cross/mouse-pointer in first-person-control view
+/CtrlPanel                       (unsynced)  Reloads GUI config
+/Debug                           (unsynced)  Enable/Disable debug rendering mode
+/DebugColVol                     (unsynced)  Enable/Disable drawing of collision volumes
+/DebugDrawAI                     (unsynced)  Enables/Disables debug drawing for AIs
+/DebugGL                         (unsynced)  Enable/Disable OpenGL debug-context output
+/DebugGLErrors                   (unsynced)  Enable/Disable OpenGL debug-errors
+/DebugInfo                       (unsynced)  Print debug info to the chat/log-file about either: sound, profiling
+/DebugPath                       (unsynced)  Enable/Disable drawing of pathfinder debug-data
+/DebugTraceRay                   (unsynced)  Enable/Disable drawing of traceray debug-data
+/DecGUIOpacity                   (unsynced)  Decreases the opacity(see-through-ness) of GUI elements
+/DecreaseViewRadius              (unsynced)  Decrease the view radius (higher performance, uglier view)
+/Deselect                        (unsynced)  Deselects all currently selected units
+/Destroy                         (unsynced)  Destroys one or multiple units by unit-ID, instantly
+/DistDraw                        (unsynced)  Set the distance between units and camera, at which they turn into far-textures (flat/texture-only representation) (Graphic setting)
+/DistIcon                        (unsynced)  Set the distance between units and camera, at which they turn into icons (Graphic setting)
+/DivByZero                       (unsynced)  Invoke an artificial crash by performing a division-by-Zero
+/DrawInMap                       (unsynced)  Enables drawing on the map
+/DrawLabel                       (unsynced)  Draws a label on the map at the current mouse-pointer position
+/DrawTrees                       (unsynced)  Enable/Disable engine-tree rendering
+/DumpState                       (unsynced)  dump game-state to file
+/DynamicSky                      (unsynced)  Enable/Disable dynamic-sky rendering
+/Echo                            (unsynced)  Write a string to the log file
+/EndGraph                        (unsynced)  Enables/Disables the statistics graphs shown at the end of the game
+/Exception                       (unsynced)  Invoke an artificial crash by throwing an std::runtime_error
+/Font                            (unsynced)  Reloads the fonts
+/FPS                             (unsynced)  Shows/Hides the frames-per-second indicator
+/FPSHud                          (unsynced)  Enables/Disables HUD (GUI interface) shown in first-person-control mode
+/Fullscreen                      (unsynced)  Switches fullscreen mode
+/GameInfo                        (unsynced)  Enables/Disables game-info panel rendering
+/GatherMode                      (unsynced)  Enter/Leave gather-wait command mode
+/Give                            (unsynced)  Places one or multiple units of a single or multiple types on the map, instantly; by default to your own team
+/GrabInput                       (unsynced)  Prevents/Enables the mouse from leaving the game window (windowed mode only)
+/GroundDecals                    (unsynced)  Disable/Enable ground-decals rendering. Ground-decals are things like scars appearing on the map after an explosion.
+/GroundDetail                    (unsynced)  Set the level of ground detail
+/Group                           (unsynced)  Allows modifying the members of a group
+/Group0                          (unsynced)  Allows modifying the members of group 0
+/Group1                          (unsynced)  Allows modifying the members of group 1
+/Group2                          (unsynced)  Allows modifying the members of group 2
+/Group3                          (unsynced)  Allows modifying the members of group 3
+/Group4                          (unsynced)  Allows modifying the members of group 4
+/Group5                          (unsynced)  Allows modifying the members of group 5
+/Group6                          (unsynced)  Allows modifying the members of group 6
+/Group7                          (unsynced)  Allows modifying the members of group 7
+/Group8                          (unsynced)  Allows modifying the members of group 8
+/Group9                          (unsynced)  Allows modifying the members of group 9
+/HardwareCursor                  (unsynced)  Enables/Disables hardware mouse-cursor support
+/HideInterface                   (unsynced)  Hide/Show the GUI controlls
+/IncGUIOpacity                   (unsynced)  Increases the opacity(see-through-ness) of GUI elements
+/IncreaseViewRadius              (unsynced)  Increase the view radius (lower performance, nicer view)
+/Info                            (unsynced)  Shows/Hides the player roster
+/InputTextGeo                    (unsynced)  Move and/or resize the input-text field (the "Say: " thing)
+/LastMsgPos                      (unsynced)  Moves the camera to show the position of the last message
+/LessClouds                      (unsynced)  Decreases the density of clouds (higher performance)
+/LessTrees                       (unsynced)  Decreases distance from the camera at which trees are still drawn
+/LODScale                        (unsynced)  Set the scale for either of: LOD (level-of-detail), shadow-LOD, reflection-LOD, refraction-LOD
+/LuaGaia                         (unsynced)  Redirects command /LuaGaia to its synced processor
+/LuaRules                        (unsynced)  Redirects command /LuaRules to its synced processor
+/LuaSave                         (unsynced)  Save the game state to a specific file, add -y to overwrite when file is already present
+/LuaUI                           (unsynced)  Allows one to reload or disable LuaUI, or alternatively to send a chat message to LuaUI
+/MapBorder                       (unsynced)  Set or toggle map-border rendering
+/MapMarks                        (unsynced)  Enables/Disables map marks rendering
+/mapmeshdrawer                   (unsynced)  Switch map-mesh rendering modes: 0=GCM, 1=HLOD, 2=ROAM
+/MapShadowPolyOffset             (unsynced)  
+/MaxNanoParticles                (unsynced)  Set the maximum number of nano-particles (Graphic setting)
+/MaxParticles                    (unsynced)  Set the maximum number of particles (Graphics setting)
+/MiniMap                         (unsynced)  FIXME document subcommands. There may be more beyond minimize, maximize and geometry.
+/MiniMap Minimize                (unsynced)  Performs the same action as pressing the red button under the minimap.
+/MiniMap Maximize                (unsynced)  Performs the same action as holding Shift and pressing the yellow button under the minimap, i.e, maintains map aspect ratio.
+/MiniMap Geometry X Y W H        (unsynced)  Sets the size of the minimap. X and Y are the coordinates of the top left corner while W and H are the width and height. Both pairs are in
+                                             pixels corresponding to monitor resolution.
+/MoreClouds                      (unsynced)  Increases the density of clouds (lower performance)
+/MoreTrees                       (unsynced)  Increases distance from the camera at which trees are still drawn
+/Mouse1                          (unsynced)  Simulates a mouse button press of button 1
+/Mouse2                          (unsynced)  Simulates a mouse button press of button 2
+/Mouse3                          (unsynced)  Simulates a mouse button press of button 3
+/Mouse4                          (unsynced)  Simulates a mouse button press of button 4
+/Mouse5                          (unsynced)  Simulates a mouse button press of button 5
+/MoveBack                        (unsynced)  Moves the camera Back a bit
+/MoveDown                        (unsynced)  Moves the camera Down a bit
+/MoveFast                        (unsynced)  Moves the camera Fast a bit
+/MoveForward                     (unsynced)  Moves the camera Forward a bit
+/MoveLeft                        (unsynced)  Moves the camera Left a bit
+/MoveRight                       (unsynced)  Moves the camera Right a bit
+/MoveSlow                        (unsynced)  Moves the camera Slow a bit
+/MoveUp                          (unsynced)  Moves the camera Up a bit
+/MuteSound                       (unsynced)  Mute/Unmute the current sound system
+/NoLuaDraw                       (unsynced)  Allow/Disallow Lua to draw on the map
+/PasteText                       (unsynced)  Paste either the argument string(s) or if none given, the content of the clip-board to chat input
+/Pause                           (unsynced)  Pause/Unpause the game
+/QuitForce                       (unsynced)  Exits game to system
+/QuitMenu                        (unsynced)  Opens the quit-menu, if it is not already open
+/QuitMessage                     (unsynced)  Deprecated, see /Quit instead (was used to quite the game immediately)
+/ReloadForce                     (unsynced)  Exits game to menu
+/ReloadGame                      (unsynced)  Restarts the game with the initially provided start-script
+/ReloadShaders                   (unsynced)  Reloads all engine shaders
+/ResBar                          (unsynced)  Shows/Hides team resource storage indicator bar
+/Resync                          (unsynced)  Redirects command /Resync to its synced processor
+/SafeGL                          (unsynced)  Enables/Disables OpenGL safe-mode
+/Save                            (unsynced)  Save the game state to a specific file, add -y to overwrite when file is already present
+/SaveGame                        (unsynced)  Save the game state to QuickSave.ssf (BROKEN)
+/Say                             (unsynced)  Say something in (public) chat
+/ScreenShot                      (unsynced)  Take a low quality JPG screen-shot of the current view
+/ScreenShot png                  (unsynced)  Take a high quality PNG screen-shot of the current view
+/Select                          (unsynced)  &lt;chat command description: Select&gt;
+/SelectCycle                     (unsynced)  &lt;chat command description: SelectUnits&gt;
+/SelectUnits                     (unsynced)  &lt;chat command description: SelectUnits&gt;
+/Send                            (unsynced)  Send a string as raw network message to the game host (for debugging only)
+/Set                             (unsynced)  Set a config key=value pair
+/Shadows                         (unsynced)  Disables/Enables shadows rendering: -1=disabled, 0=off, 1=full shadows, 2=skip terrain shadows
+/ShareDialog                     (unsynced)  Opens the share dialog, which allows you to send units and resources to other players
+/ShowElevation                   (unsynced)  Enable rendering of the auxiliary height-map overlay
+/ShowMetalMap                    (unsynced)  Enable rendering of the auxiliary metal-map overlay
+/ShowPathCost                    (unsynced)  Enable rendering of the path cost-map overlay
+/ShowPathFlow                    (unsynced)  Enable/Disable rendering of the path flow-map overlay
+/ShowPathHeat                    (unsynced)  Enable/Disable rendering of the path heat-map overlay
+/ShowPathTraversability          (unsynced)  Enable rendering of the path traversability-map overlay
+/ShowPathType                    (unsynced)  Shows path traversability for a given MoveDefName, MoveDefID or UnitDefName
+/ShowStandard                    (unsynced)  Disable rendering of all auxiliary map overlays
+/SlowDown                        (unsynced)  Decreases the simulation speed. The engine will try to simulate less frames per second
+/SoundChannelEnable              (unsynced)  Enable/Disable specific sound channels: UnitReply, General, Battle, UserInterface, Music
+/SoundDevice                     (unsynced)  Switch the sound output system (currently only OpenAL / NullAudio)
+/SpecFullView                    (unsynced)  Sets or toggles between full LOS or ally-team LOS, if the local user is a spectator
+/Spectator                       (unsynced)  Lets the local user give up control over a team, and start spectating
+/SpecTeam                        (unsynced)  Lets the local user specify the team to follow, if he is a spectator
+/Speed                           (unsynced)  Shows/Hides the simulation speed indicator
+/SpeedControl                    (unsynced)  Sets how server adjusts speed according to player's load (CPU), 1: use average, 2: use highest,
+/SpeedUp                         (unsynced)  Increases the simulation speed. The engine will try to simulate more frames per second
+/Take                            (unsynced)  Redirects command /Take to its synced processor
+/Team                            (unsynced)  Lets the local user change to another team
+/TeamHighlight                   (unsynced)  Enables/Disables uncontrolled team blinking
+/ToggleInfo                      (unsynced)  Toggles current info texture view
+/ToggleLOS                       (unsynced)  Enable rendering of the auxiliary LOS-map overlay
+/ToolTip                         (unsynced)  Enables/Disables the general tool-tips, displayed when hovering over units. features or the map
+/Track                           (unsynced)  Start following the selected unit(s) with the camera
+/TrackMode                       (unsynced)  Shift through different ways of following selected unit(s)
+/TrackOff                        (unsynced)  Stop following the selected unit(s) with the camera
+/TSet                            (unsynced)  Set a config key=value pair in the overlay, meaning it will not be persisted for future games
+/ViewSelection                   (unsynced)  Moves the camera to the center of the currently selected units
+/VSync                           (unsynced)  Enables/Disables vertical-sync (Graphics setting)
+/W                               (unsynced)  Say something in private to a specific player, by player-name
+/Water                           (unsynced)  Set water rendering mode: 0=basic, 1=reflective, 2=dynamic, 3=reflective&amp;refractive, 4=bump-mapped
+/WByNum                          (unsynced)  Say something in private to a specific player, by player-ID
+/WireMap                         (unsynced)  Toggle wireframe-mode drawing of map geometry
+/WireModel                       (unsynced)  Toggle wireframe-mode drawing of model geometry
+/WireSky                         (unsynced)  Toggle wireframe-mode drawing of skydome geometry
+/WireTree                        (unsynced)  Toggle wireframe-mode drawing of tree geometry
+/WireWater                       (unsynced)  Toggle wireframe-mode drawing of water geometry
+</pre>
+<p>More commands:
+</p>
+<pre style="overflow:auto; width:auto;">/bind &lt;keyset&gt; &lt;action&gt;                      Binds a key or key combination. Example with a key: /bind a reclaim. Example with a "key combination": /bind ctrl+a reclaim
+/luarules halfhealth                         Give to all units half health
+/luarules loadmissiles                       Load tacnuks, junos etc, to their max stockpile
+/luagaia reload                              Reloads gaia gadgets
+/luarules reload                             Reloads gadgets
+/luaui reload
+/luaui tweakgui                              Tweak mode on
+/luaui selector                              Open the default widget selector (similar to pressing F11).
+/options                                     Open the options interface for some games and mods
+/Setmaxspeed #	                             Changes the maximum speed (default is 3.0)
+/Setminspeed #                               Changes the minimum speed (default is 0.3)
+/unbind &lt;keyset&gt; &lt;action&gt;                    Unbinds a key or key combination. Example: /unbind a reclaim.
+/unbindaction &lt;action&gt;	                     Unbinds all keybinds that uses &lt;action&gt;.
+/unbindkeyset &lt;keyset&gt;	                     Unbinds all bindings that uses &lt;keyset&gt;.
+/unbindall	                             Unbinds all keys except the chat keybinding.
+
+</pre>
+<h1><span class="mw-headline" id="Scripting">Scripting</span></h1>
+<p>In Lua scripts, these commands can be used like this:<br/>
+Spring.SendCommands("resbar 0")<br/>
+notice the missing / when used like this.<br/>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223605
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.005 seconds
+Real time usage: 0.006 seconds
+Preprocessor visited node count: 23/1000000
+Post‐expand include size: 11/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 20789/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2563-0!canonical and timestamp 20260309223605 and revision id 31306
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=UI_commands&amp;oldid=31306">https://springrts.com/mediawiki/index.php?title=UI_commands&amp;oldid=31306</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Help.html" title="Category:Help">Help</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="UI_commands.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:UI_commands&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=UI_commands&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=UI_commands&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="UI_commands.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:UI_commands&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=UI+commands" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/UI_commands" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/UI_commands" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=UI_commands&amp;oldid=31306" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=UI_commands&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 19 December 2020, at 10:58.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.005","walltime":"0.006","ppvisitednodes":{"value":23,"limit":1000000},"postexpandincludesize":{"value":11,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":20789,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223605","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":112});});</script></body></html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>S3o using blender - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"1d6bc3d0e40d1071924422e2","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"S3o_using_blender","wgTitle":"S3o using blender","wgCurRevisionId":26792,"wgRevisionId":26792,"wgArticleId":2923,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["3D Models"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"S3o_using_blender","wgRelevantArticleId":2923,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-S3o_using_blender rootpage-S3o_using_blender skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">S3o using blender</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#motivation"><span class="tocnumber">1</span> <span class="toctext">motivation</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_Tools"><span class="tocnumber">2</span> <span class="toctext">The Tools</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Editing_and_Exporting"><span class="tocnumber">3</span> <span class="toctext">Editing and Exporting</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Notes_on_working_with_the_Template"><span class="tocnumber">3.1</span> <span class="toctext">Notes on working with the Template</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Notes_on_the_export_step"><span class="tocnumber">4</span> <span class="toctext">Notes on the export step</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Deployment_.26_Testing"><span class="tocnumber">5</span> <span class="toctext">Deployment &amp; Testing</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#units.2Farmsolar.fbi:_Valid_for_3do"><span class="tocnumber">5.1</span> <span class="toctext">units/armsolar.fbi: Valid for 3do</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#units.2Farmsolar.fbi:_Valid_for_s3o"><span class="tocnumber">5.2</span> <span class="toctext">units/armsolar.fbi: Valid for s3o</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="motivation">motivation</span></h2>
+<p>This guide helps you to create a '.s3o' unit for spring using:
+</p>
+<ul><li>'blender' - for 3d moddeling</li>
+<li>'gimp' - for texturing (or similar tools for 2d art)</li></ul>
+<h2><span class="mw-headline" id="The_Tools">The Tools</span></h2>
+<p>First download/install blender, then install a blender-compatible python version. The command shell window for blender will tell you which version of python it was compiled with, get specifically that version of python. Finally download the exporter for blender, found at [1].
+</p><p>Once all is installed you can either work from scratch or start working based on a template [2]. If you start from scratch, have a look at [1] to meet all requirements for the exporter script, such as naming conventions and necessary empties.
+</p>
+<h2><span class="mw-headline" id="Editing_and_Exporting">Editing and Exporting</span></h2>
+<p>The parenting system of blender is used to find the chain of children for exporting. Each child must have a unique name which can later be used for rigging.
+</p><p>Important: the model MUST have exactly two textures:
+</p>
+<ul><li>1. texture RGBA32 where:
+<ul><li>RGB is used for coloring and A is used for team-coloring</li></ul></li></ul>
+<ul><li>2. texture RGBA32 where:
+<ul><li>R for glow</li>
+<li>G for reflectivity</li>
+<li>B 'unassigned' (mod dependent)</li>
+<li>A for transparency (standard ARB shader supports only 1 bit that is: either render the pixel, or not)</li></ul></li></ul>
+<h3><span class="mw-headline" id="Notes_on_working_with_the_Template">Notes on working with the Template</span></h3>
+<p>Everything should be properly configured for export, with necessary empties etc present. If objects are hidden from view for better editing, press ALT+H to unhide all objects.
+</p><p>When you start working on the base mesh, remember not to delete the object itself. Go into Edit Mode, select all vertices and delete them. Then add primitives/vertices/... to your empty mesh of the still-valid base object.
+</p><p>After meshing out your model, remember to check whether you need to move/scale the empties that you see in the node viewer. The cubic empty sets the ground midpoint of the object, the arrow empty is used for height purposes and the spheric empty defines the model's boundary box.
+</p>
+<h2><span class="mw-headline" id="Notes_on_the_export_step">Notes on the export step</span></h2>
+<p>The active selection does not influence the exporter therefore you don't need to select any object (still you can) to make a valid export.
+The exporter will loop over all objects in the scene automatically.
+</p><p>Please note that the template you can download from [2] also includes a modified exporter script for blender that allows it to export the objects even while cameras and light setups are present in the scene for preview-rendering.
+</p>
+<h2><span id="Deployment_&amp;_Testing"></span><span class="mw-headline" id="Deployment_.26_Testing">Deployment &amp; Testing</span></h2>
+<p>Copy the '.s3o' in the folder:
+</p>
+<ul><li>/mods/modname/objects3d/</li></ul>
+<p>While textures go into:
+</p>
+<ul><li>/mods/modname/unittextures/</li></ul>
+<p>As your first model is a unit replacement, don't forget to modify the unitname.fbi (in case of the 'armsolar' replacement: use armsolar.fbi) and add your model there.
+</p>
+<ul><li>/mods/modname/units/armsolar.fbi</li></ul>
+<p>WARNING: <b>when using .s3o you have to add a suffix, else spring will crash!</b>
+</p><p>Open the '/mods/modname/units/armsolar.fbi' and you will see:
+</p>
+<h3><span id="units/armsolar.fbi:_Valid_for_3do"></span><span class="mw-headline" id="units.2Farmsolar.fbi:_Valid_for_3do">units/armsolar.fbi: Valid for 3do</span></h3>
+<pre>[UNITINFO] {
+ unitname=armsolar;
+ name=Solar Collector;
+ description=Produces Energy;
+ acceleration=0;
+ activateWhenBuilt=1;
+ ...
+</pre>
+<p>we have to modify this in order to make it s3o aware with:
+</p>
+<h3><span id="units/armsolar.fbi:_Valid_for_s3o"></span><span class="mw-headline" id="units.2Farmsolar.fbi:_Valid_for_s3o">units/armsolar.fbi: Valid for s3o</span></h3>
+<pre>[UNITINFO] {
+ <b>unitname=armsolar.s3o;</b>
+ name=Solar Collector;
+ description=Produces Energy;
+ acceleration=0;
+ activateWhenBuilt=1;
+ ...
+</pre>
+<h2><span class="mw-headline" id="Links">Links</span></h2>
+<ul><li>[1] <a class="external free" href="http://springrts.com/phpbb/viewtopic.php?f=9&amp;t=17026" rel="nofollow">http://springrts.com/phpbb/viewtopic.php?f=9&amp;t=17026</a></li>
+<li>[2] <a class="external free" href="http://www.lastlog.de/misc/s3o-template.zip" rel="nofollow">http://www.lastlog.de/misc/s3o-template.zip</a></li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20260309224112
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.006 seconds
+Real time usage: 0.007 seconds
+Preprocessor visited node count: 26/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2923-0!canonical and timestamp 20260309224112 and revision id 26792
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=S3o_using_blender&amp;oldid=26792">https://springrts.com/mediawiki/index.php?title=S3o_using_blender&amp;oldid=26792</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_3D_Models.html" title="Category:3D Models">3D Models</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="S3o_using_blender.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:S3o_using_blender&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=S3o_using_blender&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=S3o_using_blender&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="S3o_using_blender.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:S3o_using_blender&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=S3o+using+blender" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/S3o_using_blender" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/S3o_using_blender" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=S3o_using_blender&amp;oldid=26792" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=S3o_using_blender&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 21 March 2013, at 11:38.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.006","walltime":"0.007","ppvisitednodes":{"value":26,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224112","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":109});});</script></body></html>

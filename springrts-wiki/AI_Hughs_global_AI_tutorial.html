@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>AI:Hughs global AI tutorial - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"3373be4f69bbd11cce6d53de","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"AI:Hughs_global_AI_tutorial","wgTitle":"AI:Hughs global AI tutorial","wgCurRevisionId":26848,"wgRevisionId":26848,"wgArticleId":1868,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AI Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"AI:Hughs_global_AI_tutorial","wgRelevantArticleId":1868,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":
+"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AI_Hughs_global_AI_tutorial rootpage-AI_Hughs_global_AI_tutorial skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">AI:Hughs global AI tutorial</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p>This page goes step by step through how to create your own global AI.
+</p><p>We'll be writing the AI in C#, because C# is powerful and easy to debug.  You'll need a Windows platform with Visual C# Express 2005 installed.
+</p><p>Note that the C++/C# interface is made available under the GPL licence, so your AI will need to be available under the GPL licence.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Setting_up_your_own_AI_Project"><span class="tocnumber">1</span> <span class="toctext">Setting up your own AI Project</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Talking_to_the_player"><span class="tocnumber">2</span> <span class="toctext">Talking to the player</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Building_your_first_solar_panel"><span class="tocnumber">3</span> <span class="toctext">Building your first solar panel</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Get_Commander_id"><span class="tocnumber">3.1</span> <span class="toctext">Get Commander id</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Get_solar_cell_typeid"><span class="tocnumber">3.2</span> <span class="toctext">Get solar cell typeid</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Get_buildsite"><span class="tocnumber">3.3</span> <span class="toctext">Get buildsite</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Build_solar_cell"><span class="tocnumber">3.4</span> <span class="toctext">Build solar cell</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Setting_up_your_own_AI_Project">Setting up your own AI Project</span></h1>
+<p>We're going to use the C# loader dlls from CSAI.  We'll get these to run our own AI dll.
+</p>
+<ul><li>Download CSAI from <a href="AI_CSAI.html" title="AI:CSAI">AI:CSAI</a>, unzip it, and run setup.exe to install it.</li></ul>
+<p>In what follows, TASpring in a directory path means the Spring application directory, the one that contains spring.exe.
+</p><p>First, we need to create a loader dll "myailoader.dll", that will load our AI dll.
+</p>
+<ul><li>Copy TASpring\AI\Bot-libs\csailoader.dll to TASpring\AI\Bot-libs\myailoader.dll</li>
+<li>Copy TASpring\AI\Bot-libs\csailoader.xml to TASpring\AI\Bot-libs\myailoader.xml</li>
+<li>Open TASpring\AI\Bot-libs\myailoader.xml in notepad, and change the value csaidirectory to "AI/myai", then save the file</li>
+<li>Create a new directory TASpring\AI\myai</li>
+<li>For now, copy TASpring\AI\CSAI\csai.dll and TASpring\AI\CSAI\csai.pdb into the TASpring\AI\myai directory.</li></ul>
+<p>AI\myai is where we'll be placing our own AI dll.  For now we've copied the csai dll into it to check that the loader xml is configured correctly.
+</p><p>Check this is working ok:
+</p>
+<ul><li>Create a new multiplayer game</li>
+<li>Do "add bot".  Click "reload".  You should see "myailoader.dll"</li>
+<li>Select "myaialoader.dll" and do ok</li>
+<li>Do "add bot" and add "emptyai.dll".  This gives you a dummy opponent so you can spectate</li>
+<li>Click "Spectate" and launch the game</li>
+<li>Check that the game starts and that the commanders appear</li></ul>
+<p>If the game started and the commander appeared, everything is working so far.  If you get an error message about a global AI exception, and spring shuts down, recheck the steps above.
+</p><p>Now that we've set up the myailoader.dll , we can create our own AI project.
+</p>
+<ul><li>Download and unzip <a class="external text" href="http://manageddreams.com/csai/csaitemplate.zip" rel="nofollow">csaitemplate.zip</a></li>
+<li>Start Visual C# 2005 Express</li>
+<li>Create a new project of type "Class library", called "csai" (note: the name is important)</li>
+<li>Delete the default file "Class1.cs"</li>
+<li>Add the file CSAI.cs and LogFile.cs from the csaitemplate.zip file</li>
+<li>In the solution explorer, open CSAI.cs
+<ul><li>Locate the string variable aidirectory at the top of the class</li>
+<li>Change its value to "myai"</li></ul></li>
+<li>In the solution explorer, right-click "References", do "Add Reference...", select the "Browse" tab, and add TASpring\CSAIInterfaces.dll</li>
+<li>We want to build as Debug, because this gives better error messages.  By default it may build as Release, so:
+<ul><li>Go to "Tools" | "Options..."  Navigate to "Projects and Solutions", "General".  Select "Show Advanced build configurations", then click "ok"</li>
+<li>Go to "Build" | "Configuration Manager..."</li>
+<li>Set Active solution configuration to "Release", then close the dialog</li></ul></li>
+<li>Build the solution.  It should build with no errors, otherwise check the last few steps</li></ul>
+<p>You've created an empty AI dll.  We need to check that it build ok.
+</p>
+<ul><li>Locate the bin\Debug directory in your project directory</li>
+<li>You should see csai.dll, csai.pdb, CSAIInterfaces.dll and CSAIInterfaces.pdb</li>
+<li>Copy csai.dll and csai.pdb into the TASpring\AI\myai directory, overwriting the existing csai.dll and csai.pdb</li></ul>
+<p>Create a multiplayer game, add the myailoader.dll and emptyai.dll bots as before, click Spectate and Start
+</p>
+<ul><li>The game should start and the commander should appear</li></ul>
+<p>If the game starts and the commander appears, with no error messages about "Global AI Exception" then everything is working so far.  You've created a C# AI project.
+</p>
+<h1><span class="mw-headline" id="Talking_to_the_player">Talking to the player</span></h1>
+<p>Let's make the AI say something to the player.  We use the SendTextMsg function to do this.  The SendTextMsg function is available from the aicallback object in the CSAI class.
+</p><p>SendTextMsg takes two parameters.  The first is the text you want to say, and the second is the number zero.
+</p><p>In the CSAI.cs file, locate the function "InitAI"
+</p>
+<ul><li>You should see a comment "// your init code here"</li>
+<li>Add the line:
+<ul><li>aicallback.SendTextMsg( "Hello world!", 0 );</li></ul></li></ul>
+<p>Test that this works:
+</p>
+<ul><li>Rebuild the project</li>
+<li>Copy the csai.dll and csai.pdb files into TASpring/AI/myai , overwriting the old ones</li>
+<li>Restart the game, or just say ".reloadai" if the old game is still running</li>
+<li>The commander should appear, and the AI should say "Hello world!"</li></ul>
+<p>If something went wrong, and the message didnt appear, the AI will almost certainly no longer crash.  
+Instead you can find any error messages in the logfile at TASpring/AI/myai/csharpai_team0.log
+</p><p>Just make any corrections, recompile, copy the new dlls over to TASpringAI/myai , and say ".reloadai" in the game to load the corrected AI dll.
+</p>
+<h1><span class="mw-headline" id="Building_your_first_solar_panel">Building your first solar panel</span></h1>
+<p>Let's make the commander build a solar panel.
+</p><p>To do this, we use aicallback.GiveOrder , passing in the commander's id and an appropriately initialized Command object.
+</p><p>The Command object has two parts: 
+</p>
+<ul><li>an id that specifies the command type, in this case it will be the typeid for a solar cell</li>
+<li>a double array which in this case specifies the position of the new solar cell.</li></ul>
+<p>There are a couple of prerequisites:
+</p>
+<ul><li>we need to know the commander's id, to give to the GiveOrder function</li>
+<li>we need the typeid for a solar cell</li>
+<li>we need to find an appropriate location for the solar panel</li></ul>
+<h2><span class="mw-headline" id="Get_Commander_id">Get Commander id</span></h2>
+<p>First, let's get the commander's id.  An easy way to do this is using the UnitFinished method in the CSAI class.  This method is essentially an event that fires whenever a new friendly unit has finished building.
+We'll get a UnitFinished event for the commander right at the start of the game.
+</p><p>In the UnitFinished function there should be a line "IUnitDef unitdef = aicallback.GetUnitDef( deployedunitid );".
+</p>
+<ul><li>this line obtains an IUnitDef object for the newly created unit</li>
+<li>An IUnitDef gives access to data about each unit type, such as its name, its human name, whether it is a commander</li>
+<li>You can browse through the properties available on an IUnitDef using Visual Studio Express:
+<ul><li>On the line just after IUnitDef def = aicallback.GetUnitDef( deployedunitid );, type:</li>
+<li>unitdef.</li>
+<li>Intelisense should automatically produce a list of all the unitdef properties you can read.</li></ul></li></ul>
+<p>Instead of writing "unitdef.", insert some new code to get the commander's id, type:
+</p><p>if( unitdef.isCommander )
+{
+</p>
+<pre>  int commanderid = deployedunitid;
+  aicallback.SendTextMsg( "Commander id is: " + commanderid, 0 );
+</pre>
+<p>}
+</p>
+<ul><li>Recompile, copy the dlls over to TASpring/AI/myai, and restart the game to test this modification</li>
+<li>The AI should say "Commander id is: " and the commander's id</li></ul>
+<p>Note that since the commander is created only once in each game, at the start, you'll need to restart the game, .reloadai is not going to work with this code.
+</p><p>If it works, good.  If there's a problem, you can check the logfile at TASpring/AI/myai/csharpai_team0.log
+</p>
+<h2><span class="mw-headline" id="Get_solar_cell_typeid">Get solar cell typeid</span></h2>
+<p>Next, let's look at finding the typeid for solar cells.  
+To do this, we can use the function aicallback.GetUnitDefList()
+</p><p>IUnitDef[] GetUnitDefList()
+</p><p>This returns an array containing an IUnitDef s for every available unit in the currently loaded mod.
+</p><p>The function takes a while to run, 2-3 seconds, so you probably want to run this only once in your real AI, and store the results.
+</p><p>We can get the solar cell's typeid using the following code.  Add this inside your if, just after the aicallback.SendTextMsg line:
+</p>
+<pre>IUnitDef[] unitdeflist = aicallback.GetUnitDefList();
+IUnitDef solarcelldef = null;
+foreach(IUnitDef thisunitdef in unitdeflist )
+{
+   if( thisunitdef.name == "ARMSOLAR" )
+   {
+      solarcelldef = thisunitdef;
+   }
+}
+aicallback.SendTextMsg( "Found solar cell def: " + solarcelldef.id + 
+   " human name: " + solarcelldef.humanName, 0 );
+</pre>
+<p>Recompile, copy the csai.dll and csai.pdb files over to TASpring/AI/myai and restart the game.
+</p><p>Remember that .reloadai won't work with this code, because we're relying on the UnitFinished event to get the commmander's id.
+</p>
+<h2><span class="mw-headline" id="Get_buildsite">Get buildsite</span></h2>
+<p>Next we need to find an appropriate location for the solar panel.  The function to do this is aicallback.ClosestBuildSite:
+</p><p>aicallback.ClosestBuildSite( IUnitDef unitdef, Float3 targetpos, double searchRadius, int minDistance )
+</p>
+<ul><li>unitdef: the IUnitDef for the unit we want to build</li>
+<li>targetpos: roughly where we want to build it</li>
+<li>minDistance: not sure, but putting 2 here works</li>
+<li>searchRadius: how far to look for a build spot before giving up</li></ul>
+<p>We already have the unitdef for a solar cell, so we just need an approximate location.  We can use the commander's location for this.
+We can get this by calling aicallback.GetUnitPos:
+</p><p>Float3 GetUnitPos( int unitdeployedid )
+</p>
+<ul><li>unitdeployedid:  the unit's deployedid, in this case we'll use commanderid</li>
+<li>returns the position as a Float3</li></ul>
+<p>Float3's are used a lot.  They have three properties x, y, z, which typically represent the position of something.
+</p><p>Let's get the commander's position.  After the foreach(){} block above, you can add the following code:
+</p>
+<pre>Float3 commanderpos = aicallback.GetUnitPos( commanderid );
+aicallback.SendTextMsg( "The commander's position is " +
+   commanderpos.ToString(), 0 );
+</pre>
+<p>Compile, copy the dlls, and restart the game.  You should see the AI say the position of the commander.
+</p><p>Now, we can call ClosestBuildSite to get a good build site for the solar cell.  Add the following code beneath our last aicallback. SendTextMsg line:
+</p>
+<pre>Float3 buildsite = aicallback.ClosestBuildSite( 
+   solarcelldef, commanderpos, 1400, 2 );
+aicallback.SendTextMsg( "solar cell buildsite: " + buildsite.ToString(), 0 );
+</pre>
+<p>Build, copy the dlls, restart the game
+</p>
+<ul><li>You should see the ai giving the proposed solar cell position</li>
+<li>Check that it's roughly near the commander's position , otherwise double check the code above</li></ul>
+<h2><span class="mw-headline" id="Build_solar_cell">Build solar cell</span></h2>
+<p>We've got the information we need.  Now let's build a solarcell.  We can use aicallback.GiveOrder.  The general format for a GiveOrder command is:
+</p><p>aicallback.GiveOrder( targetid, new Command( commandid, new double[]{ x, y, z } ) );
+</p>
+<ul><li>The targetid in this case is the commander's id, commanderid</li>
+<li>The commandid can take specific predefined values, such as CMD_MOVE or CMD_ATTACK</li>
+<li>For a build command, commandid is minus the type id of the unit to build</li>
+<li>Lastly, an array of doubles, which in this case is the position where we want to build the solar cell</li></ul>
+<p>Just underneath the last aicallback.SendTextMsg line, add the following lines:
+</p><p>aicallback.GiveOrder( commanderid, new Command( - solarcelldef.id, buildsite.ToDoubleArray() ) );
+</p><p>The code you just wrote should look something like:
+</p>
+<pre>IUnitDef unitdef = aicallback.GetUnitDef( deployedunitid );
+</pre>
+<p>if (unitdef.isCommander)
+{
+</p>
+<pre>   int commanderid = deployedunitid;
+   IUnitDef[] unitdeflist = aicallback.GetUnitDefList();
+   IUnitDef solarcelldef = null;
+   foreach (IUnitDef thisunitdef in unitdeflist)
+   {
+       if (thisunitdef.name == "ARMSOLAR")
+       {
+           solarcelldef = thisunitdef;
+       }
+   }
+   aicallback.SendTextMsg("Found solar cell def: " + solarcelldef.id + 
+     " human name: " + solarcelldef.humanName, 0 );
+   Float3 commanderpos = aicallback.GetUnitPos(commanderid);
+   aicallback.SendTextMsg("The commander's position is " + 
+      commanderpos.ToString(), 0 );
+   Float3 buildsite = aicallback.ClosestBuildSite(
+      solarcelldef, commanderpos, 1400, 2);
+   aicallback.SendTextMsg( "solar cell buildsite: " + 
+      buildsite.ToString(), 0 );
+   aicallback.GiveOrder(commanderid, new Command(-solarcelldef.id,
+      buildsite.ToDoubleArray()));
+</pre>
+<p>}
+</p><p>Recompile, copy the dlls and restart the game to test.
+</p><p>Important: we're building an ARM solar panel, so the AI must be running as ARM for this to work.
+</p><p>Hopefully you should see the commander build a solar panel.  Otherwise check the logfile for any error message, and try again.
+</p><p>Remember that .reloadai won't work with this code, because we're relying on the UnitFinished event to get the commmander's id, so you'll need to restart the game.  There are ways around this, but that is for later :-) .
+</p><p>Here's some pictures of the commander building a solar panel:
+</p><p><img alt="tut_buildsolar1.JPG" src="images/tut_buildsolar1.JPG"/>
+</p><p><img alt="tut_buildsolar2.JPG" src="images/tut_buildsolar2.JPG"/>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223712
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.007 seconds
+Real time usage: 0.008 seconds
+Preprocessor visited node count: 22/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1868-0!canonical and timestamp 20260309223712 and revision id 26848
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=AI:Hughs_global_AI_tutorial&amp;oldid=26848">https://springrts.com/mediawiki/index.php?title=AI:Hughs_global_AI_tutorial&amp;oldid=26848</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_AI_Dev.html" title="Category:AI Dev">AI Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="AI_Hughs_global_AI_tutorial.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:AI:Hughs_global_AI_tutorial&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=AI:Hughs_global_AI_tutorial&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=AI:Hughs_global_AI_tutorial&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="AI_Hughs_global_AI_tutorial.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:AI:Hughs_global_AI_tutorial&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=AI%3AHughs+global+AI+tutorial" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/AI:Hughs_global_AI_tutorial" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/AI:Hughs_global_AI_tutorial" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=AI:Hughs_global_AI_tutorial&amp;oldid=26848" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=AI:Hughs_global_AI_tutorial&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 23 March 2013, at 17:44.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.007","walltime":"0.008","ppvisitednodes":{"value":22,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223712","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":68});});</script></body></html>

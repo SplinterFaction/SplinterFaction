@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua Performance - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"2a7168f7bbf72b2931e9f4f0","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_Performance","wgTitle":"Lua Performance","wgCurRevisionId":30790,"wgRevisionId":30790,"wgArticleId":3092,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_Performance","wgRelevantArticleId":3092,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":
+"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_Performance rootpage-Lua_Performance skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua Performance</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Other_Considerations"><span class="tocnumber">2</span> <span class="toctext">Other Considerations</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Performance_Tests"><span class="tocnumber">3</span> <span class="toctext">Performance Tests</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#TEST_1:_Localize"><span class="tocnumber">3.1</span> <span class="toctext">TEST 1: Localize</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#TEST_2:_Localized_Class-Methods_.28with_only_3_accesses.21.29"><span class="tocnumber">3.2</span> <span class="toctext">TEST 2: Localized Class-Methods (with only 3 accesses!)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#TEST_3:_Unpack_A_Table"><span class="tocnumber">3.3</span> <span class="toctext">TEST 3: Unpack A Table</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#TEST_4:_Determine_Maximum_And_Set_It_.28.27.3E.27_vs._max.29"><span class="tocnumber">3.4</span> <span class="toctext">TEST 4: Determine Maximum And Set It ('&gt;' vs. max)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#TEST_5:_Nil_Checks_.28.27if.27_vs._.27or.27.29"><span class="tocnumber">3.5</span> <span class="toctext">TEST 5: Nil Checks ('if' vs. 'or')</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#TEST_6:_.27x.5E2.27_vs._.27x.2Ax.27"><span class="tocnumber">3.6</span> <span class="toctext">TEST 6: 'x^2' vs. 'x*x'</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#TEST_7:_Modulus_Operators_.28math.mod_vs._.25.29"><span class="tocnumber">3.7</span> <span class="toctext">TEST 7: Modulus Operators (math.mod vs. %)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#TEST_8:_Functions_As_Param_For_Other_Functions"><span class="tocnumber">3.8</span> <span class="toctext">TEST 8: Functions As Param For Other Functions</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#TEST_9:_for-loops"><span class="tocnumber">3.9</span> <span class="toctext">TEST 9: for-loops</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#TEST_10:_Array_Access_.28with_.5B_.5D.29_vs._Object_Access_.28with_.method.29"><span class="tocnumber">3.10</span> <span class="toctext">TEST 10: Array Access (with [ ]) vs. Object Access (with .method)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#TEST_11:_Buffered_Table_Item_Access"><span class="tocnumber">3.11</span> <span class="toctext">TEST 11: Buffered Table Item Access</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#TEST_12:_Adding_Table_Items_.28table.insert_vs._.5B_.5D.29"><span class="tocnumber">3.12</span> <span class="toctext">TEST 12: Adding Table Items (table.insert vs. [ ])</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#TEST_12:_Adding_Table_Items_.28mytable_.3D.7B.7D_vs._mytable.3D.7B....7D.29"><span class="tocnumber">3.13</span> <span class="toctext">TEST 12: Adding Table Items (mytable ={} vs. mytable={...})</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Test_13"><span class="tocnumber">4</span> <span class="toctext">Test 13</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Lua_Garbage_Collection"><span class="tocnumber">5</span> <span class="toctext">Lua Garbage Collection</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Overview">Overview</span></h1>
+<p>This page is copied from the <a class="external text" href="http://trac.caspring.org/wiki/LuaPerformance" rel="nofollow">CA wiki</a>. The widget used in the performance tests is available from the <a class="external text" href="http://trac.caspring.org/browser/trunk/mods/ca-sandbox/LuaUI/Widgets/performance.lua" rel="nofollow">CA SVN</a>.
+</p>
+<h1><span class="mw-headline" id="Other_Considerations">Other Considerations</span></h1>
+<p>It is a well known axiom in computing that
+</p>
+<blockquote><p>"We should forget about small efficiencies, say about 97% of the time: <b>premature optimization is the root of all evil</b>"</p></blockquote>
+<pre>- <a class="external text" href="http://en.wikipedia.org/wiki/Donald_Knuth" rel="nofollow">Donald Knuth</a>
+</pre>
+<p>Lua coders should keep that in mind, and especially when visiting this page. Readability and maintainability are in most cases just as important, and optimizing code for every last ounce of performance can severely impact those qualities. On the other hand, some of the optimizations suggested have little bearing on readability and should generally always be applied, e.g. localization of API functions, or actually make for neater code e.g. the use of <code>or</code> rather than a nil-check. Generally speaking, optimize only once you are sure that there is or will be a performance bottleneck.
+</p>
+<h1><span class="mw-headline" id="Performance_Tests">Performance Tests</span></h1>
+<h2><span class="mw-headline" id="TEST_1:_Localize">TEST 1: Localize</span></h2>
+<p><b>Code:</b>
+</p>
+<pre>  local min = math.min</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">Non-local: 0.719 (158%)</span></dd>
+<dd><span class="note">Localized: 0.453 (100%)</span></dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>Yes, we should localize all standard Lua and Spring API functions.</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_2:_Localized_Class-Methods_(with_only_3_accesses!)"></span><span class="mw-headline" id="TEST_2:_Localized_Class-Methods_.28with_only_3_accesses.21.29">TEST 2: Localized Class-Methods (with only 3 accesses!)</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  for i=1,1000000 do
+    local x = class.test()
+    local y = class.test()
+    local z = class.test()
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    local test = class.test
+    local x = test()
+    local y = test()
+    local z = test()
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd>Normal way: 1.203 (102%)</dd>
+<dd>Localized: 1.172 (100%)</dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>No, it isn't faster to localize a class method IN the function call.</dd></dl>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="TEST_3:_Unpack_A_Table">TEST 3: Unpack A Table</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  for i=1,1000000 do
+    local x = min( a[1],a[2],a[3],a[4] )
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  local unpack = unpack
+  for i=1,1000000 do
+    local x = min( unpack(a) )
+  end</pre>
+<p><br/>
+<b>Code 3:</b>
+</p>
+<pre>  local function unpack4(a)
+    return a[1],a[2],a[3],a[4]
+  end
+  for i=1,1000000 do
+    local x = min( unpack4(a) )
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="note">with [ ]: 0.485 (100%)</span></dd>
+<dd><span class="warning">unpack(): 1.093 (225%)</span></dd>
+<dd>custom unpack4: 0.641 (131%)</dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>Don't use <code>unpack()</code> in time critical code!</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_4:_Determine_Maximum_And_Set_It_('&gt;'_vs._max)"></span><span class="mw-headline" id="TEST_4:_Determine_Maximum_And_Set_It_.28.27.3E.27_vs._max.29">TEST 4: Determine Maximum And Set It ('&gt;' vs. max)</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  local max = math.max
+  for i=1,1000000 do
+     x = max(random(cnt),x)
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    local r = random(cnt)
+    if (r&gt;x) then x = r end
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">math.max: 0.437 (156%)</span></dd>
+<dd><span class="note">'if &gt; then': 0.282 (100%)</span></dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>Don't use <code>math.[max|min]()</code> in time critical code!</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_5:_Nil_Checks_('if'_vs._'or')"></span><span class="mw-headline" id="TEST_5:_Nil_Checks_.28.27if.27_vs._.27or.27.29">TEST 5: Nil Checks ('if' vs. 'or')</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  for i=1,1000000 do
+    local y,x
+    if (random()&gt;0.5) then y=1 end 
+    if (y==nil) then x=1 else x=y end
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    local y
+    if (random()&gt;0.5) then y=1 end 
+    local x=y or 1
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">nil-check: 0.297 (106%)</span></dd>
+<dd><span class="note">a=x or y: 0.281 (100%)</span></dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>The <code>or</code>-operator is faster than a nil-check. Use it!</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_6:_'x^2'_vs._'x*x'"></span><span class="mw-headline" id="TEST_6:_.27x.5E2.27_vs._.27x.2Ax.27">TEST 6: 'x^2' vs. 'x*x'</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  for i=1,1000000 do
+     local y = x^2
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+     local y = x*x
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">x^2: 1.422 (110%)</span></dd>
+<dd><span class="note">x*x: 1.297 (100%) </span></dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>The second syntax is marginally faster</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_7:_Modulus_Operators_(math.mod_vs._%)"></span><span class="mw-headline" id="TEST_7:_Modulus_Operators_.28math.mod_vs._.25.29">TEST 7: Modulus Operators (math.mod vs. %)</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  local fmod = math.fmod
+  for i=1,1000000 do
+    if (fmod(i,30)&lt;1) then
+      local x = 1
+    end
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    if ((i%30)&lt;1) then
+      local x = 1
+    end
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">math.mod: 0.281 (355%)</span></dd>
+<dd><span class="note">%: 0.079 (100%) </span></dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>Don't use <code>math.fmod()</code> for positive numbers (for negative ones <code>%</code> and <code>fmod()</code> have different results!)</dd></dl>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="TEST_8:_Functions_As_Param_For_Other_Functions">TEST 8: Functions As Param For Other Functions</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  local func1 = function(a,b,func) 
+    return func(a+b) 
+  end
+
+  for i=1,1000000 do
+    local x = func1(1,2,function(a) return a*2 end)
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  local func1 = function(a,b,func) 
+    return func(a+b) 
+  end
+  local func2 = function(a) 
+    return a*2 
+  end
+
+  for i=1,1000000 do
+    local x = func1(1,2,func2)
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">defined in function param: 3.890 (1144%)</span></dd>
+<dd><span class="note">defined as local: 0.344 (100%) </span></dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>REALLY, LOCALIZE YOUR FUNCTIONS ALWAYS BEFORE SENDING THEM INTO ANOTHER FUNCTION!!! i.e if you use gl.BeginEnd(), gl.CreateList(), ...!!!</dd></dl>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="TEST_9:_for-loops">TEST 9: for-loops</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  for i=1,1000000 do
+    for j,v in pairs(a) do
+      x=v
+    end
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    for j,v in ipairs(a) do
+      x=v
+    end
+  end</pre>
+<p><br/>
+<b>Code 3:</b>
+</p>
+<pre>  for i=1,1000000 do
+    for i=1,100 do
+      x=a[i]
+    end
+  end</pre>
+<p><br/>
+<b>Code 4:</b>
+</p>
+<pre>  for i=1,1000000 do
+    for i=1,#a do
+      x=a[i]
+    end
+  end</pre>
+<p><br/>
+<b>Code 5:</b>
+</p>
+<pre>  for i=1,1000000 do
+    local length = #a
+    for i=1,length do
+      x=a[i]
+    end
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd>pairs: 3.078 (217%)</dd>
+<dd><span class="warning">ipairs: 3.344 (236%)</span></dd>
+<dd><span class="note">for i=1,x do: 1.422 (100%)</span></dd>
+<dd>for i=1,#atable do 1.422 (100%)</dd>
+<dd>for i=1,atable_length do: 1.562 (110%)</dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>Don't use <code>pairs()</code> or <code>ipairs()</code> in critical code! Try to save the table-size somewhere and use <code>for i=1,x do</code>!</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_10:_Array_Access_(with_[_])_vs._Object_Access_(with_.method)"></span><span class="mw-headline" id="TEST_10:_Array_Access_.28with_.5B_.5D.29_vs._Object_Access_.28with_.method.29">TEST 10: Array Access (with [ ]) vs. Object Access (with .method)</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  for i=1,1000000 do
+    x = a["foo"]
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    x = a.foo
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd>atable["foo"]: 1.125 (100%)</dd>
+<dd>atable.foo: 1.141 (101%)</dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>No difference.</dd></dl>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="TEST_11:_Buffered_Table_Item_Access">TEST 11: Buffered Table Item Access</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  for i=1,1000000 do
+    for n=1,100 do
+      a[n].x=a[n].x+1
+    end
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    for n=1,100 do
+      local y = a[n]
+      y.x=y.x+1
+    end
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">'a[n].x=a[n].x+1': 1.453 (127%)</span></dd>
+<dd><span class="note">'local y=a[n]; y.x=y.x+1': 1.140 (100%) </span></dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>Buffering can speed up table item access.</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_12:_Adding_Table_Items_(table.insert_vs._[_])"></span><span class="mw-headline" id="TEST_12:_Adding_Table_Items_.28table.insert_vs._.5B_.5D.29">TEST 12: Adding Table Items (table.insert vs. [ ])</span></h2>
+<p><b>Code 1:</b>
+</p>
+<pre>  local tinsert = table.insert
+  for i=1,1000000 do
+    tinsert(a,i)
+  end</pre>
+<p><br/>
+<b>Code 2:</b>
+</p>
+<pre>  for i=1,1000000 do
+    a[i]=i
+  end</pre>
+<p><br/>
+<b>Code 3:</b>
+</p>
+<pre>  for i=1,1000000 do
+    a[#a+1]=i
+  end</pre>
+<p><br/>
+<b>Code 4:</b>
+</p>
+<pre>  local count = 1
+  for i=1,1000000 do
+    d[count]=i
+    count=count+1
+  end</pre>
+<p><br/>
+<b>Results:</b>
+</p>
+<dl><dd><span class="warning">table.insert: 1.250 (727%)</span></dd>
+<dd><span class="note">a[i]: 0.172 (100%)</span></dd>
+<dd>a[#a+1]=x: 0.453 (263%)</dd>
+<dd>a[count++]=x: 0.203 (118%)</dd></dl>
+<p><b>Conclusion:</b>
+</p>
+<dl><dd>Don't use <code>table.insert</code>!!! Try to save the table-size somewhere and use <code>a[count+1]=x</code>!</dd></dl>
+<p><br/>
+</p>
+<h2><span id="TEST_12:_Adding_Table_Items_(mytable_={}_vs._mytable={...})"></span><span class="mw-headline" id="TEST_12:_Adding_Table_Items_.28mytable_.3D.7B.7D_vs._mytable.3D.7B....7D.29">TEST 12: Adding Table Items (mytable ={} vs. mytable={...})</span></h2>
+<p>When you write {true, true, true} , Lua knows beforehand that the table will need three slots in its array part, so Lua creates the table with that size. Similarly, if you write
+{x = 1, y = 2, z = 3}, Lua will create a table with four slots in its hash part.
+</p><p>As an example, the next loop runs in 2.0 seconds:
+</p><p><br/>
+<code>for i = 1, 1000000 do
+</code></p><p><code>local a = {}
+</code></p><p><code>a[1] = 1; a[2] = 2; a[3] = 3
+</code></p><p><code>end
+</code>
+</p><p>If we create the tables with the right size, we reduce the run t
+ime to 0.7 seconds:
+</p><p><code>
+for i = 1, 1000000 do
+</code></p><p><code>local a = {true, true, true}
+</code></p><p><code>a[1] = 1; a[2] = 2; a[3] = 3
+</code></p><p><code>end
+</code>
+</p><p>If you write something like {[1] = true, [2] = true, [3] = true}, however, Lua is not smart enough to detect that the given expressions (literal numbers, in this case) describe array indices, so it creates a table with four slots in its hash part, wasting memory and CPU time
+</p><p><a class="external autonumber" href="http://www.lua.org/gems/sample.pdf" rel="nofollow">[1]</a>
+</p>
+<h1><span class="mw-headline" id="Test_13">Test 13</span></h1>
+<p>Table initialisation with local members and static intialisation. 
+</p>
+<pre>local x = os.clock()
+T={}
+print(string.format("start time: %.2f\n", os.clock() - x))
+local CachedTable= {"abc","def","ghk"}
+for i=1 , 10000000, 1 do
+T[i] = CachedTable
+end
+print(string.format("elapsed time: %.2f\n", os.clock() - x))
+</pre>
+<pre>local x = os.clock()
+A={}
+print(string.format("start time: %.2f\n", os.clock() - x))
+for i=1 , 10000000, 1 do
+A[i] = {"abc","def","ghk"}
+end
+print(string.format("elapsed time: %.2f\n", os.clock() - x))
+</pre>
+<p>Result:
+local table initializer = 100 %
+static intializer = 500 %
+</p><p>Analysis: Lua sucks at identifying static initializers, do not use them, use local initalizations instead.
+</p>
+<h1><span class="mw-headline" id="Lua_Garbage_Collection">Lua Garbage Collection</span></h1>
+<p>Forum thread about <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?t&amp;t=31049" rel="nofollow">Lua Garbage collection info</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223605
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.015 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 236/1000000
+Post‐expand include size: 80/2097152 bytes
+Template argument size: 32/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3100/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.695      1 Template:Forumlink
+100.00%    1.695      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3092-0!canonical and timestamp 20260309223605 and revision id 30790
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_Performance&amp;oldid=30790">https://springrts.com/mediawiki/index.php?title=Lua_Performance&amp;oldid=30790</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_Performance.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_Performance&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_Performance&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_Performance&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_Performance.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_Performance&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+Performance" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_Performance" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_Performance" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_Performance&amp;oldid=30790" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_Performance&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 13 October 2018, at 10:59.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.015","walltime":"0.018","ppvisitednodes":{"value":236,"limit":1000000},"postexpandincludesize":{"value":80,"limit":2097152},"templateargumentsize":{"value":32,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3100,"limit":5000000},"timingprofile":["100.00%    1.695      1 Template:Forumlink","100.00%    1.695      1 -total"]},"cachereport":{"timestamp":"20260309223605","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":138});});</script></body></html>

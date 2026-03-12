@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua PathFinder - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"478b9905b8fd3ed270e3fd9a","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_PathFinder","wgTitle":"Lua PathFinder","wgCurRevisionId":30557,"wgRevisionId":30557,"wgArticleId":2469,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_PathFinder","wgRelevantArticleId":2469,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":
+"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_PathFinder rootpage-Lua_PathFinder skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua PathFinder</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua PathFinder
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#PathFinder"><span class="tocnumber">1</span> <span class="toctext">PathFinder</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Path_UserData_Object"><span class="tocnumber">2</span> <span class="toctext">Path UserData Object</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Further_Reading"><span class="tocnumber">3</span> <span class="toctext">Further Reading</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#PathNodeCosts"><span class="tocnumber">4</span> <span class="toctext">PathNodeCosts</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="PathFinder">PathFinder</span></h2>
+<p><b>Path.RequestPath</b>
+</p>
+<pre> ( string "MoveTypeName" | number moveID,
+   number start_x, number start_y, number start_z,
+   number end_x,   number end_y,   number end_z
+   [, number radius = 8 ]
+ ) -&gt; nil | pathObject path <font color="#55ee99">(see below)</font>
+</pre>
+<h2><span class="mw-headline" id="Path_UserData_Object">Path UserData Object</span></h2>
+<p><b>Path:GetPathWayPoints</b>
+</p>
+<pre> ( ) -&gt; nil | {
+    [1] = { x,y,z }, ...
+  },{
+    [1] = startIdxOfDetailedPath,
+    [2] = startIdxOfDetailedEstimatedPath1,
+    [3] = startIdxOfDetailedEstimatedPath2,
+  }
+</pre>
+<p><font color="#55ee99">GetPathWayPoints() returns 2 tables:  1 table with the waypoints and 1 table with 3 indices (in the waypoint table) when a new (more lazy) pathfinding algorithm  begins.  So the waypoint table contains 3 different levels of details.</font>
+</p><p><b>Path:Next</b>
+</p>
+<pre> ( number pos_x, number pos_y, number pos_z,
+   [, number radius = 0 ]
+ ) -&gt; nil | number x, number y, number z
+</pre>
+<p><font color="#55ee99">Path:Next() returns the next waypoint in the path.  Unlike GetPathWayPoints() in which the resolution of the waypoints decreases, Next updates the path so the resolution will increase as it approaches the target.</font>
+</p><p>Note that <i>Path</i> in <i>Path:GetPathWayPoints</i> and <i>Path:Next</i> is not part of the command, but rather a reference to the path Object created by <i>Spring.RequestPath</i>.  It must match the path Object (case sensitive).
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Further_Reading">Further Reading</span></h2>
+<p><a class="external text" href="http://springrts.com/phpbb/viewtopic.php?t&amp;t=22953&amp;start=2" rel="nofollow">a forum thread</a>
+</p><p><br/>
+</p>
+<h1><span class="mw-headline" id="PathNodeCosts">PathNodeCosts</span></h1>
+<p>The following functions allow manipulating the cost of nodes visited by the pathfinding algorithm through numbered additive overlays (arrays). Only one overlay can be active at once, but as many as desired may be created with <b>InitPathNodeCostsArray</b>. The active layer is set by <b>SetPathNodeCosts</b>.<br/>
+</p><p><span class="note">NOTE: There are separate arrays for synced &amp; unsynced! - don't ask when the unsynced one is used ... -</span>
+</p><p><span class="warning">IMPORTANT: the size of a newly created layer can be arbitrary, but ideally should match the heightmap dimensions. <b>GetPathNodeCost</b> ALWAYS takes heightmap coordinates as arguments, which are internally converted to the resolution of the active node-overlay (if any).</span>
+</p><p><b>Path.InitPathNodeCostsArray</b>
+</p>
+<pre> (number arrayID, number numNodesX, number numNodesZ) -&gt; boolean success
+</pre>
+<p><b>Path.FreePathNodeCostsArray</b>
+</p>
+<pre> (number arrayID) -&gt; boolean success
+</pre>
+<p><b>Path.SetPathNodeCosts</b>
+</p>
+<pre> (number arrayID) -&gt; boolean success
+</pre>
+<p><b>Path.GetPathNodeCosts</b> <span class="warning">New in version 104.0</span>
+</p>
+<pre> (number arrayID) -&gt; nil | table overlayCosts
+</pre>
+<p><b>Path.SetPathNodeCost</b>
+</p>
+<pre> (number arrayID, number nodeArrayIndex, number cost) -&gt; boolean success
+</pre>
+<p><b>Path.GetPathNodeCost</b>
+</p>
+<pre> (number arrayID, number heightMapX, number heightMapZ) -&gt; number nodeCost
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223602
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.011 seconds
+Preprocessor visited node count: 36/1000000
+Post‐expand include size: 138/2097152 bytes
+Template argument size: 32/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    4.236      1 -total
+ 52.12%    2.208      1 Template:Forumlink
+ 46.11%    1.953      1 Template:New
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2469-0!canonical and timestamp 20260309223602 and revision id 30557
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_PathFinder&amp;oldid=30557">https://springrts.com/mediawiki/index.php?title=Lua_PathFinder&amp;oldid=30557</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_PathFinder.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_PathFinder&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_PathFinder&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_PathFinder&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_PathFinder.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_PathFinder&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+PathFinder" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_PathFinder" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_PathFinder" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_PathFinder&amp;oldid=30557" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_PathFinder&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 22 December 2017, at 12:46.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.008","walltime":"0.011","ppvisitednodes":{"value":36,"limit":1000000},"postexpandincludesize":{"value":138,"limit":2097152},"templateargumentsize":{"value":32,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    4.236      1 -total"," 52.12%    2.208      1 Template:Forumlink"," 46.11%    1.953      1 Template:New"]},"cachereport":{"timestamp":"20260309223602","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":101});});</script></body></html>

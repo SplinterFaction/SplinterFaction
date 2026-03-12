@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Maps:Compiling - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"acd93797f2acad87fc20be1b","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Maps:Compiling","wgTitle":"Maps:Compiling","wgCurRevisionId":30726,"wgRevisionId":30726,"wgArticleId":1137,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Maps:Compiling","wgRelevantArticleId":1137,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles"
+:"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Maps_Compiling rootpage-Maps_Compiling skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Maps:Compiling</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; Maps:Compiling
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Compiling_Spring_Maps"><span class="tocnumber">1</span> <span class="toctext">Compiling Spring Maps</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Before_you_start"><span class="tocnumber">1.1</span> <span class="toctext">Before you start</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Command_Line_Options"><span class="tocnumber">1.2</span> <span class="toctext">Command Line Options</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Compiling_through_a_batch_file"><span class="tocnumber">1.3</span> <span class="toctext">Compiling through a batch file</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Compiling_through_DOS"><span class="tocnumber">1.4</span> <span class="toctext">Compiling through DOS</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Testing_your_map"><span class="tocnumber">1.5</span> <span class="toctext">Testing your map</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Compressing_your_map"><span class="tocnumber">1.6</span> <span class="toctext">Compressing your map</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Compiling_Spring_Maps">Compiling Spring Maps</span></h2>
+<p>This is often the bit that scares a lot of people off, but it is really not that difficult. There are two different ways to compile a map, so you can choose which option suits you best. You can:
+</p>
+<ul><li>Compile through a DOS prompt, or</li>
+<li>Create and batch file.</li></ul>
+<p><b>**NOTE!** IF YOU EVER GET JUST A PINK TEXTURE AFTER COMPILING THE ISSUE IS THAT YOU EITHER RENAMED THE FILES AFTER COMPILING OR CHANGED THE DIRECTORY STRUCTURE! THE SMD, SMT, AND SMF FILES MUST BE ALL CONTAINED WITHIN A DIRECTORY INSIDE YOUR ARCHIVE NAMED "maps"!!!</b>
+</p>
+<h3><span class="mw-headline" id="Before_you_start">Before you start</span></h3>
+<p>First off, download a map converter.There are two compilers that most people use:
+</p>
+<ul><li><a href="Mothers_MapConv.html" title="Mothers MapConv">Mothers MapConv</a> with 'optimization'<br/>This version should work for everyone, it has the no scanlines hack included. Works just like its described below.</li>
+<li>Users <a href="MapConv.html" title="MapConv">MapConv</a> without optimization <br/>Use this if you feel adventurous or need very special features.</li></ul>
+<p>Place the compiler in to a directory on your computer somewhere. Because of a bug in the program, the path to the map converter can NOT contain ANY Spaces. A Path of <b>C:\Maps\MapConv\</b> is good, but a path of <b>C:\Maps\Map Conv\</b> is BAD.
+</p><p>A good practice is to save all your source Pictures into seperate folders when making a map. However, this gets very tedious when compiling. So it is a good idea to make a copy of your source BMP files and place these in the same folder as the map  converter. This just makes things alot easier later on. You should have the following files in your MapConv folder:
+</p>
+<ul><li>Texture.bmp (mapsize*512 pixels)</li>
+<li>Height.bmp (mapsize*8+1 pixels)</li>
+<li>Metal.bmp (mapsize*8+1 pixels)</li>
+<li>Feature.bmp (mapsize*8 pixels)</li></ul>
+<p>All .bmp files should be 24bit RGB bitmaps.
+</p><p>You should also put, if you are using them, your type map (Type.bmp) and your tile
+map (Tile.bmp). Most maps do not use these, so you do not usually need to worry about them.
+</p><p>You need the 7-zip compression program to compress your map into a .<a class="mw-redirect" href="Sd7.html" title="Sd7">sd7</a> map file.
+</p>
+<ul><li><a class="external text" href="http://www.7-zip.org" rel="nofollow">7-zip homepage</a></li>
+<li><a class="external text" href="http://prdownloads.sourceforge.net/sevenzip/7z431.exe?download" rel="nofollow">Download Link</a></li></ul>
+<p>A .smd file. These can be made with <a class="external text" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=2420" rel="nofollow">Maelstroms SMD creator</a>.
+It is recommended to actually try to learn how the different SMD values works though by looking at other maps .smd files. The SMD creator is also not completly bugfree, so you should preferably look it through once with a text editor anyway.
+</p><p>You also need to know:
+</p>
+<ul><li>The minimum and maximum heights of your map.</li>
+<li>The name of your map.</li>
+<li>How much you want to compress your map.</li></ul>
+<h3><span class="mw-headline" id="Command_Line_Options">Command Line Options</span></h3>
+<p>As the compiler runs off information entered into it as <b>Command Line Parameters</b> , you need to know a bit about them first. Command Line Parameters are really not difficult to understand. They look a bit like this: 
+</p>
+<pre>ProgramName -Setting1 Value -Setting2 Value
+</pre>
+<p>The first bit is how we launch the program. Windows will launch whatever program is specified by <b>ProgramName</b>. <b>-Setting1 Value</b> is also very simple. Windows basically says to the program "Setting1 is Value". A better example would be -height 10, which basicly means "Height is 10". These can be combined with as many settings as you want, as we can see with the <b>Setting2 Value</b> bit. In this way we can pass as much information to the compiler as we want. To compile a map, we need the following Command Line Parameters:
+</p><p><b>Map Compression</b>
+This takes the form of <b>-c Compression</b>, where Compression is a value. Typing <b>-c 0</b> will give a compression of 0. Range is 0-1, where 0 is no compression, and will make you final map file size very large. **NOTE** NEVER USE THE SMF COMPRESSION, IT IS UTTERLY USELESS! (Further note, its not useles, just ugly. If your making a map thats bigger than 16*16, then I advise you to use it to save on the file size and texture memory. Values of up to 0.6 wont cause too noticable loss in quality, while still reducing file size.)
+</p><p><b>Max Height</b>
+This specifies the maximum height of the map. This option looks like <b>-x Height</b>, where Height is the maximum height of the map. Typing <b>-x 300</b> will give your map a maximum height of 300 map units.
+</p><p><b>Minimum Height</b>
+This specifies the minimum height of the map. This option looks like <b>-n Height</b>, where Height is the minimum height of the map. Typing <b>-n -50</b> will give your map a minimum height of -50 map units.
+</p><p><b>Texture</b>
+This specifies the location of your texture picture. This option looks like <b>-t Location</b>, where Location is the location of your texture image. Typing <b>-t texture.bmp</b> will make the compiler look in the same directory it is in for <b>texture.bmp</b>. Typing <b>-t C:\Maps\HillMap\texture.bmp</b> will make the compiler look in the <b>C:\Maps\HillMap\</b> for texture.bmp. This name cannot contain spaces.
+</p><p><b>Other Picture files</b>
+These work in basically the same way as the texture option works, with just a changed Setting name.
+</p>
+<ul><li><b>-m metal.bmp</b>: Specifies the location of the metal map.</li>
+<li><b>-a height.bmp</b>: Specifies the location of the height map.</li>
+<li><b>-f feature.bmp</b>: Specifies the location of the feature map.</li>
+<li><b>-y typemap.bmp</b>: Specifies the location of the terrain type map.</li></ul>
+<p>Please note that these names cannot contain spaces.
+</p><p><b>Map Name</b>
+The Map Converter needs to know where to save your map, and what to call it. We use the <b>-o Mapname.smf</b> setting to do this. Of course, you replace Mapname with the name of your map, but you NEED to have the '.smf' bit on the end of it, otherwise the compiling wont work. An example would be <b>-o HillMap.smf</b>. This name may contain spaces, but only if you put the filename in quotes like so: <b>-o "My Map Name.smf"</b>
+</p><p><b>Other Tags</b>
+Some of these tags are helpful, some are annoying and some are just a mystery. This is basically the mics tags settings.
+</p>
+<ul><li><b>Low Pass</b>: If you map has very steep slopes or rough areas that look ugly, this will smooth them a bit. Is activated just by typing <b>-l</b>. Very useful feature if your heightmap is a bit noisy but you dont want to lose detail by blurring/smoothing it in an image manipulation program</li>
+<li><b>Invert Height map</b>: As the logical way to make a height map is the same way up as all the other maps, but the way the map is actually used is the inverted version of this. To make things easier, they included this option to invert the height map. Is activated just by typing '-i'. Most maps will use this. With invert option enabled, black areas on the heightmap will correspond do the lowest points on the map.</li></ul>
+<h3><span class="mw-headline" id="Compiling_through_a_batch_file">Compiling through a batch file</span></h3>
+<p>This is perhaps the easiest option. You just have to create a simple text file, rename it, and run.
+</p><p>First, open up Notepad. Notepad can be found in Start &gt; Program Files &gt; Accessories &gt; Notepad. In notepad, type or copy the following:
+</p><p><b>mapconv -c 0 -x 500 -n 50 -o MapName.smf -t texture.bmp -m metal.bmp -a height.bmp -f feature.bmp -i </b>
+</p><p>Replace the relevant values with the values you need, as the settings here will not work for all the maps. Then, in Notepad click File &gt; Save As. In the file name box, type <b>"Compile.bat"</b>, with the quotes. If you do not have the quotes, it will not work. Save the file in the same directory as your compiler.
+</p><p>Go to the MapConv folder on your hard drive, and you should see a new file. This file will be called Compile.bat. Double click this file, and a black Dos window should pop up. After a few minutes the window should close. There will now be 2 extra files in that directory. <b>MapName.smt</b> and <b>MapName.smf</b>.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Compiling_through_DOS">Compiling through DOS</span></h3>
+<p>Use this option if you want to read the information that the MapConv outputs. If you are not familiar with how DOS works, then this way is not for you.
+</p><p>All you need to do is navigate your way through DOS to the location of your map converter program. Then, type in the following:
+</p><p><b>mapconv -c 0 -x 500 -n 50 -o MapName.smf -t texture.bmp -m metal.bmp -a height.bmp -f feature.bmp -i </b>
+</p><p>Replace the relevant values with the values you need, as the settings here will not work for all the maps.
+</p><p>Once compiled, there will be 2 extra files in that directory. <b>MapName.smt</b> and <b>MapName.smf</b>.
+</p>
+<h3><span class="mw-headline" id="Testing_your_map">Testing your map</span></h3>
+<p>Most often, its very annoying to have to zip and replace your map files for them to work. There is a very simple workaround that allows you, for example, to edit your .smd file and not have to zip it all up again:
+</p><p>Create a <b>Mapname.sdd</b> <b>directory</b> in your spring/maps folder, and copy the all the files you would normally place into the zipped map into it. This will allow Spring to load the map just as if it were 7zipped and renamed to .<a class="mw-redirect" href="Sd7.html" title="Sd7">sd7</a>
+</p><p>Example file placing:
+Spring/maps/Mapname.sdd/maps/Mapname.smd
+</p><p>After you've got everything fine tuned, you can 7zip the map for distribution.
+</p>
+<h3><span class="mw-headline" id="Compressing_your_map">Compressing your map</span></h3>
+<p>Your SMD file needs to have the same name as the .smt and .smf files. If your smt file is calles <b>HillMap.smt</b>, your .smd file needs to be called <b>HillMap.smd</b>.
+</p><p>Place the <b>MapName.smd</b>, <b>MapName.smt</b> and <b>MapName.smf</b> files into an empty folder called maps\. Eg: <b>C:\maps\</b>. Right click this folder, and a right click menu should appear. In that menu, there will be a 7-Zip<b>&gt;</b> submenu. Open this menu, and click <b>Add to Archive...</b>. A 7-zip window will appear. Make sure the settings are identical to the following picture:
+<a class="image" href="/wiki/File:7-zip_options.jpg"><img alt="7-zip options.jpg" decoding="async" height="471" src="images/7-zip_options.jpg" width="543"/></a>
+</p><p>Change the <b>Archive</b> box at the top to the name of your map, with .sd7 on the end. Eg: <b>HillMap.sd7</b>. Click the <b>OK</b> button. After the compression has completed, there will be a file called <b>HillMap.sd7</b> in the same directory as the folder was. In this example, the <b>HillMap.sd7</b> would be straight on the C:\ drive. Copy <b>HillMap.sd7</b> to your TASpring\Maps\ directory.
+</p><p>NOiZE: The compresion can be set at ultra. but make sure you don't make it a solid archive!
+</p><p>If all of this was done correctly, the map should now appear your maps list in the lobby, and you can go play it.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223526
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.009 seconds
+Preprocessor visited node count: 29/1000000
+Post‐expand include size: 14/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1137-0!canonical and timestamp 20260309223526 and revision id 30726
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Maps:Compiling&amp;oldid=30726">https://springrts.com/mediawiki/index.php?title=Maps:Compiling&amp;oldid=30726</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Maps_Compiling.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Maps:Compiling&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Maps:Compiling&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Maps:Compiling&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Maps_Compiling.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Maps:Compiling&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Maps%3ACompiling" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Maps:Compiling" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Maps:Compiling" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Maps:Compiling&amp;oldid=30726" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Maps:Compiling&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 14 August 2018, at 03:37.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.008","walltime":"0.009","ppvisitednodes":{"value":29,"limit":1000000},"postexpandincludesize":{"value":14,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223526","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":149});});</script></body></html>

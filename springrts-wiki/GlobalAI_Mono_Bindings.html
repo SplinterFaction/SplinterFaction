@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>GlobalAI Mono Bindings - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"19b3655c0d4c173ca13b6639","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"GlobalAI_Mono_Bindings","wgTitle":"GlobalAI Mono Bindings","wgCurRevisionId":29431,"wgRevisionId":29431,"wgArticleId":1877,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AI Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"GlobalAI_Mono_Bindings","wgRelevantArticleId":1877,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":
+"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-GlobalAI_Mono_Bindings rootpage-GlobalAI_Mono_Bindings skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">GlobalAI Mono Bindings</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#High-level_overview"><span class="tocnumber">2</span> <span class="toctext">High-level overview</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Download"><span class="tocnumber">3</span> <span class="toctext">Download</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Architecture"><span class="tocnumber">4</span> <span class="toctext">Architecture</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Pass-by-value"><span class="tocnumber">4.1</span> <span class="toctext">Pass-by-value</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Proxied_method_calls_from_C.2B.2B_to_C.23"><span class="tocnumber">4.2</span> <span class="toctext">Proxied method calls from C++ to C#</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Proxied_method_calls_from_C.23_to_C.2B.2B"><span class="tocnumber">4.3</span> <span class="toctext">Proxied method calls from C# to C++</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Generator_main_block"><span class="tocnumber">5</span> <span class="toctext">Generator main block</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Use_of_attributes"><span class="tocnumber">6</span> <span class="toctext">Use of attributes</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Hand-Tweaked_Code"><span class="tocnumber">7</span> <span class="toctext">Hand-Tweaked Code</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Overall"><span class="tocnumber">8</span> <span class="toctext">Overall</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Introduction">Introduction</span></h1>
+<p>Writing AIs in C# massively facilitates development, because C# runs just as fast as C++ and avoids those annoying stack/heap corruption errors.
+</p><p>We have bindings for .Net Framework 1.1 and 2.0 for Windows.  It would be useful to create a set of bindings for Mono so that this could run also on any Mono-supported platform.
+</p><p>Such bindings would make it possible to write portable AIs in C#, Boo (Python.Net), and any .Net language capable of being compiled into a portable ILSM class library.
+</p><p>Here's some thoughts on writing such bindings.
+</p><p>These thoughts are taken from a fuller thread at <a class="external text" href="http://taspring.clan-sy.com/phpbb/viewtopic.php?t=7634&amp;postdays=0&amp;postorder=asc" rel="nofollow">http://taspring.clan-sy.com/phpbb/viewtopic.php?t=7634&amp;postdays=0&amp;postorder=asc</a>
+</p>
+<h1><span class="mw-headline" id="High-level_overview">High-level overview</span></h1>
+<p>To create bindings for Mono, we almost certainly need a generator. The hardest part of writing a generator is parsing the input files. In the case of the Mono bindings, we can use Reflection on the existing CSAIInterfaces.dll. This could save a lot of time.
+</p>
+<h1><span class="mw-headline" id="Download">Download</span></h1>
+<p>Code written so far:
+</p>
+<ul><li>prototyping code and generator: modified MonoEmbeddedTest at <a class="external text" href="http://hughperkins.com/csai/MonoEmbeddedTest.zip" rel="nofollow">http://hughperkins.com/csai/MonoEmbeddedTest.zip</a></li>
+<li>C# AI "Hello World" for Mono: <a class="external text" href="http://hughperkins.com/csai/CSharpAIMono.zip" rel="nofollow">http://hughperkins.com/csai/CSharpAIMono.zip</a> Note that you will need to ensure that Mono-1.1.18/bin is in Spring.exe's path.</li></ul>
+<p>A generator has been started in the file "GenerateCode.cs" in the MonoEmbeddedTest.zip zipfile. You can build it by doing:
+</p>
+<pre>csc /debug GenerateCode.cs /reference:CSAIInterfaces.dll
+</pre>
+<p>Using mono, you'd do:
+</p>
+<pre>mcs -debug -reference:CSAIInterfaces.dll GenerateCode.cs
+</pre>
+<h1><span class="mw-headline" id="Architecture">Architecture</span></h1>
+<p>There are three types of classes we need to deal with:
+</p>
+<ul><li>data classes, pass-by-value. This includes: Command, Float3</li>
+<li>proxied method calls from C++ to C#. This includes: IGlobalAI</li>
+<li>proxied method calls from C# to C++. This includes: IUnitDef, IAICallback</li></ul>
+<h2><span class="mw-headline" id="Pass-by-value">Pass-by-value</span></h2>
+<p>We create a class in C++ for each pass-by-value class, with static methods "Marshall_MyType_to_MonoObject" and "Marshall_MonoObject_to_MyType"
+</p><p>The generator does this already, although it needs tweaking to cope with the double array in Command.
+</p><p>Two files are created for each type: MyTypeMarshaller.cpp and MyTypeMarshaller.h
+</p><p>We include the include file for the original Spring native type from MyTypeMarshaller.h, eg Float3Marshaller.h includes Float3.h.
+</p>
+<h2><span id="Proxied_method_calls_from_C++_to_C#"></span><span class="mw-headline" id="Proxied_method_calls_from_C.2B.2B_to_C.23">Proxied method calls from C++ to C#</span></h2>
+<p>There is only one class that this applies to, IGlobalAI.
+</p><p>We create a C# class GlobalAIProxyLoader, which contains delegate definitions for each method in IGlobalAI, and which calls SetUnitCreatedHandler etc on the C++ proxy class
+</p><p>We create a C++ class GlobalAIProxyCppToCs , which contains a function to receive each delegate from the C# ProxyLoader. It implements each function in IGlobalAI, redirecting to a user-provided GlobalAI C# class.
+</p><p>We strip the leading "I" from the interface name to get the underlying type name.
+</p>
+<h2><span id="Proxied_method_calls_from_C#_to_C++"></span><span class="mw-headline" id="Proxied_method_calls_from_C.23_to_C.2B.2B">Proxied method calls from C# to C++</span></h2>
+<p>This applies to: IUnitDef, and IAICallback.
+</p><p>The native instances of these classes are always created by Spring itself, then passed back to the AI. We need to provide a C# proxy to wrap calls to a C++ proxy, which forwards the calls to the native instance.
+</p><p>Two classes called MyTypeCallbackProxyCsToCpp are created, one in C# one in C++.
+</p><p>The MyTypeCallbackProxyCsToCpp class in C# contains instance methods, such as SendTextMsg, which redirect to static methods, such as _SendTextMsg. The static methods are extern'd internal calls to methods with the same name in the MyTypeCallbackProxyCsToCpp class in C++.
+</p><p>In the general case, there can be many instances of each of these proxied classes, so we create a map of reference number to instance in the C++ proxy. The reference number is an arbitrary number starting from 1.
+</p><p>Each time a function on the Spring side returns a class that needs to be proxied into C#, we create a new reference number and add it to the map. The reference number is returned into the C#-side proxy, and will be used as a handle for method calls in the future.
+</p><p>The C#-side proxy that called the spring function that returned the new proxied class will receive the new handle from the C++-side proxy, and create a new instance of the appropriate proxy class, passing in the new handle in the constructor. It can then pass the new proxy class instance onto the C# AI.
+</p><p>The method calls from C# into C++ contain an additional first parameter, which is the reference number , which allows the C++-side proxy to select the appropriate native object and forward the call, eg to a UnitDef object. The instance methods in the C#-side proxy class will add the additional handle parameter when they call the corresponding static method.
+</p><p>The method calls in the C++ proxy are static, so they can be internal-called from C#, and in a class, to avoid namespace collisions.
+</p>
+<h1><span class="mw-headline" id="Generator_main_block">Generator main block</span></h1>
+<p>The generator main block can add each of the types to be generated into an arraylist TypesByVal, ProxiesCppToCs or ProxiesCsToCpp, as appropriate. Then when we call generate:
+</p>
+<ul><li>it goes through each arraylist and generates the appropriate classes</li>
+<li>when a class undergoing generation uses one of the other classes, the generator can handle this accordingly by checking which arraylist the other classes are in</li></ul>
+<h1><span class="mw-headline" id="Use_of_attributes">Use of attributes</span></h1>
+<p>It's possible to add custom attributes to parameters and methods in the interface classes in CSAIInterfaces.dll . These can be read by the generator and used to tweak the generation.
+</p><p>For example, we could have [MarshallAsCNullTerminatedString] vs [MarshallAsCppStdString].
+</p><p>An attribute is just an empty class that derives from Attribute, eg:
+</p>
+<pre>[AttributeUsage(AttributeTargets.Parameter, Inherited = false, AllowMultiple = true)]
+public class MarshallAsCNullTerminatedString: Attribute
+{
+   // nothing needed here, empty class
+}
+</pre>
+<p>Use of attributes should probably be kept to a minimum, to avoid modifying CSAIInterfaces.dll, but the possibility exists where necessary.
+</p>
+<h1><span class="mw-headline" id="Hand-Tweaked_Code">Hand-Tweaked Code</span></h1>
+<p>It will almost certainly be necessary to add hand-tweaked code to the proxies. For example, GetMetalMap() cannot be easily guessed, because there is no info on the size of the array, and it's not constant either.
+</p><p>Hand-tweaked code could be added by creating a derived class, in C++, from the proxy class one wishes to tweak. This keeps generated code separate from human-written code, so it is easy to regenerate the files as the interfaces change.
+</p><p>The generator will need to know the name of any derived classes so that it can use this in any "new" statements it generates for that proxy.
+</p>
+<h1><span class="mw-headline" id="Overall">Overall</span></h1>
+<p>A plan exists that should probably work. Some code has been written. The devil is in the details.
+</p><p>Writing the Mono bindings will need someone with a good knowledge of the Mono API, the Spring GlobalAI API, C, C++ and C#.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309224143
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.010 seconds
+Preprocessor visited node count: 47/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 335/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1877-0!canonical and timestamp 20260309224143 and revision id 29431
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=GlobalAI_Mono_Bindings&amp;oldid=29431">https://springrts.com/mediawiki/index.php?title=GlobalAI_Mono_Bindings&amp;oldid=29431</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_AI_Dev.html" title="Category:AI Dev">AI Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="GlobalAI_Mono_Bindings.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:GlobalAI_Mono_Bindings&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=GlobalAI_Mono_Bindings&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=GlobalAI_Mono_Bindings&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="GlobalAI_Mono_Bindings.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:GlobalAI_Mono_Bindings&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=GlobalAI+Mono+Bindings" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/GlobalAI_Mono_Bindings" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/GlobalAI_Mono_Bindings" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=GlobalAI_Mono_Bindings&amp;oldid=29431" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=GlobalAI_Mono_Bindings&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 9 August 2015, at 11:34.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.008","walltime":"0.010","ppvisitednodes":{"value":47,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":335,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224143","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":90});});</script></body></html>

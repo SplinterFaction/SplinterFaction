@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Gamedev:CollisionVolumes - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"1c11d0c0c506c2c6ad4bbbfc","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Gamedev:CollisionVolumes","wgTitle":"Gamedev:CollisionVolumes","wgCurRevisionId":31160,"wgRevisionId":31160,"wgArticleId":3066,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Game Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Gamedev:CollisionVolumes","wgRelevantArticleId":3066,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi5tb25vIHsKICAgICAgIGZvbnQtZmFtaWx5OiBjb3VyaWVyLCBtb25vc3BhY2U7CiAgIH0KICAgc3Bhbi52YWx1ZSB7CiAgICAgICBjb2xvcjogI2ZmNjYwMDsKICAgfQ==" rel="stylesheet"/><!-- End Extension:CSS -->
+<!-- Begin Extension:CSS --><link href="data:text/css;charset=UTF-8;base64,c3Bhbi52YWx1ZSB7CiAgICBjb2xvcjojZTY1YzAwOwogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi50eXBlIHsKICAgIGNvbG9yOiMwMDk5Y2M7IAogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9CiAgc3Bhbi5wcmVmaXggewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogIH0gICAKICBzcGFuLm5hbWUgewogICAgY29sb3I6IzEwNTI4OTsgCiAgICBmb250LWZhbWlseTogw6LigqzLnEx1Y2lkYSBDb25zb2xlw6LigqzihKIsIE1vbmFjbywgbW9ub3NwYWNlOwogICAgZm9udC13ZWlnaHQ6Ym9sZDsKICB9CiAgc3Bhbi52YXIgewogICAgZm9udC1mYW1pbHk6IMOi4oKsy5xMdWNpZGEgQ29uc29sZcOi4oKs4oSiLCBNb25hY28sIG1vbm9zcGFjZTsKICB9" rel="stylesheet"/><!-- End Extension:CSS -->
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Gamedev_CollisionVolumes rootpage-Gamedev_CollisionVolumes skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Gamedev:CollisionVolumes</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Collision_Volumes"><span class="tocnumber">1</span> <span class="toctext">Collision Volumes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#What_is_a_collision_volume.3F"><span class="tocnumber">1.1</span> <span class="toctext">What is a collision volume?</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#How_to_see_them_ingame"><span class="tocnumber">1.2</span> <span class="toctext">How to see them ingame</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#What_else_are_they_used_for.3F"><span class="tocnumber">1.3</span> <span class="toctext">What else are they used for?</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#How_to_edit_their_shape"><span class="tocnumber">1.4</span> <span class="toctext">How to edit their shape</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#In_Upspring"><span class="tocnumber">1.4.1</span> <span class="toctext">In Upspring</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#In_the_Def"><span class="tocnumber">1.4.2</span> <span class="toctext">In the Def</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#boxxy_the_hitbox_editor"><span class="tocnumber">1.4.3</span> <span class="toctext">boxxy the hitbox editor</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Multiple_collision_volumes"><span class="tocnumber">1.4.4</span> <span class="toctext">Multiple collision volumes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#Can_they_be_changed_during_gameplay.3F"><span class="tocnumber">1.5</span> <span class="toctext">Can they be changed during gameplay?</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Unit_radius_.26_height_VS_collision_volume"><span class="tocnumber">1.6</span> <span class="toctext">Unit radius &amp; height VS collision volume</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Which_spot_on_an_enemy_do_units_target"><span class="tocnumber">1.7</span> <span class="toctext">Which spot on an enemy do units target</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Common_problems_.28and_how_to_solve.29"><span class="tocnumber">1.8</span> <span class="toctext">Common problems (and how to solve)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#weapons_miss_the_unit"><span class="tocnumber">1.8.1</span> <span class="toctext">weapons miss the unit</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Intersecting_hitboxes"><span class="tocnumber">1.8.2</span> <span class="toctext">Intersecting hitboxes</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Collision_Volumes">Collision Volumes</span></h1>
+<h2><span id="What_is_a_collision_volume?"></span><span class="mw-headline" id="What_is_a_collision_volume.3F">What is a collision volume?</span></h2>
+<p>The collision volume is a geometric shape around Spring units and features. If a projectile collides with this shape, the engine registers it as a hit. Other names are hitbox, hitsphere etc.
+</p>
+<div class="floatright"><a class="image" href="/wiki/File:Units_with_hitboxes.jpg"><img alt="Units with hitboxes.jpg" decoding="async" height="186" src="images/256px-Units_with_hitboxes.jpg" srcset="/mediawiki/images/thumb/0/06/Units_with_hitboxes.jpg/384px-Units_with_hitboxes.jpg 1.5x, /mediawiki/images/thumb/0/06/Units_with_hitboxes.jpg/512px-Units_with_hitboxes.jpg 2x" width="256"/></a></div>
+<h2><span class="mw-headline" id="How_to_see_them_ingame">How to see them ingame</span></h2>
+<p>Press alt + v or type <b>/debugcolvol</b> into chat.
+Look at the purple wireframe shapes around units.
+If you can not see them, the collision volume might be blocked from view by the 3D model or be very offset like underground or in the sky.
+Red shapes indicate the unit was hit.
+</p>
+<h2><span id="What_else_are_they_used_for?"></span><span class="mw-headline" id="What_else_are_they_used_for.3F">What else are they used for?</span></h2>
+<ul><li>line-of-fire calculations</li>
+<li>mouse-click detection when selecting a single unit</li></ul>
+<h2><span class="mw-headline" id="How_to_edit_their_shape">How to edit their shape</span></h2>
+<h3><span class="mw-headline" id="In_Upspring">In Upspring</span></h3>
+<p>In the 3D view, click on the blue "3D" text and a menu opens.<br/>
+Click "draw model radius + height"<br/>
+At the right side, go to the "Model" tab and edit the values.<br/>
+With Upspring, you can only define sphere shaped collision volumes.<br/>
+</p>
+<h3><span class="mw-headline" id="In_the_Def">In the Def</span></h3>
+<p>There are numerous <a href="Gamedev_UnitDefs.html#Collision_Volumes" title="Gamedev:UnitDefs">tags</a> that control shape, size and position of the collision volume. You have to restart Springfor the changes to take effect, there is no way to reload unit and feature defs.
+</p>
+<h3><span class="mw-headline" id="boxxy_the_hitbox_editor">boxxy the hitbox editor</span></h3>
+<p>This creation allows you move hitboxes by pressing buttons.
+This way you can get the needed numbers and copy them to the unitdef file.
+</p><p><img alt="loveandtrolls25t5u.gif" src="http://h-4.abload.de/img/loveandtrolls25t5u.gif"/>
+</p><p><a class="external text" href="http://springrts.com/phpbb/viewtopic.php?t&amp;t=24882" rel="nofollow">Its Boxxy!</a> (forum)
+</p>
+<h3><span class="mw-headline" id="Multiple_collision_volumes">Multiple collision volumes</span></h3>
+<p>A unit can have multiple collision volumes. For example a tank could use a box for the chassis and a cylinder for the turret.
+</p><p>Each piece can have its own collision volume. <a href="Gamedev_UnitDefs.html#usePieceCollisionVolumes" title="Gamedev:UnitDefs">usePieceCollisionVolumes</a><span class="mono"> = </span><span class="value">true</span>, will cause each piece on the model to have an autogenerated hitvolume; unwanted hitvolumes can then be removed with Lua.
+</p>
+<h2><span id="Can_they_be_changed_during_gameplay?"></span><span class="mw-headline" id="Can_they_be_changed_during_gameplay.3F">Can they be changed during gameplay?</span></h2>
+<p>Yes. One example would be "pop up" turrets that get a smaller hitbox when sunken into the ground etc.
+See <code>Spring.SetUnitCollisionVolumeData()</code> and <code>Spring.SetUnitPieceCollisionVolumeData()</code>
+at <a href="Lua_SyncedCtrl.html" title="Lua SyncedCtrl">Lua_SyncedCtrl</a>.
+</p><p>Example: <a class="external text" href="https://github.com/Balanced-Annihilation-Reloaded/BAR.sdd/blob/master/luarules/gadgets/unit_dynamic_collision_volume.lua" rel="nofollow">Dynamic Collision Volume gadget</a> and it's <a class="external text" href="https://github.com/Balanced-Annihilation-Reloaded/BAR.sdd/blob/master/luarules/configs/collisionvolumes.lua" rel="nofollow">configuration file</a>.
+</p>
+<h2><span id="Unit_radius_&amp;_height_VS_collision_volume"></span><span class="mw-headline" id="Unit_radius_.26_height_VS_collision_volume">Unit radius &amp; height VS collision volume</span></h2>
+<p>Even when a unit defines a collision volume that is not a sphere, the <i>radius</i> and <i>height</i> values set in Upspring still have a number of purposes. To name a few examples: <i>height</i> is used to decide whether a ship can move over an underwater structure, <i>radius</i> is used in collision handling for aircraft. Most importantly, all collision checks first do a pre-check with the unit <i>radius</i> before doing the colvol checks. Ergo the unit <i>radius</i> must be larger or equal to the colvol!
+</p>
+<h2><span class="mw-headline" id="Which_spot_on_an_enemy_do_units_target">Which spot on an enemy do units target</span></h2>
+<p>The model centre set in Upspring
+</p>
+<h2><span id="Common_problems_(and_how_to_solve)"></span><span class="mw-headline" id="Common_problems_.28and_how_to_solve.29">Common problems (and how to solve)</span></h2>
+<h3><span class="mw-headline" id="weapons_miss_the_unit">weapons miss the unit</span></h3>
+<p>Weapons like Dgun and torpedos might pass through under the unit if the hitvolume does not extend a bit into the ground/underwater.
+</p>
+<h3><span class="mw-headline" id="Intersecting_hitboxes">Intersecting hitboxes</span></h3>
+<p>Two near units might refuse to shoot if their turrets intersect with each other's hitboxes.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223231
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 82/1000000
+Post‐expand include size: 284/2097152 bytes
+Template argument size: 91/2097152 bytes
+Highest expansion depth: 6/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.794      1 -total
+ 73.76%    5.011      1 Template:Xtaglink
+ 41.57%    2.824      1 Template:Value
+ 25.33%    1.721      1 Template:Forumlink
+ 19.59%    1.331      1 Template:CodeStyle
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3066-0!canonical and timestamp 20260309223231 and revision id 31160
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Gamedev:CollisionVolumes&amp;oldid=31160">https://springrts.com/mediawiki/index.php?title=Gamedev:CollisionVolumes&amp;oldid=31160</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Game_Dev.html" title="Category:Game Dev">Game Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Gamedev_CollisionVolumes.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Gamedev:CollisionVolumes&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Gamedev:CollisionVolumes&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Gamedev:CollisionVolumes&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Gamedev_CollisionVolumes.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Gamedev:CollisionVolumes&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Gamedev%3ACollisionVolumes" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Gamedev:CollisionVolumes" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Gamedev:CollisionVolumes" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Gamedev:CollisionVolumes&amp;oldid=31160" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Gamedev:CollisionVolumes&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 9 January 2020, at 12:27.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.014","walltime":"0.019","ppvisitednodes":{"value":82,"limit":1000000},"postexpandincludesize":{"value":284,"limit":2097152},"templateargumentsize":{"value":91,"limit":2097152},"expansiondepth":{"value":6,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    6.794      1 -total"," 73.76%    5.011      1 Template:Xtaglink"," 41.57%    2.824      1 Template:Value"," 25.33%    1.721      1 Template:Forumlink"," 19.59%    1.331      1 Template:CodeStyle"]},"cachereport":{"timestamp":"20260309223231","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":104});});</script></body></html>

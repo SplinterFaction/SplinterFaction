@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>LINUX:SetupSpringie - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"c3b4cf7de95ad6c7a701c23d","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"LINUX:SetupSpringie","wgTitle":"LINUX:SetupSpringie","wgCurRevisionId":26963,"wgRevisionId":26963,"wgArticleId":2711,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","Autohosts"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"LINUX:SetupSpringie","wgRelevantArticleId":2711,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript"
+:"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-LINUX_SetupSpringie rootpage-LINUX_SetupSpringie skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">LINUX:SetupSpringie</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Basics"><span class="tocnumber">1</span> <span class="toctext">Basics</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Springie_on_Ubuntu"><span class="tocnumber">2</span> <span class="toctext">Springie on Ubuntu</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Configure_Springie"><span class="tocnumber">3</span> <span class="toctext">Configure Springie</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Bot_account"><span class="tocnumber">3.1</span> <span class="toctext">Bot account</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Server_Settings"><span class="tocnumber">3.2</span> <span class="toctext">Server Settings</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Add_admin_users"><span class="tocnumber">3.2.1</span> <span class="toctext">Add admin users</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Set_a_password"><span class="tocnumber">3.2.2</span> <span class="toctext">Set a password</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Set_default_map_and_mod"><span class="tocnumber">3.2.3</span> <span class="toctext">Set default map and mod</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Change_the_game_title"><span class="tocnumber">3.2.4</span> <span class="toctext">Change the game title</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Administer_Springie"><span class="tocnumber">3.2.5</span> <span class="toctext">Administer Springie</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Add_mods"><span class="tocnumber">3.3</span> <span class="toctext">Add mods</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Basics">Basics</span></h1>
+<p>Springie is a standalone windows/linux application written in C# by Licho. It is an alternative to the SPADS Autohost written by bibim. There is a <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=1&amp;t=7921&amp;st=0&amp;sk=t&amp;sd=a" rel="nofollow">forum-thread</a> dealing with springie. More information can be found in "<a class="mw-redirect" href="Hosting_Spring_Autohost.html" title="Hosting Spring/Autohost">How to use Springie</a>".
+</p><p>In order to run the application on Linux, you need to have mono installed. 
+</p><p>It is possible to run Springie on a dedicated sever without graphical interface.
+</p>
+<h1><span class="mw-headline" id="Springie_on_Ubuntu">Springie on Ubuntu</span></h1>
+<p>The following steps have led to a successful installation of Springie on an Ubuntu 9.04 (Jaunty) server.
+</p><p>1. Install Spring as described <a href="Ubuntu_install.html" title="Ubuntu install">here</a>.
+</p><p>2. Install mono:
+</p>
+<pre>sudo apt-get install mono-common libmono-winforms2.0-cil
+</pre>
+<p>3. Get Springie:
+</p>
+<pre>wget <a class="external free" href="http://springie.licho.eu/springie.zip" rel="nofollow">http://springie.licho.eu/springie.zip</a>
+</pre>
+<p>4. Extract "springie.zip" in a separate directory, e.g.:
+</p><p>In your home-directory:
+</p>
+<pre>mkdir springie
+mv path/to/springie.zip springie
+cd springie
+unzip springie.zip
+</pre>
+<p>5. Read the readme.txt file.
+</p><p>6. Edit the main.xml file in your springie directory:
+</p><p>Replace:
+</p>
+<pre>&lt;ExecutableName&gt;spring-dedicated.exe&lt;/ExecutableName&gt;
+</pre>
+<p>with:
+</p>
+<pre>&lt;ExecutableName&gt;/usr/games/spring-dedicated&lt;/ExecutableName&gt;
+</pre>
+<p>7. Run Springie.
+</p><p>When running Springie for the first time, it creates a bunch of files in its  directory. 
+</p><p>Run Springie either with
+</p>
+<pre>mono Springie.exe
+</pre>
+<p>or 
+</p>
+<pre>mono Springie.exe -nogui
+</pre>
+<p>in case of a headless display.
+</p><p>8. Stop Springie.
+</p><p>Use Ctrl+C (Strg+C) to stop Springie.
+</p><p>9. Configure Springie as described below.
+</p><p>10. Run Springie as described in item number 7. 
+</p>
+<h1><span class="mw-headline" id="Configure_Springie">Configure Springie</span></h1>
+<h2><span class="mw-headline" id="Bot_account">Bot account</span></h2>
+<p>In order to be able to play Spring and to host games at the same time, you need a new spring account.The easiest way to register a new account is to use your Multiplayer Lobby client, e.g. SpringLobby. 
+</p>
+<h2><span class="mw-headline" id="Server_Settings">Server Settings</span></h2>
+<p>In case you are hosting on a server with a display attached, you simply can use the Springie GUI for configuration.
+</p><p>If you set Springie up on a headless server, you have to manually edit autohost.xml to set the configuration options. Of course, you can use Springie on a host with a display, use the GUI for configuration and then copy over the autohost.xml file.
+</p>
+<h3><span class="mw-headline" id="Add_admin_users">Add admin users</span></h3>
+<p>Between the closing &lt;/DefaultRectangles&gt;-tag and the opening &lt;AutoLockMinPlayers&gt;-tag insert:
+</p>
+<pre> &lt;PrivilegedUsers&gt;
+ &lt;/PrivilegedUsers&gt;
+</pre>
+<p>Then for each admin insert between these tags:
+</p>
+<pre>   &lt;PrivilegedUser&gt;
+     &lt;Level&gt;LEVEL&lt;/Level&gt;
+     &lt;Name&gt;ADMIN&lt;/Name&gt;
+   &lt;/PrivilegedUser&gt;
+</pre>
+<p>where LEVEL is a number from 1 to 5 and ADMIN is a player's name who should be able to perform admin tasks.
+</p><p>The result could look like this:
+</p>
+<pre> &lt;PrivilegedUsers&gt;
+   &lt;PrivilegedUser&gt;
+     &lt;Level&gt;5&lt;/Level&gt;
+     &lt;Name&gt;YOUR-SPRING-PLAYER-ACCOUNT&lt;/Name&gt;
+   &lt;/PrivilegedUser&gt;
+   &lt;PrivilegedUser&gt;
+     &lt;Level&gt;4&lt;/Level&gt;
+     &lt;Name&gt;admin1&lt;/Name&gt;
+   &lt;/PrivilegedUser&gt;
+ &lt;/PrivilegedUsers&gt;
+</pre>
+<h3><span class="mw-headline" id="Set_a_password">Set a password</span></h3>
+<p>To set a password replace
+</p>
+<pre>&lt;Password&gt;*&lt;/Password&gt;
+</pre>
+<p>with
+</p>
+<pre>&lt;Password&gt;YOUR-PASSWORD&lt;/Password&gt;
+</pre>
+<p>in autohost.xml.
+</p>
+<h3><span class="mw-headline" id="Set_default_map_and_mod">Set default map and mod</span></h3>
+<p>The tags 
+</p>
+<pre>&lt;DefaultMap&gt;&lt;/DefaultMap&gt;
+</pre>
+<p>enclose the default map, the tags
+</p>
+<pre>&lt;DefaultMod&gt;&lt;/DefaultMod&gt;
+</pre>
+<p>the default mod.
+</p><p>An example for hosting a BA 6.95 mod with the SmallDivide map is:
+</p>
+<pre>&lt;DefaultMap&gt;SmallDivide.smf&lt;/DefaultMap&gt;
+&lt;DefaultMod&gt;Balanced Annihilation V6.95&lt;/DefaultMod&gt;
+</pre>
+<h3><span class="mw-headline" id="Change_the_game_title">Change the game title</span></h3>
+<p>Use the 
+</p>
+<pre>&lt;GameTitle&gt;&lt;/GameTitle&gt;
+</pre>
+<p>tags to set the game title, e.g.:
+</p>
+<pre>&lt;GameTitle&gt;MYCOOLSERVER!!!1!&lt;/GameTitle&gt;
+</pre>
+<h3><span class="mw-headline" id="Administer_Springie">Administer Springie</span></h3>
+<p>You can use the commands listed in the readme.txt to administer Springie by  "talking" to the bot user. The commands !help and !helpall provide lists of accepted commands.
+</p>
+<h2><span class="mw-headline" id="Add_mods">Add mods</span></h2>
+<p><i>TO DO</i>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223153
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.006 seconds
+Real time usage: 0.007 seconds
+Preprocessor visited node count: 34/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2711-0!canonical and timestamp 20260309223153 and revision id 26963
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=LINUX:SetupSpringie&amp;oldid=26963">https://springrts.com/mediawiki/index.php?title=LINUX:SetupSpringie&amp;oldid=26963</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_Autohosts.html" title="Category:Autohosts">Autohosts</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="LINUX_SetupSpringie.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:LINUX:SetupSpringie&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=LINUX:SetupSpringie&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=LINUX:SetupSpringie&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="LINUX_SetupSpringie.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:LINUX:SetupSpringie&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=LINUX%3ASetupSpringie" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/LINUX:SetupSpringie" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/LINUX:SetupSpringie" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=LINUX:SetupSpringie&amp;oldid=26963" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=LINUX:SetupSpringie&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 2 April 2013, at 03:46.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.006","walltime":"0.007","ppvisitednodes":{"value":34,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223153","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":73});});</script></body></html>

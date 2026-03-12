@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Development:Getting Started - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"de2ab4a22b8cd7a743f17984","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Development:Getting_Started","wgTitle":"Development:Getting Started","wgCurRevisionId":30300,"wgRevisionId":30300,"wgArticleId":2616,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Engine Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Development:Getting_Started","wgRelevantArticleId":2616,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":
+"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Development_Getting_Started rootpage-Development_Getting_Started skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Development:Getting Started</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; Getting Started
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Starting_Spring_Development"><span class="tocnumber">1</span> <span class="toctext">Starting Spring Development</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Overview"><span class="tocnumber">1.1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Learning_C.2B.2B"><span class="tocnumber">1.2</span> <span class="toctext">Learning C++</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Source_Code_Documentation"><span class="tocnumber">2</span> <span class="toctext">Source Code Documentation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Development_Guidelines"><span class="tocnumber">2.1</span> <span class="toctext">Development Guidelines</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Keep_track_what_others_do"><span class="tocnumber">2.2</span> <span class="toctext">Keep track what others do</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Buildbot_and_Stacktrace_translator"><span class="tocnumber">2.3</span> <span class="toctext">Buildbot and Stacktrace translator</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Important_Developer_Tasks"><span class="tocnumber">3</span> <span class="toctext">Important Developer Tasks</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Profiling"><span class="tocnumber">3.1</span> <span class="toctext">Profiling</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#How_to_debug_SyncErrors"><span class="tocnumber">3.2</span> <span class="toctext">How to debug SyncErrors</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Debug_GFX_problems"><span class="tocnumber">3.3</span> <span class="toctext">Debug GFX problems</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#How_to_get_your_code_included"><span class="tocnumber">4</span> <span class="toctext">How to get your code included</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Spring_Engine_TODO_list"><span class="tocnumber">5</span> <span class="toctext">Spring Engine TODO list</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Development_links"><span class="tocnumber">6</span> <span class="toctext">Development links</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Legal"><span class="tocnumber">7</span> <span class="toctext">Legal</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Starting_Spring_Development">Starting Spring Development</span></h1>
+<p><b>NOTE: Outlined below is information on assisting with the development of the Spring source itself. For information about developing a game (units, widgets, maps, etc.) see the <a href="Gamedev_Main.html" title="Gamedev:Main">Gamedev:Main</a> page.</b>
+</p><p><b><a href="EngineSource_for_GameDevs.html" title="EngineSource for GameDevs">Even if you are developing a game, it is highly recommended that you get the engine source. Engine source + full text search: DO IT.</a></b>
+</p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>To start development, you will need:
+</p>
+<ol><li>To read the <a href="Coding_Standards.html" title="Coding Standards">Coding_Standards</a></li>
+<li>A good code manipulation program: <a href="Development_IDEs.html" title="Development IDEs">Development_IDEs</a></li>
+<li><a href="Building_spring.html" title="Building spring">Compiling</a> the source code</li></ol>
+<h2><span id="Learning_C++"></span><span class="mw-headline" id="Learning_C.2B.2B">Learning C++</span></h2>
+<p>You will need to know C++ to modify or understand Spring's source code. If you are interested in learning C++, see <a href="Learning_CPP.html" title="Learning CPP">Learning_CPP</a>
+</p><p>However please note that badly designed code (code created by a C++ novice for example), even if working will likely not be included in the spring code. Spring is a large project, and therefore it is necessary to stay away from hack jobs and create general solutions to problems.
+</p>
+<h1><span class="mw-headline" id="Source_Code_Documentation">Source Code Documentation</span></h1>
+<p>The <a class="external text" href="https://springrts.com/dl/buildbot/doc/" rel="nofollow">doxygen documentation</a> can provide an overview about the source, directory structure and its dependencies. Unfortunately, there is no server running it, so you need to make them on your own, to do this, install doxygen and run "doxygen" in spring source directory (will take some time).
+</p><p>An explanation on how the code is executed in game can be found in the <a href="Spring_Engine_Code.html" title="Spring Engine Code">Spring Engine Code</a>
+page.
+</p>
+<h2><span class="mw-headline" id="Development_Guidelines">Development Guidelines</span></h2>
+<p>Before starting to make modifications to the source, take a look at the <a href="Development_guidelines.html" title="Development guidelines">development guidelines</a> which outlines some important things to think about. To find something interesting to work on, look for todos in the <a class="external text" href="http://springrts.com/phpbb/viewforum.php?f=60" rel="nofollow">forum</a>. You can also check in the forums to see what others are doing. If you do edit the code, please add <a href="Doxygen_style_comments.html" title="Doxygen style comments">Doxygen style comments</a> to the code, which will then enhance the source code documentation.
+</p>
+<h2><span class="mw-headline" id="Keep_track_what_others_do">Keep track what others do</span></h2>
+<p>If you develop with others, you need to know what they do. You can browse the source <a class="external text" href="http://github.com/spring/spring/tree/develop" rel="nofollow">at our github-page</a>, and there is a <a class="external text" href="http://github.com/feeds/spring/commits/spring/develop" rel="nofollow">commit newsfeed</a>.
+</p>
+<h2><span class="mw-headline" id="Buildbot_and_Stacktrace_translator">Buildbot and Stacktrace translator</span></h2>
+<p>A buildbot server is <a class="external text" href="http://buildbot.springrts.com/waterfall?reload=60" rel="nofollow">here</a> available to automatically compile Spring, the default AIs and make the installer. It can also <a class="external text" href="http://stacktranslate.springrts.com/" rel="nofollow">translate stacktraces</a> directly from uploaded <a href="Infolog.txt.html" title="Infolog.txt">infolog.txt</a> files.
+</p>
+<h1><span class="mw-headline" id="Important_Developer_Tasks">Important Developer Tasks</span></h1>
+<h2><span class="mw-headline" id="Profiling"><a href="Engine_Profiling.html" title="Engine Profiling">Profiling</a></span></h2>
+<h2><span class="mw-headline" id="How_to_debug_SyncErrors"><a href="Debugging_sync_errors.html" title="Debugging sync errors">How to debug SyncErrors</a></span></h2>
+<h2><span class="mw-headline" id="Debug_GFX_problems"><a href="Debug_GFX_problems.html" title="Debug GFX problems">Debug GFX problems</a></span></h2>
+<h1><span class="mw-headline" id="How_to_get_your_code_included">How to get your code included</span></h1>
+<p>If you create something that you think should be included in the official source tree please create a pull request to the develop branch of the spring repository on github.com.
+</p><p>Make sure that your changes:
+</p>
+<ol><li>Were successfully tested locally.</li>
+<li>Conform with the <a href="Coding_Standards.html" title="Coding Standards">Coding Standards</a>.</li>
+<li>Are spread over an appropriate amount of commits - Please refrain from combining many individual changes into a single commit and from including merge commits.</li>
+<li>Include an update to the changelog if it's a major change - this is not to save work for the devs, but mostly to provide a concise explanation of what the pull request changes.</li></ol>
+<p>Post in the <a class="external text" href="http://springrts.com/phpbb/viewforum.php?f=12" rel="nofollow">development forum</a> or drop in <a href="IRC.html" title="IRC">#sy</a> after creating the pull request (or while coding it) to get feedback and eventually to have it included.
+</p>
+<h1><span class="mw-headline" id="Spring_Engine_TODO_list">Spring Engine TODO list</span></h1>
+<p>If you want to code something, look into the <a class="external text" href="http://springrts.com/phpbb/viewforum.php?f=60" rel="nofollow">New Developers Forum</a> for TODOs.
+There is also a <a class="external text" href="http://springrts.com/phpbb/viewforum.php?f=21" rel="nofollow">feature request forum</a>, which may give you some ideas. Don't be overwhelmed by the sheer number of (silly) requests though!
+</p><p>Alternatively, you may just search the code for the <a class="external text" href="http://en.wikipedia.org/wiki/Comment_%28computer_programming%29#Tags" rel="nofollow">famous comment tags</a>,
+for example on linux:
+&lt;syntaxhighlight lang="bash"&gt;grep -r "TODO" rts
+&lt;/syntaxhighlight&gt;
+</p><p>The Bugtracker contains a <a class="external text" href="http://springrts.com/mantis/view_all_bug_page.php" rel="nofollow">long todo-list</a> as well.
+</p><p>There are also some <a href="Project_proposals.html" title="Project proposals">project proposals</a>.
+</p>
+<h1><span class="mw-headline" id="Development_links">Development links</span></h1>
+<ul><li><a class="external text" href="http://github.com/spring/spring/" rel="nofollow">View the latest source in a web browser</a></li>
+<li><a class="external text" href="https://springrts.com/dl/buildbot/doc/106.0/engine/" rel="nofollow">Doxygen documentation</a></li>
+<li><a class="external text" href="http://springrts.com/mantis/" rel="nofollow">Bug Tracking System</a></li>
+<li><a class="external text" href="http://buildbot.springrts.com/waterfall?reload=60" rel="nofollow">buildbot</a></li>
+<li><a class="external text" href="http://springrts.com/dl/buildbot/" rel="nofollow">buildbot builds</a></li>
+<li><a class="external text" href="https://springrts.com/dl/buildbot/doc/106.0/engine/d9/d28/group__unitsync__api.html" rel="nofollow">Unitsync API docs</a></li>
+<li><a href="Development_Minutes.html" title="Development:Minutes">Developer Meetings</a></li>
+<li><a class="external text" href="http://stacktranslate.springrts.com" rel="nofollow">Stacktrace Translator</a> (translates stacktraces from official win32 builds)</li>
+<li><a class="external text" href="http://sourceforge.net/projects/springrts" rel="nofollow">SourceForge project page</a></li>
+<li><a class="external text" href="http://github.com/spring/spring-website/" rel="nofollow">Web site repository</a></li></ul>
+<h1><span class="mw-headline" id="Legal">Legal</span></h1>
+<p>The Spring engine and content in the main installer is Free Software, distributed under the GPL license.  You may distribute the Spring Engine freely, modify its contents, or redistribute the source.  For details, please read the license, which is included in the installer and source code. 
+</p><p>If you wish to use a game or mod in a game CD, promote it in a magazine, or promote it on another website, please contact the game's maintainers.  The Spring Project is not responsible for the legal status of any games built with or using this engine, and does not support redistribution of illegal content.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223035
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 86/1000000
+Post‐expand include size: 212/2097152 bytes
+Template argument size: 18/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    8.460      1 -total
+ 67.57%    5.716      2 Template:EngineVersion:Stable
+ 27.55%    2.331      1 Template:Code
+ 16.95%    1.434      1 Template:EngineVersion:Stable:Major
+ 14.63%    1.238      1 Template:EngineVersion:Stable:Minor
+ 13.58%    1.149      1 Template:EngineVersion:Stable:Patchset
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2616-0!canonical and timestamp 20260309223035 and revision id 30300
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Development:Getting_Started&amp;oldid=30300">https://springrts.com/mediawiki/index.php?title=Development:Getting_Started&amp;oldid=30300</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Engine_Dev.html" title="Category:Engine Dev">Engine Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Development_Getting_Started.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Development:Getting_Started&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Development:Getting_Started&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Development:Getting_Started&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Development_Getting_Started.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Development:Getting_Started&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Development%3AGetting+Started" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Development:Getting_Started" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Development:Getting_Started" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Development:Getting_Started&amp;oldid=30300" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Development:Getting_Started&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 8 December 2016, at 19:56.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.014","walltime":"0.018","ppvisitednodes":{"value":86,"limit":1000000},"postexpandincludesize":{"value":212,"limit":2097152},"templateargumentsize":{"value":18,"limit":2097152},"expansiondepth":{"value":5,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    8.460      1 -total"," 67.57%    5.716      2 Template:EngineVersion:Stable"," 27.55%    2.331      1 Template:Code"," 16.95%    1.434      1 Template:EngineVersion:Stable:Major"," 14.63%    1.238      1 Template:EngineVersion:Stable:Minor"," 13.58%    1.149      1 Template:EngineVersion:Stable:Patchset"]},"cachereport":{"timestamp":"20260309223035","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":126});});</script></body></html>

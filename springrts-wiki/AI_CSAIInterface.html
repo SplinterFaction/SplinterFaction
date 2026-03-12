@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>AI:CSAIInterface - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"88674d88b58bb487cafe51e0","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"AI:CSAIInterface","wgTitle":"AI:CSAIInterface","wgCurRevisionId":26839,"wgRevisionId":26839,"wgArticleId":1857,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AI Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"AI:CSAIInterface","wgRelevantArticleId":1857,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AI_CSAIInterface rootpage-AI_CSAIInterface skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">AI:CSAIInterface</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#CSAI_Interface"><span class="tocnumber">1</span> <span class="toctext">CSAI Interface</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Platforms"><span class="tocnumber">2</span> <span class="toctext">Platforms</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#How_to_use"><span class="tocnumber">3</span> <span class="toctext">How to use</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Dynamic_dll_recompilation_and_reloading"><span class="tocnumber">4</span> <span class="toctext">Dynamic dll recompilation and reloading</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#dll_loading.2C_CSAILoader.dll_configuration"><span class="tocnumber">5</span> <span class="toctext">dll loading, CSAILoader.dll configuration</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#C.23_AI_base_class"><span class="tocnumber">6</span> <span class="toctext">C# AI base class</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Creating_a_C.23_dll_using_Visual_Studio"><span class="tocnumber">7</span> <span class="toctext">Creating a C# dll using Visual Studio</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#CSAI_Interface_Architecture"><span class="tocnumber">8</span> <span class="toctext">CSAI Interface Architecture</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#spring.exe"><span class="tocnumber">8.1</span> <span class="toctext">spring.exe</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#csailoader.dll"><span class="tocnumber">8.2</span> <span class="toctext">csailoader.dll</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#CSAIInterfaces.dll"><span class="tocnumber">8.3</span> <span class="toctext">CSAIInterfaces.dll</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#CSAI.dll"><span class="tocnumber">8.4</span> <span class="toctext">CSAI.dll</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#How_this_works.2C_C.2B.2B.2FC.23_binding"><span class="tocnumber">9</span> <span class="toctext">How this works, C++/C# binding</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#How_this_works.2C_dynamic_recompilation_and_reloading"><span class="tocnumber">10</span> <span class="toctext">How this works, dynamic recompilation and reloading</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="CSAI_Interface">CSAI Interface</span></h2>
+<p>CSAI Interface makes it possible to build Global AIs for Spring using .Net Framework 1.1 or 2.0.  This means you can write AIs using C#, VB, Boo (Python.Net), or any language capable of being compiled into ILSM bytecode assemblies.  Fairly complete list at <a class="external autonumber" href="http://www.dotnetpowered.com/languages.aspx" rel="nofollow">[1]</a> .
+</p><p>.Net languages run fast and are easy to debug.  In addition, using CSAI Interface makes it possible to dynamically recompile and reload your AI dll in the middle of a game.
+</p><p>Helloworlds are available in C#, VB and Boo (Python.Net)
+</p><p>You can get CSAI Interface from within the CSAI download on the <a href="AI_CSAI.html" title="AI:CSAI">CSAI page</a>.
+</p><p>CSAI Interface was written by Hugh Perkins
+</p>
+<h2><span class="mw-headline" id="Platforms">Platforms</span></h2>
+<p>CSAI Interface runs on Windows using .Net Framework 1.1 or 2.0
+</p><p>It would be possible to write bindings for Mono.  Discussion at <a href="GlobalAI_Mono_Bindings.html" title="GlobalAI Mono Bindings">GlobalAI Mono Bindings</a>.
+</p>
+<h2><span class="mw-headline" id="How_to_use">How to use</span></h2>
+<ul><li><a href="AI_CSAI.html" title="AI:CSAI">AI:CSAI</a>  Please see the CSAI installation instructions for installation instructions; for now these are integrated and identical</li>
+<li><a href="CSAI_Build_Instructions.html" title="CSAI Build Instructions">CSAI Build Instructions</a>  For now, the build instructions for CSAI and CSAI Interface are integrated and identical</li></ul>
+<h2><span class="mw-headline" id="Dynamic_dll_recompilation_and_reloading">Dynamic dll recompilation and reloading</span></h2>
+<p>To dynamically recompile and reload your AI dll in the middle of a game:
+</p>
+<ul><li>recompile your dll</li>
+<li>in the game say ".reloadai"</li></ul>
+<p>You can do this whilst paused if you want.
+</p><p>Note that this only applies to the C# AI dll itself.  CSAIInterfaces.dll and CSAILoader.dll require the game to be shut down during recompilation.
+</p>
+<h2><span id="dll_loading,_CSAILoader.dll_configuration"></span><span class="mw-headline" id="dll_loading.2C_CSAILoader.dll_configuration">dll loading, CSAILoader.dll configuration</span></h2>
+<p>CSAILoader.dll searches for a configuration file with the same name (ie CSAILoader.xml), in the same directory.  This configuration file defines the C# AI dll to reload.  If you want you can name your C# dll mysuperai.dll , as long as you change the name of the dll in the configuration file.  You can also change the name of the directory and the name of the main C# dll class.
+</p><p>Be really careful to double-check the name of the dll, directory and class if you change them.  Your only warning that something is wrong will be an AI exception when you start the game ;-)
+</p><p>You can rename CSAILoader.dll to anything you like.  The dll will look for a configuration file with the same name.
+</p><p>All this means that it is very easy for you to create your own C# AI dlls with your own name, and that it wont conflict with other people's C# AIs.
+</p><p>Note that CSAIInterfaces.dll is immutable, never needs to be renamed.
+</p>
+<h2><span id="C#_AI_base_class"></span><span class="mw-headline" id="C.23_AI_base_class">C# AI base class</span></h2>
+<p>Your C# AI needs to have a class that derives from CSharpAI.IGlobalAI
+</p><p>You can see the definition of this interfaces in CSAIInterfaces\IGlobalAI.cs
+</p><p>You will need to ensure that the name of the class specified in your CSAILoader.xml configuration file matches the name and namespace of this class.
+</p><p>If you're unsure, just call this class CSAI, in namespace CSharpAI.  Then you won't need to change the configuration file
+</p>
+<h2><span id="Creating_a_C#_dll_using_Visual_Studio"></span><span class="mw-headline" id="Creating_a_C.23_dll_using_Visual_Studio">Creating a C# dll using Visual Studio</span></h2>
+<ul><li>Create a new project of type "class library"</li>
+<li>Add a reference to CSAIInterfaces\CSAIInterfaces.dll</li></ul>
+<p>This will automatically configure your project to build as a dll, and make the types from CSAIInterfaces.dll available to your project.
+</p>
+<h2><span class="mw-headline" id="CSAI_Interface_Architecture">CSAI Interface Architecture</span></h2>
+<p>You won't need to know this unless you want to extend the interface, but it might be interesting as background.
+</p>
+<h3><span class="mw-headline" id="spring.exe">spring.exe</span></h3>
+<p>Spring.exe is the Spring RTS game that loads the AI.
+</p><p>The main classes that are important are:
+- IGlobalAI     The AI's main class should derive from this
+- AICallback    Passed to AI, to provide functions for AI to drive Spring
+- UnitDef       Unit definitions
+- Command       Commands passed to AICallback-&gt;GiveOrder
+- MoveData      Information on movements, part of a UnitDef
+</p><p>Other helper classes include:
+- float3        vector of 3 floats
+</p>
+<h3><span class="mw-headline" id="csailoader.dll">csailoader.dll</span></h3>
+<p>This is a managed C++ component that binds Spring.exe to CSAI.dll
+</p><p>- CSAIProxy        derives from Spring.exe/IGlobalAI.  This is the proxy from Spring.exe to CSAI.dll
+- AICallbackProxy  derives from CSAI.dll/IAICallback.  This proxies requests from CSAI.dll to Spring.exe
+- UnitDefProxy     derives from CSAI.dll/IUnitDef.  This is a proxy of the actual Spring.exe UnitDef
+</p>
+<h3><span class="mw-headline" id="CSAIInterfaces.dll">CSAIInterfaces.dll</span></h3>
+<p>This holds interfaces that are used to abstract CSAI.dll classes away from csailoader.dll  It is written in C#
+</p><p>This gives us the possibility to dynamically reload CSAI without reloading Spring.
+</p><p>- CSharpAI.IGlobalAI     C# version of Spring.exe/IGlobalAI
+- CSharpAI.IAICallback   C# version of Spring.exe/IAICallback
+</p><p>Some helper classes:
+- CSharpAI.Command      used to hold commands passed to IAICallback.GiveOrder
+- CSharpAI.IUnitDef     holds definition of a unit
+- CSharpAI.Float3       holds vectors of 3 floats
+</p>
+<h3><span class="mw-headline" id="CSAI.dll">CSAI.dll</span></h3>
+<p>This is the C# AI component.
+</p><p>- CSAI       the main class, equivalent to a C++ IGLobalAI derivative
+</p><p>+ The C# AI's classes go here, eg:
+- ScoutController.cs
+- TankController.cs
+- CommanderController.cs
+- StrategyController.cs
+- ...
+</p>
+<h2><span id="How_this_works,_C++/C#_binding"></span><span class="mw-headline" id="How_this_works.2C_C.2B.2B.2FC.23_binding">How this works, C++/C# binding</span></h2>
+<p>Some background information on how the C++/C# binding works.
+</p>
+<ul><li>C++ can be built in mixed mode, with both managed and unmanaged classes</li>
+<li>we do this by simply specifying /clr in the commandline</li>
+<li>managed classes have __gc at the start, unmanaged ones dont.  This is always true</li></ul>
+<ul><li>managed objects dont need deleting or memory management, unmanaged ones do</li>
+<li>managed objects can freely call into unmanaged code, and hold pointers to unmanaged objects</li>
+<li>unmanaged objects can freely call into managed code</li>
+<li>an unmanaged object can hold a pointer to a managed object, as long as the pointer variable is declared as gcroot, or it exists only for the lifetime of a method call</li></ul>
+<h2><span id="How_this_works,_dynamic_recompilation_and_reloading"></span><span class="mw-headline" id="How_this_works.2C_dynamic_recompilation_and_reloading">How this works, dynamic recompilation and reloading</span></h2>
+<p>Some background information on how .reloadai works
+</p><p>What this is:
+- you can recompile CSAI.dll when you like, because CSAI.dll and CSAI.pdb are not locked
+- you can reload the CSAI.dll during a game by saying ".reloadai"
+</p><p>This works best if you run spring in windowed mode, and set its priority to "Low".
+</p><p>Why would you want to do this?
+</p>
+<ul><li>saves time during AI development and debugging</li></ul>
+<p>Doesnt this mean the AI doesnt know what happened before?
+</p>
+<ul><li>yes, but it's pretty easy for it to ask Spring to remind it what is happening</li></ul>
+<p>How does this work / why this is hard
+</p>
+<ul><li>when managed code that loads an assembly is run, that assembly/dll will be automatically loaded, and locked</li>
+<li>assemblies cant be unloaded from an appdomain without destroying the entire appdomain</li></ul>
+<p>We can load assemblies dynamically, without locking them, by reading the assembly's dll file as a binaryfile, and passing the raw bytes to Assembly.Load  The old assemblies are not unloaded, but they will be CPU-starved because our CSAIProxy class will no longer be forwarding events to them
+</p><p>Just in case we create new threads within our AI, there is a Shutdown method in the CSAI main class, where we can shut these down.  This can also be used to close open handles to a logfile.
+</p><p>This comes close to solving the problem, however:
+</p>
+<ul><li>when we create variables using types defined in our target C# assembly, the CLR will automatically load that assembly ...</li>
+<li>... locking the assembly so we cant swap it out with a new one</li></ul>
+<p>A solution is to abstract any C# interfaces used by the C++ dll into a new dll, CSAIInterfaces.dll.  This dll will be fairly stable wrt changes to C# AI code.
+</p><p>One last point: in order to get detailed debugging information during exceptions, with line numbers, we need the pdb file.  We can load the pdb file also by reading it as a binaryfile, and pass the raw bytes to Assembly.Load along with the main assembly bytes.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223714
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.013 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 45/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1857-0!canonical and timestamp 20260309223714 and revision id 26839
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=AI:CSAIInterface&amp;oldid=26839">https://springrts.com/mediawiki/index.php?title=AI:CSAIInterface&amp;oldid=26839</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_AI_Dev.html" title="Category:AI Dev">AI Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="AI_CSAIInterface.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:AI:CSAIInterface&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=AI:CSAIInterface&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=AI:CSAIInterface&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="AI_CSAIInterface.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:AI:CSAIInterface&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=AI%3ACSAIInterface" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/AI:CSAIInterface" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/AI:CSAIInterface" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=AI:CSAIInterface&amp;oldid=26839" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=AI:CSAIInterface&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 23 March 2013, at 17:42.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.013","walltime":"0.017","ppvisitednodes":{"value":45,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223714","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":108});});</script></body></html>

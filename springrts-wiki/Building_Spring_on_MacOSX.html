@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Building Spring on MacOSX - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"26b10bf3613eab86b465fdd8","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Building_Spring_on_MacOSX","wgTitle":"Building Spring on MacOSX","wgCurRevisionId":31187,"wgRevisionId":31187,"wgArticleId":2764,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiling"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Building_Spring_on_MacOSX","wgRelevantArticleId":2764,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Building_Spring_on_MacOSX rootpage-Building_Spring_on_MacOSX skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Building Spring on MacOSX</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a href="Building_spring.html" title="Building spring">Building Spring</a> &lt; Building Spring on MacOSX
+</p><p>This is a guide to the requirements for building the Spring RTS engine on MacOS. If you want only to play a spring game, follow the <a href="Spring_on_MacOSX.html" title="Spring on MacOSX">Spring_on_MacOSX</a> Tutorial.
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Building_Spring_on_MacOS"><span class="tocnumber">1</span> <span class="toctext">Building Spring on MacOS</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Requirements"><span class="tocnumber">2</span> <span class="toctext">Requirements</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Command_Line_Tools"><span class="tocnumber">2.1</span> <span class="toctext">Command Line Tools</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Package_Manager"><span class="tocnumber">2.2</span> <span class="toctext">Package Manager</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Compiler"><span class="tocnumber">2.3</span> <span class="toctext">Compiler</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#MacPorts"><span class="tocnumber">2.3.1</span> <span class="toctext">MacPorts</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#HomeBrew"><span class="tocnumber">2.3.2</span> <span class="toctext">HomeBrew</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Dependencies"><span class="tocnumber">2.4</span> <span class="toctext">Dependencies</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#MacPorts_2"><span class="tocnumber">2.4.1</span> <span class="toctext">MacPorts</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#HomeBrew_2"><span class="tocnumber">2.4.2</span> <span class="toctext">HomeBrew</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Obtaining_Source"><span class="tocnumber">2.5</span> <span class="toctext">Obtaining Source</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Compiling_Source"><span class="tocnumber">3</span> <span class="toctext">Compiling Source</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Additional_Notes"><span class="tocnumber">4</span> <span class="toctext">Additional Notes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="#Using_Macports"><span class="tocnumber">4.1</span> <span class="toctext">Using Macports</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Using_Homebrew"><span class="tocnumber">4.2</span> <span class="toctext">Using Homebrew</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Examples"><span class="tocnumber">5</span> <span class="toctext">Examples</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#Macports_3"><span class="tocnumber">5.1</span> <span class="toctext">Macports</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Building_Spring_on_MacOS">Building Spring on MacOS</span></h1>
+<p><b>This guide is for x86/Intel based MacOS installs</b>
+</p><p>Even though it will not run, Spring should successfully compile on Mac for both 104.0 and the latest develop version.
+</p><p>NOTE: Only official spring versions 99.0-103.1 will compile and run on MacOS. 104+ will compile, but uses an incompatible OpenGL version. When 105.0 is released, a MacOS - compatible OpenGL version will be used, however at this point in time <b>there are other blocking issues</b>.
+</p><p>Questions about this process should be asked <a class="external text" href="https://springrts.com/phpbb/viewforum.php?f=65" rel="nofollow">here</a>.
+</p><p><br/>
+</p>
+<h1><span class="mw-headline" id="Requirements">Requirements</span></h1>
+<h2><span class="mw-headline" id="Command_Line_Tools">Command Line Tools</span></h2>
+<p>Install the <a class="external text" href="http://developer.apple.com/TOOLS/Xcode/" rel="nofollow">Xcode developers package</a> (this requires a free membership to apple's ADC website).
+</p>
+<h2><span class="mw-headline" id="Package_Manager">Package Manager</span></h2>
+<p>Either  <a class="external text" href="http://brew.sh" rel="nofollow">Homebrew</a> or <a class="external text" href="http://www.macports.org/install.php" rel="nofollow">MacPorts</a> may be used to fetch dependencies. The MacOS Buildbot (run by Turboss) uses Homebrew. The writer uses Macports.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Compiler">Compiler</span></h2>
+<p>Compiler: GCC must be used, and dependencies must be compiled with GCC
+</p>
+<h3><span class="mw-headline" id="MacPorts">MacPorts</span></h3>
+<p>For MacPorts:
+</p>
+<pre>port install
+sudo port select --set gcc mp-gcc8
+hash -r # Reload the terminal
+</pre>
+<p>To check for installed gcc:
+<code>
+port select --list gcc
+</code>
+</p>
+<h3><span class="mw-headline" id="HomeBrew">HomeBrew</span></h3>
+<pre>brew install gcc@8
+</pre>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Dependencies">Dependencies</span></h2>
+<h3><span class="mw-headline" id="MacPorts_2">MacPorts</span></h3>
+<p>Necessary dependencies for the develop branch are below (as called by Macports):
+</p>
+<pre>port install sudo port install cmake libsdl2 p7zip libdevil libvorbis minizip openal-soft glew freetype binutils libXcursor +gcc8
+</pre>
+<p>(This list has not been tested for errors; please message MasterBel if they do not work for you.)
+</p><p>Compiling Spring 104.0 (current master) or older will also require Boost. <a class="external text" href="https://sourceforge.net/projects/boost/" rel="nofollow">Retreive source</a> and compile with gcc. <b>TODO: Instructions?</b>
+</p>
+<h3><span class="mw-headline" id="HomeBrew_2">HomeBrew</span></h3>
+<p>Note that this list is incomplete:
+</p>
+<pre>brew install cmake minizip freetype glew openal-soft p7zip clang-format libvorbis jsoncpp PkgConfig devil sdl2
+</pre>
+<p>You will also need to install XQuartz for the X11 dependency, however it will install the headers in a non-standard location. Use this command to symlink it to the standard location:
+</p>
+<pre>ln -s /opt/X11/include/X11 /usr/local/include/X11
+</pre>
+<h2><span class="mw-headline" id="Obtaining_Source">Obtaining Source</span></h2>
+<p><code>
+git clone --recursive <a class="external free" href="git://github.com/spring/spring.git" rel="nofollow">git://github.com/spring/spring.git</a> -b &lt;branch&gt;
+</code>
+</p><p>The “master” branch is the latest stable release. “develop” branch is the latest development release. (Note: The recursive argument is important for submodules.)<br/>
+Update with: <code>git pull --rebase</code>
+</p>
+<h1><span class="mw-headline" id="Compiling_Source">Compiling Source</span></h1>
+<pre>cmake . -DCMAKE_CXX_COMPILER=/path/to/bin/g++-mp-8 -DCMAKE_C_COMPILER=/path/to/bin/gcc-mp-8
+make spring
+</pre>
+<p>Other common Cmake flags are:
+</p>
+<pre>-DGLEW_INCLUDE_DIR=/path/to/include 
+-DGLEW_LIBRARIES=/path/to/lib/libGLEW.a 
+-DOPENAL_INCLUDE_DIR=/path/to/include/AL 
+-DCMAKE_INSTALL_PREFIX:PATH=/path/to/output/directory 
+-DCMAKE_PREFIX_PATH=/path/
+</pre>
+<p>If boost is used:
+<code>
+-DBoost_Root=/path/to/boost
+</code>
+</p><p>Number of simultaneous jobs may be specified by: <code>make spring -j&lt;n&gt;</code> Where n is number of jobs. It is common for n to be number of cores + 1
+</p><p>Other targets may be made also/instead, e.g.
+</p>
+<pre>make prdownloader -j&lt;n&gt;
+make install-spring -j&lt;n&gt;
+</pre>
+<h1><span class="mw-headline" id="Additional_Notes">Additional Notes</span></h1>
+<h2><span class="mw-headline" id="Using_Macports">Using Macports</span></h2>
+<p>As hint: set "buildmakejobs" to cpu-core count + 1 in /opt/local/etc/macports/macports.conf. For example:
+<code>
+buildmakejobs 5
+</code>
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Using_Homebrew">Using Homebrew</span></h2>
+<p>Hombrew can install boost, but it must be recompiled  with gcc &lt;version&gt;:
+<code>
+brew install boost --build-from-source --cc=gcc&lt;version&gt;
+</code>
+</p><p>These flags were recommended by a previous editor:
+</p>
+<pre>cmake . -DAPPLE=1 -DCMAKE_CXX_COMPILER=/usr/local/Cellar/gcc48/4.8.3/bin/g++-4.8 \
+-DCMAKE_C_COMPILER=/usr/local/Cellar/gcc48/4.8.3/bin/gcc-4.8 \
+-DIL_INCLUDE_DIR=/usr/local/include \
+-DGLEW_INCLUDE_DIR=/usr/local/include \
+-DOPENAL_DIR=/usr/local/include/AL \
+-DNO_SOUND=1
+</pre>
+<p><br/>
+</p>
+<h1><span class="mw-headline" id="Examples">Examples</span></h1>
+<h2><span class="mw-headline" id="Macports_3">Macports</span></h2>
+<pre># Example setup script (for MacOS Catalina)
+
+# Macports must be installed prior to running this script. Macports requires XCode to be installed.
+# Boost sources must be located in
+
+# Requires the following directory format:
+# $DIR (customisable; set on line 16)
+#	/setup.sh
+#	/build.sh
+# 	/Sources
+#		/boost_1_68_0
+#	/Builds
+#	/Bunldes
+
+DIR=~/Spring # The root directory; to be set manually
+
+SCRIPTDIR=~/Documents/Spring/ # The directory the build script is located in
+
+SOURCES=$DIR/Sources
+SPRING=$SOURCES/spring
+BOOST=$SOURCES/boost_1_66_0/boost
+
+cd $DIR
+
+# Install the necessary compiler. Version gcc5 is oldest compatible with High Sierra; gcc48 is the oldest I know works
+sudo port install gcc9
+
+# Set compiler as default
+sudo port select --set gcc mp-gcc9
+hash -r
+
+sudo port install cmake libsdl2 p7zip libdevil libvorbis minizip openal-soft glew freetype binutils dylibbundler xorg-libXcursor +gcc9
+#dylibbundler is for the bundling stage, not actual dependency
+
+cd $SOURCES
+
+# Clone from git (creates the directory $SPRING for us)
+git clone --recursive git://github.com/spring/spring.git
+cd $SPRING
+git fetch --all --tags --prune
+git checkout tags/103.0 -b master
+
+# Install Boost
+
+cd $BOOST
+
+./bootstrap.sh --with-toolset=gcc --with-libraries=all # Not sure which libaries.
+./b2 # install
+
+# Try compiling spring
+
+cd $SCRIPTDIR
+
+sh build.sh
+
+</pre>
+<pre>
+
+# Example buildscript (for MacOS Catalina)
+
+# This script assumes that setup.sh (the above example) has been run.
+
+# Build Configuration
+
+BRANCH=&lt;branch name&gt; # The source branch to checkout and build.
+REPOSITORY=spring # The name of the folder containing the git repository.
+WIPE=0 # Wipes previous build on WIPE = 1 (flag -w)
+
+for arg in "$@"
+do
+if [ "$arg" == "-w" ]; then
+echo "Initiating clean build."
+WIPE=1
+else
+echo "Unknown flag ${arg}"
+fi
+done
+
+echo "Building sources at/to ${REPOSITORY}"
+
+# Directory Setup
+
+DIR=~/Spring # Where everything is/will be
+SOURCES=$DIR/Sources
+SPRING=$SOURCES/$REPOSITORY
+BUILD=$DIR/Builds/$REPOSITORY
+BOOST=$SOURCES/boost_1_55_0 # Where boost can be found. Must be prepared as per the setup script (above).
+
+MACPORTS=/opt/local # The install directory of MACPORTS
+
+if [ -d $BUILD ]; then
+	if [ $WIPE != 0 ]; then
+		echo "Wiping previous build…"
+		rm -r $BUILD # Wipe preivous build
+
+		echo "Making new build directory…"
+		mkdir $BUILD # The others should have already been made
+	fi
+else
+	echo "Making new build directory…"
+	mkdir $BUILD # The others should have already been made
+fi
+
+if [ -e $DIR/log.txt ]; then
+	echo "Removing outdated log…"
+	rm $DIR/log.txt
+fi
+
+# Source setup
+
+if [ -d $SPRING ]; then
+	cd $SPRING
+else
+	echo "Cloning remote…"
+    cd $SOURCES
+    git clone --recursive git://github.com/spring/spring.git $REPOSITORY
+
+	cd $SPRING
+fi
+
+# Update repository
+
+CURRENTBRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$CURRENTBRANCH" != "$BRANCH" ]; then
+git fetch --all
+echo "Switching branch from ${CURRENTBRANCH} to ${BRANCH}"
+git checkout $BRANCH
+fi
+
+echo "Updating to latest…"
+git pull # Update to latest
+echo "Updating submodules"
+git submodule update
+
+# Metadata
+
+REV=$(git describe --tags)
+VERSION=`echo "${REV}" | tr '&lt;&gt;:\"/\\|?*' -`
+
+# Compile
+
+echo "Compiling Spring ${VERSION}"
+
+cd $BUILD
+
+cmake . $SPRING -DCMAKE_PREFIX_PATH=$MACPORTS -DCMAKE_CXX_COMPILER=$MACPORTS/bin/g++-mp-9 -DCMAKE_C_COMPILER=$MACPORTS/bin/gcc-mp-9 -DGLEW_INCLUDE_DIR=$MACPORTS/include -DGLEW_LIBRARIES=$MACPORTS/lib/libGLEW.a -DOPENAL_INCLUDE_DIR=$MACPORTS/include/AL -DBOOST_ROOT=$BOOST -DBoost_USE_STATIC_LIBS=YES -DCMAKE_CXX_FLAGS="${FLAGS}" -DCMAKE_C_FLAGS="${FLAGS}"
+
+make spring -j5 # &gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+make pr-downloader # -j5 &gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+make install-spring DESTDIR=$BUILD/temp #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+# Bundling spring
+
+BUNDLES=$DIR/Bundles
+BUNDLE=$BUNDLES/Spring_${VERSION}.app
+
+mkdir $BUNDLES
+mkdir $BUNDLE
+mkdir $BUNDLE/Contents
+mkdir $BUNDLE/Contents/MacOS
+mkdir $BUNDLE/Contents/Resources
+mkdir $BUNDLE/Contents/lib
+
+cp $BUILD/spring $BUNDLE/Contents/MacOS/spring #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+cp $SPRING/installer/Mac/spring.icns $BUNDLE/Contents/Resources/spring.icns #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+cp -R $BUILD/temp/usr/local/share $BUNDLE/Contents/share #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+cat $SPRING/installer/Mac/Info.plist | sed s/###VERSION###/${VERSION}/ &gt; $BUNDLE/Contents/Info.plist
+
+cp $BUILD/tools/pr-downloader/src/pr-downloader $BUNDLE/Contents/MacOS #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUILD/temp/usr/local/lib/libunitsync.dylib -d $BUNDLE/Contents/MacOS -p @loader_path/../MacOS #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -of -cd -b -x $BUNDLE/Contents/MacOS/spring -d $BUNDLE/Contents/lib -p @executable_path/../lib #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+install_name_tool -change $MACPORTS/lib/libX11.6.dylib @executable_path/../lib/libX11.6.dylib $BUNDLE/Contents/lib/libXcursor.1.dylib #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -of -cd -b -x $BUNDLE/Contents/MacOS/pr-downloader -d $BUNDLE/Contents/lib -p @executable_path/../lib #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Interfaces/C/0.1/libAIInterface.dylib -d $BUNDLE/Contents/share/games/spring/AI/Interfaces/C/0.1 -p @loader_path/../0.1 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Interfaces/Java/0.1/libAIInterface.dylib -d $BUNDLE/Contents/share/games/spring/AI/Interfaces/Java/0.1 -p @loader_path/../0.1 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Skirmish/AAI/0.9/libSkirmishAI.dylib -d $BUNDLE/Contents/share/games/spring/AI/Skirmish/AAI/0.9 -p @loader_path/../0.9 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Skirmish/CppTestAI/0.1/libSkirmishAI.dylib -d $BUNDLE/Contents/share/games/spring/AI/Skirmish/CppTestAI/0.1 -p @loader_path/../0.1 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Skirmish/E323AI/3.25.0/libSkirmishAI.dylib -d $BUILD/Spring.app/Contents/share/games/spring/AI/Skirmish/E323AI/3.25.0 -p @loader_path/../3.25.0 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUILD/Spring.app/Contents/share/games/spring/AI/Skirmish/KAIK/0.13/libSkirmishAI.dylib -d $BUILD/Spring.app/Contents/share/games/spring/AI/Skirmish/KAIK/0.13 -p @loader_path/../0.13 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Skirmish/NullAI/0.1/libSkirmishAI.dylib -d $BUNDLE/Contents/share/games/spring/AI/Skirmish/NullAI/0.1 -p @loader_path/../0.1 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Skirmish/RAI/0.601/libSkirmishAI.dylib -d $BUNDLE/Contents/share/games/spring/AI/Skirmish/RAI/0.601 -p @loader_path/../0.601 #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+dylibbundler -cd -b -x $BUNDLE/Contents/share/games/spring/AI/Skirmish/Shard/dev/libSkirmishAI.dylib -d $BUILD/Spring.app/Contents/share/games/spring/AI/Skirmish/Shard/dev -p @loader_path/../dev #&gt;&gt;$DIR/log.txt 2&gt;&amp;1
+
+if [ ! -e $BUNDLE/Contents/MacOS/spring ];then
+echo "Error: App did not build correctly. Check log for details"
+ERRORBUILD=1
+fi
+
+if [ "$ERRORBUILD" = "1" ]; then
+	echo "Build Failed."
+fi
+
+echo "Done!"
+exit 0
+
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223155
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.009 seconds
+Preprocessor visited node count: 108/1000000
+Post‐expand include size: 25/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8433/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2764-0!canonical and timestamp 20260309223155 and revision id 31187
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Building_Spring_on_MacOSX&amp;oldid=31187">https://springrts.com/mediawiki/index.php?title=Building_Spring_on_MacOSX&amp;oldid=31187</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiling.html" title="Category:Compiling">Compiling</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Building_Spring_on_MacOSX.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Building_Spring_on_MacOSX&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Building_Spring_on_MacOSX&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Building_Spring_on_MacOSX&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Building_Spring_on_MacOSX.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Building_Spring_on_MacOSX&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Building+Spring+on+MacOSX" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Building_Spring_on_MacOSX" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Building_Spring_on_MacOSX" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Building_Spring_on_MacOSX&amp;oldid=31187" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Building_Spring_on_MacOSX&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 4 March 2020, at 18:44.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.008","walltime":"0.009","ppvisitednodes":{"value":108,"limit":1000000},"postexpandincludesize":{"value":25,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":8433,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223155","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":108});});</script></body></html>

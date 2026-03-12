@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua WeaponDefs - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"fc7e49d0e78f4088ab11a7ac","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_WeaponDefs","wgTitle":"Lua WeaponDefs","wgCurRevisionId":30806,"wgRevisionId":30806,"wgArticleId":2435,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_WeaponDefs","wgRelevantArticleId":2435,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":
+"ready","user":"ready","user.options":"loading","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_WeaponDefs rootpage-Lua_WeaponDefs skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua WeaponDefs</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua WeaponDefs
+</p><p>The <b>WeaponDefs[]</b> table holds all information about the weapons used in a game.
+</p><p>Works the same way as <a href="Lua_UnitDefs.html" title="Lua UnitDefs">Lua_UnitDefs</a> except the tables are called <b>WeaponDefs[]</b> and <b>WeaponDefNames[]</b>
+</p><p>Note: Its entries are metatables, so you can't use the pairs() iterator on them, use this instead:
+</p>
+<pre>  for id,weaponDef in pairs(WeaponDefs) do
+    for name,param in weaponDef:pairs() do
+      Spring.Echo(name,param)
+    end
+  end
+</pre>
+<h2><span class="mw-headline" id="Naming">Naming</span></h2>
+<p>If a unit named "tank" has a weapon named "gun", the resulting <code>name</code> will be "tank_gun" and you can get this weaponDefID like:
+</p><p><code>local gunID = WeaponDefNames["tank_gun"].id</code>
+</p>
+<h2><span class="mw-headline" id="Example">Example</span></h2>
+<p>For a more detailed overview of tag definitions look at 
+<a href="Gamedev_WeaponDefs.html" title="Gamedev:WeaponDefs">Gamedev:WeaponDefs</a> or look directly at the source at 
+<a class="external free" href="https://github.com/spring/spring/blob/5f08624585852b8c8dfd1a16d020ae530269dc09/rts/Sim/Weapons/WeaponLoader.cpp" rel="nofollow">https://github.com/spring/spring/blob/5f08624585852b8c8dfd1a16d020ae530269dc09/rts/Sim/Weapons/WeaponLoader.cpp</a>
+</p><p>In key = value format, where WeaponDefs[weaponDefID].key==value, with subtables at the end.
+</p>
+<pre>    accuracy = 0,
+    avoidFeature = false,
+    avoidFriendly = true,
+    avoidNeutral = false,
+    beamTTL = 0,
+    beamburst = false,
+    beamtime = 0.10000000149012,
+    bouncerebound = 1,
+    canAttackGround = true,
+    cegTag = "",
+    collisionSize = 0.050000000745058,
+    coverageRange = 0,
+    craterAreaOfEffect = 0,
+    cylinderTargeting = 1,
+    cylinderTargetting = 1,
+    damageAreaOfEffect = 6,
+    dance = 0,
+    description = "J7Laser",
+    duration = 0.050000000745058,
+    dynDamageExp = 0,
+    dynDamageInverted = false,
+    dynDamageMin = 0,
+    dynDamageRange = 0,
+    edgeEffectiveness = 0.99000000953674,
+    energyCost = 0,
+    explosionSpeed = 3.233583688736,
+    exteriorShield = false,
+    fireStarter = 0.69999998807907,
+    flightTime = 0,
+    gravityAffected = false,
+    groundbounce = false,
+    groundslip = 1,
+    heightBoostFactor = -1,
+    heightMod = 1,
+    highTrajectory = 2,
+    id = 220,
+    impactOnly = true,
+    intensity = 0.89999997615814,
+    interceptSolo = true,
+    interceptedByShieldType = 2,
+    interceptor = 0,
+    isShield = false,
+    largeBeamLaser = false,
+    laserHardStop = false,
+    leadBonus = 0,
+    leadLimit = -1,
+    manualFire = false,
+    maxAngle = 0.95873802900314,
+    metalCost = 0,
+    minIntensity = 0,
+    movingAccuracy = 0,
+    myGravity = 0,
+    name = "corcom_armcomlaser",
+    noAutoTarget = false,
+    noEnemyCollide = false,
+    noExplode = false,
+    noFeatureCollide = false,
+    noFriendlyCollide = false,
+    noGroundCollide = false,
+    noNeutralCollide = false,
+    noSelfDamage = true,
+    numbounce = -1,
+    onlyForward = false,
+    paralyzer = false,
+    predictBoost = 0,
+    projectiles = 1,
+    projectilespeed = 30.000001907349,
+    proximityPriority = 1,
+    range = 300,
+    reload = 0.40000000596046,
+    salvoDelay = 0.10000000149012,
+    salvoSize = 1,
+    selfExplode = false,
+    shieldAlpha = 0.20000000298023,
+    shieldBadColorB = 0.5,
+    shieldBadColorG = 0.5,
+    shieldBadColorR = 1,
+    shieldEnergyUse = 0,
+    shieldForce = 0,
+    shieldGoodColorB = 1,
+    shieldGoodColorG = 0.5,
+    shieldGoodColorR = 0.5,
+    shieldInterceptType = 0,
+    shieldMaxSpeed = 0,
+    shieldPower = 0,
+    shieldPowerRegen = 0,
+    shieldPowerRegenEnergy = 0,
+    shieldRadius = 0,
+    shieldRechargeDelay = 0,
+    shieldRepulser = false,
+    size = 2.1875,
+    sizeGrowth = 0.5,
+    smartShield = false,
+    soundTrigger = true,
+    sprayAngle = 0,
+    startvelocity = 0.0099999997764826,
+    stockpile = false,
+    stockpileTime = 30,
+    sweepFire = false,
+    targetBorder = 0,
+    targetMoveError = 0.050000000745058,
+    targetable = 0,
+    tdfId = 0,
+    tracks = false,
+    trajectoryHeight = 0,
+    turnRate = 0,
+    turret = true,
+    type = "BeamLaser",
+    uptime = 0,
+    visibleShield = false,
+    visibleShieldHitFrames = 0,
+    visibleShieldRepulse = false,
+    waterWeapon = false,
+    waterbounce = false,
+    weaponAcceleration = 0,
+    wobble = 0,
+    customParams = {},
+    damages = {
+        craterBoost = 0,
+        ...
+    },
+    fireSound = {
+        [1] = {
+            id = 36,
+            name = "lasrfir1",
+            volume = 6.1237244606018,
+        },
+        ...
+    },
+    hitSound = {
+        [1] = {
+            id = -1,
+            name = "",
+            volume = 6.1237244606018,
+        },
+        ...
+    },
+    visuals = {
+        alphaDecay = 1,
+        alwaysVisible = false,
+        beamDecay = 1,
+        beamWeapon = false,
+        color2B = 1,
+        color2G = 1,
+        color2R = 1,
+        colorB = 0,
+        colorG = 0,
+        colorR = 1,
+        coreThickness = 0.10000000149012,
+        laserFlareSize = 7,
+        modelName = "",
+        noGap = true,
+        pulseSpeed = 1,
+        scrollSpeed = 5,
+        separation = 1,
+        sizeDecay = 0,
+        smokeTrail = false,
+        stages = 5,
+        thickness = 2,
+        tileLength = 200,
+    },
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223552
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.004 seconds
+Real time usage: 0.005 seconds
+Preprocessor visited node count: 19/1000000
+Post‐expand include size: 14/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4063/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2435-0!canonical and timestamp 20260309223552 and revision id 30806
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_WeaponDefs&amp;oldid=30806">https://springrts.com/mediawiki/index.php?title=Lua_WeaponDefs&amp;oldid=30806</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_WeaponDefs.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_WeaponDefs&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_WeaponDefs&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_WeaponDefs&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_WeaponDefs.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_WeaponDefs&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+WeaponDefs" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_WeaponDefs" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_WeaponDefs" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_WeaponDefs&amp;oldid=30806" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_WeaponDefs&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 10 November 2018, at 18:51.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.004","walltime":"0.005","ppvisitednodes":{"value":19,"limit":1000000},"postexpandincludesize":{"value":14,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":4063,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223552","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":74});});</script></body></html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>3DModels:AssimpWorkflow - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"47acb5ff0ff3c3df53aab69e","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"3DModels:AssimpWorkflow","wgTitle":"3DModels:AssimpWorkflow","wgCurRevisionId":30478,"wgRevisionId":30478,"wgArticleId":3817,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["3D Models"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"3DModels:AssimpWorkflow","wgRelevantArticleId":3817,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready",
+"noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-3DModels_AssimpWorkflow rootpage-3DModels_AssimpWorkflow skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">3DModels:AssimpWorkflow</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><h2><span class="mw-headline" id="Standard_Assimp_Workflow">Standard Assimp Workflow</span></h2>
+<p>This Workflow is provided for a standard 3D Modeling package using the Z = forward, Y = upwards convention, like Maya, Modo or Lightwave. You can also use Blender for ASSIMP, but it won't be covered here. Bear in mind that the default DAE/FBX exporter from Maya might present issues with the texture overriding options of the model .lua script (version tested: Maya 2017). 3rd-Party DAE exporters from Maya might suit you best.
+</p><p>I. In the 3D Modeling Package:
+</p>
+<ol><li>Create your models as usual, after making sure all separate pieces share a single UV set. There shouldn't be more than one UV set in the file. All packages have a way to merge multiple UV sets as needed, bear in mind that in some of them you need to combine all objects first.</li>
+<li>To set the separate pieces pivot points, <i>don't use your modeling package's set pivot functionality</i>, it'll usually reset it to the world's origin (0,0,0) upon save to .dae. Instead, add an empty object / locator, move it to where you want the pivot to be, and parent the actual mesh to that object.</li>
+<li>Remember Spring uses a quite unique coordinates system, which probably won't correspond to your 3D Apps for rotation of pieces.</li></ol>
+<p>II. In Photoshop:
+</p>
+<ol><li>Install the DDS export/import plugin (<a href="3DModels_AssimpWorkflow.html#Other_File_Formats" title="3DModels:AssimpWorkflow">Other image file formats</a>). If you have an older Photoshop, you can use nVidia's older 32-bit release. If you use a newer Photoshop (tested on CC.2017) make sure you download this amazing open source plugin <a class="external text" href="http://fnordware.blogspot.com.br/2014/09/dds-plug-in-for-after-effects-and.html" rel="nofollow">here</a></li>
+<li>With the main (diffuse) texture opened, select the areas of the UV you want to have team color on. Select &gt; Save Selection, click ok. A new 'Alpha 1' channel will be created and accessible from Photoshop's 'Channels' panel, usually docked as a tab next to 'Layers'.</li>
+<li>Use 'Levels' (Ctrl+L) to make sure you have no pure black or white in the Alpha Channel. First select the Alpha Channel from the Channels tab of the Layer panel. In the 'Output Levels' box (at the bottom) set the left field to 5 and the right field to 250.</li>
+<li>Click 'Save As', select DDS file format. Make sure to keep 'Alpha Channels' selected</li>
+<li>In the 'DDS Options' panel, select Format 'DXT5' (for main/team texture), keep 'Mipmap' and the Alpha Channel enabled (usually 'Alpha 1'). No need to mess with anything else, defaults are fine. Save the texture to your mod's 'unittextures' folder.</li>
+<li>Now it's time to create your 2nd texture. <i>If you don't, the model will show all transparent in-game and you'll keep scratching your head.</i> A quick way to do that, if you don't want to spend time properly separating the channels, is to turn the RGB image into grayscale (Image &gt; Adjust &gt; Hue Saturation, set Saturation to 0). Now select the Alpha Channel again, hit D (default colors) then Ctrl+Delete (Fill layer with bg color, white in this case).</li>
+<li>Save the 2nd texture as DDS to your mod's 'unittextures' folder too, this time using DXT1 format, with Alpha selected.</li></ol>
+<p>III. In Spring:
+</p>
+<ol><li>Place your spanking new DDS textures in the '\unittextures' folder of your game/mod</li>
+<li>In your unit's .lua file (the UnitDef one), set object = "3dmeshname.dae", replacing the filename with your own model name of course. You need to add the .dae extension for Spring to load this file instead of searching for an .s3o file
+<ol><li>Attention: For the FeatureDef property of the UnitDef, its inner 'object' value shouldn't take the extension, or else Spring will fail loading it. Also make sure the corpse property is set to that same value. Eg.:</li></ol></li></ol>
+<pre>		corpse = "3dmeshname",
+		featuredefs = {
+			dead = {
+				object = "3dmeshname",
+			}
+		}
+</pre>
+<ol><li>Place your .dae file in the objects3d folder</li>
+<li>Add a new .lua file to the objects3d folder, in our case "3dmeshname.dae.lua"</li>
+<li>Add the following code to it, editing the field values as needed. `tex2` is commented out, but your 2nd unit texture (for reflectivity/glow/clipping) may also be defined here.</li></ol>
+<pre>	model = {
+	      radius = 25.0,
+	      height = 40,
+	      tex1 = "3dmeshname_tex.dds",
+	      tex2 = "3dmeshname_tex2.dds",
+	      midpos = {0,0,0},
+	}
+	return model
+
+</pre>
+<p>Done. Go test your new unit model and texture in-game.
+</p>
+<h2><span class="mw-headline" id="Other_File_Formats">Other File Formats</span></h2>
+<p>DDS is a native nVidia format, it holds all mipmaps and has many great image compression algorithms. Bear in mind that the image packed inside DDS can't be altered (like "flipped vertically") through commands in the model configuration .lua file. 
+If you don't want to use DDS for any reason, like not having support in your image app, make sure to use TARGA (.TGA) 32-bits. That's because, although ASSIMP also supports JPG, PNG, and BMP, the first has no support for alpha channels and the other two, for optmization reasons, may embed the alpha channel in a non-standard way. In Photoshop, until version CS6, PNG and BMP saved their alpha channels separately, after that version and up to the latest (CC.2017 at the time of this writing) it embeds the alpha information in the RGB channels. TARGA format always saves the alpha channel separately, as expected by ASSIMP.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223223
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.003 seconds
+Real time usage: 0.004 seconds
+Preprocessor visited node count: 17/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 260/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3817-0!canonical and timestamp 20260309223223 and revision id 30478
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=3DModels:AssimpWorkflow&amp;oldid=30478">https://springrts.com/mediawiki/index.php?title=3DModels:AssimpWorkflow&amp;oldid=30478</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_3D_Models.html" title="Category:3D Models">3D Models</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="3DModels_AssimpWorkflow.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:3DModels:AssimpWorkflow&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=3DModels:AssimpWorkflow&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=3DModels:AssimpWorkflow&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="3DModels_AssimpWorkflow.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:3DModels:AssimpWorkflow&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=3DModels%3AAssimpWorkflow" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/3DModels:AssimpWorkflow" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/3DModels:AssimpWorkflow" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=3DModels:AssimpWorkflow&amp;oldid=30478" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=3DModels:AssimpWorkflow&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 3 October 2017, at 05:34.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.003","walltime":"0.004","ppvisitednodes":{"value":17,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":260,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223223","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":115});});</script></body></html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Spring on MacOSX - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"f9986db928e36d0e995dbfa9","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Spring_on_MacOSX","wgTitle":"Spring on MacOSX","wgCurRevisionId":28486,"wgRevisionId":28486,"wgArticleId":2001,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Deprecated"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Spring_on_MacOSX","wgRelevantArticleId":2001,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Spring_on_MacOSX rootpage-Spring_on_MacOSX skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Spring on MacOSX</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><table style="border:1px solid #888; color:#FFFFFF; background:#BB2525;padding:.2em; padding:15px;text-align:justify;width:90%; margin:10px 30px; -webkit-border-radius: 10px; -moz-border-radius: 10px;border-radius: 10px;">
+<tbody><tr>
+<td style="width:50px;"><a class="image" href="/wiki/File:172px-Symbol_comment_vote.svg.png"><img alt="172px-Symbol comment vote.svg.png" decoding="async" height="51" src="images/50px-172px-Symbol_comment_vote.svg.png" srcset="/mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/75px-172px-Symbol_comment_vote.svg.png 1.5x, /mediawiki/images/thumb/d/d6/172px-Symbol_comment_vote.svg.png/100px-172px-Symbol_comment_vote.svg.png 2x" width="50"/></a>
+</td>
+<td style="padding-left:.2em;">This howto is deprecated, please use the <a href="Download.html" title="Download">official package</a>, else you can <a href="Building_Spring_on_MacOSX.html" title="Building Spring on MacOSX">compile</a> it yourself.
+</td></tr></tbody></table>
+<p><br/>
+</p><p><b>Important notice: as of the next engine release, this tutorial will be discontinued, as Spring will be available as a standalone Mac OS X .app bundle (so will SpringLobby).</b>
+</p><p>Last page update: 2011/08/01 by daftalx (updated SpringLobby to 0.135)
+</p><p>Current milestones available:
+</p>
+<ul><li>Spring: 0.82.7.1</li>
+<li>SpringLobby: 0.135</li></ul>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Preamble"><span class="tocnumber">1</span> <span class="toctext">Preamble</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Basics"><span class="tocnumber">2</span> <span class="toctext">Basics</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Install_the_XCode_tools"><span class="tocnumber">2.1</span> <span class="toctext">Install the XCode tools</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Install_the_Java_developer_packages"><span class="tocnumber">2.2</span> <span class="toctext">Install the Java developer packages</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Install_MacPorts"><span class="tocnumber">2.3</span> <span class="toctext">Install MacPorts</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Configure_MacPorts"><span class="tocnumber">2.4</span> <span class="toctext">Configure MacPorts</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Keep_MacPorts_up-to-date"><span class="tocnumber">2.5</span> <span class="toctext">Keep MacPorts up-to-date</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Spring"><span class="tocnumber">3</span> <span class="toctext">Spring</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Install_spring"><span class="tocnumber">3.1</span> <span class="toctext">Install spring</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Setup_game_data"><span class="tocnumber">3.2</span> <span class="toctext">Setup game data</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Check_if_Spring_works"><span class="tocnumber">3.3</span> <span class="toctext">Check if Spring works</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Lobbies"><span class="tocnumber">4</span> <span class="toctext">Lobbies</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#SpringLobby"><span class="tocnumber">4.1</span> <span class="toctext">SpringLobby</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#Install_SpringLobby"><span class="tocnumber">4.1.1</span> <span class="toctext">Install SpringLobby</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Setup_SpringLobby"><span class="tocnumber">4.1.2</span> <span class="toctext">Setup SpringLobby</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Known_bugs"><span class="tocnumber">4.1.3</span> <span class="toctext">Known bugs</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Troubleshooting"><span class="tocnumber">5</span> <span class="toctext">Troubleshooting</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Preamble">Preamble</span></h1>
+<p>This tutorial is intended for Mac OS X Snow Leopard (10.6.*) users running in 32bit kernel mode. Although Spring compiles and runs in 64 bits, <b>it does not work in 64bit kernel mode</b> (thanks to <i>frequencyandsulphur</i> for digging this one out).
+</p><p><br/>
+This tutorial has not been tested on older releases of Mac OS X (10.5-). Yet, there are big chances that you can get through and still be able to run Spring. Keep in mind though that due to architecture incompatibilities, Intel-powered macs will be able to discuss online together, as well as with PCs, but not with PPC-powered Macs.
+</p><p><br/>
+Finally, please bear in mind that this tutorial is mostly for testing purposes and proof of concept. Although no manual compilation is required, using the Terminal application is necessary (for now). Due to the little amount of time people are dedicating to the Mac version of Spring, things will move only slowly and often behind the other platforms. Once things get stabilized, an all-in-one installer will (hopefully one day) replace this tutorial.
+</p><p><br/>
+Good luck, and have fun !
+</p>
+<h1><span class="mw-headline" id="Basics">Basics</span></h1>
+<h2><span class="mw-headline" id="Install_the_XCode_tools">Install the XCode tools</span></h2>
+<p>These are available on your Mac OS X install DVD, the installer is called "XCode Tools" in the "Optional installs" folder.
+</p>
+<h2><span class="mw-headline" id="Install_the_Java_developer_packages">Install the Java developer packages</span></h2>
+<p>As of Apple's "Java for Mac OS X 10.6 Update 3", headers for JNI (among other stuff) are no longer provided by default. In order to build spring AIs but also various dependencies, you should download and install the Java Developer package available on Apple's support site <a class="external text" href="http://connect.apple.com/cgi-bin/WebObjects/MemberSite.woa/wa/getSoftware?bundleID=20719" rel="nofollow">here</a> (NOTE: you must have an Apple ID to access this page. Feel free to post any public hard link in the forum to be added here instead).
+</p>
+<h2><span class="mw-headline" id="Install_MacPorts">Install MacPorts</span></h2>
+<ul><li>If you never had MacPorts installed, the latest version is available as a ".dmg" installer on <a class="external text" href="http://www.macports.org/install.php" rel="nofollow">this page</a></li>
+<li>If you already have MacPorts, make sure you run the latest version with</li></ul>
+<pre>    sudo port selfupdate
+</pre>
+<h2><span class="mw-headline" id="Configure_MacPorts">Configure MacPorts</span></h2>
+<p>Spring and it's lobbies are published in a different repository than MacPorts's official one. So you must edit (as root) the MacPorts sources file (located by default in /opt/local/etc/macports/sources.conf), and add the following line <b>before</b> the last one:
+</p>
+<pre>    rsync://daftserve.dyndns.org/macports/
+</pre>
+<h2><span class="mw-headline" id="Keep_MacPorts_up-to-date">Keep MacPorts up-to-date</span></h2>
+<p>To sync your MacPorts install with the latest repositories hit
+</p>
+<pre>    sudo port sync
+</pre>
+<p>and upgrade any outdated ports with
+</p>
+<pre>    sudo port upgrade outdated
+</pre>
+<p>From now on I assume your Portfiles will always be up-to-date, therefore I will get straight to the point during the remainder of this tutorial.
+</p>
+<h1><span class="mw-headline" id="Spring">Spring</span></h1>
+<h2><span class="mw-headline" id="Install_spring">Install spring</span></h2>
+<p>Crazy as it may seem, installing spring now comes down to this command:
+</p>
+<pre>    sudo port install springrts binutils
+</pre>
+<p>WARNING: this will take a *long* while, especially on a fresh system (ballpark figure: over an hour with an Intel C2D 2.2GHz cpu).
+</p><p>the binutils are required for finding the source of a crash of spring, the utility addr2line is used.
+</p>
+<h2><span class="mw-headline" id="Setup_game_data">Setup game data</span></h2>
+<p>create a ".spring" folder in your home directory, and create the usual "games", "maps" and "demos" folder. There you can store your favorite game data (most of the content is cross-platform compatible).
+</p>
+<h2><span class="mw-headline" id="Check_if_Spring_works">Check if Spring works</span></h2>
+<pre>    spring
+</pre>
+<p>should launch the standalone GUI in window mode, which allows offline gaming, e.g. if you have demo scripts or single player games (my favorite these days is Chicken BA).
+</p>
+<h1><span class="mw-headline" id="Lobbies">Lobbies</span></h1>
+<h2><span class="mw-headline" id="SpringLobby">SpringLobby</span></h2>
+<p>Although the Mac OS port of SpringLobby should be considered "barely alpha"-stage, quite a lot of features are already functional, so you should be able to play online with patience and little effort.
+</p>
+<h3><span class="mw-headline" id="Install_SpringLobby">Install SpringLobby</span></h3>
+<p>As for the engine, installing SpringLobby comes down to a simple command:
+</p>
+<pre>    sudo port install springlobby
+</pre>
+<p>In the end you should get two "double-clickable" .app bundles (springlobby and <a href="SpringSettings.html" title="SpringSettings">SpringSettings</a>) in MacPorts's binary folder (/opt/local/bin by default).
+</p>
+<h3><span class="mw-headline" id="Setup_SpringLobby">Setup SpringLobby</span></h3>
+<p>Upon first run, you'll have to tell SpringLobby where to find the spring executable and unitsync library manually. The spring executable is in "/opt/local/bin/spring" and the unitsync library in "/opt/local/lib/libunitsync.so".
+</p><p>As mentioned earlier the lobby is in a very early port stage. One major feature that does *NOT* work yet is to join (or autojoin) an IRC channel (but you may chat inside a battleroom). So before connecting to the main server, open the "Autojoin channels" options window and remove all default channels.
+</p><p>That's it, connect and enjoy  
+NOTE: SpringLobby will mostly crash upon startup (much less afterwards). Don't worry, just keep trying until you get through...
+</p>
+<h3><span class="mw-headline" id="Known_bugs">Known bugs</span></h3>
+<ul><li>Add bot in a game opens a tiny (one-pixel wide) window. Clicking it restores its size, but be precise !</li></ul>
+<h1><span class="mw-headline" id="Troubleshooting">Troubleshooting</span></h1>
+<p>In case you encounter compile or install errors on the way, MacPorts will let you know that a log file has been stored somewhere like /opt/local/var/macports/logs/??/main.log, where the "??" describes the port you are installing. Paste the contents of this file into a paste bin (<a class="external free" href="http://www.pastebin.ca" rel="nofollow">http://www.pastebin.ca</a>) and post the shortlink to the pastebin in <a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=65&amp;t=23455" rel="nofollow">this topic</a>, together will your full system info (OS, CPU, ARCH, MacPorts version).
+</p><p>That's it ! Enjoy !
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223023
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.011 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 62/1000000
+Post‐expand include size: 483/2097152 bytes
+Template argument size: 135/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.648      1 Template:Deprecated
+100.00%    1.648      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2001-0!canonical and timestamp 20260309223023 and revision id 28486
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Spring_on_MacOSX&amp;oldid=28486">https://springrts.com/mediawiki/index.php?title=Spring_on_MacOSX&amp;oldid=28486</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Deprecated.html" title="Category:Deprecated">Deprecated</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Spring_on_MacOSX.html" title="View the content page [c]">Page</a></li><li id="ca-talk"><a accesskey="t" href="/wiki/Talk:Spring_on_MacOSX" rel="discussion" title="Discussion about the content page [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Spring_on_MacOSX&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Spring_on_MacOSX&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Spring_on_MacOSX.html" title="Page">Page</a></li><li id="ca-talk-mobile"><a href="/wiki/Talk:Spring_on_MacOSX" rel="discussion" title="Discussion">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Spring+on+MacOSX" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Spring_on_MacOSX" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Spring_on_MacOSX" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Spring_on_MacOSX&amp;oldid=28486" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Spring_on_MacOSX&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 12 April 2014, at 11:20.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.011","walltime":"0.013","ppvisitednodes":{"value":62,"limit":1000000},"postexpandincludesize":{"value":483,"limit":2097152},"templateargumentsize":{"value":135,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.648      1 Template:Deprecated","100.00%    1.648      1 -total"]},"cachereport":{"timestamp":"20260309223023","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":74});});</script></body></html>

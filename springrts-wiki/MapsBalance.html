@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>MapsBalance - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"95bf9d191c1d089bdee236c2","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"MapsBalance","wgTitle":"MapsBalance","wgCurRevisionId":17536,"wgRevisionId":17536,"wgArticleId":1115,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Map making"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"MapsBalance","wgRelevantArticleId":1115,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready",
+"user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-MapsBalance rootpage-MapsBalance skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">MapsBalance</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Map_development.html" title="Map development">Map Development</a> &lt; MapsBalance
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Making_properly_balanced_maps"><span class="tocnumber">1</span> <span class="toctext">Making properly balanced maps</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Resource_Standards"><span class="tocnumber">2</span> <span class="toctext">Resource Standards</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Gravity"><span class="tocnumber">3</span> <span class="toctext">Gravity</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Resource_Dynamics"><span class="tocnumber">4</span> <span class="toctext">Resource Dynamics</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Making_properly_balanced_maps">Making properly balanced maps</span></h2>
+<p>So, you're making a map. But how much resources should it have?
+</p><p>Don't regard this as of little relevance! This is very important!
+</p><p>All units in unit sets are balanced assuming that, for example, metal is x harder to get than energy. If your map has, for example, too much metal, units that cost more onto the metal side than energy side become unbalancedly cheap.
+</p>
+<h2><span class="mw-headline" id="Resource_Standards">Resource Standards</span></h2>
+<p>When making maps, these are the standards for resources:
+</p><p><b>Metal:</b>
+</p>
+<ul><li>The amount per normal metal extractor is between 0.7 and 2.5</li>
+<li>The amount of total metal in all patches, when beeing extracted by normal metal extractors, is about 5~15 per player, assuming each player is controlling about a quarter of the map.  It should be noted, though, that this metal should be SPREAD OUT, not all located at the start position.</li></ul>
+<p><br/>
+<b>Energy:</b>
+</p>
+<ul><li>The amount of tidal energy is almost always 20</li>
+<li>The amount of solar energy is almost always 20</li>
+<li>The amount of wind, is usually 1(min)~25(max) or some other min~max values <b>that average between 7 and 13</b></li>
+<li>The amount of geothermals available to each player generally varies widely depending on the map.  A good guideline is to usually have 1 geothermal for every 2 players as a minimum, or 2 geothermals per player as a maximum.</li></ul>
+<p><br/>
+Standards are just that, standards, and you don't HAVE to follow them. But it's better not to go too overboard with resources or use diferent standards very frequently.  For example an  interesting variation may be to increase the amount of metal generated per extractor, but reduce the number of extractors, so that the total metal available is not changed significantly. 
+</p><p>In all cases, <b>less metal = more strategy</b>.  Too little metal is <b>always</b> better than too much.  This point cannot be stressed too much.
+</p>
+<h2><span class="mw-headline" id="Gravity">Gravity</span></h2>
+<p>When making maps, the standard gravity is <b>140</b>, or so some assume. No clear "default" value has actually be given by the developers, but it most likely lies somewhere between 100 and 150. If you decide to use a value much higher value, units that fire balistic projectiles (cannons) may not be able to fire their projectiles at the intended range. Be sure to test your map alot before releasing it if you are going to change the gravity drastically.
+</p>
+<h2><span class="mw-headline" id="Resource_Dynamics">Resource Dynamics</span></h2>
+<p>This section is dedicated to a more throughout explanation of the workings of the resources in Spring so you can balance your map accordingly.
+</p><p><br/>
+<b>Metal:</b>
+</p><p>Additional info needed.
+</p><p><br/>
+<b>Energy:</b>
+</p><p>A somewhat edited quote from the map forum (thus not a true quote);
+</p><p>"On the wind issue I belive somewhere around 0-20 or 0-30 is pretty reasonable for a map where you want wind to be the "best" option, which it wasn't on all TA maps. Although wind was viable on most maps with the expection of the moon maps.
+Relying on wind for your energy needs has always been a risky move though, even on maps where it has proven to be useful, because you might just get stuck with all of your generators giving an output of  1, thus ruining your economy for the moment. I hope it stays this way in TA, and personally I find the suggestion that you'd need 30-40 as an average output for wind to be viable quite odd, as online play in TA has shown that's not true.
+Just for reference, two maps where almost only wind was used in TA are GoW and PD. In GoW I belive the wind varied between 3 to 27, while on PD it was between 1 (or 0, not sure) to 24.
+</p><p>From what I've discussed so far though (with old TA players), most seems to agree that once the average income goes to 7 or above, wind quickly becomes the better option. Some do favor having a few solars just as a backup, but overall wind quickly becomes the better option for your main source of energy income, the solars will at most get the postion of a small backup. It can lead to the added investment of energy storages though.
+</p><p>From this you can easily come to your own conclusions, there are however some minor points that I would want to add. First of, you have to take into account that solars in XTA doesn't cost any energy at all, this is however something that mostly comes into play if your current source of energy is getting destroyed, so you lack energy.
+The other thing I want to add is a short overview of the advantages of the two different sources of energy, ordered by (from my point of view and without taking into account the lack of energy cost for the XTA solar) importance;
+1) The wind generator costs less, only 1/3 of a solar. An average income of 7 will thus already put it as the better choice theoretically.
+2) The wind generator builds quicker, this means you will start to get your energy income faster too which might matter quite a bit.
+3) The solar gives you a constant supply of energy that does not vary.
+4) The solar is better armored than the wind generator. I'm not sure if 3 wind generators have more health than a single solar though (you also have to take into account that they are often built next to each other, so when one goes it will damage the ones next to it).
+5) A single solar takes less space than 3 wind generators. Once the average wind income from a single generator is 20 or above this points becomes moot though, but before that it can potentially be important on certain maps.
+6) A solar usually leaves a "better" wreckage, thus yielding you more metal when you reclaim it. This of course means it was destroyed in the first place, which never is that good.
+</p><p>This is all disregarding the tidal of course, but that's another matter entirely as it needs water to be built. It works by the same principle as the solar however, the difference being that the wind generator is only Ã‚Â½ the cost of the tidal. There are also some other differences compared to the solar of course (size, armor etc), but generally it should be pretty straightforward to decide if its worth the cost or not if you already understand the relation between solars and wind generators.
+</p><p>One more note about wind, if I remember correctly. In OTA the wind was highest on the barren worlds (ice/desert etc), while it wasn't a real option on moon maps."
+</p><p><br/>
+<b>A short summary of this "quote" reads as follows;</b>
+</p><p>Wind generators starts to become the best choice as soon as the average energy income from a single generator goes above 7. As the average gets higher the wind generators quickly become the only real choice if you want to win.
+If your map does have an average income of 7 or above, the only real benifits of a solar is more armor, constant supply, less space and finally it usually leaves wreckage behind.
+A single solar costs 3 times that of a wind generator, a single tidal costs 2 times the amount of a wind generator.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223528
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.006 seconds
+Real time usage: 0.008 seconds
+Preprocessor visited node count: 16/1000000
+Post‐expand include size: 11/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:1115-0!canonical and timestamp 20260309223528 and revision id 17536
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=MapsBalance&amp;oldid=17536">https://springrts.com/mediawiki/index.php?title=MapsBalance&amp;oldid=17536</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Map_making.html" title="Category:Map making">Map making</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="MapsBalance.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:MapsBalance&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=MapsBalance&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=MapsBalance&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="MapsBalance.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:MapsBalance&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=MapsBalance" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/MapsBalance" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/MapsBalance" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=MapsBalance&amp;oldid=17536" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=MapsBalance&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 31 August 2009, at 18:56.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.006","walltime":"0.008","ppvisitednodes":{"value":16,"limit":1000000},"postexpandincludesize":{"value":11,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223528","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":195});});</script></body></html>

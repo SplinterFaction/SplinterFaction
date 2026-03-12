@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Animation:LuaExamples - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"ac648371555552634cbdbbbc","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Animation:LuaExamples","wgTitle":"Animation:LuaExamples","wgCurRevisionId":31906,"wgRevisionId":31906,"wgArticleId":3589,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Animation"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Animation:LuaExamples","wgRelevantArticleId":3589,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":
+"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Animation_LuaExamples rootpage-Animation_LuaExamples skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Animation:LuaExamples</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#LUS_Script_Examples"><span class="tocnumber">1</span> <span class="toctext">LUS Script Examples</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#How_to_use"><span class="tocnumber">1.1</span> <span class="toctext">How to use</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Script_Scaffolds"><span class="tocnumber">1.2</span> <span class="toctext">Script Scaffolds</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#Air_Transport"><span class="tocnumber">1.2.1</span> <span class="toctext">Air Transport</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Builder"><span class="tocnumber">1.2.2</span> <span class="toctext">Builder</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Factory"><span class="tocnumber">1.2.3</span> <span class="toctext">Factory</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Wind_Generator"><span class="tocnumber">1.2.4</span> <span class="toctext">Wind Generator</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="LUS_Script_Examples">LUS Script Examples</span></h1>
+<h2><span class="mw-headline" id="How_to_use">How to use</span></h2>
+<ul><li><code>FIXME</code> - Indicates a section of code you will need to tweak to suit your own unit / model</li>
+<li><code>TODO</code> - Indicates an optional section of code is missing that you may wish to pad out e.g. with an animation</li></ul>
+<h2><span class="mw-headline" id="Script_Scaffolds">Script Scaffolds</span></h2>
+<h3><span class="mw-headline" id="Air_Transport">Air Transport</span></h3>
+<pre>-- FIXME: This should be whatever piece name you want to attach to in your model
+local attachPiece = piece "attach"
+
+-- called for each unit loaded, returns the attaching piece
+function script.QueryTransport(passengerID)
+    return attachPiece
+end
+
+-- called for each unit loaded to animate the load process
+function script.BeginTransport(passengerID)
+    -- TODO: any loading animations here
+end
+
+--how this is called depends on https://springrts.com/wiki/Gamedev:UnitDefs#transportUnloadMethod
+-- 0 (Default) called once on the last unit dropped
+-- 1 called for each unit dropped in mid-air
+-- 2 called for the last unit dropped
+function script.EndTransport(passengerID)
+    -- TODO: relevant end of transport sequence animations
+end
+
+
+-- Only called if transportUnloadMethod = 2
+function script.TransportDrop(passengerID, x,y,z)
+    -- TODO: animation to unload each individual passenger on the ground
+end
+</pre>
+<h3><span class="mw-headline" id="Builder">Builder</span></h3>
+<pre>local nanoPieces = {}
+-- FIXME: this example has 2 nano pieces to alternate between
+for i = 1, 2 do 
+     -- FIXME: the pieces are named nanoPiece1 and nanoPiece2 in the model
+    nanoPieces[i] = piece("nanoPiece" .. i)
+end
+Spring.SetUnitNanoPieces(unitID, nanoPieces)
+
+function script.StartBuilding(heading, pitch)
+    -- TODO: This is where you would add your unpack / point towards animation
+    SetUnitValue(COB.INBUILDSTANCE, true)
+end
+function script.StopBuilding()
+    -- TODO: This is where you would add your pack-up animation
+    SetUnitValue(COB.INBUILDSTANCE, false)
+end
+</pre>
+<h3><span class="mw-headline" id="Factory">Factory</span></h3>
+<pre>local nanoPieces = {}
+-- FIXME: this example has 2 nano pieces to alternate between
+for i = 1, 2 do 
+     -- FIXME: the pieces are named nanoPiece1 and nanoPiece2 in the model
+    nanoPieces[i] = piece("nanoPiece" .. i)
+end
+Spring.SetUnitNanoPieces(unitID, nanoPieces)
+
+function script.QueryBuildInfo()
+    -- FIXME: the pad piece is named buildPad in the model
+    return piece("buildPad")
+end
+
+local function OpenCloseAnim(open)
+    Signal(1) -- Kill any other copies of this thread
+    SetSignalMask(1) -- Allow this thread to be killed by fresh copies
+    if open then
+        -- TODO: This is where you would add your opening up anim
+    else
+        -- TODO: This is where you would add your closing up anim
+    end
+    SetUnitValue(COB.YARD_OPEN, open)
+    SetUnitValue(COB.BUGGER_OFF, open)
+    SetUnitValue(COB.INBUILDSTANCE, open)
+end
+
+-- Called when factory yard opens
+function script.Activate()
+    -- OpenCloseAnim must be threaded to call Sleep() or WaitFor functions
+    StartThread(OpenCloseAnim, true)
+end
+
+-- Called when factory yard closes
+function script.Deactivate()
+    -- OpenCloseAnim must be threaded to call Sleep() or WaitFor functions
+    StartThread(OpenCloseAnim, false)
+end
+
+function script.StartBuilding()
+    -- TODO: You can run any animation that continues throughout the build process here e.g. spin pad
+end
+
+function script.StopBuilding()
+    -- TODO: You can run any animation that signifies the end of the build process here
+end
+</pre>
+<h3><span class="mw-headline" id="Wind_Generator">Wind Generator</span></h3>
+<pre>-- FIXME: Assumes model has pieces named 'tower' and 'blades'
+local tower, blades = piece("tower", "blades")
+
+function script.WindChanged (number heading, number strength)
+  -- Turn the tower to face the wind at 30deg/s
+  Turn(tower, y_axis, heading, math.rad(30))
+  -- Spin the turbine blades relative to wind strength
+  -- FIXME: Here I set rotational speed to half of strength
+  Spin(blades, z_axis, strength * 0.5)
+end
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20260309223217
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.004 seconds
+Real time usage: 0.005 seconds
+Preprocessor visited node count: 38/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3431/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3589-0!canonical and timestamp 20260309223217 and revision id 31906
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Animation:LuaExamples&amp;oldid=31906">https://springrts.com/mediawiki/index.php?title=Animation:LuaExamples&amp;oldid=31906</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Animation.html" title="Category:Animation">Animation</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Animation_LuaExamples.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Animation:LuaExamples&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Animation:LuaExamples&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Animation:LuaExamples&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Animation_LuaExamples.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Animation:LuaExamples&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Animation%3ALuaExamples" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Animation:LuaExamples" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Animation:LuaExamples" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Animation:LuaExamples&amp;oldid=31906" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Animation:LuaExamples&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 21 December 2025, at 15:54.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.004","walltime":"0.005","ppvisitednodes":{"value":38,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3431,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223217","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":116});});</script></body></html>

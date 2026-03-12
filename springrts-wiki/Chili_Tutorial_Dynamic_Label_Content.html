@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Chili:Tutorial Dynamic Label Content - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"c16096bf791e4b10479fca4b","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Chili:Tutorial_Dynamic_Label_Content","wgTitle":"Chili:Tutorial Dynamic Label Content","wgCurRevisionId":26863,"wgRevisionId":26863,"wgArticleId":3117,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Libraries"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Chili:Tutorial_Dynamic_Label_Content","wgRelevantArticleId":3117,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]
+};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Chili_Tutorial_Dynamic_Label_Content rootpage-Chili_Tutorial_Dynamic_Label_Content skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Chili:Tutorial Dynamic Label Content</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Dynamic_label_updating"><span class="tocnumber">1</span> <span class="toctext">Dynamic label updating</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Preparation"><span class="tocnumber">1.1</span> <span class="toctext">Preparation</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Units_destroyed_counter.lua"><span class="tocnumber">1.2</span> <span class="toctext">Units_destroyed_counter.lua</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#messages.lua"><span class="tocnumber">1.3</span> <span class="toctext">messages.lua</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#utilities.lua"><span class="tocnumber">1.4</span> <span class="toctext">utilities.lua</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#gui_chili_unitdestroyedwindow.lua"><span class="tocnumber">1.5</span> <span class="toctext">gui_chili_unitdestroyedwindow.lua</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Dynamic_label_updating">Dynamic label updating</span></h2>
+<h3><span class="mw-headline" id="Preparation">Preparation</span></h3>
+<p>Having windows with labels on screen is a fun thing.  Although you probably want to change the contents of those labels if some event happens ingame.  For this tutorial we are going to change a label everytime a unit gets destroyed.
+</p><p>as before we are going to establish a basic structure for our code.  However we are going to need 4 scripts now.
+</p>
+<pre> 
+- LuaRules\Gadgets\Includes\messages.lua
+- LuaRules\Gadgets\Includes\utilities.lua
+- LuaRules\Gadgets\units_destroyed_counter.lua
+- LuaUI\widgets\gui_chili_unitdestroyedwindow.lua
+</pre>
+<p>In the messages.lua we are going to put global constants that will prefix interface messages between the engine rules code and the widget ui code.  Utilities.lua will contain handy utitliy functions like tokenizing strings or array debug code.  Units_destroyed_counter.lua will be used as engine rule code to keep track of the amount of units destroyed.  Gui_chili_unitdestroyedwindow.lua will contain the code to display the amount of units destroyed.
+</p>
+<h3><span class="mw-headline" id="Units_destroyed_counter.lua">Units_destroyed_counter.lua</span></h3>
+<p>We will start this page the same way as we did with hello world.
+</p>
+<code><pre>function gadget:GetInfo()
+	return {
+		name      = "units destroyed counter",
+		desc      = "Keeps track of the destroyed units in game (including unfinished units, 
+                            that timeout)",
+		author    = "Sunspot",
+		date      = "2011-06-19",
+		license   = "GNU GPL v2",
+		layer     = -50,
+		enabled   = true
+	}
+end
+
+-- INCLUDES
+VFS.Include("LuaRules/Gadgets/Includes/utilities.lua")
+VFS.Include("LuaRules/Gadgets/Includes/messagetypes.lua")
+
+-- CONSTANTS
+local DEBUG	= true
+
+-- MEMBERS
+local unitDestroyedCounter = 0
+
+-- SPEEDUPS
+local Echo         = Spring.Echo
+</pre></code>
+<p>As you see 2 of the scripts mentioned earlier will be included in this script in the Includes section.  I'll elaborate on them later but for now just put them there.  In the Constants section I created a DEBUG constant, this constant will be your friend in later development.  Especially if you have to give support to users (ofcourse it's the users fault !) if the code doesn't work anymore.  In the Members section we have unitDestroyedCounter this counter will keep track of the destroyed units thru the entire lifetime of the script.  Synced control section speaks for itselfs we cache the Spring.Echo function because we probably gonna use it a lot and we need to think about performance.
+</p><p>Next up we will have to init the gadget and create the method to increase the counter everytime a unit gets destroyed.  Not really all that difficult but then raises the question how are we going to notify the widget this counter increased ... cause thats an entire other script.  Well the sollution is to let the engine send a message.  Here is how.
+</p>
+<code><pre>function gadget:GetInfo()
+	return {
+		name      = "units destroyed counter",
+		desc      = "Keeps track of the destroyed units in game (including unfinished units, 
+                            that timeout)",
+		author    = "Sunspot",
+		date      = "2011-06-19",
+		license   = "GNU GPL v2",
+		layer     = -50,
+		enabled   = true
+	}
+end
+
+-- SYNCED ONLY
+if (not gadgetHandler:IsSyncedCode()) then
+	return
+end
+
+-- INCLUDES
+VFS.Include("LuaRules/Gadgets/Includes/utilities.lua")
+VFS.Include("LuaRules/Gadgets/Includes/messagetypes.lua")
+
+-- CONSTANTS
+local DEBUG	= true
+
+-- MEMBERS
+local unitDestroyedCounter = 0
+
+-- SPEEDUPS
+local Echo         = Spring.Echo
+
+function gadget:GameStart()
+	unitDestroyedCounter = 0
+end
+	
+function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID)
+	unitDestroyedCounter = unitDestroyedCounter + 1
+	if DEBUG then Echo("Sending message type " .. UNITDESTROYEDUPDATE .. " 
+               params ", unitDestroyedCounter) end
+	MessageDispatcher(UNITDESTROYEDUPDATE .. "-" .. unitDestroyedCounter) 
+end	
+</pre></code>
+<p>Few things to notice here I've added a new constant that we will use to send messages out the MessageDispatcher.  Also since we are sending data that each client needs to recieve we have to do everything synced.  We make sure of that by making the gadget work with synced code.  Next we call the GameStart method to initialise the unitDestroyedCounter.  It's not really needed because we allready initalised it to 0 at variable creation, but it's never a bad habit to do so.  The UnitDestroyed method gives you some variables to work with like the unit that got destroyed , what team he belonged to and the unit who killed it.  All nice params to work with but not needed in this tutorial, we will just increase the unitDestroyedCounter with one and send a message out.  Notice the format of the message, it start with the prefix of the type of message thats a constant in the messages.lua include followed by the parameters separated by "-".  What sign you use to seperate isn't important as long as it does not appear in your regular text and parameters.  In fact there is nothing wrong in making it a constant in messages.lua either.  For readability of the tutorial however I didn't.
+</p>
+<h3><span class="mw-headline" id="messages.lua">messages.lua</span></h3>
+<p>A simple and easy file where we keep our message constants in this case the UNITDESTROYEDUPDATE one.
+</p>
+<code><pre>UNITDESTROYEDUPDATE = "UNITDESTROYEDUPDATE " --format: UNITDESTROYEDUPDATE-(unitDestroyedCounter)
+</pre></code>
+<h3><span class="mw-headline" id="utilities.lua">utilities.lua</span></h3>
+<p>Make this file your standard file for all little utilities that you will probably use often in your developing adventures in Spring.  Let me start you off, with the following two methods that will be very handy, and one of them even needed in the tutorial
+</p>
+<code><pre>function to_string(data, indent)      
+	local str = ""        
+	if(indent == nil) then          
+		indent = 0      
+	end          
+	local indenter = "    "      
+	-- Check the type      
+	if(type(data) == "string") then          
+		str = str .. (indenter):rep(indent) .. data .. "\n"      
+	elseif(type(data) == "number") then          
+		str = str .. (indenter):rep(indent) .. data .. "\n"      
+	elseif(type(data) == "boolean") then          
+		if(data == true) then              
+			str = str .. "true"          
+		else              
+			str = str .. "false"          
+		end      
+	elseif(type(data) == "table") then          
+		local i, v          
+		for i, v in pairs(data) do              
+		-- Check for a table in a table              
+			if(type(v) == "table") then                  
+				str = str .. (indenter):rep(indent) .. i .. ":\n"              
+                        str = str .. to_string(v, indent + 2)              
+			else                  
+				str = str .. (indenter):rep(indent) .. i .. ": " ..  to_string(v, 0)             
+			end          
+		end          
+	elseif(type(data) == "function") then                  
+		str = str .. (indenter):rep(indent) .. 'function' .. "\n"      
+	else          
+		echo(1, "Error: unknown data type: %s", type(data))      
+	end        
+	return str  
+end  
+
+function split(pString, pPattern)
+	local tableIndex = 1
+	local Table = {} -- NOTE: use {n = 0} in Lua-5.0
+	local fpat = "(.-)" .. pPattern
+	local last_end = 1
+	local s, e, cap = pString:find(fpat, 1)
+	while s do
+		if s ~= 1 or cap ~= "" then
+			Table[tableIndex] = cap
+			tableIndex = tableIndex + 1
+		end
+		last_end = e+1
+		s, e, cap = pString:find(fpat, last_end)
+	end
+	if last_end &lt;= #pString then
+		cap = pString:sub(last_end)
+		Table[tableIndex] = cap
+		tableIndex = tableIndex + 1
+	end
+	return Table
+end
+</pre></code>
+<p>the to_string method, will be very helpfull once you start debugging arrays.  with it you can get a text representation of your array vars.  The split method is what I think is a decent regular language split method.  Unfourtunatly I didn't find any stringtokenizer method as java has.  So it will have to do
+</p>
+<h3><span class="mw-headline" id="gui_chili_unitdestroyedwindow.lua">gui_chili_unitdestroyedwindow.lua</span></h3>
+<p>This is our gui script that puts the destroyedcounter on the screen and updates it.  It will need a way to recieve the messages send by the rules script, interpret them and then update the screen.  Don't worry it's not as hard as it sounds.  Look here.
+</p>
+<code><pre>function widget:GetInfo()
+	return {
+		name		= "unit destroyed window",
+		desc		= "window to keep the unitdestroyed counter",
+		author		= "Sunspot",
+		date		= "2011-06-19",
+		license         = "GNU GPL v2",
+		layer		= 2,
+		enabled   	= true  --  loaded by default?
+	}
+end
+
+-- INCLUDES
+VFS.Include("LuaRules/Gadgets/Includes/utilities.lua")
+VFS.Include("LuaRules/Gadgets/Includes/messagetypes.lua")
+
+-- CONSTANTS
+local DEBUG = true
+local LOCALPLAYER = Spring.GetMyPlayerID()
+
+-- MEMBERS
+local Chili
+local unitsDestroyedLabel
+local unitsDestroyedWindow
+
+
+-- SCRIPT FUNCTIONS
+function doUnitDestroyedUpdate(value)
+	if DEBUG then Spring.Echo("changing unitsdestroyed to " .. value) end
+	unitsDestroyedLabel:SetCaption(value)
+end
+
+
+function widget:Initialize()
+	if (not WG.Chili) then
+		widgetHandler:RemoveWidget()
+		return
+	end
+
+	Chili = WG.Chili
+	local screen0 = Chili.Screen0
+	
+	unitsDestroyedWindow = Chili.Window:New{
+		x = '50%',
+		y = '50%',	
+		dockable = true,
+		parent = screen0,
+		caption = "units destroyed",
+		draggable = true,
+		resizable = false,
+		dragUseGrip = true,
+		clientWidth = 100,
+		clientHeight = 20,
+		backgroundColor = {0.8,0.8,0.8,0.9},
+	}
+	
+	unitsDestroyedLabel = Chili.Label:New{
+		x = "50%",
+		y = '50%',
+		parent = unitsDestroyedWindow,
+		caption = 0,
+		fontsize = 13,
+		autosize = false,
+		textColor = {1,1,1,1},
+	}	
+end
+
+
+function widget:RecvLuaMsg(msg, playerID)
+	if (playerID ~= LOCALPLAYER) then return end
+	
+	local tokens = split(msg,"-");
+	if(tokens[1] == UNITDESTROYEDUPDATE)then
+		if DEBUG then Spring.Echo("unitdestroyed msg recieved : " .. msg) end		
+		doUnitDestroyedUpdate(tokens[2])
+	end
+end
+</pre></code>
+<p>Let me walk you thru this.  First of all a new constant, you need to know who you are ... strange I know ... but if you don't you will have problems in the RecvLuaMsg method.  Everytime some script throws the SendLuaMsg method, you'll trigger this method.  This will happen for every player since, every player threw the msg due to the sync code.  You are only interested in your own messages so you put in the check "if (playerID ~= LOCALPLAYER) then return end".  Once you have determined the msg is for you, you need to learn how read it.  As we discussed earlier , there isn't a tokenizer method, but we can use the split method we put in our utilities script.  The first token will be the messagetype, while every following token are the paramters.  In case of different type of messages being send, you first check what message type and next you do the action for the message.  In our case we make an update to the label unit destroyed.
+</p><p>The label update is nothing special but due take note about this.  The Chili framework will provide you with methods to update stuff.  You could have done in this case for example
+</p>
+<code><pre>--Disclaimer don't use this
+unitsDestroyedLabel.value = "new value"
+unitsDestroyedWindow:RemoveChild(unitsDestroyedLabel)
+unitsDestroyedWindow:AddChild(unitsDestroyedLabel)
+</pre></code>
+<p>This would refresh the window with a changed label but why go the long way around.  The Label class has a handy method SetCaption(x) that will , update your label and refresh it, from within the framework
+</p><p>And there we have it , you have learned how to send messages from engine rule code to widget ui code and learned how to update Chili objects !
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309224127
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.004 seconds
+Real time usage: 0.005 seconds
+Preprocessor visited node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5612/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3117-0!canonical and timestamp 20260309224127 and revision id 26863
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Chili:Tutorial_Dynamic_Label_Content&amp;oldid=26863">https://springrts.com/mediawiki/index.php?title=Chili:Tutorial_Dynamic_Label_Content&amp;oldid=26863</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Libraries.html" title="Category:Libraries">Libraries</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Chili_Tutorial_Dynamic_Label_Content.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Chili:Tutorial_Dynamic_Label_Content&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Chili:Tutorial_Dynamic_Label_Content&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Chili:Tutorial_Dynamic_Label_Content&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Chili_Tutorial_Dynamic_Label_Content.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Chili:Tutorial_Dynamic_Label_Content&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Chili%3ATutorial+Dynamic+Label+Content" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Chili:Tutorial_Dynamic_Label_Content" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Chili:Tutorial_Dynamic_Label_Content" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Chili:Tutorial_Dynamic_Label_Content&amp;oldid=26863" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Chili:Tutorial_Dynamic_Label_Content&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 23 March 2013, at 18:54.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.004","walltime":"0.005","ppvisitednodes":{"value":48,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":5612,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224127","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":75});});</script></body></html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Mapdev:Tutorial Simple - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"d90b79ac0597b9ca96a1df0d","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Mapdev:Tutorial_Simple","wgTitle":"Mapdev:Tutorial Simple","wgCurRevisionId":30868,"wgRevisionId":30868,"wgArticleId":3369,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Map Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Mapdev:Tutorial_Simple","wgRelevantArticleId":3369,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":
+"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Mapdev_Tutorial_Simple rootpage-Mapdev_Tutorial_Simple skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Mapdev:Tutorial Simple</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Beginners_Tutorial_Stage_1"><span class="tocnumber">1</span> <span class="toctext">Beginners Tutorial Stage 1</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#What_you_will_need"><span class="tocnumber">2</span> <span class="toctext">What you will need</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Download"><span class="tocnumber">3</span> <span class="toctext">Download</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Preparation"><span class="tocnumber">4</span> <span class="toctext">Preparation</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Create_Height_map"><span class="tocnumber">5</span> <span class="toctext">Create Height map</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Edit_mapinfo.lua"><span class="tocnumber">5.1</span> <span class="toctext">Edit mapinfo.lua</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Create_Metal_Map"><span class="tocnumber">6</span> <span class="toctext">Create Metal Map</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Edit_mapinfo.lua_2"><span class="tocnumber">6.1</span> <span class="toctext">Edit mapinfo.lua</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Create_Diffuse_Texture"><span class="tocnumber">7</span> <span class="toctext">Create Diffuse Texture</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Create_Mini_Map"><span class="tocnumber">8</span> <span class="toctext">Create Mini Map</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Create_Grass_Map"><span class="tocnumber">9</span> <span class="toctext">Create Grass Map</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Define_Start_Positions"><span class="tocnumber">10</span> <span class="toctext">Define Start Positions</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Review"><span class="tocnumber">11</span> <span class="toctext">Review</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Finalizing"><span class="tocnumber">12</span> <span class="toctext">Finalizing</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#I_want_more"><span class="tocnumber">13</span> <span class="toctext">I want more</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Beginners_Tutorial_Stage_1">Beginners Tutorial Stage 1</span></h1>
+<p>This beginners tutorial is aimed at getting you from nothing, to something simple which you can build upon.
+</p>
+<ul><li>We'll start with the height map, defining the structure of the terrain</li>
+<li>Then the metalmap, a resource scheme built into the spring engine</li>
+<li>The diffuse texture, defining the colour of the terrain</li>
+<li>The minimap, for when selecting the map in the game lobby</li>
+<li>The grass map, for that extra flourish of detail</li>
+<li>Finally set up the start positions</li></ul>
+<h1><span class="mw-headline" id="What_you_will_need">What you will need</span></h1>
+<ul><li>An image editor, such as <a class="external text" href="http://www.gimp.org/" rel="nofollow">GIMP</a> or <a class="external text" href="http://www.adobe.com/products/photoshop.html" rel="nofollow">Adobe Photoshop</a>, <a class="external text" href="http://en.wikipedia.org/wiki/List_of_raster_graphics_editors#List" rel="nofollow">etc</a></li>
+<li><a class="external text" href="http://www.7-zip.org/" rel="nofollow">7zip</a></li>
+<li>Windows - <a href="MapConv.html" title="MapConv">MapConv</a>, Linux - <a href="MapConvNG.html" title="MapConvNG">MapConvNG</a></li>
+<li>a copy of the map blueprint <a class="external text" href="https://github.com/jk3064/Map-Blueprint/archive/master.zip" rel="nofollow">archive</a></li></ul>
+<p>There are a multitude of other tools you can use to make maps, however for the purposes of this beginners tutorial, these are the only ones you will need. Check the <a href="Mapdev_Main.html#Tools" title="Mapdev:Main">tools</a> section for more information.
+</p>
+<h1><span class="mw-headline" id="Download">Download</span></h1>
+<ul><li><a class="external text" href="http://springfiles.com/spring/other/mapdev-stage1-working-files" rel="nofollow">Download</a> the working  files</li>
+<li><a class="external text" href="http://springfiles.com/spring/spring-maps/mapdev-stage1" rel="nofollow">Download</a> the completed map archive</li></ul>
+<h1><span class="mw-headline" id="Preparation">Preparation</span></h1>
+<ol>
+<li>Extract the mapcontainer.sdd folder from the blueprint archive into your working directory.</li>
+Your directory structure should look like this:
+<pre>working directory
+  |-mapcontainer.sdd/
+    |-LuaGaia/
+    |-mapconfig/
+    |-maphelper/
+    |-maps/
+    |-mapinfo.lua
+    |-mapoptions.lua
+</pre>
+<li>Rename the mapcontainer.sdd folder to the name of your map, eg. mymap.sdd
+</li><li>Edit the following variables in the mapinfo.lua file, ignore the rest for now.
+<ul><li>name</li>
+<li>shortname</li>
+<li>description</li>
+<li>author</li>
+<li>version (just put like v1 or something in here)</li></ul>
+</li></ol>
+<h1><span class="mw-headline" id="Create_Height_map">Create Height map</span></h1>
+<p>For this tutorial we will be creating a 4x4 size map, which is relatively small. Typically maps will be 8x8 (for a 1v1) or larger, but entirely depends on the game you are targeting.
+</p>
+<ol>
+<li>Check the <a href="Mapdev_height.html" title="Mapdev:height">height</a> page to get our image dimensions. In our case a 4x4 map yields a image resolution of 257x257 pixels
+</li><li>Create a 257x257 greyscale image using your image editor
+</li><li>Draw the terrain</li>
+<li>Save the image to your working directory, call it heightmap.png
+</li></ol>
+<center>
+<table cellpadding="5" style="margin-top:15px; background:rgba(255,255,0,0.1); border: 1px solid rgba(0,0,0,0.5); border-radius: 12px 12px 12px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 10px 8px rgba(255,255,255,0.3);">
+<tbody><tr>
+<td rowspan="2"><a class="image" href="/wiki/File:Icon-tip.png"><img alt="Icon-tip.png" decoding="async" height="48" src="images/48px-Icon-tip.png" srcset="/mediawiki/images/thumb/4/44/Icon-tip.png/72px-Icon-tip.png 1.5x, /mediawiki/images/thumb/4/44/Icon-tip.png/96px-Icon-tip.png 2x" width="48"/></a>
+</td>
+<th style="font-size:large">Tip
+</th></tr>
+<tr>
+<td>Black represents the lowest elevation on the map, white represents the highest, in between lies all the shades of grey. Hard edges in the image will be cliffs, and smooth gradients will be ramps.
+</td></tr></tbody></table></center>
+<center>
+<table class="wikitable">
+<caption>Example
+</caption>
+<tbody><tr>
+<td><a class="image" href="/wiki/File:Mapdev-height.png"><img alt="Mapdev-height.png" decoding="async" height="256" src="images/256px-Mapdev-height.png" srcset="/mediawiki/images/3/33/Mapdev-height.png 1.5x" width="256"/></a></td>
+<td><a class="image" href="/wiki/File:Mapdev-height-example.png"><img alt="Mapdev-height-example.png" decoding="async" height="256" src="images/Mapdev-height-example.png" width="455"/></a>
+</td></tr>
+<tr>
+<th>Example Height Map</th>
+<th>Ingame Result
+</th></tr></tbody></table></center>
+<h2><span class="mw-headline" id="Edit_mapinfo.lua">Edit mapinfo.lua</span></h2>
+<ol>
+<li>Open the mapinfo.lua file in a text editor
+</li><li>Change the <code>minHeight</code> and <code>maxHeight</code> variables to <code>10</code> and <code>256</code> respectively<br/>
+These values control the overall height of the terrain, and will be unique to your map. After loading up the map in game you may want to revisit and tweak these values to get the best result.<br/>
+The resulting portion of code should appear like this:
+<pre>local mapinfo = {
+   ...
+   smf = {
+      minHeight = 10,
+      maxHeight = 256,
+      ...
+   },
+   ...
+}</pre>
+</li></ol>
+<h1><span class="mw-headline" id="Create_Metal_Map">Create Metal Map</span></h1>
+<center>
+<table cellpadding="5" style="margin-top:15px; background:rgba(255,0,0,0.1); border: 1px solid rgba(0,0,0,0.5); border-radius: 12px 12px 12px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 10px 8px rgba(255,255,255,0.3);">
+<tbody><tr>
+<td rowspan="2"><a class="image" href="/wiki/File:Icon-caution.png"><img alt="Icon-caution.png" decoding="async" height="48" src="images/48px-Icon-caution.png" srcset="/mediawiki/images/thumb/1/1a/Icon-caution.png/72px-Icon-caution.png 1.5x, /mediawiki/images/thumb/1/1a/Icon-caution.png/96px-Icon-caution.png 2x" width="48"/></a>
+</td>
+<th style="font-size:large">Caution
+</th></tr>
+<tr>
+<td>There are several games for Spring which use their own resourcing system. If you are creating a map for one of those games, a metal map may not be necessary, however it is always nice if you can make your maps as compatible with other games as possible, but this is a choice left entirely up to you.
+</td></tr></tbody></table></center>
+<ol>
+<li>Check the <a href="Mapdev_metal.html" title="Mapdev:metal">metal</a> page to get our image dimensions. In our case a 4x4 map yields an image resolution of 128x128 pixels
+</li><li>Create a 128x128 RGB image using your image editor
+</li><li>Paint the whole image black
+</li><li>Paint full red spots 6 or so pixels in diameter on the places where you want metal to appear in game.
+</li><li>Save the image to your working directory, call it metalmap.png
+</li></ol>
+<center>
+<table class="wikitable">
+<caption>Example
+</caption>
+<tbody><tr>
+<td><a class="image" href="/wiki/File:Mapdev-metal.png"><img alt="Mapdev-metal.png" decoding="async" height="256" src="images/256px-Mapdev-metal.png" srcset="/mediawiki/images/1/19/Mapdev-metal.png 1.5x" width="256"/></a></td>
+<td><a class="image" href="/wiki/File:Mapdev-metal-example.png"><img alt="Mapdev-metal-example.png" decoding="async" height="256" src="images/Mapdev-metal-example.png" width="455"/></a>
+</td></tr>
+<tr>
+<th>Example Metal Map</th>
+<th>Ingame Result
+</th></tr></tbody></table></center>
+<h2><span class="mw-headline" id="Edit_mapinfo.lua_2">Edit mapinfo.lua</span></h2>
+<ol>
+<li>Open the mapinfo.lua file in a text editor
+</li><li>Change the <code>maxMetal </code> and the <code>extractorRadius</code> variables to <code>6.0</code> and <code>32.0</code> respectively<br/>
+These variables control the maximum amount of metal that a metal extractor can extract at full capacity, and  the radius that a metal extractor will be able to draw from.<br/>
+The resulting portion of code will appear thus:
+<pre>local mapinfo = {
+   ...
+   maxMetal = 6.0,
+   extractorRadius = 32.0,
+   ...
+}</pre>
+</li></ol>
+<h1><span class="mw-headline" id="Create_Diffuse_Texture">Create Diffuse Texture</span></h1>
+<ol>
+<li>Check the <a href="Mapdev_diffuse.html" title="Mapdev:diffuse">diffuse</a> page to get our image dimensions. In our case a 4x4 map yields an image resolution of 2048x2048 pixels
+</li><li>Create a 2048x2048 RGB image using your image editor
+</li><li>Paint your ground colour in such a way that it compliments the height of the terrain, and metal spots.
+</li><li>Save the image to your working directory, call it diffuse.png
+</li></ol>
+<center>
+<table cellpadding="5" style="margin-top:15px; background:rgba(255,255,0,0.1); border: 1px solid rgba(0,0,0,0.5); border-radius: 12px 12px 12px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 10px 8px rgba(255,255,255,0.3);">
+<tbody><tr>
+<td rowspan="2"><a class="image" href="/wiki/File:Icon-tip.png"><img alt="Icon-tip.png" decoding="async" height="48" src="images/48px-Icon-tip.png" srcset="/mediawiki/images/thumb/4/44/Icon-tip.png/72px-Icon-tip.png 1.5x, /mediawiki/images/thumb/4/44/Icon-tip.png/96px-Icon-tip.png 2x" width="48"/></a>
+</td>
+<th style="font-size:large">Tip
+</th></tr>
+<tr>
+<td>It may be useful to use the heightmap.png and metalmap.png images as a starting points, scaling them up to size, and then painting over the top.
+</td></tr></tbody></table></center>
+<center>
+<table cellpadding="5" style="margin-top:15px; background:rgba(255,0,0,0.1); border: 1px solid rgba(0,0,0,0.5); border-radius: 12px 12px 12px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 10px 8px rgba(255,255,255,0.3);">
+<tbody><tr>
+<td rowspan="2"><a class="image" href="/wiki/File:Icon-caution.png"><img alt="Icon-caution.png" decoding="async" height="48" src="images/48px-Icon-caution.png" srcset="/mediawiki/images/thumb/1/1a/Icon-caution.png/72px-Icon-caution.png 1.5x, /mediawiki/images/thumb/1/1a/Icon-caution.png/96px-Icon-caution.png 2x" width="48"/></a>
+</td>
+<th style="font-size:large">Caution
+</th></tr>
+<tr>
+<td>The larger the map the greater the file size this texture will be, a 4x4 map at 2048x2048 the diffuse texture image is already at 5.4mb, imagine a 32x32 size map, it would be in the hundreds of megabytes. Working with large textures is difficult, and requires good hardware.
+</td></tr></tbody></table></center>
+<center>
+<table class="wikitable">
+<caption>Example
+</caption>
+<tbody><tr>
+<td><a class="image" href="/wiki/File:Mapdev-diffuse.jpg"><img alt="Mapdev-diffuse.jpg" decoding="async" height="256" src="images/Mapdev-diffuse.jpg" width="256"/></a></td>
+<td><a class="image" href="/wiki/File:Mapdev-diffuse-example.png"><img alt="Mapdev-diffuse-example.png" decoding="async" height="256" src="images/Mapdev-diffuse-example.png" width="455"/></a>
+</td></tr>
+<tr>
+<th>Example Diffuse Map</th>
+<th>Ingame Result
+</th></tr></tbody></table></center>
+<h1><span class="mw-headline" id="Create_Mini_Map">Create Mini Map</span></h1>
+<p>The <a href="Mapdev_minimap.html" title="Mapdev:minimap">mini-map</a> is a thumbnail image of the the whole map displayed in lobbies when selecting maps.
+</p>
+<ol>
+<li>Load up your diffuse.png image
+</li><li>Scale the image to exactly 1024x1024 pixels
+</li><li>Save the image to your working directory, call it mini.png
+</li></ol>
+<h1><span class="mw-headline" id="Create_Grass_Map">Create Grass Map</span></h1>
+<p>Grass adds additional depth to your map, giving it a little bit extra.
+</p>
+<ol><li>Check the <a href="Mapdev_grass.html" title="Mapdev:grass">grass</a> page to get our image dimensions. In our case a 4x4 map yields a image resolution of 64x64 pixels</li>
+<li>Create a 64x64 RGB image using your image editor</li>
+<li>Paint the image fully black to begin with</li>
+<li>Paint varying strengths of blue for where you want the grass to show up.</li>
+<li>Save the image to your working directory, call it grassmap.png</li></ol>
+<center>
+<table class="wikitable">
+<caption>Example
+</caption>
+<tbody><tr>
+<td><a class="image" href="/wiki/File:Mapdev-grass.png"><img alt="Mapdev-grass.png" decoding="async" height="256" src="images/Mapdev-grass.png" width="256"/></a></td>
+<td><a class="image" href="/wiki/File:Mapdev-grass-example.png"><img alt="Mapdev-grass-example.png" decoding="async" height="258" src="images/455px-Mapdev-grass-example.png" srcset="/mediawiki/images/thumb/9/94/Mapdev-grass-example.png/683px-Mapdev-grass-example.png 1.5x, /mediawiki/images/thumb/9/94/Mapdev-grass-example.png/910px-Mapdev-grass-example.png 2x" width="455"/></a>
+</td></tr>
+<tr>
+<th>Grass map</th>
+<th>In Game Result
+</th></tr></tbody></table></center>
+<h1><span class="mw-headline" id="Define_Start_Positions">Define Start Positions</span></h1>
+<p>considering the small size of the map we will only define two teams
+</p>
+<ol>
+<li>Open the mapinfo.lua file in a text editor
+</li><li>Locate the teams subtable and delete the lines for teams 2 and 3
+</li><li>Edit the <code>x</code> and <code>z</code> coordinate for each team to define their start location<br/>
+The coordinates for spring relate 1:1 with the pixels in the diffuse map. Starting at the top left of the image at (0,0). <code>x</code> increases horizontally to the right, <code>z</code> increases vertically downwards.<br/>
+The code should look similar to this:
+<pre>local mapinfo = {
+  ...
+  teams = {
+    [0] = {startPos = {x = 256, z = 1024}},
+    [1] = {startPos = {x = 1792, z = 1024}},
+  },
+  ...
+}</pre>
+</li></ol>
+<center>
+<table class="wikitable">
+<tbody><tr>
+<td><a class="image" href="/wiki/File:Mapdev-coords.png"><img alt="Mapdev-coords.png" decoding="async" height="256" src="images/Mapdev-coords.png" width="256"/></a>
+</td></tr>
+<tr>
+<th>Coordinates
+</th></tr></tbody></table></center>
+<h1><span class="mw-headline" id="Review">Review</span></h1>
+<p>From the tutorial we have learned how to make the:
+</p>
+<ul><li>Height map</li>
+<li>Diffuse texture</li>
+<li>Metal map</li>
+<li>Mini map</li>
+<li>Grass map</li>
+<li>Start locations</li></ul>
+<p>Your directory structure should look similar to this:
+</p>
+<pre>working directory
+  |-mymapname.sdd/
+  | |-LuaGaia/
+  | |-mapconfig/
+  | |-maphelper/
+  | |-maps/
+  | |-mapinfo.lua
+  | |-mapoptions.lua
+  |-grassmap.png
+  |-heightmap.png
+  |-metalmap.png
+  |-diffuse.png
+  |-minimap.png
+</pre>
+<p>Now we need to get the map loaded into the game
+</p>
+<h1><span class="mw-headline" id="Finalizing">Finalizing</span></h1>
+<p>Continue to <a href="Mapdev_Tutorial_Finalizing.html" title="Mapdev:Tutorial Finalizing">this page</a> to compile, test and archive your map for distribution.
+</p>
+<h1><span class="mw-headline" id="I_want_more">I want more</span></h1>
+<p>Continue to <a href="Mapdev_Tutorial_Intermediate.html" title="Mapdev:Tutorial Intermediate">stage two</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309151328
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.032 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 179/1000000
+Post‐expand include size: 4752/2097152 bytes
+Template argument size: 1981/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 737/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    5.226      1 -total
+ 67.26%    3.515      2 Template:Tip
+ 32.71%    1.709      4 Template:Infobox
+ 29.26%    1.529      2 Template:Caution
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3369-0!canonical and timestamp 20260309151328 and revision id 30868
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Mapdev:Tutorial_Simple&amp;oldid=30868">https://springrts.com/mediawiki/index.php?title=Mapdev:Tutorial_Simple&amp;oldid=30868</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Map_Dev.html" title="Category:Map Dev">Map Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Mapdev_Tutorial_Simple.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Mapdev:Tutorial_Simple&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Mapdev:Tutorial_Simple&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Mapdev:Tutorial_Simple&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Mapdev_Tutorial_Simple.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Mapdev:Tutorial_Simple&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Mapdev%3ATutorial+Simple" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Mapdev:Tutorial_Simple" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Mapdev:Tutorial_Simple" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Mapdev:Tutorial_Simple&amp;oldid=30868" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Mapdev:Tutorial_Simple&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 2 January 2019, at 04:49.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.032","walltime":"0.038","ppvisitednodes":{"value":179,"limit":1000000},"postexpandincludesize":{"value":4752,"limit":2097152},"templateargumentsize":{"value":1981,"limit":2097152},"expansiondepth":{"value":5,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":737,"limit":5000000},"timingprofile":["100.00%    5.226      1 -total"," 67.26%    3.515      2 Template:Tip"," 32.71%    1.709      4 Template:Infobox"," 29.26%    1.529      2 Template:Caution"]},"cachereport":{"timestamp":"20260309151328","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":53});});</script></body></html>

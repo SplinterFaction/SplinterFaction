@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua Beginners FAQ - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"68940ce4b634cd915e245b69","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_Beginners_FAQ","wgTitle":"Lua Beginners FAQ","wgCurRevisionId":31672,"wgRevisionId":31672,"wgArticleId":2400,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_Beginners_FAQ","wgRelevantArticleId":2400,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_Beginners_FAQ rootpage-Lua_Beginners_FAQ skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua Beginners FAQ</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua Beginners FAQ
+</p><p><br/>
+This page is an introduction to using Lua in Spring - it only tries to answer general questions, for more specific Questions please ask in the forum.
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Where_should_I_start.3F"><span class="tocnumber">1</span> <span class="toctext">Where should I start?</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Where_can_I_find_help.3F"><span class="tocnumber">2</span> <span class="toctext">Where can I find help?</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#How_do_I_open_.22.lua.22_files.3F"><span class="tocnumber">3</span> <span class="toctext">How do I open ".lua" files?</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#What_is_a_call-in.3F_And_a_call-out.3F"><span class="tocnumber">4</span> <span class="toctext">What is a call-in? And a call-out?</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#What_is_the_difference_between_unsynced_and_synced_lua_code.3F"><span class="tocnumber">5</span> <span class="toctext">What is the difference between unsynced and synced lua code?</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#What_is_the_difference_between_LuaUI.2C_LuaRules.2C_widgets_and_gadgets.3F"><span class="tocnumber">6</span> <span class="toctext">What is the difference between LuaUI, LuaRules, widgets and gadgets?</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#What_can.27t_Lua_do_in_the_current_version_of_Spring.3F"><span class="tocnumber">7</span> <span class="toctext">What can't Lua do in the current version of Spring?</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Complex_Lifecycles"><span class="tocnumber">8</span> <span class="toctext">Complex Lifecycles</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Where_can_I_find.2Fedit_examples.3F"><span class="tocnumber">9</span> <span class="toctext">Where can I find/edit examples?</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Can_I_reload_a_script_without_restarting_Spring.3F"><span class="tocnumber">10</span> <span class="toctext">Can I reload a script without restarting Spring?</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Why_does_the_print_function_seem_to_do_nothing.3F"><span class="tocnumber">11</span> <span class="toctext">Why does the print function seem to do nothing?</span></a></li>
+</ul>
+</div>
+<h2><span id="Where_should_I_start?"></span><span class="mw-headline" id="Where_should_I_start.3F">Where should I start?</span></h2>
+<p>You can start by reading general Lua tutorials  <a class="external text" href="http://lua-users.org/wiki/LuaTutorial" rel="nofollow">here</a>. 
+</p><p>After that, you could look at the example widget <a href="Lua_Tutorial_GettingStarted.html" title="Lua:Tutorial GettingStarted">here</a>, and try to add some functionality of your own!
+</p><p>Once you're a pro, have a look at the game repos <a class="external text" href="Gamedev_PublicRepos.html" rel="nofollow">here</a>, especially their /luaui/Widgets and /luarules/gadgets dirs.
+</p>
+<h2><span id="Where_can_I_find_help?"></span><span class="mw-headline" id="Where_can_I_find_help.3F">Where can I find help?</span></h2>
+<p>You can find documentation of Springs Lua API on the <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua_Scripting</a> page. Discussion of lua coding takes place on the <a class="external text" href="Read_Me_First.html" rel="nofollow">lobby</a> in #moddev and #lua, and there is also a <a class="external text" href="https://springrts.com/phpbb/viewforum.php?f=23" rel="nofollow">Lua sub-forum</a>.
+</p><p><br/>
+</p>
+<h2><span id='How_do_I_open_".lua"_files?'></span><span class="mw-headline" id="How_do_I_open_.22.lua.22_files.3F">How do I open ".lua" files?</span></h2>
+<p>Any text editor is enough. On Windows i.e. use <a class="external text" href="http://notepad-plus.sourceforge.net/uk/site.htm" rel="nofollow">Notepad++</a>. There are also IDEs able to work with Lua, such as Eclipse, if you look for them.
+</p>
+<h2><span id="What_is_a_call-in?_And_a_call-out?"></span><span class="mw-headline" id="What_is_a_call-in.3F_And_a_call-out.3F">What is a call-in? And a call-out?</span></h2>
+<p>Call-ins are functions defined in your script that Spring calls when a determined event takes place. For example, the widget:Initialize() call-in is run by Spring when the widget is loaded.
+Call-outs are functions defined in Spring you can run at whichever moment you desire. For example, when you call Spring.GetUnitTeam(unitID), the engine returns the teamID of the unit identified by "unitID".
+</p><p><br/>
+</p>
+<h2><span id="What_is_the_difference_between_unsynced_and_synced_lua_code?"></span><span class="mw-headline" id="What_is_the_difference_between_unsynced_and_synced_lua_code.3F">What is the difference between unsynced and synced lua code?</span></h2>
+<p>Synced code is code that runs, identically and at the same time, on every connected client. In practice, this means code which controls the game state. Unsynced code is code that will run differently (or maybe not at all) on each connected client. Typically, this means the user interface.
+</p><p>For example, lua code to make units explode if they fell down a cliff would need to be synced. But, code that warned a player when one of their own units was getting near a cliff edge, would need to be unsynced.
+</p><p><br/>
+</p>
+<h2><span id="What_is_the_difference_between_LuaUI,_LuaRules,_widgets_and_gadgets?"></span><span class="mw-headline" id="What_is_the_difference_between_LuaUI.2C_LuaRules.2C_widgets_and_gadgets.3F">What is the difference between LuaUI, LuaRules, widgets and gadgets?</span></h2>
+<p>Spring allows various <a href="Lua_Environments.html" title="Lua:Environments">Lua Environments</a>, each with differing functionality. Inside each Lua environment, developers can write addons, which are self-contained pieces of code. There are:
+</p>
+<ul><li><b>LuaUI</b>: Used for unsynced GUI related code. Addons in here are often called widgets. Clients can (if the game permits it) control which widgets are running. Widgets contain only unsynced code. They can be bundled inside the game, or loaded from the users "Spring/LuaUI/Wigets" directory.</li>
+<li><b>LuaRules</b>: Addons in here are often called gadgets. Clients cannot choose which gadgets run. Gadgets can include both synced and unsynced code, and must be bundled inside the game.</li></ul>
+<p>Intended for mappers, there is also LuaGaia, which behaves like LuaRules but is separated from it. To see which of the lua environoments has access to which data/functionality, see <a href="Lua_Environments.html#Interfaces" title="Lua:Environments">Lua:Environments#Interfaces</a> and <a href="Lua_Callins.html" title="Lua:Callins">Lua:Callins</a>.
+</p>
+<h2><span id="What_can't_Lua_do_in_the_current_version_of_Spring?"></span><span class="mw-headline" id="What_can.27t_Lua_do_in_the_current_version_of_Spring.3F">What can't Lua do in the current version of Spring?</span></h2>
+<p>Springs Lua interface is very powerful. To work out if some idea is possible you need to ask 
+</p>
+<ul><li>When do I need the engine to tell me something has happened? Check against <a href="Lua_Callins.html" title="Lua:Callins">Callins</a>.</li>
+<li>What information will I need to know about the game state? Check against <a href="Lua_SyncedRead.html" title="Lua SyncedRead">Lua_SyncedRead</a> (synced) and <a href="Lua_UnsyncedRead.html" title="Lua UnsyncedRead">Lua_UnsyncedRead</a> (unsynced).</li>
+<li>What do I then need to do about it? Check against <a href="Lua_SyncedCtrl.html" title="Lua SyncedCtrl">Lua_SyncedCtrl</a> (synced) and<a href="Lua_UnsyncedCtrl.html" title="Lua UnsyncedCtrl">Lua_UnsyncedCtrl</a> (unsynced).</li></ul>
+<p>Sometimes you need special functionality, like disk access or OpenGL calls, in which case check against <a class="mw-redirect" href="Lua_Scripting.html#Interfaces" title="Lua Scripting">Interfaces</a>.
+</p><p>For completeness, some examples of things you (currently) can't do:
+</p>
+<ul><li>control the ground LOS - but you can set the los status of units!</li>
+<li>add custom parameters to CEG definitions.</li></ul>
+<h2><span class="mw-headline" id="Complex_Lifecycles">Complex Lifecycles</span></h2>
+<p>Due to the complexity of the simulation, spring scripts are burdened with the curse of complex lifecyles very similar to <a class="external free" href="https://en.wikipedia.org/wiki/Object_lifetime" rel="nofollow">https://en.wikipedia.org/wiki/Object_lifetime</a> in programing.
+</p><p>This means, you can not rely on any information about the simulation being valid after as little as 1 frame has passed. Units may have been captured, destroyed or created in this time. Terrain may have been altered.
+</p><p>People usually combat this by creating large amounts of  protective boiler plate, checking if a unit still exists, is still on the same team, etc. every time a unitscript, gadget or widget wakes up.
+</p>
+<h2><span id="Where_can_I_find/edit_examples?"></span><span class="mw-headline" id="Where_can_I_find.2Fedit_examples.3F">Where can I find/edit examples?</span></h2>
+<p>You can find some easy example widgets <a href="Lua_Tutorial_GettingStarted.html" title="Lua:Tutorial GettingStarted">here</a>. The best source of more complicated examples is inside games themselves, in the LuaUI/Widgets and Luarules/gadgets directories. See <a href="Gamedev_PublicRepos.html" title="Gamedev:PublicRepos">Gamedev:PublicRepos</a> for a list of repositories. 
+</p><p>To make your own widgets, simply place individual .lua files into your Spring/LuaUI/Widgets dir (create the dir if it is not present. Case-sensitive!!!). Game repositories can be checked out into a folder named "SomeAwesomeGame.sdd", placed in your "/Spring/games" dir; this shoudl give a local copy of the game, recognized by Spring, where you can edit files. Make sure to check the licenses before doing this!
+</p><p><br/>
+</p>
+<h2><span id="Can_I_reload_a_script_without_restarting_Spring?"></span><span class="mw-headline" id="Can_I_reload_a_script_without_restarting_Spring.3F">Can I reload a script without restarting Spring?</span></h2>
+<p>Yes, you can type "/luaui reload" to reload widgets, and if you have "cheats" enabled you can also "/luarules reload" to reload gadgets.
+</p>
+<h2><span id="Why_does_the_print_function_seem_to_do_nothing?"></span><span class="mw-headline" id="Why_does_the_print_function_seem_to_do_nothing.3F">Why does the print function seem to do nothing?</span></h2>
+<p>Its output is displayed in stdout. If you have no easy way to see it, you can Spring.Echo("some text") which prints to the ingame chat and infolog.txt.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223547
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.009 seconds
+Preprocessor visited node count: 50/1000000
+Post‐expand include size: 17/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2400-0!canonical and timestamp 20260309223547 and revision id 31672
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_Beginners_FAQ&amp;oldid=31672">https://springrts.com/mediawiki/index.php?title=Lua_Beginners_FAQ&amp;oldid=31672</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_Beginners_FAQ.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_Beginners_FAQ&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_Beginners_FAQ&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_Beginners_FAQ&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_Beginners_FAQ.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_Beginners_FAQ&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+Beginners+FAQ" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_Beginners_FAQ" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_Beginners_FAQ" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_Beginners_FAQ&amp;oldid=31672" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_Beginners_FAQ&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 12 December 2021, at 10:36.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.008","walltime":"0.009","ppvisitednodes":{"value":50,"limit":1000000},"postexpandincludesize":{"value":17,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223547","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":75});});</script></body></html>

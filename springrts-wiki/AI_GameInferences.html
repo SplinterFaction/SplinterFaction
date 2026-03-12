@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>AI:GameInferences - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"faeda02a4b4e426ecbda59cd","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"AI:GameInferences","wgTitle":"AI:GameInferences","wgCurRevisionId":28967,"wgRevisionId":28967,"wgArticleId":3667,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AI Dev"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"AI:GameInferences","wgRelevantArticleId":3667,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AI_GameInferences rootpage-AI_GameInferences skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">AI:GameInferences</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Useful_inferences_derivable_from_the_game.27s_data"><span class="tocnumber">1</span> <span class="toctext">Useful inferences derivable from the game's data</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Description"><span class="tocnumber">1.1</span> <span class="toctext">Description</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Infer_spawn_positions"><span class="tocnumber">2</span> <span class="toctext">Infer spawn positions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Enable_cheats"><span class="tocnumber">2.1</span> <span class="toctext">Enable cheats</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Parse_the_startup_script"><span class="tocnumber">2.2</span> <span class="toctext">Parse the startup script</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Try_to_parse_the_map.27s_raw_data_files"><span class="tocnumber">2.3</span> <span class="toctext">Try to parse the map's raw data files</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Assume_symetric_starting_positions"><span class="tocnumber">2.4</span> <span class="toctext">Assume symetric starting positions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Infer_map_traversability"><span class="tocnumber">3</span> <span class="toctext">Infer map traversability</span></a></li>
+</ul>
+</div>
+<h1><span id="Useful_inferences_derivable_from_the_game's_data"></span><span class="mw-headline" id="Useful_inferences_derivable_from_the_game.27s_data">Useful inferences derivable from the game's data</span></h1>
+<h2><span class="mw-headline" id="Description">Description</span></h2>
+<p>This page describes how to infer (derive logical conclusions from permisses) some useful information to get started. For example: try to infer where the opponent might have started.
+</p>
+<h1><span class="mw-headline" id="Infer_spawn_positions">Infer spawn positions</span></h1>
+<p>An important first step right at the start of the game is to infer where the opponent(s) might have started.<br/>
+A forum thread about it: <a class="external free" href="http://springrts.com/phpbb/viewtopic.php?f=15&amp;t=32662" rel="nofollow">http://springrts.com/phpbb/viewtopic.php?f=15&amp;t=32662</a><br/>
+<br/>
+There are a few methods of varying reliability but, unfortunately, none appears to be absolutely reliable:
+</p>
+<ul><li><b>Enable cheats, even if only temporarily</b><br/></li>
+<li><b>Parse the startup script</b><br/></li>
+<li><b>Try to parse the map's raw data files</b><br/></li>
+<li><b>Assume symetric starting positions</b><br/></li></ul>
+<h2><span class="mw-headline" id="Enable_cheats">Enable cheats</span></h2>
+<p>The Java OOInterface allows the enabling and disabling of cheats (not sure about the other interfaces - someone update this). After cheating is enable, querying for all opponents' units will respond with all enemy units even if they are out of sight or radar.<br/>
+</p>
+<code><pre>Cheats cheats = _OOAICallback.getCheats();
+cheats.setEnabled (true); //Enables cheats and sends a message to all players warning the AI is cheating.
+cheats.setEventsEnabled (true); //Enables this AI receiving events for also the other player, like the "unitFinished" event.
+</pre></code>
+<p><br/>
+Note - at the very beggining of the game (as in frame 0) the enemy might not yet have spawned (your initial unit might have spawned first). It's necessary to wait a few frames before trying to get this info reliably. (SpringRTS runs at 30 simulation steps per second)<br/>
+<br/>
+Note - this method does not work in all conditions. As far as I've read somewhere, cheating will only work when the AI is playing someone in the same host machine and, if any cheating is done with someone else in the game, it will desync the running simulation between the running machines. There is a method that can be used to query that:
+</p>
+<code><pre>bool whetherCheatingWillDesyncTheGame = cheats.isOnlyPassive();
+</pre></code>
+<h2><span class="mw-headline" id="Parse_the_startup_script">Parse the startup script</span></h2>
+<p>The lobbies create an instruction script that is passed to SpringRTS when the lobby invokes it. On start, the SpringRTS engine will then parse that script for instructions on what maps to load, etc., and which starting positions to use. In Linux, that script should be in: ~/.config/spring/script.txt.<br/>
+<br/>
+In the startup script you can find parameters like:
+</p>
+<code><pre>   startpostype=3;
+
+   [TEAM0]
+   {
+      StartPosX=284;
+      StartPosZ=256;
+   }
+</pre></code>
+<p>See the source code for a mapping of what each startpostype means: <a class="external free" href="https://github.com/spring/spring/blob/64733de8b60dfba3533ed2374cc426c2bfb6addb/rts/Game/GameSetup.h#L65" rel="nofollow">https://github.com/spring/spring/blob/64733de8b60dfba3533ed2374cc426c2bfb6addb/rts/Game/GameSetup.h#L65</a><br/>
+<br/>
+If "choose in game" option was chosen, the script should have a definition of a rectangle of where each player could have chosen its start position:
+</p>
+<code><pre>startrecttop
+ startrectbottom
+startrectleft
+startrectright
+</pre></code>
+<h2><span id="Try_to_parse_the_map's_raw_data_files"></span><span class="mw-headline" id="Try_to_parse_the_map.27s_raw_data_files">Try to parse the map's raw data files</span></h2>
+<p>According to user Silentwings, some maps have a mapinfo.lua specifications file with the information on the starting positions on the map. However, not all maps have that file, and each mod/game can override that behaviour anyway.
+</p>
+<h2><span class="mw-headline" id="Assume_symetric_starting_positions">Assume symetric starting positions</span></h2>
+<p>As a final last resort, a weak assumption can be made that in a 1v1 match the opponent will start in the symetrical opposite position of the map.<br/>
+<br/>
+Example: if the AI starts top left, at position (250; 250), it can make a weak assumption that the opponent will have started roughly at (MaxX-250; MaxZ-250).
+</p>
+<h1><span class="mw-headline" id="Infer_map_traversability">Infer map traversability</span></h1>
+<p>How to infer where in the map each unit can pass through. Usually a submarine won't be able to go inland and a tank won't be able to climb mountains.<br/>
+TODO<br/>
+<a class="external free" href="http://springrts.com/phpbb/viewtopic.php?f=15&amp;t=32665" rel="nofollow">http://springrts.com/phpbb/viewtopic.php?f=15&amp;t=32665</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223627
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.006 seconds
+Real time usage: 0.007 seconds
+Preprocessor visited node count: 43/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 528/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3667-0!canonical and timestamp 20260309223627 and revision id 28967
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=AI:GameInferences&amp;oldid=28967">https://springrts.com/mediawiki/index.php?title=AI:GameInferences&amp;oldid=28967</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_AI_Dev.html" title="Category:AI Dev">AI Dev</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="AI_GameInferences.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:AI:GameInferences&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=AI:GameInferences&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=AI:GameInferences&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="AI_GameInferences.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:AI:GameInferences&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=AI%3AGameInferences" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/AI:GameInferences" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/AI:GameInferences" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=AI:GameInferences&amp;oldid=28967" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=AI:GameInferences&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 22 October 2014, at 23:24.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.006","walltime":"0.007","ppvisitednodes":{"value":43,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":528,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223627","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":135});});</script></body></html>

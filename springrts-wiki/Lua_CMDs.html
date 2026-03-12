@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lua CMDs - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"8f9351a94e20414a29b7d009","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lua_CMDs","wgTitle":"Lua CMDs","wgCurRevisionId":31051,"wgRevisionId":31051,"wgArticleId":2431,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lua"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lua_CMDs","wgRelevantArticleId":2431,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready",
+"user.options":"loading","jquery.tablesorter.styles":"ready","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","jquery.tablesorter","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=jquery.tablesorter.styles%7Cmediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lua_CMDs rootpage-Lua_CMDs skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lua CMDs</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; <a class="mw-redirect" href="Lua_Scripting.html" title="Lua Scripting">Lua Scripting</a> &lt; Lua CMDs
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Options"><span class="tocnumber">1</span> <span class="toctext">Options</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Waitcodes"><span class="tocnumber">2</span> <span class="toctext">Waitcodes</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Insert.2FRemove_Commands"><span class="tocnumber">3</span> <span class="toctext">Insert/Remove Commands</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#CommandQueues"><span class="tocnumber">3.1</span> <span class="toctext">CommandQueues</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Commands"><span class="tocnumber">4</span> <span class="toctext">Commands</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#CommandTypes"><span class="tocnumber">5</span> <span class="toctext">CommandTypes</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#CmdIDs"><span class="tocnumber">6</span> <span class="toctext">CmdIDs</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Options">Options</span></h2>
+<p><b id="CMD.OPT_ALT">CMD.OPT_ALT</b><br/>
+<b id="CMD.OPT_CTRL">CMD.OPT_CTRL</b><br/>
+<b id="CMD.OPT_SHIFT">CMD.OPT_SHIFT</b><br/>
+<b id="CMD.OPT_RIGHT">CMD.OPT_RIGHT</b><br/>
+<b id="CMD.OPT_INTERNAL">CMD.OPT_INTERNAL</b><br/>
+<b id="CMD.OPT_META">CMD.OPT_META</b>
+</p>
+<h2><span class="mw-headline" id="Waitcodes">Waitcodes</span></h2>
+<p><b id="CMD.WAITCODE_TIME">CMD.WAITCODE_TIME</b><br/>
+<b id="CMD.WAITCODE_DEATH">CMD.WAITCODE_DEATH</b><br/>
+<b id="CMD.WAITCODE_SQUAD">CMD.WAITCODE_SQUAD</b><br/>
+<b id="CMD.WAITCODE_GATHER">CMD.WAITCODE_GATHER</b>
+</p>
+<h2><span id="Insert/Remove_Commands"></span><span class="mw-headline" id="Insert.2FRemove_Commands">Insert/Remove Commands</span></h2>
+<p>To get the commandqueue use the following lua-call
+</p>
+<h3><span class="mw-headline" id="CommandQueues">CommandQueues</span></h3>
+<p><b>Spring.GetUnitCommands</b> <br/>
+<b>Spring.GetCommandQueue</b> <span class="note">(Alias)</span>
+</p>
+<pre> ( number unitID, number count ) -&gt; nil | number commandQueueSize <span class="warning">New in version 96</span>
+ -&gt; nil | table commandQueueTable = {
+    [1] = {
+      "id"      = number,
+      "params"  = { [1] = number, ...},
+      "options" = {
+        "coded"    = number,
+        "alt"      = boolean,
+        "ctrl"     = boolean,
+        "shift"    = boolean,
+        "right"    = boolean,
+        "internal" = boolean,
+        "meta"    = boolean
+      }
+    }, ...
+  }
+</pre>
+<p>Use count = -1 to get all commands.
+</p><p><span class="note">First, said "tags" aka "id" are unique command identifiers, so each command that gets inserted into a unit's command 
+queue gets its unique "tag" number. (It is used to <i>sync</i> command queue operations, also it makes things much easier.)
+Editors Note: I fucking hate it when open source devs use the word easy. It is a clear indicator that someone spends a whole day finding out about a well hidden simple concept. Well at least we are on this journey together :)
+<br/>
+To look at those "tags" you can do the following:
+</span></p>
+<pre>  local cmdQueue = Spring.GetUnitCommands(unitID, 100);
+  if (#cmdQueue&gt;0) then 
+     local cmdTag = cmdQueue[1].tag
+     Spring.Echo(cmdTag)
+     ..
+  end
+</pre>
+<p><br/>
+</p><p><br/>
+</p><p><b id="CMD.INSERT">CMD.INSERT</b>
+</p>
+<pre> options.ALT     -&gt; treat param0 as a position instead of a tag 
+ options.CONTROL -&gt; use the build queue for factories 
+ params[0] = command tag or position (negative numbers to reference
+ the back of the queue and 0 the first)
+ params[1] = insertCmd id 
+ params[2] = insertCmd options (shift,alt,right click,etc.)
+ params[3 ... N+2] = insertCmd params[0 ... N-1]
+</pre>
+<pre> Example:
+</pre>
+<p>&lt;syntaxhighlight lang="lua"&gt;
+</p>
+<pre>   Spring.GiveOrderToUnit(unitID,
+     CMD.INSERT,
+     {-1,CMD.ATTACK,<i>CMD.OPT_SHIFT</i>,<i>unitID2</i>},
+     {"alt"}
+   );
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>	Command structure dissection:
+</p><p> <b>What to do with the command - in our case insert:</b>
+</p><p>		'CMD.INSERT'
+</p><p> <b>Place in the queue to insert:</b>
+</p><p>		'-1'
+</p><p> <b>Type of command to insert:</b>
+</p><p>		'CMD.ATTACK'
+</p><p> <b>Additional Information:</b>
+</p><p>	If the unit is working down a shift queue, add it seemless into it
+</p><p>		'CMD.OPT_SHIFT'
+</p><p> <b>TargetID or Position:</b>
+</p><p>		'unitID2'
+</p><p> <b>The '-1' is the queue position and not a tag:</b>
+</p><p>		'{"alt"}'
+</p><p><br/>
+</p>
+<pre> if you insert cmd in pos 2 for example the rest of commands starting
+ from 2 will be pushed back. 
+ Ilustration: {cmdA, cmdB, cmdC, cmdD} =&gt; {cmdA, cmdB, NewCmd, cmdC, cmdD}
+</pre>
+<pre> <font color="red">
+ Note: If you didn't already notice, the command params and
+       the command options are twisted in the array (compared to GiveOrder)!
+ </font><font color="red">
+ Note2: The command options in the array/table is a number value!
+        You have to use CMD.OPT_* in this case.
+ </font><font color="red">
+ Note3: The inserted command doesn't go through allowcommand callins, only CMD.INSERT does.
+ </font>
+</pre>
+<p><b id="CMD.REMOVE">CMD.REMOVE</b>
+</p>
+<pre> options.ALT     -&gt; use the parameters as commandIDs 
+ options.CONTROL -&gt; use the build queue for factories 
+ params[0 ... N-1] = tags or commandIDs to remove
+</pre>
+<p>No clues what the above mean translated, but here is a working example of how to delete a buildorder from a factory:  
+&lt;syntaxhighlight lang="lua"&gt;   
+</p>
+<pre>local facCmds = Spring.GetFactoryCommands(factoryID)
+
+if facCmds then -- nil check
+</pre>
+<p>	local cmd = facCmds[1]
+	Spring.GiveOrderToUnit(factoryID, CMD.REMOVE, {i,cmd.tag}, {"ctrl"})
+</p>
+<pre>end
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Commands">Commands</span></h2>
+<p><font color="#55ee99">Note, the CMD[] table is bidirectional. That means: CMD[CMD.STOP] := "CMD_STOP"</font>
+</p><p><b id="CMD.STOP">CMD.STOP</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.WAIT">CMD.WAIT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.TIMEWAIT">CMD.TIMEWAIT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.NUMBER" title="Lua CMDs">CMDTYPE.NUMBER</a>
+</pre>
+<p><b id="CMD.DEATHWAIT">CMD.DEATHWAIT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_OR_RECTANGLE" title="Lua CMDs">CMDTYPE.ICON_UNIT_OR_RECTANGLE</a>
+</pre>
+<p><b id="CMD.SQUADWAIT">CMD.SQUADWAIT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.NUMBER" title="Lua CMDs">CMDTYPE.NUMBER</a>
+</pre>
+<p><b id="CMD.GATHERWAIT">CMD.GATHERWAIT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.MOVE">CMD.MOVE</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MAP" title="Lua CMDs">CMDTYPE.ICON_MAP</a>
+</pre>
+<p><b id="CMD.PATROL">CMD.PATROL</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MAP" title="Lua CMDs">CMDTYPE.ICON_MAP</a>
+</pre>
+<p><b id="CMD.FIGHT">CMD.FIGHT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MAP" title="Lua CMDs">CMDTYPE.ICON_MAP</a>
+</pre>
+<p><b id="CMD.ATTACK">CMD.ATTACK</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_OR_MAP" title="Lua CMDs">CMDTYPE.ICON_UNIT_OR_MAP</a>
+</pre>
+<p><b id="CMD.AREA_ATTACK">CMD.AREA_ATTACK</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_AREA" title="Lua CMDs">CMDTYPE.ICON_AREA</a>
+</pre>
+<p><b id="CMD.GUARD">CMD.GUARD</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT" title="Lua CMDs">CMDTYPE.ICON_UNIT</a>
+</pre>
+<p><b id="CMD.AISELECT">CMD.AISELECT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.COMBO_BOX" title="Lua CMDs">CMDTYPE.COMBO_BOX</a>
+</pre>
+<p><b id="CMD.GROUPSELECT">CMD.GROUPSELECT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.GROUPADD">CMD.GROUPADD</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.GROUPCLEAR">CMD.GROUPCLEAR</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.REPAIR">CMD.REPAIR</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_OR_AREA" title="Lua CMDs">CMDTYPE.ICON_UNIT_OR_AREA</a>
+</pre>
+<p><b id="CMD.FIRE_STATE">CMD.FIRE_STATE</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.MOVE_STATE">CMD.MOVE_STATE</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.SELFD">CMD.SELFD</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.LOAD_UNITS">CMD.LOAD_UNITS</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_OR_AREA" title="Lua CMDs">CMDTYPE.ICON_UNIT_OR_AREA</a>
+</pre>
+<p><b id="CMD.LOAD_ONTO">CMD.LOAD_ONTO</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT" title="Lua CMDs">CMDTYPE.ICON_UNIT</a>
+</pre>
+<p><b id="CMD.UNLOAD_UNITS">CMD.UNLOAD_UNITS</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_OR_AREA" title="Lua CMDs">CMDTYPE.ICON_UNIT_OR_AREA</a>
+</pre>
+<p><b id="CMD.UNLOAD_UNIT">CMD.UNLOAD_UNIT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MAP" title="Lua CMDs">CMDTYPE.ICON_MAP</a>
+</pre>
+<p><b id="CMD.ONOFF">CMD.ONOFF</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.RECLAIM">CMD.RECLAIM</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_FEATURE_OR_AREA" title="Lua CMDs">CMDTYPE.ICON_UNIT_FEATURE_OR_AREA</a>
+</pre>
+<p><b id="CMD.CLOAK">CMD.CLOAK</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.STOCKPILE">CMD.STOCKPILE</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON" title="Lua CMDs">CMDTYPE.ICON</a>
+</pre>
+<p><b id="CMD.DGUN">CMD.DGUN</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MAP" title="Lua CMDs">CMDTYPE.ICON_MAP</a>
+</pre>
+<p><b id="CMD.RESTORE">CMD.RESTORE</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_AREA" title="Lua CMDs">CMDTYPE.ICON_AREA</a>
+</pre>
+<p><b id="CMD.REPEAT">CMD.REPEAT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.TRAJECTORY">CMD.TRAJECTORY</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.RESURRECT">CMD.RESURRECT</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_FEATURE_OR_AREA" title="Lua CMDs">CMDTYPE.ICON_UNIT_FEATURE_OR_AREA</a>
+</pre>
+<p><b id="CMD.CAPTURE">CMD.CAPTURE</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_UNIT_OR_AREA" title="Lua CMDs">CMDTYPE.ICON_UNIT_OR_AREA</a>
+</pre>
+<p><b id="CMD.AUTOREPAIRLEVEL">CMD.AUTOREPAIRLEVEL</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.LOOPBACKATTACK">CMD.LOOPBACKATTACK</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.IDLEMODE">CMD.IDLEMODE</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.ICON_MODE" title="Lua CMDs">CMDTYPE.ICON_MODE</a>
+</pre>
+<p><b id="CMD.SET_WANTED_MAX_SPEED">CMD.SET_WANTED_MAX_SPEED</b>
+</p>
+<pre> type <a href="Lua_CMDs.html#CMDTYPE.NUMBER" title="Lua CMDs">CMDTYPE.NUMBER</a>
+</pre>
+<p><b id="CMD.SETBASE">CMD.SETBASE</b>
+</p><p><b id="CMD.INTERNAL">CMD.INTERNAL</b>
+</p>
+<pre> used in different ways
+</pre>
+<p><b>A negative number means build command</b><br/>
+The number is -unitDefID of the unittype that this command orders to be built.
+</p>
+<pre>  This means that build orders have no convenient CMD._____ string.
+     The command id for build orders must always be a "minus" sign <i>appended to an integer value</i>.
+  <font color="#55ee99">Spring.GiveOrderToUnit(unitID, <b>-(unitDefID)</b>, {x,y,z(,facing)}, {"shift"})</font>
+     alternatively:
+  <font color="#55ee99">Spring.GiveOrderToUnit(unitID, <b>-UnitDefNames["unitname"].id</b>, {x,y,z(,facing)}, {"shift"})</font>
+    <b>'facing'</b> is an optional integer parameter that controls unit's facing when placed.
+     The values of (x,y,z) must <i>all</i> be number values (like the number "0"), or the build order will break.
+</pre>
+<h2><span class="mw-headline" id="CommandTypes">CommandTypes</span></h2>
+<p><font color="#55ee99">Note, the CMDTYPE[] table is bidirectional. That means: CMDTYPE[CMDTYPE.ICON] := "CMDTYPE_ICON"</font>
+</p><p><b id="CMDTYPE.ICON">CMDTYPE.ICON</b>
+</p>
+<pre> expect 0 parameters in return
+</pre>
+<p><b id="CMDTYPE.ICON_MODE">CMDTYPE.ICON_MODE</b>
+</p>
+<pre> expect 1 parameter in return (number selected mode)
+</pre>
+<p><b id="CMDTYPE.ICON_MAP">CMDTYPE.ICON_MAP</b>
+</p>
+<pre> expect 3 parameters in return (mappos)
+</pre>
+<p><b id="CMDTYPE.ICON_AREA">CMDTYPE.ICON_AREA</b>
+</p>
+<pre> expect 4 parameters in return (mappos+radius)
+</pre>
+<p><b id="CMDTYPE.ICON_UNIT">CMDTYPE.ICON_UNIT</b>
+</p>
+<pre> expect 1 parameters in return (unitid)
+</pre>
+<p><b id="CMDTYPE.ICON_UNIT_OR_MAP">CMDTYPE.ICON_UNIT_OR_MAP</b>
+</p>
+<pre> expect 1 parameters in return (unitid) or 3 parameters in return (mappos)
+</pre>
+<p><b id="CMDTYPE.ICON_FRONT">CMDTYPE.ICON_FRONT</b>
+</p>
+<pre> expect 3 or 6 parameters in return (middle and right side of front if a front was defined)
+</pre>
+<p><b id="CMDTYPE.COMBO_BOX">CMDTYPE.COMBO_BOX</b>
+</p>
+<pre> expect 1 parameter in return (number selected option)
+</pre>
+<p><b id="CMDTYPE.ICON_UNIT_OR_AREA">CMDTYPE.ICON_UNIT_OR_AREA</b>
+</p>
+<pre> expect 1 parameter in return (unitid) or 4 parameters in return (mappos+radius)
+</pre>
+<p><b id="CMDTYPE.ICON_UNIT_FEATURE_OR_AREA">CMDTYPE.ICON_UNIT_FEATURE_OR_AREA</b>
+</p>
+<pre> expect 1 parameter in return (unitid or <a href="Lua_ConstGame.html#Engine" title="Lua ConstGame">Game.maxUnits</a>+featureid)
+     or 4 parameters in return (mappos+radius)
+</pre>
+<p><b id="CMDTYPE.ICON_BUILDING">CMDTYPE.ICON_BUILDING</b>
+</p>
+<pre> expect 3 parameters in return (mappos)
+</pre>
+<p><b id="CMDTYPE.ICON_UNIT_OR_RECTANGLE">CMDTYPE.ICON_UNIT_OR_RECTANGLE</b>
+</p>
+<pre> expect 1 parameter in return (unitid)
+     or 3 parameters in return (mappos)
+     or 6 parameters in return (startpos+endpos)
+</pre>
+<p><b id="CMDTYPE.NUMBER">CMDTYPE.NUMBER</b>
+</p>
+<pre> expect 1 parameter in return (number)
+</pre>
+<p><b id="CMDTYPE.CUSTOM">CMDTYPE.CUSTOM</b>
+</p>
+<pre> used with CMD_INTERNAL
+</pre>
+<p><b id="CMDTYPE.NEXT">CMDTYPE.NEXT</b> <font color="#55ee99">next command page</font>
+</p>
+<pre> used with CMD_INTERNAL
+</pre>
+<p><b id="CMDTYPE.PREV">CMDTYPE.PREV</b> <font color="#55ee99">previous command page</font>
+</p>
+<pre> used with CMD_INTERNAL
+</pre>
+<h2><span class="mw-headline" id="CmdIDs">CmdIDs</span></h2>
+<p>Below is a table of all CMD table entries and their IDs:
+</p>
+<table class="wikitable sortable">
+<tbody><tr>
+<th>Command</th>
+<th>ID
+</th></tr>
+<tr>
+<td>FIRESTATE_NONE</td>
+<td>-1
+</td></tr>
+<tr>
+<td>MOVESTATE_NONE</td>
+<td>-1
+</td></tr>
+<tr>
+<td>STOP</td>
+<td>0
+</td></tr>
+<tr>
+<td>MOVESTATE_HOLDPOS</td>
+<td>0
+</td></tr>
+<tr>
+<td>FIRESTATE_HOLDFIRE</td>
+<td>0
+</td></tr>
+<tr>
+<td>INSERT</td>
+<td>1
+</td></tr>
+<tr>
+<td>MOVESTATE_MANEUVER</td>
+<td>1
+</td></tr>
+<tr>
+<td>FIRESTATE_RETURNFIRE</td>
+<td>1
+</td></tr>
+<tr>
+<td>WAITCODE_TIME</td>
+<td>1
+</td></tr>
+<tr>
+<td>WAITCODE_DEATH</td>
+<td>2
+</td></tr>
+<tr>
+<td>MOVESTATE_ROAM</td>
+<td>2
+</td></tr>
+<tr>
+<td>REMOVE</td>
+<td>2
+</td></tr>
+<tr>
+<td>FIRESTATE_FIREATWILL</td>
+<td>2
+</td></tr>
+<tr>
+<td>FIRESTATE_FIREATNEUTRAL</td>
+<td>3
+</td></tr>
+<tr>
+<td>WAITCODE_SQUAD</td>
+<td>3
+</td></tr>
+<tr>
+<td>OPT_META</td>
+<td>4
+</td></tr>
+<tr>
+<td>WAITCODE_GATHER</td>
+<td>4
+</td></tr>
+<tr>
+<td>WAIT</td>
+<td>5
+</td></tr>
+<tr>
+<td>TIMEWAIT</td>
+<td>6
+</td></tr>
+<tr>
+<td>DEATHWAIT</td>
+<td>7
+</td></tr>
+<tr>
+<td>OPT_INTERNAL</td>
+<td>8
+</td></tr>
+<tr>
+<td>SQUADWAIT</td>
+<td>8
+</td></tr>
+<tr>
+<td>GATHERWAIT</td>
+<td>9
+</td></tr>
+<tr>
+<td>MOVE</td>
+<td>10
+</td></tr>
+<tr>
+<td>PATROL</td>
+<td>15
+</td></tr>
+<tr>
+<td>FIGHT</td>
+<td>16
+</td></tr>
+<tr>
+<td>OPT_RIGHT</td>
+<td>16
+</td></tr>
+<tr>
+<td>LOOPBACKATTACK</td>
+<td>20
+</td></tr>
+<tr>
+<td>ATTACK</td>
+<td>20
+</td></tr>
+<tr>
+<td>AREA_ATTACK</td>
+<td>21
+</td></tr>
+<tr>
+<td>GUARD</td>
+<td>25
+</td></tr>
+<tr>
+<td>AISELECT</td>
+<td>30
+</td></tr>
+<tr>
+<td>OPT_SHIFT</td>
+<td>32
+</td></tr>
+<tr>
+<td>GROUPSELECT</td>
+<td>35
+</td></tr>
+<tr>
+<td>GROUPADD</td>
+<td>36
+</td></tr>
+<tr>
+<td>GROUPCLEAR</td>
+<td>37
+</td></tr>
+<tr>
+<td>REPAIR</td>
+<td>40
+</td></tr>
+<tr>
+<td>FIRE_STATE</td>
+<td>45
+</td></tr>
+<tr>
+<td>MOVE_STATE</td>
+<td>50
+</td></tr>
+<tr>
+<td>SETBASE</td>
+<td>55
+</td></tr>
+<tr>
+<td>INTERNAL</td>
+<td>60
+</td></tr>
+<tr>
+<td>OPT_CTRL</td>
+<td>64
+</td></tr>
+<tr>
+<td>SELFD</td>
+<td>65
+</td></tr>
+<tr>
+<td>SET_WANTED_MAX_SPEED</td>
+<td>70
+</td></tr>
+<tr>
+<td>LOAD_UNITS</td>
+<td>75
+</td></tr>
+<tr>
+<td>LOAD_ONTO</td>
+<td>76
+</td></tr>
+<tr>
+<td>UNLOAD_UNITS</td>
+<td>80
+</td></tr>
+<tr>
+<td>UNLOAD_UNIT</td>
+<td>81
+</td></tr>
+<tr>
+<td>ONOFF</td>
+<td>85
+</td></tr>
+<tr>
+<td>RECLAIM</td>
+<td>90
+</td></tr>
+<tr>
+<td>CLOAK</td>
+<td>95
+</td></tr>
+<tr>
+<td>STOCKPILE</td>
+<td>100
+</td></tr>
+<tr>
+<td>MANUALFIRE</td>
+<td>105
+</td></tr>
+<tr>
+<td>DGUN</td>
+<td>105
+</td></tr>
+<tr>
+<td>RESTORE</td>
+<td>110
+</td></tr>
+<tr>
+<td>REPEAT</td>
+<td>115
+</td></tr>
+<tr>
+<td>TRAJECTORY</td>
+<td>120
+</td></tr>
+<tr>
+<td>RESURRECT</td>
+<td>125
+</td></tr>
+<tr>
+<td>OPT_ALT</td>
+<td>128
+</td></tr>
+<tr>
+<td>CAPTURE</td>
+<td>130
+</td></tr>
+<tr>
+<td>AUTOREPAIRLEVEL</td>
+<td>135
+</td></tr>
+<tr>
+<td>IDLEMODE</td>
+<td>145
+</td></tr>
+</tbody></table>
+<!-- 
+NewPP limit report
+Cached time: 20260309221239
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 150/1000000
+Post‐expand include size: 54/2097152 bytes
+Template argument size: 2/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.804      1 Template:New
+100.00%    1.804      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2431-0!canonical and timestamp 20260309221239 and revision id 31051
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lua_CMDs&amp;oldid=31051">https://springrts.com/mediawiki/index.php?title=Lua_CMDs&amp;oldid=31051</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lua.html" title="Category:Lua">Lua</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lua_CMDs.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lua_CMDs&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lua_CMDs&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lua_CMDs&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lua_CMDs.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lua_CMDs&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lua+CMDs" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lua_CMDs" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lua_CMDs" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lua_CMDs&amp;oldid=31051" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lua_CMDs&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 10 May 2019, at 18:00.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.019","walltime":"0.021","ppvisitednodes":{"value":150,"limit":1000000},"postexpandincludesize":{"value":54,"limit":2097152},"templateargumentsize":{"value":2,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.804      1 Template:New","100.00%    1.804      1 -total"]},"cachereport":{"timestamp":"20260309221239","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":92});});</script></body></html>

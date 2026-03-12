@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Lobby Development - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"3488bc864f2de0215e0e46b7","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Lobby_Development","wgTitle":"Lobby Development","wgCurRevisionId":31157,"wgRevisionId":31157,"wgArticleId":2671,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Lobby"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Lobby_Development","wgRelevantArticleId":2671,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready",
+"user.styles":"ready","user":"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Lobby_Development rootpage-Lobby_Development skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Lobby Development</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p><a class="mw-redirect" href="Engine_Development.html" title="Engine Development">Development</a> &lt; Lobby Development
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Live_systems"><span class="tocnumber">1</span> <span class="toctext">Live systems</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Protocol"><span class="tocnumber">1.1</span> <span class="toctext">Protocol</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Server:"><span class="tocnumber">1.2</span> <span class="toctext">Server:</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Uberserver"><span class="tocnumber">1.3</span> <span class="toctext">Uberserver</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Download_Systems"><span class="tocnumber">1.4</span> <span class="toctext">Download_Systems</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Lobby_clients:"><span class="tocnumber">1.5</span> <span class="toctext">Lobby clients:</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#SpringLobby"><span class="tocnumber">1.6</span> <span class="toctext">SpringLobby</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Chobby"><span class="tocnumber">1.7</span> <span class="toctext">Chobby</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Zero-K_systems"><span class="tocnumber">2</span> <span class="toctext">Zero-K systems</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#ZeroK_Server"><span class="tocnumber">2.1</span> <span class="toctext">ZeroK Server</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Zero-K_Lobby"><span class="tocnumber">2.2</span> <span class="toctext">Zero-K Lobby</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Legacy_systems"><span class="tocnumber">3</span> <span class="toctext">Legacy systems</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Legacy_lobby_clients"><span class="tocnumber">3.1</span> <span class="toctext">Legacy lobby clients</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#flobby"><span class="tocnumber">3.1.1</span> <span class="toctext">flobby</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Weblobby"><span class="tocnumber">3.1.2</span> <span class="toctext">Weblobby</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#TASClient"><span class="tocnumber">3.1.3</span> <span class="toctext">TASClient</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Alphalobby"><span class="tocnumber">3.1.4</span> <span class="toctext">Alphalobby</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#CheeseLobby"><span class="tocnumber">3.1.5</span> <span class="toctext">CheeseLobby</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#QtLobby"><span class="tocnumber">3.1.6</span> <span class="toctext">QtLobby</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#Spring-PythonBotFramework"><span class="tocnumber">3.1.7</span> <span class="toctext">Spring-PythonBotFramework</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Go_SpringLobbyClient"><span class="tocnumber">3.1.8</span> <span class="toctext">Go SpringLobbyClient</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-22"><a href="#Legacy_lobbyservers"><span class="tocnumber">3.2</span> <span class="toctext">Legacy lobbyservers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-23"><a href="#SpringLS"><span class="tocnumber">3.2.1</span> <span class="toctext">SpringLS</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Live_systems">Live systems</span></h1>
+<h3><span class="mw-headline" id="Protocol">Protocol</span></h3>
+<ul><li><a class="external text" href="https://springrts.com/dl/LobbyProtocol/ProtocolDescription.html" rel="nofollow">Spring Lobby Protocol Description</a></li>
+<li><a class="external text" href="https://springrts.com/dl/LobbyProtocol/ProtocolDescription.html#Changelog" rel="nofollow">changelog</a></li>
+<li><a class="external text" href="http://springrts.com/dl/LobbyProtocol/" rel="nofollow">Index of commands</a></li></ul>
+<p>These are both updated once per day from <a class="external text" href="https://github.com/spring/LobbyProtocol/blob/master/ProtocolDescription.xml" rel="nofollow">the raw xml docs</a>
+</p>
+<h3><span class="mw-headline" id="Server:">Server:</span></h3>
+<h3><span class="mw-headline" id="Uberserver"><a href="Uberserver.html" title="Uberserver">Uberserver</a></span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">Python</font>,
+by <font color="#00CC00">aegis, abma, silentwings</font>
+</p>
+<ul><li>The primary lobby server currently running on springrts.com. See the dedicated page on <a href="Uberserver.html" title="Uberserver">uberserver</a> for more info.</li></ul>
+<h3><span class="mw-headline" id="Download_Systems"><a href="Download_Systems.html" title="Download Systems">Download_Systems</a></span></h3>
+<p>Various systems exist to supply content, see the dedicated page <a href="Download_Systems.html" title="Download Systems">Download_Systems</a>.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Lobby_clients:">Lobby clients:</span></h3>
+<h3><span class="mw-headline" id="SpringLobby"><a href="SpringLobby.html" title="SpringLobby">SpringLobby</a></span></h3>
+<p><font color="orange">Linux, Windows, Mac </font>,
+<font color="#00AAFF">C++</font>,
+by <font color="#00CC00">Koshi, Braindamage, Abma and many others </font>
+</p><p><a class="external text" href="https://github.com/springlobby/springlobby" rel="nofollow">github: repository + issues</a>
+</p>
+<h3><span class="mw-headline" id="Chobby"><a href="Chobby.html" title="Chobby">Chobby</a></span></h3>
+<p><font color="orange">Windows</font>,
+<font color="#00AAFF">Lua</font>,
+by <font color="#00CC00">gajop, with major contributions from various game devs</font>
+</p><p><a class="external text" href="https://github.com/Spring-Chobby/Chobby" rel="nofollow">github: repository + issues</a>
+</p><p><br/>
+</p>
+<h1><span class="mw-headline" id="Zero-K_systems">Zero-K systems</span></h1>
+<h3><span class="mw-headline" id="ZeroK_Server">ZeroK Server</span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">C#</font>,
+by <font color="#00CC00">Licho</font>
+</p><p>Zero-K lobby server. Uses a different protocol. Source can be found at
+<a class="external free" href="https://github.com/ZeroK-RTS/Zero-K-Infrastructure/tree/master/ZkLobbyServer" rel="nofollow">https://github.com/ZeroK-RTS/Zero-K-Infrastructure/tree/master/ZkLobbyServer</a>
+</p>
+<h3><span class="mw-headline" id="Zero-K_Lobby">Zero-K Lobby</span></h3>
+<p>No longer uses the Spring lobby protocol
+</p><p><font color="orange">Windows/Linux</font>,
+<font color="#00AAFF">C#</font>,
+by <font color="#00CC00">Licho</font> &amp; <font color="#00CC00">quantum</font>
+</p><p><a class="external text" href="https://github.com/ZeroK-RTS/Zero-K-Infrastructure/tree/master/ZeroKLobby" rel="nofollow">Zero-K Lobby github</a>
+</p><p><br/>
+</p>
+<h1><span class="mw-headline" id="Legacy_systems">Legacy systems</span></h1>
+<h2><span class="mw-headline" id="Legacy_lobby_clients">Legacy lobby clients</span></h2>
+<p>From mostly functional, to WIP, abandoned or unusable. Apparently, its much harder to make a lobby client than most people think.
+</p>
+<h3><span class="mw-headline" id="flobby">flobby</span></h3>
+<p><font color="orange">Linux</font>,
+<font color="#00AAFF">C++</font>,
+by <font color="#00CC00">cleanrock</font>, only maintained actively for use with the Zero-K lobbyserver.
+</p><p><a class="external text" href="https://github.com/cleanrock/flobby" rel="nofollow">github page</a>
+</p>
+<h3><span class="mw-headline" id="Weblobby">Weblobby</span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">C++</font>,
+<font color="#FF0000">unmaintained</font> (superceeded by Chobby)
+</p><p><a class="external text" href="http://weblobby.springrts.com" rel="nofollow">project site</a>
+</p>
+<h3><span class="mw-headline" id="TASClient"><a href="TASClient.html" title="TASClient">TASClient</a></span></h3>
+<p><font color="orange">Windows</font>,
+<font color="#00AAFF">Delphi</font>,
+by <font color="#00CC00">Satirik</font>, <font color="#FF0000">unmaintained</font>
+</p>
+<h3><span class="mw-headline" id="Alphalobby">Alphalobby</span></h3>
+<p><font color="orange">Windows</font>,
+<font color="#00AAFF">C</font>,
+<font color="#FF0000">unmaintained</font>
+</p><p>Alphalobby is still very much work in progress. If you still wish to use it, source available from the <a class="external text" href="http://code.google.com/p/alphalobby/source/checkout" rel="nofollow">mercurial repository</a>, binary available on the <a class="external text" href="http://springfiles.com/spring/lobby-clients/alphalobby" rel="nofollow">springfiles page</a>.
+</p>
+<h3><span class="mw-headline" id="CheeseLobby">CheeseLobby</span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">Java</font>,
+by <font color="#00CC00">Cheesecan</font>, <font color="#FF0000">unmaintained</font>
+</p><p><a class="external text" href="http://springrts.com/phpbb/viewtopic.php?f=64&amp;t=24905" rel="nofollow">forum thread</a>
+</p><p><a class="external text" href="https://github.com/jahwag/OpenLobby" rel="nofollow">binaries and code</a>
+</p>
+<h3><span class="mw-headline" id="QtLobby">QtLobby</span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">C++</font>,
+<font color="#FF0000">unmaintained</font>
+</p><p><a class="external text" href="https://github.com/tizbac/qtlobby" rel="nofollow">project page</a>
+</p>
+<h3><span class="mw-headline" id="Spring-PythonBotFramework">Spring-PythonBotFramework</span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">Python</font>, by
+<font color="#00CC00">BrainDamage</font> &amp; <font color="#00CC00">koshi</font>, <font color="#FF0000">unmaintained</font>
+</p><p>A bot framework written in python. <a class="external text" href="https://github.com/renemilk/tasbot/wiki" rel="nofollow">GitHub wiki</a>
+</p>
+<h3><span class="mw-headline" id="Go_SpringLobbyClient">Go SpringLobbyClient</span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">Go</font>
+<font color="#FF0000">unmaintained</font>
+</p><p>A simple client implementation of the lobby protocol in Go.
+<a class="external text" href="https://github.com/Agon/go-slc/" rel="nofollow">project page</a>
+</p>
+<h2><span class="mw-headline" id="Legacy_lobbyservers">Legacy lobbyservers</span></h2>
+<h3><span class="mw-headline" id="SpringLS">SpringLS</span></h3>
+<p><font color="orange">cross-platform</font>,
+<font color="#00AAFF">Java</font>,
+<font color="#00CC00">hoijui</font>
+</p><p>Legacy lobby server, created by Betalord. Superceeded by uberserver in 2012. You can fetch the sources through <i>git</i>. Details can be found on the <a class="external text" href="http://github.com/spring/SpringLS" rel="nofollow">development site</a>.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309223036
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 121/1000000
+Post‐expand include size: 17/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:2671-0!canonical and timestamp 20260309223036 and revision id 31157
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Lobby_Development&amp;oldid=31157">https://springrts.com/mediawiki/index.php?title=Lobby_Development&amp;oldid=31157</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Lobby.html" title="Category:Lobby">Lobby</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Lobby_Development.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Lobby_Development&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Lobby_Development&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Lobby_Development&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Lobby_Development.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Lobby_Development&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Lobby+Development" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Lobby_Development" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Lobby_Development" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Lobby_Development&amp;oldid=31157" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Lobby_Development&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 24 December 2019, at 18:03.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.014","walltime":"0.017","ppvisitednodes":{"value":121,"limit":1000000},"postexpandincludesize":{"value":17,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309223036","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":152});});</script></body></html>

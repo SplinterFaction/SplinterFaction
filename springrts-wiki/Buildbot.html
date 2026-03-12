@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/basic-columns.css">
+<!-- Stylesheet Stuff Here -->
+<title>Buildbot - Spring</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"da401d9e25414b6cf1b7d811","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Buildbot","wgTitle":"Buildbot","wgCurRevisionId":30749,"wgRevisionId":30749,"wgArticleId":3358,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Buildbot"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Buildbot","wgRelevantArticleId":3358,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":
+"ready","user.options":"loading","mediawiki.toc.styles":"ready","mediawiki.skinning.content.externallinks":"ready","skins.monobook.responsive":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","mediawiki.toc","skins.monobook.mobile"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link href="/mediawiki/load.php?lang=en&amp;modules=mediawiki.skinning.content.externallinks%7Cmediawiki.toc.styles%7Cskins.monobook.responsive&amp;only=styles&amp;skin=monobook" rel="stylesheet"/>
+<script async="" src="/mediawiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=monobook"></script>
+<!--[if lt IE 9]><link rel="stylesheet" href="/mediawiki/skins/MonoBook/resources/screen-desktop.css?d010f" media="screen"/><![endif]-->
+<meta content="MediaWiki 1.35.9" name="generator"/>
+<meta content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0" name="viewport"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/mediawiki/opensearch_desc.php" rel="search" title="Spring (en)" type="application/opensearchdescription+xml"/>
+<link href="https://springrts.com/mediawiki/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+<link href="/mediawiki/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="Spring Atom feed" type="application/atom+xml"/>
+<!--[if lt IE 9]><script src="/mediawiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Buildbot rootpage-Buildbot skin-monobook action-view"><div id="globalWrapper"><div id="column-content"><div class="mw-body" id="content" role="main"><a id="top"></a><div class="mw-indicators mw-body-content">
+</div>
+<h1 class="firstHeading" id="firstHeading" lang="en">Buildbot</h1><div class="mw-body-content" id="bodyContent"><div id="siteSub">From Spring</div><div dir="ltr" id="contentSub" lang="en"></div><div id="jump-to-nav"></div><a class="mw-jump-link" href="#column-one">Jump to navigation</a><a class="mw-jump-link" href="#searchInput">Jump to search</a><!-- start content --><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-parser-output"><p>Spring uses a <a class="external text" href="https://buildbot.springrts.com/waterfall" rel="nofollow">buildbot</a> to automaticly compile commits to the git repository to test if the commit broke something and to create the official installers.
+</p><p>There are currently three buildbot setups, based on <a href="Buildbot_Gentoo.html" title="Buildbot:Gentoo">Gentoo</a>, <a href="Buildbot_OSX.html" title="Buildbot:OSX">OSX</a> and ubuntu (this page, but deprecated).
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Setting_up_buildmaster"><span class="tocnumber">1</span> <span class="toctext">Setting up buildmaster</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Setting_up_buildslave_.28Making_the_chroot.29"><span class="tocnumber">2</span> <span class="toctext">Setting up buildslave (Making the chroot)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Configuring_schroot"><span class="tocnumber">2.1</span> <span class="toctext">Configuring schroot</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Building_and_entering_the_chroot"><span class="tocnumber">2.2</span> <span class="toctext">Building and entering the chroot</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Inside_the_chroot"><span class="tocnumber">3</span> <span class="toctext">Inside the chroot</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Run_.28as_root.29"><span class="tocnumber">3.1</span> <span class="toctext">Run (as root)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Recompile_MinGW_package_with_dwarf2_exceptions_instead_of_sjlj_exceptions_.28as_root.29"><span class="tocnumber">3.2</span> <span class="toctext">Recompile MinGW package with dwarf2 exceptions instead of sjlj exceptions (as root)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Patch_a_few_things"><span class="tocnumber">3.3</span> <span class="toctext">Patch a few things</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Run_.28as_buildbot_user.29"><span class="tocnumber">3.4</span> <span class="toctext">Run (as buildbot user)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#ccache"><span class="tocnumber">3.5</span> <span class="toctext">ccache</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Outside_the_chroot_again"><span class="tocnumber">4</span> <span class="toctext">Outside the chroot again</span></a></li>
+</ul>
+</div>
+<h1><span class="mw-headline" id="Setting_up_buildmaster">Setting up buildmaster</span></h1>
+<pre>sudo apt-get install buildbot
+cd spring/buildbot/master
+cp passwords.py.template passwords.py
+buildbot start
+buildbot create-master
+</pre>
+<p>After creating the master, the generated `public_html` can be erased and linked to the `buildbot/master/public_html` in the Spring repository.
+</p>
+<h1><span id="Setting_up_buildslave_(Making_the_chroot)"></span><span class="mw-headline" id="Setting_up_buildslave_.28Making_the_chroot.29">Setting up buildslave (Making the chroot)</span></h1>
+<p>At least debootstrap and schroot are required. I didn't compile an exhaustive list of other dependencies on the host system, so YMMV.
+</p>
+<h2><span class="mw-headline" id="Configuring_schroot">Configuring schroot</span></h2>
+<p>Add a file (name does not matter) to `/etc/schroot/chroot.d` with the following contents, after substituting an absolute path for `$DIR`:
+</p>
+<pre>[buildbot-maverick]
+description=Ubuntu Maverick
+directory=$DIR
+type=directory
+users=buildbot
+groups=buildbot
+root-groups=root
+personality=linux32
+script-config=script-defaults
+message-verbosity=verbose
+</pre>
+<p>Then, remove or comment out the `/home` bind mount in `/etc/schroot/default/fstab`!
+</p><p>This configuration has been tested with schroot 1.4.23. With any other version YMMV.
+</p>
+<h2><span class="mw-headline" id="Building_and_entering_the_chroot">Building and entering the chroot</span></h2>
+<pre>debootstrap --variant=buildd --arch i386 maverick $DIR http://ftp.cvut.cz/ubuntu/
+mkdir -p $DIR/home/buildbot/www
+chown buildbot:buildbot $DIR/home/buildbot
+schroot -c buildbot-maverick
+</pre>
+<h1><span class="mw-headline" id="Inside_the_chroot">Inside the chroot</span></h1>
+<h2><span id="Run_(as_root)"></span><span class="mw-headline" id="Run_.28as_root.29">Run (as root)</span></h2>
+<pre>echo 'deb http://ftp.cvut.cz/ubuntu maverick universe' &gt;&gt; /etc/apt/sources.list
+sed s/deb/deb-src/g /etc/apt/sources.list &gt;&gt; /etc/apt/sources.list
+apt-get update
+apt-get install nano git-core python-dev python-setuptools
+
+cd /root
+git clone git://github.com/buildbot/buildbot.git
+cd buildbot
+git checkout v0.8.3p1
+cd slave
+python setup.py install
+mkdir /slave
+chown buildbot:buildbot /slave
+</pre>
+<p>Build dependencies for Windows build (except MinGW, see below):
+</p>
+<pre>apt-get install cmake nsis p7zip-full unzip wget pandoc wine
+apt-get install openjdk-6-jdk   #to enable building of Java AIs
+</pre>
+<p>Build dependencies for Linux build:
+</p>
+<pre>apt-get install libboost-all-dev libdevil-dev libfreetype6-dev libopenal-dev \
+	libogg-dev libvorbis-dev libglew-dev libsdl-dev libxcursor-dev \
+	p7zip-full
+</pre>
+<p>Build dependencies for validation test:
+</p>
+<pre>apt-get install gdb libcurl4-gnutls-dev
+</pre>
+<p>Build dependencies for doxygen:
+</p>
+<pre>apt-get install doxygen
+</pre>
+<p>Build dependencies for cppcheck:
+</p>
+<pre>apt-get install cppcheck
+</pre>
+<p>Speed up linking:
+</p>
+<pre>apt-get install binutils-gold
+</pre>
+<h2><span id="Recompile_MinGW_package_with_dwarf2_exceptions_instead_of_sjlj_exceptions_(as_root)"></span><span class="mw-headline" id="Recompile_MinGW_package_with_dwarf2_exceptions_instead_of_sjlj_exceptions_.28as_root.29">Recompile MinGW package with dwarf2 exceptions instead of sjlj exceptions (as root)</span></h2>
+<p>First recompile the compiler itself:
+</p>
+<pre>mkdir mingw
+cd mingw
+apt-get build-dep gcc-mingw32
+apt-get source gcc-mingw32
+cd gcc-mingw32-4.4.4
+editor debian/rules   # remove --enable-sjlj-exceptions, add --disable-sjlj-exceptions --with-dwarf2
+dpkg-buildpackage -rfakeroot -b
+cd ..
+dpkg -i gcc-mingw32*.deb
+echo "gcc-mingw32 hold"|dpkg --set-selections
+</pre>
+<p>Then recompile the runtime libraries against the new compiler:
+</p>
+<pre>apt-get build-dep mingw32-runtime
+apt-get source mingw32-runtime
+cd mingw32-runtime-3.15.2
+dpkg-buildpackage -rfakeroot -b
+cd ..
+dpkg -i mingw32-runtime*.deb
+echo "mingw32-runtime hold"|dpkg --set-selections
+</pre>
+<p>Optionally, remove build dependencies (check what apt-get build-dep installed!):
+</p>
+<pre>apt-get purge autoconf automake autotools-dev cdbs debhelper fdupes gettext \
+	gettext-base groff-base html2text intltool intltool-debian libcroco3 \
+	libfont-afm-perl libgmp3-dev libgmpxx4ldbl libhtml-format-perl \
+	libhtml-parser-perl libhtml-tagset-perl libhtml-tree-perl \
+	libmail-sendmail-perl libmailtools-perl libmpfr-dev \
+	libsys-hostname-long-perl libunistring0 liburi-perl libwww-perl \
+	libxml-parser-perl lzma m4 man-db mingw-w64 po-debconf
+</pre>
+<h2><span class="mw-headline" id="Patch_a_few_things">Patch a few things</span></h2>
+<p>We set up ld to allow only one execution at the same time, to prevent thrashing the box due to multiple parallel linker jobs.
+We "patch" makensis to not sync the installer to disk after every tiny chunk of data it has written.
+This speeds installer building up by an order of magnitude.
+</p><p>First, copy over ld, makensis and no-msync.c from spring/buildbot/slave (Spring repository) to the chroot.
+Then switch to the directory (inside the chroot!) where you copied those files and do:
+</p><p>For Linux builds:
+</p>
+<pre>mv /usr/bin/ld /usr/bin/ld.orig
+cp ld /usr/bin/ld
+</pre>
+<p>For MinGW builds:
+</p>
+<pre>mv /usr/bin/i586-mingw32msvc-ld /usr/bin/i586-mingw32msvc-ld.orig
+cp ld /usr/bin/i586-mingw32msvc-ld
+mv /usr/i586-mingw32msvc/bin/ld /usr/i586-mingw32msvc/bin/ld.orig
+cp ld /usr/i586-mingw32msvc/bin/ld
+</pre>
+<p>For makensis:
+</p>
+<pre>gcc -shared -m32 no-msync.c -o no-msync.so
+cp makensis no-msync.so /usr/local/bin/
+</pre>
+<h2><span id="Run_(as_buildbot_user)"></span><span class="mw-headline" id="Run_.28as_buildbot_user.29">Run (as buildbot user)</span></h2>
+<p>Substitute MASTER with host:port of the buildmaster and SLAVENAME and PASSWORD with the slave name and password as configured in the master.
+</p>
+<pre>buildslave create-slave /slave MASTER SLAVENAME PASSWORD
+cd /slave
+git clone git://github.com/spring/mingwlibs.git
+</pre>
+<h2><span class="mw-headline" id="ccache">ccache</span></h2>
+<p>To install ccache simply run `apt-get install ccache` (inside the chroot) and (optionally) tweak the settings (cache size etc.)
+</p>
+<h1><span class="mw-headline" id="Outside_the_chroot_again">Outside the chroot again</span></h1>
+<p>Get the Makefile from the Spring repository that can be used to start/stop the slave easily:
+</p>
+<pre>wget https://raw.github.com/spring/spring/master/buildbot/master/buildbot.mk -O Makefile
+</pre>
+<p>Then you can use:
+</p>
+<pre>make start-slave    # creates schroot session and starts buildslave in it
+make stop-slave     # stops buildslave and remove schroot session
+make enter-chroot   # enter the schroot as buildbot user
+</pre>
+<p>Make sure you review the Makefile and fix the chroot name, paths, etc. before using it!
+(That applies to anything in this readme really.)
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20260309224145
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.011 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 126/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3260/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+<!-- Saved in parser cache with key mediawiki-wiki_:pcache:idhash:3358-0!canonical and timestamp 20260309224145 and revision id 30749
+ -->
+</div></div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://springrts.com/mediawiki/index.php?title=Buildbot&amp;oldid=30749">https://springrts.com/mediawiki/index.php?title=Buildbot&amp;oldid=30749</a>"</div>
+<div class="catlinks" data-mw="interface" id="catlinks"><div class="mw-normal-catlinks" id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="Category_Buildbot.html" title="Category:Buildbot">Buildbot</a></li></ul></div></div><!-- end content --><div class="visualClear"></div></div></div><div class="visualClear"></div></div><div dir="ltr" id="column-one" lang="en"><h2>Navigation menu</h2><div aria-labelledby="p-cactions-label" class="portlet" id="p-cactions" role="navigation"><h3 dir="ltr" id="p-cactions-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main"><a accesskey="c" href="Buildbot.html" title="View the content page [c]">Page</a></li><li class="new" id="ca-talk"><a accesskey="t" href="/mediawiki/index.php?title=Talk:Buildbot&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]">Discussion</a></li><li id="ca-viewsource"><a accesskey="e" href="/mediawiki/index.php?title=Buildbot&amp;action=edit" title="This page is protected.
+You can view its source [e]">View source</a></li><li id="ca-history"><a accesskey="h" href="/mediawiki/index.php?title=Buildbot&amp;action=history" title="Past revisions of this page [h]">History</a></li></ul></div></div><div aria-labelledby="p-cactions-mobile-label" class="portlet" id="p-cactions-mobile" role="navigation"><h3 dir="ltr" id="p-cactions-mobile-label" lang="en">Page actions</h3><div class="pBody"><ul dir="ltr" lang="en"><li class="selected" id="ca-nstab-main-mobile"><a href="Buildbot.html" title="Page">Page</a></li><li class="new" id="ca-talk-mobile"><a href="/mediawiki/index.php?title=Talk:Buildbot&amp;action=edit&amp;redlink=1" rel="discussion" title=" (page does not exist)">Discussion</a></li><li id="ca-more"><a href="#p-cactions">More</a></li><li id="ca-tools"><a href="#p-tb" title="Tools">Tools</a></li><li id="ca-languages"><a href="#p-lang" title="In other languages">In other languages</a></li></ul></div></div><div aria-labelledby="p-personal-label" class="portlet" id="p-personal" role="navigation"><h3 dir="ltr" id="p-personal-label" lang="en">Personal tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="pt-login"><a accesskey="o" href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Buildbot" title="You are encouraged to log in; however, it is not mandatory [o]">Log in</a></li></ul></div></div><div class="portlet" id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html" title="Visit the main page"></a></div><div id="sidebar"><div aria-labelledby="p-navigation-label" class="portlet generated-sidebar" id="p-navigation" role="navigation"><h3 dir="ltr" id="p-navigation-label" lang="en">Navigation</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-About"><a href="About.html">About</a></li><li id="n-Games"><a href="Games.html">Games</a></li><li id="n-Documentation"><a href="Main_Page.html">Documentation</a></li><li id="n-Forum"><a href="https://springrts.com/phpbb/" rel="nofollow">Forum</a></li><li id="n-Report-a-bug"><a href="https://springrts.com/mantis/my_view_page.php" rel="nofollow">Report a bug</a></li><li id="n-Download"><a href="Download.html">download</a></li></ul></div></div><div aria-labelledby="p-special_links-label" class="portlet generated-sidebar" id="p-special_links" role="navigation"><h3 dir="ltr" id="p-special_links-label" lang="en">special links</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="n-Recent-changes"><a href="/wiki/Special:RecentChanges">Recent changes</a></li><li id="n-Site-search"><a href="https://www.google.com/search?as_sitesearch=springrts.com/wiki" rel="nofollow">Site search</a></li></ul></div></div><div class="portlet" id="p-search" role="search"><h3 dir="ltr" id="p-search-label" lang="en"><label for="searchInput">Search</label></h3><div class="pBody" id="searchBody"><form action="local_search.html" id="searchform" method="GET">  <input accesskey="f" class="search" id="searchInput" name="q" placeholder="Search Spring" type="search"/><input class="searchButton" id="searchGoButton" type="submit" value="Go"/></form></div></div><div aria-labelledby="p-tb-label" class="portlet" id="p-tb" role="navigation"><h3 dir="ltr" id="p-tb-label" lang="en">Tools</h3><div class="pBody"><ul dir="ltr" lang="en"><li id="t-whatlinkshere"><a accesskey="j" href="/wiki/Special:WhatLinksHere/Buildbot" title="A list of all wiki pages that link here [j]">What links here</a></li><li id="t-recentchangeslinked"><a accesskey="k" href="/wiki/Special:RecentChangesLinked/Buildbot" rel="nofollow" title="Recent changes in pages linked from this page [k]">Related changes</a></li><li id="t-specialpages"><a accesskey="q" href="/wiki/Special:SpecialPages" title="A list of all special pages [q]">Special pages</a></li><li id="t-print"><a accesskey="p" href="javascript:print();" rel="alternate" title="Printable version of this page [p]">Printable version</a></li><li id="t-permalink"><a href="/mediawiki/index.php?title=Buildbot&amp;oldid=30749" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/mediawiki/index.php?title=Buildbot&amp;action=info" title="More information about this page">Page information</a></li></ul></div></div></div><a class="menu-toggle" href="#sidebar" id="sidebar-toggle" title="navigation"></a><a class="menu-toggle" href="#p-personal" id="p-personal-toggle" title="user tools"></a><a class="menu-toggle" href="#globalWrapper" id="globalWrapper-toggle" title="back to top"></a></div><!-- end of the left (by default at least) column --><div class="visualClear"></div><div class="mw-footer" dir="ltr" id="footer" lang="en" role="contentinfo"><div class="footer-icons" id="f-poweredbyico"><a href="https://www.mediawiki.org/"><img alt="Powered by MediaWiki" height="31" loading="lazy" src="images/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" width="88"/></a></div><ul id="f-list"><li id="lastmod"> This page was last edited on 19 August 2018, at 09:23.</li><li id="privacy"><a href="Spring_Privacy_policy.html" title="Spring:Privacy policy">Privacy policy</a></li><li id="about"><a class="mw-redirect" href="Spring_About.html" title="Spring:About">About Spring</a></li><li id="disclaimer"><a href="Spring_General_disclaimer.html" title="Spring:General disclaimer">Disclaimers</a></li></ul></div></div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.011","walltime":"0.013","ppvisitednodes":{"value":126,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3260,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260309224145","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":91});});</script></body></html>
