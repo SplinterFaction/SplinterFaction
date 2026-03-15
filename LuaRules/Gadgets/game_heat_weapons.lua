@@ -30,6 +30,9 @@ local HEAT_DEATH_FLAG   = "killedByHeat"   -- numeric: 1 = heat, nil/0 otherwise
 local HEAT_DEATH_KILLER = "heatKiller"     -- optional: attacker unitID
 local HEAT_DEATH_WDID   = "heatWeaponDef"  -- optional: weaponDefID
 
+local spGetUnitPosition = Spring.GetUnitPosition
+local spSpawnCEG        = Spring.SpawnCEG
+
 --------------------------------------------------------------------------------
 -- Heat slow tuning
 --------------------------------------------------------------------------------
@@ -74,6 +77,47 @@ local function GetUnitMetalCost(unitDefID)
 	local ud = UnitDefs[unitDefID]
 	if not ud then return 0 end
 	return (ud.metalCost or ud.metal or 0)
+end
+
+
+--------------------------------------------------------------------------------
+-- Visuals
+--------------------------------------------------------------------------------
+
+local HEAT_CEG_INTERVAL = 2 * 30 -- 60 frames
+
+local pieceCache = {}
+
+local function GetRandomPiece(unitID, unitDefID)
+
+	local cache = pieceCache[unitDefID]
+
+	if not cache then
+		local pieces = Spring.GetUnitPieceList(unitID)
+		local pieceMap = Spring.GetUnitPieceMap(unitID)
+
+		if not pieces or not pieceMap then return end
+
+		cache = {}
+		for i=1,#pieces do
+			cache[i] = pieceMap[pieces[i]]
+		end
+
+		pieceCache[unitDefID] = cache
+	end
+
+	return cache[math.random(1,#cache)]
+end
+
+local function SpawnCEG(unitID, unitDefID, cegName)
+
+	local pieceIndex = GetRandomPiece(unitID, unitDefID)
+	if not pieceIndex then return end
+
+	local px, py, pz = Spring.GetUnitPiecePosDir(unitID, pieceIndex)
+	if not px then return end
+
+	Spring.SpawnCEG(cegName, px, py, pz, 0,1,0)
 end
 
 --------------------------------------------------------------------------------
@@ -229,6 +273,9 @@ local function initHeatedUnit(unitID, unitDefID)
 		baseMove        = {},  -- cached maxSpeed/accRate/turnRate
 
 		lastHeatPercent = -1,
+
+		-- visual throttle
+		lastCEGFrame    = -100000,
 	}
 
 	IterableMap.Add(heatedUnits, unitID, data)
@@ -287,6 +334,12 @@ end
 local function UpdateHeatedUnit(unitID, data, index, frame)
 	if not Spring.ValidUnitID(unitID) then
 		return true
+	end
+
+	local heatPct = 100 * clamp01(data.heatEnergy / data.heatCapacity)
+	if heatPct >= 25 and frame - (data.lastCEGFrame or -100000) >= HEAT_CEG_INTERVAL then
+		SpawnCEG(unitID, data.unitDefID, "flamepoof")
+		data.lastCEGFrame = frame
 	end
 
 	if Spring.GetUnitIsDead(unitID) then
@@ -369,18 +422,23 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 
 		if cp.requiretech == "tech0" then
 			Spring.SpawnCEG("genericunitexplosion-heatdeath-small", x, y+10, z, 0, 0, 0)
+			Spring.SpawnCEG("heatdeath-fire-t1", x, y+10, z, 0, 0, 0)
 		end
 		if cp.requiretech == "tech1" then
 			Spring.SpawnCEG("genericunitexplosion-heatdeath-small", x, y+10, z, 0, 0, 0)
+			Spring.SpawnCEG("heatdeath-fire-t1", x, y+10, z, 0, 0, 0)
 		end
 		if cp.requiretech == "tech2" then
 			Spring.SpawnCEG("genericunitexplosion-heatdeath-medium", x, y+10, z, 0, 0, 0)
+			Spring.SpawnCEG("heatdeath-fire-t2", x, y+10, z, 0, 0, 0)
 		end
 		if cp.requiretech == "tech3" then
 			Spring.SpawnCEG("genericunitexplosion-heatdeath-large", x, y+10, z, 0, 0, 0)
+			Spring.SpawnCEG("heatdeath-fire-t3", x, y+10, z, 0, 0, 0)
 		end
 		if cp.requiretech == "tech4" then
 			Spring.SpawnCEG("genericunitexplosion-heatdeath-huge", x, y+10, z, 0, 0, 0)
+			Spring.SpawnCEG("heatdeath-fire-t4", x, y+10, z, 0, 0, 0)
 		end
 
 		-- Mark death reason for other gadgets

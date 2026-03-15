@@ -76,6 +76,8 @@ local spSetUnitRulesParam   = Spring.SetUnitRulesParam
 local spSetUnitWeaponState  = Spring.SetUnitWeaponState
 local spGetAllUnits         = Spring.GetAllUnits
 local spGetUnitIsDead       = Spring.GetUnitIsDead
+local spGetUnitPosition     = Spring.GetUnitPosition
+local spSpawnCEG            = Spring.SpawnCEG
 
 local MoveCtrl              = Spring.MoveCtrl
 local mcGetGroundMoveTypeData = MoveCtrl and MoveCtrl.GetGroundMoveTypeData
@@ -191,6 +193,21 @@ local function CacheMoveType(unitID, unitDefID)
 	end
 
 	moveTypeCache[unitID] = cache
+end
+
+local function SpawnCEG(unitID, cegName, radius)
+	local x, y, z = spGetUnitPosition(unitID)
+	if not x then return end
+
+	radius = radius or 20
+
+	local rx = (math.random() * 2 - 1) * radius
+	local rz = (math.random() * 2 - 1) * radius
+
+	local gy = Spring.GetGroundHeight(x + rx, z + rz)
+	local py = math.max(y, gy)
+
+	spSpawnCEG(cegName, x + rx, py, z + rz, 0, 1, 0)
 end
 
 local function ApplyMovementPenalty(unitID, speedMult, accelMult, turnMult)
@@ -483,6 +500,8 @@ function gadget:GameFrame(frame)
 			local cap = disruptionCapacity[unitID] or 1
 			local current = disruption[unitID] or 0
 			local fullyDisrupted = IsUnitFullyDisrupted(unitID, frame)
+
+			SpawnCEG(unitID, "lightning_stormbolt", 20)
 
 			if disruptedUntil[unitID] and disruptedUntil[unitID] <= frame then
 				disruptedUntil[unitID] = nil

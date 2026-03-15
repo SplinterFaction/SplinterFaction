@@ -53,5 +53,36 @@ return {
     },
   },
 
+  ["flamepoof"] = {
+    flamepuf = {
+      air                = true,
+      class              = [[CSimpleParticleSystem]],
+      count              = 1,
+      ground             = true,
+      water              = true,
+      properties = {
+        airdrag            = 1,
+        colormap           = [[1 1 1 0.01   1 1 1 0.1   1 1 1 0.01   1 1 1 0.01    0 0 0 0.01]],
+        directional        = true,
+        emitrot            = 0,
+        emitrotspread      = 0,
+        emitvector         = [[0, 0, 0]],
+        gravity            = [[0, 0, 0]],
+        numparticles       = 1,
+        particlelife       = 20,
+        particlelifespread = 0,
+        particlesize       = 10,
+        particlesizespread = 0,
+        particlespeed      = 0,
+        particlespeedspread = 0,
+        sizegrowth         = 0,
+        sizemod            = 1.0,
+        rotParams           = [[0, 0, -180]],
+        animParams          = [[8,4,20]], --[xTiles, yTiles, animLength in game frames]
+        pos                 = [[0,0,0]],
+        texture            = [[generated-walloffire]],
+      },
+    },
+  },
 }
 
