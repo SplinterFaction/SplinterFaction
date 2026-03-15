@@ -79,8 +79,7 @@ unitDef                    = {
 	weapons                      = {
 		[1]                      = {
 			def                  = "heatraymk2",
-			badTargetCategory     = "BUILDING",
-			onlyTargetCategory    = "GROUND BUILDING SHIP",
+			onlyTargetCategory    = "GROUND SHIP",
 		},
 	},
 	customParams                 = {

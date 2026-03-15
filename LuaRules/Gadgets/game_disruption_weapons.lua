@@ -1,0 +1,535 @@
+function gadget:GetInfo()
+	return {
+		name    = "Disruption Damage",
+		desc    = "Converts marked weapon damage into disruption buildup; progressive impairment; full disruption at 100%",
+		author  = "",
+		date    = "2026-03-14",
+		license = "MIT",
+		layer   = 0,
+		enabled = true,
+	}
+end
+
+if not gadgetHandler:IsSyncedCode() then
+	return
+end
+
+--------------------------------------------------------------------------------
+-- Config
+--------------------------------------------------------------------------------
+
+local GAME_SPEED = 30
+local IN_LOS = { inlos = true }
+
+-- Full disruption
+local LOCKOUT_SECONDS   = 10
+local LOCKOUT_FRAMES    = LOCKOUT_SECONDS * GAME_SPEED
+local POST_TRIGGER_RESET = 0.55
+
+-- Decay only begins this long after the last disruption hit
+local RECENT_HIT_DELAY_SECONDS = 2
+local RECENT_HIT_DELAY_FRAMES  = RECENT_HIT_DELAY_SECONDS * GAME_SPEED
+
+-- Decay rates are based on max HP per second
+local DECAY_HIGH = 0.02 -- >70%
+local DECAY_MID  = 0.04 -- 30-70%
+local DECAY_LOW  = 0.06 -- <30%
+
+-- Performance / update cadence
+local UPDATE_FRAMES = 6
+local RULESPARAM_EPSILON_PERCENT = 0.5
+
+-- Penalty floors at 100% disruption
+local MIN_SPEED_MULT = 0.25
+local MIN_ACCEL_MULT = 0.25
+local MIN_TURN_MULT  = 0.25
+
+-- Weapon reload scaling (kept for debug/possible later use)
+local MAX_RELOAD_MULT = 4.0
+
+--------------------------------------------------------------------------------
+-- optional customparams
+--------------------------------------------------------------------------------
+--unitdefs
+--customParams = {
+--	disruptionresist = 1.0,
+--	disruptionrecovery = 1.0,
+--	disruptioncapacitymult = 1.0,
+--	disruptionimmune = 0,
+--}
+
+--weapondefs
+--customParams = {
+--	disruptionweapon = 1,
+--	disruptiondamage = 180, -- if you want it to differ from the default weapon damage
+--}
+
+--------------------------------------------------------------------------------
+-- Locals
+--------------------------------------------------------------------------------
+
+local spGetGameFrame        = Spring.GetGameFrame
+local spValidUnitID         = Spring.ValidUnitID
+local spGetUnitHealth       = Spring.GetUnitHealth
+local spGetUnitDefID        = Spring.GetUnitDefID
+local spSetUnitRulesParam   = Spring.SetUnitRulesParam
+local spSetUnitWeaponState  = Spring.SetUnitWeaponState
+local spGetAllUnits         = Spring.GetAllUnits
+local spGetUnitIsDead       = Spring.GetUnitIsDead
+
+local MoveCtrl              = Spring.MoveCtrl
+local mcGetGroundMoveTypeData = MoveCtrl and MoveCtrl.GetGroundMoveTypeData
+local mcSetGroundMoveTypeData = MoveCtrl and MoveCtrl.SetGroundMoveTypeData
+
+local UnitDefs   = UnitDefs
+local WeaponDefs = WeaponDefs
+local math_min   = math.min
+local math_max   = math.max
+local math_abs   = math.abs
+
+--------------------------------------------------------------------------------
+-- Tables
+--------------------------------------------------------------------------------
+
+local disruption = {}
+local disruptionCapacity = {}
+local lastDisruptionHit = {}
+local disruptedUntil = {}
+local activeUnits = {}
+local lastShownPercent = {}
+
+local unitResistMult = {}
+local unitRecoveryMult = {}
+local unitCapacityMult = {}
+local unitImmune = {}
+
+local moveTypeCache = {}
+-- moveTypeCache[unitID] = {
+--   kind = "ground"/"none",
+--   baseMove = {
+--     maxSpeed = ...,
+--     accRate  = ...,
+--     turnRate = ...,
+--   }
+-- }
+
+local unitWeaponBaseReload = {}
+
+--------------------------------------------------------------------------------
+-- Helpers
+--------------------------------------------------------------------------------
+
+local function Clamp(x, lo, hi)
+	if x < lo then return lo end
+	if x > hi then return hi end
+	return x
+end
+
+local function GetUnitMaxHealth(unitID)
+	local _, maxHealth = spGetUnitHealth(unitID)
+	return maxHealth or 1
+end
+
+local function IsUnitFullyDisrupted(unitID, frame)
+	local untilFrame = disruptedUntil[unitID]
+	return untilFrame and untilFrame > frame
+end
+
+local function GetPenaltyMultipliersFromPercent(pct, fullyDisrupted)
+	-- Stronger early ramp than linear, but still ends at 25% at 100%.
+	local shaped = pct ^ 0.7
+
+	local speedMult = 1 - (shaped * 0.75)
+	local accelMult = 1 - (shaped * 0.75)
+	local turnMult  = 1 - (shaped * 0.75)
+
+	speedMult = math_max(MIN_SPEED_MULT, speedMult)
+	accelMult = math_max(MIN_ACCEL_MULT, accelMult)
+	turnMult  = math_max(MIN_TURN_MULT, turnMult)
+
+	local reloadMult = 1 + ((MAX_RELOAD_MULT - 1) * pct * pct)
+
+	if fullyDisrupted then
+		speedMult = MIN_SPEED_MULT
+		accelMult = MIN_ACCEL_MULT
+		turnMult  = MIN_TURN_MULT
+		reloadMult = MAX_RELOAD_MULT
+	end
+
+	return speedMult, accelMult, turnMult, reloadMult
+end
+
+local function CacheMoveType(unitID, unitDefID)
+	local ud = UnitDefs[unitDefID]
+	if not ud then
+		moveTypeCache[unitID] = { kind = "none" }
+		return
+	end
+
+	local cache = {
+		kind = "ground",
+		baseMove = {},
+	}
+
+	if mcGetGroundMoveTypeData then
+		local ok, mtd = pcall(mcGetGroundMoveTypeData, unitID)
+		if ok and mtd then
+			cache.baseMove.maxSpeed = mtd.maxSpeed
+			cache.baseMove.accRate  = mtd.accRate
+			cache.baseMove.turnRate = mtd.turnRate
+			moveTypeCache[unitID] = cache
+			return
+		end
+	end
+
+	cache.baseMove.maxSpeed = ud.speed
+	cache.baseMove.turnRate = ud.turnRate
+	cache.baseMove.accRate  = ud.accel
+
+	if not cache.baseMove.maxSpeed then
+		cache.kind = "none"
+	end
+
+	moveTypeCache[unitID] = cache
+end
+
+local function ApplyMovementPenalty(unitID, speedMult, accelMult, turnMult)
+	if not mcSetGroundMoveTypeData then return end
+
+	local cache = moveTypeCache[unitID]
+	if not cache or cache.kind ~= "ground" then
+		return
+	end
+
+	local bm = cache.baseMove
+	if not bm or not bm.maxSpeed then
+		return
+	end
+
+	local values = {
+		maxSpeed = bm.maxSpeed * speedMult,
+	}
+
+	if bm.accRate then
+		values.accRate = bm.accRate * accelMult
+	end
+	if bm.turnRate then
+		values.turnRate = bm.turnRate * turnMult
+	end
+
+	pcall(mcSetGroundMoveTypeData, unitID, values)
+end
+
+local function RestoreMovement(unitID)
+	if not mcSetGroundMoveTypeData then return end
+
+	local cache = moveTypeCache[unitID]
+	if not cache or cache.kind ~= "ground" then
+		return
+	end
+
+	local bm = cache.baseMove
+	if not bm or not bm.maxSpeed then
+		return
+	end
+
+	local values = {
+		maxSpeed = bm.maxSpeed,
+	}
+
+	if bm.accRate then
+		values.accRate = bm.accRate
+	end
+	if bm.turnRate then
+		values.turnRate = bm.turnRate
+	end
+
+	pcall(mcSetGroundMoveTypeData, unitID, values)
+end
+
+local function SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
+	local displayPercent = pct * 100
+	local prev = lastShownPercent[unitID]
+
+	if (not prev) or math_abs(displayPercent - prev) >= RULESPARAM_EPSILON_PERCENT then
+		lastShownPercent[unitID] = displayPercent
+		spSetUnitRulesParam(unitID, "disruption", displayPercent, IN_LOS)
+	end
+
+	spSetUnitRulesParam(unitID, "disruption_disrupted", fullyDisrupted and 1 or 0, IN_LOS)
+end
+
+local function ClearUnitState(unitID)
+	disruption[unitID] = nil
+	disruptionCapacity[unitID] = nil
+	lastDisruptionHit[unitID] = nil
+	disruptedUntil[unitID] = nil
+	activeUnits[unitID] = nil
+	lastShownPercent[unitID] = nil
+	unitResistMult[unitID] = nil
+	unitRecoveryMult[unitID] = nil
+	unitCapacityMult[unitID] = nil
+	unitImmune[unitID] = nil
+	moveTypeCache[unitID] = nil
+
+	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
+	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
+	spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
+	spSetUnitRulesParam(unitID, "disruption_reloadmult", 1, IN_LOS)
+end
+
+local function GetDecayRateForPercent(pct)
+	if pct > 0.70 then
+		return DECAY_HIGH
+	elseif pct >= 0.30 then
+		return DECAY_MID
+	else
+		return DECAY_LOW
+	end
+end
+
+local function TriggerFullDisruption(unitID, frame)
+	local cap = disruptionCapacity[unitID] or 1
+	disruption[unitID] = cap
+	disruptedUntil[unitID] = frame + LOCKOUT_FRAMES
+	activeUnits[unitID] = true
+end
+
+local function BuildUnitWeaponReloadCache()
+	for unitDefID, ud in pairs(UnitDefs) do
+		unitWeaponBaseReload[unitDefID] = {}
+		if ud.weapons then
+			for weaponNum, weaponInfo in ipairs(ud.weapons) do
+				local wdid = weaponInfo.weaponDef
+				local wd = WeaponDefs[wdid]
+				if wd then
+					local reloadFrames = (wd.reload or 1) * GAME_SPEED
+					unitWeaponBaseReload[unitDefID][weaponNum] = reloadFrames
+				end
+			end
+		end
+	end
+end
+
+local function InitUnitState(unitID, unitDefID)
+	local ud = UnitDefs[unitDefID]
+	if not ud then
+		return
+	end
+
+	local maxHealth = GetUnitMaxHealth(unitID)
+	local cp = ud.customParams or {}
+
+	local capacityMult = tonumber(cp.disruptioncapacitymult) or 1
+	local resistMult   = tonumber(cp.disruptionresist) or 1
+	local recoveryMult = tonumber(cp.disruptionrecovery) or 1
+	local immune       = tonumber(cp.disruptionimmune) == 1
+
+	disruption[unitID] = disruption[unitID] or 0
+	disruptionCapacity[unitID] = math_max(1, maxHealth * capacityMult)
+	lastDisruptionHit[unitID] = lastDisruptionHit[unitID] or -999999
+	disruptedUntil[unitID] = disruptedUntil[unitID] or nil
+
+	unitCapacityMult[unitID] = capacityMult
+	unitResistMult[unitID] = resistMult
+	unitRecoveryMult[unitID] = recoveryMult
+	unitImmune[unitID] = immune
+
+	CacheMoveType(unitID, unitDefID)
+
+	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
+	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
+	spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
+	spSetUnitRulesParam(unitID, "disruption_reloadmult", 1, IN_LOS)
+end
+
+--------------------------------------------------------------------------------
+-- Gadget Callins
+--------------------------------------------------------------------------------
+
+function gadget:Initialize()
+	BuildUnitWeaponReloadCache()
+
+	local allUnits = spGetAllUnits()
+	for i = 1, #allUnits do
+		local unitID = allUnits[i]
+		local unitDefID = spGetUnitDefID(unitID)
+		if unitDefID then
+			InitUnitState(unitID, unitDefID)
+		end
+	end
+end
+
+function gadget:UnitCreated(unitID, unitDefID)
+	InitUnitState(unitID, unitDefID)
+end
+
+function gadget:UnitFinished(unitID, unitDefID)
+	CacheMoveType(unitID, unitDefID)
+end
+
+function gadget:UnitDestroyed(unitID)
+	RestoreMovement(unitID)
+	ClearUnitState(unitID)
+end
+
+function gadget:UnitTaken(unitID, unitDefID)
+	RestoreMovement(unitID)
+	ClearUnitState(unitID)
+	InitUnitState(unitID, unitDefID)
+end
+
+function gadget:UnitGiven(unitID, unitDefID)
+	RestoreMovement(unitID)
+	ClearUnitState(unitID)
+	InitUnitState(unitID, unitDefID)
+end
+
+--------------------------------------------------------------------------------
+-- Damage interception
+--------------------------------------------------------------------------------
+
+function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponID, attackerID, attackerDefID, attackerTeam)
+	if not weaponID then
+		return damage
+	end
+
+	local wd = WeaponDefs[weaponID]
+	if not wd then
+		return damage
+	end
+
+	local cp = wd.customParams
+	if not cp or tonumber(cp.disruptionweapon) ~= 1 then
+		return damage
+	end
+
+	if unitImmune[unitID] then
+		return 0
+	end
+
+	local frame = spGetGameFrame()
+
+	-- Do not let additional disruption extend the lockout.
+	if IsUnitFullyDisrupted(unitID, frame) then
+		return 0
+	end
+
+	local disruptAmount = tonumber(cp.disruptiondamage) or damage or 0
+	if disruptAmount <= 0 then
+		return 0
+	end
+
+	local resist = unitResistMult[unitID] or 1
+	disruptAmount = disruptAmount * resist
+
+	local cap = disruptionCapacity[unitID]
+	if not cap or cap <= 0 then
+		local maxHealth = GetUnitMaxHealth(unitID)
+		cap = math_max(1, maxHealth * (unitCapacityMult[unitID] or 1))
+		disruptionCapacity[unitID] = cap
+	end
+
+	disruption[unitID] = math_min(cap, (disruption[unitID] or 0) + disruptAmount)
+	lastDisruptionHit[unitID] = frame
+	activeUnits[unitID] = true
+
+	if disruption[unitID] >= cap then
+		TriggerFullDisruption(unitID, frame)
+	end
+
+	return 0
+end
+
+--------------------------------------------------------------------------------
+-- Weapon control
+--------------------------------------------------------------------------------
+
+function gadget:AllowWeaponTarget(attackerID, targetID, attackerWeaponNum, attackerWeaponDefID, defPriority)
+	local frame = spGetGameFrame()
+	if IsUnitFullyDisrupted(attackerID, frame) then
+		return false
+	end
+	return true
+end
+
+local function ApplyReloadPenalty(unitID, unitDefID, frame, reloadMult, fullyDisrupted)
+	local weapons = unitWeaponBaseReload[unitDefID]
+	if not weapons then return end
+
+	-- Only hard-block during full disruption.
+	if fullyDisrupted then
+		for weaponNum in pairs(weapons) do
+			spSetUnitWeaponState(unitID, weaponNum, "reloadState", frame + LOCKOUT_FRAMES)
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Main update loop
+--------------------------------------------------------------------------------
+
+function gadget:GameFrame(frame)
+	if frame % UPDATE_FRAMES ~= 0 then
+		return
+	end
+
+	local dt = UPDATE_FRAMES / GAME_SPEED
+
+	for unitID in pairs(activeUnits) do
+		if (not spValidUnitID(unitID)) or spGetUnitIsDead(unitID) then
+			activeUnits[unitID] = nil
+		else
+			local cap = disruptionCapacity[unitID] or 1
+			local current = disruption[unitID] or 0
+			local fullyDisrupted = IsUnitFullyDisrupted(unitID, frame)
+
+			if disruptedUntil[unitID] and disruptedUntil[unitID] <= frame then
+				disruptedUntil[unitID] = nil
+				current = cap * POST_TRIGGER_RESET
+				disruption[unitID] = current
+				fullyDisrupted = false
+				lastDisruptionHit[unitID] = frame
+			end
+
+			if (not fullyDisrupted) and current > 0 then
+				local lastHit = lastDisruptionHit[unitID] or -999999
+				if frame - lastHit > RECENT_HIT_DELAY_FRAMES then
+					local pct = current / cap
+					local decayRate = GetDecayRateForPercent(pct)
+					local recoveryMult = unitRecoveryMult[unitID] or 1
+					local decayAmount = cap * decayRate * recoveryMult * dt
+
+					current = math_max(0, current - decayAmount)
+					disruption[unitID] = current
+				end
+			end
+
+			local pct = current / cap
+			pct = Clamp(pct, 0, 1)
+
+			local speedMult, accelMult, turnMult, reloadMult = GetPenaltyMultipliersFromPercent(pct, fullyDisrupted)
+
+			spSetUnitRulesParam(unitID, "disruption_speedmult", speedMult, IN_LOS)
+			spSetUnitRulesParam(unitID, "disruption_reloadmult", reloadMult, IN_LOS)
+
+			ApplyMovementPenalty(unitID, speedMult, accelMult, turnMult)
+
+			local unitDefID = spGetUnitDefID(unitID)
+			if unitDefID then
+				ApplyReloadPenalty(unitID, unitDefID, frame, reloadMult, fullyDisrupted)
+			end
+
+			SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
+
+			if (not fullyDisrupted) and current <= 0.001 then
+				disruption[unitID] = 0
+				RestoreMovement(unitID)
+				SetDisplayedRulesParams(unitID, 0, false)
+				spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
+				spSetUnitRulesParam(unitID, "disruption_reloadmult", 1, IN_LOS)
+				activeUnits[unitID] = nil
+			end
+		end
+	end
+end
