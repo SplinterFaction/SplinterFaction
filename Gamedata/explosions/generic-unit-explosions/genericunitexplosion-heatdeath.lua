@@ -31,7 +31,7 @@ return {
         rotParams           = [[0, 0, -180]],
         animParams          = [[8,5,40]], --[xTiles, yTiles, animLength in game frames]
         pos                 = [[0,0,0]],
-        sizegrowth          = 1.5,
+        sizegrowth          = 1,
         sizemod             = 1,
         texture             = [[generated-heatdeath]],
         drawOrder           = 0,
@@ -67,7 +67,7 @@ return {
         rotParams           = [[0, 0, -180]],
         animParams          = [[8,5,40]], --[xTiles, yTiles, animLength in game frames]
         pos                 = [[0,0,0]],
-        sizegrowth          = 1.5,
+        sizegrowth          = 1,
         sizemod             = 1,
         texture             = [[generated-heatdeath]],
         drawOrder           = 0,
@@ -103,7 +103,7 @@ return {
         rotParams           = [[0, 0, -180]],
         animParams          = [[8,5,40]], --[xTiles, yTiles, animLength in game frames]
         pos                 = [[0,0,0]],
-        sizegrowth          = 1.5,
+        sizegrowth          = 1,
         sizemod             = 1,
         texture             = [[generated-heatdeath]],
         drawOrder           = 0,
@@ -139,7 +139,7 @@ return {
         rotParams           = [[0, 0, -180]],
         animParams          = [[8,5,40]], --[xTiles, yTiles, animLength in game frames]
         pos                 = [[0,0,0]],
-        sizegrowth          = 1.5,
+        sizegrowth          = 1,
         sizemod             = 1,
         texture             = [[generated-heatdeath]],
         drawOrder           = 0,

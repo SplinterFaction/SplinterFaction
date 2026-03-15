@@ -415,32 +415,6 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 	local pct = setHeatRulesParam(unitID, data.heatEnergy, data.heatCapacity, data)
 
 	if pct >= 100 then
-		-- Boom (your custom tech-based CEG selection)
-		local x, y, z = Spring.GetUnitPosition(unitID)
-		local ud = UnitDefs[data.unitDefID]
-		local cp = ud and ud.customParams or {}
-
-		if cp.requiretech == "tech0" then
-			Spring.SpawnCEG("genericunitexplosion-heatdeath-small", x, y+10, z, 0, 0, 0)
-			Spring.SpawnCEG("heatdeath-fire-t1", x, y+10, z, 0, 0, 0)
-		end
-		if cp.requiretech == "tech1" then
-			Spring.SpawnCEG("genericunitexplosion-heatdeath-small", x, y+10, z, 0, 0, 0)
-			Spring.SpawnCEG("heatdeath-fire-t1", x, y+10, z, 0, 0, 0)
-		end
-		if cp.requiretech == "tech2" then
-			Spring.SpawnCEG("genericunitexplosion-heatdeath-medium", x, y+10, z, 0, 0, 0)
-			Spring.SpawnCEG("heatdeath-fire-t2", x, y+10, z, 0, 0, 0)
-		end
-		if cp.requiretech == "tech3" then
-			Spring.SpawnCEG("genericunitexplosion-heatdeath-large", x, y+10, z, 0, 0, 0)
-			Spring.SpawnCEG("heatdeath-fire-t3", x, y+10, z, 0, 0, 0)
-		end
-		if cp.requiretech == "tech4" then
-			Spring.SpawnCEG("genericunitexplosion-heatdeath-huge", x, y+10, z, 0, 0, 0)
-			Spring.SpawnCEG("heatdeath-fire-t4", x, y+10, z, 0, 0, 0)
-		end
-
 		-- Mark death reason for other gadgets
 		Spring.SetUnitRulesParam(unitID, HEAT_DEATH_FLAG, 1)
 		if attackerID and attackerID > 0 then

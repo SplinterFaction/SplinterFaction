@@ -158,6 +158,21 @@ if gadgetHandler:IsSyncedCode() then
 
 				Spring.SetFeatureVelocity(featureID, vx, vy, vz) -- may not work depending on engine
 				Spring.SetFeatureDirection(featureID, dirx, 0, dirz)
+				if heatKill then
+					if tech == "tech0" or tech == "tech1" then
+						Spring.SpawnCEG("genericunitexplosion-heatdeath-small", posx, posy, posz, 0, 0, 0)
+						Spring.SpawnCEG("heatdeath-fire-t1", posx, posy+10, posz, 0, 0, 0)
+					elseif tech == "tech2" then
+						Spring.SpawnCEG("genericunitexplosion-heatdeath-medium", posx, posy, posz, 0, 0, 0)
+						Spring.SpawnCEG("heatdeath-fire-t2", posx, posy+10, posz, 0, 0, 0)
+					elseif tech == "tech3" then
+						Spring.SpawnCEG("genericunitexplosion-heatdeath-large", posx, posy, posz, 0, 0, 0)
+						Spring.SpawnCEG("heatdeath-fire-t3", posx, posy+10, posz, 0, 0, 0)
+					elseif tech == "tech4" then
+						Spring.SpawnCEG("genericunitexplosion-heatdeath-huge", posx, posy, posz, 0, 0, 0)
+						Spring.SpawnCEG("heatdeath-fire-t4", posx, posy+10, posz, 0, 0, 0)
+					end
+				end
 			else
 				--Spring.Echo("[Death Spawns] Spawning a part feature")
 
