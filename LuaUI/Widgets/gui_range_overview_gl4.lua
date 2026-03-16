@@ -6,7 +6,7 @@ function widget:GetInfo()
 		date    = "2026-03-15",
 		license = "GPL v2 or later",
 		layer   = -90,
-		enabled = true,
+		enabled = false,
 		depends = { "gl4" },
 	}
 end
