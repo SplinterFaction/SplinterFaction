@@ -6,7 +6,7 @@ function widget:GetInfo()
 		date = "2021.06.18",
 		license = "Lua: GPLv2, GLSL: (c) Beherith (mysterme@gmail.com)",
 		layer = 0,
-		enabled = true
+		enabled = false
 	}
 end
 

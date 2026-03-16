@@ -30,13 +30,7 @@ function widget:Initialize()
 	})
 	Spring.SendCommands("bind g areaguard")
 
-	-- replace fps mode bind with capture
-	Spring.SendCommands({
-		"unbindkeyset c",
-	})
-	Spring.SendCommands("bind ctrl+c capture")
-	
-	
+
 	-- set repeat to be bound to q
 	Spring.SendCommands({
 		"unbindkeyset q",

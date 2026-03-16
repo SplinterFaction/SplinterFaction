@@ -2,7 +2,7 @@ function gadget:GetInfo()
 	return {
 		name = "Area Heal Radius",
 		desc = "Heals allied units in a radius, with delay after taking damage",
-		author = "ChatGPT",
+		author = "",
 		date = "2025",
 		license = "MIT",
 		layer = 0,

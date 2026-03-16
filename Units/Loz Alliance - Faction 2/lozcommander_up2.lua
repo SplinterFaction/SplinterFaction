@@ -29,7 +29,7 @@ script = [[lozcommander_lus.lua]]
 footprintx = 5
 footprintz = 5
 
-weapon1 = [[commrailgun_up2]]
+weapon1 = [[commgun_up2]]
 
 explodeas = [[commnuke_up2]]
 selfdestructas = [[commnuke_up2]]

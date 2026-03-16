@@ -12,10 +12,10 @@ local function makeInstanceVBOTable(layout, maxElements, myName, unitIDattribID)
 	local newInstanceVBO = gl.GetVBO(GL.ARRAY_BUFFER,true)
 	if newInstanceVBO == nil then Spring.Echo("makeInstanceVBOTable, cannot get VBO for", myName); return nil end
 	newInstanceVBO:Define(
-		maxElements,
-		layout
+			maxElements,
+			layout
 	)
-	
+
 
 
 	local instanceStep = 0
@@ -120,7 +120,7 @@ local function makeInstanceVBOTable(layout, maxElements, myName, unitIDattribID)
 				newInstanceIDtoIndex[instanceID] = newUsedElements
 				newIndexToInstanceID[newUsedElements] = instanceID
 			else
-			    --Spring.Echo("compacting index",i, 'instanceID', instanceID)
+				--Spring.Echo("compacting index",i, 'instanceID', instanceID)
 			end
 		end
 		--Spring.Echo("Post compacting", self.usedElements, newUsedElements)
@@ -170,10 +170,10 @@ local function makeInstanceVBOTable(layout, maxElements, myName, unitIDattribID)
 	newInstanceVBO:Upload(instanceData)
 
 	-- I believe that the openGL spec doesnt guarantee that a buffer has an idea before data is uploaded to it, so we will fill it with zeros. 
-	if gldebugannotations then 
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, newInstanceVBO:GetID(), myName)
 	end
-	
+
 
 	--register self in WG if possible
 	if WG then
@@ -684,10 +684,10 @@ end
 
 local function uploadElementRange(iT, startElementIndex, endElementIndex)
 	iT.instanceVBO:Upload(iT.instanceData, -- The lua mirrored VBO data
-		nil, -- the attribute index, nil for all attributes
-		startElementIndex, -- vboOffset optional, , what ELEMENT offset of the VBO to start uploading into, 0 based
-		startElementIndex * iT.instanceStep + 1, --  luaStartIndex, default 1, what element of the lua array to start uploading from. 1 is the 1st element of a lua table.
-		endElementIndex * iT.instanceStep --] luaEndIndex, default #{array}, what element of the lua array to upload up to, inclusively
+	                      nil, -- the attribute index, nil for all attributes
+	                      startElementIndex, -- vboOffset optional, , what ELEMENT offset of the VBO to start uploading into, 0 based
+	                      startElementIndex * iT.instanceStep + 1, --  luaStartIndex, default 1, what element of the lua array to start uploading from. 1 is the 1st element of a lua table.
+	                      endElementIndex * iT.instanceStep --] luaEndIndex, default #{array}, what element of the lua array to upload up to, inclusively
 	)
 	if iT.indextoUnitID then
 		--we need to reslice the table
@@ -804,11 +804,11 @@ local function makeCircleVBO(circleSegments, radius, startCenter, name)
 	end
 
 	circleVBO:Define(
-		circleSegments + 1 + (startCenter and 1 or 0) , -- +1 for center point if startCenter is true
-		VBOLayout
+			circleSegments + 1 + (startCenter and 1 or 0) , -- +1 for center point if startCenter is true
+			VBOLayout
 	)
 	circleVBO:Upload(VBOData)
-	if gldebugannotations then 
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, circleVBO:GetID(), name or "CircleVBO")
 	end
 	return circleVBO, #VBOData/4
@@ -838,12 +838,12 @@ local function makePlaneVBO(xsize, ysize, xresolution, yresolution, name) -- mak
 	end
 
 	planeVBO:Define(
-		(xresolution + 1) * (yresolution + 1) ,
-		VBOLayout
+			(xresolution + 1) * (yresolution + 1) ,
+			VBOLayout
 	)
 	planeVBO:Upload(VBOData)
 
-	if gldebugannotations then 
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, planeVBO:GetID(), name or "PlaneVBO")
 	end
 
@@ -888,11 +888,11 @@ local function makePlaneIndexVBO(xresolution, yresolution, cutcircle, name)
 		qindex = qindex + 1
 	end
 	planeIndexVBO:Define(
-		#	IndexVBOData
+			#	IndexVBOData
 	)
 	planeIndexVBO:Upload(IndexVBOData)
-	
-	if gldebugannotations then 
+
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, planeIndexVBO:GetID(), name or "planeIndexVBO")
 	end
 	--Spring.Echo("PlaneIndexVBO up:",#IndexVBOData, "Down", #planeIndexVBO:Download())
@@ -921,12 +921,12 @@ local function makePointVBO(numPoints, randomFactor, name)
 	end
 
 	pointVBO:Define(
-		numPoints,
-		VBOLayout
+			numPoints,
+			VBOLayout
 	)
 	pointVBO:Upload(VBOData)
-	
-	if gldebugannotations then 
+
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, pointVBO:GetID(), name or "pointVBO")
 	end
 	return pointVBO, numPoints
@@ -956,11 +956,11 @@ local function makeRectVBO(minX,minY, maxX, maxY, minU, minV, maxU, maxV, name)
 	}
 
 	rectVBO:Define(
-		6,
-		VBOLayout
+			6,
+			VBOLayout
 	)
 	rectVBO:Upload(VBOData)
-	
+
 	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, rectVBO:GetID(), name or "rectVBO")
 	end
@@ -972,10 +972,10 @@ local function makeRectIndexVBO(name)
 	if rectIndexVBO == nil then return nil end
 
 	rectIndexVBO:Define(
-		6
+			6
 	)
 	rectIndexVBO:Upload({0,1,2,3,4,5})
-	if gldebugannotations then 
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, rectIndexVBO:GetID(), name or "rectIndexVBO")
 	end
 	return rectIndexVBO,6
@@ -1036,7 +1036,7 @@ local function makeConeVBO(numSegments, height, radius, name)
 	coneVBO:Define(#VBOData/4,	{{id = 0, name = "localpos_progress", size = 4}})
 	coneVBO:Upload(VBOData)
 
-	if gldebugannotations then 
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, coneVBO:GetID(), name or "coneVBO")
 	end
 
@@ -1144,8 +1144,8 @@ local function makeCylinderVBO(numSegments, height, radius, hastop, hasbottom, n
 
 	cylinderVBO:Define(#VBOData/4,	{{id = 0, name = "localpos_progress", size = 4}})
 	cylinderVBO:Upload(VBOData)
-	
-	if gldebugannotations then 
+
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, cylinderVBO:GetID(), name or "cylinderVBO")
 	end
 
@@ -1161,46 +1161,46 @@ local function makeBoxVBO(minX, minY, minZ, maxX, maxY, maxZ, name) -- make a bo
 
 	local VBOData = {
 		minX,minY,minZ,0
-		,minX,minY,maxZ,0
-		,minX,maxY,maxZ,0
-		,maxX,maxY,minZ,0
-		,minX,minY,minZ,0
-		,minX,maxY,minZ,0
-		,maxX,minY,maxZ,0
-		,minX,minY,minZ,0
-		,maxX,minY,minZ,0
-		,maxX,maxY,minZ,0
-		,maxX,minY,minZ,0
-		,minX,minY,minZ,0
-		,minX,minY,minZ,0
-		,minX,maxY,maxZ,0
-		,minX,maxY,minZ,0
-		,maxX,minY,maxZ,0
-		,minX,minY,maxZ,0
-		,minX,minY,minZ,0
-		,minX,maxY,maxZ,0
-		,minX,minY,maxZ,0
-		,maxX,minY,maxZ,0
-		,maxX,maxY,maxZ,0
-		,maxX,minY,minZ,0
-		,maxX,maxY,minZ,0
-		,maxX,minY,minZ,0
-		,maxX,maxY,maxZ,0
-		,maxX,minY,maxZ,0
-		,maxX,maxY,maxZ,0
-		,maxX,maxY,minZ,0
-		,minX,maxY,minZ,0
-		,maxX,maxY,maxZ,0
-		,minX,maxY,minZ,0
-		,minX,maxY,maxZ,0
-		,maxX,maxY,maxZ,0
-		,minX,maxY,maxZ,0
-		,maxX,minY,maxZ,0
+	,minX,minY,maxZ,0
+	,minX,maxY,maxZ,0
+	,maxX,maxY,minZ,0
+	,minX,minY,minZ,0
+	,minX,maxY,minZ,0
+	,maxX,minY,maxZ,0
+	,minX,minY,minZ,0
+	,maxX,minY,minZ,0
+	,maxX,maxY,minZ,0
+	,maxX,minY,minZ,0
+	,minX,minY,minZ,0
+	,minX,minY,minZ,0
+	,minX,maxY,maxZ,0
+	,minX,maxY,minZ,0
+	,maxX,minY,maxZ,0
+	,minX,minY,maxZ,0
+	,minX,minY,minZ,0
+	,minX,maxY,maxZ,0
+	,minX,minY,maxZ,0
+	,maxX,minY,maxZ,0
+	,maxX,maxY,maxZ,0
+	,maxX,minY,minZ,0
+	,maxX,maxY,minZ,0
+	,maxX,minY,minZ,0
+	,maxX,maxY,maxZ,0
+	,maxX,minY,maxZ,0
+	,maxX,maxY,maxZ,0
+	,maxX,maxY,minZ,0
+	,minX,maxY,minZ,0
+	,maxX,maxY,maxZ,0
+	,minX,maxY,minZ,0
+	,minX,maxY,maxZ,0
+	,maxX,maxY,maxZ,0
+	,minX,maxY,maxZ,0
+	,maxX,minY,maxZ,0
 	}
 	boxVBO:Define(#VBOData/4,	{{id = 0, name = "localpos_progress", size = 4}})
 	boxVBO:Upload(VBOData)
-	
-	if gldebugannotations then 
+
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, boxVBO:GetID(), name or "boxVBO")
 	end
 
@@ -1280,8 +1280,8 @@ local function makeSphereVBO(sectorCount, stackCount, radius, name) -- http://ww
 	end
 	sphereVBO:Define(#VBOData/9, vertVBOLayout)
 	sphereVBO:Upload(VBOData)
-	
-	if gldebugannotations then 
+
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, sphereVBO:GetID(), name or "sphereVBO")
 	end
 
@@ -1329,8 +1329,8 @@ local function makeSphereVBO(sectorCount, stackCount, radius, name) -- http://ww
 
 	sphereIndexVBO:Define(#VBOData)
 	sphereIndexVBO:Upload(VBOData)
-		
-	if gldebugannotations then 
+
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, sphereIndexVBO:GetID(), name or "sphereIndexVBO")
 	end
 
@@ -1351,20 +1351,20 @@ local function MakeTexRectVAO(minX,minY, maxX, maxY, minU, minV, maxU, maxV, nam
 	local w = 1
 	rectVBO:Define(	6,	{{id = 0, name = "pos", size = 4}})
 	rectVBO:Upload({
-			
-		minX,minY, minU, minV, --bl
-		maxX,maxY, maxU, maxV, --tr
-		minX,maxY, minU, maxV, --tl
-		maxX,maxY, maxU, maxV, --tr
-		minX,minY, minU, minV, --bl
-		maxX,minY, maxU, minV, --br
-			})
-	
-	
-	if gldebugannotations then 
+
+		               minX,minY, minU, minV, --bl
+		               maxX,maxY, maxU, maxV, --tr
+		               minX,maxY, minU, maxV, --tl
+		               maxX,maxY, maxU, maxV, --tr
+		               minX,minY, minU, minV, --bl
+		               maxX,minY, maxU, minV, --br
+	               })
+
+
+	if gldebugannotations then
 		gl.ObjectLabel(GL_BUFFER, rectVBO:GetID(), name or "rectVBO")
 	end
-			
+
 	myGL4TexRectVAO = gl.GetVAO()
 	if myGL4TexRectVAO == nil then return nil end
 	myGL4TexRectVAO:AttachVertexBuffer(rectVBO)
