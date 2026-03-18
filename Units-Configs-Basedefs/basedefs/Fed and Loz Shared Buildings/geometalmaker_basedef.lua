@@ -63,6 +63,7 @@ unitDef                     = {
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",
+		buildmenucategory		  = "Economy",
 		iseco                     = 1,
 		needed_cover              = 3,
 		death_sounds              = "generic",

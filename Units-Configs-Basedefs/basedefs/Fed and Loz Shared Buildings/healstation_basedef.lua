@@ -78,6 +78,7 @@ unitDef                    = {
 	customParams                 = {
 		RequireTech				 = tech,
 		unittype				  = "building",
+		buildmenucategory		  = "Utility",
 		canbetransported 		 = "false",
 		needed_cover             = 2,
 		death_sounds             = "generic",

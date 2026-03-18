@@ -64,6 +64,7 @@ unitDef                     = {
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Single-Target Turret",
+		buildmenucategory		  = "Combat",
 		unitrole_sound            = "turret",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,

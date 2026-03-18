@@ -1,9 +1,9 @@
 function widget:GetInfo()
 	return {
 		name    = "Range Overview GL4",
-		desc    = "Displays selected unit attack, radar, seismic sensor, sight, and build ranges",
+		desc    = "Fast GL4 range rings for selected units, allied sight, static defenses, and mouseover",
 		author  = "OpenAI",
-		date    = "2026-03-15",
+		date    = "2026-03-17",
 		license = "GPL v2 or later",
 		layer   = -90,
 		enabled = false,
@@ -19,24 +19,41 @@ local selectionDisableThreshold = 512
 local tacticalFadeStart = 2800
 local tacticalFadeEnd   = 8000
 
-local showBuildForSelectedBuildersOnly = true
-local showBuildWhilePlacing = true
-local enableAnimatedGlow = true
+-- Increase for smoother circles, decrease for fewer vertices and slightly better performance
+local circleDivs = 48
 
--- performance knobs
-local persistentRefreshFrames = 30
-local persistentCullDistance = 7000
+local showBuildForSelectedBuildersOnly = true
+local showBuildWhilePlacing            = true
+
+local persistentRefreshFrames = 20
+local persistentCullDistance  = 6500
 local persistentCullDistanceSq = persistentCullDistance * persistentCullDistance
-local selectedOnlyInnerRings = true
-local selectedOnlySweepEffects = true
+local mouseoverRefreshFrames  = 3
+local selectedOnlyInnerRings  = true
+
+local persistentAlliedSight         = true
+local persistentStaticDefenseAttack = true
+local persistentAlliedDefenseAttack = true
+local persistentEnemyDefenseAttack  = true
+local enableMouseoverRings          = true
+
+-- Per-ring enable flags. Set any of these to false to completely skip maintaining
+-- and drawing that ring class. This is the best place to expose player options later.
+local ringEnabled = {
+	attack = true,
+	radar  = true,
+	sensor = true,
+	sight  = true,
+	build  = true,
+}
 
 local colorConfig = {
 	drawStencil    = true,
-	drawInnerRings = true,
+	drawInnerRings = false,	-- disabled: merged outer rings only
 
-	internalalpha = 0.035,
-	fill_alpha    = 0.055,
-	externalalpha = 0.72,
+	internalalpha = 0,
+	fill_alpha    = 0,
+	externalalpha = 1,
 	outer_fade_height_difference = 2500,
 
 	attack = {
@@ -45,46 +62,30 @@ local colorConfig = {
 		groupselectionfadescale = 0.78,
 		externallinethickness = 3.0,
 		internallinethickness = 1.8,
-		stipple = 0,
-		stipplePattern = 0,
-		sweep = 0,
-		alwaysvisible = true,
 	},
 
 	radar = {
-		color = { 0.05, 1.00, 0.05, 0.72 },
+		color = { 0.05, 1.00, 0.05, 0.70 },
 		fadeparams = { 2500, 5000, 1.0, 0.0 },
 		groupselectionfadescale = 0.58,
-		externallinethickness = 10,
-		internallinethickness = 5,
-		stipple = 1,
-		stipplePattern = 1, -- long dash
-		sweep = 1,
-		alwaysvisible = false,
+		externallinethickness = 6.0,
+		internallinethickness = 3.0,
 	},
 
 	sensor = {
-		color = { 0.90, 0.25, 1.00, 0.72 },
+		color = { 0.90, 0.25, 1.00, 0.70 },
 		fadeparams = { 2500, 5000, 1.0, 0.0 },
 		groupselectionfadescale = 0.58,
-		externallinethickness = 5,
-		internallinethickness = 2.5,
-		stipple = 1,
-		stipplePattern = 2, -- dot-dash
-		sweep = 0,
-		alwaysvisible = false,
+		externallinethickness = 4.0,
+		internallinethickness = 2.0,
 	},
 
 	sight = {
-		color = { 1, 1, 1, 0.2 },
+		color = { 1.00, 1.00, 1.00, 0.20 },
 		fadeparams = { 6000, 12000, 1.0, 0.2 },
 		groupselectionfadescale = 0.58,
-		externallinethickness = 8,
-		internallinethickness = 4,
-		stipple = 0,
-		stipplePattern = 0, -- sparse dots
-		sweep = 0,
-		alwaysvisible = true,
+		externallinethickness = 10.0,
+		internallinethickness = 2.5,
 	},
 
 	build = {
@@ -93,10 +94,6 @@ local colorConfig = {
 		groupselectionfadescale = 0.06,
 		externallinethickness = 2.3,
 		internallinethickness = 1.3,
-		stipple = 0,
-		stipplePattern = 0,
-		sweep = 0,
-		alwaysvisible = false,
 	},
 }
 
@@ -104,28 +101,32 @@ local colorConfig = {
 -- Locals
 --------------------------------------------------------------------------------
 
-local spGetSelectedUnits      = Spring.GetSelectedUnits
-local spGetVisibleUnits       = Spring.GetVisibleUnits
-local spGetUnitDefID          = Spring.GetUnitDefID
-local spGetUnitPosition       = Spring.GetUnitPosition
-local spGetUnitWeaponState    = Spring.GetUnitWeaponState
-local spGetUnitTeam           = Spring.GetUnitTeam
-local spGetMyTeamID           = Spring.GetMyTeamID
-local spIsGUIHidden           = Spring.IsGUIHidden
-local spGetCameraPosition     = Spring.GetCameraPosition
-local spGetGroundHeight       = Spring.GetGroundHeight
-local spGetActiveCommand      = Spring.GetActiveCommand
-local spEcho                  = Spring.Echo
+local spGetSelectedUnits   = Spring.GetSelectedUnits
+local spGetVisibleUnits    = Spring.GetVisibleUnits
+local spGetUnitDefID       = Spring.GetUnitDefID
+local spGetUnitPosition    = Spring.GetUnitPosition
+local spGetUnitWeaponState = Spring.GetUnitWeaponState
+local spGetUnitTeam        = Spring.GetUnitTeam
+local spGetMyTeamID        = Spring.GetMyTeamID
+local spGetMyAllyTeamID    = Spring.GetMyAllyTeamID
+local spGetUnitAllyTeam    = Spring.GetUnitAllyTeam
+local spIsGUIHidden        = Spring.IsGUIHidden
+local spGetCameraPosition  = Spring.GetCameraPosition
+local spGetGroundHeight    = Spring.GetGroundHeight
+local spGetActiveCommand   = Spring.GetActiveCommand
+local spGetMouseState      = Spring.GetMouseState
+local spTraceScreenRay     = Spring.TraceScreenRay
+local spEcho               = Spring.Echo
 
-local glTexture               = gl.Texture
-local glClear                 = gl.Clear
-local glDepthTest             = gl.DepthTest
-local glLineWidth             = gl.LineWidth
-local glColorMask             = gl.ColorMask
-local glStencilTest           = gl.StencilTest
-local glStencilMask           = gl.StencilMask
-local glStencilFunc           = gl.StencilFunc
-local glStencilOp             = gl.StencilOp
+local glTexture     = gl.Texture
+local glClear       = gl.Clear
+local glDepthTest   = gl.DepthTest
+local glLineWidth   = gl.LineWidth
+local glColorMask   = gl.ColorMask
+local glStencilTest = gl.StencilTest
+local glStencilMask = gl.StencilMask
+local glStencilFunc = gl.StencilFunc
+local glStencilOp   = gl.StencilOp
 
 local GL_STENCIL_BUFFER_BIT = GL.STENCIL_BUFFER_BIT or 0x00000400
 local GL_TRIANGLE_FAN       = GL.TRIANGLE_FAN       or 0x0006
@@ -135,14 +136,11 @@ local GL_NOTEQUAL           = GL.NOTEQUAL           or 0x0205
 local GL_KEEP               = GL.KEEP               or 0x1E00
 local GL_REPLACE            = GL.REPLACE            or 0x1E01
 
-local mathMax   = math.max
-local mathSin   = math.sin
-
 --------------------------------------------------------------------------------
 -- Includes
 --------------------------------------------------------------------------------
 
-local LuaShader = VFS.Include("modules/graphics/LuaShader.lua")
+local LuaShader        = VFS.Include("modules/graphics/LuaShader.lua")
 local InstanceVBOTable = VFS.Include("modules/graphics/instancevbotable.lua")
 
 local pushElementInstance = InstanceVBOTable.pushElementInstance
@@ -159,9 +157,7 @@ local unitRadarDistance   = {}
 local unitSeismicDistance = {}
 local unitWeapons         = {}
 local unitMaxWeaponRange  = {}
-
--- per-def quick filters for persistent rings
-local unitHasPersistentAlwaysVisible = {}
+local unitIsStaticDefense = {}
 
 for udid, ud in pairs(UnitDefs) do
 	unitBuilder[udid]         = ud.isBuilder and (ud.canAssist or ud.canReclaim) and not (ud.isFactory and #ud.buildOptions > 0)
@@ -171,35 +167,40 @@ for udid, ud in pairs(UnitDefs) do
 	unitSeismicDistance[udid] = ud.seismicDistance or 0
 	unitWeapons[udid]         = ud.weapons or {}
 	unitMaxWeaponRange[udid]  = ud.maxWeaponRange or 0
-	unitHasPersistentAlwaysVisible[udid] = false
+
+	local hasAttack = (ud.maxWeaponRange or 0) > 0
+	local mobile = (ud.speed or 0) > 0 or ud.canMove == true
+	local builderOnly = unitBuilder[udid] and not hasAttack
+	unitIsStaticDefense[udid] = hasAttack and (not mobile) and (not builderOnly)
 end
 
 --------------------------------------------------------------------------------
 -- GL4 setup
 --------------------------------------------------------------------------------
 
-local circleSegments = 32
+local circleSegments = math.max(8, circleDivs or 32)
 local circleVBO = nil
 local rangeShader = nil
 
 local rangeClasses = { "attack", "radar", "sensor", "sight", "build" }
 local rangeVAOs = {
-	selected = {},
-	mine     = {},
-	other    = {},
+	selected  = {},
+	mine      = {},
+	other     = {},
+	mouseover = {},
 }
 
 local circleInstanceVBOLayout = {
-	{ id = 1, name = 'posscale',         size = 4 },
-	{ id = 2, name = 'color1',           size = 4 },
-	{ id = 3, name = 'visibility',       size = 4 },
-	{ id = 4, name = 'projectileParams', size = 4 },
-	{ id = 5, name = 'additionalParams', size = 4 },
-	{ id = 6, name = 'instData',         size = 4, type = GL.UNSIGNED_INT },
+	{ id = 1, name = "posscale",         size = 4 },
+	{ id = 2, name = "color1",           size = 4 },
+	{ id = 3, name = "visibility",       size = 4 },
+	{ id = 4, name = "projectileParams", size = 4 },
+	{ id = 5, name = "additionalParams", size = 4 },
+	{ id = 6, name = "instData",         size = 4, type = GL.UNSIGNED_INT },
 }
 
 local shaderSourceCache = {
-	shaderName = 'Range Overview GL4',
+	shaderName = "Range Overview GL4",
 	vssrcpath = "LuaUI/Shaders/range_overview_gl4.vert.glsl",
 	fssrcpath = "LuaUI/Shaders/range_overview_gl4.frag.glsl",
 	shaderConfig = {
@@ -207,7 +208,7 @@ local shaderSourceCache = {
 		STATICUNITS = 0,
 		DEBUG = 0,
 		MOUSEOVERALPHAMULTIPLIER = 1.0,
-		RANGE_OVERVIEW_EXTRAS = 1,
+		RANGE_OVERVIEW_EXTRAS = 0,
 	},
 	uniformInt = {
 		heightmapTex = 0,
@@ -225,7 +226,8 @@ local shaderSourceCache = {
 		pipVisibleArea = {0, 1, 0, 1},
 		timeSeconds = 0.0,
 		tacticalAlphaMult = 1.0,
-		bucketMode = 0.0, -- 0 selected, 1 mine persistent, 2 other persistent
+		bucketMode = 0.0,
+		drawAlpha = 1.0,
 	},
 }
 
@@ -246,19 +248,19 @@ end
 local function initGL4()
 	circleVBO = InstanceVBOTable.makeCircleVBO(circleSegments)
 
-	for _, bucket in ipairs({ "selected", "mine", "other" }) do
+	for _, bucket in ipairs({ "selected", "mine", "other", "mouseover" }) do
 		for _, className in ipairs(rangeClasses) do
 			rangeVAOs[bucket][className] = InstanceVBOTable.makeInstanceVBOTable(
-					circleInstanceVBOLayout,
-					24,
-					bucket .. "_" .. className .. "_rangeoverview_gl4",
-					6
+				circleInstanceVBOLayout,
+				24,
+				bucket .. "_" .. className .. "_rangeoverview_gl4",
+				6
 			)
 
 			rangeVAOs[bucket][className].vertexVBO = circleVBO
 			rangeVAOs[bucket][className].VAO = InstanceVBOTable.makeVAOandAttach(
-					rangeVAOs[bucket][className].vertexVBO,
-					rangeVAOs[bucket][className].instanceVBO
+				rangeVAOs[bucket][className].vertexVBO,
+				rangeVAOs[bucket][className].instanceVBO
 			)
 		end
 	end
@@ -271,17 +273,23 @@ end
 --------------------------------------------------------------------------------
 
 local myTeamID = spGetMyTeamID()
+local myAllyTeamID = spGetMyAllyTeamID()
+local gameFrame = 0
+local isBuilding = false
 
 local selectedUnits = {}
-local selUnits = {}
+local selectedSet = {}
 local selections = {}
 local persistentUnitsMine = {}
 local persistentUnitsOther = {}
+local mouseovers = {}
+local mouseoverUnitID = nil
+
 local selUnitCount = 0
 local selBuilderCount = 0
-local updateSelection = false
-local gameFrame = 0
-local isBuilding = false
+
+local dirtySelection = false
+local dirtyBuildState = false
 
 local cacheTable = {}
 for i = 1, 24 do
@@ -292,30 +300,41 @@ end
 -- Helpers
 --------------------------------------------------------------------------------
 
-local function ClassAlwaysVisible(className)
-	local cfg = colorConfig[className]
-	return cfg and cfg.alwaysvisible == true
+local classOffsets = {
+	attack = 1,
+	radar  = 2,
+	sensor = 3,
+	sight  = 4,
+	build  = 5,
+}
+
+local drawOrder = { "build", "radar", "sensor", "sight", "attack" }
+
+local function IsRingClassEnabled(className)
+	return ringEnabled[className] ~= false
 end
 
-local function AnyAlwaysVisibleClass()
-	for _, className in ipairs(rangeClasses) do
-		if ClassAlwaysVisible(className) then
+local function WantsClassForMode(mode, className)
+	if not IsRingClassEnabled(className) then
+		return false
+	end
+	if mode == "selected" or mode == "mouseover" then
+		if className == "build" then
 			return true
 		end
+		return className == "attack" or className == "radar" or className == "sensor" or className == "sight"
+	elseif mode == "persistent_sight" then
+		return className == "sight"
+	elseif mode == "persistent_attack" then
+		return className == "attack"
+	elseif mode == "persistent_combo" then
+		return className == "sight" or className == "attack"
 	end
 	return false
 end
 
-local function RebuildPersistentDefFlags()
-	for udid in pairs(UnitDefs) do
-		local has = false
-		if ClassAlwaysVisible("attack") and (unitMaxWeaponRange[udid] or 0) > 0 then has = true end
-		if ClassAlwaysVisible("radar")  and (unitRadarDistance[udid] or 0) > 0 then has = true end
-		if ClassAlwaysVisible("sensor") and (unitSeismicDistance[udid] or 0) > 0 then has = true end
-		if ClassAlwaysVisible("sight")  and (unitSightDistance[udid] or 0) > 0 then has = true end
-		if ClassAlwaysVisible("build")  and unitBuilder[udid] and (unitBuildDistance[udid] or 0) > 0 then has = true end
-		unitHasPersistentAlwaysVisible[udid] = has
-	end
+local function IsAllied(unitID)
+	return spGetUnitAllyTeam(unitID) == myAllyTeamID
 end
 
 local function GetAttackRange(unitID, unitDefID)
@@ -339,67 +358,17 @@ local function GetAttackRange(unitID, unitDefID)
 	return best
 end
 
-local function classToStencilMask(className)
-	if className == "attack" then return 1 end
-	if className == "radar"  then return 2 end
-	if className == "sensor" then return 4 end
-	if className == "sight"  then return 8 end
-	if className == "build"  then return 16 end
-	return 1
-end
-
-local function classToAdditionalType(className)
-	if className == "attack" then
-		return 1
-	end
-	return 2
-end
-
-local function classToFlags(className)
-	local cfg = colorConfig[className]
-	if not cfg then
-		return 0
-	end
-
-	local flags = 0
-	if (cfg.stipple or 0) ~= 0 then
-		flags = flags + 1
-	end
-	if (cfg.sweep or 0) ~= 0 then
-		flags = flags + 2
-	end
-	return flags
-end
-
-local function classToStipplePattern(className)
-	local cfg = colorConfig[className]
-	if not cfg then
-		return 0
-	end
-	return cfg.stipplePattern or 0
-end
-
-local function IsBuilderSelected()
-	for i = 1, #selectedUnits do
-		local unitDefID = spGetUnitDefID(selectedUnits[i])
-		if unitDefID and unitBuilder[unitDefID] then
-			return true
-		end
-	end
-	return false
-end
-
 local function ShouldShowBuildRange(unitDefID)
 	if not unitBuilder[unitDefID] then
 		return false
 	end
-	if showBuildForSelectedBuildersOnly and IsBuilderSelected() then
-		return true
-	end
 	if showBuildWhilePlacing and isBuilding then
 		return true
 	end
-	return not showBuildForSelectedBuildersOnly
+	if showBuildForSelectedBuildersOnly then
+		return selBuilderCount > 0
+	end
+	return true
 end
 
 local function GetCameraHeightFactor()
@@ -407,6 +376,7 @@ local function GetCameraHeightFactor()
 	if not cy then
 		return 1.0, 1.0
 	end
+
 	local gh = spGetGroundHeight(cx, cz)
 	local camHeight = cy - gh
 
@@ -423,11 +393,34 @@ local function GetCameraHeightFactor()
 	return alphaMult, thicknessMult
 end
 
-local function MakeInstanceID(unitID, classOffset)
-	return unitID * 16 + classOffset
+local function MakeInstanceID(unitID, className, bucket)
+	local bucketBase = 0
+	if bucket == "mine" then bucketBase = 100000000 end
+	if bucket == "other" then bucketBase = 200000000 end
+	if bucket == "mouseover" then bucketBase = 300000000 end
+	return bucketBase + unitID * 16 + (classOffsets[className] or 0)
 end
 
-local function AddRangeInstance(unitID, className, radius, x, z, vaoBucket)
+local function classToStencilMask(className)
+	if className == "attack" then return 1 end
+	if className == "radar"  then return 2 end
+	if className == "sensor" then return 4 end
+	if className == "sight"  then return 8 end
+	if className == "build"  then return 16 end
+	return 1
+end
+
+local function bucketModeValue(bucket)
+	if bucket == "selected" then return 0.0 end
+	if bucket == "mine" then return 1.0 end
+	if bucket == "other" then return 2.0 end
+	return 0.0
+end
+
+local function AddRangeInstance(unitID, className, radius, x, z, vaoBucket, alphaScale)
+	if not IsRingClassEnabled(className) then
+		return nil
+	end
 	if not radius or radius <= 0 then
 		return nil
 	end
@@ -437,6 +430,8 @@ local function AddRangeInstance(unitID, className, radius, x, z, vaoBucket)
 		return nil
 	end
 
+	alphaScale = alphaScale or 1.0
+
 	cacheTable[1]  = x
 	cacheTable[2]  = 0
 	cacheTable[3]  = z
@@ -445,7 +440,7 @@ local function AddRangeInstance(unitID, className, radius, x, z, vaoBucket)
 	cacheTable[5]  = cfg.color[1]
 	cacheTable[6]  = cfg.color[2]
 	cacheTable[7]  = cfg.color[3]
-	cacheTable[8]  = cfg.color[4]
+	cacheTable[8]  = cfg.color[4] * alphaScale
 
 	cacheTable[9]  = cfg.fadeparams[1]
 	cacheTable[10] = cfg.fadeparams[2]
@@ -458,142 +453,216 @@ local function AddRangeInstance(unitID, className, radius, x, z, vaoBucket)
 	cacheTable[16] = 0
 
 	cacheTable[17] = cfg.groupselectionfadescale
-	cacheTable[18] = classToAdditionalType(className)
-	cacheTable[19] = classToFlags(className)
-	cacheTable[20] = classToStipplePattern(className)
+	cacheTable[18] = (className == "attack") and 1 or 2
+	cacheTable[19] = 0
+	cacheTable[20] = 0
 
 	cacheTable[21] = unitID
 	cacheTable[22] = 0
 	cacheTable[23] = 0
 	cacheTable[24] = 0
 
-	local classOffset = ({
-		attack = 1,
-		radar  = 2,
-		sensor = 3,
-		sight  = 4,
-		build  = 5,
-	})[className] or 0
-
-	local instanceID = MakeInstanceID(unitID, classOffset)
+	local instanceID = MakeInstanceID(unitID, className, vaoBucket)
 	pushElementInstance(rangeVAOs[vaoBucket][className], cacheTable, instanceID, true, false, unitID)
 	return instanceID
 end
 
-local function AddUnitToCollection(unitID, collection, isPersistent)
-	if collection[unitID] then
-		return
-	end
-
-	local unitDefID = spGetUnitDefID(unitID)
-	if not unitDefID then
-		return
-	end
-
-	local x, _, z = spGetUnitPosition(unitID, true, true)
-	if not x then
-		return
-	end
-
-	local vaoBucket
-	if collection == selections then
-		vaoBucket = "selected"
-	elseif collection == persistentUnitsMine then
-		vaoBucket = "mine"
-	else
-		vaoBucket = "other"
-	end
-
-	local entry = {
-		unitDefID = unitDefID,
-		vaokeys = {},
-		vaoBucket = vaoBucket,
-	}
-
-	local function maybeAdd(className, radius)
-		if isPersistent and not ClassAlwaysVisible(className) then
-			return
-		end
-		local id = AddRangeInstance(unitID, className, radius, x, z, vaoBucket)
-		if id then
-			entry.vaokeys[id] = className
-		end
-	end
-
-	-- Selected units can compute all rings.
-	-- Persistent units avoid unnecessary work for classes that are not alwaysvisible.
-	if not isPersistent or ClassAlwaysVisible("attack") then
-		maybeAdd("attack", GetAttackRange(unitID, unitDefID))
-	end
-	if not isPersistent or ClassAlwaysVisible("radar") then
-		maybeAdd("radar", unitRadarDistance[unitDefID] or 0)
-	end
-	if not isPersistent or ClassAlwaysVisible("sensor") then
-		maybeAdd("sensor", unitSeismicDistance[unitDefID] or 0)
-	end
-	if not isPersistent or ClassAlwaysVisible("sight") then
-		maybeAdd("sight", unitSightDistance[unitDefID] or 0)
-	end
-	if not isPersistent or ClassAlwaysVisible("build") then
-		local buildRange = ShouldShowBuildRange(unitDefID) and (unitBuildDistance[unitDefID] or 0) or 0
-		maybeAdd("build", buildRange)
-	end
-
-	collection[unitID] = entry
-end
-
 local function RemoveUnitFromCollection(unitID, collection)
 	local entry = collection[unitID]
-	if not entry then
-		return
-	end
+	if not entry then return end
 
-	for instanceID, vaoKey in pairs(entry.vaokeys) do
-		popElementInstance(rangeVAOs[entry.vaoBucket][vaoKey], instanceID)
+	for className, instanceID in pairs(entry.instances) do
+		popElementInstance(rangeVAOs[entry.vaoBucket][className], instanceID)
 	end
 
 	collection[unitID] = nil
 end
 
-local RefreshSelectedUnits
+local function AddUnitToCollection(unitID, collection, mode)
+	if collection[unitID] then return end
 
-local function RefreshPersistentUnits()
-	if not AnyAlwaysVisibleClass() then
-		for unitID in pairs(persistentUnitsMine) do
-			RemoveUnitFromCollection(unitID, persistentUnitsMine)
-		end
-		for unitID in pairs(persistentUnitsOther) do
-			RemoveUnitFromCollection(unitID, persistentUnitsOther)
-		end
-		return
+	local unitDefID = spGetUnitDefID(unitID)
+	if not unitDefID then return end
+
+	local x, _, z = spGetUnitPosition(unitID, true, true)
+	if not x then return end
+
+	local vaoBucket = "selected"
+	if collection == persistentUnitsMine then
+		vaoBucket = "mine"
+	elseif collection == persistentUnitsOther then
+		vaoBucket = "other"
+	elseif collection == mouseovers then
+		vaoBucket = "mouseover"
 	end
 
+	local alphaScale = (vaoBucket == "mouseover") and 1.15 or 1.0
+	local entry = {
+		unitDefID = unitDefID,
+		vaoBucket = vaoBucket,
+		instances = {},
+	}
+
+	local function maybeAdd(className, radius)
+		if not WantsClassForMode(mode, className) then
+			return
+		end
+		local instanceID = AddRangeInstance(unitID, className, radius, x, z, vaoBucket, alphaScale)
+		if instanceID then
+			entry.instances[className] = instanceID
+		end
+	end
+
+	if mode == "selected" then
+		maybeAdd("attack", GetAttackRange(unitID, unitDefID))
+		maybeAdd("radar",  unitRadarDistance[unitDefID] or 0)
+		maybeAdd("sensor", unitSeismicDistance[unitDefID] or 0)
+		maybeAdd("sight",  unitSightDistance[unitDefID] or 0)
+		if ShouldShowBuildRange(unitDefID) then
+			maybeAdd("build", unitBuildDistance[unitDefID] or 0)
+		end
+	elseif mode == "persistent_sight" then
+		maybeAdd("sight", unitSightDistance[unitDefID] or 0)
+	elseif mode == "persistent_attack" then
+		maybeAdd("attack", GetAttackRange(unitID, unitDefID))
+	elseif mode == "persistent_combo" then
+		maybeAdd("sight", unitSightDistance[unitDefID] or 0)
+		maybeAdd("attack", GetAttackRange(unitID, unitDefID))
+	elseif mode == "mouseover" then
+		maybeAdd("attack", GetAttackRange(unitID, unitDefID))
+		maybeAdd("radar",  unitRadarDistance[unitDefID] or 0)
+		maybeAdd("sensor", unitSeismicDistance[unitDefID] or 0)
+		maybeAdd("sight",  unitSightDistance[unitDefID] or 0)
+		if ShouldShowBuildRange(unitDefID) then
+			maybeAdd("build", unitBuildDistance[unitDefID] or 0)
+		end
+	end
+
+	if next(entry.instances) then
+		collection[unitID] = entry
+	end
+end
+
+local function RefreshSelectedUnits()
+	local newSet = {}
+	for i = 1, #selectedUnits do
+		newSet[selectedUnits[i]] = true
+	end
+
+	for unitID in pairs(selectedSet) do
+		if not newSet[unitID] then
+			RemoveUnitFromCollection(unitID, selections)
+		end
+	end
+
+	if selUnitCount < selectionDisableThreshold then
+		for i = 1, #selectedUnits do
+			local unitID = selectedUnits[i]
+			if not selections[unitID] then
+				if persistentUnitsMine[unitID] then
+					RemoveUnitFromCollection(unitID, persistentUnitsMine)
+				end
+				if persistentUnitsOther[unitID] then
+					RemoveUnitFromCollection(unitID, persistentUnitsOther)
+				end
+				AddUnitToCollection(unitID, selections, "selected")
+			end
+		end
+	else
+		for unitID in pairs(selections) do
+			RemoveUnitFromCollection(unitID, selections)
+		end
+	end
+
+	selectedSet = newSet
+end
+
+local function RefreshSelectedBuildRingsOnly()
+	for unitID, entry in pairs(selections) do
+		local unitDefID = entry.unitDefID
+		local hasBuild = entry.instances.build ~= nil
+		local shouldHave = IsRingClassEnabled("build") and ShouldShowBuildRange(unitDefID) and (unitBuildDistance[unitDefID] or 0) > 0
+
+		if hasBuild and not shouldHave then
+			popElementInstance(rangeVAOs[entry.vaoBucket].build, entry.instances.build)
+			entry.instances.build = nil
+		elseif shouldHave and not hasBuild then
+			local x, _, z = spGetUnitPosition(unitID, true, true)
+			if x then
+				entry.instances.build = AddRangeInstance(unitID, "build", unitBuildDistance[unitDefID], x, z, entry.vaoBucket)
+			end
+		end
+	end
+end
+
+local function UpdateSelectionState()
+	selectedUnits = spGetSelectedUnits()
+	selUnitCount = #selectedUnits
+
+	selBuilderCount = 0
+	for i = 1, #selectedUnits do
+		local udid = spGetUnitDefID(selectedUnits[i])
+		if udid and unitBuilder[udid] then
+			selBuilderCount = selBuilderCount + 1
+		end
+	end
+
+	RefreshSelectedUnits()
+	dirtySelection = false
+end
+
+local function RefreshPersistentUnits()
 	local cx, _, cz = spGetCameraPosition()
 	local visibleUnits = spGetVisibleUnits(-1, nil, false)
-	local stillVisibleMine = {}
-	local stillVisibleOther = {}
+
+	local keepMine = {}
+	local keepOther = {}
 
 	for i = 1, #visibleUnits do
 		local unitID = visibleUnits[i]
-		local unitDefID = spGetUnitDefID(unitID)
+		if not selectedSet[unitID] and unitID ~= mouseoverUnitID then
+			local unitDefID = spGetUnitDefID(unitID)
+			if unitDefID then
+				local x, _, z = spGetUnitPosition(unitID, true, true)
+				if x then
+					local dx = x - cx
+					local dz = z - cz
+					if (dx * dx + dz * dz) <= persistentCullDistanceSq then
+						local allied = IsAllied(unitID)
+						local isStaticDefense = unitIsStaticDefense[unitDefID]
+						local wantsAlliedSight = allied and persistentAlliedSight and (unitSightDistance[unitDefID] or 0) > 0
+						local wantsAlliedDefenseAttack = allied and persistentAlliedDefenseAttack and persistentStaticDefenseAttack and isStaticDefense
+						local wantsEnemyDefenseAttack = (not allied) and persistentEnemyDefenseAttack and persistentStaticDefenseAttack and isStaticDefense
 
-		if unitDefID and unitHasPersistentAlwaysVisible[unitDefID] and not selections[unitID] then
-			local x, _, z = spGetUnitPosition(unitID, true, true)
-			if x then
-				local dx = x - cx
-				local dz = z - cz
-				if (dx * dx + dz * dz) <= persistentCullDistanceSq then
-					local unitTeam = spGetUnitTeam(unitID)
-
-					if unitTeam == myTeamID then
-						stillVisibleMine[unitID] = true
-						if not persistentUnitsMine[unitID] then
-							AddUnitToCollection(unitID, persistentUnitsMine, true)
-						end
-					else
-						stillVisibleOther[unitID] = true
-						if not persistentUnitsOther[unitID] then
-							AddUnitToCollection(unitID, persistentUnitsOther, true)
+						if allied and (wantsAlliedSight or wantsAlliedDefenseAttack) then
+							keepMine[unitID] = true
+							local desiredMode = (wantsAlliedSight and wantsAlliedDefenseAttack) and "persistent_combo"
+								or (wantsAlliedDefenseAttack and "persistent_attack")
+								or "persistent_sight"
+							local entry = persistentUnitsMine[unitID]
+							local needsSight = desiredMode == "persistent_sight" or desiredMode == "persistent_combo"
+							local needsAttack = desiredMode == "persistent_attack" or desiredMode == "persistent_combo"
+							if entry then
+								local hasSight = entry.instances.sight ~= nil
+								local hasAttack = entry.instances.attack ~= nil
+								if hasSight ~= needsSight or hasAttack ~= needsAttack then
+									RemoveUnitFromCollection(unitID, persistentUnitsMine)
+									AddUnitToCollection(unitID, persistentUnitsMine, desiredMode)
+								end
+							else
+								AddUnitToCollection(unitID, persistentUnitsMine, desiredMode)
+							end
+						elseif wantsEnemyDefenseAttack then
+							keepOther[unitID] = true
+							if persistentUnitsOther[unitID] then
+								local entry = persistentUnitsOther[unitID]
+								if not entry.instances.attack or entry.instances.sight then
+									RemoveUnitFromCollection(unitID, persistentUnitsOther)
+									AddUnitToCollection(unitID, persistentUnitsOther, "persistent_attack")
+								end
+							else
+								AddUnitToCollection(unitID, persistentUnitsOther, "persistent_attack")
+							end
 						end
 					end
 				end
@@ -602,19 +671,20 @@ local function RefreshPersistentUnits()
 	end
 
 	for unitID in pairs(persistentUnitsMine) do
-		if not stillVisibleMine[unitID] or selections[unitID] then
+		if not keepMine[unitID] then
 			RemoveUnitFromCollection(unitID, persistentUnitsMine)
 		end
 	end
 
 	for unitID in pairs(persistentUnitsOther) do
-		if not stillVisibleOther[unitID] or selections[unitID] then
+		if not keepOther[unitID] then
 			RemoveUnitFromCollection(unitID, persistentUnitsOther)
 		end
 	end
 end
 
-local function RebuildCollections()
+
+local function FullRebuildAllCollections()
 	for unitID in pairs(selections) do
 		RemoveUnitFromCollection(unitID, selections)
 	end
@@ -624,98 +694,94 @@ local function RebuildCollections()
 	for unitID in pairs(persistentUnitsOther) do
 		RemoveUnitFromCollection(unitID, persistentUnitsOther)
 	end
-	selUnits = {}
-	RefreshSelectedUnits()
-	RefreshPersistentUnits()
+	for unitID in pairs(mouseovers) do
+		RemoveUnitFromCollection(unitID, mouseovers)
+	end
+	selectedSet = {}
+	mouseoverUnitID = nil
+	dirtySelection = true
+	dirtyBuildState = true
 end
 
-RefreshSelectedUnits = function()
-	local newSelUnits = {}
-
-	for i = 1, #selectedUnits do
-		local unitID = selectedUnits[i]
-		newSelUnits[unitID] = true
-
-		if not selUnits[unitID] and selUnitCount < selectionDisableThreshold then
-			if persistentUnitsMine[unitID] then
-				RemoveUnitFromCollection(unitID, persistentUnitsMine)
-			end
-			if persistentUnitsOther[unitID] then
-				RemoveUnitFromCollection(unitID, persistentUnitsOther)
-			end
-			AddUnitToCollection(unitID, selections, false)
-		end
+-- Optional helper for later UI/option wiring:
+-- WG.RangeOverviewSetRingEnabled("radar", false)
+function widget:SetRingEnabled(className, enabled)
+	if ringEnabled[className] == nil then
+		return false
 	end
-
-	for unitID in pairs(selUnits) do
-		if not newSelUnits[unitID] then
-			RemoveUnitFromCollection(unitID, selections)
-
-			if AnyAlwaysVisibleClass() then
-				local unitDefID = spGetUnitDefID(unitID)
-				if unitDefID and unitHasPersistentAlwaysVisible[unitDefID] then
-					local unitTeam = spGetUnitTeam(unitID)
-					if unitTeam == myTeamID then
-						AddUnitToCollection(unitID, persistentUnitsMine, true)
-					else
-						AddUnitToCollection(unitID, persistentUnitsOther, true)
-					end
-				end
-			end
-		end
+	enabled = not not enabled
+	if ringEnabled[className] == enabled then
+		return true
 	end
-
-	selUnits = newSelUnits
+	ringEnabled[className] = enabled
+	FullRebuildAllCollections()
+	return true
 end
 
-local function UpdateSelectedUnits()
-	selectedUnits = spGetSelectedUnits()
-	selUnitCount = #selectedUnits
+function widget:GetRingEnabled(className)
+	return ringEnabled[className]
+end
 
-	selBuilderCount = 0
-	for i = 1, #selectedUnits do
-		local udid = spGetUnitDefID(selectedUnits[i])
-		if udid and unitBuilder[udid] and ShouldShowBuildRange(udid) then
-			selBuilderCount = selBuilderCount + 1
+local function RefreshMouseoverUnit()
+	if not enableMouseoverRings then
+		if mouseoverUnitID then
+			RemoveUnitFromCollection(mouseoverUnitID, mouseovers)
+			mouseoverUnitID = nil
 		end
+		return
 	end
 
-	updateSelection = false
-	RefreshSelectedUnits()
-	RefreshPersistentUnits()
+	local mx, my = spGetMouseState()
+	local hitType, hitData = spTraceScreenRay(mx, my)
+	local newMouseover = (hitType == "unit") and hitData or nil
+
+	if newMouseover == mouseoverUnitID then
+		return
+	end
+
+	if mouseoverUnitID and mouseovers[mouseoverUnitID] then
+		RemoveUnitFromCollection(mouseoverUnitID, mouseovers)
+	end
+	mouseoverUnitID = nil
+
+	if newMouseover and not selectedSet[newMouseover] then
+		if persistentUnitsMine[newMouseover] then
+			RemoveUnitFromCollection(newMouseover, persistentUnitsMine)
+		end
+		if persistentUnitsOther[newMouseover] then
+			RemoveUnitFromCollection(newMouseover, persistentUnitsOther)
+		end
+		AddUnitToCollection(newMouseover, mouseovers, "mouseover")
+		mouseoverUnitID = newMouseover
+	end
 end
 
 --------------------------------------------------------------------------------
 -- Drawing
 --------------------------------------------------------------------------------
 
-local function DRAWRINGS(bucket, primitiveType, thicknessKey, thicknessMult)
-	local ordered = { "build", "radar", "sensor", "sight", "attack" }
+local function DrawRingBucket(bucket, primitiveType, thicknessKey, thicknessMult)
+	for i = 1, #drawOrder do
+		local className = drawOrder[i]
+		if IsRingClassEnabled(className) then
+			local vao = rangeVAOs[bucket][className]
 
-	for i = 1, #ordered do
-		local className = ordered[i]
-		local vao = rangeVAOs[bucket][className]
-
-		if vao and vao.VAO and vao.usedElements and vao.usedElements > 0 then
+			if vao and vao.VAO and vao.usedElements and vao.usedElements > 0 then
 			if thicknessKey then
-				local width = colorConfig[className] and colorConfig[className][thicknessKey]
-				if width then
-					glLineWidth(width * thicknessMult)
+				local width = colorConfig[className][thicknessKey]
+				if bucket == "mouseover" then
+					width = width * 1.15
 				end
+				glLineWidth(width * thicknessMult)
 			end
 
 			local stencilMask = classToStencilMask(className)
 			glStencilMask(stencilMask)
 			glStencilFunc(GL_NOTEQUAL, stencilMask, stencilMask)
 			vao.VAO:DrawArrays(primitiveType, circleSegments, 0, vao.usedElements, 0)
+			end
 		end
 	end
-end
-
-local function bucketModeValue(bucket)
-	if bucket == "selected" then return 0.0 end
-	if bucket == "mine" then return 1.0 end
-	return 2.0
 end
 
 local function DrawStencilPass(bucket, alphaMult, thicknessMult, timeSeconds)
@@ -737,22 +803,21 @@ local function DrawStencilPass(bucket, alphaMult, thicknessMult, timeSeconds)
 	rangeShader:SetUniform("tacticalAlphaMult", alphaMult)
 	rangeShader:SetUniform("bucketMode", bucketModeValue(bucket))
 
-	DRAWRINGS(bucket, GL_TRIANGLE_FAN, nil, thicknessMult)
+	DrawRingBucket(bucket, GL_TRIANGLE_FAN, nil, thicknessMult)
 
 	glColorMask(true, true, true, true)
 	glStencilMask(0)
 	glDepthTest(GL_LEQUAL)
 
-	local pulse = 1.0
-	if enableAnimatedGlow then
-		pulse = 0.92 + 0.08 * mathSin(timeSeconds * 2.2)
+	local outlineAlpha = colorConfig.externalalpha * alphaMult
+	if bucket == "mouseover" then
+		outlineAlpha = outlineAlpha * 1.15
 	end
-
-	rangeShader:SetUniform("lineAlphaUniform", colorConfig.externalalpha * alphaMult * pulse)
+	rangeShader:SetUniform("lineAlphaUniform", outlineAlpha)
 	rangeShader:SetUniform("drawMode", 1.0)
 	rangeShader:SetUniform("drawAlpha", 1.0)
 
-	DRAWRINGS(bucket, GL_LINE_LOOP, "externallinethickness", thicknessMult)
+	DrawRingBucket(bucket, GL_LINE_LOOP, "externallinethickness", thicknessMult)
 
 	glStencilTest(false)
 	glStencilMask(255)
@@ -760,41 +825,48 @@ local function DrawStencilPass(bucket, alphaMult, thicknessMult, timeSeconds)
 	glClear(GL_STENCIL_BUFFER_BIT)
 end
 
-local function DrawInnerPass(bucket, alphaMult, thicknessMult)
-	rangeShader:SetUniform("lineAlphaUniform", colorConfig.internalalpha * alphaMult)
-	rangeShader:SetUniform("drawMode", 2.0)
-	rangeShader:SetUniform("fadeDistOffset", 0)
-	rangeShader:SetUniform("cannonmode", 0)
-	rangeShader:SetUniform("bucketMode", bucketModeValue(bucket))
-
-	DRAWRINGS(bucket, GL_LINE_LOOP, "internallinethickness", thicknessMult)
-end
 
 --------------------------------------------------------------------------------
 -- Widget callins
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	WG.RangeOverviewSetRingEnabled = function(className, enabled)
+		return widget:SetRingEnabled(className, enabled)
+	end
+	WG.RangeOverviewGetRingEnabled = function(className)
+		return widget:GetRingEnabled(className)
+	end
+
 	if not initGL4() then
 		widgetHandler:RemoveWidget(self)
 		return
 	end
+
 	myTeamID = spGetMyTeamID()
-	RebuildPersistentDefFlags()
-	updateSelection = true
+	myAllyTeamID = spGetMyAllyTeamID()
+	dirtySelection = true
+	dirtyBuildState = true
 end
 
 function widget:Shutdown()
+	if WG.RangeOverviewSetRingEnabled then
+		WG.RangeOverviewSetRingEnabled = nil
+	end
+	if WG.RangeOverviewGetRingEnabled then
+		WG.RangeOverviewGetRingEnabled = nil
+	end
 end
 
 function widget:SelectionChanged()
-	updateSelection = true
+	dirtySelection = true
 end
 
 function widget:PlayerChanged()
 	myTeamID = spGetMyTeamID()
-	updateSelection = true
-	RebuildCollections()
+	myAllyTeamID = spGetMyAllyTeamID()
+	dirtySelection = true
+	RefreshPersistentUnits()
 end
 
 function widget:GameFrame(gf)
@@ -808,35 +880,78 @@ function widget:VisibleUnitRemoved(unitID)
 	if persistentUnitsOther[unitID] then
 		RemoveUnitFromCollection(unitID, persistentUnitsOther)
 	end
+	if mouseovers[unitID] then
+		RemoveUnitFromCollection(unitID, mouseovers)
+		if mouseoverUnitID == unitID then
+			mouseoverUnitID = nil
+		end
+	end
+end
+
+function widget:UnitDestroyed(unitID)
+	if selections[unitID] then
+		RemoveUnitFromCollection(unitID, selections)
+	end
+	if persistentUnitsMine[unitID] then
+		RemoveUnitFromCollection(unitID, persistentUnitsMine)
+	end
+	if persistentUnitsOther[unitID] then
+		RemoveUnitFromCollection(unitID, persistentUnitsOther)
+	end
+	if mouseovers[unitID] then
+		RemoveUnitFromCollection(unitID, mouseovers)
+	end
+	selectedSet[unitID] = nil
+	if mouseoverUnitID == unitID then
+		mouseoverUnitID = nil
+	end
 end
 
 function widget:Update()
-	if updateSelection and gameFrame % 3 == 0 then
-		UpdateSelectedUnits()
+	if dirtySelection and gameFrame % 3 == 0 then
+		UpdateSelectionState()
+		dirtyBuildState = true
 	end
 
 	local _, cmdID = spGetActiveCommand()
 	local buildingNow = (cmdID ~= nil and cmdID < 0)
-
 	if buildingNow ~= isBuilding then
 		isBuilding = buildingNow
-		RebuildCollections()
+		dirtyBuildState = true
+	end
+
+	if dirtyBuildState then
+		RefreshSelectedBuildRingsOnly()
+		if mouseoverUnitID and mouseovers[mouseoverUnitID] then
+			RemoveUnitFromCollection(mouseoverUnitID, mouseovers)
+			AddUnitToCollection(mouseoverUnitID, mouseovers, "mouseover")
+		end
+		dirtyBuildState = false
 	end
 
 	if gameFrame % persistentRefreshFrames == 0 then
 		RefreshPersistentUnits()
 	end
+
+	if gameFrame % mouseoverRefreshFrames == 0 then
+		RefreshMouseoverUnit()
+	end
 end
 
 function widget:DrawWorld()
-	if spIsGUIHidden() then return end
+	if spIsGUIHidden() then
+		return
+	end
 
 	local hasAny =
-	(selUnitCount > 0) or
-			(next(persistentUnitsMine) ~= nil) or
-			(next(persistentUnitsOther) ~= nil)
+		(next(selections) ~= nil) or
+		(next(persistentUnitsMine) ~= nil) or
+		(next(persistentUnitsOther) ~= nil) or
+		(next(mouseovers) ~= nil)
 
-	if not hasAny then return end
+	if not hasAny then
+		return
+	end
 
 	local alphaMult, thicknessMult = GetCameraHeightFactor()
 	local timeSeconds = gameFrame / 30.0
@@ -848,18 +963,12 @@ function widget:DrawWorld()
 	rangeShader:Activate()
 
 	if colorConfig.drawStencil then
-		DrawStencilPass("selected", alphaMult, thicknessMult, timeSeconds)
-		DrawStencilPass("mine",     alphaMult, thicknessMult, timeSeconds)
-		DrawStencilPass("other",    alphaMult, thicknessMult, timeSeconds)
+		DrawStencilPass("selected",  alphaMult, thicknessMult, timeSeconds)
+		DrawStencilPass("mine",      alphaMult, thicknessMult, timeSeconds)
+		DrawStencilPass("other",     alphaMult, thicknessMult, timeSeconds)
+		DrawStencilPass("mouseover", alphaMult, thicknessMult, timeSeconds)
 	end
 
-	if colorConfig.drawInnerRings then
-		DrawInnerPass("selected", alphaMult, thicknessMult)
-		if not selectedOnlyInnerRings then
-			DrawInnerPass("mine",  alphaMult, thicknessMult)
-			DrawInnerPass("other", alphaMult, thicknessMult)
-		end
-	end
 
 	rangeShader:Deactivate()
 

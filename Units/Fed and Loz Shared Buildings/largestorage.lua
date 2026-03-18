@@ -70,6 +70,7 @@ local unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole				  = "Economy",
+		buildmenucategory		  = "Economy",
 		simpleaiunittype          = "storage",
 		iseco                     = 1,
 		RequireTech				  = [[tech3]],

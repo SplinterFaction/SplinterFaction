@@ -70,6 +70,7 @@ local unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole				  = "Economy",
+		buildmenucategory		  = "Economy",
 		simpleaiunittype          = "energygenerator",
 		iseco                     = 1,
 		needed_cover              = 2,

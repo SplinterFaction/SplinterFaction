@@ -65,6 +65,7 @@ unitDef                     = {
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",
+		buildmenucategory		  = "Economy",
 		metal_maker               = true,
 		metal_extractor           = true, --Keeping this flag for compatibility
 		buildtimemultiplier       = buildtimemultiplier,

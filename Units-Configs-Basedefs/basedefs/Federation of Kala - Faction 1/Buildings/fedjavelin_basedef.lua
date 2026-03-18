@@ -63,6 +63,7 @@ unitDef                     = {
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Medium Range Anti-Air",
+		buildmenucategory		  = "Combat",
 		unitrole_sound            = "turret",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,

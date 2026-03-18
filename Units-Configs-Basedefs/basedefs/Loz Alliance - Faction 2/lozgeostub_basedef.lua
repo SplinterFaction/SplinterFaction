@@ -70,6 +70,7 @@ unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole 				  = "Construction Stub",
+		buildmenucategory		  = "Utility",
 		RequireTech              = tech,
 		death_sounds              = "generic",
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 

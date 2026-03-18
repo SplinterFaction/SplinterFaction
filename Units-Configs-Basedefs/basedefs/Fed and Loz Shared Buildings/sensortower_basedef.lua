@@ -71,6 +71,7 @@ unitDef                     = {
 	customParams                  = {
 		unittype				  = "building",
 		unitrole				  = "Seismic Sensor",
+		buildmenucategory		  = "Utility",
 		--supply_cost               = supply,
 		death_sounds              = "generic",
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 

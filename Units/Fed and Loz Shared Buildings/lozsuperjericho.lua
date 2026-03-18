@@ -78,6 +78,7 @@ local unitDef                     = {
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole 				  = "Support Building",
+		buildmenucategory		  = "Combat",
 		needed_cover              = 1,
 		death_sounds              = "generic",
 		factionname	              = "Neutral",

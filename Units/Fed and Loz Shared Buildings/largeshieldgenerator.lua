@@ -84,6 +84,7 @@ local unitDef                     = {
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole 				  = "Support Building",
+		buildmenucategory		  = "Utility",
 		needed_cover              = 1,
 		death_sounds              = "generic",
 		shield_power			  = shield1Power,

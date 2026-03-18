@@ -68,6 +68,7 @@ unitDef                      = {
 	customParams                   = {
 		unittype				  = "building",
 		unitrole 				  = "Factory",
+		buildmenucategory		  = "Production",
 		RequireTech              = tech,
 		death_sounds               = "generic",
 		normaltex                 = "unittextures/lego2skin_explorernormal.dds", 
