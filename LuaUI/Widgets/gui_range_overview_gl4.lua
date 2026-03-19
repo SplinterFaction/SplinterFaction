@@ -6,7 +6,7 @@ function widget:GetInfo()
 		date    = "2026-03-17",
 		license = "GPL v2 or later",
 		layer   = -90,
-		enabled = false,
+		enabled = true,
 		depends = { "gl4" },
 	}
 end
@@ -20,7 +20,7 @@ local tacticalFadeStart = 2800
 local tacticalFadeEnd   = 8000
 
 -- Increase for smoother circles, decrease for fewer vertices and slightly better performance
-local circleDivs = 48
+local circleDivs = 64
 
 local showBuildForSelectedBuildersOnly = true
 local showBuildWhilePlacing            = true
@@ -51,9 +51,9 @@ local colorConfig = {
 	drawStencil    = true,
 	drawInnerRings = false,	-- disabled: merged outer rings only
 
-	internalalpha = 0,
-	fill_alpha    = 0,
-	externalalpha = 1,
+	internalalpha = 0.045,
+	fill_alpha    = 0.050,
+	externalalpha = 0.78,
 	outer_fade_height_difference = 2500,
 
 	attack = {
@@ -84,7 +84,7 @@ local colorConfig = {
 		color = { 1.00, 1.00, 1.00, 0.20 },
 		fadeparams = { 6000, 12000, 1.0, 0.2 },
 		groupselectionfadescale = 0.58,
-		externallinethickness = 10.0,
+		externallinethickness = 15.0,
 		internallinethickness = 2.5,
 	},
 
@@ -116,6 +116,8 @@ local spGetGroundHeight    = Spring.GetGroundHeight
 local spGetActiveCommand   = Spring.GetActiveCommand
 local spGetMouseState      = Spring.GetMouseState
 local spTraceScreenRay     = Spring.TraceScreenRay
+local spGetPositionLosState = Spring.GetPositionLosState
+local spGetUnitIsDead      = Spring.GetUnitIsDead
 local spEcho               = Spring.Echo
 
 local glTexture     = gl.Texture
@@ -358,6 +360,48 @@ local function GetAttackRange(unitID, unitDefID)
 	return best
 end
 
+local function EnemyDefenseShouldBeRemoved(unitID, entry)
+	-- If the engine already knows the unit is dead, remove immediately.
+	if spGetUnitIsDead(unitID) then
+		return true
+	end
+
+	-- No remembered position? Keep the ring rather than removing too aggressively.
+	if not entry or not entry.posx or not entry.posz then
+		return false
+	end
+
+	local losState = spGetPositionLosState(entry.posx, entry.posy or 0, entry.posz)
+
+	-- Engine variants:
+	-- 1) table: {inLos=..., inRadar=..., inJammer=...}
+	-- 2) bare boolean
+	-- 3) multiple return values
+	local inLos = false
+
+	if type(losState) == "table" then
+		inLos = losState.inLos or losState.los or false
+	elseif type(losState) == "boolean" then
+		inLos = losState
+	else
+		-- Some engine builds may return multiple values instead of a table.
+		local a, b, c = spGetPositionLosState(entry.posx, entry.posy or 0, entry.posz)
+		if type(a) == "boolean" then
+			inLos = a
+		elseif type(a) == "table" then
+			inLos = a.inLos or a.los or false
+		end
+	end
+
+	-- Only remove once we can actually see the remembered spot.
+	if not inLos then
+		return false
+	end
+
+	-- If the spot is in LOS and the unit is not present anymore, drop the memory ring.
+	return true
+end
+
 local function ShouldShowBuildRange(unitDefID)
 	if not unitBuilder[unitDefID] then
 		return false
@@ -484,7 +528,7 @@ local function AddUnitToCollection(unitID, collection, mode)
 	local unitDefID = spGetUnitDefID(unitID)
 	if not unitDefID then return end
 
-	local x, _, z = spGetUnitPosition(unitID, true, true)
+	local x, y, z = spGetUnitPosition(unitID, true, true)
 	if not x then return end
 
 	local vaoBucket = "selected"
@@ -501,6 +545,9 @@ local function AddUnitToCollection(unitID, collection, mode)
 		unitDefID = unitDefID,
 		vaoBucket = vaoBucket,
 		instances = {},
+		posx = x,
+		posy = y or 0,
+		posz = z,
 	}
 
 	local function maybeAdd(className, radius)
@@ -587,7 +634,7 @@ local function RefreshSelectedBuildRingsOnly()
 			popElementInstance(rangeVAOs[entry.vaoBucket].build, entry.instances.build)
 			entry.instances.build = nil
 		elseif shouldHave and not hasBuild then
-			local x, _, z = spGetUnitPosition(unitID, true, true)
+			local x, y, z = spGetUnitPosition(unitID, true, true)
 			if x then
 				entry.instances.build = AddRangeInstance(unitID, "build", unitBuildDistance[unitDefID], x, z, entry.vaoBucket)
 			end
@@ -623,7 +670,7 @@ local function RefreshPersistentUnits()
 		if not selectedSet[unitID] and unitID ~= mouseoverUnitID then
 			local unitDefID = spGetUnitDefID(unitID)
 			if unitDefID then
-				local x, _, z = spGetUnitPosition(unitID, true, true)
+				local x, y, z = spGetUnitPosition(unitID, true, true)
 				if x then
 					local dx = x - cx
 					local dz = z - cz
@@ -643,6 +690,7 @@ local function RefreshPersistentUnits()
 							local needsSight = desiredMode == "persistent_sight" or desiredMode == "persistent_combo"
 							local needsAttack = desiredMode == "persistent_attack" or desiredMode == "persistent_combo"
 							if entry then
+								entry.posx, entry.posy, entry.posz = x, y or 0, z
 								local hasSight = entry.instances.sight ~= nil
 								local hasAttack = entry.instances.attack ~= nil
 								if hasSight ~= needsSight or hasAttack ~= needsAttack then
@@ -654,8 +702,9 @@ local function RefreshPersistentUnits()
 							end
 						elseif wantsEnemyDefenseAttack then
 							keepOther[unitID] = true
-							if persistentUnitsOther[unitID] then
-								local entry = persistentUnitsOther[unitID]
+							local entry = persistentUnitsOther[unitID]
+							if entry then
+								entry.posx, entry.posy, entry.posz = x, y or 0, z
 								if not entry.instances.attack or entry.instances.sight then
 									RemoveUnitFromCollection(unitID, persistentUnitsOther)
 									AddUnitToCollection(unitID, persistentUnitsOther, "persistent_attack")
@@ -676,9 +725,13 @@ local function RefreshPersistentUnits()
 		end
 	end
 
-	for unitID in pairs(persistentUnitsOther) do
-		if not keepOther[unitID] then
+	for unitID, entry in pairs(persistentUnitsOther) do
+		if keepOther[unitID] then
+			-- visible this refresh, keep it
+		elseif EnemyDefenseShouldBeRemoved(unitID, entry) then
 			RemoveUnitFromCollection(unitID, persistentUnitsOther)
+		else
+			-- intentionally keep remembered enemy defense rings until we confirm death
 		end
 	end
 end
@@ -878,7 +931,10 @@ function widget:VisibleUnitRemoved(unitID)
 		RemoveUnitFromCollection(unitID, persistentUnitsMine)
 	end
 	if persistentUnitsOther[unitID] then
-		RemoveUnitFromCollection(unitID, persistentUnitsOther)
+		local entry = persistentUnitsOther[unitID]
+		if EnemyDefenseShouldBeRemoved(unitID, entry) then
+			RemoveUnitFromCollection(unitID, persistentUnitsOther)
+		end
 	end
 	if mouseovers[unitID] then
 		RemoveUnitFromCollection(unitID, mouseovers)

@@ -1,6 +1,6 @@
 function widget:GetInfo()
     return {
-        version   = "0.2",
+        version   = "0.3",
         name      = "chiliBuildOrderMenu",
         desc      = "Build/Order menu implemented with chili ui, with categorized build sections",
         author    = "Adrianulima + ChatGPT",
@@ -114,8 +114,8 @@ if buildOrderUI == traditionalSmall then
             captionFontMaxSize = GetScaledFontSize(),
             queueFontSize      = GetScaledFontSize(),
             costFontSize       = GetScaledFontSize(),
-            sectionFontSize    = GetScaledFontSize() + 2,
-            categoryFontSize   = GetScaledFontSize(),
+            sectionFontSize    = GetScaledFontSize() + 3,
+            categoryFontSize   = GetScaledFontSize() - 1,
         },
         hiddenCMDs = {
             timewait = true, deathwait = true, squadwait = true, gatherwait = true,
@@ -147,8 +147,8 @@ elseif buildOrderUI == traditionalCompact then
             captionFontMaxSize = GetScaledFontSize(),
             queueFontSize      = GetScaledFontSize(),
             costFontSize       = GetScaledFontSize(),
-            sectionFontSize    = GetScaledFontSize() + 2,
-            categoryFontSize   = GetScaledFontSize(),
+            sectionFontSize    = GetScaledFontSize() + 3,
+            categoryFontSize   = GetScaledFontSize() - 1,
         },
         hiddenCMDs = {
             timewait = true, deathwait = true, squadwait = true, gatherwait = true,
@@ -180,8 +180,8 @@ else
             captionFontMaxSize = GetScaledFontSize(),
             queueFontSize      = GetScaledFontSize(),
             costFontSize       = GetScaledFontSize(),
-            sectionFontSize    = GetScaledFontSize() + 2,
-            categoryFontSize   = GetScaledFontSize(),
+            sectionFontSize    = GetScaledFontSize() + 3,
+            categoryFontSize   = GetScaledFontSize() - 1,
         },
         hiddenCMDs = {
             timewait = true, deathwait = true, squadwait = true, gatherwait = true,
@@ -201,6 +201,21 @@ local FAMILY_CATEGORY_ORDER = {
 local FAMILY_SECTION_TITLES = {
     Factory = "Factory Units",
     Builder = "Structures",
+}
+
+local HEADER_STYLE = {
+    section = {
+        height = 28,
+        bgColor = {0.08, 0.08, 0.08, 0.75},
+        lineColor = {1, 1, 1, 0.10},
+        textX = 10,
+    },
+    category = {
+        height = 22,
+        bgColor = {1, 1, 1, 0.05},
+        lineColor = {1, 1, 1, 0.08},
+        textX = 16,
+    },
 }
 
 local function NormalizeProducerRole(unitRole)
@@ -646,8 +661,6 @@ local function GetSelectedProducerFamilyData()
         Factory = { canBuild = {}, hasProducer = false },
     }
 
-    local familyOrder = {}
-
     for i = 1, #selectedUnits do
         local unitID = selectedUnits[i]
         local unitDefID = sGetUnitDefID(unitID)
@@ -657,11 +670,6 @@ local function GetSelectedProducerFamilyData()
                 local family = NormalizeProducerRole(ud.customParams.unitrole)
                 if family then
                     familyData[family].hasProducer = true
-                    if not familyOrder[family] then
-                        familyOrder[#familyOrder + 1] = family
-                        familyOrder[family] = true
-                    end
-
                     if ud.buildOptions then
                         for j = 1, #ud.buildOptions do
                             familyData[family].canBuild[ud.buildOptions[j]] = true
@@ -690,36 +698,88 @@ local function GetBuildWindowInnerWidth()
     return mathmax(innerWidth, 100)
 end
 
-local function MakeSectionHeader(text, parent, y)
-    return Label:New{
+local function MakeHeaderBar(parent, y, height, bgColor, lineColor)
+    local bar = Control:New{
         parent = parent,
-        x = 4, y = y,
+        x = 0,
+        y = y,
         width = '100%',
-        height = 24,
+        height = height,
+        padding = {0, 0, 0, 0},
+        backgroundColor = bgColor,
+    }
+
+    Image:New{
+        parent = bar,
+        x = 0,
+        bottom = 0,
+        width = '100%',
+        height = 1,
+        file = 'LuaUI/Images/button-highlight.dds',
+        color = lineColor,
+        keepAspect = false,
+        fixedRatio = false,
+    }
+
+    return bar
+end
+
+local function MakeSectionHeader(text, parent, y)
+    local bar = MakeHeaderBar(
+        parent,
+        y,
+        HEADER_STYLE.section.height,
+        HEADER_STYLE.section.bgColor,
+        HEADER_STYLE.section.lineColor
+    )
+
+    Label:New{
+        parent = bar,
+        x = HEADER_STYLE.section.textX,
+        y = 0,
+        width = '100%',
+        height = '100%',
         caption = text,
         valign = 'center',
         font = {
             size = Config.labels.sectionFontSize,
-            outline = true, shadow = true,
-            outlineWidth = 2, outlineWeight = 2,
+            outline = true,
+            shadow = true,
+            outlineWidth = 2,
+            outlineWeight = 2,
         },
     }
+
+    return HEADER_STYLE.section.height
 end
 
 local function MakeCategoryHeader(text, parent, y)
-    return Label:New{
-        parent = parent,
-        x = 12, y = y,
+    local bar = MakeHeaderBar(
+        parent,
+        y,
+        HEADER_STYLE.category.height,
+        HEADER_STYLE.category.bgColor,
+        HEADER_STYLE.category.lineColor
+    )
+
+    Label:New{
+        parent = bar,
+        x = HEADER_STYLE.category.textX,
+        y = 0,
         width = '100%',
-        height = 20,
+        height = '100%',
         caption = text,
         valign = 'center',
         font = {
             size = Config.labels.categoryFontSize,
-            outline = true, shadow = true,
-            outlineWidth = 2, outlineWeight = 2,
+            outline = true,
+            shadow = true,
+            outlineWidth = 2,
+            outlineWeight = 2,
         },
     }
+
+    return HEADER_STYLE.category.height
 end
 
 local function RenderFamilySection(parent, family, familyCommands, yOffset)
@@ -744,14 +804,12 @@ local function RenderFamilySection(parent, family, familyCommands, yOffset)
     local columns = Config.buildmenu.columns
     local cellSize = mathfloor(innerWidth / columns)
 
-    MakeSectionHeader(FAMILY_SECTION_TITLES[family], parent, y)
-    y = y + 26
+    y = y + MakeSectionHeader(FAMILY_SECTION_TITLES[family], parent, y) + 4
 
     for _, categoryName in ipairs(categories) do
         local cmds = familyCommands[categoryName]
         if cmds and #cmds > 0 then
-            MakeCategoryHeader(categoryName, parent, y)
-            y = y + 20
+            y = y + MakeCategoryHeader(categoryName, parent, y) + 6
 
             local rows = mathmax(1, mathceil(#cmds / columns))
             local gridHeight = rows * cellSize
@@ -771,7 +829,7 @@ local function RenderFamilySection(parent, family, familyCommands, yOffset)
                 addBuildCommand(cmds[i], grid)
             end
 
-            y = y + gridHeight + 8
+            y = y + gridHeight + 10
         end
     end
 
@@ -836,8 +894,7 @@ local function RenderCategorizedBuildCommands(buildCommands)
         local cellSize = mathfloor(innerWidth / Config.buildmenu.columns)
         local gridHeight = rows * cellSize
 
-        MakeSectionHeader("Build List", buildContainer, y)
-        y = y + 26
+        y = y + MakeSectionHeader("Build List", buildContainer, y) + 4
 
         local grid = Grid:New{
             parent = buildContainer,
@@ -1036,13 +1093,9 @@ function widget:ViewResize(newX, newY)
         captionFontMaxSize = GetScaledFontSize(),
         queueFontSize      = GetScaledFontSize(),
         costFontSize       = GetScaledFontSize(),
-        sectionFontSize    = GetScaledFontSize() + 2,
-        categoryFontSize   = GetScaledFontSize(),
+        sectionFontSize    = GetScaledFontSize() + 3,
+        categoryFontSize   = GetScaledFontSize() - 1,
     }
-
-    if buildWindow then
-        Config.buildmenu.height = buildWindow.height
-    end
 
     processAllCommands(true)
 end
