@@ -20,6 +20,7 @@ local GetAllUnits       = Spring.GetAllUnits
 local GetUnitDefID      = Spring.GetUnitDefID
 local GetUnitIsDead     = Spring.GetUnitIsDead
 local Echo              = Spring.Echo
+local SetUnitRulesParam = Spring.SetUnitRulesParam
 
 local function round(x)
 	return math.floor(x + 0.5)
@@ -39,7 +40,7 @@ local ENERGY_USE_CHANNEL = "cue"
 
 -- IMPORTANT: In many setups, resource "use" is represented as NEGATIVE.
 -- If you find energy isn't being drained, flip this to -1.
-local ENERGY_SIGN = -1
+local ENERGY_SIGN = 1
 
 -- Your original balance numbers were tuned around metalSpot_value = 3.
 local BASE_SPOT_VALUE = 3
@@ -123,7 +124,12 @@ local function ApplyToUnit(unitID)
 	if not udid then return end
 
 	local cfg = byDefID[udid]
-	if not cfg then return end
+	if not cfg then
+		-- Clear params for units that are not managed by this gadget
+		SetUnitRulesParam(unitID, "maker_metal", nil, {public = true})
+		SetUnitRulesParam(unitID, "maker_energy", nil, {public = true})
+		return
+	end
 	if not metalSpotValue then return end
 
 	-- Metal production
@@ -133,11 +139,14 @@ local function ApplyToUnit(unitID)
 
 	-- Energy drain (scaled)
 	local scaledEnergy = GetScaledEnergy(cfg.energyBase)
-	SetUnitResourcing(unitID, ENERGY_USE_CHANNEL, ENERGY_SIGN * scaledEnergy)
+	local appliedEnergy = ENERGY_SIGN * scaledEnergy
+	SetUnitResourcing(unitID, ENERGY_USE_CHANNEL, appliedEnergy)
 
-	-- Optional UI debug (uncomment if useful)
-	-- Spring.SetUnitRulesParam(unitID, "maker_metal", makes, {public=true})
-	-- Spring.SetUnitRulesParam(unitID, "maker_energy", ENERGY_SIGN * scaledEnergy, {public=true})
+	-- Publish exact values for widgets/UI
+	-- Store metal as positive production
+	-- Store energy as positive drain for easier display
+	SetUnitRulesParam(unitID, "maker_metal", makes, {public = true})
+	SetUnitRulesParam(unitID, "maker_energy", math.abs(appliedEnergy), {public = true})
 end
 
 local function ApplyToAllExisting()
@@ -190,4 +199,9 @@ end
 
 function gadget:UnitTaken(unitID, unitDefID, oldTeam, newTeam)
 	ApplyToUnit(unitID)
+end
+
+function gadget:UnitDestroyed(unitID)
+	SetUnitRulesParam(unitID, "maker_metal", nil, {public = true})
+	SetUnitRulesParam(unitID, "maker_energy", nil, {public = true})
 end
