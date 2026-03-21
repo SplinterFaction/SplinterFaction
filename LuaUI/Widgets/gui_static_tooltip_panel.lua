@@ -1,0 +1,929 @@
+function widget:GetInfo()
+	return {
+		name    = "Static Tooltip Panel",
+		desc    = "Panel-style tooltip anchored to the right of the static order panel",
+		author  = "OpenAI",
+		date    = "2026-03-21",
+		license = "GPL v2 or later",
+		layer   = 2,
+		enabled = true,
+	}
+end
+
+--------------------------------------------------------------------------------
+-- Config (matched to gui_static_buildordermenu.lua)
+--------------------------------------------------------------------------------
+
+local PANEL_MARGIN_X        = 8
+local PANEL_MARGIN_Y        = 8
+local PANEL_WIDTH_FRAC      = 1 / 6
+local TOTAL_HEIGHT_FRAC     = 0.70
+local ORDER_HEIGHT_FRAC     = 0.28
+local GAP_BETWEEN_PANELS    = 10
+local PANEL_RADIUS          = 10
+local PANEL_BG              = {0.08, 0.08, 0.09, 0.88}
+local PANEL_BORDER          = {1.0, 1.0, 1.0, 0.12}
+local SECTION_BG            = {0.14, 0.14, 0.15, 0.90}
+local CATEGORY_BG           = {0.20, 0.20, 0.21, 0.55}
+local HEADER_TEXT           = {1.0, 1.0, 1.0, 1.0}
+local SUBTEXT_COLOR         = {0.80, 0.82, 0.86, 1.0}
+local MUTED_TEXT_COLOR      = {0.65, 0.67, 0.72, 1.0}
+
+local INNER_PAD             = 10
+local SECTION_GAP           = 6
+local CARD_GAP              = 6
+
+local TOOLTIP_WIDTH_MULT    = 1.18
+local TOOLTIP_GAP_X         = 10
+
+local TITLE_SIZE            = 15
+local HEADER_SIZE           = 12
+local BODY_SIZE             = 11
+local SMALL_SIZE            = 10
+
+local TECH_TEXT_COLORS = {
+	T0 = {0.0, 0.8, 0.8, 1.0},
+	T1 = {1.0, 0.5, 0.0, 1.0},
+	T2 = {1.0, 0.0, 1.0, 1.0},
+	T3 = {0.0, 1.0, 0.0, 1.0},
+	T4 = {1.0, 0.0, 0.0, 1.0},
+}
+
+local METAL_TEXT_COLOR      = {0.53, 0.77, 0.89, 1.0}
+local ENERGY_TEXT_COLOR     = {1.0, 1.0, 0.0, 1.0}
+local SUPPLY_TEXT_COLOR     = {1.0, 0.62, 0.10, 1.0}
+local POSITIVE_TEXT_COLOR   = {0.35, 1.0, 0.45, 1.0}
+local NEGATIVE_TEXT_COLOR   = {1.0, 0.35, 0.35, 1.0}
+local SHIELD_TEXT_COLOR     = {0.62, 0.72, 1.0, 1.0}
+local OVERSHIELD_TEXT_COLOR = {0.82, 0.82, 1.0, 1.0}
+local PARALYZE_TEXT_COLOR   = {0.55, 1.0, 1.0, 1.0}
+
+--------------------------------------------------------------------------------
+-- Spring / Lua locals
+--------------------------------------------------------------------------------
+
+local spGetViewGeometry        = Spring.GetViewGeometry
+local spGetCurrentTooltip      = Spring.GetCurrentTooltip
+local spGetMouseState          = Spring.GetMouseState
+local spTraceScreenRay         = Spring.TraceScreenRay
+local spGetSelectedUnits       = Spring.GetSelectedUnits
+local spGetSelectedUnitsCount  = Spring.GetSelectedUnitsCount
+local spGetUnitDefID           = Spring.GetUnitDefID
+local spGetUnitResources       = Spring.GetUnitResources
+local spGetUnitHealth          = Spring.GetUnitHealth
+local spGetUnitShieldState     = Spring.GetUnitShieldState
+local spGetUnitRulesParam      = Spring.GetUnitRulesParam
+local spGetUnitIsCloaked       = Spring.GetUnitIsCloaked
+local spGetUnitIsStunned       = Spring.GetUnitIsStunned
+local spGetGroundHeight        = Spring.GetGroundHeight
+local spGetFeatureDefID        = Spring.GetFeatureDefID
+local spGetFeatureResources    = Spring.GetFeatureResources
+local spGetFeatureHealth       = Spring.GetFeatureHealth
+local spGetConfigFloat         = Spring.GetConfigFloat
+local spIsGUIHidden            = Spring.IsGUIHidden
+local spGetModKeyState         = Spring.GetModKeyState
+local spGetKeySymbol           = Spring.GetKeySymbol
+local spSendCommands           = Spring.SendCommands
+local spSetDrawSelectionInfo   = Spring.SetDrawSelectionInfo
+
+local glColor                  = gl.Color
+local glText                   = gl.Text
+local glRect                   = gl.Rect
+local glBeginEnd               = gl.BeginEnd
+local glVertex                 = gl.Vertex
+local glLineWidth              = gl.LineWidth
+local glScissor                = gl.Scissor
+local glPushMatrix             = gl.PushMatrix
+local glPopMatrix              = gl.PopMatrix
+local GL_TRIANGLE_FAN          = GL.TRIANGLE_FAN
+local GL_LINE_LOOP             = GL.LINE_LOOP
+
+local math_min                 = math.min
+local math_max                 = math.max
+local math_floor               = math.floor
+local math_pi                  = math.pi
+local math_cos                 = math.cos
+local math_sin                 = math.sin
+local tostring                 = tostring
+local tonumber                 = tonumber
+local pairs                    = pairs
+local ipairs                   = ipairs
+local type                     = type
+local string_format            = string.format
+local string_find              = string.find
+local string_match             = string.match
+local string_gsub              = string.gsub
+local table_concat             = table.concat
+
+--------------------------------------------------------------------------------
+-- Font / ui opacity
+--------------------------------------------------------------------------------
+
+local ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
+
+--------------------------------------------------------------------------------
+-- Hotkey config from old tooltip
+--------------------------------------------------------------------------------
+
+VFS.Include("luaui/configs/evo_buildHotkeysConfig.lua")
+
+local function GetKeySymbol(k)
+	if k >= 97 and k <= 122 then
+		return string.char(k):upper()
+	end
+	local keySymbol = spGetKeySymbol(k)
+	return keySymbol:sub(1, 1):upper() .. keySymbol:sub(2)
+end
+
+local humanNameToKeySymbols = {}
+for unitDefID = 1, #UnitDefs do
+	local ud = UnitDefs[unitDefID]
+	local name = ud.name
+	if name:find("_up", -5) then
+		name = name:sub(1, -5)
+	end
+	if nameToKeyCode[name] then
+		local parts = {}
+		for i = 1, #nameToKeyCode[name] do
+			parts[#parts + 1] = GetKeySymbol(nameToKeyCode[name][i])
+		end
+		humanNameToKeySymbols[ud.humanName] = table_concat(parts, " + ")
+	end
+end
+
+--------------------------------------------------------------------------------
+-- State
+--------------------------------------------------------------------------------
+
+local vsx, vsy = spGetViewGeometry()
+
+local orderPanel = {}
+local tooltipPanel = {}
+
+--------------------------------------------------------------------------------
+-- Helpers
+--------------------------------------------------------------------------------
+
+local function Clamp(v, lo, hi)
+	if v < lo then return lo end
+	if v > hi then return hi end
+	return v
+end
+
+local function FormatNbr(x, digits)
+	if x == nil then return "" end
+	local ret = string_format("%." .. (digits or 0) .. "f", x)
+	if digits and digits > 0 then
+		while true do
+			local last = ret:sub(#ret, #ret)
+			if last == "0" or last == "." then
+				ret = ret:sub(1, #ret - 1)
+			end
+			if last ~= "0" then
+				break
+			end
+		end
+	end
+	return ret
+end
+
+local function UpdateRects()
+	vsx, vsy = spGetViewGeometry()
+
+	local panelW = math_floor(vsx * PANEL_WIDTH_FRAC)
+	local totalH = math_floor(vsy * TOTAL_HEIGHT_FRAC)
+	local orderH = math_floor(totalH * ORDER_HEIGHT_FRAC)
+
+	orderPanel.x1 = PANEL_MARGIN_X
+	orderPanel.y1 = PANEL_MARGIN_Y
+	orderPanel.x2 = orderPanel.x1 + panelW
+	orderPanel.y2 = orderPanel.y1 + orderH
+	orderPanel.w = panelW
+	orderPanel.h = orderH
+
+	local tooltipW = math_floor(panelW * TOOLTIP_WIDTH_MULT)
+
+	tooltipPanel.x1 = orderPanel.x2 + TOOLTIP_GAP_X
+	tooltipPanel.y1 = orderPanel.y1
+	tooltipPanel.x2 = tooltipPanel.x1 + tooltipW
+	tooltipPanel.y2 = orderPanel.y2
+	tooltipPanel.w = tooltipW
+	tooltipPanel.h = orderPanel.h
+end
+
+local function RoundedRectVertices(x1, y1, x2, y2, r, segments)
+	local rr = math_min(r, (x2 - x1) * 0.5, (y2 - y1) * 0.5)
+	if rr <= 0 then
+		glVertex(x1, y1)
+		glVertex(x2, y1)
+		glVertex(x2, y2)
+		glVertex(x1, y2)
+		return
+	end
+
+	local function Arc(cx, cy, startAng, endAng)
+		for i = 0, segments do
+			local a = startAng + (endAng - startAng) * (i / segments)
+			glVertex(cx + math_cos(a) * rr, cy + math_sin(a) * rr)
+		end
+	end
+
+	Arc(x2 - rr, y2 - rr, 0, math_pi * 0.5)
+	Arc(x1 + rr, y2 - rr, math_pi * 0.5, math_pi)
+	Arc(x1 + rr, y1 + rr, math_pi, math_pi * 1.5)
+	Arc(x2 - rr, y1 + rr, math_pi * 1.5, math_pi * 2)
+end
+
+local function DrawRoundedRect(x1, y1, x2, y2, r, color)
+	local rr = math_min(r, (x2 - x1) * 0.5, (y2 - y1) * 0.5)
+
+	glColor(color)
+	glBeginEnd(GL_TRIANGLE_FAN, function()
+		local cx = (x1 + x2) * 0.5
+		local cy = (y1 + y2) * 0.5
+		glVertex(cx, cy)
+
+		RoundedRectVertices(x1, y1, x2, y2, rr, 6)
+
+		if rr <= 0 then
+			glVertex(x1, y1)
+		else
+			glVertex(x2, y2 - rr)
+		end
+	end)
+end
+
+local function DrawRoundedOutline(x1, y1, x2, y2, r, color)
+	glColor(color)
+	glLineWidth(1)
+	glBeginEnd(GL_LINE_LOOP, function()
+		RoundedRectVertices(x1, y1, x2, y2, r, 6)
+	end)
+end
+
+local function DrawPanel(x1, y1, x2, y2)
+	DrawRoundedRect(x1, y1, x2, y2, PANEL_RADIUS, {PANEL_BG[1], PANEL_BG[2], PANEL_BG[3], ui_opacity})
+	DrawRoundedOutline(x1, y1, x2, y2, PANEL_RADIUS, PANEL_BORDER)
+end
+
+local function DrawSectionBox(x1, y1, x2, y2)
+	DrawRoundedRect(x1 + 2, y1, x2 - 2, y2, 8, SECTION_BG)
+end
+
+local function TextWidthApprox(text, size)
+	return #tostring(text or "") * size * 0.55
+end
+
+local function DrawTextFitted(text, x, y, size, maxWidth, color, align)
+	text = tostring(text or "")
+	glColor(color or HEADER_TEXT)
+	local drawSize = size
+	local approxW = TextWidthApprox(text, size)
+	if approxW > maxWidth and approxW > 0 then
+		drawSize = size * (maxWidth / approxW)
+	end
+	glText(text, x, y, drawSize, (align or "o"))
+end
+
+local function GetTooltipArmor(ud)
+	local str = ud and ud.customParams and ud.customParams.armortype
+	if str == "light" then return "Light" end
+	if str == "armored" then return "Armored" end
+	if str == "building" then return "Building" end
+	if str == "air" then return "Air" end
+	return "Default"
+end
+
+local function GetTooltipRole(ud)
+	local str = ud and ud.customParams and ud.customParams.unitrole
+	if not str then
+		return "Unit Role Undefined"
+	end
+	return str
+end
+
+local function GetTechTag(ud)
+	if not ud or not ud.name then return nil end
+	local lvl = ud.name:find("_up", -5) and tonumber(ud.name:sub(-1, -1)) or 0
+	return "T" .. tostring(lvl)
+end
+
+local function GetBuildPowerTotal()
+	local buildpower = 1
+	local sel = spGetSelectedUnits()
+	for i = 1, #sel do
+		local unitDefID = spGetUnitDefID(sel[i])
+		if unitDefID then
+			local def = UnitDefs[unitDefID]
+			if def then
+				buildpower = buildpower + (def.buildSpeed or 0)
+			end
+		end
+	end
+	return buildpower
+end
+
+local function GetTooltipBuildPower(buildSpeed)
+	return FormatNbr((buildSpeed or 0) * 4, 1) .. " metal/s"
+end
+
+local function FormatSupplyValue(v)
+	if not v then return nil end
+	if v == math_floor(v) then
+		return tostring(math_floor(v))
+	end
+	return tostring(v)
+end
+
+--------------------------------------------------------------------------------
+-- Weapon extraction / dedupe
+--------------------------------------------------------------------------------
+
+local function BuildWeaponCards(ud)
+	local cards = {}
+	if not ud or not ud.weapons then
+		return cards
+	end
+
+	local dedupe = {}
+
+	for _, w in pairs(ud.weapons) do
+		local weap = WeaponDefs[w.weaponDef]
+		if weap and not weap.isShield and weap.description ~= "No Weapon" then
+			local key = weap.description or weap.name or ("weapon_" .. tostring(w.weaponDef))
+			local card = dedupe[key]
+
+			if not card then
+				local reloadTime = weap.reload > 0 and weap.reload or 1
+				local burst = (weap.projectiles or 1) * (weap.salvoSize or 1)
+				local dpsConversion = burst / reloadTime
+				local damage = (weap.damages and weap.damages[Game.armorTypes.default] or 0) * burst
+				local dps = damage / reloadTime
+				local energyPerSecond = (weap.energyCost or 0) * dpsConversion
+				local isDisruptor = weap.damages and weap.damages.paralyzeDamageTime and weap.damages.paralyzeDamageTime > 0
+
+				card = {
+					title = key,
+					count = 1,
+					perShot = damage,
+					dps = dps,
+					aoe = weap.damageAreaOfEffect or 0,
+					range = weap.range or 0,
+					eps = energyPerSecond,
+					paralyze = isDisruptor,
+					reload = reloadTime,
+					water = weap.waterWeapon and true or false,
+				}
+				dedupe[key] = card
+				cards[#cards + 1] = card
+			else
+				card.count = card.count + 1
+			end
+		end
+	end
+
+	return cards
+end
+
+--------------------------------------------------------------------------------
+-- Tooltip source resolution
+--------------------------------------------------------------------------------
+
+local function ResolveHoveredWorldObject()
+	local mx, my = spGetMouseState()
+	local kind, id = spTraceScreenRay(mx, my, false, true)
+	if kind == "unit" then
+		return "unit", id
+	elseif kind == "feature" then
+		return "feature", id
+	end
+	return nil, nil
+end
+
+local function ResolveHoveredBuildFromTooltip(currentTooltip)
+	local unitname = string_match(currentTooltip, "Build: (.-) %- ")
+	local unitdesc = string_match(currentTooltip, " %- (.+)\nHealth ")
+	local unithealth = string_match(currentTooltip, "Health (.+)\nMetal") or string_match(currentTooltip, "Health (.+)\nBuild time ")
+	local unitbuildtime = string_match(currentTooltip .. "\n", "Build time (.-)\n")
+	local unitmetalcost = string_match(currentTooltip, "Metal cost (.-)\nEnergy cost ")
+	local unitenergycost = string_match(currentTooltip, "\nEnergy cost (.-).Build time ")
+
+	if not (unitname and unitdesc and unithealth and unitbuildtime) then
+		return nil
+	end
+
+	local fud = nil
+	for _, ud in pairs(UnitDefs) do
+		if ud.humanName == unitname and ud.tooltip == unitdesc and math.abs((ud.health or 0) - tonumber(unithealth or 0)) <= 1 then
+			fud = ud
+			break
+		end
+	end
+
+	return {
+		type = "build",
+		ud = fud,
+		name = unitname,
+		desc = unitdesc,
+		health = tonumber(unithealth),
+		buildTime = tonumber(unitbuildtime),
+		metalCost = tonumber(unitmetalcost) or (fud and fud.metalCost or 0),
+		energyCost = tonumber(unitenergycost) or (fud and fud.energyCost or 0),
+	}
+end
+
+local function ResolveOrderFromTooltip(currentTooltip)
+	if currentTooltip == "" then
+		return nil
+	end
+
+	if currentTooltip:find("Build: ") then
+		return nil
+	end
+
+	local firstLine = string_match(currentTooltip, "([^\n]+)")
+	if not firstLine then
+		return nil
+	end
+
+	local title = firstLine
+	local body = currentTooltip
+	local action = string_match(firstLine, "^(.-):")
+	if action then
+		title = action
+	end
+
+	return {
+		type = "order",
+		title = title,
+		body = body,
+	}
+end
+
+local function ResolveTooltipData()
+	local currentTooltip = spGetCurrentTooltip() or ""
+
+	local worldType, worldID = ResolveHoveredWorldObject()
+	if worldType == "unit" and worldID then
+		return { type = "unit", id = worldID }
+	elseif worldType == "feature" and worldID then
+		return { type = "feature", id = worldID }
+	end
+
+	local buildData = ResolveHoveredBuildFromTooltip(currentTooltip)
+	if buildData then
+		return buildData
+	end
+
+	local orderData = ResolveOrderFromTooltip(currentTooltip)
+	if orderData then
+		return orderData
+	end
+
+	return nil
+end
+
+--------------------------------------------------------------------------------
+-- Section drawing
+--------------------------------------------------------------------------------
+
+local function DrawHeaderTag(x, y, text, color)
+	if not text then return 0 end
+	local w = math_floor(TextWidthApprox(text, SMALL_SIZE) + 10)
+	local h = 16
+	DrawRoundedRect(x, y - 3, x + w, y + h - 3, 5, CATEGORY_BG)
+	DrawTextFitted(text, x + 5, y, SMALL_SIZE, w - 10, color or HEADER_TEXT, "o")
+	return w + 4
+end
+
+local function DrawKVLine(x, y, label, value, labelColor, valueColor)
+	DrawTextFitted(label, x, y, BODY_SIZE, 140, labelColor or MUTED_TEXT_COLOR, "o")
+	DrawTextFitted(value or "-", x + 88, y, BODY_SIZE, 220, valueColor or HEADER_TEXT, "o")
+end
+
+local function DrawTitleSection(data, x1, yTop, w)
+	local h = 44
+	local y1 = yTop - h
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+
+	local title = data.title or "Unknown"
+	local subtitle = data.subtitle or ""
+
+	DrawTextFitted(title, x1 + 10, yTop - 18, TITLE_SIZE, w - 20, HEADER_TEXT, "o")
+	if subtitle ~= "" then
+		DrawTextFitted(subtitle, x1 + 10, yTop - 34, BODY_SIZE, w - 20, SUBTEXT_COLOR, "o")
+	end
+
+	local tagX = x1 + w - 10
+	if data.tech then
+		local tagW = TextWidthApprox(data.tech, SMALL_SIZE) + 10
+		tagX = tagX - tagW
+		DrawHeaderTag(tagX, yTop - 18, data.tech, TECH_TEXT_COLORS[data.tech] or HEADER_TEXT)
+	end
+
+	return y1 - SECTION_GAP
+end
+
+local function DrawStatsSection(data, x1, yTop, w)
+	local lines = 3
+	if data.healthText then lines = lines + 1 end
+	if data.shieldText then lines = lines + 1 end
+	if data.overshieldText then lines = lines + 1 end
+	if data.statusText then lines = lines + 1 end
+
+	local h = 24 + lines * 14
+	local y1 = yTop - h
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+
+	DrawTextFitted("Stats", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+
+	local cy = yTop - 32
+	if data.roleText then
+		DrawKVLine(x1 + 10, cy, "Role", data.roleText, MUTED_TEXT_COLOR, HEADER_TEXT)
+		cy = cy - 14
+	end
+	if data.armorText then
+		DrawKVLine(x1 + 10, cy, "Armor", data.armorText, MUTED_TEXT_COLOR, HEADER_TEXT)
+		cy = cy - 14
+	end
+	if data.healthText then
+		DrawKVLine(x1 + 10, cy, "Health", data.healthText, MUTED_TEXT_COLOR, HEADER_TEXT)
+		cy = cy - 14
+	end
+	if data.shieldText then
+		DrawKVLine(x1 + 10, cy, "Shield", data.shieldText, MUTED_TEXT_COLOR, SHIELD_TEXT_COLOR)
+		cy = cy - 14
+	end
+	if data.overshieldText then
+		DrawKVLine(x1 + 10, cy, "OverShield", data.overshieldText, MUTED_TEXT_COLOR, OVERSHIELD_TEXT_COLOR)
+		cy = cy - 14
+	end
+	if data.statusText then
+		DrawKVLine(x1 + 10, cy, "Status", data.statusText, MUTED_TEXT_COLOR, HEADER_TEXT)
+		cy = cy - 14
+	end
+
+	return y1 - SECTION_GAP
+end
+
+local function DrawEconomySection(data, x1, yTop, w)
+	local h = 92
+	local y1 = yTop - h
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+
+	DrawTextFitted("Economy", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+
+	DrawKVLine(x1 + 10, yTop - 34, "Metal", data.metalCostText or "-", MUTED_TEXT_COLOR, METAL_TEXT_COLOR)
+	DrawKVLine(x1 + 10, yTop - 48, "Energy", data.energyCostText or "-", MUTED_TEXT_COLOR, ENERGY_TEXT_COLOR)
+	if data.supplyText then
+		DrawKVLine(x1 + 10, yTop - 62, "Supply", data.supplyText, MUTED_TEXT_COLOR, SUPPLY_TEXT_COLOR)
+	else
+		DrawKVLine(x1 + 10, yTop - 62, "Supply", "-", MUTED_TEXT_COLOR, HEADER_TEXT)
+	end
+	if data.upkeepText then
+		DrawKVLine(x1 + 10, yTop - 76, "Flow", data.upkeepText, MUTED_TEXT_COLOR, HEADER_TEXT)
+	else
+		DrawKVLine(x1 + 10, yTop - 76, "Flow", "-", MUTED_TEXT_COLOR, HEADER_TEXT)
+	end
+
+	return y1 - SECTION_GAP
+end
+
+local function DrawBuildSection(data, x1, yTop, w)
+	local h = 64
+	local y1 = yTop - h
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+
+	DrawTextFitted("Build Info", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+	DrawKVLine(x1 + 10, yTop - 34, "Build Time", data.buildTimeText or "-", MUTED_TEXT_COLOR, HEADER_TEXT)
+	DrawKVLine(x1 + 10, yTop - 48, "Build Power", data.buildPowerText or "-", MUTED_TEXT_COLOR, HEADER_TEXT)
+
+	return y1 - SECTION_GAP
+end
+
+local function DrawOrderSection(data, x1, yTop, w)
+	local body = data.body or ""
+	local lines = 1
+	for _ in body:gmatch("\n") do
+		lines = lines + 1
+	end
+	lines = Clamp(lines, 2, 9)
+
+	local h = 34 + lines * 13
+	local y1 = yTop - h
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+
+	DrawTextFitted("Command", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+
+	local clean = string_gsub(body, "Metal cost %d*\nEnergy cost %d*\n", "")
+	local cy = yTop - 34
+	for line in (clean .. "\n"):gmatch("([^\n]*)\n") do
+		if line ~= "" then
+			DrawTextFitted(line, x1 + 10, cy, BODY_SIZE, w - 20, SUBTEXT_COLOR, "o")
+			cy = cy - 13
+		end
+	end
+
+	return y1 - SECTION_GAP
+end
+
+local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
+	if not cards or #cards == 0 then
+		return yTop
+	end
+
+	local headerH = 22
+	local cardH = 52
+	local totalH = headerH + (#cards * cardH) + math_max(0, (#cards - 1) * CARD_GAP) + 10
+	local y1 = yTop - totalH
+
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+	DrawTextFitted("Weapons", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+
+	glScissor(x1, clipBottom, w, yTop - clipBottom)
+	local cyTop = yTop - 26
+
+	for i = 1, #cards do
+		local card = cards[i]
+		local by2 = cyTop - (i - 1) * (cardH + CARD_GAP)
+		local by1 = by2 - cardH
+
+		if by2 >= clipBottom then
+			DrawRoundedRect(x1 + 8, by1, x1 + w - 8, by2, 6, CATEGORY_BG)
+			DrawTextFitted(card.title .. (card.count > 1 and (" x" .. card.count) or ""), x1 + 16, by2 - 14, BODY_SIZE, w - 32, HEADER_TEXT, "o")
+
+			local dmgLabel = card.paralyze and "Paralyze" or "DPS"
+			local dmgColor = card.paralyze and PARALYZE_TEXT_COLOR or HEADER_TEXT
+
+			DrawTextFitted(dmgLabel .. ": " .. FormatNbr(card.dps, 1), x1 + 16, by2 - 28, SMALL_SIZE, 120, dmgColor, "o")
+			DrawTextFitted("Range: " .. FormatNbr(card.range, 0), x1 + 118, by2 - 28, SMALL_SIZE, 90, SUBTEXT_COLOR, "o")
+			DrawTextFitted("AoE: " .. FormatNbr(card.aoe, 0), x1 + 196, by2 - 28, SMALL_SIZE, 70, SUBTEXT_COLOR, "o")
+
+			local extra = ""
+			if card.eps and card.eps > 0 then
+				extra = extra .. "E/s " .. FormatNbr(card.eps, 1)
+			end
+			if card.water then
+				if extra ~= "" then extra = extra .. "   " end
+				extra = extra .. "WATER"
+			end
+			if extra ~= "" then
+				DrawTextFitted(extra, x1 + 16, by2 - 41, SMALL_SIZE, w - 32, ENERGY_TEXT_COLOR, "o")
+			end
+		end
+	end
+
+	glScissor(false)
+	return y1 - SECTION_GAP
+end
+
+--------------------------------------------------------------------------------
+-- Data builders
+--------------------------------------------------------------------------------
+
+local function BuildUnitPanelData(unitID)
+	local ud = UnitDefs[spGetUnitDefID(unitID)]
+	if not ud then return nil end
+
+	local metalMake, metalUse, energyMake, energyUse = spGetUnitResources(unitID)
+	local health, maxHealth, _, _, buildProgress = spGetUnitHealth(unitID)
+	local _, stunned, beingBuilt = spGetUnitIsStunned(unitID)
+	local hasShield, shieldPower = spGetUnitShieldState(unitID)
+	local maxShieldPower = ud.shieldWeaponDef and WeaponDefs[ud.shieldWeaponDef] and WeaponDefs[ud.shieldWeaponDef].shieldPower or nil
+	local overshieldStrength = spGetUnitRulesParam(unitID, "personalShield")
+	local shieldMaxStrength = ud.customParams and ud.customParams.shield_max_strength
+
+	local status = {}
+	if stunned then status[#status + 1] = "Paralyzed" end
+	if beingBuilt or (buildProgress and buildProgress < 1) then status[#status + 1] = "Building" end
+	if spGetUnitIsCloaked(unitID) then status[#status + 1] = "Cloaked" end
+
+	local supplyCost = ud.customParams and tonumber(ud.customParams.supply_cost or 0) or 0
+	local supplyGive = ud.customParams and tonumber(ud.customParams.supply_granted or 0) or 0
+	local supplyText = nil
+	if supplyGive > 0 then
+		supplyText = "+" .. FormatSupplyValue(supplyGive)
+	elseif supplyCost > 0 then
+		supplyText = "-" .. FormatSupplyValue(supplyCost)
+	end
+
+	local upkeep = nil
+	if metalMake ~= nil then
+		upkeep = "M " .. FormatNbr(metalMake, 1) .. "/" .. FormatNbr(-metalUse, 1) ..
+				"   E " .. FormatNbr(energyMake, 1) .. "/" .. FormatNbr(-energyUse, 1)
+	end
+
+	return {
+		title = ud.humanName,
+		subtitle = ud.tooltip or "",
+		tech = GetTechTag(ud),
+
+		roleText = GetTooltipRole(ud),
+		armorText = GetTooltipArmor(ud),
+		healthText = health and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil,
+		shieldText = (hasShield and maxShieldPower) and (FormatNbr(math_min(shieldPower, maxShieldPower), 0) .. "/" .. FormatNbr(maxShieldPower, 0)) or nil,
+		overshieldText = (overshieldStrength and shieldMaxStrength) and (FormatNbr(math_min(overshieldStrength, shieldMaxStrength), 0) .. "/" .. FormatNbr(shieldMaxStrength, 0)) or nil,
+		statusText = (#status > 0) and table_concat(status, ", ") or nil,
+
+		metalCostText = FormatNbr(ud.metalCost or 0, 0),
+		energyCostText = FormatNbr(ud.energyCost or 0, 0),
+		supplyText = supplyText,
+		upkeepText = upkeep,
+
+		buildTimeText = nil,
+		buildPowerText = (ud.buildSpeed and ud.buildSpeed > 0) and GetTooltipBuildPower(ud.buildSpeed) or nil,
+
+		weaponCards = BuildWeaponCards(ud),
+	}
+end
+
+local function BuildBuildPanelData(buildData)
+	local ud = buildData.ud
+	local supplyText = nil
+	local buildPower = GetBuildPowerTotal()
+
+	if ud and ud.customParams then
+		local supplyCost = tonumber(ud.customParams.supply_cost or 0) or 0
+		local supplyGive = tonumber(ud.customParams.supply_granted or 0) or 0
+		if supplyGive > 0 then
+			supplyText = "+" .. FormatSupplyValue(supplyGive)
+		elseif supplyCost > 0 then
+			supplyText = "-" .. FormatSupplyValue(supplyCost)
+		end
+	end
+
+	local estBuildTime = nil
+	if ud and ud.buildTime then
+		estBuildTime = math_floor((29 + math_floor(31 + ud.buildTime / (buildPower / 32))) / 30)
+	elseif buildData.buildTime then
+		estBuildTime = math_floor((29 + math_floor(31 + buildData.buildTime / (buildPower / 32))) / 30)
+	end
+
+	return {
+		title = ud and ud.humanName or buildData.name,
+		subtitle = ud and (ud.tooltip or buildData.desc) or buildData.desc,
+		tech = ud and GetTechTag(ud) or nil,
+
+		roleText = ud and GetTooltipRole(ud) or nil,
+		armorText = ud and GetTooltipArmor(ud) or nil,
+		healthText = ud and FormatNbr(ud.health, 0) or (buildData.health and FormatNbr(buildData.health, 0) or nil),
+		shieldText = (ud and ud.shieldWeaponDef and WeaponDefs[ud.shieldWeaponDef]) and FormatNbr(WeaponDefs[ud.shieldWeaponDef].shieldPower, 0) or nil,
+		overshieldText = (ud and ud.customParams and ud.customParams.isshieldedunit == "1" and ud.customParams.shield_max_strength) and FormatNbr(ud.customParams.shield_max_strength, 0) or nil,
+		statusText = humanNameToKeySymbols[buildData.name] and ("Hotkey: " .. humanNameToKeySymbols[buildData.name]) or nil,
+
+		metalCostText = FormatNbr(buildData.metalCost or (ud and ud.metalCost or 0), 0),
+		energyCostText = FormatNbr(buildData.energyCost or (ud and ud.energyCost or 0), 0),
+		supplyText = supplyText,
+		upkeepText = nil,
+
+		buildTimeText = estBuildTime and (tostring(estBuildTime) .. "s") or nil,
+		buildPowerText = (ud and ud.buildSpeed and ud.buildSpeed > 0) and GetTooltipBuildPower(ud.buildSpeed) or nil,
+
+		weaponCards = ud and BuildWeaponCards(ud) or {},
+	}
+end
+
+local function BuildOrderPanelData(orderData)
+	return {
+		title = orderData.title or "Command",
+		subtitle = "",
+		body = orderData.body or "",
+	}
+end
+
+local function BuildFeaturePanelData(featureID)
+	local featureDefID = spGetFeatureDefID(featureID)
+	local fd = featureDefID and FeatureDefs[featureDefID]
+	if not fd then return nil end
+
+	local reclaimLeft, metal, energy = spGetFeatureResources(featureID)
+	local health, maxHealth = spGetFeatureHealth(featureID)
+
+	return {
+		title = fd.name or "Feature",
+		subtitle = fd.tooltip or "Map Feature",
+		tech = nil,
+
+		roleText = "Feature",
+		armorText = nil,
+		healthText = health and maxHealth and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil,
+		shieldText = nil,
+		overshieldText = nil,
+		statusText = reclaimLeft and ("Reclaim left: " .. FormatNbr(reclaimLeft, 0) .. "%") or nil,
+
+		metalCostText = metal and FormatNbr(metal, 0) or "-",
+		energyCostText = energy and FormatNbr(energy, 0) or "-",
+		supplyText = nil,
+		upkeepText = nil,
+
+		buildTimeText = nil,
+		buildPowerText = nil,
+
+		weaponCards = {},
+	}
+end
+
+--------------------------------------------------------------------------------
+-- Main draw
+--------------------------------------------------------------------------------
+
+local function DrawTooltipPanel(resolved)
+	if not resolved then return end
+
+	local panelData = nil
+	local isOrder = false
+
+	if resolved.type == "unit" then
+		panelData = BuildUnitPanelData(resolved.id)
+	elseif resolved.type == "feature" then
+		panelData = BuildFeaturePanelData(resolved.id)
+	elseif resolved.type == "build" then
+		panelData = BuildBuildPanelData(resolved)
+	elseif resolved.type == "order" then
+		panelData = BuildOrderPanelData(resolved)
+		isOrder = true
+	end
+
+	if not panelData then
+		return
+	end
+
+	local x1, y1, x2, y2 = tooltipPanel.x1, tooltipPanel.y1, tooltipPanel.x2, tooltipPanel.y2
+	if x2 > vsx - 8 then
+		return
+	end
+
+	DrawPanel(x1, y1, x2, y2)
+
+	local CORNER_SAFE_TOP = PANEL_RADIUS + 8
+	local CORNER_SAFE_SIDE = PANEL_RADIUS + 8
+	local CORNER_SAFE_BOTTOM = INNER_PAD + 2
+
+	local top = y2 - CORNER_SAFE_TOP
+	local bottom = y1 + CORNER_SAFE_BOTTOM
+	local sx = x1 + CORNER_SAFE_SIDE
+	local width = (x2 - x1) - (CORNER_SAFE_SIDE * 2)
+	local cy = top
+
+	cy = DrawTitleSection(panelData, sx, cy, width)
+
+	if isOrder then
+		cy = DrawOrderSection(panelData, sx, cy, width)
+		return
+	end
+
+	cy = DrawStatsSection(panelData, sx, cy, width)
+	cy = DrawEconomySection(panelData, sx, cy, width)
+
+	if panelData.buildTimeText or panelData.buildPowerText then
+		cy = DrawBuildSection(panelData, sx, cy, width)
+	end
+
+	if cy > bottom + 26 then
+		cy = DrawWeaponCards(panelData.weaponCards, sx, cy, width, bottom + 4)
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Widget callins
+--------------------------------------------------------------------------------
+
+function widget:Initialize()
+	UpdateRects()
+	spSendCommands({"tooltip 0"})
+	spSetDrawSelectionInfo(false)
+
+	for _, ud in pairs(UnitDefs) do
+		ud.shieldPower = 0
+		local shieldDefID = ud.shieldWeaponDef
+		ud.shieldPower = ((shieldDefID) and (WeaponDefs[shieldDefID].shieldPower)) or (-1)
+	end
+end
+
+function widget:Shutdown()
+	spSendCommands({"tooltip 1"})
+end
+
+function widget:ViewResize()
+	UpdateRects()
+end
+
+function widget:Update(dt)
+	ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
+end
+
+function widget:DrawScreen()
+	if spIsGUIHidden() then
+		return
+	end
+	if not spGetCurrentTooltip then
+		return
+	end
+
+	local resolved = ResolveTooltipData()
+	if not resolved then
+		return
+	end
+
+	DrawTooltipPanel(resolved)
+end
