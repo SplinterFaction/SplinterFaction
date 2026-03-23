@@ -121,8 +121,124 @@ local function GetPlayerColorByName(name)
 	return {1, 1, 1, 1}
 end
 
+local function MeasureText(text, size)
+	return font:GetTextWidth(text) * size
+end
+
+local function WrapTextToWidth(text, maxWidth, size)
+	if not text or text == "" then
+		return {""}
+	end
+
+	local lines = {}
+	local current = ""
+
+	for word in text:gmatch("%S+") do
+		local testLine
+		if current == "" then
+			testLine = word
+		else
+			testLine = current .. " " .. word
+		end
+
+		if MeasureText(testLine, size) <= maxWidth then
+			current = testLine
+		else
+			if current ~= "" then
+				lines[#lines + 1] = current
+				current = word
+			else
+				-- single very long word fallback
+				lines[#lines + 1] = word
+				current = ""
+			end
+		end
+	end
+
+	if current ~= "" then
+		lines[#lines + 1] = current
+	end
+
+	if #lines == 0 then
+		lines[1] = ""
+	end
+
+	return lines
+end
+
+local function BuildWrappedEntry(entry)
+	if not entry.player then
+		local bodyLines = WrapTextToWidth(entry.body or "", MAX_BOX_WIDTH, FONT_SIZE)
+		return {
+			entry = entry,
+			nameText = nil,
+			separatorText = nil,
+			bodyLines = bodyLines,
+			nameWidth = 0,
+			separatorWidth = 0,
+			bodyX = 0,
+			width = MAX_BOX_WIDTH,
+			height = #bodyLines,
+		}
+	end
+
+	local nameText = entry.player
+	local separatorText = ":"
+
+	local nameWidth = MeasureText(nameText, FONT_SIZE)
+	local separatorWidth = MeasureText(separatorText, FONT_SIZE)
+	local prefixWidth = nameWidth + separatorWidth + NAME_BODY_GAP
+
+	local firstLineBodyWidth = math.max(40, MAX_BOX_WIDTH - prefixWidth)
+	local wrappedBody = WrapTextToWidth(entry.body or "", firstLineBodyWidth, FONT_SIZE)
+
+	-- re-wrap continuation lines to full continued width if desired
+	-- here we keep continuation aligned under the message start
+	local bodyX = prefixWidth
+	local continuedWidth = math.max(40, MAX_BOX_WIDTH - bodyX)
+
+	if #wrappedBody > 1 then
+		local rebuilt = {wrappedBody[1]}
+		local remaining = table.concat(wrappedBody, " ", 2)
+		local continuationLines = WrapTextToWidth(remaining, continuedWidth, FONT_SIZE)
+		for i = 1, #continuationLines do
+			rebuilt[#rebuilt + 1] = continuationLines[i]
+		end
+		wrappedBody = rebuilt
+	end
+
+	local longestBodyWidth = 0
+	for i = 1, #wrappedBody do
+		local lineWidth = MeasureText(wrappedBody[i], FONT_SIZE)
+		if lineWidth > longestBodyWidth then
+			longestBodyWidth = lineWidth
+		end
+	end
+
+	local totalWidth = math.min(
+			MAX_BOX_WIDTH,
+			math.max(
+					prefixWidth + MeasureText(wrappedBody[1] or "", FONT_SIZE),
+					bodyX + longestBodyWidth
+			)
+	)
+
+	return {
+		entry = entry,
+		nameText = nameText,
+		separatorText = separatorText,
+		bodyLines = wrappedBody,
+		nameWidth = nameWidth,
+		separatorWidth = separatorWidth,
+		bodyX = bodyX,
+		width = totalWidth,
+		height = #wrappedBody,
+	}
+end
+
 local function PushChatLine(data)
-	data.time = os.clock()
+	data.time    = os.clock()
+	data.wrapped = BuildWrappedEntry(data)   -- compute once, reuse forever
 	chatLines[#chatLines + 1] = data
 end
 
@@ -301,120 +417,6 @@ end
 -- Draw
 --------------------------------------------------------------------------------
 
-local function MeasureText(text, size)
-	return font:GetTextWidth(text) * size
-end
-
-local function WrapTextToWidth(text, maxWidth, size)
-	if not text or text == "" then
-		return {""}
-	end
-
-	local lines = {}
-	local current = ""
-
-	for word in text:gmatch("%S+") do
-		local testLine
-		if current == "" then
-			testLine = word
-		else
-			testLine = current .. " " .. word
-		end
-
-		if MeasureText(testLine, size) <= maxWidth then
-			current = testLine
-		else
-			if current ~= "" then
-				lines[#lines + 1] = current
-				current = word
-			else
-				-- single very long word fallback
-				lines[#lines + 1] = word
-				current = ""
-			end
-		end
-	end
-
-	if current ~= "" then
-		lines[#lines + 1] = current
-	end
-
-	if #lines == 0 then
-		lines[1] = ""
-	end
-
-	return lines
-end
-
-local function BuildWrappedEntry(entry)
-	if not entry.player then
-		local bodyLines = WrapTextToWidth(entry.body or "", MAX_BOX_WIDTH, FONT_SIZE)
-		return {
-			entry = entry,
-			nameText = nil,
-			separatorText = nil,
-			bodyLines = bodyLines,
-			nameWidth = 0,
-			separatorWidth = 0,
-			bodyX = 0,
-			width = MAX_BOX_WIDTH,
-			height = #bodyLines,
-		}
-	end
-
-	local nameText = entry.player
-	local separatorText = ":"
-
-	local nameWidth = MeasureText(nameText, FONT_SIZE)
-	local separatorWidth = MeasureText(separatorText, FONT_SIZE)
-	local prefixWidth = nameWidth + separatorWidth + NAME_BODY_GAP
-
-	local firstLineBodyWidth = math.max(40, MAX_BOX_WIDTH - prefixWidth)
-	local wrappedBody = WrapTextToWidth(entry.body or "", firstLineBodyWidth, FONT_SIZE)
-
-	-- re-wrap continuation lines to full continued width if desired
-	-- here we keep continuation aligned under the message start
-	local bodyX = prefixWidth
-	local continuedWidth = math.max(40, MAX_BOX_WIDTH - bodyX)
-
-	if #wrappedBody > 1 then
-		local rebuilt = {wrappedBody[1]}
-		local remaining = table.concat(wrappedBody, " ", 2)
-		local continuationLines = WrapTextToWidth(remaining, continuedWidth, FONT_SIZE)
-		for i = 1, #continuationLines do
-			rebuilt[#rebuilt + 1] = continuationLines[i]
-		end
-		wrappedBody = rebuilt
-	end
-
-	local longestBodyWidth = 0
-	for i = 1, #wrappedBody do
-		local lineWidth = MeasureText(wrappedBody[i], FONT_SIZE)
-		if lineWidth > longestBodyWidth then
-			longestBodyWidth = lineWidth
-		end
-	end
-
-	local totalWidth = math.min(
-			MAX_BOX_WIDTH,
-			math.max(
-					prefixWidth + MeasureText(wrappedBody[1] or "", FONT_SIZE),
-					bodyX + longestBodyWidth
-			)
-	)
-
-	return {
-		entry = entry,
-		nameText = nameText,
-		separatorText = separatorText,
-		bodyLines = wrappedBody,
-		nameWidth = nameWidth,
-		separatorWidth = separatorWidth,
-		bodyX = bodyX,
-		width = totalWidth,
-		height = #wrappedBody,
-	}
-end
 
 local function GetLineAlpha(entry, now)
 	local age = now - entry.time
@@ -523,11 +525,11 @@ function widget:DrawScreen()
 		local entry = chatLines[i]
 		local alpha = GetLineAlpha(entry, now)
 		if alpha > 0 then
-			local wrapped = BuildWrappedEntry(entry)
+			-- wrapped is pre-computed in PushChatLine; never rebuild here
 			alive[#alive + 1] = {
-				entry = entry,
-				alpha = alpha,
-				wrapped = wrapped,
+				entry   = entry,
+				alpha   = alpha,
+				wrapped = entry.wrapped,
 			}
 		end
 	end
@@ -537,7 +539,6 @@ function widget:DrawScreen()
 		return
 	end
 
-	-- Trim by rendered line count, including wrapped lines
 	alive = TrimAliveToMaxRenderedLines(alive, MAX_LINES)
 
 	-- Rebuild backing chatLines from trimmed visible entries only
@@ -559,7 +560,7 @@ function widget:DrawScreen()
 	local totalHeight = math.max(FONT_SIZE, ((totalLineCount - 1) * LINE_SPACING) + FONT_SIZE)
 
 	local boxWidth = MAX_BOX_WIDTH
-	local x = (vsx * 0.5) - (boxWidth * 0.5)
+	local x    = (vsx * 0.5) - (boxWidth * 0.5)
 	local yTop = (vsy * 0.15) + (totalHeight * 0.5)
 
 	if DRAW_BACKGROUND then
@@ -572,11 +573,14 @@ function widget:DrawScreen()
 		)
 	end
 
+	-- Single font batch for all lines -- eliminates per-draw Begin/End overhead
+	font:Begin()
 	local currentY = yTop
 	for i = 1, #alive do
 		DrawWrappedEntry(x, currentY, alive[i].wrapped, alive[i].alpha)
 		currentY = currentY - (alive[i].wrapped.height * LINE_SPACING)
 	end
+	font:End()
 
 	font:SetTextColor(1, 1, 1, 1)
 	glColor(1, 1, 1, 1)

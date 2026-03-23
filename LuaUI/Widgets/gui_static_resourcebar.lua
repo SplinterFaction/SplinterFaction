@@ -94,6 +94,25 @@ local supplyDisplayCap = SUPPLY_MIN_CAP
 local supplyShrinkFrame = 0
 local chobbyInterface = false
 
+-- Last values used to build the dynamic list. The list is only rebuilt when
+-- any of these change, instead of every frame.
+local lastDynamic = {}
+
+local function DynamicValuesChanged(supplyUsed, supplyMax, supplyFree, supplyPct,
+                                    mc, ms, mi, mp, metalPct,
+                                    ec, es, ei, ep, energyPct)
+	return lastDynamic.supplyUsed ~= supplyUsed
+			or lastDynamic.supplyMax  ~= supplyMax
+			or lastDynamic.supplyFree ~= supplyFree
+			or lastDynamic.supplyPct  ~= supplyPct
+			or lastDynamic.mc ~= mc or lastDynamic.ms ~= ms
+			or lastDynamic.mi ~= mi or lastDynamic.mp ~= mp
+			or lastDynamic.metalPct   ~= metalPct
+			or lastDynamic.ec ~= ec or lastDynamic.es ~= es
+			or lastDynamic.ei ~= ei or lastDynamic.ep ~= ep
+			or lastDynamic.energyPct  ~= energyPct
+end
+
 --------------------------------------------------------------------------------
 -- helpers
 --------------------------------------------------------------------------------
@@ -345,58 +364,66 @@ local function BuildStaticList()
 end
 
 local function BuildDynamicList()
-	if displayListDynamic then
-		gl.DeleteList(displayListDynamic)
+	local myTeamID = spGetMyTeamID()
+	if not myTeamID then return end
+
+	local supplyUsed = round(spGetTeamRulesParam(myTeamID, "supplyUsed") or 0)
+	local supplyMax  = round(spGetTeamRulesParam(myTeamID, "supplyMax") or 0)
+
+	local ec, es, ep, ei, ee = spGetTeamResources(myTeamID, "energy")
+	local mc, ms, mp, mi, me = spGetTeamResources(myTeamID, "metal")
+
+	ec, es, ep, ei, ee = ec or 0, es or 1, ep or 0, ei or 0, ee or 0
+	mc, ms, mp, mi, me = mc or 0, ms or 1, mp or 0, mi or 0, me or 0
+
+	UpdateSupplyDisplayCap(supplyMax)
+
+	local supplyFree = math.max(0, supplyMax - supplyUsed)
+	local supplyPct  = (supplyDisplayCap > 0) and (supplyFree / supplyDisplayCap) or 0
+	local metalPct   = (ms > 0) and (mc / ms) or 0
+	local energyPct  = (es > 0) and (ec / es) or 0
+
+	-- Only rebuild the list if any value actually changed
+	if displayListDynamic and not DynamicValuesChanged(
+			supplyUsed, supplyMax, supplyFree, supplyPct,
+			mc, ms, mi, mp, metalPct,
+			ec, es, ei, ep, energyPct) then
+		return
+	end
+
+	-- Save values for next-frame comparison
+	lastDynamic.supplyUsed = supplyUsed ; lastDynamic.supplyMax  = supplyMax
+	lastDynamic.supplyFree = supplyFree ; lastDynamic.supplyPct  = supplyPct
+	lastDynamic.mc = mc ; lastDynamic.ms = ms
+	lastDynamic.mi = mi ; lastDynamic.mp = mp ; lastDynamic.metalPct  = metalPct
+	lastDynamic.ec = ec ; lastDynamic.es = es
+	lastDynamic.ei = ei ; lastDynamic.ep = ep ; lastDynamic.energyPct = energyPct
+
+	if displayListDynamic then gl.DeleteList(displayListDynamic) end
+
+	local supplyR, supplyG, supplyB = 0.30, 0.90, 0.35
+
+	if supplyFree <= 0 then
+		supplyR, supplyG, supplyB = 1.0, 0.24, 0.24
+	elseif supplyFree <= math.max(5, supplyMax * 0.20) then
+		supplyR, supplyG, supplyB = 1.0, 0.65, 0.18
+	end
+
+	local metalR, metalG, metalB = 0.74, 0.84, 0.95
+	if metalPct > 0.85 then
+		metalR, metalG, metalB = 1.0, 0.50, 0.18
+	elseif metalPct < 0.20 then
+		metalR, metalG, metalB = 1.0, 0.25, 0.25
+	end
+
+	local energyR, energyG, energyB = 0.94, 0.84, 0.24
+	if energyPct < 0.20 then
+		energyR, energyG, energyB = 1.0, 0.25, 0.25
+	elseif energyPct > 0.80 then
+		energyR, energyG, energyB = 0.35, 0.95, 0.35
 	end
 
 	displayListDynamic = gl.CreateList(function()
-		local myTeamID = spGetMyTeamID()
-		if not myTeamID then return end
-
-		local supplyUsed = round(spGetTeamRulesParam(myTeamID, "supplyUsed") or 0)
-		local supplyMax  = round(spGetTeamRulesParam(myTeamID, "supplyMax") or 0)
-
-		local ec, es, ep, ei, ee = spGetTeamResources(myTeamID, "energy")
-		local mc, ms, mp, mi, me = spGetTeamResources(myTeamID, "metal")
-
-		ec, es, ep, ei, ee = ec or 0, es or 1, ep or 0, ei or 0, ee or 0
-		mc, ms, mp, mi, me = mc or 0, ms or 1, mp or 0, mi or 0, me or 0
-
-		UpdateSupplyDisplayCap(supplyMax)
-
-		local supplyFree = math.max(0, supplyMax - supplyUsed)
-		local supplyPct = 0
-		if supplyDisplayCap > 0 then
-			supplyPct = supplyFree / supplyDisplayCap
-		end
-
-		local metalPct  = (ms > 0) and (mc / ms) or 0
-		local energyPct = (es > 0) and (ec / es) or 0
-
-		local supplyR, supplyG, supplyB = 0.30, 0.90, 0.35  -- green
-
-		if supplyFree <= 0 then
-			-- hard capped → red
-			supplyR, supplyG, supplyB = 1.0, 0.24, 0.24
-		elseif supplyFree <= math.max(5, supplyMax * 0.20) then
-			-- low supply → orange warning
-			supplyR, supplyG, supplyB = 1.0, 0.65, 0.18
-		end
-
-		local metalR, metalG, metalB = 0.74, 0.84, 0.95
-		if metalPct > 0.85 then
-			metalR, metalG, metalB = 1.0, 0.50, 0.18
-		elseif metalPct < 0.20 then
-			metalR, metalG, metalB = 1.0, 0.25, 0.25
-		end
-
-		local energyR, energyG, energyB = 0.94, 0.84, 0.24
-		if energyPct < 0.20 then
-			energyR, energyG, energyB = 1.0, 0.25, 0.25
-		elseif energyPct > 0.80 then
-			energyR, energyG, energyB = 0.35, 0.95, 0.35
-		end
-
 		glPushMatrix()
 		glTranslate(posx, posy, 0)
 		glScale(widgetScale, widgetScale, 1)

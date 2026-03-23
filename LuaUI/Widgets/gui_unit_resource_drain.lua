@@ -14,10 +14,11 @@ end
 -- Config
 --------------------------------------------------------------------------------
 
-local UPDATE_FRAMES      = 8
+local UPDATE_FRAMES      = 16
 local MIN_VALUE_TO_SHOW  = 0.05
 local TEXT_SIZE          = 16
 local MAX_DIST           = 5000
+local MAX_DIST_SQ        = MAX_DIST * MAX_DIST
 local GROUND_Y_OFFSET    = 1.2   -- lift slightly above terrain to reduce z-fighting
 
 -- "energy", "metal", "both"
@@ -76,7 +77,7 @@ local math_sqrt             = math.sqrt
 -- Locals
 --------------------------------------------------------------------------------
 
-local unitTextCache = {}
+local unitTextCache = {}   -- array of data entries, rebuilt each update
 local lastUpdateFrame = -math.huge
 local myTeamID = spGetMyTeamID()
 
@@ -179,8 +180,8 @@ local function FormatStackedTexts(metalValue, energyValue)
 	local showEnergy = (DISPLAY_MODE == "energy" or DISPLAY_MODE == "both")
 	local showMetal  = (DISPLAY_MODE == "metal"  or DISPLAY_MODE == "both")
 
-	local hasMetal  = showMetal  and metalValue  and math.abs(metalValue)  > MIN_VALUE_TO_SHOW
-	local hasEnergy = showEnergy and energyValue and math.abs(energyValue) > MIN_VALUE_TO_SHOW
+	local hasMetal  = showMetal  and metalValue  and metalValue  < -MIN_VALUE_TO_SHOW
+	local hasEnergy = showEnergy and energyValue and energyValue < -MIN_VALUE_TO_SHOW
 
 	if not hasMetal and not hasEnergy then
 		return nil, nil
@@ -321,14 +322,18 @@ local function UpdateCache()
 							drawZ
 					)
 
-					unitTextCache[unitID] = {
-						metalText = metalText,
+					-- Pre-compute terrain matrix once here; DrawWorldPreUnit just reads it.
+					local matrix = GetTerrainTextMatrix(finalX, finalZ)
+
+					unitTextCache[#unitTextCache + 1] = {
+						metalText  = metalText,
 						energyText = energyText,
 						metalValue = metalValue,
 						energyValue = energyValue,
-						x = finalX,
-						y = finalY,
-						z = finalZ,
+						x      = finalX,
+						y      = finalY,
+						z      = finalZ,
+						matrix = matrix,
 					}
 				end
 			end
@@ -353,38 +358,31 @@ function widget:PlayerChanged()
 end
 
 function widget:DrawWorldPreUnit()
-	if spIsGUIHidden() then
-		return
-	end
+	if spIsGUIHidden() then return end
 
 	local camX, camY, camZ = spGetCameraPosition()
-	if not camX then
-		return
-	end
+	if not camX then return end
+
+	if #unitTextCache == 0 then return end
 
 	glDepthTest(true)
 	glPolygonOffset(-2, -2)
-
-	for unitID, data in pairs(unitTextCache) do
+	for i = 1, #unitTextCache do
+		local data = unitTextCache[i]
 		local dx = data.x - camX
 		local dy = data.y - camY
 		local dz = data.z - camZ
-		local distSq = dx*dx + dy*dy + dz*dz
 
-		if distSq <= (MAX_DIST * MAX_DIST) then
-			local matrix = GetTerrainTextMatrix(data.x, data.z)
-
+		if dx*dx + dy*dy + dz*dz <= MAX_DIST_SQ then
 			glPushMatrix()
 			glTranslate(data.x, data.y, data.z)
-			glMultMatrix(matrix)
+			glMultMatrix(data.matrix)
 
 			if data.metalText and data.energyText then
 				local mc = (data.metalValue >= 0) and METAL_POS_COLOR or METAL_NEG_COLOR
 				local ec = (data.energyValue >= 0) and ENERGY_POS_COLOR or ENERGY_NEG_COLOR
-
 				glColor(mc[1], mc[2], mc[3], mc[4])
 				glText(data.metalText, 0, LINE_SPACING * 0.5, TEXT_SIZE, "oc")
-
 				glColor(ec[1], ec[2], ec[3], ec[4])
 				glText(data.energyText, 0, -LINE_SPACING * 0.5, TEXT_SIZE, "oc")
 
@@ -398,6 +396,7 @@ function widget:DrawWorldPreUnit()
 				glColor(ec[1], ec[2], ec[3], ec[4])
 				glText(data.energyText, 0, 0, TEXT_SIZE, "oc")
 			end
+
 			glPopMatrix()
 		end
 	end

@@ -190,6 +190,30 @@ local hiddenCMDs = {
 }
 
 --------------------------------------------------------------------------------
+-- Render cache state
+--
+-- We cache the "static" layer into GL display lists — one per panel.
+-- Display lists compile the GL command stream and replay it cheaply each frame.
+-- They are rebuilt only when commandsDirty fires, viewport resizes, or scroll changes.
+--
+-- The "dynamic" layer (hover, active-command tint, scrollbar thumb) is drawn
+-- each frame as immediate-mode quads on top.
+--------------------------------------------------------------------------------
+
+local buildList       = nil   -- display list for build panel static layer
+local orderList       = nil   -- display list for order panel static layer
+local staticDirty     = true
+local lastScrollOffset = -1
+
+local cachedLayoutItems = {}
+local cachedOrderItems  = {}
+
+local function FreeDisplayLists()
+    if buildList then gl.DeleteList(buildList) ; buildList = nil end
+    if orderList then gl.DeleteList(orderList) ; orderList = nil end
+end
+
+--------------------------------------------------------------------------------
 -- Helpers
 --------------------------------------------------------------------------------
 
@@ -487,6 +511,7 @@ local function ProcessAllCommands(flush)
     UpdatePanelVisibility(#currentCommands[1] + #currentCommands[2], #currentCommands[3])
 
     commandsDirty = false
+    staticDirty   = true   -- commands changed: static layer must be rebaked
 end
 
 --------------------------------------------------------------------------------
@@ -506,7 +531,7 @@ local function OverrideDefaultMenu()
 end
 
 --------------------------------------------------------------------------------
--- Drawing primitives
+-- Drawing primitives  (unchanged — used both for bake pass and dynamic pass)
 --------------------------------------------------------------------------------
 
 local function RoundedRectVertices(x1, y1, x2, y2, r, segments)
@@ -658,12 +683,20 @@ local function ApplyCommand(cmdID, button)
 end
 
 --------------------------------------------------------------------------------
--- Build content layout and draw
+-- Build layout
+--
+-- BuildButtonLayout_Bake  — called inside RenderToTexture, draws using full
+--   screen coords (RenderToTexture captures whatever is drawn at those coords).
+--   Populates cachedLayoutItems for reuse.
+--
+-- BuildButtonLayout_Hitboxes  — called every DrawScreen frame, rebuilds
+--   currentBuildHitboxes from cachedLayoutItems for hit testing and overlays.
 --------------------------------------------------------------------------------
 
-local function BuildButtonLayout(mx, my, activeCmdID)
+local function BuildButtonLayout_Bake(scrollOffset)
+    cachedLayoutItems   = {}
     currentBuildHitboxes = {}
-    scrollbarInfo = nil
+    scrollbarInfo        = nil
 
     local x1 = buildPanel.x1 + INNER_PAD
     local x2 = buildPanel.x2 - INNER_PAD
@@ -672,13 +705,13 @@ local function BuildButtonLayout(mx, my, activeCmdID)
 
     local contentX1 = x1
     local contentX2 = x2 - SCROLLBAR_W - 6
-    local contentW = contentX2 - contentX1
-    local buttonW = math_floor((contentW - BUTTON_PAD * (BUILD_COLUMNS - 1)) / BUILD_COLUMNS)
-    local buttonH = buttonW + BUILD_INFO_H
+    local contentW  = contentX2 - contentX1
+    local buttonW   = math_floor((contentW - BUTTON_PAD * (BUILD_COLUMNS - 1)) / BUILD_COLUMNS)
+    local buttonH   = buttonW + BUILD_INFO_H
 
     buildViewHeight = y2 - y1
 
-    local layoutItems = {}
+    local layoutItems = cachedLayoutItems
     local cy = 0
 
     local function AddSectionHeader(text)
@@ -699,22 +732,16 @@ local function BuildButtonLayout(mx, my, activeCmdID)
             local by1 = cy + row * (buttonH + BUTTON_PAD)
             local bx2 = bx1 + buttonW
             local by2 = by1 + buttonH
-            layoutItems[#layoutItems + 1] = {
-                kind = "buildbutton",
-                cmd = cmds[i],
-                x1 = bx1, y1 = by1, x2 = bx2, y2 = by2,
-            }
+            layoutItems[#layoutItems + 1] = { kind = "buildbutton", cmd = cmds[i], x1 = bx1, y1 = by1, x2 = bx2, y2 = by2 }
         end
         cy = cy + math_max(1, math_ceil(#cmds / BUILD_COLUMNS)) * (buttonH + BUTTON_PAD) - BUTTON_PAD + BUILD_GRID_GAP
     end
 
     local function AddFamily(family)
         local grouped = processedBuild.grouped[family]
-        local order = FAMILY_CATEGORY_ORDER[family]
-        local any = false
-        for i = 1, #order do
-            if #grouped[order[i]] > 0 then any = true break end
-        end
+        local order   = FAMILY_CATEGORY_ORDER[family]
+        local any     = false
+        for i = 1, #order do if #grouped[order[i]] > 0 then any = true break end end
         if not any then return end
         AddSectionHeader(FAMILY_SECTION_TITLES[family])
         for i = 1, #order do
@@ -735,34 +762,37 @@ local function BuildButtonLayout(mx, my, activeCmdID)
     end
 
     buildContentHeight = math_max(cy, buildViewHeight)
-    buildScrollOffset = Clamp(buildScrollOffset, 0, math_max(0, buildContentHeight - buildViewHeight))
+    buildScrollOffset  = Clamp(scrollOffset, 0, math_max(0, buildContentHeight - buildViewHeight))
 
+    -- Draw everything at screen coordinates — RenderToTexture captures them.
     glScissor(contentX1, y1, contentW, buildViewHeight)
+
     for i = 1, #layoutItems do
         local item = layoutItems[i]
+
+        -- Convert layout-space y (grows downward from 0) to screen y
         local iy1 = y2 - (item.y1 - buildScrollOffset) - (item.y2 - item.y1)
         local iy2 = y2 - (item.y1 - buildScrollOffset)
 
         if iy2 >= y1 and iy1 <= y2 then
+
             if item.kind == "section" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 7, SECTION_BG)
                 glColor(HEADER_TEXT)
                 DrawTextFitted(item.text, item.x1 + 8, iy1 + 6, 13, "o", item.x2 - item.x1 - 16)
+
             elseif item.kind == "category" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 6, CATEGORY_BG)
                 glColor(HEADER_TEXT)
                 DrawTextFitted(item.text, item.x1 + 12, iy1 + 4, 11, "o", item.x2 - item.x1 - 20)
-            elseif item.kind == "buildbutton" then
-                local cmd = item.cmd
-                local hovered = mx and my and IsInside(mx, my, item.x1, iy1, item.x2, iy2)
-                local active = (activeCmdID == cmd.id)
-                local disabled = cmd.disabled
-                local buildDefID = -cmd.id
 
-                local iconY1 = iy1 + BUILD_INFO_H
-                local iconY2 = iy2
-                local infoY1 = iy1
-                local infoY2 = iy1 + BUILD_INFO_H - 2
+            elseif item.kind == "buildbutton" then
+                local cmd      = item.cmd
+                local buildDefID = -cmd.id
+                local iconY1   = iy1 + BUILD_INFO_H
+                local iconY2   = iy2
+                local infoY1   = iy1
+                local infoY2   = iy1 + BUILD_INFO_H - 2
 
                 DrawRoundedRect(item.x1, infoY1, item.x2, iconY2, 6, {0.12, 0.12, 0.13, 0.80})
                 DrawRoundedRect(item.x1 + 1, infoY1 + 1, item.x2 - 1, infoY2, 5, {0.08, 0.08, 0.09, 0.92})
@@ -770,53 +800,29 @@ local function BuildButtonLayout(mx, my, activeCmdID)
                 glRect(item.x1 + 4, infoY2, item.x2 - 4, infoY2 + 1)
                 DrawIcon(item.x1 + 1, iconY1 + 1, item.x2 - 1, iconY2 - 1, '#' .. buildDefID)
 
+                -- Queue count badge
                 local queueCount = tonumber(cmd.params and cmd.params[1])
                 if queueCount and queueCount > 0 then
                     local queueText = tostring(math_floor(queueCount))
-                    local iconH = iconY2 - iconY1
-                    local qSize = math_max(11, math_floor(iconH * 0.16))
-                    local qPadX = 5
-                    local qPadY = 4
-                    local textW = gl.GetTextWidth(queueText) * qSize
-                    local panelW = math_floor(textW + qPadX * 2)
-                    local panelH = math_floor(qSize + qPadY * 2)
-                    local qx2 = item.x2 - 4
-                    local qx1 = qx2 - panelW
-                    local qy2 = iconY2 - 4
-                    local qy1 = qy2 - panelH
-
+                    local iconH   = iconY2 - iconY1
+                    local qSize   = math_max(11, math_floor(iconH * 0.16))
+                    local qPadX, qPadY = 5, 4
+                    local panelW2 = math_floor(gl.GetTextWidth(queueText) * qSize + qPadX * 2)
+                    local panelH2 = math_floor(qSize + qPadY * 2)
+                    local qx2, qy2 = item.x2 - 4, iconY2 - 4
+                    local qx1, qy1 = qx2 - panelW2, qy2 - panelH2
                     DrawRoundedRect(qx1, qy1, qx2, qy2, 4, {0.08, 0.08, 0.09, 0.88})
                     DrawRoundedOutline(qx1, qy1, qx2, qy2, 4, {1.0, 1.0, 1.0, 0.10})
-
                     glColor(1.0, 1.0, 1.0, 1.0)
                     DrawTextFitted(queueText, qx2 - qPadX, qy1 + qPadY, qSize, "or")
                 end
 
-                if not disabled and hovered then
-                    DrawRoundedRect(item.x1, infoY1, item.x2, iconY2, 6, HOVER_OVERLAY)
-                end
-                if active then
-                    DrawRoundedRect(item.x1, infoY1, item.x2, iconY2, 6, ACTIVE_OVERLAY)
-                    DrawRoundedOutline(item.x1, infoY1, item.x2, iconY2, 6, {1.0, 0.85, 0.2, 0.7})
-                end
-                if disabled then
-                    DrawRoundedRect(item.x1, infoY1, item.x2, iconY2, 6, DISABLED_OVERLAY)
-                end
-
-                local overlay = ParseBuildOverlay(cmd)
+                -- Text overlays
+                local overlay              = ParseBuildOverlay(cmd)
                 local hotkeyText, hotkeyMatch = GetHotkeyText(cmd)
-
-                local leftTop = nil
-                local rightTop = nil
-                local bottomLeft = nil
-                local bottomRight = nil
-
-                if hotkeyText then
-                    leftTop = hotkeyText
-                end
-                if overlay.tech then
-                    rightTop = overlay.tech
-                end
+                local leftTop  = hotkeyText
+                local rightTop = overlay.tech
+                local bottomLeft, bottomRight = nil, nil
 
                 if overlay.metal and overlay.energy then
                     bottomLeft = overlay.metal .. " / " .. overlay.energy
@@ -825,46 +831,30 @@ local function BuildButtonLayout(mx, my, activeCmdID)
                 elseif overlay.energy then
                     bottomLeft = overlay.energy
                 end
+                if overlay.supply then bottomRight = overlay.supply end
 
-                if overlay.supply then
-                    bottomRight = overlay.supply -- Previously it was: "S:" .. overlay.supply
-                end
-
-                local panelPad = 5
-                local infoW = item.x2 - item.x1
+                local panelPad  = 5
+                local infoW     = item.x2 - item.x1
                 local topSize, bottomSize = GetInfoTextBaseSizes(infoW)
-                local rightTopReserve = rightTop and math_floor(topSize * 3.8) or 0
+                local rightTopReserve    = rightTop    and math_floor(topSize    * 3.8) or 0
                 local bottomRightReserve = bottomRight and math_floor(bottomSize * 4.8) or 0
-                local topY = infoY1 + BUILD_INFO_H - topSize - 3
+                local topY    = infoY1 + BUILD_INFO_H - topSize - 3
                 local bottomY = infoY1 + 4
 
                 if leftTop then
-                    if hotkeyMatch then
-                        glColor(0.2, 1.0, 0.2, 1.0)
-                    else
-                        glColor(1.0, 1.0, 1.0, 1.0)
-                    end
-                    local maxW = (item.x2 - item.x1) - panelPad * 2 - rightTopReserve
-                    DrawTextFitted(leftTop, item.x1 + panelPad, topY, topSize, "o", maxW)
+                    glColor(hotkeyMatch and {0.2, 1.0, 0.2, 1.0} or {1.0, 1.0, 1.0, 1.0})
+                    DrawTextFitted(leftTop, item.x1 + panelPad, topY, topSize, "o",
+                                   (item.x2 - item.x1) - panelPad * 2 - rightTopReserve)
                 end
-
                 if rightTop then
                     glColor(TECH_TEXT_COLORS[rightTop] or {1.0, 0.75, 0.30, 1.0})
-                    local rightW = math_floor(topSize * 3.2)
-                    DrawTextFitted(rightTop, item.x2 - panelPad, topY, topSize, "or", rightW)
+                    DrawTextFitted(rightTop, item.x2 - panelPad, topY, topSize, "or", math_floor(topSize * 3.2))
                 end
-
                 if bottomLeft then
-                    local metalWidth = 0
-                    local slashWidth = 0
-                    if overlay.metal then
-                        metalWidth = gl.GetTextWidth(overlay.metal) * bottomSize
-                    end
-                    if overlay.metal and overlay.energy then
-                        slashWidth = gl.GetTextWidth(" / ") * bottomSize
-                    end
-                    glColor(METAL_TEXT_COLOR)
+                    local metalWidth  = overlay.metal  and gl.GetTextWidth(overlay.metal)  * bottomSize or 0
+                    local slashWidth  = (overlay.metal and overlay.energy) and gl.GetTextWidth(" / ") * bottomSize or 0
                     local maxW = (item.x2 - item.x1) - panelPad * 2 - bottomRightReserve
+                    glColor(METAL_TEXT_COLOR)
                     DrawTextFitted(overlay.metal or bottomLeft, item.x1 + panelPad, bottomY, bottomSize, "o", maxW)
                     if overlay.metal and overlay.energy then
                         local energyX = item.x1 + panelPad + metalWidth
@@ -876,44 +866,67 @@ local function BuildButtonLayout(mx, my, activeCmdID)
                 end
                 if bottomRight then
                     glColor(1.0, 0.7, 0.2, 1.0)
-                    local rightW = math_floor(bottomSize * 4.2)
-                    DrawTextFitted(bottomRight, item.x2 - panelPad, bottomY, bottomSize, "or", rightW)
+                    DrawTextFitted(bottomRight, item.x2 - panelPad, bottomY, bottomSize, "or", math_floor(bottomSize * 4.2))
                 end
 
+                -- Cache screen-space hitbox for dynamic overlay pass
                 currentBuildHitboxes[#currentBuildHitboxes + 1] = {
-                    type = "build",
-                    cmd = cmd,
-                    x1 = item.x1,
-                    y1 = iy1,
-                    x2 = item.x2,
-                    y2 = iy2,
-                    disabled = disabled,
+                    type = "build", cmd = cmd, disabled = cmd.disabled,
+                    x1 = item.x1, y1 = iy1, x2 = item.x2, y2 = iy2,
+                }
+            end
+
+        end -- visibility check
+    end -- layout items loop
+
+    glScissor(false)
+
+    -- Scrollbar track (static — just the background rect)
+    if buildContentHeight > buildViewHeight then
+        local sbx1 = contentX2 + 6
+        local sbx2 = x2
+        DrawRoundedRect(sbx1, y1, sbx2, y2, 5, SCROLLBAR_BG)
+    end
+end
+
+-- Called every frame in DrawScreen to rebuild hitboxes from the cached layout
+-- and compute the scrollbar thumb position.
+local function BuildButtonLayout_Hitboxes(scrollOffset)
+    currentBuildHitboxes = {}
+    scrollbarInfo        = nil
+
+    local x1 = buildPanel.x1 + INNER_PAD
+    local x2 = buildPanel.x2 - INNER_PAD
+    local y1 = buildPanel.y1 + INNER_PAD
+    local y2 = buildPanel.y2 - INNER_PAD
+    local contentX2 = x2 - SCROLLBAR_W - 6
+
+    buildViewHeight = y2 - y1
+
+    for i = 1, #cachedLayoutItems do
+        local item = cachedLayoutItems[i]
+        if item.kind == "buildbutton" then
+            local iy1 = y2 - (item.y1 - scrollOffset) - (item.y2 - item.y1)
+            local iy2 = y2 - (item.y1 - scrollOffset)
+            if iy2 >= y1 and iy1 <= y2 then
+                currentBuildHitboxes[#currentBuildHitboxes + 1] = {
+                    type = "build", cmd = item.cmd, disabled = item.cmd.disabled,
+                    x1 = item.x1, y1 = iy1, x2 = item.x2, y2 = iy2,
                 }
             end
         end
     end
-    glScissor(false)
 
     if buildContentHeight > buildViewHeight then
-        local sbx1 = contentX2 + 6
-        local sbx2 = x2
-        local sby1 = y1
-        local sby2 = y2
-        DrawRoundedRect(sbx1, sby1, sbx2, sby2, 5, SCROLLBAR_BG)
-
+        local sbx1   = contentX2 + 6
+        local sbx2   = x2
         local thumbH = math_max(24, buildViewHeight * (buildViewHeight / buildContentHeight))
         local trackH = buildViewHeight - thumbH
-        local thumbOffset = 0
-        if buildContentHeight > buildViewHeight then
-            thumbOffset = trackH * (buildScrollOffset / (buildContentHeight - buildViewHeight))
-        end
-        local thy2 = y2 - thumbOffset
-        local thy1 = thy2 - thumbH
-        local thumbHover = mx and my and IsInside(mx, my, sbx1, thy1, sbx2, thy2)
-        DrawRoundedRect(sbx1 + 1, thy1, sbx2 - 1, thy2, 5, thumbHover and SCROLLBAR_THUMB_HOVER or SCROLLBAR_THUMB)
-
-        scrollbarInfo = { x1 = sbx1, y1 = sby1, x2 = sbx2, y2 = sby2, tx1 = sbx1, ty1 = thy1, tx2 = sbx2, ty2 = thy2 }
-        AddInteractiveItem({ type = "scrollbar", x1 = sbx1, y1 = sby1, x2 = sbx2, y2 = sby2 })
+        local thumbOffset = trackH * (scrollOffset / math_max(1, buildContentHeight - buildViewHeight))
+        local thy2   = y2 - thumbOffset
+        local thy1   = thy2 - thumbH
+        scrollbarInfo = { x1 = sbx1, y1 = y1, x2 = sbx2, y2 = y2, tx1 = sbx1, ty1 = thy1, tx2 = sbx2, ty2 = thy2 }
+        AddInteractiveItem({ type = "scrollbar", x1 = sbx1, y1 = y1, x2 = sbx2, y2 = y2 })
     end
 
     for i = 1, #currentBuildHitboxes do
@@ -922,7 +935,7 @@ local function BuildButtonLayout(mx, my, activeCmdID)
 end
 
 --------------------------------------------------------------------------------
--- Order layout and draw
+-- Order layout  (same split: static bake vs dynamic overlay)
 --------------------------------------------------------------------------------
 
 local function DrawStateBars(cmd, x1, y1, x2, y2)
@@ -955,8 +968,9 @@ local function DrawStateBars(cmd, x1, y1, x2, y2)
     end
 end
 
-local function DrawOrderButtons(mx, my, activeCmdID)
-    currentOrderHitboxes = {}
+-- Populates cachedOrderItems during the static bake (screen coords throughout).
+local function DrawOrderButtons_Static()
+    cachedOrderItems = {}
 
     local x1 = orderPanel.x1 + INNER_PAD
     local x2 = orderPanel.x2 - INNER_PAD
@@ -980,24 +994,11 @@ local function DrawOrderButtons(mx, my, activeCmdID)
         local by2 = y2 - row * (bh + ORDER_GRID_GAP)
         local bx2 = bx1 + bw
         local by1 = by2 - bh
-        local entry = merged[i]
-        local cmd = entry.cmd
 
-        local hovered = mx and my and IsInside(mx, my, bx1, by1, bx2, by2)
-        local active = activeCmdID == cmd.id
-        local disabled = cmd.disabled
+        local entry = merged[i]
+        local cmd   = entry.cmd
 
         DrawRoundedRect(bx1, by1, bx2, by2, 6, {0.14, 0.14, 0.15, 0.85})
-        if not disabled and hovered then
-            DrawRoundedRect(bx1, by1, bx2, by2, 6, HOVER_OVERLAY)
-        end
-        if active then
-            DrawRoundedRect(bx1, by1, bx2, by2, 6, ACTIVE_OVERLAY)
-            DrawRoundedOutline(bx1, by1, bx2, by2, 6, {1.0, 0.85, 0.2, 0.75})
-        end
-        if disabled then
-            DrawRoundedRect(bx1, by1, bx2, by2, 6, DISABLED_OVERLAY)
-        end
 
         local caption = cmd.name == "Repair" and "Build" or cmd.name
         glColor(1, 1, 1, 1)
@@ -1007,12 +1008,38 @@ local function DrawOrderButtons(mx, my, activeCmdID)
             DrawStateBars(cmd, bx1, by1, bx2, by2)
         end
 
-        currentOrderHitboxes[#currentOrderHitboxes + 1] = {
+        cachedOrderItems[#cachedOrderItems + 1] = {
             type = entry.state and "state" or "order",
-            cmd = cmd,
+            cmd  = cmd,
             x1 = bx1, y1 = by1, x2 = bx2, y2 = by2,
-            disabled = disabled,
+            disabled = cmd.disabled,
         }
+    end
+end
+
+local function DrawOrderButtons_Dynamic(mx, my, activeCmdID)
+    currentOrderHitboxes = {}
+
+    for i = 1, #cachedOrderItems do
+        local item = cachedOrderItems[i]
+        local cmd = item.cmd
+
+        local hovered  = mx and my and IsInside(mx, my, item.x1, item.y1, item.x2, item.y2)
+        local active   = activeCmdID == cmd.id
+        local disabled = cmd.disabled
+
+        if not disabled and hovered then
+            DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, HOVER_OVERLAY)
+        end
+        if active then
+            DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, ACTIVE_OVERLAY)
+            DrawRoundedOutline(item.x1, item.y1, item.x2, item.y2, 6, {1.0, 0.85, 0.2, 0.75})
+        end
+        if disabled then
+            DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, DISABLED_OVERLAY)
+        end
+
+        currentOrderHitboxes[#currentOrderHitboxes + 1] = item
     end
 
     for i = 1, #currentOrderHitboxes do
@@ -1041,6 +1068,35 @@ local function UpdateHover(mx, my)
 end
 
 --------------------------------------------------------------------------------
+-- Static bake  — render static layer into offscreen textures
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- Static bake — compile draw calls into display lists
+--------------------------------------------------------------------------------
+
+local function BakeStaticLayer()
+    FreeDisplayLists()
+
+    if showBuildPanel and processedBuild then
+        buildList = gl.CreateList(function()
+            DrawPanel(buildPanel.x1, buildPanel.y1, buildPanel.x2, buildPanel.y2)
+            BuildButtonLayout_Bake(buildScrollOffset)
+        end)
+    end
+
+    if showOrderPanel then
+        orderList = gl.CreateList(function()
+            DrawPanel(orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2)
+            DrawOrderButtons_Static()
+        end)
+    end
+
+    staticDirty      = false
+    lastScrollOffset = buildScrollOffset
+end
+
+--------------------------------------------------------------------------------
 -- Widget callins
 --------------------------------------------------------------------------------
 
@@ -1050,6 +1106,7 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
+    FreeDisplayLists()
     widgetHandler:ConfigLayoutHandler(nil)
     spForceLayoutUpdate()
 end
@@ -1057,6 +1114,7 @@ end
 function widget:ViewResize()
     UpdatePanelRects()
     commandsDirty = true
+    staticDirty   = true
 end
 
 function widget:CommandsChanged()
@@ -1067,15 +1125,16 @@ function widget:SelectionChanged()
     commandsDirty = true
 end
 
-function widget:UnitCreated() commandsDirty = true end
+function widget:UnitCreated()   commandsDirty = true end
 function widget:UnitDestroyed() commandsDirty = true end
-function widget:UnitGiven() commandsDirty = true end
-function widget:UnitTaken() commandsDirty = true end
+function widget:UnitGiven()     commandsDirty = true end
+function widget:UnitTaken()     commandsDirty = true end
 
 function widget:Update()
     local newOpacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
     if newOpacity ~= ui_opacity then
-        ui_opacity = newOpacity
+        ui_opacity  = newOpacity
+        staticDirty = true
     end
 
     if commandsDirty then
@@ -1083,6 +1142,12 @@ function widget:Update()
         showCost    = spGetConfigInt(SHOW_COST_CONFIG, 1) == 1
         showTechReq = spGetConfigInt(SHOW_TECHREQ_CONFIG, 1) == 1
         ProcessAllCommands(true)
+        -- staticDirty is set inside ProcessAllCommands
+    end
+
+    -- Scroll changes require a static rebake (content shifts)
+    if buildScrollOffset ~= lastScrollOffset then
+        staticDirty = true
     end
 
     if draggingScrollbar and scrollbarInfo then
@@ -1094,9 +1159,14 @@ function widget:Update()
         if trackRange > 0 then
             local desiredTop = Clamp(my + scrollbarDragOffset, trackBottom + thumbH, trackTop)
             local frac = (trackTop - desiredTop) / trackRange
-            buildScrollOffset = frac * math_max(0, buildContentHeight - buildViewHeight)
+            local newOffset = frac * math_max(0, buildContentHeight - buildViewHeight)
+            if newOffset ~= buildScrollOffset then
+                buildScrollOffset = newOffset
+                staticDirty = true
+            end
         end
     end
+
 end
 
 function widget:DrawScreen()
@@ -1104,18 +1174,66 @@ function widget:DrawScreen()
     if not lastCommands then return end
     if not showBuildPanel and not showOrderPanel then return end
 
+    -- Bake static layer here — gl calls are only valid inside Draw callins
+    if staticDirty then
+        BakeStaticLayer()
+    end
+
     interactiveItems = {}
     local mx, my = spGetMouseState()
     local _, activeCmdID = spGetActiveCommand()
 
-    if showBuildPanel then
-        DrawPanel(buildPanel.x1, buildPanel.y1, buildPanel.x2, buildPanel.y2)
-        BuildButtonLayout(mx, my, activeCmdID)
+    -- Dynamic overlay pass: blit cached textures, then draw hover/active states
+    -- The textures already contain all expensive geometry — we just blit them.
+
+    if showBuildPanel and buildList then
+        gl.CallList(buildList)
+
+        -- Rebuild hitboxes and scrollbar info from cached layout
+        BuildButtonLayout_Hitboxes(buildScrollOffset)
+
+        -- Draw hover/active overlays for build buttons, scissored to content area
+        local _cx1 = buildPanel.x1 + INNER_PAD
+        local _cx2 = buildPanel.x2 - INNER_PAD - SCROLLBAR_W - 6
+        local _cy1 = buildPanel.y1 + INNER_PAD
+        local _cy2 = buildPanel.y2 - INNER_PAD
+        glScissor(_cx1, _cy1, _cx2 - _cx1, _cy2 - _cy1)
+        for i = 1, #currentBuildHitboxes do
+            local item = currentBuildHitboxes[i]
+            local cmd = item.cmd
+            local hovered  = IsInside(mx, my, item.x1, item.y1, item.x2, item.y2)
+            local active   = activeCmdID == cmd.id
+            local disabled = cmd.disabled
+
+            if not disabled and hovered then
+                DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, HOVER_OVERLAY)
+            end
+            if active then
+                DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, ACTIVE_OVERLAY)
+                DrawRoundedOutline(item.x1, item.y1, item.x2, item.y2, 6, {1.0, 0.85, 0.2, 0.7})
+            end
+            if disabled then
+                DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, DISABLED_OVERLAY)
+            end
+        end
+        glScissor(false)
+
+        -- Scrollbar thumb (dynamic — position changes while scrolling)
+        if scrollbarInfo then
+            local thy1 = scrollbarInfo.ty1
+            local thy2 = scrollbarInfo.ty2
+            local sbx1 = scrollbarInfo.tx1
+            local sbx2 = scrollbarInfo.tx2
+            local thumbHover = IsInside(mx, my, sbx1, thy1, sbx2, thy2)
+            DrawRoundedRect(sbx1 + 1, thy1, sbx2 - 1, thy2, 5, thumbHover and SCROLLBAR_THUMB_HOVER or SCROLLBAR_THUMB)
+        end
     end
 
-    if showOrderPanel then
-        DrawPanel(orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2)
-        DrawOrderButtons(mx, my, activeCmdID)
+    if showOrderPanel and orderList then
+        gl.CallList(orderList)
+
+        -- Dynamic overlay: hover / active / disabled
+        DrawOrderButtons_Dynamic(mx, my, activeCmdID)
     end
 
     UpdateHover(mx, my)
@@ -1153,7 +1271,11 @@ function widget:MouseWheel(up, value)
     local mx, my = spGetMouseState()
     if showBuildPanel and IsInside(mx, my, buildPanel.x1, buildPanel.y1, buildPanel.x2, buildPanel.y2) and buildContentHeight > buildViewHeight then
         local delta = up and -SCROLL_STEP or SCROLL_STEP
-        buildScrollOffset = Clamp(buildScrollOffset + delta, 0, math_max(0, buildContentHeight - buildViewHeight))
+        local newOffset = Clamp(buildScrollOffset + delta, 0, math_max(0, buildContentHeight - buildViewHeight))
+        if newOffset ~= buildScrollOffset then
+            buildScrollOffset = newOffset
+            staticDirty = true
+        end
         return true
     end
     return false
