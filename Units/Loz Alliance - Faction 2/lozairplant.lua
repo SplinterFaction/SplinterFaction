@@ -11,7 +11,7 @@ humanName = [[VTOL Factory]]
 objectName = "lozairplant.s3o"
 script = "lozairplant.cob"
 
-tech = [[tech0]]
+tech = [[tech1]]
 
 airPlantBuildList = Shared.buildListLozAirPlant
 

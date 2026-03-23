@@ -11,7 +11,7 @@ humanName = [[Sea Factory]]
 objectName = "fedseaplant.s3o"
 script = "fedseaplant.cob"
 
-tech = [[tech0]]
+tech = [[tech1]]
 
 buildlist = Shared.buildListFedSeaPlant
 

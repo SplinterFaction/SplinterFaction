@@ -1,14 +1,16 @@
 function widget:GetInfo()
 	return {
 		name    = "Static Tooltip Panel",
-		desc    = "Panel-style tooltip anchored to the right of the static order panel",
-		author  = "OpenAI",
-		date    = "2026-03-21",
+		desc    = "Panel-style tooltip with optional additional info panel",
+		author  = "",
+		date    = "2026-03-22",
 		license = "GPL v2 or later",
 		layer   = 2,
 		enabled = true,
 	}
 end
+
+include("keysym.h.lua")
 
 --------------------------------------------------------------------------------
 -- Config (matched to gui_static_buildordermenu.lua)
@@ -23,17 +25,29 @@ local GAP_BETWEEN_PANELS    = 10
 local PANEL_RADIUS          = 10
 local PANEL_BG              = {0.08, 0.08, 0.09, 0.88}
 local PANEL_BORDER          = {1.0, 1.0, 1.0, 0.12}
+local PANEL_OUTER_COLOR     = {0, 0, 0, 0.85}
+local PANEL_INNER_COLOR     = {0.15, 0.15, 0.15, 0.85}
+local TOOLTIP_ACCENT_COLOR    = {0.00, 0.50, 1.00, 0.60}
+local ADDITIONAL_ACCENT_COLOR = {0.00, 0.50, 1.00, 0.60}
+local PANEL_ACCENT_HEIGHT     = 3
+
+-- Accent colors for inner section boxes (Stats, Economy, Build Info, etc.)
+local SECTION_ACCENT_COLOR       = {1.0, 1.0, 1.0, 0.035}
+local CATEGORY_CARD_ACCENT_COLOR = {1.0, 1.0, 1.0, 0.035}
+local SECTION_ACCENT_HEIGHT      = 3
+
 local SECTION_BG            = {0.14, 0.14, 0.15, 0.90}
 local CATEGORY_BG           = {0.20, 0.20, 0.21, 0.55}
 local HEADER_TEXT           = {1.0, 1.0, 1.0, 1.0}
 local SUBTEXT_COLOR         = {0.80, 0.82, 0.86, 1.0}
 local MUTED_TEXT_COLOR      = {0.65, 0.67, 0.72, 1.0}
+local HINT_TEXT_COLOR       = {0.75, 0.78, 0.83, 0.95}
 
 local INNER_PAD             = 10
 local SECTION_GAP           = 6
 local CARD_GAP              = 6
 
-local TOOLTIP_WIDTH_MULT    = 1.18
+local TOOLTIP_WIDTH_MULT    = 1.00
 local TOOLTIP_GAP_X         = 10
 
 local TITLE_SIZE            = 15
@@ -58,6 +72,9 @@ local SHIELD_TEXT_COLOR     = {0.62, 0.72, 1.0, 1.0}
 local OVERSHIELD_TEXT_COLOR = {0.82, 0.82, 1.0, 1.0}
 local PARALYZE_TEXT_COLOR   = {0.55, 1.0, 1.0, 1.0}
 
+local TOOLTIP_HINT_TEXT     = "Press Spacebar for Additional Info"
+local ADDITIONAL_HINT_TEXT  = "Press Spacebar to toggle off/on"
+
 --------------------------------------------------------------------------------
 -- Spring / Lua locals
 --------------------------------------------------------------------------------
@@ -67,7 +84,6 @@ local spGetCurrentTooltip      = Spring.GetCurrentTooltip
 local spGetMouseState          = Spring.GetMouseState
 local spTraceScreenRay         = Spring.TraceScreenRay
 local spGetSelectedUnits       = Spring.GetSelectedUnits
-local spGetSelectedUnitsCount  = Spring.GetSelectedUnitsCount
 local spGetUnitDefID           = Spring.GetUnitDefID
 local spGetUnitResources       = Spring.GetUnitResources
 local spGetUnitHealth          = Spring.GetUnitHealth
@@ -75,29 +91,28 @@ local spGetUnitShieldState     = Spring.GetUnitShieldState
 local spGetUnitRulesParam      = Spring.GetUnitRulesParam
 local spGetUnitIsCloaked       = Spring.GetUnitIsCloaked
 local spGetUnitIsStunned       = Spring.GetUnitIsStunned
-local spGetGroundHeight        = Spring.GetGroundHeight
 local spGetFeatureDefID        = Spring.GetFeatureDefID
 local spGetFeatureResources    = Spring.GetFeatureResources
 local spGetFeatureHealth       = Spring.GetFeatureHealth
 local spGetConfigFloat         = Spring.GetConfigFloat
 local spIsGUIHidden            = Spring.IsGUIHidden
-local spGetModKeyState         = Spring.GetModKeyState
 local spGetKeySymbol           = Spring.GetKeySymbol
 local spSendCommands           = Spring.SendCommands
 local spSetDrawSelectionInfo   = Spring.SetDrawSelectionInfo
 
 local glColor                  = gl.Color
 local glText                   = gl.Text
-local glRect                   = gl.Rect
 local glBeginEnd               = gl.BeginEnd
 local glVertex                 = gl.Vertex
 local glLineWidth              = gl.LineWidth
 local glScissor                = gl.Scissor
-local glPushMatrix             = gl.PushMatrix
-local glPopMatrix              = gl.PopMatrix
+local glTexture                = gl.Texture
+local glTexCoord               = gl.TexCoord
 local GL_TRIANGLE_FAN          = GL.TRIANGLE_FAN
 local GL_LINE_LOOP             = GL.LINE_LOOP
+local GL_QUADS                 = GL.QUADS
 
+local math_abs                 = math.abs
 local math_min                 = math.min
 local math_max                 = math.max
 local math_floor               = math.floor
@@ -107,12 +122,10 @@ local math_sin                 = math.sin
 local tostring                 = tostring
 local tonumber                 = tonumber
 local pairs                    = pairs
-local ipairs                   = ipairs
-local type                     = type
 local string_format            = string.format
-local string_find              = string.find
 local string_match             = string.match
 local string_gsub              = string.gsub
+local string_lower             = string.lower
 local table_concat             = table.concat
 
 --------------------------------------------------------------------------------
@@ -120,6 +133,7 @@ local table_concat             = table.concat
 --------------------------------------------------------------------------------
 
 local ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
+local bgcorner = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
 
 --------------------------------------------------------------------------------
 -- Hotkey config from old tooltip
@@ -159,6 +173,9 @@ local vsx, vsy = spGetViewGeometry()
 
 local orderPanel = {}
 local tooltipPanel = {}
+local additionalPanel = {}
+
+local additionalInfoEnabled = false
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -193,6 +210,7 @@ local function UpdateRects()
 	local panelW = math_floor(vsx * PANEL_WIDTH_FRAC)
 	local totalH = math_floor(vsy * TOTAL_HEIGHT_FRAC)
 	local orderH = math_floor(totalH * ORDER_HEIGHT_FRAC)
+	local buildH = math_max(120, totalH - orderH - GAP_BETWEEN_PANELS)
 
 	orderPanel.x1 = PANEL_MARGIN_X
 	orderPanel.y1 = PANEL_MARGIN_Y
@@ -208,7 +226,14 @@ local function UpdateRects()
 	tooltipPanel.x2 = tooltipPanel.x1 + tooltipW
 	tooltipPanel.y2 = orderPanel.y2
 	tooltipPanel.w = tooltipW
-	tooltipPanel.h = orderPanel.h
+	tooltipPanel.h = orderH
+
+	additionalPanel.x1 = tooltipPanel.x1
+	additionalPanel.y1 = tooltipPanel.y2 + GAP_BETWEEN_PANELS
+	additionalPanel.x2 = additionalPanel.x1 + panelW
+	additionalPanel.y2 = additionalPanel.y1 + buildH
+	additionalPanel.w = panelW
+	additionalPanel.h = buildH
 end
 
 local function RoundedRectVertices(x1, y1, x2, y2, r, segments)
@@ -242,7 +267,6 @@ local function DrawRoundedRect(x1, y1, x2, y2, r, color)
 		local cx = (x1 + x2) * 0.5
 		local cy = (y1 + y2) * 0.5
 		glVertex(cx, cy)
-
 		RoundedRectVertices(x1, y1, x2, y2, rr, 6)
 
 		if rr <= 0 then
@@ -261,13 +285,86 @@ local function DrawRoundedOutline(x1, y1, x2, y2, r, color)
 	end)
 end
 
-local function DrawPanel(x1, y1, x2, y2)
-	DrawRoundedRect(x1, y1, x2, y2, PANEL_RADIUS, {PANEL_BG[1], PANEL_BG[2], PANEL_BG[3], ui_opacity})
-	DrawRoundedOutline(x1, y1, x2, y2, PANEL_RADIUS, PANEL_BORDER)
+local function DrawRectRound(px, py, sx, sy, cs)
+	glTexCoord(0.8, 0.8)
+	glVertex(px + cs, py, 0)
+	glVertex(sx - cs, py, 0)
+	glVertex(sx - cs, sy, 0)
+	glVertex(px + cs, sy, 0)
+
+	glVertex(px, py + cs, 0)
+	glVertex(px + cs, py + cs, 0)
+	glVertex(px + cs, sy - cs, 0)
+	glVertex(px, sy - cs, 0)
+
+	glVertex(sx, py + cs, 0)
+	glVertex(sx - cs, py + cs, 0)
+	glVertex(sx - cs, sy - cs, 0)
+	glVertex(sx, sy - cs, 0)
+
+	local o = 0.07
+
+	-- bottom left
+	glTexCoord(o,o)       glVertex(px, py, 0)
+	glTexCoord(o,1-o)     glVertex(px+cs, py, 0)
+	glTexCoord(1-o,1-o)   glVertex(px+cs, py+cs, 0)
+	glTexCoord(1-o,o)     glVertex(px, py+cs, 0)
+
+	-- bottom right
+	glTexCoord(o,o)       glVertex(sx, py, 0)
+	glTexCoord(o,1-o)     glVertex(sx-cs, py, 0)
+	glTexCoord(1-o,1-o)   glVertex(sx-cs, py+cs, 0)
+	glTexCoord(1-o,o)     glVertex(sx, py+cs, 0)
+
+	-- top left
+	glTexCoord(o,o)       glVertex(px, sy, 0)
+	glTexCoord(o,1-o)     glVertex(px+cs, sy, 0)
+	glTexCoord(1-o,1-o)   glVertex(px+cs, sy-cs, 0)
+	glTexCoord(1-o,o)     glVertex(px, sy-cs, 0)
+
+	-- top right
+	glTexCoord(o,o)       glVertex(sx, sy, 0)
+	glTexCoord(o,1-o)     glVertex(sx-cs, sy, 0)
+	glTexCoord(1-o,1-o)   glVertex(sx-cs, sy-cs, 0)
+	glTexCoord(1-o,o)     glVertex(sx, sy-cs, 0)
 end
 
-local function DrawSectionBox(x1, y1, x2, y2)
-	DrawRoundedRect(x1 + 2, y1, x2 - 2, y2, 8, SECTION_BG)
+local function RectRound(px, py, sx, sy, cs)
+	glTexture(bgcorner)
+	gl.BeginEnd(GL_QUADS, DrawRectRound, px, py, sx, sy, cs)
+	glTexture(false)
+end
+
+local function GetAccentForPanel(panelData, fallbackColor)
+	if panelData and panelData.tech and TECH_TEXT_COLORS[panelData.tech] then
+		local c = TECH_TEXT_COLORS[panelData.tech]
+		return {c[1], c[2], c[3], 0.70}
+	end
+	return fallbackColor or TOOLTIP_ACCENT_COLOR
+end
+
+local function DrawPanel(x1, y1, x2, y2, accentColor)
+	RectRound(x1, y1, x2, y2, PANEL_RADIUS)
+	glColor(PANEL_OUTER_COLOR)
+	RectRound(x1, y1, x2, y2, PANEL_RADIUS)
+
+	glColor(PANEL_INNER_COLOR)
+	RectRound(x1 + 2, y1 + 2, x2 - 2, y2 - 2, PANEL_RADIUS - 1)
+
+	local accent = accentColor or TOOLTIP_ACCENT_COLOR
+	glColor(accent)
+	RectRound(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2, 3)
+	glColor(1,1,1,1)
+end
+
+local function DrawSectionBox(x1, y1, x2, y2, accentColor)
+	glColor(0.06, 0.06, 0.07, 0.65)
+	RectRound(x1 + 1, y1, x2 - 1, y2, 8)
+
+	local accent = accentColor or SECTION_ACCENT_COLOR
+	glColor(accent)
+	RectRound(x1 + 1, y2 - (1 + SECTION_ACCENT_HEIGHT), x2 - 1, y2 - 1, 3)
+	glColor(1,1,1,1)
 end
 
 local function TextWidthApprox(text, size)
@@ -283,6 +380,35 @@ local function DrawTextFitted(text, x, y, size, maxWidth, color, align)
 		drawSize = size * (maxWidth / approxW)
 	end
 	glText(text, x, y, drawSize, (align or "o"))
+end
+
+local function WrapText(text, maxWidth, size)
+	local lines = {}
+	if not text or text == "" then
+		return lines
+	end
+
+	for paragraph in (text .. "\n"):gmatch("([^\n]*)\n") do
+		if paragraph == "" then
+			lines[#lines + 1] = ""
+		else
+			local current = ""
+			for word in paragraph:gmatch("%S+") do
+				local candidate = (current == "") and word or (current .. " " .. word)
+				if TextWidthApprox(candidate, size) <= maxWidth or current == "" then
+					current = candidate
+				else
+					lines[#lines + 1] = current
+					current = word
+				end
+			end
+			if current ~= "" then
+				lines[#lines + 1] = current
+			end
+		end
+	end
+
+	return lines
 end
 
 local function GetTooltipArmor(ud)
@@ -302,10 +428,19 @@ local function GetTooltipRole(ud)
 	return str
 end
 
+local TECH_REQUIREMENT_MAP = {
+	tech0 = "T0",
+	tech1 = "T1",
+	tech2 = "T2",
+	tech3 = "T3",
+	tech4 = "T4",
+}
+
 local function GetTechTag(ud)
-	if not ud or not ud.name then return nil end
-	local lvl = ud.name:find("_up", -5) and tonumber(ud.name:sub(-1, -1)) or 0
-	return "T" .. tostring(lvl)
+	if not ud or not ud.customParams then return nil end
+	local req = ud.customParams.requiretech
+	if not req then return nil end
+	return TECH_REQUIREMENT_MAP[string_lower(tostring(req))]
 end
 
 local function GetBuildPowerTotal()
@@ -324,7 +459,8 @@ local function GetBuildPowerTotal()
 end
 
 local function GetTooltipBuildPower(buildSpeed)
-	return FormatNbr((buildSpeed or 0) * 4, 1) .. " metal/s"
+	if not buildSpeed or buildSpeed <= 0 then return nil end
+	return FormatNbr(buildSpeed, 0)
 end
 
 local function FormatSupplyValue(v)
@@ -354,7 +490,7 @@ local function BuildWeaponCards(ud)
 			local card = dedupe[key]
 
 			if not card then
-				local reloadTime = weap.reload > 0 and weap.reload or 1
+				local reloadTime = (weap.reload and weap.reload > 0) and weap.reload or 1
 				local burst = (weap.projectiles or 1) * (weap.salvoSize or 1)
 				local dpsConversion = burst / reloadTime
 				local damage = (weap.damages and weap.damages[Game.armorTypes.default] or 0) * burst
@@ -373,11 +509,15 @@ local function BuildWeaponCards(ud)
 					paralyze = isDisruptor,
 					reload = reloadTime,
 					water = weap.waterWeapon and true or false,
+					guide = (weap.customParams and weap.customParams.weaponguide) or nil,
 				}
 				dedupe[key] = card
 				cards[#cards + 1] = card
 			else
 				card.count = card.count + 1
+				if (not card.guide or card.guide == "") and weap.customParams and weap.customParams.weaponguide then
+					card.guide = weap.customParams.weaponguide
+				end
 			end
 		end
 	end
@@ -414,7 +554,7 @@ local function ResolveHoveredBuildFromTooltip(currentTooltip)
 
 	local fud = nil
 	for _, ud in pairs(UnitDefs) do
-		if ud.humanName == unitname and ud.tooltip == unitdesc and math.abs((ud.health or 0) - tonumber(unithealth or 0)) <= 1 then
+		if ud.humanName == unitname and ud.tooltip == unitdesc and math_abs((ud.health or 0) - tonumber(unithealth or 0)) <= 1 then
 			fud = ud
 			break
 		end
@@ -470,6 +610,12 @@ local function ResolveTooltipData()
 		return { type = "feature", id = worldID }
 	end
 
+	-- Fallback: if exactly one unit is selected, show it the same way as hover
+	local selectedUnits = spGetSelectedUnits()
+	if selectedUnits and #selectedUnits == 1 then
+		return { type = "unit", id = selectedUnits[1] }
+	end
+
 	local buildData = ResolveHoveredBuildFromTooltip(currentTooltip)
 	if buildData then
 		return buildData
@@ -494,6 +640,22 @@ local function DrawHeaderTag(x, y, text, color)
 	DrawRoundedRect(x, y - 3, x + w, y + h - 3, 5, CATEGORY_BG)
 	DrawTextFitted(text, x + 5, y, SMALL_SIZE, w - 10, color or HEADER_TEXT, "o")
 	return w + 4
+end
+
+local function DrawFlowLine(x, y, label, metalValue, energyValue)
+	DrawTextFitted(label, x, y, BODY_SIZE, 140, MUTED_TEXT_COLOR, "o")
+
+	local vx = x + 88
+	DrawTextFitted("M ", vx, y, BODY_SIZE, 16, MUTED_TEXT_COLOR, "o")
+	vx = vx + 12
+	DrawTextFitted(metalValue or "-", vx, y, BODY_SIZE, 52,
+	               (metalValue and metalValue:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
+
+	vx = vx + 42
+	DrawTextFitted("   E ", vx, y, BODY_SIZE, 24, MUTED_TEXT_COLOR, "o")
+	vx = vx + 24
+	DrawTextFitted(energyValue or "-", vx, y, BODY_SIZE, 52,
+	               (energyValue and energyValue:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
 end
 
 local function DrawKVLine(x, y, label, value, labelColor, valueColor)
@@ -575,16 +737,14 @@ local function DrawEconomySection(data, x1, yTop, w)
 
 	DrawKVLine(x1 + 10, yTop - 34, "Metal", data.metalCostText or "-", MUTED_TEXT_COLOR, METAL_TEXT_COLOR)
 	DrawKVLine(x1 + 10, yTop - 48, "Energy", data.energyCostText or "-", MUTED_TEXT_COLOR, ENERGY_TEXT_COLOR)
+
 	if data.supplyText then
 		DrawKVLine(x1 + 10, yTop - 62, "Supply", data.supplyText, MUTED_TEXT_COLOR, SUPPLY_TEXT_COLOR)
 	else
 		DrawKVLine(x1 + 10, yTop - 62, "Supply", "-", MUTED_TEXT_COLOR, HEADER_TEXT)
 	end
-	if data.upkeepText then
-		DrawKVLine(x1 + 10, yTop - 76, "Flow", data.upkeepText, MUTED_TEXT_COLOR, HEADER_TEXT)
-	else
-		DrawKVLine(x1 + 10, yTop - 76, "Flow", "-", MUTED_TEXT_COLOR, HEADER_TEXT)
-	end
+
+	DrawFlowLine(x1 + 10, yTop - 76, "Flow", data.metalFlowText, data.energyFlowText)
 
 	return y1 - SECTION_GAP
 end
@@ -632,9 +792,35 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 		return yTop
 	end
 
+	local guideWrapWidth = w - 32
+	local guideLineH = 11
+	local baseCardH = 52
+	local layout = {}
+	local totalCardsH = 0
+
+	for i = 1, #cards do
+		local card = cards[i]
+		local guideLines = {}
+		local extraH = 0
+		if card.guide and card.guide ~= "" then
+			guideLines = WrapText(card.guide, guideWrapWidth, SMALL_SIZE)
+			extraH = #guideLines * guideLineH + 6
+		end
+
+		local cardH = baseCardH + extraH
+		layout[i] = {
+			card = card,
+			cardH = cardH,
+			guideLines = guideLines,
+		}
+		totalCardsH = totalCardsH + cardH
+		if i < #cards then
+			totalCardsH = totalCardsH + CARD_GAP
+		end
+	end
+
 	local headerH = 22
-	local cardH = 52
-	local totalH = headerH + (#cards * cardH) + math_max(0, (#cards - 1) * CARD_GAP) + 10
+	local totalH = headerH + totalCardsH + 10
 	local y1 = yTop - totalH
 
 	DrawSectionBox(x1, y1, x1 + w, yTop)
@@ -643,21 +829,25 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 	glScissor(x1, clipBottom, w, yTop - clipBottom)
 	local cyTop = yTop - 26
 
-	for i = 1, #cards do
-		local card = cards[i]
-		local by2 = cyTop - (i - 1) * (cardH + CARD_GAP)
-		local by1 = by2 - cardH
+	for i = 1, #layout do
+		local entry = layout[i]
+		local card = entry.card
+		local by2 = cyTop
+		local by1 = by2 - entry.cardH
 
 		if by2 >= clipBottom then
 			DrawRoundedRect(x1 + 8, by1, x1 + w - 8, by2, 6, CATEGORY_BG)
+			glColor(CATEGORY_CARD_ACCENT_COLOR)
+			RectRound(x1 + 8, by2 - (1 + SECTION_ACCENT_HEIGHT), x1 + w - 8, by2 - 1, 3)
+			glColor(1,1,1,1)
 			DrawTextFitted(card.title .. (card.count > 1 and (" x" .. card.count) or ""), x1 + 16, by2 - 14, BODY_SIZE, w - 32, HEADER_TEXT, "o")
 
 			local dmgLabel = card.paralyze and "Paralyze" or "DPS"
 			local dmgColor = card.paralyze and PARALYZE_TEXT_COLOR or HEADER_TEXT
 
-			DrawTextFitted(dmgLabel .. ": " .. FormatNbr(card.dps, 1), x1 + 16, by2 - 28, SMALL_SIZE, 120, dmgColor, "o")
-			DrawTextFitted("Range: " .. FormatNbr(card.range, 0), x1 + 118, by2 - 28, SMALL_SIZE, 90, SUBTEXT_COLOR, "o")
-			DrawTextFitted("AoE: " .. FormatNbr(card.aoe, 0), x1 + 196, by2 - 28, SMALL_SIZE, 70, SUBTEXT_COLOR, "o")
+			DrawTextFitted(dmgLabel .. ": " .. FormatNbr(card.dps, 1), x1 + 16, by2 - 28, SMALL_SIZE, 110, dmgColor, "o")
+			DrawTextFitted("Range: " .. FormatNbr(card.range, 0), x1 + 112, by2 - 28, SMALL_SIZE, 78, SUBTEXT_COLOR, "o")
+			DrawTextFitted("AoE: " .. FormatNbr(card.aoe, 0), x1 + 178, by2 - 28, SMALL_SIZE, 62, SUBTEXT_COLOR, "o")
 
 			local extra = ""
 			if card.eps and card.eps > 0 then
@@ -670,10 +860,61 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 			if extra ~= "" then
 				DrawTextFitted(extra, x1 + 16, by2 - 41, SMALL_SIZE, w - 32, ENERGY_TEXT_COLOR, "o")
 			end
+
+			if entry.guideLines and #entry.guideLines > 0 then
+				local gy = by2 - 54
+				for j = 1, #entry.guideLines do
+					if gy >= clipBottom then
+						DrawTextFitted(entry.guideLines[j], x1 + 16, gy, SMALL_SIZE, w - 32, SUBTEXT_COLOR, "o")
+					end
+					gy = gy - guideLineH
+				end
+			end
 		end
+
+		cyTop = by1 - CARD_GAP
 	end
 
 	glScissor(false)
+	return y1 - SECTION_GAP
+end
+
+local function DrawGuideSection(guideText, x1, yTop, w, clipBottom)
+	if not guideText or guideText == "" then
+		return yTop
+	end
+
+	local wrapWidth = w - 20
+	local lines = WrapText(guideText, wrapWidth, BODY_SIZE)
+	if #lines == 0 then
+		return yTop
+	end
+
+	local lineH = 13
+	local totalH = 26 + (#lines * lineH) + 10
+	local y1 = yTop - totalH
+
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+	DrawTextFitted("Unit Guide", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+
+	glScissor(x1, clipBottom, w, yTop - clipBottom)
+	local cy = yTop - 34
+	for i = 1, #lines do
+		if cy >= clipBottom then
+			DrawTextFitted(lines[i], x1 + 10, cy, BODY_SIZE, w - 20, SUBTEXT_COLOR, "o")
+		end
+		cy = cy - lineH
+	end
+	glScissor(false)
+
+	return y1 - SECTION_GAP
+end
+
+local function DrawHintSection(text, x1, yTop, w)
+	local h = 26
+	local y1 = yTop - h
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+	DrawTextFitted(text, x1 + 10, yTop - 17, SMALL_SIZE, w - 20, HINT_TEXT_COLOR, "o")
 	return y1 - SECTION_GAP
 end
 
@@ -707,10 +948,13 @@ local function BuildUnitPanelData(unitID)
 		supplyText = "-" .. FormatSupplyValue(supplyCost)
 	end
 
-	local upkeep = nil
+	local metalFlowText = nil
+	local energyFlowText = nil
 	if metalMake ~= nil then
-		upkeep = "M " .. FormatNbr(metalMake, 1) .. "/" .. FormatNbr(-metalUse, 1) ..
-				"   E " .. FormatNbr(energyMake, 1) .. "/" .. FormatNbr(-energyUse, 1)
+		local netMetal = metalMake - metalUse
+		local netEnergy = energyMake - energyUse
+		metalFlowText = (netMetal >= 0 and "+" or "") .. FormatNbr(netMetal, 1)
+		energyFlowText = (netEnergy >= 0 and "+" or "") .. FormatNbr(netEnergy, 1)
 	end
 
 	return {
@@ -728,12 +972,14 @@ local function BuildUnitPanelData(unitID)
 		metalCostText = FormatNbr(ud.metalCost or 0, 0),
 		energyCostText = FormatNbr(ud.energyCost or 0, 0),
 		supplyText = supplyText,
-		upkeepText = upkeep,
+		metalFlowText = metalFlowText,
+		energyFlowText = energyFlowText,
 
 		buildTimeText = nil,
 		buildPowerText = (ud.buildSpeed and ud.buildSpeed > 0) and GetTooltipBuildPower(ud.buildSpeed) or nil,
 
 		weaponCards = BuildWeaponCards(ud),
+		unitGuideText = ud.customParams and ud.customParams.unitguide or nil,
 	}
 end
 
@@ -774,12 +1020,14 @@ local function BuildBuildPanelData(buildData)
 		metalCostText = FormatNbr(buildData.metalCost or (ud and ud.metalCost or 0), 0),
 		energyCostText = FormatNbr(buildData.energyCost or (ud and ud.energyCost or 0), 0),
 		supplyText = supplyText,
-		upkeepText = nil,
+		metalFlowText = nil,
+		energyFlowText = nil,
 
 		buildTimeText = estBuildTime and (tostring(estBuildTime) .. "s") or nil,
 		buildPowerText = (ud and ud.buildSpeed and ud.buildSpeed > 0) and GetTooltipBuildPower(ud.buildSpeed) or nil,
 
 		weaponCards = ud and BuildWeaponCards(ud) or {},
+		unitGuideText = ud and ud.customParams and ud.customParams.unitguide or nil,
 	}
 end
 
@@ -814,50 +1062,97 @@ local function BuildFeaturePanelData(featureID)
 		metalCostText = metal and FormatNbr(metal, 0) or "-",
 		energyCostText = energy and FormatNbr(energy, 0) or "-",
 		supplyText = nil,
-		upkeepText = nil,
+		metalFlowText = nil,
+		energyFlowText = nil,
 
 		buildTimeText = nil,
 		buildPowerText = nil,
 
 		weaponCards = {},
+		unitGuideText = nil,
 	}
+end
+
+local function BuildPanelDataFromResolved(resolved)
+	if not resolved then return nil end
+	if resolved.type == "unit" then
+		return BuildUnitPanelData(resolved.id), false
+	elseif resolved.type == "feature" then
+		return BuildFeaturePanelData(resolved.id), false
+	elseif resolved.type == "build" then
+		return BuildBuildPanelData(resolved), false
+	elseif resolved.type == "order" then
+		return BuildOrderPanelData(resolved), true
+	end
+	return nil, false
+end
+
+--------------------------------------------------------------------------------
+-- Additional info
+--------------------------------------------------------------------------------
+
+local function CanShowAdditionalInfo(resolved)
+	return resolved and (resolved.type == "unit" or resolved.type == "build")
+end
+
+local function DrawAdditionalInfoPanel(panelData)
+	if not panelData then return end
+
+	local x1, y1, x2, y2 = additionalPanel.x1, additionalPanel.y1, additionalPanel.x2, additionalPanel.y2
+	if x2 > vsx - 8 then
+		return
+	end
+
+	DrawPanel(x1, y1, x2, y2, GetAccentForPanel(panelData, ADDITIONAL_ACCENT_COLOR))
+
+	local CORNER_SAFE_TOP = PANEL_RADIUS + 3
+	local CORNER_SAFE_SIDE = PANEL_RADIUS + 3
+	local CORNER_SAFE_BOTTOM = INNER_PAD - 2
+
+	local top = y2 - CORNER_SAFE_TOP
+	local bottom = y1 + CORNER_SAFE_BOTTOM
+	local sx = x1 + CORNER_SAFE_SIDE
+	local width = (x2 - x1) - (CORNER_SAFE_SIDE * 2)
+	local cy = top
+
+	cy = DrawTitleSection({
+		                      title = "Additional Info",
+		                      subtitle = panelData.title or "",
+		                      tech = panelData.tech,
+	                      }, sx, cy, width)
+
+	cy = DrawHintSection(ADDITIONAL_HINT_TEXT, sx, cy, width)
+
+	if panelData.buildTimeText or panelData.buildPowerText then
+		cy = DrawBuildSection(panelData, sx, cy, width)
+	end
+
+	if panelData.weaponCards and #panelData.weaponCards > 0 and cy > bottom + 60 then
+		cy = DrawWeaponCards(panelData.weaponCards, sx, cy, width, bottom + 4)
+	end
+
+	if cy > bottom + 40 and panelData.unitGuideText and panelData.unitGuideText ~= "" then
+		cy = DrawGuideSection(panelData.unitGuideText, sx, cy, width, bottom + 4)
+	end
 end
 
 --------------------------------------------------------------------------------
 -- Main draw
 --------------------------------------------------------------------------------
 
-local function DrawTooltipPanel(resolved)
-	if not resolved then return end
-
-	local panelData = nil
-	local isOrder = false
-
-	if resolved.type == "unit" then
-		panelData = BuildUnitPanelData(resolved.id)
-	elseif resolved.type == "feature" then
-		panelData = BuildFeaturePanelData(resolved.id)
-	elseif resolved.type == "build" then
-		panelData = BuildBuildPanelData(resolved)
-	elseif resolved.type == "order" then
-		panelData = BuildOrderPanelData(resolved)
-		isOrder = true
-	end
-
-	if not panelData then
-		return
-	end
+local function DrawTooltipPanel(panelData, isOrder)
+	if not panelData then return end
 
 	local x1, y1, x2, y2 = tooltipPanel.x1, tooltipPanel.y1, tooltipPanel.x2, tooltipPanel.y2
 	if x2 > vsx - 8 then
 		return
 	end
 
-	DrawPanel(x1, y1, x2, y2)
+	DrawPanel(x1, y1, x2, y2, GetAccentForPanel(panelData, TOOLTIP_ACCENT_COLOR))
 
-	local CORNER_SAFE_TOP = PANEL_RADIUS + 8
-	local CORNER_SAFE_SIDE = PANEL_RADIUS + 8
-	local CORNER_SAFE_BOTTOM = INNER_PAD + 2
+	local CORNER_SAFE_TOP = PANEL_RADIUS + 3
+	local CORNER_SAFE_SIDE = PANEL_RADIUS + 3
+	local CORNER_SAFE_BOTTOM = INNER_PAD - 2
 
 	local top = y2 - CORNER_SAFE_TOP
 	local bottom = y1 + CORNER_SAFE_BOTTOM
@@ -869,19 +1164,13 @@ local function DrawTooltipPanel(resolved)
 
 	if isOrder then
 		cy = DrawOrderSection(panelData, sx, cy, width)
+		cy = DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, width)
 		return
 	end
 
 	cy = DrawStatsSection(panelData, sx, cy, width)
 	cy = DrawEconomySection(panelData, sx, cy, width)
-
-	if panelData.buildTimeText or panelData.buildPowerText then
-		cy = DrawBuildSection(panelData, sx, cy, width)
-	end
-
-	if cy > bottom + 26 then
-		cy = DrawWeaponCards(panelData.weaponCards, sx, cy, width, bottom + 4)
-	end
+	cy = DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, width)
 end
 
 --------------------------------------------------------------------------------
@@ -908,8 +1197,21 @@ function widget:ViewResize()
 	UpdateRects()
 end
 
-function widget:Update(dt)
+function widget:Update()
 	ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
+end
+
+function widget:KeyPress(key, mods, isRepeat)
+	if isRepeat then
+		return false
+	end
+
+	if key == KEYSYMS.SPACE then
+		additionalInfoEnabled = not additionalInfoEnabled
+		return true
+	end
+
+	return false
 end
 
 function widget:DrawScreen()
@@ -925,5 +1227,14 @@ function widget:DrawScreen()
 		return
 	end
 
-	DrawTooltipPanel(resolved)
+	local panelData, isOrder = BuildPanelDataFromResolved(resolved)
+	if not panelData then
+		return
+	end
+
+	DrawTooltipPanel(panelData, isOrder)
+
+	if additionalInfoEnabled and CanShowAdditionalInfo(resolved) then
+		DrawAdditionalInfoPanel(panelData)
+	end
 end

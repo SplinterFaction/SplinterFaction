@@ -2,7 +2,7 @@ function widget:GetInfo()
 	return {
 		name    = "Range Overview GL4",
 		desc    = "Fast GL4 range rings for selected units, allied sight, static defenses, and mouseover",
-		author  = "OpenAI",
+		author  = "",
 		date    = "2026-03-17",
 		license = "GPL v2 or later",
 		layer   = -90,

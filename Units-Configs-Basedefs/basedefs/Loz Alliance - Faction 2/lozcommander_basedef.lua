@@ -25,7 +25,7 @@ unitDef                    = {
 	canstop                      = true,
 	category                     = "GROUND",
 	description                  = [[Builds Units]],
-	energyMake                   = 10,
+	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
 	explodeAs                    = explodeas,
@@ -40,7 +40,7 @@ unitDef                    = {
 	maxVelocity                  = maxvelocity,
 	maxReverseVelocity           = 1,
 	maxWaterDepth                = 5000,
-	metalmake                    = 2,
+	metalmake                    = 0,
 	metalStorage                 = 0,
 	movementClass                = movementclass,
 	moveState			         = "0",
@@ -132,6 +132,9 @@ unitDef                    = {
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
+		unitguide                = [[Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.]],
 	},
 }
 
@@ -224,6 +227,7 @@ weaponDefs                 = {
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			single_hit            = "true",
+			weaponguide         = [[A powerful EMP wave that will stun for a short period of time.]],
 		},
 		damage                   = {
 			default              = 400,

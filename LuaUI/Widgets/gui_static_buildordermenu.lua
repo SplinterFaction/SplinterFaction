@@ -74,6 +74,10 @@ local TECH_TEXT_COLORS = {
 local METAL_TEXT_COLOR  = {0.53, 0.77, 0.89, 1.0}
 local ENERGY_TEXT_COLOR = {1.0, 1.0, 0.0, 1.0}
 
+local ui_opacity           = tonumber(Spring.GetConfigFloat("ui_opacity", 0.66) or 0.66)
+local bgcorner             = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
+local PANEL_ACCENT         = {1.00, 0.25, 0.25, 0.60}
+
 --------------------------------------------------------------------------------
 -- Spring / GL locals
 --------------------------------------------------------------------------------
@@ -90,6 +94,7 @@ local spGetMouseState        = Spring.GetMouseState
 local spGetKeySymbol         = Spring.GetKeySymbol
 local spIsGUIHidden          = Spring.IsGUIHidden
 local spGetModKeyState       = Spring.GetModKeyState
+local spGetConfigFloat       = Spring.GetConfigFloat
 
 local glColor                = gl.Color
 local glRect                 = gl.Rect
@@ -101,6 +106,7 @@ local glBeginEnd             = gl.BeginEnd
 local glVertex               = gl.Vertex
 local GL_TRIANGLE_FAN        = GL.TRIANGLE_FAN
 local GL_LINE_LOOP           = GL.LINE_LOOP
+local GL_QUADS               = GL.QUADS
 
 local math_min               = math.min
 local math_max               = math.max
@@ -552,9 +558,61 @@ local function DrawRoundedOutline(x1, y1, x2, y2, r, color)
     end)
 end
 
+local function DrawRectRound(px, py, sx, sy, cs)
+    gl.TexCoord(0.8, 0.8)
+    gl.Vertex(px + cs, py, 0)
+    gl.Vertex(sx - cs, py, 0)
+    gl.Vertex(sx - cs, sy, 0)
+    gl.Vertex(px + cs, sy, 0)
+
+    gl.Vertex(px, py + cs, 0)
+    gl.Vertex(px + cs, py + cs, 0)
+    gl.Vertex(px + cs, sy - cs, 0)
+    gl.Vertex(px, sy - cs, 0)
+
+    gl.Vertex(sx, py + cs, 0)
+    gl.Vertex(sx - cs, py + cs, 0)
+    gl.Vertex(sx - cs, sy - cs, 0)
+    gl.Vertex(sx, sy - cs, 0)
+
+    local o = 0.07
+
+    gl.TexCoord(o,o)       gl.Vertex(px, py, 0)
+    gl.TexCoord(o,1-o)     gl.Vertex(px+cs, py, 0)
+    gl.TexCoord(1-o,1-o)   gl.Vertex(px+cs, py+cs, 0)
+    gl.TexCoord(1-o,o)     gl.Vertex(px, py+cs, 0)
+
+    gl.TexCoord(o,o)       gl.Vertex(sx, py, 0)
+    gl.TexCoord(o,1-o)     gl.Vertex(sx-cs, py, 0)
+    gl.TexCoord(1-o,1-o)   gl.Vertex(sx-cs, py+cs, 0)
+    gl.TexCoord(1-o,o)     gl.Vertex(sx, py+cs, 0)
+
+    gl.TexCoord(o,o)       gl.Vertex(px, sy, 0)
+    gl.TexCoord(o,1-o)     gl.Vertex(px+cs, sy, 0)
+    gl.TexCoord(1-o,1-o)   gl.Vertex(px+cs, sy-cs, 0)
+    gl.TexCoord(1-o,o)     gl.Vertex(px, sy-cs, 0)
+
+    gl.TexCoord(o,o)       gl.Vertex(sx, sy, 0)
+    gl.TexCoord(o,1-o)     gl.Vertex(sx-cs, sy, 0)
+    gl.TexCoord(1-o,1-o)   gl.Vertex(sx-cs, sy-cs, 0)
+    gl.TexCoord(1-o,o)     gl.Vertex(sx, sy-cs, 0)
+end
+
+local function RectRound(px, py, sx, sy, cs)
+    glTexture(bgcorner)
+    glBeginEnd(GL_QUADS, DrawRectRound, px, py, sx, sy, cs)
+    glTexture(false)
+end
+
 local function DrawPanel(x1, y1, x2, y2)
-    DrawRoundedRect(x1, y1, x2, y2, PANEL_RADIUS, PANEL_BG)
-    DrawRoundedOutline(x1, y1, x2, y2, PANEL_RADIUS, PANEL_BORDER)
+    glColor(0, 0, 0, ui_opacity)
+    RectRound(x1, y1, x2, y2, PANEL_RADIUS)
+
+    glColor(0.12, 0.12, 0.12, 0.78)
+    RectRound(x1 + 2, y1 + 2, x2 - 2, y2 - 2, math_max(1, PANEL_RADIUS - 1))
+
+    glColor(PANEL_ACCENT)
+    RectRound(x1 + 2, y2 - 5, x2 - 2, y2 - 2, 3)
 end
 
 local function DrawTextFitted(text, x, y, size, opts, maxWidth)
@@ -711,6 +769,28 @@ local function BuildButtonLayout(mx, my, activeCmdID)
                 glColor(1, 1, 1, 0.08)
                 glRect(item.x1 + 4, infoY2, item.x2 - 4, infoY2 + 1)
                 DrawIcon(item.x1 + 1, iconY1 + 1, item.x2 - 1, iconY2 - 1, '#' .. buildDefID)
+
+                local queueCount = tonumber(cmd.params and cmd.params[1])
+                if queueCount and queueCount > 0 then
+                    local queueText = tostring(math_floor(queueCount))
+                    local iconH = iconY2 - iconY1
+                    local qSize = math_max(11, math_floor(iconH * 0.16))
+                    local qPadX = 5
+                    local qPadY = 4
+                    local textW = gl.GetTextWidth(queueText) * qSize
+                    local panelW = math_floor(textW + qPadX * 2)
+                    local panelH = math_floor(qSize + qPadY * 2)
+                    local qx2 = item.x2 - 4
+                    local qx1 = qx2 - panelW
+                    local qy2 = iconY2 - 4
+                    local qy1 = qy2 - panelH
+
+                    DrawRoundedRect(qx1, qy1, qx2, qy2, 4, {0.08, 0.08, 0.09, 0.88})
+                    DrawRoundedOutline(qx1, qy1, qx2, qy2, 4, {1.0, 1.0, 1.0, 0.10})
+
+                    glColor(1.0, 1.0, 1.0, 1.0)
+                    DrawTextFitted(queueText, qx2 - qPadX, qy1 + qPadY, qSize, "or")
+                end
 
                 if not disabled and hovered then
                     DrawRoundedRect(item.x1, infoY1, item.x2, iconY2, 6, HOVER_OVERLAY)
@@ -993,6 +1073,11 @@ function widget:UnitGiven() commandsDirty = true end
 function widget:UnitTaken() commandsDirty = true end
 
 function widget:Update()
+    local newOpacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
+    if newOpacity ~= ui_opacity then
+        ui_opacity = newOpacity
+    end
+
     if commandsDirty then
         showHotkeys = spGetConfigInt(SHOW_HOTKEYS_CONFIG, 1) == 1
         showCost    = spGetConfigInt(SHOW_COST_CONFIG, 1) == 1
