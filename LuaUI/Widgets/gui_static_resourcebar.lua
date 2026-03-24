@@ -552,6 +552,16 @@ function widget:ViewResize(newX, newY)
 		font2 = gl.LoadFont(FONT_FILE2, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
 	end
 
+	-- Force the dynamic list to rebuild on the next draw so the fill bars
+	-- reposition themselves to match the new scale/offset. Without this,
+	-- BuildDynamicList() skips the rebuild when resource values haven't
+	-- changed, leaving the bars detached from the panels at the new resolution.
+	if displayListDynamic then
+		gl.DeleteList(displayListDynamic)
+		displayListDynamic = nil
+	end
+	lastDynamic = {}
+
 	BuildBackgroundList()
 	BuildStaticList()
 end

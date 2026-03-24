@@ -50,10 +50,12 @@ local CARD_GAP              = 6
 local TOOLTIP_WIDTH_MULT    = 1.00
 local TOOLTIP_GAP_X         = 10
 
-local TITLE_SIZE            = 15
-local HEADER_SIZE           = 12
-local BODY_SIZE             = 11
-local SMALL_SIZE            = 10
+local TITLE_SIZE  = 15
+local HEADER_SIZE = 12
+local BODY_SIZE   = 11
+local SMALL_SIZE  = 10
+local LINE_H      = 14
+local uiScale     = 1.0   -- reserved for future use; currently fixed
 
 local TECH_TEXT_COLORS = {
 	T0 = {0.0, 0.8, 0.8, 1.0},
@@ -101,6 +103,7 @@ local spSendCommands           = Spring.SendCommands
 local spSetDrawSelectionInfo   = Spring.SetDrawSelectionInfo
 
 local glColor                  = gl.Color
+local glRect                   = gl.Rect
 local glText                   = gl.Text
 local glBeginEnd               = gl.BeginEnd
 local glVertex                 = gl.Vertex
@@ -201,7 +204,8 @@ local additionalList = nil
 local cachedPanelData   = nil
 local cachedIsOrder     = false
 local cachedResolvedKey = nil
-local cachedIsLiveUnit  = false
+local cachedIsLiveUnit    = false
+local lastShowAdditional  = false  -- tracks what was baked into staticList
 
 local function FreeDisplayLists()
 	if staticList     then gl.DeleteList(staticList)     ; staticList     = nil end
@@ -209,12 +213,49 @@ local function FreeDisplayLists()
 	if additionalList then gl.DeleteList(additionalList) ; additionalList = nil end
 end
 
+-- Track the values that went into the last dynamic list compile.
+-- The list is only rebuilt when something actually changes.
+local lastDynValues = {}
+
+local function DynamicValuesChanged(pd)
+	local lv = lastDynValues
+	return lv.healthText      ~= pd.healthText
+			or lv.shieldText      ~= pd.shieldText
+			or lv.overshieldText  ~= pd.overshieldText
+			or lv.statusText      ~= pd.statusText
+			or lv.metalFlowText   ~= pd.metalFlowText
+			or lv.energyFlowText  ~= pd.energyFlowText
+			or lv.metalCostText   ~= pd.metalCostText
+			or lv.energyCostText  ~= pd.energyCostText
+end
+
+local function SaveDynamicValues(pd)
+	local lv = lastDynValues
+	lv.healthText     = pd.healthText
+	lv.shieldText     = pd.shieldText
+	lv.overshieldText = pd.overshieldText
+	lv.statusText     = pd.statusText
+	lv.metalFlowText  = pd.metalFlowText
+	lv.energyFlowText = pd.energyFlowText
+	lv.metalCostText  = pd.metalCostText
+	lv.energyCostText = pd.energyCostText
+end
+
 local function ResolvedKey(resolved)
 	if not resolved then return nil end
 	if resolved.type == "unit"    then return "unit:"    .. tostring(resolved.id) end
 	if resolved.type == "feature" then return "feature:" .. tostring(resolved.id) end
 	if resolved.type == "build"   then return "build:"   .. tostring(resolved.name or "") end
-	if resolved.type == "order"   then return "order:"   .. tostring(resolved.title or "") .. tostring(resolved.body or "") end
+	if resolved.type == "order"     then return "order:"     .. tostring(resolved.title or "") end
+	if resolved.type == "selection" then
+		-- Key on sorted unit IDs so composition changes trigger a rebuild
+		local ids = {}
+		for i = 1, #resolved.units do ids[i] = resolved.units[i] end
+		table.sort(ids)
+		local key = "selection:"
+		for i = 1, math_min(#ids, 32) do key = key .. ids[i] .. "," end
+		return key
+	end
 	return nil
 end
 
@@ -452,19 +493,10 @@ local function WrapText(text, maxWidth, size)
 	return lines
 end
 
-local function GetTooltipArmor(ud)
-	local str = ud and ud.customParams and ud.customParams.armortype
-	if str == "light" then return "Light" end
-	if str == "armored" then return "Armored" end
-	if str == "building" then return "Building" end
-	if str == "air" then return "Air" end
-	return "Default"
-end
-
 local function GetTooltipRole(ud)
-	local str = ud and ud.customParams and ud.customParams.unitrole
-	if not str then
-		return "Unit Role Undefined"
+	local str = ud and ud.customParams and ud.customParams.buildmenucategory
+	if not str or str == "" then
+		return "Unsorted"
 	end
 	return str
 end
@@ -622,6 +654,14 @@ local function ResolveOrderFromTooltip(currentTooltip)
 		return nil
 	end
 
+	-- Suppress engine terrain/position tooltips — these change every pixel of
+	-- mouse movement and should not trigger panel rendering or cache rebuilds.
+	if currentTooltip:find("^Pos ") or currentTooltip:find("^Position") or
+			currentTooltip:find("^Elevation") or currentTooltip:find("^Height") or
+			currentTooltip:find("^%(") then
+		return nil
+	end
+
 	local firstLine = string_match(currentTooltip, "([^\n]+)")
 	if not firstLine then
 		return nil
@@ -651,7 +691,16 @@ local function ResolveTooltipData()
 		return { type = "feature", id = worldID }
 	end
 
-	-- First prefer UI tooltip content (build buttons / order buttons)
+	-- Handle selection fallback (single or multi)
+	local selectedUnits = spGetSelectedUnits()
+	if selectedUnits and #selectedUnits == 1 then
+		-- Single selected unit — prefer showing it over any order tooltip.
+		return { type = "unit", id = selectedUnits[1] }
+	elseif selectedUnits and #selectedUnits > 1 then
+		return { type = "selection", units = selectedUnits }
+	end
+
+	-- UI tooltip content (build buttons / order buttons)
 	local buildData = ResolveHoveredBuildFromTooltip(currentTooltip)
 	if buildData then
 		return buildData
@@ -660,12 +709,6 @@ local function ResolveTooltipData()
 	local orderData = ResolveOrderFromTooltip(currentTooltip)
 	if orderData then
 		return orderData
-	end
-
-	-- Fallback: if exactly one unit is selected, show it the same way as hover
-	local selectedUnits = spGetSelectedUnits()
-	if selectedUnits and #selectedUnits == 1 then
-		return { type = "unit", id = selectedUnits[1] }
 	end
 
 	return nil
@@ -731,41 +774,47 @@ end
 local function DrawStatsSection_Static(data, x1, yTop, w)
 	local lines = 3
 	if data.healthText     then lines = lines + 1 end
-	if data.shieldText     then lines = lines + 1 end
 	if data.overshieldText then lines = lines + 1 end
+	if data.shieldText     then lines = lines + 1 end
 	if data.statusText     then lines = lines + 1 end
 
-	local h  = 24 + lines * 14
+	local h  = 24 + lines * LINE_H
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 	DrawTextFitted("Stats", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
 
 	local cy = yTop - 32
 	if data.roleText then
-		DrawKVLine(x1 + 10, cy, "Role",  data.roleText,  MUTED_TEXT_COLOR, HEADER_TEXT)
-		cy = cy - 14
+		DrawKVLine(x1 + 10, cy, "Role", data.roleText, MUTED_TEXT_COLOR, HEADER_TEXT)
+		cy = cy - LINE_H
 	end
-	if data.armorText then
-		DrawKVLine(x1 + 10, cy, "Armor", data.armorText, MUTED_TEXT_COLOR, HEADER_TEXT)
-		cy = cy - 14
+	-- Labels are always drawn in the static pass (order: HP, OverShield, Shield, Status)
+	-- For live units the value strings are filled in by the dynamic pass
+	if data.healthText then
+		DrawTextFitted("HP", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		if not data.isLiveUnit then
+			DrawTextFitted(data.healthText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
+		end
+		cy = cy - LINE_H
 	end
-	-- health / shield / overshield / status values are drawn by the dynamic pass
-	-- for live units; draw them statically for non-live sources
-	if not data.isLiveUnit then
-		if data.healthText then
-			DrawKVLine(x1 + 10, cy, "Health", data.healthText, MUTED_TEXT_COLOR, HEADER_TEXT)
-			cy = cy - 14
+	if data.overshieldText then
+		DrawTextFitted("OverShield", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		if not data.isLiveUnit then
+			DrawTextFitted(data.overshieldText, x1 + 98, cy, BODY_SIZE, w - 108, OVERSHIELD_TEXT_COLOR, "o")
 		end
-		if data.shieldText then
-			DrawKVLine(x1 + 10, cy, "Shield", data.shieldText, MUTED_TEXT_COLOR, SHIELD_TEXT_COLOR)
-			cy = cy - 14
+		cy = cy - LINE_H
+	end
+	if data.shieldText then
+		DrawTextFitted("Shield", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		if not data.isLiveUnit then
+			DrawTextFitted(data.shieldText, x1 + 98, cy, BODY_SIZE, w - 108, SHIELD_TEXT_COLOR, "o")
 		end
-		if data.overshieldText then
-			DrawKVLine(x1 + 10, cy, "OverShield", data.overshieldText, MUTED_TEXT_COLOR, OVERSHIELD_TEXT_COLOR)
-			cy = cy - 14
-		end
-		if data.statusText then
-			DrawKVLine(x1 + 10, cy, "Status", data.statusText, MUTED_TEXT_COLOR, HEADER_TEXT)
+		cy = cy - LINE_H
+	end
+	if data.statusText then
+		DrawTextFitted("Status", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		if not data.isLiveUnit then
+			DrawTextFitted(data.statusText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
 		end
 	end
 
@@ -777,17 +826,16 @@ end
 local function CalcStatsDynamicPositions(data, x1, yTop, w)
 	local lines = 3
 	if data.healthText     then lines = lines + 1 end
-	if data.shieldText     then lines = lines + 1 end
 	if data.overshieldText then lines = lines + 1 end
+	if data.shieldText     then lines = lines + 1 end
 	if data.statusText     then lines = lines + 1 end
 
 	local h  = 24 + lines * 14
 	local y1 = yTop - h
 
-	-- skip role and armor (always static)
+	-- skip role and armor (always static); also skip label-only rows (now static too)
 	local cy = yTop - 32
-	if data.roleText  then cy = cy - 14 end
-	if data.armorText then cy = cy - 14 end
+	if data.roleText then cy = cy - 14 end
 
 	local positions = { sectionY1 = y1, x1 = x1, w = w, baseY = cy }
 	return positions
@@ -799,15 +847,15 @@ local function DrawStatsDynamic(data, pos)
 	local w  = pos.w
 	if data.healthText then
 		DrawTextFitted(data.healthText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
-		cy = cy - 14
-	end
-	if data.shieldText then
-		DrawTextFitted(data.shieldText, x1 + 98, cy, BODY_SIZE, w - 108, SHIELD_TEXT_COLOR, "o")
-		cy = cy - 14
+		cy = cy - LINE_H
 	end
 	if data.overshieldText then
 		DrawTextFitted(data.overshieldText, x1 + 98, cy, BODY_SIZE, w - 108, OVERSHIELD_TEXT_COLOR, "o")
-		cy = cy - 14
+		cy = cy - LINE_H
+	end
+	if data.shieldText then
+		DrawTextFitted(data.shieldText, x1 + 98, cy, BODY_SIZE, w - 108, SHIELD_TEXT_COLOR, "o")
+		cy = cy - LINE_H
 	end
 	if data.statusText then
 		DrawTextFitted(data.statusText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
@@ -1126,7 +1174,6 @@ local function BuildUnitPanelData(unitID)
 		tech = GetTechTag(ud),
 
 		roleText = GetTooltipRole(ud),
-		armorText = GetTooltipArmor(ud),
 		healthText = health and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil,
 		shieldText = (hasShield and maxShieldPower) and (FormatNbr(math_min(shieldPower, maxShieldPower), 0) .. "/" .. FormatNbr(maxShieldPower, 0)) or nil,
 		overshieldText = (overshieldStrength and shieldMaxStrength) and (FormatNbr(math_min(overshieldStrength, shieldMaxStrength), 0) .. "/" .. FormatNbr(shieldMaxStrength, 0)) or nil,
@@ -1174,7 +1221,6 @@ local function BuildBuildPanelData(buildData)
 		tech = ud and GetTechTag(ud) or nil,
 
 		roleText = ud and GetTooltipRole(ud) or nil,
-		armorText = ud and GetTooltipArmor(ud) or nil,
 		healthText = ud and FormatNbr(ud.health, 0) or (buildData.health and FormatNbr(buildData.health, 0) or nil),
 		shieldText = (ud and ud.shieldWeaponDef and WeaponDefs[ud.shieldWeaponDef]) and FormatNbr(WeaponDefs[ud.shieldWeaponDef].shieldPower, 0) or nil,
 		overshieldText = (ud and ud.customParams and ud.customParams.isshieldedunit == "1" and ud.customParams.shield_max_strength) and FormatNbr(ud.customParams.shield_max_strength, 0) or nil,
@@ -1216,7 +1262,6 @@ local function BuildFeaturePanelData(featureID)
 		tech = nil,
 
 		roleText = "Feature",
-		armorText = nil,
 		healthText = health and maxHealth and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil,
 		shieldText = nil,
 		overshieldText = nil,
@@ -1236,6 +1281,82 @@ local function BuildFeaturePanelData(featureID)
 	}
 end
 
+local function BuildSelectionPanelData(units)
+	-- Group units by defID, count them, accumulate economy
+	local groups   = {}   -- defID -> { ud, count }
+	local order    = {}   -- insertion order for stable display
+	local totalMetal  = 0
+	local totalEnergy = 0
+	local totalSupply = 0
+
+	for i = 1, #units do
+		local unitID = units[i]
+		local defID  = spGetUnitDefID(unitID)
+		if defID then
+			if not groups[defID] then
+				groups[defID] = { ud = UnitDefs[defID], count = 0 }
+				order[#order + 1] = defID
+			end
+			groups[defID].count = groups[defID].count + 1
+
+			-- Accumulate economy drain
+			local mMake, mUse, eMake, eUse = spGetUnitResources(unitID)
+			totalMetal  = totalMetal  + ((mMake or 0) - (mUse  or 0))
+			totalEnergy = totalEnergy + ((eMake or 0) - (eUse  or 0))
+		end
+	end
+
+	-- Total supply used across selection
+	for i = 1, #order do
+		local g  = groups[order[i]]
+		local ud = g.ud
+		if ud and ud.customParams then
+			local sc = tonumber(ud.customParams.supply_cost or 0) or 0
+			totalSupply = totalSupply + sc * g.count
+		end
+	end
+
+	-- Sort groups by count descending
+	table.sort(order, function(a, b)
+		return groups[a].count > groups[b].count
+	end)
+
+	-- Build row data
+	local rows = {}
+	for i = 1, #order do
+		local g  = groups[order[i]]
+		local ud = g.ud
+		if ud then
+			local tech = nil
+			if ud.customParams and ud.customParams.requiretech then
+				local TECH_MAP = { tech0="T0", tech1="T1", tech2="T2", tech3="T3", tech4="T4" }
+				tech = TECH_MAP[string_lower(tostring(ud.customParams.requiretech))]
+			end
+			rows[#rows + 1] = {
+				name  = ud.humanName or ud.name or "Unknown",
+				count = g.count,
+				tech  = tech,
+			}
+		end
+	end
+
+	-- Format economy summary
+	local function SignedStr(v)
+		if v >= 0 then return string_format("+%.1f", v) end
+		return string_format("%.1f", v)
+	end
+
+	return {
+		type          = "selection",
+		title         = "Selection",
+		subtitle      = #units .. " units",
+		rows          = rows,
+		metalFlowText  = SignedStr(totalMetal),
+		energyFlowText = SignedStr(totalEnergy),
+		supplyText     = totalSupply > 0 and tostring(math_floor(totalSupply)) or nil,
+	}
+end
+
 local function BuildPanelDataFromResolved(resolved)
 	if not resolved then return nil end
 	if resolved.type == "unit" then
@@ -1246,6 +1367,8 @@ local function BuildPanelDataFromResolved(resolved)
 		return BuildBuildPanelData(resolved), false
 	elseif resolved.type == "order" then
 		return BuildOrderPanelData(resolved), true
+	elseif resolved.type == "selection" then
+		return BuildSelectionPanelData(resolved.units), false
 	end
 	return nil, false
 end
@@ -1268,6 +1391,65 @@ local dynamicEconomyW   = nil
 -- Display list baking
 --------------------------------------------------------------------------------
 
+local function DrawSelectionSection(panelData, x1, yTop, w)
+	local rows    = panelData.rows or {}
+	local rowH    = LINE_H
+	local headerH = 22
+	local footerH = 28   -- economy summary
+	local totalH  = headerH + #rows * rowH + footerH + 10
+	local y1      = yTop - totalH
+
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+
+	-- Header
+	DrawTextFitted("Units", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+
+	-- Unit rows
+	local cy = yTop - headerH - rowH + 4
+	for i = 1, #rows do
+		local row   = rows[i]
+		local nameW = w - 50   -- leave room for count on right
+
+		-- Tech tag
+		local tagW = 0
+		if row.tech then
+			local tc = TECH_TEXT_COLORS[row.tech] or HEADER_TEXT
+			DrawTextFitted(row.tech, x1 + 10, cy, SMALL_SIZE, 24, tc, "o")
+			tagW = 28
+		end
+
+		-- Unit name
+		DrawTextFitted(row.name, x1 + 10 + tagW, cy, BODY_SIZE, nameW - tagW, HEADER_TEXT, "o")
+
+		-- Count on right
+		DrawTextFitted("x" .. row.count, x1 + w - 6, cy, BODY_SIZE, 40, MUTED_TEXT_COLOR, "or")
+
+		cy = cy - rowH
+	end
+
+	-- Economy summary separator line
+	local sepY = y1 + footerH
+	glColor(1, 1, 1, 0.06)
+	glRect(x1 + 6, sepY, x1 + w - 6, sepY + 1)
+
+	-- Economy row
+	local ey = y1 + footerH - 10
+	local mv = panelData.metalFlowText
+	local ev = panelData.energyFlowText
+	DrawTextFitted("M", x1 + 10,      ey, BODY_SIZE, 14, MUTED_TEXT_COLOR, "o")
+	DrawTextFitted(mv or "-", x1 + 22, ey, BODY_SIZE, 60,
+	               (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
+	DrawTextFitted("E", x1 + 88,       ey, BODY_SIZE, 14, MUTED_TEXT_COLOR, "o")
+	DrawTextFitted(ev or "-", x1 + 100, ey, BODY_SIZE, 60,
+	               (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
+	if panelData.supplyText then
+		DrawTextFitted("S", x1 + 166,       ey, BODY_SIZE, 14, MUTED_TEXT_COLOR, "o")
+		DrawTextFitted(panelData.supplyText, x1 + 178, ey, BODY_SIZE, 50, SUPPLY_TEXT_COLOR, "o")
+	end
+
+	return y1 - SECTION_GAP
+end
+
 local function BakeStaticList(panelData, isOrder, showAdditional)
 	local x1, y1, x2, y2 = tooltipPanel.x1, tooltipPanel.y1, tooltipPanel.x2, tooltipPanel.y2
 	if x2 > vsx - 8 then return end
@@ -1285,7 +1467,10 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 	DrawPanel(x1, y1, x2, y2, GetAccentForPanel(panelData, TOOLTIP_ACCENT_COLOR))
 	cy = DrawTitleSection(panelData, sx, cy, width)
 
-	if isOrder then
+	if panelData.type == "selection" then
+		DrawSelectionSection(panelData, sx, cy, width)
+		return
+	elseif isOrder then
 		cy = DrawOrderSection(panelData, sx, cy, width)
 		DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, width)
 	else
@@ -1303,7 +1488,7 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 			if panelData.shieldText     then lines = lines + 1 end
 			if panelData.overshieldText then lines = lines + 1 end
 			if panelData.statusText     then lines = lines + 1 end
-			local statsH = 24 + lines * 14
+			local statsH = 24 + lines * LINE_H
 			local statsYTop = cy + statsH + SECTION_GAP  -- reverse the section gap
 			dynamicStatsPos = CalcStatsDynamicPositions(panelData, sx, statsYTop, width)
 		else
@@ -1387,6 +1572,7 @@ function widget:Shutdown()
 	spSendCommands({"tooltip 1"})
 end
 
+
 function widget:ViewResize()
 	UpdateRects()
 	cachedResolvedKey = nil
@@ -1402,11 +1588,7 @@ function widget:KeyPress(key, mods, isRepeat)
 	if isRepeat then return false end
 	if key == KEYSYMS.SPACE then
 		additionalInfoEnabled = not additionalInfoEnabled
-		-- Spacebar toggles additional panel — rebuild static list to include/exclude it
-		if cachedPanelData then
-			FreeDisplayLists()
-			-- lists will be rebuilt next DrawScreen
-		end
+		-- DrawScreen will detect lastShowAdditional changed and rebuild safely
 		return true
 	end
 	return false
@@ -1419,6 +1601,12 @@ function widget:DrawScreen()
 	local resolved = ResolveTooltipData()
 	local key      = ResolvedKey(resolved)
 	local showAdditional = additionalInfoEnabled and resolved and CanShowAdditionalInfo(resolved)
+
+	-- If the additional panel was toggled, rebuild the static list with the same data
+	if showAdditional ~= lastShowAdditional and cachedPanelData then
+		lastShowAdditional = showAdditional
+		RebuildAllLists(cachedPanelData, cachedIsOrder, showAdditional)
+	end
 
 	if key ~= cachedResolvedKey then
 		-- Source changed — rebuild data and all display lists
@@ -1434,15 +1622,29 @@ function widget:DrawScreen()
 			cachedIsOrder    = false
 			cachedIsLiveUnit = false
 		end
+		lastDynValues = {}  -- reset so new unit always compiles its first dynamic list
+		lastShowAdditional = showAdditional
 		RebuildAllLists(cachedPanelData, cachedIsOrder, showAdditional)
 
+	elseif cachedIsOrder and cachedPanelData and resolved then
+		-- Same order command — only rebuild if body text actually changed
+		local newBody = resolved.body or ""
+		if cachedPanelData.body ~= newBody then
+			cachedPanelData.body = newBody
+			RebuildAllLists(cachedPanelData, cachedIsOrder, showAdditional)
+		end
+
 	elseif cachedIsLiveUnit and cachedPanelData then
-		-- Same live unit — refresh values and rebuild just the cheap dynamic list
+		-- Same live unit — refresh values, but only recompile the dynamic list
+		-- if something actually changed. This avoids gl.DeleteList+CreateList every frame.
 		RefreshLiveUnitFields(cachedPanelData, resolved.id)
-		if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end
-		dynamicList = gl.CreateList(function()
-			BakeDynamicList(cachedPanelData)
-		end)
+		if not dynamicList or DynamicValuesChanged(cachedPanelData) then
+			SaveDynamicValues(cachedPanelData)
+			if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end
+			dynamicList = gl.CreateList(function()
+				BakeDynamicList(cachedPanelData)
+			end)
+		end
 	end
 
 	if not staticList then return end
