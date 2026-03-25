@@ -44,9 +44,6 @@ local MIN_SPEED_MULT = 0.25
 local MIN_ACCEL_MULT = 0.25
 local MIN_TURN_MULT  = 0.25
 
--- Weapon reload scaling (kept for debug/possible later use)
-local MAX_RELOAD_MULT = 4.0
-
 --------------------------------------------------------------------------------
 -- optional customparams
 --------------------------------------------------------------------------------
@@ -73,7 +70,7 @@ local spValidUnitID         = Spring.ValidUnitID
 local spGetUnitHealth       = Spring.GetUnitHealth
 local spGetUnitDefID        = Spring.GetUnitDefID
 local spSetUnitRulesParam   = Spring.SetUnitRulesParam
-local spSetUnitWeaponState  = Spring.SetUnitWeaponState
+local spGiveOrderToUnit     = Spring.GiveOrderToUnit
 local spGetAllUnits         = Spring.GetAllUnits
 local spGetUnitIsDead       = Spring.GetUnitIsDead
 local spGetUnitPosition     = Spring.GetUnitPosition
@@ -115,8 +112,6 @@ local moveTypeCache = {}
 --   }
 -- }
 
-local unitWeaponBaseReload = {}
-
 --------------------------------------------------------------------------------
 -- Helpers
 --------------------------------------------------------------------------------
@@ -149,16 +144,13 @@ local function GetPenaltyMultipliersFromPercent(pct, fullyDisrupted)
 	accelMult = math_max(MIN_ACCEL_MULT, accelMult)
 	turnMult  = math_max(MIN_TURN_MULT, turnMult)
 
-	local reloadMult = 1 + ((MAX_RELOAD_MULT - 1) * pct * pct)
-
 	if fullyDisrupted then
 		speedMult = MIN_SPEED_MULT
 		accelMult = MIN_ACCEL_MULT
 		turnMult  = MIN_TURN_MULT
-		reloadMult = MAX_RELOAD_MULT
 	end
 
-	return speedMult, accelMult, turnMult, reloadMult
+	return speedMult, accelMult, turnMult
 end
 
 local function CacheMoveType(unitID, unitDefID)
@@ -292,7 +284,6 @@ local function ClearUnitState(unitID)
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
-	spSetUnitRulesParam(unitID, "disruption_reloadmult", 1, IN_LOS)
 end
 
 local function GetDecayRateForPercent(pct)
@@ -310,22 +301,8 @@ local function TriggerFullDisruption(unitID, frame)
 	disruption[unitID] = cap
 	disruptedUntil[unitID] = frame + LOCKOUT_FRAMES
 	activeUnits[unitID] = true
-end
 
-local function BuildUnitWeaponReloadCache()
-	for unitDefID, ud in pairs(UnitDefs) do
-		unitWeaponBaseReload[unitDefID] = {}
-		if ud.weapons then
-			for weaponNum, weaponInfo in ipairs(ud.weapons) do
-				local wdid = weaponInfo.weaponDef
-				local wd = WeaponDefs[wdid]
-				if wd then
-					local reloadFrames = (wd.reload or 1) * GAME_SPEED
-					unitWeaponBaseReload[unitDefID][weaponNum] = reloadFrames
-				end
-			end
-		end
-	end
+	spGiveOrderToUnit(unitID, CMD.STOP, {}, 0)
 end
 
 local function InitUnitState(unitID, unitDefID)
@@ -357,7 +334,6 @@ local function InitUnitState(unitID, unitDefID)
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
-	spSetUnitRulesParam(unitID, "disruption_reloadmult", 1, IN_LOS)
 end
 
 --------------------------------------------------------------------------------
@@ -365,8 +341,6 @@ end
 --------------------------------------------------------------------------------
 
 function gadget:Initialize()
-	BuildUnitWeaponReloadCache()
-
 	local allUnits = spGetAllUnits()
 	for i = 1, #allUnits do
 		local unitID = allUnits[i]
@@ -427,8 +401,12 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
 
 	local frame = spGetGameFrame()
 
-	-- Do not let additional disruption extend the lockout.
+	-- Target is already fully disrupted: block the hit and stop the attacker
+	-- so it immediately drops its target and looks for something else.
 	if IsUnitFullyDisrupted(unitID, frame) then
+		if attackerID and spValidUnitID(attackerID) then
+			spGiveOrderToUnit(attackerID, CMD.STOP, {}, 0)
+		end
 		return 0
 	end
 
@@ -464,22 +442,24 @@ end
 
 function gadget:AllowWeaponTarget(attackerID, targetID, attackerWeaponNum, attackerWeaponDefID, defPriority)
 	local frame = spGetGameFrame()
+
+	-- Fully disrupted units cannot fire at all.
 	if IsUnitFullyDisrupted(attackerID, frame) then
 		return false
 	end
-	return true
-end
 
-local function ApplyReloadPenalty(unitID, unitDefID, frame, reloadMult, fullyDisrupted)
-	local weapons = unitWeaponBaseReload[unitDefID]
-	if not weapons then return end
-
-	-- Only hard-block during full disruption.
-	if fullyDisrupted then
-		for weaponNum in pairs(weapons) do
-			spSetUnitWeaponState(unitID, weaponNum, "reloadState", frame + LOCKOUT_FRAMES)
+	-- Disruption weapons will not target a unit that is already fully disrupted.
+	local wd = WeaponDefs[attackerWeaponDefID]
+	if wd then
+		local cp = wd.customParams
+		if cp and tonumber(cp.disruptionweapon) == 1 then
+			if IsUnitFullyDisrupted(targetID, frame) then
+				return false
+			end
 		end
 	end
+
+	return true
 end
 
 --------------------------------------------------------------------------------
@@ -527,17 +507,11 @@ function gadget:GameFrame(frame)
 			local pct = current / cap
 			pct = Clamp(pct, 0, 1)
 
-			local speedMult, accelMult, turnMult, reloadMult = GetPenaltyMultipliersFromPercent(pct, fullyDisrupted)
+			local speedMult, accelMult, turnMult = GetPenaltyMultipliersFromPercent(pct, fullyDisrupted)
 
 			spSetUnitRulesParam(unitID, "disruption_speedmult", speedMult, IN_LOS)
-			spSetUnitRulesParam(unitID, "disruption_reloadmult", reloadMult, IN_LOS)
 
 			ApplyMovementPenalty(unitID, speedMult, accelMult, turnMult)
-
-			local unitDefID = spGetUnitDefID(unitID)
-			if unitDefID then
-				ApplyReloadPenalty(unitID, unitDefID, frame, reloadMult, fullyDisrupted)
-			end
 
 			SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
 
@@ -546,7 +520,6 @@ function gadget:GameFrame(frame)
 				RestoreMovement(unitID)
 				SetDisplayedRulesParams(unitID, 0, false)
 				spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
-				spSetUnitRulesParam(unitID, "disruption_reloadmult", 1, IN_LOS)
 				activeUnits[unitID] = nil
 			end
 		end
