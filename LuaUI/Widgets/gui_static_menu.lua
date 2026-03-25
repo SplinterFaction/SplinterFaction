@@ -2,7 +2,7 @@ function widget:GetInfo()
 	return {
 		name      = "Static Menu",
 		desc      = "Top-right menu with Settings, Resign, and Quit buttons",
-		author    = "OpenAI",
+		author    = "",
 		date      = "2026-03-22",
 		license   = "GNU GPL, v2 or later",
 		layer     = 1000,

@@ -2,7 +2,7 @@ function widget:GetInfo()
     return {
         name    = "Static Build/Order Menu",
         desc    = "Non-Chili build and order menu with categorized build sections",
-        author  = "OpenAI",
+        author  = "",
         date    = "2026-03-21",
         license = "GPL v2 or later",
         layer   = 1,

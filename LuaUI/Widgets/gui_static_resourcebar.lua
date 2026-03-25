@@ -2,7 +2,7 @@ function widget:GetInfo()
 	return {
 		name    = "Static Resourcebar",
 		desc    = "Static top resource bars for supply, metal and energy",
-		author  = "OpenAI",
+		author  = "",
 		date    = "2026-03-22",
 		license = "GPL v2 or later",
 		layer   = 1,

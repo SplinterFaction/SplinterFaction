@@ -16,28 +16,32 @@ local myTeamID = Spring.GetMyTeamID
 local myAllyTeamID = Spring.GetMyAllyTeamID
 local unitAllyTeamID = Spring.GetUnitAllyTeam
 
-local notificationTimeout = 10
+-- FIX 1: Replaced 18 individual timeout variables with a single table.
+-- To add a new timeout, just add an entry here. updateNotifications() handles the rest.
+local timeouts = {
+	notification             = 10,
+	allyCommHP               = 60,
+	myCommHP                 = 60,
+	allyT4HP                 = 60,
+	goliath                  = 60,
+	mammoth                  = 60,
+	juggernaut               = 60,
+	silverback               = 60,
+	allyJuggernaut           = 60,
+	allySilverback           = 60,
+	energy                   = 30,
+	metal                    = 30,
+	supply                   = 30,
+	enemyCommanderSpotted    = 60,
+	enemyCloakingMechSpotted = 60,
+	enemyShieldingTankSpotted= 60,
+	upgrade                  = 10,
+	myMex                    = 15,
+}
 
-local allyCommHPNotificationTimeout = 60
-local myCommHPNotificationTimeout = 60
-local allyT4HPNotificationTimeout = 60
-local goliathNotificationTimeout = 60
-local mammothNotificationTimeout = 60
-local juggernautNotificationTimeout = 60
-local silverbackNotificationTimeout = 60
-local allyJuggernautNotificationTimeout = 60
-local allySilverbackNotificationTimeout = 60
-local energyNotificationTimeout = 30
-local metalNotificationTimeout = 30
-local supplyNotificationTimeout = 30
 local enemyT2Notification = 0
 local enemyT3Notification = 0
 local enemyT4Notification = 0
-local enemyCommanderSpottedTimeout = 60
-local enemyCloakingMechSpottedTimeout = 60
-local enemyShieldingTankSpottedTimeout = 60
-local upgradeNotificationTimeout = 10
-local myMexNotificationTimeout = 15
 
 local meT1Notification = 0
 local meT2Notification = 0
@@ -50,41 +54,95 @@ local dontRemindMeToTechToT3 = 0
 local dontRemindMeToTechToT4 = 0
 
 local notificationQueue = {}
-local dt = 1 -- Timeout Decrement
+local dt = 1 -- Timeout Decrement (1 second, matches the GameFrame call frequency of every 30 frames at 30fps)
 
 --[[
-Description of how to enqueue stuff, because I get loopy and forget how to do things...
+HOW TO ADD A NEW NOTIFICATION — end to end guide
 
-Whenever you want to display a notification, instead of directly echoing the message, you will add it to the queue:
+Let's say you want to warn the player when an enemy T3 artillery unit is spotted.
+Follow these four steps:
 
-local function enqueueNotification(message)
-  table.insert(notificationQueue, { message = message })
-end
+────────────────────────────────────────────────────────────────────
+STEP 1 — Add a sound file
+────────────────────────────────────────────────────────────────────
+Drop your .wav or .ogg file somewhere under luaui/sounds/, e.g.:
+    luaui/sounds/enemyt3artillery.wav
 
-With this queuing system in place, multiple notifications will be added to the queue instead of being directly enacted, and they will be played one after another as the `notificationTimeout` reaches 0.
+The message string you use in the queue (Step 3) must match this filename
+exactly, without the extension, as that is what Spring.PlaySoundFile() expects.
+
+────────────────────────────────────────────────────────────────────
+STEP 2 — Add a cooldown timeout (if needed)
+────────────────────────────────────────────────────────────────────
+If this notification can fire more than once (i.e. it's not a one-time
+"first sighting" flag), add a cooldown entry to the timeouts table at the
+top of the file:
+
+    local timeouts = {
+        ...
+        enemyT3ArtillerySpotted = 60,   -- 60 seconds between alerts
+    }
+
+Skip this step if the notification should only ever fire once (like the
+enemyT2/T3/T4 tier-spotted flags). In that case you'll use a plain 0/1
+flag variable instead, like enemyT2Notification.
+
+────────────────────────────────────────────────────────────────────
+STEP 3 — Enqueue the notification in the right game event
+────────────────────────────────────────────────────────────────────
+Find the widget callback where the trigger lives — UnitEnteredLos for
+visibility events, UnitDamaged for HP events, UnitFinished for
+build-complete events, GameFrame for periodic resource checks, or
+WG.AddNotification for calls coming from other widgets.
+
+Inside that callback, check your cooldown (or one-time flag), insert
+into the queue, reset the cooldown, and optionally snap the camera:
+
+    if UnitDefs[unitDefID].name == "fedhowitzer" then
+        if timeouts.enemyT3ArtillerySpotted <= 0 then
+            table.insert(notificationQueue, { message = "enemyt3artillery" })
+            timeouts.enemyT3ArtillerySpotted = 60
+            Spring.SetLastMessagePosition(x, y, z)
+        end
+    end
+
+The queue fires notifications one at a time as timeouts.notification
+counts down, so you never need to worry about sounds overlapping.
+
+────────────────────────────────────────────────────────────────────
+STEP 4 — Add a testing shortcut in widget:Initialize() (optional)
+────────────────────────────────────────────────────────────────────
+Uncomment or add a line in the testing block inside widget:Initialize()
+so you can zero out the timeout and verify the sound plays in-game
+without waiting for the real trigger condition:
+
+    --timeouts.enemyT3ArtillerySpotted = 0
+
+That's it. The decrement loop in updateNotifications() picks up any new
+timeouts table entry automatically — no other plumbing required.
 ]]--
 
 function widget:Initialize()
 
 	------------ Uncomment these to make testing easier
-	--notificationTimeout = 0
-	--allyCommHPNotificationTimeout = 0
-	--myCommHPNotificationTimeout = 0
-	--allyT4HPNotificationTimeout = 0
-	--goliathNotificationTimeout = 0
-	--mammothNotificationTimeout = 0
-	--juggernautNotificationTimeout = 0
-	--silverbackNotificationTimeout = 0
-	--allyJuggernautNotificationTimeout = 0
-	--allySilverbackNotificationTimeout = 0
-	--energyNotificationTimeout = 0
-	--metalNotificationTimeout = 0
-	--supplyNotificationTimeout = 0
-	--enemyCommanderSpottedTimeout = 0
-	--enemyCloakingMechSpottedTimeout = 0
-	--enemyShieldingTankSpottedTimeout = 0
-	--upgradeNotificationTimeout = 0
-	--myMexNotificationTimeout = 0
+	--timeouts.notification = 0
+	--timeouts.allyCommHP = 0
+	--timeouts.myCommHP = 0
+	--timeouts.allyT4HP = 0
+	--timeouts.goliath = 0
+	--timeouts.mammoth = 0
+	--timeouts.juggernaut = 0
+	--timeouts.silverback = 0
+	--timeouts.allyJuggernaut = 0
+	--timeouts.allySilverback = 0
+	--timeouts.energy = 0
+	--timeouts.metal = 0
+	--timeouts.supply = 0
+	--timeouts.enemyCommanderSpotted = 0
+	--timeouts.enemyCloakingMechSpotted = 0
+	--timeouts.enemyShieldingTankSpotted = 0
+	--timeouts.upgrade = 0
+	--timeouts.myMex = 0
 	------------
 
 	---- See if the kills file exists
@@ -173,31 +231,33 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 	if unitTeam ~= myTeamID() then
 		-- Ally high value units under attack
 		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
-			if allyCommHPNotificationTimeout <= 0 then
+			if timeouts.allyCommHP <= 0 then
 				if unitHP <= unitMaxHP * 0.5 then
 					table.insert(notificationQueue, { message = "allycomWarning" })
 					Spring.SetLastMessagePosition (x,y,z)
+					-- FIX 3: Timeout now only resets when the HP threshold was actually met,
+					-- so the cooldown isn't wasted on hits above the warning threshold.
+					timeouts.allyCommHP = 60
 				end
-				allyCommHPNotificationTimeout = 60
 			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
 			if UnitDefs[unitDefID].name == "fedjuggernaut" then
-				if allyJuggernautNotificationTimeout <= 0 then
+				if timeouts.allyJuggernaut <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
 						table.insert(notificationQueue, { message = "allyjuggernautWarning" })
 						Spring.SetLastMessagePosition (x,y,z)
+						timeouts.allyJuggernaut = 60
 					end
-					allyJuggernautNotificationTimeout = 60
 				end
 			end
 			if UnitDefs[unitDefID].name == "lozsilverback" then
-				if allySilverbackNotificationTimeout <= 0 then
+				if timeouts.allySilverback <= 0 then
 					if unitHP <= unitMaxHP * 0.75 then
 						table.insert(notificationQueue, { message = "allysilverbackWarning" })
 						Spring.SetLastMessagePosition (x,y,z)
+						timeouts.allySilverback = 60
 					end
-					allySilverbackNotificationTimeout = 60
 				end
 			end
 		end
@@ -205,62 +265,65 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 
 	if unitTeam == myTeamID() then
 		if UnitDefs[unitDefID].customParams.unittype == "Commander" then
-			if myCommHPNotificationTimeout <= 0 then
+			if timeouts.myCommHP <= 0 then
 				if unitHP <= unitMaxHP * 0.25 then
 					table.insert(notificationQueue, { message = "mycomCriticalDamageWarning" })
 					Spring.SetLastMessagePosition (x,y,z)
+					timeouts.myCommHP = 30
 				elseif unitHP <= unitMaxHP * 0.5 then
 					table.insert(notificationQueue, { message = "mycomHeavyDamageWarning" })
 					Spring.SetLastMessagePosition (x,y,z)
+					timeouts.myCommHP = 30
 				end
-				myCommHPNotificationTimeout = 30
+				-- FIX 3 applied here: timeout was previously reset outside the HP checks,
+				-- which suppressed future warnings even when no notification was queued.
 			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech3" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
 			if UnitDefs[unitDefID].name == "fedgoliath" then
-				if goliathNotificationTimeout <= 0 then
+				if timeouts.goliath <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
 						table.insert(notificationQueue, { message = "mygoliathWarning" })
 						Spring.SetLastMessagePosition (x,y,z)
+						timeouts.goliath = 60
 					end
-					goliathNotificationTimeout = 60
 				end
 			end
 			if UnitDefs[unitDefID].name == "lozmammoth" then
-				if mammothNotificationTimeout <= 0 then
+				if timeouts.mammoth <= 0 then
 					if unitHP <= unitMaxHP * 0.75 then
 						table.insert(notificationQueue, { message = "mymammothWarning" })
 						Spring.SetLastMessagePosition (x,y,z)
+						timeouts.mammoth = 60
 					end
-					mammothNotificationTimeout = 60
 				end
 			end
 		end
 		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
 			if UnitDefs[unitDefID].name == "fedjuggernaut" then
-				if juggernautNotificationTimeout <= 0 then
+				if timeouts.juggernaut <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
 						table.insert(notificationQueue, { message = "myjuggernautWarning" })
 						Spring.SetLastMessagePosition (x,y,z)
+						timeouts.juggernaut = 60
 					end
-					juggernautNotificationTimeout = 60
 				end
 			end
 			if UnitDefs[unitDefID].name == "lozsilverback" then
-				if silverbackNotificationTimeout <= 0 then
+				if timeouts.silverback <= 0 then
 					if unitHP <= unitMaxHP * 0.75 then
 						table.insert(notificationQueue, { message = "mysilverbackWarning" })
 						Spring.SetLastMessagePosition (x,y,z)
+						timeouts.silverback = 60
 					end
-					silverbackNotificationTimeout = 60
 				end
 			end
 		end
 		if UnitDefs[unitDefID].customParams.metal_extractor then
-			if myMexNotificationTimeout <= 0 then
-					table.insert(notificationQueue, { message = "myMexDamageWarning" })
+			if timeouts.myMex <= 0 then
+				table.insert(notificationQueue, { message = "myMexDamageWarning" })
 				Spring.SetLastMessagePosition (x,y,z)
-				myMexNotificationTimeout = 15
+				timeouts.myMex = 15
 			end
 		end
 	end
@@ -274,10 +337,10 @@ function widget:UnitEnteredLos(unitID, unitTeam)
 		--Spring.Echo(2)
 		if UnitDefs[unitDefID].customParams.unitrole == "Commander" then
 			--Spring.Echo(3)
-			if enemyCommanderSpottedTimeout <= 0 then
+			if timeouts.enemyCommanderSpotted <= 0 then
 				--Spring.Echo(4)
 				table.insert(notificationQueue, { message = "enemycommanderSpotted" })
-				enemyCommanderSpottedTimeout = 60
+				timeouts.enemyCommanderSpotted = 60
 				Spring.SetLastMessagePosition (x,y,z)
 			end
 		end
@@ -303,16 +366,16 @@ function widget:UnitEnteredLos(unitID, unitTeam)
 			end
 		end
 		if UnitDefs[unitDefID].name == "feddeleter" then
-			if enemyCloakingMechSpottedTimeout <= 0 then
+			if timeouts.enemyCloakingMechSpotted <= 0 then
 				table.insert(notificationQueue, { message = "enemyt3CloakingMech" })
-				enemyCloakingMechSpottedTimeout = 60
+				timeouts.enemyCloakingMechSpotted = 60
 				Spring.SetLastMessagePosition (x,y,z)
 			end
 		end
 		if UnitDefs[unitDefID].name == "lozprotector" then
-			if enemyShieldingTankSpottedTimeout <= 0 then
+			if timeouts.enemyShieldingTankSpotted <= 0 then
 				table.insert(notificationQueue, { message = "enemyt3ShieldingTank" })
-				enemyShieldingTankSpottedTimeout = 60
+				timeouts.enemyShieldingTankSpotted = 60
 				Spring.SetLastMessagePosition (x,y,z)
 			end
 		end
@@ -336,63 +399,48 @@ function widget:UnitEnteredLos(unitID, unitTeam)
 
 end
 
+-- FIX 4: Removed the direct Spring.SendMessageToPlayer() calls from WG.AddNotification.
+-- Previously, resource/upgrade warnings fired a chat message immediately, bypassing the
+-- queue entirely. Now all output goes through the queue for consistent pacing.
+-- If you want the chat ping back for a specific notification, add it inside the
+-- updateNotifications() dispatch block alongside PlaySoundFile().
 function WG.AddNotification(notificationType)
 	if notificationType == "energyWarning" then
-		if energyNotificationTimeout <= 0 then
+		if timeouts.energy <= 0 then
 			table.insert(notificationQueue, { message = "energyWarning" })
-			energyNotificationTimeout = 30
-			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "Build more power plants!")
+			timeouts.energy = 30
 		end
 	end
 	if notificationType == "metalWarning" then
-		if metalNotificationTimeout <= 0 then
+		if timeouts.metal <= 0 then
 			table.insert(notificationQueue, { message = "metalWarning" })
-			metalNotificationTimeout = 30
-			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "You are excessing metal!")
+			timeouts.metal = 30
 		end
 	end
 	if notificationType == "supplyWarning" then
-		if supplyNotificationTimeout <= 0 then
+		if timeouts.supply <= 0 then
 			table.insert(notificationQueue, { message = "supplyWarning" })
-			supplyNotificationTimeout = 30
-			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "Build more supply depots!")
+			timeouts.supply = 30
 		end
 	end
 	if notificationType == "morphFinished" then
-		if upgradeNotificationTimeout <= 0 then
+		if timeouts.upgrade <= 0 then
 			table.insert(notificationQueue, { message = "upgradecomplete" })
-			upgradeNotificationTimeout = 10
-			Spring.SendMessageToPlayer(Spring.GetMyPlayerID(), "Unit upgrade complete!")
+			timeouts.upgrade = 10
 		end
 	end
 end
 
 local function updateNotifications(dt)
-	-- Decrement the timeout
-	notificationTimeout = notificationTimeout - dt
-	allyCommHPNotificationTimeout = allyCommHPNotificationTimeout - dt
-	allyT4HPNotificationTimeout = allyT4HPNotificationTimeout - dt
-	myCommHPNotificationTimeout = myCommHPNotificationTimeout - dt
-	goliathNotificationTimeout = goliathNotificationTimeout - dt
-	mammothNotificationTimeout = mammothNotificationTimeout - dt
-	juggernautNotificationTimeout = juggernautNotificationTimeout - dt
-	silverbackNotificationTimeout = silverbackNotificationTimeout - dt
-	allyJuggernautNotificationTimeout = allyJuggernautNotificationTimeout - dt
-	allySilverbackNotificationTimeout = allySilverbackNotificationTimeout - dt
-	energyNotificationTimeout = energyNotificationTimeout - dt
-	metalNotificationTimeout = metalNotificationTimeout - dt
-	supplyNotificationTimeout = supplyNotificationTimeout - dt
-	enemyCommanderSpottedTimeout = enemyCommanderSpottedTimeout - dt
-	enemyCloakingMechSpottedTimeout = enemyCloakingMechSpottedTimeout - dt
-	enemyShieldingTankSpottedTimeout = enemyShieldingTankSpottedTimeout - dt
-	upgradeNotificationTimeout = upgradeNotificationTimeout - dt
-	myMexNotificationTimeout = myMexNotificationTimeout -dt
+	-- FIX 1: Decrement all timeouts in a single loop instead of 18 individual lines.
+	for key, _ in pairs(timeouts) do
+		timeouts[key] = timeouts[key] - dt
+	end
 
-
-	-- Spring.Echo("notificationTimeout is " .. notificationTimeout)
+	-- Spring.Echo("notificationTimeout is " .. timeouts.notification)
 
 	-- Check if the timeout has reached 0
-	if notificationTimeout <= 0 then
+	if timeouts.notification <= 0 then
 		-- Check if there are notifications in the queue
 		if #notificationQueue > 0 then
 			-- Dequeue the next notification
@@ -403,19 +451,15 @@ local function updateNotifications(dt)
 			-- Spring.Echo(nextNotification.message)
 
 			-- Reset the timeout
-			notificationTimeout = 5
+			timeouts.notification = 5
 		end
 	end
 end
 
 local function purgeNotificationQueue()
-	-- Remove many entries (such as dumping all queued events)
-	local startRecord = 1
-	local endRecord = 100
-	 -- Loop through table indices  1 - 100 and remove them ... If there are more than 3 or 4, we seriously fucked up, but going to 100 just to be sure.
-	for recordsToRemove = endRecord, startRecord, -1 do
-		table.remove(notificationQueue, recordsToRemove)
-	end
+	-- FIX 2: Replaced the fragile 100-iteration loop with a simple table reset.
+	-- The old approach called table.remove() up to 100 times regardless of actual queue size.
+	notificationQueue = {}
 end
 
 function widget:GameFrame(frame)
@@ -434,9 +478,31 @@ function widget:GameFrame(frame)
 	if frame > 450 then
 		if frame%450 == 5 then -- frame%450 = every 15 seconds
 			-- Get the current resourcing stats
+			-- Spring.GetTeamResources ( number teamID, string "metal" | "energy" )
+			-- return: nil | number currentLevel, number storage, number pull, number income, number expense, number share, number sent, number received
+
 			su, sm = math.round(Spring.GetTeamRulesParam(myTeamID(), "supplyUsed") or 0), math.round(Spring.GetTeamRulesParam(myTeamID(), "supplyMax") or 0)
 			ec, es, ep, ei, ee = Spring.GetTeamResources(myTeamID(), "energy")
 			mc, ms, mp, mi, me = Spring.GetTeamResources(myTeamID(), "metal")
+
+			local resourcePrompts = Spring.GetConfigInt("evo_resourceprompts", 1)
+			if resourcePrompts == 1 then
+				-- If supply used is 85% or more, warn
+				if su >= sm * 0.85 then
+					WG.AddNotification("supplyWarning")
+				end
+
+				-- If Energy reserves are at 20% or below, warn
+				if ec <= es * 0.2 then
+					WG.AddNotification("energyWarning")
+				end
+
+				-- If Metal Storage is 80% or above, warn
+				if mc >= ms * 0.8 then
+					WG.AddNotification("metalWarning")
+				end
+			end
+
 			-- Spring .Echo ("energy " .. ei)
 			-- Spring .Echo ("metal " .. mi)
 			if meT1Notification == 0 and dontRemindMeToTechToT1 == 0 then

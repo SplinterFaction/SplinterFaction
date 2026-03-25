@@ -440,6 +440,17 @@ end
 -- Weapon control
 --------------------------------------------------------------------------------
 
+function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag, synced)
+	-- Block manual attack orders while fully disrupted.
+	if cmdID == CMD.ATTACK or cmdID == CMD.FIGHT then
+		local frame = spGetGameFrame()
+		if IsUnitFullyDisrupted(unitID, frame) then
+			return false
+		end
+	end
+	return true
+end
+
 function gadget:AllowWeaponTarget(attackerID, targetID, attackerWeaponNum, attackerWeaponDefID, defPriority)
 	local frame = spGetGameFrame()
 
