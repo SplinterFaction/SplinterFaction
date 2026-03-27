@@ -50,12 +50,18 @@ local CARD_GAP              = 6
 local TOOLTIP_WIDTH_MULT    = 1.00
 local TOOLTIP_GAP_X         = 10
 
+-- UI scaling.  Change BASE_RESOLUTION to match your "designed-for" height.
+-- At that resolution uiScale == 1.0 and all sizes are their base values.
+-- At higher/lower resolutions everything scales proportionally.
+local BASE_RESOLUTION = 1440
+
+local uiScale     = 1.0   -- computed in UpdateRects from actual viewport height
+
 local TITLE_SIZE  = 15
 local HEADER_SIZE = 12
 local BODY_SIZE   = 11
 local SMALL_SIZE  = 10
 local LINE_H      = 14
-local uiScale     = 1.0   -- reserved for future use; currently fixed
 
 local TECH_TEXT_COLORS = {
 	T0 = {0.0, 0.8, 0.8, 1.0},
@@ -289,10 +295,22 @@ end
 local function UpdateRects()
 	vsx, vsy = spGetViewGeometry()
 
+	-- Recompute scale and all derived size constants each time the viewport changes.
+	uiScale     = vsy / BASE_RESOLUTION
+	TITLE_SIZE  = math_floor(15 * uiScale)
+	HEADER_SIZE = math_floor(12 * uiScale)
+	BODY_SIZE   = math_floor(11 * uiScale)
+	SMALL_SIZE  = math_floor(10 * uiScale)
+	LINE_H      = math_floor(14 * uiScale)
+	INNER_PAD   = math_floor(10 * uiScale)
+	SECTION_GAP = math_floor( 6 * uiScale)
+	CARD_GAP    = math_floor( 6 * uiScale)
+	TOOLTIP_GAP_X = math_floor(10 * uiScale)
+
 	local panelW = math_floor(vsx * PANEL_WIDTH_FRAC)
 	local totalH = math_floor(vsy * TOTAL_HEIGHT_FRAC)
 	local orderH = math_floor(totalH * ORDER_HEIGHT_FRAC)
-	local buildH = math_max(120, totalH - orderH - GAP_BETWEEN_PANELS)
+	local buildH = math_max(math_floor(120 * uiScale), totalH - orderH - GAP_BETWEEN_PANELS)
 
 	orderPanel.x1 = PANEL_MARGIN_X
 	orderPanel.y1 = PANEL_MARGIN_Y
@@ -720,52 +738,60 @@ end
 
 local function DrawHeaderTag(x, y, text, color)
 	if not text then return 0 end
-	local w = math_floor(TextWidthApprox(text, SMALL_SIZE) + 10)
-	local h = 16
-	DrawRoundedRect(x, y - 3, x + w, y + h - 3, 5, CATEGORY_BG)
-	DrawTextFitted(text, x + 5, y, SMALL_SIZE, w - 10, color or HEADER_TEXT, "o")
-	return w + 4
+	local pad = math_floor(10 * uiScale)
+	local w = math_floor(TextWidthApprox(text, SMALL_SIZE) + pad)
+	local h = math_floor(16 * uiScale)
+	DrawRoundedRect(x, y - math_floor(3 * uiScale), x + w, y + h - math_floor(3 * uiScale), 5, CATEGORY_BG)
+	DrawTextFitted(text, x + math_floor(5 * uiScale), y, SMALL_SIZE, w - math_floor(10 * uiScale), color or HEADER_TEXT, "o")
+	return w + math_floor(4 * uiScale)
 end
 
 local function DrawFlowLine(x, y, label, metalValue, energyValue)
-	DrawTextFitted(label, x, y, BODY_SIZE, 140, MUTED_TEXT_COLOR, "o")
+	local col1 = math_floor(88 * uiScale)
+	local col2 = math_floor(12 * uiScale)
+	local col3 = math_floor(52 * uiScale)
+	local col4 = math_floor(42 * uiScale)
+	local col5 = math_floor(24 * uiScale)
+	DrawTextFitted(label, x, y, BODY_SIZE, math_floor(140 * uiScale), MUTED_TEXT_COLOR, "o")
 
-	local vx = x + 88
-	DrawTextFitted("M ", vx, y, BODY_SIZE, 16, MUTED_TEXT_COLOR, "o")
-	vx = vx + 12
-	DrawTextFitted(metalValue or "-", vx, y, BODY_SIZE, 52,
+	local vx = x + col1
+	DrawTextFitted("M ", vx, y, BODY_SIZE, math_floor(16 * uiScale), MUTED_TEXT_COLOR, "o")
+	vx = vx + col2
+	DrawTextFitted(metalValue or "-", vx, y, BODY_SIZE, col3,
 	               (metalValue and metalValue:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
 
-	vx = vx + 42
-	DrawTextFitted("   E ", vx, y, BODY_SIZE, 24, MUTED_TEXT_COLOR, "o")
-	vx = vx + 24
-	DrawTextFitted(energyValue or "-", vx, y, BODY_SIZE, 52,
+	vx = vx + col3 + math_floor(10 * uiScale)
+	DrawTextFitted("   E ", vx, y, BODY_SIZE, col5, MUTED_TEXT_COLOR, "o")
+	vx = vx + col5
+	DrawTextFitted(energyValue or "-", vx, y, BODY_SIZE, col3,
 	               (energyValue and energyValue:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
 end
 
 local function DrawKVLine(x, y, label, value, labelColor, valueColor)
-	DrawTextFitted(label, x, y, BODY_SIZE, 140, labelColor or MUTED_TEXT_COLOR, "o")
-	DrawTextFitted(value or "-", x + 88, y, BODY_SIZE, 220, valueColor or HEADER_TEXT, "o")
+	local col = math_floor(88 * uiScale)
+	DrawTextFitted(label, x, y, BODY_SIZE, math_floor(140 * uiScale), labelColor or MUTED_TEXT_COLOR, "o")
+	DrawTextFitted(value or "-", x + col, y, BODY_SIZE, math_floor(220 * uiScale), valueColor or HEADER_TEXT, "o")
 end
 
 local function DrawTitleSection(data, x1, yTop, w)
-	local h = 44
+	local h = math_floor(44 * uiScale)
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 
 	local title = data.title or "Unknown"
 	local subtitle = data.subtitle or ""
 
-	DrawTextFitted(title, x1 + 10, yTop - 18, TITLE_SIZE, w - 20, HEADER_TEXT, "o")
+	local pad = math_floor(10 * uiScale)
+	DrawTextFitted(title,    x1 + pad, yTop - math_floor(18 * uiScale), TITLE_SIZE,  w - pad * 2, HEADER_TEXT,   "o")
 	if subtitle ~= "" then
-		DrawTextFitted(subtitle, x1 + 10, yTop - 34, BODY_SIZE, w - 20, SUBTEXT_COLOR, "o")
+		DrawTextFitted(subtitle, x1 + pad, yTop - math_floor(34 * uiScale), BODY_SIZE, w - pad * 2, SUBTEXT_COLOR, "o")
 	end
 
-	local tagX = x1 + w - 10
+	local tagX = x1 + w - pad
 	if data.tech then
-		local tagW = TextWidthApprox(data.tech, SMALL_SIZE) + 10
+		local tagW = TextWidthApprox(data.tech, SMALL_SIZE) + pad
 		tagX = tagX - tagW
-		DrawHeaderTag(tagX, yTop - 18, data.tech, TECH_TEXT_COLORS[data.tech] or HEADER_TEXT)
+		DrawHeaderTag(tagX, yTop - math_floor(18 * uiScale), data.tech, TECH_TEXT_COLORS[data.tech] or HEADER_TEXT)
 	end
 
 	return y1 - SECTION_GAP
@@ -778,43 +804,46 @@ local function DrawStatsSection_Static(data, x1, yTop, w)
 	if data.shieldText     then lines = lines + 1 end
 	if data.statusText     then lines = lines + 1 end
 
-	local h  = 24 + lines * LINE_H
+	local h  = math_floor(24 * uiScale) + lines * LINE_H
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
-	DrawTextFitted("Stats", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
 
-	local cy = yTop - 32
+	local pad  = math_floor(10 * uiScale)
+	local col  = math_floor(98 * uiScale)
+	local lblW = math_floor(80 * uiScale)
+
+	DrawTextFitted("Stats", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
+
+	local cy = yTop - math_floor(32 * uiScale)
 	if data.roleText then
-		DrawKVLine(x1 + 10, cy, "Role", data.roleText, MUTED_TEXT_COLOR, HEADER_TEXT)
+		DrawKVLine(x1 + pad, cy, "Role", data.roleText, MUTED_TEXT_COLOR, HEADER_TEXT)
 		cy = cy - LINE_H
 	end
-	-- Labels are always drawn in the static pass (order: HP, OverShield, Shield, Status)
-	-- For live units the value strings are filled in by the dynamic pass
 	if data.healthText then
-		DrawTextFitted("HP", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		DrawTextFitted("HP", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
 		if not data.isLiveUnit then
-			DrawTextFitted(data.healthText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
+			DrawTextFitted(data.healthText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
 		end
 		cy = cy - LINE_H
 	end
 	if data.overshieldText then
-		DrawTextFitted("OverShield", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		DrawTextFitted("OverShield", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
 		if not data.isLiveUnit then
-			DrawTextFitted(data.overshieldText, x1 + 98, cy, BODY_SIZE, w - 108, OVERSHIELD_TEXT_COLOR, "o")
+			DrawTextFitted(data.overshieldText, x1 + col, cy, BODY_SIZE, w - col - pad, OVERSHIELD_TEXT_COLOR, "o")
 		end
 		cy = cy - LINE_H
 	end
 	if data.shieldText then
-		DrawTextFitted("Shield", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		DrawTextFitted("Shield", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
 		if not data.isLiveUnit then
-			DrawTextFitted(data.shieldText, x1 + 98, cy, BODY_SIZE, w - 108, SHIELD_TEXT_COLOR, "o")
+			DrawTextFitted(data.shieldText, x1 + col, cy, BODY_SIZE, w - col - pad, SHIELD_TEXT_COLOR, "o")
 		end
 		cy = cy - LINE_H
 	end
 	if data.statusText then
-		DrawTextFitted("Status", x1 + 10, cy, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
+		DrawTextFitted("Status", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
 		if not data.isLiveUnit then
-			DrawTextFitted(data.statusText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
+			DrawTextFitted(data.statusText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
 		end
 	end
 
@@ -830,83 +859,90 @@ local function CalcStatsDynamicPositions(data, x1, yTop, w)
 	if data.shieldText     then lines = lines + 1 end
 	if data.statusText     then lines = lines + 1 end
 
-	local h  = 24 + lines * 14
+	local h  = math_floor(24 * uiScale) + lines * LINE_H
 	local y1 = yTop - h
 
-	-- skip role and armor (always static); also skip label-only rows (now static too)
-	local cy = yTop - 32
-	if data.roleText then cy = cy - 14 end
+	local cy = yTop - math_floor(32 * uiScale)
+	if data.roleText then cy = cy - LINE_H end
 
-	local positions = { sectionY1 = y1, x1 = x1, w = w, baseY = cy }
+	local col = math_floor(98 * uiScale)
+	local positions = { sectionY1 = y1, x1 = x1, w = w, baseY = cy, col = col }
 	return positions
 end
 
 local function DrawStatsDynamic(data, pos)
-	local cy = pos.baseY
-	local x1 = pos.x1
-	local w  = pos.w
+	local cy  = pos.baseY
+	local x1  = pos.x1
+	local w   = pos.w
+	local col = pos.col or math_floor(98 * uiScale)
+	local pad = math_floor(10 * uiScale)
 	if data.healthText then
-		DrawTextFitted(data.healthText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
+		DrawTextFitted(data.healthText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
 		cy = cy - LINE_H
 	end
 	if data.overshieldText then
-		DrawTextFitted(data.overshieldText, x1 + 98, cy, BODY_SIZE, w - 108, OVERSHIELD_TEXT_COLOR, "o")
+		DrawTextFitted(data.overshieldText, x1 + col, cy, BODY_SIZE, w - col - pad, OVERSHIELD_TEXT_COLOR, "o")
 		cy = cy - LINE_H
 	end
 	if data.shieldText then
-		DrawTextFitted(data.shieldText, x1 + 98, cy, BODY_SIZE, w - 108, SHIELD_TEXT_COLOR, "o")
+		DrawTextFitted(data.shieldText, x1 + col, cy, BODY_SIZE, w - col - pad, SHIELD_TEXT_COLOR, "o")
 		cy = cy - LINE_H
 	end
 	if data.statusText then
-		DrawTextFitted(data.statusText, x1 + 98, cy, BODY_SIZE, w - 108, HEADER_TEXT, "o")
+		DrawTextFitted(data.statusText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
 	end
 end
 
 local function DrawEconomySection_Static(data, x1, yTop, w)
-	local h  = 92
+	local h  = math_floor(92 * uiScale)
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 
-	DrawTextFitted("Economy", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+	local pad  = math_floor(10 * uiScale)
+	local col  = math_floor(98 * uiScale)
+	local col2 = math_floor(110 * uiScale)
+	local col3 = math_floor(66 * uiScale)
 
-	-- Labels are always static
-	DrawTextFitted("Metal",   x1 + 10, yTop - 34, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("Energy",  x1 + 10, yTop - 48, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("Supply",  x1 + 10, yTop - 62, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("Flow",    x1 + 10, yTop - 76, BODY_SIZE, 80, MUTED_TEXT_COLOR, "o")
-	-- M / E sub-labels for flow
-	DrawTextFitted("M ",  x1 + 98, yTop - 76, BODY_SIZE, 16, MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("   E ", x1 + 110 + 42, yTop - 76, BODY_SIZE, 24, MUTED_TEXT_COLOR, "o")
+	DrawTextFitted("Economy", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
 
-	-- Values are static for non-live sources
+	DrawTextFitted("Metal",   x1 + pad, yTop - math_floor(34 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+	DrawTextFitted("Energy",  x1 + pad, yTop - math_floor(48 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+	DrawTextFitted("Supply",  x1 + pad, yTop - math_floor(62 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+	DrawTextFitted("Flow",    x1 + pad, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+	DrawTextFitted("M ",  x1 + col,        yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(16 * uiScale), MUTED_TEXT_COLOR, "o")
+	DrawTextFitted("   E ", x1 + col2 + math_floor(42 * uiScale), yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(24 * uiScale), MUTED_TEXT_COLOR, "o")
+
 	if not data.isLiveUnit then
-		DrawTextFitted(data.metalCostText  or "-", x1 + 98, yTop - 34, BODY_SIZE, w - 108, METAL_TEXT_COLOR,  "o")
-		DrawTextFitted(data.energyCostText or "-", x1 + 98, yTop - 48, BODY_SIZE, w - 108, ENERGY_TEXT_COLOR, "o")
+		DrawTextFitted(data.metalCostText  or "-", x1 + col, yTop - math_floor(34 * uiScale), BODY_SIZE, w - col - pad, METAL_TEXT_COLOR,  "o")
+		DrawTextFitted(data.energyCostText or "-", x1 + col, yTop - math_floor(48 * uiScale), BODY_SIZE, w - col - pad, ENERGY_TEXT_COLOR, "o")
 		local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-		DrawTextFitted(data.supplyText or "-",     x1 + 98, yTop - 62, BODY_SIZE, w - 108, supplyColor, "o")
-		-- flow values
+		DrawTextFitted(data.supplyText or "-",     x1 + col, yTop - math_floor(62 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
 		local mv = data.metalFlowText
 		local ev = data.energyFlowText
 		local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
 		local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-		DrawTextFitted(mv or "-", x1 + 110,      yTop - 76, BODY_SIZE, 52, mvColor, "o")
-		DrawTextFitted(ev or "-", x1 + 110 + 66, yTop - 76, BODY_SIZE, 52, evColor, "o")
+		DrawTextFitted(mv or "-", x1 + col2,        yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), mvColor, "o")
+		DrawTextFitted(ev or "-", x1 + col2 + col3, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), evColor, "o")
 	end
 
 	return y1 - SECTION_GAP
 end
 
 local function DrawEconomyDynamic(data, x1, yTop, w)
-	DrawTextFitted(data.metalCostText  or "-", x1 + 98, yTop - 34, BODY_SIZE, w - 108, METAL_TEXT_COLOR,  "o")
-	DrawTextFitted(data.energyCostText or "-", x1 + 98, yTop - 48, BODY_SIZE, w - 108, ENERGY_TEXT_COLOR, "o")
+	local pad  = math_floor(10 * uiScale)
+	local col  = math_floor(98 * uiScale)
+	local col2 = math_floor(110 * uiScale)
+	local col3 = math_floor(66 * uiScale)
+	DrawTextFitted(data.metalCostText  or "-", x1 + col, yTop - math_floor(34 * uiScale), BODY_SIZE, w - col - pad, METAL_TEXT_COLOR,  "o")
+	DrawTextFitted(data.energyCostText or "-", x1 + col, yTop - math_floor(48 * uiScale), BODY_SIZE, w - col - pad, ENERGY_TEXT_COLOR, "o")
 	local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-	DrawTextFitted(data.supplyText or "-",     x1 + 98, yTop - 62, BODY_SIZE, w - 108, supplyColor, "o")
+	DrawTextFitted(data.supplyText or "-",     x1 + col, yTop - math_floor(62 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
 	local mv = data.metalFlowText
 	local ev = data.energyFlowText
 	local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
 	local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-	DrawTextFitted(mv or "-", x1 + 110,      yTop - 76, BODY_SIZE, 52, mvColor, "o")
-	DrawTextFitted(ev or "-", x1 + 110 + 66, yTop - 76, BODY_SIZE, 52, evColor, "o")
+	DrawTextFitted(mv or "-", x1 + col2,        yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), mvColor, "o")
+	DrawTextFitted(ev or "-", x1 + col2 + col3, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), evColor, "o")
 end
 
 -- Original combined versions kept for non-live paths (order, feature) where
@@ -921,13 +957,14 @@ end
 
 
 local function DrawBuildSection(data, x1, yTop, w)
-	local h = 64
+	local h = math_floor(64 * uiScale)
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 
-	DrawTextFitted("Build Info", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
-	DrawKVLine(x1 + 10, yTop - 34, "Build Time", data.buildTimeText or "-", MUTED_TEXT_COLOR, HEADER_TEXT)
-	DrawKVLine(x1 + 10, yTop - 48, "Build Power", data.buildPowerText or "-", MUTED_TEXT_COLOR, HEADER_TEXT)
+	local pad = math_floor(10 * uiScale)
+	DrawTextFitted("Build Info",  x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
+	DrawKVLine(x1 + pad, yTop - math_floor(34 * uiScale), "Build Time",  data.buildTimeText  or "-", MUTED_TEXT_COLOR, HEADER_TEXT)
+	DrawKVLine(x1 + pad, yTop - math_floor(48 * uiScale), "Build Power", data.buildPowerText or "-", MUTED_TEXT_COLOR, HEADER_TEXT)
 
 	return y1 - SECTION_GAP
 end
@@ -940,18 +977,20 @@ local function DrawOrderSection(data, x1, yTop, w)
 	end
 	lines = Clamp(lines, 2, 9)
 
-	local h = 34 + lines * 13
+	local lineH = math_floor(13 * uiScale)
+	local h = math_floor(34 * uiScale) + lines * lineH
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 
-	DrawTextFitted("Command", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+	local pad = math_floor(10 * uiScale)
+	DrawTextFitted("Command", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
 
 	local clean = string_gsub(body, "Metal cost %d*\nEnergy cost %d*\n", "")
-	local cy = yTop - 34
+	local cy = yTop - math_floor(34 * uiScale)
 	for line in (clean .. "\n"):gmatch("([^\n]*)\n") do
 		if line ~= "" then
-			DrawTextFitted(line, x1 + 10, cy, BODY_SIZE, w - 20, SUBTEXT_COLOR, "o")
-			cy = cy - 13
+			DrawTextFitted(line, x1 + pad, cy, BODY_SIZE, w - pad * 2, SUBTEXT_COLOR, "o")
+			cy = cy - lineH
 		end
 	end
 
@@ -963,9 +1002,9 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 		return yTop
 	end
 
-	local guideWrapWidth = w - 32
-	local guideLineH = 11
-	local baseCardH = 52
+	local guideWrapWidth = w - math_floor(32 * uiScale)
+	local guideLineH     = math_floor(11 * uiScale)
+	local baseCardH      = math_floor(52 * uiScale)
 	local layout = {}
 	local totalCardsH = 0
 
@@ -975,7 +1014,7 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 		local extraH = 0
 		if card.guide and card.guide ~= "" then
 			guideLines = WrapText(card.guide, guideWrapWidth, SMALL_SIZE)
-			extraH = #guideLines * guideLineH + 6
+			extraH = #guideLines * guideLineH + math_floor(6 * uiScale)
 		end
 
 		local cardH = baseCardH + extraH
@@ -990,15 +1029,23 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 		end
 	end
 
-	local headerH = 22
-	local totalH = headerH + totalCardsH + 10
+	local headerH = math_floor(22 * uiScale)
+	local totalH = headerH + totalCardsH + math_floor(10 * uiScale)
 	local y1 = yTop - totalH
 
+	local pad  = math_floor(8  * uiScale)
+	local pad2 = math_floor(16 * uiScale)
+
 	DrawSectionBox(x1, y1, x1 + w, yTop)
-	DrawTextFitted("Weapons", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+	DrawTextFitted("Weapons", x1 + math_floor(10 * uiScale), yTop - math_floor(16 * uiScale), HEADER_SIZE, w - math_floor(20 * uiScale), HEADER_TEXT, "o")
 
 	glScissor(x1, clipBottom, w, yTop - clipBottom)
-	local cyTop = yTop - 26
+	local cyTop = yTop - math_floor(26 * uiScale)
+
+	local col1w = math_floor(110 * uiScale)
+	local col2w = math_floor(78  * uiScale)
+	local col3x = math_floor(178 * uiScale)
+	local col3w = math_floor(62  * uiScale)
 
 	for i = 1, #layout do
 		local entry = layout[i]
@@ -1007,18 +1054,18 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 		local by1 = by2 - entry.cardH
 
 		if by2 >= clipBottom then
-			DrawRoundedRect(x1 + 8, by1, x1 + w - 8, by2, 6, CATEGORY_BG)
+			DrawRoundedRect(x1 + pad, by1, x1 + w - pad, by2, 6, CATEGORY_BG)
 			glColor(CATEGORY_CARD_ACCENT_COLOR)
-			RectRound(x1 + 8, by2 - (1 + SECTION_ACCENT_HEIGHT), x1 + w - 8, by2 - 1, 3)
+			RectRound(x1 + pad, by2 - (1 + SECTION_ACCENT_HEIGHT), x1 + w - pad, by2 - 1, 3)
 			glColor(1,1,1,1)
-			DrawTextFitted(card.title .. (card.count > 1 and (" x" .. card.count) or ""), x1 + 16, by2 - 14, BODY_SIZE, w - 32, HEADER_TEXT, "o")
+			DrawTextFitted(card.title .. (card.count > 1 and (" x" .. card.count) or ""), x1 + pad2, by2 - math_floor(14 * uiScale), BODY_SIZE, w - math_floor(32 * uiScale), HEADER_TEXT, "o")
 
 			local dmgLabel = card.paralyze and "Paralyze" or "DPS"
 			local dmgColor = card.paralyze and PARALYZE_TEXT_COLOR or HEADER_TEXT
 
-			DrawTextFitted(dmgLabel .. ": " .. FormatNbr(card.dps, 1), x1 + 16, by2 - 28, SMALL_SIZE, 110, dmgColor, "o")
-			DrawTextFitted("Range: " .. FormatNbr(card.range, 0), x1 + 112, by2 - 28, SMALL_SIZE, 78, SUBTEXT_COLOR, "o")
-			DrawTextFitted("AoE: " .. FormatNbr(card.aoe, 0), x1 + 178, by2 - 28, SMALL_SIZE, 62, SUBTEXT_COLOR, "o")
+			DrawTextFitted(dmgLabel .. ": " .. FormatNbr(card.dps, 1), x1 + pad2, by2 - math_floor(28 * uiScale), SMALL_SIZE, col1w, dmgColor, "o")
+			DrawTextFitted("Range: " .. FormatNbr(card.range, 0),      x1 + col1w + pad, by2 - math_floor(28 * uiScale), SMALL_SIZE, col2w, SUBTEXT_COLOR, "o")
+			DrawTextFitted("AoE: "   .. FormatNbr(card.aoe, 0),        x1 + col3x, by2 - math_floor(28 * uiScale), SMALL_SIZE, col3w, SUBTEXT_COLOR, "o")
 
 			local extra = ""
 			if card.eps and card.eps > 0 then
@@ -1029,14 +1076,14 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 				extra = extra .. "WATER"
 			end
 			if extra ~= "" then
-				DrawTextFitted(extra, x1 + 16, by2 - 41, SMALL_SIZE, w - 32, ENERGY_TEXT_COLOR, "o")
+				DrawTextFitted(extra, x1 + pad2, by2 - math_floor(41 * uiScale), SMALL_SIZE, w - math_floor(32 * uiScale), ENERGY_TEXT_COLOR, "o")
 			end
 
 			if entry.guideLines and #entry.guideLines > 0 then
-				local gy = by2 - 54
+				local gy = by2 - math_floor(54 * uiScale)
 				for j = 1, #entry.guideLines do
 					if gy >= clipBottom then
-						DrawTextFitted(entry.guideLines[j], x1 + 16, gy, SMALL_SIZE, w - 32, SUBTEXT_COLOR, "o")
+						DrawTextFitted(entry.guideLines[j], x1 + pad2, gy, SMALL_SIZE, w - math_floor(32 * uiScale), SUBTEXT_COLOR, "o")
 					end
 					gy = gy - guideLineH
 				end
@@ -1055,24 +1102,25 @@ local function DrawGuideSection(guideText, x1, yTop, w, clipBottom)
 		return yTop
 	end
 
-	local wrapWidth = w - 20
+	local wrapWidth = w - math_floor(20 * uiScale)
 	local lines = WrapText(guideText, wrapWidth, BODY_SIZE)
 	if #lines == 0 then
 		return yTop
 	end
 
-	local lineH = 13
-	local totalH = 26 + (#lines * lineH) + 10
+	local lineH  = math_floor(13 * uiScale)
+	local totalH = math_floor(26 * uiScale) + (#lines * lineH) + math_floor(10 * uiScale)
 	local y1 = yTop - totalH
 
+	local pad = math_floor(10 * uiScale)
 	DrawSectionBox(x1, y1, x1 + w, yTop)
-	DrawTextFitted("Unit Guide", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+	DrawTextFitted("Unit Guide", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
 
 	glScissor(x1, clipBottom, w, yTop - clipBottom)
-	local cy = yTop - 34
+	local cy = yTop - math_floor(34 * uiScale)
 	for i = 1, #lines do
 		if cy >= clipBottom then
-			DrawTextFitted(lines[i], x1 + 10, cy, BODY_SIZE, w - 20, SUBTEXT_COLOR, "o")
+			DrawTextFitted(lines[i], x1 + pad, cy, BODY_SIZE, w - pad * 2, SUBTEXT_COLOR, "o")
 		end
 		cy = cy - lineH
 	end
@@ -1082,10 +1130,10 @@ local function DrawGuideSection(guideText, x1, yTop, w, clipBottom)
 end
 
 local function DrawHintSection(text, x1, yTop, w)
-	local h = 26
+	local h = math_floor(26 * uiScale)
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
-	DrawTextFitted(text, x1 + 10, yTop - 17, SMALL_SIZE, w - 20, HINT_TEXT_COLOR, "o")
+	DrawTextFitted(text, x1 + math_floor(10 * uiScale), yTop - math_floor(17 * uiScale), SMALL_SIZE, w - math_floor(20 * uiScale), HINT_TEXT_COLOR, "o")
 	return y1 - SECTION_GAP
 end
 
@@ -1394,57 +1442,58 @@ local dynamicEconomyW   = nil
 local function DrawSelectionSection(panelData, x1, yTop, w)
 	local rows    = panelData.rows or {}
 	local rowH    = LINE_H
-	local headerH = 22
-	local footerH = 28   -- economy summary
-	local totalH  = headerH + #rows * rowH + footerH + 10
+	local headerH = math_floor(22 * uiScale)
+	local footerH = math_floor(28 * uiScale)
+	local totalH  = headerH + #rows * rowH + footerH + math_floor(10 * uiScale)
 	local y1      = yTop - totalH
 
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 
-	-- Header
-	DrawTextFitted("Units", x1 + 10, yTop - 16, HEADER_SIZE, w - 20, HEADER_TEXT, "o")
+	local pad  = math_floor(10 * uiScale)
+	local tagW = math_floor(28 * uiScale)
 
-	-- Unit rows
-	local cy = yTop - headerH - rowH + 4
+	DrawTextFitted("Units", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
+
+	local cy = yTop - headerH - rowH + math_floor(4 * uiScale)
 	for i = 1, #rows do
 		local row   = rows[i]
-		local nameW = w - 50   -- leave room for count on right
+		local nameW = w - math_floor(50 * uiScale)
 
-		-- Tech tag
-		local tagW = 0
 		if row.tech then
 			local tc = TECH_TEXT_COLORS[row.tech] or HEADER_TEXT
-			DrawTextFitted(row.tech, x1 + 10, cy, SMALL_SIZE, 24, tc, "o")
-			tagW = 28
+			DrawTextFitted(row.tech, x1 + pad, cy, SMALL_SIZE, math_floor(24 * uiScale), tc, "o")
+			DrawTextFitted(row.name, x1 + pad + tagW, cy, BODY_SIZE, nameW - tagW, HEADER_TEXT, "o")
+		else
+			DrawTextFitted(row.name, x1 + pad, cy, BODY_SIZE, nameW, HEADER_TEXT, "o")
 		end
 
-		-- Unit name
-		DrawTextFitted(row.name, x1 + 10 + tagW, cy, BODY_SIZE, nameW - tagW, HEADER_TEXT, "o")
-
-		-- Count on right
-		DrawTextFitted("x" .. row.count, x1 + w - 6, cy, BODY_SIZE, 40, MUTED_TEXT_COLOR, "or")
+		DrawTextFitted("x" .. row.count, x1 + w - math_floor(6 * uiScale), cy, BODY_SIZE, math_floor(40 * uiScale), MUTED_TEXT_COLOR, "or")
 
 		cy = cy - rowH
 	end
 
-	-- Economy summary separator line
 	local sepY = y1 + footerH
 	glColor(1, 1, 1, 0.06)
-	glRect(x1 + 6, sepY, x1 + w - 6, sepY + 1)
+	glRect(x1 + math_floor(6 * uiScale), sepY, x1 + w - math_floor(6 * uiScale), sepY + 1)
 
-	-- Economy row
-	local ey = y1 + footerH - 10
-	local mv = panelData.metalFlowText
-	local ev = panelData.energyFlowText
-	DrawTextFitted("M", x1 + 10,      ey, BODY_SIZE, 14, MUTED_TEXT_COLOR, "o")
-	DrawTextFitted(mv or "-", x1 + 22, ey, BODY_SIZE, 60,
+	local ey  = y1 + footerH - math_floor(10 * uiScale)
+	local mv  = panelData.metalFlowText
+	local ev  = panelData.energyFlowText
+	local c1  = math_floor(12 * uiScale)
+	local c2  = math_floor(22 * uiScale)
+	local c3  = math_floor(88 * uiScale)
+	local c4  = math_floor(100 * uiScale)
+	local c5  = math_floor(166 * uiScale)
+	local c6  = math_floor(178 * uiScale)
+	DrawTextFitted("M", x1 + pad, ey, BODY_SIZE, math_floor(14 * uiScale), MUTED_TEXT_COLOR, "o")
+	DrawTextFitted(mv or "-", x1 + c2, ey, BODY_SIZE, math_floor(60 * uiScale),
 	               (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
-	DrawTextFitted("E", x1 + 88,       ey, BODY_SIZE, 14, MUTED_TEXT_COLOR, "o")
-	DrawTextFitted(ev or "-", x1 + 100, ey, BODY_SIZE, 60,
+	DrawTextFitted("E", x1 + c3, ey, BODY_SIZE, math_floor(14 * uiScale), MUTED_TEXT_COLOR, "o")
+	DrawTextFitted(ev or "-", x1 + c4, ey, BODY_SIZE, math_floor(60 * uiScale),
 	               (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR, "o")
 	if panelData.supplyText then
-		DrawTextFitted("S", x1 + 166,       ey, BODY_SIZE, 14, MUTED_TEXT_COLOR, "o")
-		DrawTextFitted(panelData.supplyText, x1 + 178, ey, BODY_SIZE, 50, SUPPLY_TEXT_COLOR, "o")
+		DrawTextFitted("S", x1 + c5, ey, BODY_SIZE, math_floor(14 * uiScale), MUTED_TEXT_COLOR, "o")
+		DrawTextFitted(panelData.supplyText, x1 + c6, ey, BODY_SIZE, math_floor(50 * uiScale), SUPPLY_TEXT_COLOR, "o")
 	end
 
 	return y1 - SECTION_GAP
@@ -1454,9 +1503,9 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 	local x1, y1, x2, y2 = tooltipPanel.x1, tooltipPanel.y1, tooltipPanel.x2, tooltipPanel.y2
 	if x2 > vsx - 8 then return end
 
-	local CORNER_SAFE_TOP    = PANEL_RADIUS + 3
-	local CORNER_SAFE_SIDE   = PANEL_RADIUS + 3
-	local CORNER_SAFE_BOTTOM = INNER_PAD - 2
+	local CORNER_SAFE_TOP    = PANEL_RADIUS + math_floor(3 * uiScale)
+	local CORNER_SAFE_SIDE   = PANEL_RADIUS + math_floor(3 * uiScale)
+	local CORNER_SAFE_BOTTOM = INNER_PAD - math_floor(2 * uiScale)
 
 	local top    = y2 - CORNER_SAFE_TOP
 	local bottom = y1 + CORNER_SAFE_BOTTOM
@@ -1488,7 +1537,7 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 			if panelData.shieldText     then lines = lines + 1 end
 			if panelData.overshieldText then lines = lines + 1 end
 			if panelData.statusText     then lines = lines + 1 end
-			local statsH = 24 + lines * LINE_H
+			local statsH = math_floor(24 * uiScale) + lines * LINE_H
 			local statsYTop = cy + statsH + SECTION_GAP  -- reverse the section gap
 			dynamicStatsPos = CalcStatsDynamicPositions(panelData, sx, statsYTop, width)
 		else
@@ -1504,11 +1553,11 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 		local ax1, ay1, ax2, ay2 = additionalPanel.x1, additionalPanel.y1, additionalPanel.x2, additionalPanel.y2
 		if ax2 <= vsx - 8 then
 			DrawPanel(ax1, ay1, ax2, ay2, GetAccentForPanel(panelData, ADDITIONAL_ACCENT_COLOR))
-			local atop   = ay2 - CORNER_SAFE_TOP
+			local atop    = ay2 - CORNER_SAFE_TOP
 			local abottom = ay1 + CORNER_SAFE_BOTTOM
-			local asx    = ax1 + CORNER_SAFE_SIDE
-			local awidth = (ax2 - ax1) - (CORNER_SAFE_SIDE * 2)
-			local acy    = atop
+			local asx     = ax1 + CORNER_SAFE_SIDE
+			local awidth  = (ax2 - ax1) - (CORNER_SAFE_SIDE * 2)
+			local acy     = atop
 
 			acy = DrawTitleSection({ title = "Additional Info", subtitle = panelData.title or "", tech = panelData.tech }, asx, acy, awidth)
 			acy = DrawHintSection(ADDITIONAL_HINT_TEXT, asx, acy, awidth)
@@ -1516,11 +1565,11 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 			if panelData.buildTimeText or panelData.buildPowerText then
 				acy = DrawBuildSection(panelData, asx, acy, awidth)
 			end
-			if panelData.weaponCards and #panelData.weaponCards > 0 and acy > abottom + 60 then
-				acy = DrawWeaponCards(panelData.weaponCards, asx, acy, awidth, abottom + 4)
+			if panelData.weaponCards and #panelData.weaponCards > 0 and acy > abottom + math_floor(60 * uiScale) then
+				acy = DrawWeaponCards(panelData.weaponCards, asx, acy, awidth, abottom + math_floor(4 * uiScale))
 			end
-			if acy > abottom + 40 and panelData.unitGuideText and panelData.unitGuideText ~= "" then
-				DrawGuideSection(panelData.unitGuideText, asx, acy, awidth, abottom + 4)
+			if acy > abottom + math_floor(40 * uiScale) and panelData.unitGuideText and panelData.unitGuideText ~= "" then
+				DrawGuideSection(panelData.unitGuideText, asx, acy, awidth, abottom + math_floor(4 * uiScale))
 			end
 		end
 	end

@@ -34,6 +34,14 @@ local SCROLLBAR_BG          = {1.0, 1.0, 1.0, 0.06}
 local SCROLLBAR_THUMB       = {1.0, 1.0, 1.0, 0.20}
 local SCROLLBAR_THUMB_HOVER = {1.0, 1.0, 1.0, 0.30}
 
+-- UI scaling.  Change BASE_RESOLUTION to match your "designed-for" height.
+-- At that resolution uiScale == 1.0 and all sizes are their base values.
+-- At higher/lower resolutions everything scales proportionally.
+local BASE_RESOLUTION = 1440
+
+local uiScale = 1.0  -- computed in UpdatePanelRects
+
+-- Base (1080p) values — scaled copies are recomputed in UpdatePanelRects
 local INNER_PAD             = 10
 local BUTTON_PAD            = 4
 local BUILD_COLUMNS         = 3
@@ -257,6 +265,19 @@ end
 
 local function UpdatePanelRects()
     vsx, vsy = spGetViewGeometry()
+
+    uiScale       = vsy / BASE_RESOLUTION
+    INNER_PAD     = math_floor(10 * uiScale)
+    BUTTON_PAD    = math_floor( 4 * uiScale)
+    SECTION_H     = math_floor(26 * uiScale)
+    CATEGORY_H    = math_floor(20 * uiScale)
+    SECTION_GAP   = math_floor( 6 * uiScale)
+    CATEGORY_GAP  = math_floor( 4 * uiScale)
+    BUILD_GRID_GAP = math_floor(8 * uiScale)
+    ORDER_GRID_GAP = math_floor(6 * uiScale)
+    BUILD_INFO_H  = math_floor(40 * uiScale)
+    SCROLLBAR_W   = math_floor(10 * uiScale)
+    SCROLL_STEP   = math_floor(56 * uiScale)
 
     local panelW = math_floor(vsx * PANEL_WIDTH_FRAC)
     local totalH = math_floor(vsy * TOTAL_HEIGHT_FRAC)
@@ -652,13 +673,13 @@ end
 
 local function GetInfoTextBaseSizes(buttonW)
     local rowH = BUILD_INFO_H * 0.5
-    local widthTop = math_floor(buttonW * 0.105)
+    local widthTop    = math_floor(buttonW * 0.105)
     local widthBottom = math_floor(buttonW * 0.095)
-    local heightTop = math_floor(rowH * 0.68)
+    local heightTop    = math_floor(rowH * 0.68)
     local heightBottom = math_floor(rowH * 0.58)
 
-    local topSize = math_max(8, math_min(widthTop, heightTop))
-    local bottomSize = math_max(7, math_min(widthBottom, heightBottom))
+    local topSize    = math_max(math_floor(8 * uiScale),  math_min(widthTop,    heightTop))
+    local bottomSize = math_max(math_floor(7 * uiScale),  math_min(widthBottom, heightBottom))
 
     return topSize, bottomSize
 end
@@ -779,12 +800,12 @@ local function BuildButtonLayout_Bake(scrollOffset)
             if item.kind == "section" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 7, SECTION_BG)
                 glColor(HEADER_TEXT)
-                DrawTextFitted(item.text, item.x1 + 8, iy1 + 6, 13, "o", item.x2 - item.x1 - 16)
+                DrawTextFitted(item.text, item.x1 + math_floor(8 * uiScale), iy1 + math_floor(6 * uiScale), math_floor(13 * uiScale), "o", item.x2 - item.x1 - math_floor(16 * uiScale))
 
             elseif item.kind == "category" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 6, CATEGORY_BG)
                 glColor(HEADER_TEXT)
-                DrawTextFitted(item.text, item.x1 + 12, iy1 + 4, 11, "o", item.x2 - item.x1 - 20)
+                DrawTextFitted(item.text, item.x1 + math_floor(12 * uiScale), iy1 + math_floor(4 * uiScale), math_floor(11 * uiScale), "o", item.x2 - item.x1 - math_floor(20 * uiScale))
 
             elseif item.kind == "buildbutton" then
                 local cmd      = item.cmd
@@ -805,11 +826,11 @@ local function BuildButtonLayout_Bake(scrollOffset)
                 if queueCount and queueCount > 0 then
                     local queueText = tostring(math_floor(queueCount))
                     local iconH   = iconY2 - iconY1
-                    local qSize   = math_max(11, math_floor(iconH * 0.16))
-                    local qPadX, qPadY = 5, 4
+                    local qSize   = math_max(math_floor(11 * uiScale), math_floor(iconH * 0.16))
+                    local qPadX, qPadY = math_floor(5 * uiScale), math_floor(4 * uiScale)
                     local panelW2 = math_floor(gl.GetTextWidth(queueText) * qSize + qPadX * 2)
                     local panelH2 = math_floor(qSize + qPadY * 2)
-                    local qx2, qy2 = item.x2 - 4, iconY2 - 4
+                    local qx2, qy2 = item.x2 - math_floor(4 * uiScale), iconY2 - math_floor(4 * uiScale)
                     local qx1, qy1 = qx2 - panelW2, qy2 - panelH2
                     DrawRoundedRect(qx1, qy1, qx2, qy2, 4, {0.08, 0.08, 0.09, 0.88})
                     DrawRoundedOutline(qx1, qy1, qx2, qy2, 4, {1.0, 1.0, 1.0, 0.10})
@@ -833,13 +854,13 @@ local function BuildButtonLayout_Bake(scrollOffset)
                 end
                 if overlay.supply then bottomRight = overlay.supply end
 
-                local panelPad  = 5
+                local panelPad  = math_floor(5 * uiScale)
                 local infoW     = item.x2 - item.x1
                 local topSize, bottomSize = GetInfoTextBaseSizes(infoW)
                 local rightTopReserve    = rightTop    and math_floor(topSize    * 3.8) or 0
                 local bottomRightReserve = bottomRight and math_floor(bottomSize * 4.8) or 0
-                local topY    = infoY1 + BUILD_INFO_H - topSize - 3
-                local bottomY = infoY1 + 4
+                local topY    = infoY1 + BUILD_INFO_H - topSize - math_floor(3 * uiScale)
+                local bottomY = infoY1 + math_floor(4 * uiScale)
 
                 if leftTop then
                     glColor(hotkeyMatch and {0.2, 1.0, 0.2, 1.0} or {1.0, 1.0, 1.0, 1.0})
@@ -1002,7 +1023,7 @@ local function DrawOrderButtons_Static()
 
         local caption = cmd.name == "Repair" and "Build" or cmd.name
         glColor(1, 1, 1, 1)
-        DrawTextFitted(caption, bx1 + 6, by1 + bh * 0.45, 11, "o", bw - 12)
+        DrawTextFitted(caption, bx1 + math_floor(6 * uiScale), by1 + bh * 0.45, math_floor(11 * uiScale), "o", bw - math_floor(12 * uiScale))
 
         if entry.state then
             DrawStateBars(cmd, bx1, by1, bx2, by2)
