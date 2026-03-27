@@ -6,6 +6,7 @@ Shared.buildListf1landfac = {
 	[[fedengineer_up1]],
 	[[fedak]],
 	[[fedstorm]],
+	[[fedequalizer]],
 	[[fedthud]],
 	[[fedcrasher]],
 	[[fedbear]],
