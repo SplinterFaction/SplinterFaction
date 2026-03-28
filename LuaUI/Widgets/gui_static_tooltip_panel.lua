@@ -107,6 +107,7 @@ local spIsGUIHidden            = Spring.IsGUIHidden
 local spGetKeySymbol           = Spring.GetKeySymbol
 local spSendCommands           = Spring.SendCommands
 local spSetDrawSelectionInfo   = Spring.SetDrawSelectionInfo
+local spPlaySoundFile          = Spring.PlaySoundFile
 
 local glColor                  = gl.Color
 local glRect                   = gl.Rect
@@ -143,6 +144,18 @@ local table_concat             = table.concat
 
 local ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
 local bgcorner = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
+
+--------------------------------------------------------------------------------
+-- Sound
+--------------------------------------------------------------------------------
+
+local function PlayHoverSound()
+	spPlaySoundFile("hover", 1.0, "ui")
+end
+
+local function PlayToggleSound()
+	spPlaySoundFile("leftclick", 1.0, "ui")
+end
 
 --------------------------------------------------------------------------------
 -- Hotkey config from old tooltip
@@ -185,6 +198,28 @@ local tooltipPanel = {}
 local additionalPanel = {}
 
 local additionalInfoEnabled = false
+
+-- Scrollbar config
+local SCROLLBAR_W          = 6   -- will be scaled in UpdateRects
+local SCROLLBAR_BG         = {1.0, 1.0, 1.0, 0.06}
+local SCROLLBAR_THUMB      = {1.0, 1.0, 1.0, 0.20}
+local SCROLLBAR_THUMB_HOVER= {1.0, 1.0, 1.0, 0.35}
+
+-- Scroll state — tooltip panel
+local tooltipScrollOffset   = 0
+local tooltipContentH       = 0
+local tooltipViewH          = 0
+local tooltipScrollbarInfo  = nil
+local tooltipDragging       = false
+local tooltipDragOffset     = 0
+
+-- Scroll state — additional panel
+local addScrollOffset       = 0
+local addContentH           = 0
+local addViewH              = 0
+local addScrollbarInfo      = nil
+local addDragging           = false
+local addDragOffset         = 0
 
 --------------------------------------------------------------------------------
 -- Display list cache
@@ -306,6 +341,11 @@ local function UpdateRects()
 	SECTION_GAP = math_floor( 6 * uiScale)
 	CARD_GAP    = math_floor( 6 * uiScale)
 	TOOLTIP_GAP_X = math_floor(10 * uiScale)
+	SCROLLBAR_W   = math_floor( 6 * uiScale)
+
+	-- Reset scroll on geometry change
+	tooltipScrollOffset = 0
+	addScrollOffset     = 0
 
 	local panelW = math_floor(vsx * PANEL_WIDTH_FRAC)
 	local totalH = math_floor(vsy * TOTAL_HEIGHT_FRAC)
@@ -680,6 +720,12 @@ local function ResolveOrderFromTooltip(currentTooltip)
 		return nil
 	end
 
+	-- Suppress engine unit-info tooltips (shown when hovering/selecting units).
+	-- These contain "Health" and "Experience" lines and are not order commands.
+	if currentTooltip:find("\nHealth ") or currentTooltip:find("\nExperience ") then
+		return nil
+	end
+
 	local firstLine = string_match(currentTooltip, "([^\n]+)")
 	if not firstLine then
 		return nil
@@ -709,21 +755,23 @@ local function ResolveTooltipData()
 		return { type = "feature", id = worldID }
 	end
 
-	-- Handle selection fallback (single or multi)
-	local selectedUnits = spGetSelectedUnits()
-	if selectedUnits and #selectedUnits == 1 then
-		-- Single selected unit — prefer showing it over any order tooltip.
-		return { type = "unit", id = selectedUnits[1] }
-	elseif selectedUnits and #selectedUnits > 1 then
-		return { type = "selection", units = selectedUnits }
-	end
-
-	-- UI tooltip content (build buttons / order buttons)
+	-- Check build buttons before selection — hovering a build button while units
+	-- are selected should show the build tooltip, not the selection.
 	local buildData = ResolveHoveredBuildFromTooltip(currentTooltip)
 	if buildData then
 		return buildData
 	end
 
+	-- Selection fallback comes before order buttons, so a multi-selection is
+	-- never clobbered by the engine's unit-info tooltip string.
+	local selectedUnits = spGetSelectedUnits()
+	if selectedUnits and #selectedUnits == 1 then
+		return { type = "unit", id = selectedUnits[1] }
+	elseif selectedUnits and #selectedUnits > 1 then
+		return { type = "selection", units = selectedUnits }
+	end
+
+	-- Only reach order resolution when nothing is selected and no build is hovered.
 	local orderData = ResolveOrderFromTooltip(currentTooltip)
 	if orderData then
 		return orderData
@@ -1499,38 +1547,136 @@ local function DrawSelectionSection(panelData, x1, yTop, w)
 	return y1 - SECTION_GAP
 end
 
-local function BakeStaticList(panelData, isOrder, showAdditional)
-	local x1, y1, x2, y2 = tooltipPanel.x1, tooltipPanel.y1, tooltipPanel.x2, tooltipPanel.y2
-	if x2 > vsx - 8 then return end
-
+-- Returns total content height drawn for a panel, given a scroll offset and
+-- whether to actually draw (draw=true) or just measure (draw=false).
+-- When drawing, applies glScissor to clip content to the panel interior and
+-- offsets all section positions by -scrollOffset.
+local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, accentColor, extraSections)
 	local CORNER_SAFE_TOP    = PANEL_RADIUS + math_floor(3 * uiScale)
 	local CORNER_SAFE_SIDE   = PANEL_RADIUS + math_floor(3 * uiScale)
 	local CORNER_SAFE_BOTTOM = INNER_PAD - math_floor(2 * uiScale)
 
-	local top    = y2 - CORNER_SAFE_TOP
-	local bottom = y1 + CORNER_SAFE_BOTTOM
-	local sx     = x1 + CORNER_SAFE_SIDE
-	local width  = (x2 - x1) - (CORNER_SAFE_SIDE * 2)
-	local cy     = top
+	local viewTop    = py2 - CORNER_SAFE_TOP
+	local viewBottom = py1 + CORNER_SAFE_BOTTOM
+	local viewH      = viewTop - viewBottom
+	local sx         = px1 + CORNER_SAFE_SIDE
+	local width      = (px2 - px1) - (CORNER_SAFE_SIDE * 2)
 
-	DrawPanel(x1, y1, x2, y2, GetAccentForPanel(panelData, TOOLTIP_ACCENT_COLOR))
-	cy = DrawTitleSection(panelData, sx, cy, width)
+	-- Reserve space for scrollbar if content might overflow
+	local sbW    = SCROLLBAR_W + math_floor(4 * uiScale)
+	local cWidth = width - sbW
 
-	if panelData.type == "selection" then
-		DrawSelectionSection(panelData, sx, cy, width)
-		return
+	DrawPanel(px1, py1, px2, py2, accentColor)
+
+	-- Measure content by doing a dry-run without drawing
+	-- We track cy descending from 0 (content-space), then convert to screen-space
+	local function MeasureContent()
+		local cy = 0   -- content-space: 0 at top, grows downward
+		local titleH = math_floor(44 * uiScale) + SECTION_GAP
+		cy = cy + titleH
+
+		-- If this is purely an extra-sections panel (additional info), skip main sections
+		if extraSections and extraSections.additionalOnly then
+			-- hint section
+			cy = cy + math_floor(26 * uiScale) + SECTION_GAP
+		elseif panelData.type == "selection" then
+			local rows    = panelData.rows or {}
+			local headerH = math_floor(22 * uiScale)
+			local footerH = math_floor(28 * uiScale)
+			cy = cy + headerH + #rows * LINE_H + footerH + math_floor(10 * uiScale) + SECTION_GAP
+		elseif isOrder then
+			local body = panelData.body or ""
+			local lines = 1
+			for _ in body:gmatch("\n") do lines = lines + 1 end
+			lines = Clamp(lines, 2, 9)
+			cy = cy + math_floor(34 * uiScale) + lines * math_floor(13 * uiScale) + SECTION_GAP
+			cy = cy + math_floor(26 * uiScale) + SECTION_GAP  -- hint
+		else
+			-- Stats
+			local statLines = 3
+			if panelData.healthText     then statLines = statLines + 1 end
+			if panelData.overshieldText then statLines = statLines + 1 end
+			if panelData.shieldText     then statLines = statLines + 1 end
+			if panelData.statusText     then statLines = statLines + 1 end
+			cy = cy + math_floor(24 * uiScale) + statLines * LINE_H + SECTION_GAP
+			-- Economy
+			cy = cy + math_floor(92 * uiScale) + SECTION_GAP
+			-- Hint
+			cy = cy + math_floor(26 * uiScale) + SECTION_GAP
+		end
+
+		-- Extra sections (additional panel: build info, weapons, guide)
+		if extraSections and not extraSections.additionalOnly then
+			if extraSections.buildTime or extraSections.buildPower then
+				cy = cy + math_floor(64 * uiScale) + SECTION_GAP
+			end
+			if extraSections.weaponCards and #extraSections.weaponCards > 0 then
+				local baseCardH = math_floor(52 * uiScale)
+				local guideLineH = math_floor(11 * uiScale)
+				local totalCardsH = 0
+				for i = 1, #extraSections.weaponCards do
+					local card = extraSections.weaponCards[i]
+					local extraH = 0
+					if card.guide and card.guide ~= "" then
+						local guideLines = WrapText(card.guide, cWidth - math_floor(32 * uiScale), SMALL_SIZE)
+						extraH = #guideLines * guideLineH + math_floor(6 * uiScale)
+					end
+					totalCardsH = totalCardsH + baseCardH + extraH
+					if i < #extraSections.weaponCards then totalCardsH = totalCardsH + CARD_GAP end
+				end
+				cy = cy + math_floor(22 * uiScale) + totalCardsH + math_floor(10 * uiScale) + SECTION_GAP
+			end
+			if extraSections.unitGuide and extraSections.unitGuide ~= "" then
+				local guideLines = WrapText(extraSections.unitGuide, cWidth - math_floor(20 * uiScale), BODY_SIZE)
+				if #guideLines > 0 then
+					cy = cy + math_floor(26 * uiScale) + #guideLines * math_floor(13 * uiScale) + math_floor(10 * uiScale) + SECTION_GAP
+				end
+			end
+		end
+
+		return cy
+	end
+
+	local contentH = MeasureContent()
+	local needsScroll = contentH > viewH
+	local clampedOffset = Clamp(scrollOffset, 0, math_max(0, contentH - viewH))
+
+	-- Draw content clipped to panel interior, shifted by scroll offset
+	-- Content is drawn top-down; cy starts at viewTop and descends.
+	-- We translate by +clampedOffset so content scrolls up.
+	glScissor(px1, py1 + CORNER_SAFE_BOTTOM, px2 - px1, viewH)
+
+	local cy = viewTop + clampedOffset
+	cy = DrawTitleSection(panelData, sx, cy, cWidth)
+
+	if extraSections and extraSections.additionalOnly then
+		-- Additional info panel: just hint + extra sections below
+		if extraSections.hintText then
+			cy = DrawHintSection(extraSections.hintText, sx, cy, cWidth)
+		end
+		local clipBottom = py1 + CORNER_SAFE_BOTTOM
+		if extraSections.buildTime or extraSections.buildPower then
+			cy = DrawBuildSection(extraSections.buildData, sx, cy, cWidth)
+		end
+		if extraSections.weaponCards and #extraSections.weaponCards > 0 then
+			cy = DrawWeaponCards(extraSections.weaponCards, sx, cy, cWidth, clipBottom)
+		end
+		if extraSections.unitGuide and extraSections.unitGuide ~= "" then
+			DrawGuideSection(extraSections.unitGuide, sx, cy, cWidth, clipBottom)
+		end
+	elseif panelData.type == "selection" then
+		DrawSelectionSection(panelData, sx, cy, cWidth)
 	elseif isOrder then
-		cy = DrawOrderSection(panelData, sx, cy, width)
-		DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, width)
+		cy = DrawOrderSection(panelData, sx, cy, cWidth)
+		DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, cWidth)
 	else
-		cy = DrawStatsSection_Static(panelData, sx, cy, width)
+		cy = DrawStatsSection_Static(panelData, sx, cy, cWidth)
 
-		-- Record where economy section top will be for dynamic pass
+		-- Record dynamic pass coordinates (screen-space, scroll-adjusted)
 		dynamicEconomyX1  = sx
 		dynamicEconomyTop = cy
-		dynamicEconomyW   = width
+		dynamicEconomyW   = cWidth
 
-		-- Record stats dynamic positions
 		if panelData.isLiveUnit then
 			local lines = 3
 			if panelData.healthText     then lines = lines + 1 end
@@ -1538,41 +1684,126 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 			if panelData.overshieldText then lines = lines + 1 end
 			if panelData.statusText     then lines = lines + 1 end
 			local statsH = math_floor(24 * uiScale) + lines * LINE_H
-			local statsYTop = cy + statsH + SECTION_GAP  -- reverse the section gap
-			dynamicStatsPos = CalcStatsDynamicPositions(panelData, sx, statsYTop, width)
+			local statsYTop = cy + statsH + SECTION_GAP
+			dynamicStatsPos = CalcStatsDynamicPositions(panelData, sx, statsYTop, cWidth)
 		else
 			dynamicStatsPos = nil
 		end
 
-		cy = DrawEconomySection_Static(panelData, sx, cy, width)
-		DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, width)
+		cy = DrawEconomySection_Static(panelData, sx, cy, cWidth)
+		DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, cWidth)
 	end
 
-	-- Additional panel (entirely static — no live values there)
+	-- Non-additionalOnly extra sections (unused currently but kept for extensibility)
+	if extraSections and not extraSections.additionalOnly then
+		if extraSections.hintText then
+			cy = DrawHintSection(extraSections.hintText, sx, cy, cWidth)
+		end
+		if extraSections.buildTime or extraSections.buildPower then
+			cy = DrawBuildSection(extraSections.buildData, sx, cy, cWidth)
+		end
+		local clipBottom = py1 + CORNER_SAFE_BOTTOM
+		if extraSections.weaponCards and #extraSections.weaponCards > 0 then
+			cy = DrawWeaponCards(extraSections.weaponCards, sx, cy, cWidth, clipBottom)
+		end
+		if extraSections.unitGuide and extraSections.unitGuide ~= "" then
+			DrawGuideSection(extraSections.unitGuide, sx, cy, cWidth, clipBottom)
+		end
+	end
+
+	glScissor(false)
+
+	-- Scrollbar track (only if needed)
+	if needsScroll then
+		local sbx1 = px2 - CORNER_SAFE_SIDE - SCROLLBAR_W
+		local sbx2 = sbx1 + SCROLLBAR_W
+		local sby1 = py1 + CORNER_SAFE_BOTTOM
+		local sby2 = py2 - CORNER_SAFE_TOP
+		DrawRoundedRect(sbx1, sby1, sbx2, sby2, 3, SCROLLBAR_BG)
+	end
+
+	return contentH, clampedOffset, viewH, needsScroll
+end
+
+local function BakeStaticList(panelData, isOrder, showAdditional)
+	local x1, y1, x2, y2 = tooltipPanel.x1, tooltipPanel.y1, tooltipPanel.x2, tooltipPanel.y2
+	if x2 > vsx - 8 then return end
+
+	local tContentH, tOffset, tViewH, tNeedsScroll =
+	BakePanel(panelData, isOrder, x1, y1, x2, y2, tooltipScrollOffset,
+	          GetAccentForPanel(panelData, TOOLTIP_ACCENT_COLOR), nil)
+
+	tooltipContentH = tContentH
+	tooltipViewH    = tViewH
+	tooltipScrollOffset = tOffset  -- clamped
+
+	-- Compute scrollbar info for dynamic pass hit-testing
+	if tNeedsScroll then
+		local CORNER_SAFE_SIDE = PANEL_RADIUS + math_floor(3 * uiScale)
+		local CORNER_SAFE_TOP  = PANEL_RADIUS + math_floor(3 * uiScale)
+		local CORNER_SAFE_BOTTOM = INNER_PAD - math_floor(2 * uiScale)
+		local sbx1 = x2 - CORNER_SAFE_SIDE - SCROLLBAR_W
+		local sbx2 = sbx1 + SCROLLBAR_W
+		local sby1 = y1 + CORNER_SAFE_BOTTOM
+		local sby2 = y2 - CORNER_SAFE_TOP
+		tooltipScrollbarInfo = { x1=sbx1, y1=sby1, x2=sbx2, y2=sby2 }
+	else
+		tooltipScrollbarInfo = nil
+	end
+
+	-- Additional panel
 	if showAdditional then
 		local ax1, ay1, ax2, ay2 = additionalPanel.x1, additionalPanel.y1, additionalPanel.x2, additionalPanel.y2
 		if ax2 <= vsx - 8 then
-			DrawPanel(ax1, ay1, ax2, ay2, GetAccentForPanel(panelData, ADDITIONAL_ACCENT_COLOR))
-			local atop    = ay2 - CORNER_SAFE_TOP
-			local abottom = ay1 + CORNER_SAFE_BOTTOM
-			local asx     = ax1 + CORNER_SAFE_SIDE
-			local awidth  = (ax2 - ax1) - (CORNER_SAFE_SIDE * 2)
-			local acy     = atop
+			local extra = {
+				additionalOnly = true,
+				hintText    = ADDITIONAL_HINT_TEXT,
+				buildTime   = panelData.buildTimeText,
+				buildPower  = panelData.buildPowerText,
+				buildData   = panelData,
+				weaponCards = panelData.weaponCards,
+				unitGuide   = panelData.unitGuideText,
+			}
+			local addTitle = { title = "Additional Info", subtitle = panelData.title or "", tech = panelData.tech }
+			local aContentH, aOffset, aViewH, aNeedsScroll =
+			BakePanel(addTitle, false, ax1, ay1, ax2, ay2, addScrollOffset,
+			          GetAccentForPanel(panelData, ADDITIONAL_ACCENT_COLOR), extra)
 
-			acy = DrawTitleSection({ title = "Additional Info", subtitle = panelData.title or "", tech = panelData.tech }, asx, acy, awidth)
-			acy = DrawHintSection(ADDITIONAL_HINT_TEXT, asx, acy, awidth)
+			addContentH = aContentH
+			addViewH    = aViewH
+			addScrollOffset = aOffset
 
-			if panelData.buildTimeText or panelData.buildPowerText then
-				acy = DrawBuildSection(panelData, asx, acy, awidth)
-			end
-			if panelData.weaponCards and #panelData.weaponCards > 0 and acy > abottom + math_floor(60 * uiScale) then
-				acy = DrawWeaponCards(panelData.weaponCards, asx, acy, awidth, abottom + math_floor(4 * uiScale))
-			end
-			if acy > abottom + math_floor(40 * uiScale) and panelData.unitGuideText and panelData.unitGuideText ~= "" then
-				DrawGuideSection(panelData.unitGuideText, asx, acy, awidth, abottom + math_floor(4 * uiScale))
+			if aNeedsScroll then
+				local CORNER_SAFE_SIDE   = PANEL_RADIUS + math_floor(3 * uiScale)
+				local CORNER_SAFE_TOP    = PANEL_RADIUS + math_floor(3 * uiScale)
+				local CORNER_SAFE_BOTTOM = INNER_PAD - math_floor(2 * uiScale)
+				local sbx1 = ax2 - CORNER_SAFE_SIDE - SCROLLBAR_W
+				local sbx2 = sbx1 + SCROLLBAR_W
+				local sby1 = ay1 + CORNER_SAFE_BOTTOM
+				local sby2 = ay2 - CORNER_SAFE_TOP
+				addScrollbarInfo = { x1=sbx1, y1=sby1, x2=sbx2, y2=sby2 }
+			else
+				addScrollbarInfo = nil
 			end
 		end
+	else
+		addScrollbarInfo = nil
 	end
+end
+
+local function DrawScrollbarThumb(info, contentH, viewH, scrollOffset, mx, my)
+	if not info then return end
+	local trackH = info.y2 - info.y1
+	local thumbH = math_max(math_floor(20 * uiScale), trackH * (viewH / math_max(contentH, 1)))
+	local range  = trackH - thumbH
+	local frac   = Clamp(scrollOffset / math_max(1, contentH - viewH), 0, 1)
+	-- y2 is top in Spring coords
+	local ty2 = info.y2 - range * frac
+	local ty1 = ty2 - thumbH
+	local hovered = mx >= info.x1 and mx <= info.x2 and my >= ty1 and my <= ty2
+	DrawRoundedRect(info.x1, ty1, info.x2, ty2, 3,
+	                hovered and SCROLLBAR_THUMB_HOVER or SCROLLBAR_THUMB)
+	return ty1, ty2
 end
 
 local function BakeDynamicList(panelData)
@@ -1621,7 +1852,6 @@ function widget:Shutdown()
 	spSendCommands({"tooltip 1"})
 end
 
-
 function widget:ViewResize()
 	UpdateRects()
 	cachedResolvedKey = nil
@@ -1637,15 +1867,139 @@ function widget:KeyPress(key, mods, isRepeat)
 	if isRepeat then return false end
 	if key == KEYSYMS.SPACE then
 		additionalInfoEnabled = not additionalInfoEnabled
+		addScrollOffset = 0   -- reset additional panel scroll on toggle
+		PlayToggleSound()
 		-- DrawScreen will detect lastShowAdditional changed and rebuild safely
 		return true
 	end
 	return false
 end
 
+function widget:IsAbove(x, y)
+	if tooltipScrollbarInfo then
+		local i = tooltipScrollbarInfo
+		if x >= i.x1 and x <= i.x2 and y >= i.y1 and y <= i.y2 then return true end
+	end
+	if addScrollbarInfo then
+		local i = addScrollbarInfo
+		if x >= i.x1 and x <= i.x2 and y >= i.y1 and y <= i.y2 then return true end
+	end
+	return false
+end
+
+function widget:MousePress(x, y, button)
+	if button ~= 1 then return false end
+
+	if tooltipScrollbarInfo and tooltipContentH > tooltipViewH then
+		local info = tooltipScrollbarInfo
+		if x >= info.x1 and x <= info.x2 and y >= info.y1 and y <= info.y2 then
+			tooltipDragging = true
+			-- compute thumb position to get drag offset
+			local trackH = info.y2 - info.y1
+			local thumbH = math_max(math_floor(20 * uiScale), trackH * (tooltipViewH / math_max(tooltipContentH, 1)))
+			local range  = trackH - thumbH
+			local frac   = Clamp(tooltipScrollOffset / math_max(1, tooltipContentH - tooltipViewH), 0, 1)
+			local ty2    = info.y2 - range * frac
+			tooltipDragOffset = ty2 - y
+			return true
+		end
+	end
+
+	if addScrollbarInfo and addContentH > addViewH then
+		local info = addScrollbarInfo
+		if x >= info.x1 and x <= info.x2 and y >= info.y1 and y <= info.y2 then
+			addDragging = true
+			local trackH = info.y2 - info.y1
+			local thumbH = math_max(math_floor(20 * uiScale), trackH * (addViewH / math_max(addContentH, 1)))
+			local range  = trackH - thumbH
+			local frac   = Clamp(addScrollOffset / math_max(1, addContentH - addViewH), 0, 1)
+			local ty2    = info.y2 - range * frac
+			addDragOffset = ty2 - y
+			return true
+		end
+	end
+
+	return false
+end
+
+function widget:MouseRelease(x, y, button)
+	if tooltipDragging or addDragging then
+		tooltipDragging = false
+		addDragging     = false
+		return true
+	end
+	return false
+end
+
+function widget:MouseWheel(up, value)
+	local mx, my = spGetMouseState()
+	local step = math_floor(40 * uiScale)
+
+	-- Tooltip panel scroll
+	local tp = tooltipPanel
+	if mx >= tp.x1 and mx <= tp.x2 and my >= tp.y1 and my <= tp.y2 and tooltipContentH > tooltipViewH then
+		local delta = up and -step or step
+		local newOff = Clamp(tooltipScrollOffset + delta, 0, math_max(0, tooltipContentH - tooltipViewH))
+		if newOff ~= tooltipScrollOffset then
+			tooltipScrollOffset = newOff
+			RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
+		end
+		return true
+	end
+
+	-- Additional panel scroll
+	local ap = additionalPanel
+	if mx >= ap.x1 and mx <= ap.x2 and my >= ap.y1 and my <= ap.y2 and addContentH > addViewH then
+		local delta = up and -step or step
+		local newOff = Clamp(addScrollOffset + delta, 0, math_max(0, addContentH - addViewH))
+		if newOff ~= addScrollOffset then
+			addScrollOffset = newOff
+			RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
+		end
+		return true
+	end
+
+	return false
+end
+
 function widget:DrawScreen()
 	if spIsGUIHidden() then return end
 	if not spGetCurrentTooltip then return end
+
+	local mx, my = spGetMouseState()
+
+	-- Handle scrollbar dragging (immediate, each frame)
+	if tooltipDragging and tooltipScrollbarInfo and tooltipContentH > tooltipViewH then
+		local info    = tooltipScrollbarInfo
+		local trackH  = info.y2 - info.y1
+		local thumbH  = math_max(math_floor(20 * uiScale), trackH * (tooltipViewH / math_max(tooltipContentH, 1)))
+		local range   = trackH - thumbH
+		if range > 0 then
+			local ty2    = Clamp(my + tooltipDragOffset, info.y1 + thumbH, info.y2)
+			local frac   = (info.y2 - ty2) / range
+			local newOff = Clamp(frac * (tooltipContentH - tooltipViewH), 0, tooltipContentH - tooltipViewH)
+			if math_abs(newOff - tooltipScrollOffset) > 0.5 then
+				tooltipScrollOffset = newOff
+				RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
+			end
+		end
+	end
+
+	if addDragging and addScrollbarInfo and addContentH > addViewH then
+		local info    = addScrollbarInfo
+		local trackH  = info.y2 - info.y1
+		local thumbH  = math_max(math_floor(20 * uiScale), trackH * (addViewH / math_max(addContentH, 1)))
+		local range   = trackH - thumbH
+		if range > 0 then
+			local ty2    = Clamp(my + addDragOffset, info.y1 + thumbH, info.y2)
+			local frac   = (info.y2 - ty2) / range
+			local newOff = Clamp(frac * (addContentH - addViewH), 0, addContentH - addViewH)
+			if math_abs(newOff - addScrollOffset) > 0.5 then
+				addScrollOffset = newOff
+				RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
+			end
+		end
+	end
 
 	local resolved = ResolveTooltipData()
 	local key      = ResolvedKey(resolved)
@@ -1658,7 +2012,9 @@ function widget:DrawScreen()
 	end
 
 	if key ~= cachedResolvedKey then
-		-- Source changed — rebuild data and all display lists
+		-- Source changed — reset scroll and rebuild
+		tooltipScrollOffset = 0
+		addScrollOffset     = 0
 		cachedResolvedKey = key
 		if resolved then
 			cachedPanelData, cachedIsOrder = BuildPanelDataFromResolved(resolved)
@@ -1666,17 +2022,17 @@ function widget:DrawScreen()
 			if cachedPanelData then
 				cachedPanelData.isLiveUnit = cachedIsLiveUnit
 			end
+			PlayHoverSound()
 		else
 			cachedPanelData  = nil
 			cachedIsOrder    = false
 			cachedIsLiveUnit = false
 		end
-		lastDynValues = {}  -- reset so new unit always compiles its first dynamic list
+		lastDynValues = {}
 		lastShowAdditional = showAdditional
 		RebuildAllLists(cachedPanelData, cachedIsOrder, showAdditional)
 
 	elseif cachedIsOrder and cachedPanelData and resolved then
-		-- Same order command — only rebuild if body text actually changed
 		local newBody = resolved.body or ""
 		if cachedPanelData.body ~= newBody then
 			cachedPanelData.body = newBody
@@ -1684,8 +2040,6 @@ function widget:DrawScreen()
 		end
 
 	elseif cachedIsLiveUnit and cachedPanelData then
-		-- Same live unit — refresh values, but only recompile the dynamic list
-		-- if something actually changed. This avoids gl.DeleteList+CreateList every frame.
 		RefreshLiveUnitFields(cachedPanelData, resolved.id)
 		if not dynamicList or DynamicValuesChanged(cachedPanelData) then
 			SaveDynamicValues(cachedPanelData)
@@ -1701,5 +2055,13 @@ function widget:DrawScreen()
 	gl.CallList(staticList)
 	if dynamicList then
 		gl.CallList(dynamicList)
+	end
+
+	-- Draw scrollbar thumbs on top (immediate mode, not baked)
+	if tooltipScrollbarInfo and tooltipContentH > tooltipViewH then
+		DrawScrollbarThumb(tooltipScrollbarInfo, tooltipContentH, tooltipViewH, tooltipScrollOffset, mx, my)
+	end
+	if addScrollbarInfo and addContentH > addViewH then
+		DrawScrollbarThumb(addScrollbarInfo, addContentH, addViewH, addScrollOffset, mx, my)
 	end
 end

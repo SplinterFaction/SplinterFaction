@@ -57,6 +57,12 @@ local BUILD_INFO_H          = 40
 local SCROLLBAR_W           = 10
 local SCROLL_STEP           = 56
 
+-- Queue badge text vertical nudge (positive = up, negative = down).
+-- Adjust this if the number looks off-centre in the badge at your base resolution.
+local QUEUE_BADGE_TEXT_OFFSET_X = 1
+local QUEUE_BADGE_TEXT_OFFSET_Y = 4
+
+
 local SHOW_HOTKEYS_CONFIG   = "evo_showhotkeys"
 local SHOW_COST_CONFIG      = "evo_showcost"
 local SHOW_TECHREQ_CONFIG   = "evo_showtechreq"
@@ -103,6 +109,7 @@ local spGetKeySymbol         = Spring.GetKeySymbol
 local spIsGUIHidden          = Spring.IsGUIHidden
 local spGetModKeyState       = Spring.GetModKeyState
 local spGetConfigFloat       = Spring.GetConfigFloat
+local spPlaySoundFile        = Spring.PlaySoundFile
 
 local glColor                = gl.Color
 local glRect                 = gl.Rect
@@ -177,6 +184,7 @@ local buildScrollOffset = 0
 local buildContentHeight = 0
 local buildViewHeight = 0
 local hoveredItem = nil
+local lastHoveredItem = nil   -- tracks previous frame's hovered item for hover-sound dedup
 local tooltipText = nil
 local interactiveItems = {}
 local currentBuildHitboxes = {}
@@ -219,6 +227,22 @@ local cachedOrderItems  = {}
 local function FreeDisplayLists()
     if buildList then gl.DeleteList(buildList) ; buildList = nil end
     if orderList then gl.DeleteList(orderList) ; orderList = nil end
+end
+
+--------------------------------------------------------------------------------
+-- Sound
+--------------------------------------------------------------------------------
+
+local function PlayHoverSound()
+    spPlaySoundFile("hover", 1.0, "ui")
+end
+
+local function PlayLeftClickSound()
+    spPlaySoundFile("leftclick", 1.0, "ui")
+end
+
+local function PlayRightClickSound()
+    spPlaySoundFile("rightclick", 1.0, "ui")
 end
 
 --------------------------------------------------------------------------------
@@ -835,7 +859,7 @@ local function BuildButtonLayout_Bake(scrollOffset)
                     DrawRoundedRect(qx1, qy1, qx2, qy2, 4, {0.08, 0.08, 0.09, 0.88})
                     DrawRoundedOutline(qx1, qy1, qx2, qy2, 4, {1.0, 1.0, 1.0, 0.10})
                     glColor(1.0, 1.0, 1.0, 1.0)
-                    DrawTextFitted(queueText, qx2 - qPadX, qy1 + qPadY, qSize, "or")
+                    DrawTextFitted(queueText, qx2 - qPadX + math_floor(QUEUE_BADGE_TEXT_OFFSET_X * uiScale), qy1 + qPadY + math_floor(QUEUE_BADGE_TEXT_OFFSET_Y * uiScale), qSize, "or")
                 end
 
                 -- Text overlays
@@ -1083,9 +1107,19 @@ local function UpdateHover(mx, my)
             if item.cmd then
                 tooltipText = string_gsub(item.cmd.tooltip or '', "Metal cost %d*\nEnergy cost %d*\n", "")
             end
+            -- Fire hover sound only when moving onto a new button (not disabled).
+            -- Compare by cmd ID + type rather than table reference, since
+            -- interactiveItems is rebuilt from scratch every frame.
+            local newID = item.cmd and item.cmd.id
+            local oldID = lastHoveredItem and lastHoveredItem.cmd and lastHoveredItem.cmd.id
+            if newID ~= oldID and item.cmd and not item.disabled then
+                PlayHoverSound()
+            end
+            lastHoveredItem = { cmd = item.cmd, disabled = item.disabled }
             return
         end
     end
+    lastHoveredItem = nil
 end
 
 --------------------------------------------------------------------------------
@@ -1277,6 +1311,11 @@ function widget:MousePress(x, y, button)
     end
 
     if hoveredItem and hoveredItem.cmd and not hoveredItem.disabled then
+        if button == 1 then
+            PlayLeftClickSound()
+        elseif button == 3 then
+            PlayRightClickSound()
+        end
         return ApplyCommand(hoveredItem.cmd.id, button)
     end
 

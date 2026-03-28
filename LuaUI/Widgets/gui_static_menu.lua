@@ -98,6 +98,7 @@ local glTexRect         = gl.TexRect
 
 local spGetMouseState   = Spring.GetMouseState
 local spGetViewGeometry = Spring.GetViewGeometry
+local spPlaySoundFile   = Spring.PlaySoundFile
 
 --------------------------------------------------------------------------------
 -- State
@@ -106,6 +107,19 @@ local spGetViewGeometry = Spring.GetViewGeometry
 local vsx, vsy = spGetViewGeometry()
 local widgetScale = 1
 local buttons = {}
+local lastHoveredIndex = nil   -- tracks which button was hovered last frame for dedup
+
+--------------------------------------------------------------------------------
+-- Sound
+--------------------------------------------------------------------------------
+
+local function PlayHoverSound()
+	spPlaySoundFile("hover", 1.0, "ui")
+end
+
+local function PlayLeftClickSound()
+	spPlaySoundFile("leftclick", 1.0, "ui")
+end
 
 local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
 local fontfileScale = (0.5 + (vsx * vsy / 5700000))
@@ -291,6 +305,7 @@ function widget:MouseRelease(x, y, button)
 	for i = 1, #buttons do
 		local b = buttons[i]
 		if IsOnRect(x, y, b.x1, b.y1, b.x2, b.y2) then
+			PlayLeftClickSound()
 			if b.onClick then b.onClick() end
 			return true
 		end
@@ -313,10 +328,18 @@ function widget:DrawScreen()
 
 	-- Hover tint — cheap immediate-mode on top, no list needed
 	local mx, my = spGetMouseState()
+	local currentHoveredIndex = nil
 	for i = 1, #buttons do
 		local b = buttons[i]
 		if IsOnRect(mx, my, b.x1, b.y1, b.x2, b.y2) then
 			DrawButtonHover(b)
+			currentHoveredIndex = i
 		end
+	end
+	if currentHoveredIndex ~= lastHoveredIndex then
+		if currentHoveredIndex then
+			PlayHoverSound()
+		end
+		lastHoveredIndex = currentHoveredIndex
 	end
 end
