@@ -10,6 +10,7 @@ Shared.buildListf1landfac = {
 	[[fedthud]],
 	[[fedcrasher]],
 	[[fedbear]],
+	[[feddominator]],
 	[[fedcobra]],
 	[[fedavalanche]],
 	[[fedphalanx]],

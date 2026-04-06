@@ -37,6 +37,9 @@ local LINE_ALPHA   = 0.65
 local GHOST_ALPHA  = 0.35
 local GHOST_YOFF   = 1.0       -- small lift so it doesn't z-fight
 
+local XOFFSET      = 8
+local ZOFFSET      = 8
+
 local myTeamID = spGetMyTeamID()
 
 -- Only metal makers will be snapped/previewed
@@ -179,7 +182,7 @@ function widget:DrawWorld()
 	-- ghost building on the spot
 	glColor(1, 1, 1, GHOST_ALPHA)
 	glPushMatrix()
-	glTranslate(spot.x, sy + GHOST_YOFF, spot.z)
+	glTranslate(spot.x + XOFFSET, sy + GHOST_YOFF, spot.z + ZOFFSET)
 	-- facing = 0 (south) by default; rotate if you later want spot.facing
 	glRotate(0, 0, 1, 0)
 	-- draw as translucent "shape"
