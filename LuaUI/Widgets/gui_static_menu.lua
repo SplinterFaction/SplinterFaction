@@ -14,7 +14,8 @@ end
 -- Config
 --------------------------------------------------------------------------------
 
-local bgcorner = "LuaUI/Images/bgcorner.png"
+local bgcorner   = "LuaUI/Images/bgcorner.png"
+local accentImg  = ":n:LuaUI/Images/staticgui_accent.png"
 
 local PANEL_WIDTH        = 100
 local PANEL_MARGIN_TOP   = 10
@@ -26,7 +27,7 @@ local BUTTON_GAP         = 8
 local OUTER_CORNER       = 5
 local INNER_CORNER       = 4.3
 local INNER_INSET        = 2.25
-local ACCENT_HEIGHT      = 3
+local PANEL_ACCENT_HEIGHT = 5
 
 --------------------------------------------------------------------------------
 -- Theme config
@@ -50,7 +51,7 @@ local TEXT_COLOR = "\255\244\244\244"
 local BUTTONS = {
 	{
 		label = "Settings",
-		accent = {0.18, 0.52, 0.98, 0.95}, -- blue
+		accent = {0.18, 0.52, 0.98, 1}, -- blue
 		onClick = function()
 			if WG.crude and WG.crude.OpenPath then
 				WG.crude.OpenPath("Settings")
@@ -73,14 +74,14 @@ local BUTTONS = {
 	},
 	{
 		label = "Resign",
-		accent = {0.95, 0.65, 0.18, 0.95}, -- amber
+		accent = {0.95, 0.65, 0.18, 1}, -- amber
 		onClick = function()
 			Spring.SendCommands("spectator")
 		end
 	},
 	{
 		label = "Quit",
-		accent = {0.90, 0.22, 0.22, 0.95}, -- red
+		accent = {0.90, 0.22, 0.22, 1}, -- red
 		onClick = function()
 			Spring.SendCommands("quitforce")
 		end
@@ -217,7 +218,7 @@ local function DrawButtonStatic(button)
 	local outerCorner = OUTER_CORNER  * widgetScale
 	local innerCorner = INNER_CORNER  * widgetScale
 	local inset       = INNER_INSET   * widgetScale
-	local accentH     = ACCENT_HEIGHT * widgetScale
+	local accentH     = PANEL_ACCENT_HEIGHT * widgetScale
 
 	local borderColor = GetBorderColor()
 	local panelColor  = GetPanelBGColor(false)
@@ -229,7 +230,9 @@ local function DrawButtonStatic(button)
 	RectRound(x1 + inset, y1 + inset, x2 - inset, y2 - inset - 0.06, innerCorner)
 
 	glColor(button.accent[1], button.accent[2], button.accent[3], button.accent[4])
-	RectRound(x1 + inset, y2 - inset - accentH, x2 - inset, y2 - inset - 0.06, innerCorner)
+	glTexture(accentImg)
+	glTexRect(x1 + inset, y2 - inset - accentH, x2 - inset, y2 - inset - 0.06)
+	glTexture(false)
 
 	font:Begin()
 	font:Print(

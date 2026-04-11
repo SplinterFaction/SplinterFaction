@@ -184,6 +184,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A dedicated anti-air particle beam that delivers a devastating hit to any aircraft it connects with. Fast and hard-hitting, it makes short work of anything that ventures into range.]],
 		},
 		damage                   = {
 			default              = 80,

@@ -459,17 +459,6 @@ function gadget:AllowWeaponTarget(attackerID, targetID, attackerWeaponNum, attac
 		return false
 	end
 
-	-- Disruption weapons will not target a unit that is already fully disrupted.
-	local wd = WeaponDefs[attackerWeaponDefID]
-	if wd then
-		local cp = wd.customParams
-		if cp and tonumber(cp.disruptionweapon) == 1 then
-			if IsUnitFullyDisrupted(targetID, frame) then
-				return false
-			end
-		end
-	end
-
 	return true
 end
 

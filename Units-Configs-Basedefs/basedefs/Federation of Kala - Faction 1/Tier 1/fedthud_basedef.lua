@@ -148,6 +148,7 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A high-velocity artillery shell that screams downrange with enough force to obliterate smaller targets in a single devastating impact. Speed and power in equal measure.]],
 		},      
 		damage                   = {
 			default              = 150,

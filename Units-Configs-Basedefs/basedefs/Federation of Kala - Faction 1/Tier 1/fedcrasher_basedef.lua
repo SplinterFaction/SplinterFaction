@@ -144,6 +144,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A modest anti-air missile with underwhelming individual damage. In volleys, it turns contested airspace into a deadly gauntlet for any aircraft.]],
 		},     
 		damage                   = {
 			default              = 17,

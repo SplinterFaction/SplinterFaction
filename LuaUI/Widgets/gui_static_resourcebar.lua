@@ -27,6 +27,7 @@ local INNER_PADDING    = 8
 local ICON_SIZE        = 24
 local FILL_HEIGHT      = 10
 local CORNER_SIZE      = 10
+local PANEL_ACCENT_HEIGHT = 5
 
 local TOP_MARGIN       = 8
 local SUPPLY_MIN_CAP   = 50       -- minimum visual supply scale
@@ -45,6 +46,7 @@ local spGetTeamResources   = Spring.GetTeamResources
 local spGetTeamRulesParam  = Spring.GetTeamRulesParam
 local spGetSpectatingState = Spring.GetSpectatingState
 local spSendCommands       = Spring.SendCommands
+local spSetShareLevel      = Spring.SetShareLevel
 local spGetGameFrame       = Spring.GetGameFrame
 local spGetConfigFloat     = Spring.GetConfigFloat
 
@@ -56,6 +58,7 @@ local glPopMatrix  = gl.PopMatrix
 local glTranslate  = gl.Translate
 local glScale      = gl.Scale
 local glCallList   = gl.CallList
+local glRect       = gl.Rect
 
 local vsx, vsy = spGetViewGeometry()
 local widgetScale = 1
@@ -74,7 +77,8 @@ local displayListBg
 local displayListStatic
 local displayListDynamic
 
-local bgcorner = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
+local bgcorner   = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
+local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 local supplyTexture = LUAUI_DIRNAME .. "Images/supply.png"
 local energyTexture = LUAUI_DIRNAME .. "Images/energy2.png"
 local metalTexture  = LUAUI_DIRNAME .. "Images/metal.png"
@@ -93,6 +97,24 @@ local skyblue  = "\255\136\197\226"
 local supplyDisplayCap = SUPPLY_MIN_CAP
 local supplyShrinkFrame = 0
 local chobbyInterface = false
+
+--------------------------------------------------------------------------------
+-- Share level state
+--------------------------------------------------------------------------------
+
+local metalShareLevel  = 0.8
+local energyShareLevel = 0.8
+
+-- drag state
+local draggingMetal  = false
+local draggingEnergy = false
+
+-- slider visual config
+local SLIDER_LINE_W    = 2     -- width of the vertical marker line
+local SLIDER_HANDLE_W  = 5   -- total width of the draggable handle
+local SLIDER_HANDLE_H  = 1    -- height of handle tab above/below the bar
+local SLIDER_COLOR     = {1.0, 1.0, 1.0, 0.85}
+local SLIDER_DRAG_COLOR= {1.0, 1.0, 0.4, 1.0}
 
 -- Last values used to build the dynamic list. The list is only rebuilt when
 -- any of these change, instead of every frame.
@@ -200,8 +222,10 @@ local function DrawPanel(x1, y1, x2, y2, accentR, accentG, accentB, accentA)
 	RectRound(x1 + 2, y1 + 2, x2 - 2, y2 - 2, CORNER_SIZE - 1)
 
 	-- subtle top accent
-	glColor(accentR, accentG, accentB, accentA)
-	RectRound(x1 + 2, y2 - 5, x2 - 2, y2 - 2, 3)
+	glColor(accentR, accentG, accentB, 1)
+	glTexture(accentImg)
+	gl.TexRect(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
+	glTexture(false)
 end
 
 local function DrawFillBar(x1, y1, x2, y2, pct, r, g, b, glow)
@@ -284,6 +308,68 @@ local function UpdateSupplyDisplayCap(supplyMax)
 	else
 		supplyShrinkFrame = spGetGameFrame() + SUPPLY_SHRINK_DELAY
 	end
+end
+
+--------------------------------------------------------------------------------
+-- Share level helpers
+--------------------------------------------------------------------------------
+
+-- Returns the world-space x1,y1,x2,y2 of the fill bar for metal or energy.
+-- Matches the coordinate system used in BuildDynamicList.
+local function GetBarWorldRect(resource)
+	local barX1 = INNER_PADDING
+	local barX2 = BAR_WIDTH - INNER_PADDING
+	local barY1 = 8
+	local barY2 = barY1 + FILL_HEIGHT
+
+	local localX
+	if resource == "metal" then
+		localX = BAR_WIDTH + BAR_GAP
+	else
+		localX = (BAR_WIDTH + BAR_GAP) * 2
+	end
+
+	local wx1 = posx + (localX + barX1) * widgetScale
+	local wx2 = posx + (localX + barX2) * widgetScale
+	local wy1 = posy + barY1 * widgetScale
+	local wy2 = posy + barY2 * widgetScale
+	return wx1, wy1, wx2, wy2
+end
+
+local function DrawShareSlider(resource, shareLevel, dragging)
+	local wx1, wy1, wx2, wy2 = GetBarWorldRect(resource)
+	local sliderX = wx1 + (wx2 - wx1) * shareLevel
+
+	local hw     = (SLIDER_HANDLE_W * widgetScale) * 0.5
+	local hpad   = SLIDER_HANDLE_H * widgetScale
+	local lw     = SLIDER_LINE_W * widgetScale * 0.5
+	local col    = dragging and SLIDER_DRAG_COLOR or SLIDER_COLOR
+
+	-- vertical marker line through the full bar height
+	glColor(col[1], col[2], col[3], col[4])
+	glRect(sliderX - lw, wy1, sliderX + lw, wy2)
+
+	-- handle tab (slightly taller than the bar so it's easy to grab)
+	glRect(sliderX - hw, wy1 - hpad, sliderX + hw, wy2 + hpad)
+end
+
+local function SliderHitTest(x, y, resource, shareLevel)
+	local wx1, wy1, wx2, wy2 = GetBarWorldRect(resource)
+	local sliderX = wx1 + (wx2 - wx1) * shareLevel
+	local hw  = (SLIDER_HANDLE_W * widgetScale) * 0.5
+	local hpad = SLIDER_HANDLE_H * widgetScale
+	return x >= sliderX - hw and x <= sliderX + hw
+			and y >= wy1 - hpad  and y <= wy2 + hpad
+end
+
+local function ClampShareLevel(v)
+	if v < 0 then return 0 end
+	if v > 1 then return 1 end
+	return v
+end
+
+local function ApplyShareLevel(resource, level)
+	spSetShareLevel(resource, level)
 end
 
 --------------------------------------------------------------------------------
@@ -493,6 +579,10 @@ function widget:Initialize()
 	font2 = gl.LoadFont(FONT_FILE2, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
 
 	self:ViewResize(vsx, vsy)
+
+	-- Set initial share levels
+	ApplyShareLevel("metal",  metalShareLevel)
+	ApplyShareLevel("energy", energyShareLevel)
 end
 
 function widget:Shutdown()
@@ -518,6 +608,43 @@ function widget:Update(dt)
 	end
 end
 
+function widget:IsAbove(x, y)
+	if SliderHitTest(x, y, "metal",  metalShareLevel)  then return true end
+	if SliderHitTest(x, y, "energy", energyShareLevel) then return true end
+	return false
+end
+
+function widget:MousePress(x, y, button)
+	if button ~= 1 then return false end
+	if SliderHitTest(x, y, "metal",  metalShareLevel)  then draggingMetal  = true ; return true end
+	if SliderHitTest(x, y, "energy", energyShareLevel) then draggingEnergy = true ; return true end
+	return false
+end
+
+function widget:MouseMove(x, y, dx, dy, button)
+	if draggingMetal then
+		local wx1, _, wx2 = GetBarWorldRect("metal")
+		metalShareLevel = ClampShareLevel((x - wx1) / (wx2 - wx1))
+		ApplyShareLevel("metal", metalShareLevel)
+		return true
+	end
+	if draggingEnergy then
+		local wx1, _, wx2 = GetBarWorldRect("energy")
+		energyShareLevel = ClampShareLevel((x - wx1) / (wx2 - wx1))
+		ApplyShareLevel("energy", energyShareLevel)
+		return true
+	end
+end
+
+function widget:MouseRelease(x, y, button)
+	if draggingMetal or draggingEnergy then
+		draggingMetal  = false
+		draggingEnergy = false
+		return true
+	end
+	return false
+end
+
 function widget:DrawScreen()
 	if chobbyInterface then return end
 	if spGetSpectatingState() then
@@ -531,6 +658,10 @@ function widget:DrawScreen()
 	glCallList(displayListBg)
 	glCallList(displayListStatic)
 	glCallList(displayListDynamic)
+
+	-- Share level sliders — drawn immediate mode on top of everything
+	DrawShareSlider("metal",  metalShareLevel,  draggingMetal)
+	DrawShareSlider("energy", energyShareLevel, draggingEnergy)
 end
 
 function widget:ViewResize(newX, newY)

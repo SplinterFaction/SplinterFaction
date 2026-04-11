@@ -136,6 +136,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A fast-moving unguided torpedo with a short reload cycle. Its speed alone is sufficient to intercept most moving targets without the need for any tracking system.]],
 		},
 		damage                   = {
 			default              = 250,

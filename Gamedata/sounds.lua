@@ -164,7 +164,7 @@ local Sounds = {
 local soundData = {
 
 	['ui'] = {
-		gain = 0.15,
+		gain = 1,
 		--pitchmod = 0,
 		gainmod = 0,
 		dopplerscale = 0,
@@ -173,17 +173,18 @@ local soundData = {
 	},
 
 	['commands'] = {
-		gain = 0.3,
+		gain = 1.3,
 		--pitchmod = 0.02,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 32,
-		rolloff = 0,
+		rolloff = 0.5,
 		priority = 1,
+		in3d = true,
 	},
 
 	['unitselections'] = {
-		gain = 0.1,
+		gain = 1.1,
 		--pitchmod = 0.02,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
@@ -193,25 +194,25 @@ local soundData = {
 	},
 
 	['weapons'] = {
-		gain = 0.525,  -- 1.75 * 0.3 = 0.525
+		gain = 5,  -- 1.75 * 0.3 = 0.525
 		--pitchmod = 0.17,
-		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
+		--gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['weaponsloud'] = {
-		gain = 1.5,  -- 5 * 0.3 = 1.5
+		gain = 10,  -- 5 * 0.3 = 1.5
 		--pitchmod = 0.17,
-		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
+		--gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['impacts'] = {
-		gain = 0.9,  -- 3 * 0.3 = 0.9
+		gain = 1.9,  -- 3 * 0.3 = 0.9
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -220,7 +221,7 @@ local soundData = {
 	},
 
 	['impacts/generic'] = {
-		gain = 0.9,  -- 3 * 0.3 = 0.9
+		gain = 1.9,  -- 3 * 0.3 = 0.9
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -229,7 +230,7 @@ local soundData = {
 	},
 
 	['deathsounds/generic'] = {
-		gain = 1.2,  -- 4 * 0.3 = 1.2
+		gain = 2.2,  -- 4 * 0.3 = 1.2
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -247,7 +248,7 @@ local soundData = {
 	},
 
 	['misc'] = {
-		gain = 0.36,  -- 1.2 * 0.3 = 0.36
+		gain = 1.36,  -- 1.2 * 0.3 = 0.36
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -257,7 +258,7 @@ local soundData = {
 	},
 
 	['selfdcountdown'] = {
-		gain = 0.36,  -- 1.2 * 0.3 = 0.36
+		gain = 1.36,  -- 1.2 * 0.3 = 0.36
 		--pitchmod = 0.02,
 		--gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,

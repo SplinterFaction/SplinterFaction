@@ -27,14 +27,14 @@ local PANEL_BG              = {0.08, 0.08, 0.09, 0.88}
 local PANEL_BORDER          = {1.0, 1.0, 1.0, 0.12}
 local PANEL_OUTER_COLOR     = {0, 0, 0, 0.85}
 local PANEL_INNER_COLOR     = {0.15, 0.15, 0.15, 0.85}
-local TOOLTIP_ACCENT_COLOR    = {0.00, 0.50, 1.00, 0.60}
-local ADDITIONAL_ACCENT_COLOR = {0.00, 0.50, 1.00, 0.60}
-local PANEL_ACCENT_HEIGHT     = 3
+local TOOLTIP_ACCENT_COLOR    = {0.00, 0.50, 1.00, 1}
+local ADDITIONAL_ACCENT_COLOR = {0.00, 0.50, 1.00, 1}
+local PANEL_ACCENT_HEIGHT     = 5
 
 -- Accent colors for inner section boxes (Stats, Economy, Build Info, etc.)
 local SECTION_ACCENT_COLOR       = {1.0, 1.0, 1.0, 0.035}
 local CATEGORY_CARD_ACCENT_COLOR = {1.0, 1.0, 1.0, 0.035}
-local SECTION_ACCENT_HEIGHT      = 3
+local SECTION_ACCENT_HEIGHT      = 5
 
 local SECTION_BG            = {0.14, 0.14, 0.15, 0.90}
 local CATEGORY_BG           = {0.20, 0.20, 0.21, 0.55}
@@ -143,7 +143,8 @@ local table_concat             = table.concat
 --------------------------------------------------------------------------------
 
 local ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
-local bgcorner = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
+local bgcorner   = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
+local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 
 --------------------------------------------------------------------------------
 -- Sound
@@ -493,7 +494,9 @@ local function DrawPanel(x1, y1, x2, y2, accentColor)
 
 	local accent = accentColor or TOOLTIP_ACCENT_COLOR
 	glColor(accent)
-	RectRound(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2, 3)
+	glTexture(accentImg)
+	gl.TexRect(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
+	glTexture(false)
 	glColor(1,1,1,1)
 end
 
@@ -503,7 +506,9 @@ local function DrawSectionBox(x1, y1, x2, y2, accentColor)
 
 	local accent = accentColor or SECTION_ACCENT_COLOR
 	glColor(accent)
-	RectRound(x1 + 1, y2 - (1 + SECTION_ACCENT_HEIGHT), x2 - 1, y2 - 1, 3)
+	glTexture(accentImg)
+	gl.TexRect(x1 + 1, y2 - (1 + SECTION_ACCENT_HEIGHT), x2 - 1, y2 - 1)
+	glTexture(false)
 	glColor(1,1,1,1)
 end
 

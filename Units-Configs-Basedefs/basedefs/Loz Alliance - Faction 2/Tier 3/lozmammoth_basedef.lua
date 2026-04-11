@@ -88,7 +88,7 @@ unitDef                    = {
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[3]                      = {
-			def                  = "flamethrower",
+			def                  = "heatray",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -283,6 +283,57 @@ weaponDefs                 = {
 		},
 		damage                    = {
 			default               = 37.5,
+		},
+	},
+	heatray           = {
+		edgeeffectiveness        = 0.1,
+		hardstop                  = true,
+		avoidGround               = false,
+		avoidFeature              = false,
+		avoidFriendly             = false,
+		collideFeature            = false,
+		collideFriendly           = false,
+		coreThickness             = 0.3,
+		duration                  = 0.1,
+		burst                     = 15,
+		burstrate                 = 0.1,
+		energypershot             = 50,
+		edgeeffectiveness		  = 0,
+		explosionGenerator        = "custom:genericshellexplosion-small",
+		fallOffRate               = 0.1,
+		fireStarter               = 100,
+		impulseFactor             = 0,
+		interceptedByShieldType   = 4,
+		minintensity              = 0.1,
+		name                      = "High Intensity WaveLaser",
+		range                     = 800,
+		reloadtime                = 5,
+		WeaponType                = "LaserCannon",
+		rgbColor                  = orange,
+		rgbColor2                 = "1 1 1",
+		soundTrigger              = true,
+		soundstart                = "flashpointheatray",
+		soundHit                  = "phasegun1hit.wav",
+		-- sprayangle				  = 500,
+		texture1                 = "wave",
+		texture2                 = "empty",
+		thickness                 = 10,
+		tolerance                 = 1000,
+		turret                    = true,
+		weaponVelocity            = 2000,
+		waterweapon				 = false,
+		noexplode                 = true,
+		customparams              = {
+			expl_light_color	= orange, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit            = "true",
+			heatweapon = "1",
+			heatmult   = "1.0", -- optional; higher = heats faster per damage
+		},
+		damage                    = {
+			default               = 100,
 		},
 	},
 }

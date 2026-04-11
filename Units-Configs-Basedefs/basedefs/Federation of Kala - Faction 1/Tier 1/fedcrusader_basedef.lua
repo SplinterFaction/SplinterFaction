@@ -139,6 +139,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Don't let the compact frame fool you, this particle cannon hits hard and doesn't stop. Rapid successive bursts make it a serious threat despite its small profile.]],
 		},
 		damage                   = {
 			default              = 35,
@@ -181,6 +182,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A single missile is little more than a nuisance to most aircraft. When launched en masse, the relentless barrage becomes a serious hazard to anything attempting to hold airspace.]],
 		},
 		damage                   = {
 			default              = 50,

@@ -87,7 +87,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "particlebeamcannon",
+			def                  = "disruptionlaser",
 			--mainDir = "0 0 1", -- x:0 y:0 z:1 => that's forward!
 			--maxAngleDif = 180,
 			badTargetCategory     = "BUILDING",
@@ -154,6 +154,48 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 50,
+		},
+	},
+	disruptionlaser                 = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		rgbColor               = "1 0 0",
+		rgbColor2              = "1 1 1",
+		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.25,
+		minintensity             = 1,
+		impulseFactor          = 0,
+		--interceptedByShieldType  = 4,
+		name                   = "E.M.G. Disruption Cannon",
+		range                  = 680,
+		reloadtime             = 0.25,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "disruption-laser-high",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.5,
+		thickness              = 8,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponVelocity         = 2000,
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit          = "true",
+			disruptionweapon    = 1,
+			weaponguide         = [[Disruption will cause the target unit to become increasingly non-functional until it shorts out causing a lockout period.]],
 		},
 		damage                   = {
 			default              = 50,

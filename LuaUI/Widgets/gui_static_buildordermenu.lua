@@ -90,7 +90,9 @@ local ENERGY_TEXT_COLOR = {1.0, 1.0, 0.0, 1.0}
 
 local ui_opacity           = tonumber(Spring.GetConfigFloat("ui_opacity", 0.66) or 0.66)
 local bgcorner             = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
-local PANEL_ACCENT         = {1.00, 0.25, 0.25, 0.60}
+local accentImg            = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
+local PANEL_ACCENT         = {1.00, 0.25, 0.25, 1}
+local PANEL_ACCENT_HEIGHT  = 5
 
 --------------------------------------------------------------------------------
 -- Spring / GL locals
@@ -682,7 +684,9 @@ local function DrawPanel(x1, y1, x2, y2)
     RectRound(x1 + 2, y1 + 2, x2 - 2, y2 - 2, math_max(1, PANEL_RADIUS - 1))
 
     glColor(PANEL_ACCENT)
-    RectRound(x1 + 2, y2 - 5, x2 - 2, y2 - 2, 3)
+    glTexture(accentImg)
+    gl.TexRect(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
+    glTexture(false)
 end
 
 local function DrawTextFitted(text, x, y, size, opts, maxWidth)

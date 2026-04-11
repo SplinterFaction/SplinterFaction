@@ -190,6 +190,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Launched at a steep 45-degree arc, this guided rocket crests hills and obstructions that would otherwise shelter its target. What's behind the ridge is no longer safe.]],
 		},
 		damage                   = {
 			default              = 80,

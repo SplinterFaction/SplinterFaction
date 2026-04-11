@@ -148,6 +148,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.15, -- Use this sparingly
+			weaponguide = [[A weak but persistent laser that poses little threat on its own. In numbers, swarms can quickly strip apart undefended economy units and constructors.]],
 		},
 		damage                   = {
 			default              = 5,
