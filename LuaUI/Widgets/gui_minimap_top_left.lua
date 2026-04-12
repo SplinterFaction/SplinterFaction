@@ -14,7 +14,7 @@ local spSendCommands       = Spring.SendCommands
 local spGetViewGeometry    = Spring.GetViewGeometry
 local spGetMiniMapGeometry = Spring.GetMiniMapGeometry
 
-local MINIMAP_HEIGHT = 400
+local MINIMAP_HEIGHT_RATIO = 400 / 1440  -- tuned at 1440p
 local PADDING = 8
 local COVER_PAD = 2
 local BORDER_SIZE = 2
@@ -27,7 +27,7 @@ local function SetMinimap()
 	local vsx, vsy = spGetViewGeometry()
 
 	local aspect = Game.mapSizeZ / Game.mapSizeX
-	local h = MINIMAP_HEIGHT
+	local h = round(vsy * MINIMAP_HEIGHT_RATIO)
 	local w = round(h / aspect)
 
 	local x = PADDING

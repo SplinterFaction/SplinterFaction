@@ -147,6 +147,30 @@ local bgcorner   = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
 local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 
 --------------------------------------------------------------------------------
+-- Hero image (constants and cache only — DrawHeroImage is defined later,
+-- after DrawSectionBox which it depends on)
+--------------------------------------------------------------------------------
+
+local HERO_IMG_HEIGHT  = 236   -- base pixels; will be scaled by uiScale
+local HERO_IMG_PAD     = 6     -- horizontal inset inside the section box
+
+local heroTextureCache = {}    -- unitName -> texture path or false (not found)
+
+local function GetHeroTexturePath(unitName)
+	if not unitName or unitName == "" then return nil end
+	if heroTextureCache[unitName] ~= nil then
+		return heroTextureCache[unitName] or nil
+	end
+	local path = "unitpics-hero/" .. unitName .. "-hero.dds"
+	if VFS.FileExists(path) then
+		heroTextureCache[unitName] = path
+		return path
+	end
+	heroTextureCache[unitName] = false
+	return nil
+end
+
+--------------------------------------------------------------------------------
 -- Sound
 --------------------------------------------------------------------------------
 
@@ -510,6 +534,27 @@ local function DrawSectionBox(x1, y1, x2, y2, accentColor)
 	gl.TexRect(x1 + 1, y2 - (1 + SECTION_ACCENT_HEIGHT), x2 - 1, y2 - 1)
 	glTexture(false)
 	glColor(1,1,1,1)
+end
+
+-- Draws the hero image section below yTop, returns new yTop (descends).
+-- Returns yTop unchanged if no image is available for this unit.
+local function DrawHeroImage(unitName, x1, yTop, w)
+	local path = GetHeroTexturePath(unitName)
+	if not path then return yTop end
+
+	local scaledH = math_floor(HERO_IMG_HEIGHT * uiScale)
+	local pad     = math_floor(HERO_IMG_PAD * uiScale)
+	local totalH  = scaledH + pad * 2
+	local y1      = yTop - totalH
+
+	DrawSectionBox(x1, y1, x1 + w, yTop)
+
+	glColor(1, 1, 1, 1)
+	glTexture(":l:" .. path)
+	gl.TexRect(x1 + pad, y1 + pad, x1 + w - pad, yTop - pad)
+	glTexture(false)
+
+	return y1 - SECTION_GAP
 end
 
 local function TextWidthApprox(text, size)
@@ -1273,6 +1318,7 @@ local function BuildUnitPanelData(unitID)
 		title = ud.humanName,
 		subtitle = ud.tooltip or "",
 		tech = GetTechTag(ud),
+		unitName = ud.name,
 
 		roleText = GetTooltipRole(ud),
 		healthText = health and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil,
@@ -1320,6 +1366,7 @@ local function BuildBuildPanelData(buildData)
 		title = ud and ud.humanName or buildData.name,
 		subtitle = ud and (ud.tooltip or buildData.desc) or buildData.desc,
 		tech = ud and GetTechTag(ud) or nil,
+		unitName = ud and ud.name or nil,
 
 		roleText = ud and GetTooltipRole(ud) or nil,
 		healthText = ud and FormatNbr(ud.health, 0) or (buildData.health and FormatNbr(buildData.health, 0) or nil),
@@ -1582,6 +1629,10 @@ local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, a
 
 		-- If this is purely an extra-sections panel (additional info), skip main sections
 		if extraSections and extraSections.additionalOnly then
+			-- hero image (if present)
+			if extraSections.unitName and GetHeroTexturePath(extraSections.unitName) then
+				cy = cy + math_floor(HERO_IMG_HEIGHT * uiScale) + math_floor(HERO_IMG_PAD * uiScale) * 2 + SECTION_GAP
+			end
 			-- hint section
 			cy = cy + math_floor(26 * uiScale) + SECTION_GAP
 		elseif panelData.type == "selection" then
@@ -1656,6 +1707,9 @@ local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, a
 
 	if extraSections and extraSections.additionalOnly then
 		-- Additional info panel: just hint + extra sections below
+		if extraSections.unitName then
+			cy = DrawHeroImage(extraSections.unitName, sx, cy, cWidth)
+		end
 		if extraSections.hintText then
 			cy = DrawHintSection(extraSections.hintText, sx, cy, cWidth)
 		end
@@ -1762,6 +1816,7 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 		if ax2 <= vsx - 8 then
 			local extra = {
 				additionalOnly = true,
+				unitName    = panelData.unitName,
 				hintText    = ADDITIONAL_HINT_TEXT,
 				buildTime   = panelData.buildTimeText,
 				buildPower  = panelData.buildPowerText,
