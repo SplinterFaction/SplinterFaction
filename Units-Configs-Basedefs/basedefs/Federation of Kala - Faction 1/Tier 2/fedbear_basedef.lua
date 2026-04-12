@@ -105,6 +105,7 @@ unitDef                    = {
 		isupgraded			  	 = isUpgraded,
 		unittype				  = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 2",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -114,6 +115,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
+		unitguide = [[The Bear is a heavy assault mech that brings both a rapid-fire particle cannon and a long-range plasma cannon to bear simultaneously. The particle beam keeps sustained pressure on targets while the plasma cannon punishes anything that tries to hold ground at distance. It hits slower than Tier 1 skirmishers but its dual-weapon output makes it a serious threat to any armored unit that wanders into its considerable range.]],
 		
 	},
 }

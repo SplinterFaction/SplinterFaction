@@ -135,6 +135,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Assault Bomber",
+		buildmenucategory        = "Support",
 		death_sounds             = "generic",
 		attacksafetydistance     = "300",
 		nofriendlyfire           = "1",

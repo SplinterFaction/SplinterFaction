@@ -84,6 +84,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Heatray Tank",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",

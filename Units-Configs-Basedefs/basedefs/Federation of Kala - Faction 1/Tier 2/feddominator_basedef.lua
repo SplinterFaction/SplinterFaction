@@ -97,6 +97,7 @@ unitDef                    = {
 		isupgraded			  	 = isUpgraded,
 		unittype				  = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 2",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -106,7 +107,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Dominator is the Federation's premier disruption platform at Tier 2, wielding a heavier EMG Disruption Cannon that hits harder and reaches further than the Equalizer it succeeds. Like its predecessor, it stacks an impairment effect with each hit that eventually locks its target down entirely for ten seconds. Against high-value units, a Dominator that lands its full disruption cycle effectively removes the target from the fight long enough to finish it off.]],
 	},
 }
 

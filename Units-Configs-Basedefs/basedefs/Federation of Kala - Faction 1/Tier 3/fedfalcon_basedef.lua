@@ -129,6 +129,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Strategic Bomber",
+		buildmenucategory        = "Support",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
@@ -137,7 +138,7 @@ unitDef                    = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Falcon is the Federation's strategic bomber, delivering a single nuclear payload capable of erasing everything within a substantial blast radius in one strike. It is not a precision weapon and it is not a cheap one — it exists to end conversations, not start them. A Falcon committed to a target is a statement of intent. Keep it escorted and keep it away from anti-air until the moment it matters, because it only needs to get through once.]],
 	},
 }
 

@@ -104,6 +104,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				  = "mobile",
 		unitrole				 = "Artillery - Tech 2",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		--stockpileLimit           = 5,
 		needed_cover             = 1,
@@ -114,7 +115,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Avalanche is a long-range burst artillery unit that fires two simultaneous volleys of scatter-shot plasma shells, blanketing a wide area with high-damage impacts at ranges that most units cannot effectively answer. It defaults to a hold-fire stance and must be directed deliberately — its enormous per-volley damage and area coverage make it devastating against clustered formations, but its slow reload and fragile frame mean poor positioning will get it killed before it fires twice.]],
 	},
 }
 

@@ -131,6 +131,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 4",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -140,7 +141,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Juggernaut is the Federation of Kala's Tier 4 ground behemoth and the most expensive unit in their land arsenal. It brings six weapon systems to bear simultaneously: a rapid-fire particle cannon that shreds armor with relentless high-energy pulses, two heavy plasma cannons that deliver single-shot damage capable of crippling most units outright, twin guided cluster rocket launchers, and a vertically launched missile system raining down heavy warheads at a steady cadence. It moves slowly and turns slowly, but at the range its weapons operate, most enemies never get the chance to exploit that. Committing a Juggernaut to a front is a statement that the front is about to cease to exist.]],
 	},
 }
 

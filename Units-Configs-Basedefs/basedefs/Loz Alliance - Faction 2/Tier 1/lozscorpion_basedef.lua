@@ -86,6 +86,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Artillery",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",

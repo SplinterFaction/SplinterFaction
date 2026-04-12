@@ -98,6 +98,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -107,6 +108,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
+		unitguide = [[The Equalizer carries an EMG Disruption Cannon that applies a stacking impairment effect with every hit, eventually locking a target unit down entirely for ten seconds. Against individual targets it is a reliable disabler; against a column, a coordinated volley can bring an entire advance to a standstill. Its moderate speed and health make it a solid frontline skirmisher as long as it stays in the fight long enough to stack its effect.]],
 	},
 }
 

@@ -97,6 +97,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Scout",
+		buildmenucategory        = "Scout",
 		sightdistanceoverride	 = true,
 		canbetransported 		 = "true",
 		needed_cover             = 1,
@@ -107,7 +108,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The fastest bot in the Federation's ground roster, the AK is built for hit-and-run harassment rather than sustained combat. Its rapid-fire laser deals negligible damage to armored targets, but against undefended economy structures and constructors it is ruthlessly efficient. Best deployed in swarms, where its low cost and high speed let it overwhelm a base before a proper defense can be organized.]],
 	},
 }
 

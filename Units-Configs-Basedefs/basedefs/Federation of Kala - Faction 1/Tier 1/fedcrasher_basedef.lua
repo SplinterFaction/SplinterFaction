@@ -97,6 +97,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Anti-Air",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -106,7 +107,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[A cheap, dedicated anti-air platform that punishes any enemy commander who neglects air cover. Individual missiles hit lightly, but the Crasher's fast reload and guided tracking make it a persistent threat to anything airborne. Field them in clusters to screen advances or protect key positions — a sky defended by Crashers is a sky that stays contested.]],
 	},
 }
 

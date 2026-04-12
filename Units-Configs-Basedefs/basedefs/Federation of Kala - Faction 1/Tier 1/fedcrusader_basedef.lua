@@ -91,6 +91,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "ship",
 		unitrole				 = "Frigate",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",
@@ -101,6 +102,7 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
 		corpse                   = "fedcrusader_dead",
+		unitguide = [[The Crusader is the Federation's workhorse frigate, combining a rapid-fire particle cannon for surface engagements with a missile battery for air defense. Neither weapon is overwhelming on its own, but together they make the Crusader a credible threat in both roles. Slower and heavier than the Piranha, it is best used to anchor a fleet line rather than lead a charge.]],
 	},
 }
 

@@ -90,6 +90,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "ship",
 		unitrole				 = "Corvette",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",
@@ -100,6 +101,7 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
 		corpse                   = "fedpiranha_dead",
+		unitguide = [[The Piranha is a fast torpedo corvette built for aggressive naval raiding. Its unguided torpedo deals heavy damage per hit and reloads quickly, relying on the projectile's raw speed to intercept moving targets without any tracking system. Cheap relative to larger warships and quick enough to dictate engagement range, it excels at harassing enemy fleets and picking off isolated vessels before they can respond.]],
 	},
 }
 

@@ -98,6 +98,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Indirect Fire Support",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -107,7 +108,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Thud is the Federation's indirect fire answer to armored pushes, lobbing high-velocity plasma shells in a steep arc over intervening terrain. Its long reload and fragile frame mean it cannot take a hit, but a well-positioned battery can devastate grouped units before they ever close to effective range. Keep it screened and far from the front.]],
 	},
 }
 

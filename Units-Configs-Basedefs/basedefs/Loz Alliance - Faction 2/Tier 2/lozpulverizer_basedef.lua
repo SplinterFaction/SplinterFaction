@@ -91,6 +91,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Anti-Air - Tech 2",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 3,
 		death_sounds             = "generic",

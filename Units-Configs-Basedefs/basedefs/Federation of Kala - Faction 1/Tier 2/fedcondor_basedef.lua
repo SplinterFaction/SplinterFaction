@@ -201,6 +201,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Combat Transport",
+		buildmenucategory        = "Skirmish",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
@@ -209,7 +210,7 @@ unitDef                    = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Condor is a heavy combat transport capable of lifting and deploying large numbers of ground units directly into contested territory. Unlike a standard transport, it carries a downward-firing particle cannon that allows it to suppress ground targets while loading or unloading its cargo. It is a gunship and should be treated as one. It's ability to project force during the deployment window makes it far more survivable than a transport that arrives defenseless. The real threat the Condor poses is strategic — it can put a full army somewhere the enemy did not expect.]],
 	},
 }
 

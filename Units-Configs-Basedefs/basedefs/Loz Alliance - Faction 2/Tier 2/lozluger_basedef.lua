@@ -86,6 +86,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				  = "mobile",
 		unitrole				 = "Artillery - Tech 2",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		canareaattack            ="1",
 		-- stockpileLimit           = 5,

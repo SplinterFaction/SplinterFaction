@@ -88,6 +88,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Support",
+		buildmenucategory        = "Utility",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",

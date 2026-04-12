@@ -135,6 +135,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Assault Bomber",
+		buildmenucategory        = "Support",
 		death_sounds             = "generic",
 		attacksafetydistance     = "300",
 		nofriendlyfire           = "1",
@@ -144,7 +145,7 @@ unitDef                    = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Crow is a heavy-payload bomber that delivers clusters of explosive submunitions across a broad area, making it devastating against grouped units and unprotected structures alike. A rear-facing machinegun provides minimal self-defense against pursuing interceptors, but the Crow should never be flying without an escort. Its long reload demands good timing — commit it to a target worth the wait.]],
 	},
 }
 

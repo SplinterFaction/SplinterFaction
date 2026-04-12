@@ -106,6 +106,7 @@ unitDef                    = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
 		unitrole				 = "Support",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -115,7 +116,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Striker is a large Tier 3 mech that pairs a rapid-fire disruption laser with a sustained depleted uranium particle cannon, both targeting the same enemy simultaneously. The disruption laser stacks its impairment effect with every hit while the particle cannon hammers the target with kinetic rounds — a unit that isn't killed outright by the combined fire will shortly find itself locked down and unable to fight back. Fast for its size and expensive enough to field carefully, the Striker rewards aggressive, well-supported pushes into enemy lines.]],
 	},
 }
 

@@ -97,6 +97,7 @@ unitDef                    = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 3",
+		buildmenucategory        = "Skirmisher",
 		death_sounds             = "generic",
 		RequireTech              = tech,
 		nofriendlyfire	         = "1",

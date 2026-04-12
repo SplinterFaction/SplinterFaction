@@ -128,6 +128,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Strike Fighter",
+		buildmenucategory        = "Skirmish",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
@@ -136,7 +137,7 @@ unitDef                    = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Hawk is a versatile strike fighter armed with fast-tracking guided missiles capable of engaging both air and ground targets without switching modes. Its flexibility makes it useful in a wide range of situations, though it excels at neither role the way a dedicated interceptor or bomber would. Best deployed as a general-purpose fast response unit — redirect it wherever the enemy is least prepared to deal with it.]],
 	},
 }
 

@@ -129,6 +129,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "ship",
 		unitrole				 = "Destroyer",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",
@@ -139,6 +140,7 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
 		corpse                   = "fedcolossus_dead",
+		unitguide = [[The Colossus is the Federation's Tier 2 destroyer, packing three plasma cannon batteries, twin cluster rocket launchers, and a flak machinegun into a single hull. No individual weapon is overwhelming, but the sheer combined weight of fire it puts out makes it a credible threat to surface targets at range while the machinegun discourages aircraft from getting comfortable overhead. It is the most well-rounded ship in the Federation's naval roster — slow to get anywhere, but difficult to ignore once it arrives.]],
 	},
 }
 

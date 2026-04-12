@@ -98,6 +98,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -107,6 +108,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
+		unitguide = [[A skirmisher built around an arc-trajectory guided rocket that crests terrain and ridgelines to strike targets that would otherwise be out of reach. Slower than dedicated raiders but more threatening to armored units, the Storm rewards positioning — fire from behind cover and let the rocket do the work. Avoid buildings; it's not what this bot was built for.]],
 	},
 }
 

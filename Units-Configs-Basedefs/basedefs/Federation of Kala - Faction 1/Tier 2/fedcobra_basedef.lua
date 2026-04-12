@@ -106,6 +106,7 @@ unitDef                    = {
 		isupgraded			  	 = isUpgraded,
 		unittype				  = "mobile",
 		unitrole				 = "Direct Fire Support - Tech 2",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -115,7 +116,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Cobra is a dual-weapon fire support mech that pairs a burst plasma cannon with a volley of guided cluster missiles, both slaved to the same targeting solution. The plasma cannon scatters energy across the blast zone while the missiles pile on with tracking warheads, making the combined strike punishing against any unit that can't get clear in time. Slow on its feet and not built for the front line, it rewards commanders who keep it screened and positioned well.]],
 	},
 }
 

@@ -105,6 +105,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "ship",
 		unitrole				 = "Heavy Cruiser",
+		buildmenucategory        = "Skirmisher",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",

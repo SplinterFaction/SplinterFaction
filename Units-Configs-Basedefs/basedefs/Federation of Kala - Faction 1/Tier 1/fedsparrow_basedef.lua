@@ -133,6 +133,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Interceptor",
+		buildmenucategory        = "Skirmish",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
@@ -141,7 +142,7 @@ unitDef                    = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[A fast, agile interceptor purpose-built to deny enemy air operations. Its particle beam hits hard and reloads quickly, and its tight turn radius lets it stay on target through evasive maneuvers. The Sparrow has no ground attack capability whatsoever — it exists solely to kill aircraft, and at that job it excels. Pair it with ground-based anti-air for layered coverage.]],
 	},
 }
 

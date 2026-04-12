@@ -91,6 +91,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "ship",
 		unitrole				 = "Frigate",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",

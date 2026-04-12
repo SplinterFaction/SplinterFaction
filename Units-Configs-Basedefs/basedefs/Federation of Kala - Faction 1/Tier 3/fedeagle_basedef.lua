@@ -200,6 +200,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Massive Transport",
+		buildmenucategory        = "Skirmish",
 		death_sounds             = "generic",
 		nofriendlyfire           = "1",
 		RequireTech              = tech,
@@ -208,7 +209,7 @@ unitDef                    = {
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Eagle is a massive Tier 3 transport capable of lifting far heavier cargo than the Condor it complements, including the Federation's largest ground units. It carries a burst rocket battery to suppress ground targets during deployment, though like all transports its survival depends on what it delivers, not what it fights. The strategic threat the Eagle poses is difficult to overstate — an Eagle in the air means an army could appear anywhere on the map without warning.]],
 	},
 }
 

@@ -145,6 +145,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "ship",
 		unitrole				 = "Battlecruiser",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "false",
 		needed_cover             = 2,
 		death_sounds             = "generic",
@@ -155,6 +156,7 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
 		corpse                   = "fedharbinger_dead",
+		unitguide = [[The Harbinger is the Federation's Tier 3 naval capital ship and the most heavily armed vessel in its fleet. A central heavy plasma cannon handles long-range priority targets, four broadside plasma batteries cover both flanks with burst fire, a vertically launched missile system delivers a near-continuous rain of high-damage warheads, and a forward particle beam cannon rattles off rapid pulses at anything in its arc. No single system on the Harbinger is what makes it dangerous — it is the totality of fire it brings to bear all at once. Give it sea room and a target, and let it work.]],
 	},
 }
 

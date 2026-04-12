@@ -78,6 +78,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "mobile",
 		unitrole				 = "Scout",
+		buildmenucategory        = "Scout",
 		canbetransported 		 = "true",
 		sightdistanceoverride	 = true,
 		hpoverride               = 90,

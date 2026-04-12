@@ -109,6 +109,7 @@ unitDef                    = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
 		unitrole				 = "Support",
+		buildmenucategory        = "Utility",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -118,6 +119,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
+		unitguide = [[The Deleter is a support mech that projects a wide area-cloaking field, concealing all friendly units within its radius from enemy detection. It activates its cloak field immediately on deployment and maintains it passively with no energy cost. It carries no meaningful weapon and cannot survive direct engagement — its value is entirely in the cover it provides. A Deleter tucked inside a formation turns an advancing army into a ghost column, buying positioning advantages that no amount of firepower can replicate.]],
 		
 
 		area_cloak = 1, -- Can this unit emit a cloaking field?

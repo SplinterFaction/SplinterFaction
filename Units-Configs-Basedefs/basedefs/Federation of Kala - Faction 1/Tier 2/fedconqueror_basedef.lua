@@ -103,6 +103,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "ship",
 		unitrole				 = "Light Cruiser",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 2,
 		death_sounds             = "generic",
@@ -113,6 +114,7 @@ unitDef                    = {
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
 		corpse                   = "fedconqueror_dead",
+		unitguide = [[The Conqueror is a slow but heavily armed light cruiser that delivers its plasma payload in rapid successive bursts, with each full burst carrying enough cumulative damage to threaten all but the most durable naval targets. Its long range lets it engage well before smaller vessels can close to effective distance, and its burst fire makes it difficult to simply absorb and outlast. It should not be leading the line — let faster ships draw fire while the Conqueror dismantles whatever they pin down.]],
 	},
 }
 

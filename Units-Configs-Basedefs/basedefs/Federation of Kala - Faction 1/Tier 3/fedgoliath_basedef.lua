@@ -122,6 +122,7 @@ unitDef                    = {
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 3",
+		buildmenucategory        = "Skirmish",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -131,7 +132,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Goliath is the Federation's premier Tier 3 ground combatant, fielding twin precision laser cannons and twin plasma cannon batteries all slaved to a single targeting solution. The lasers deliver focused, punishing single-target damage while the plasma cannons saturate the surrounding area with overlapping blasts in the same firing cycle. It is slow and massive, but what it points at tends to stop existing — and everything nearby it tends to suffer for the privilege of being close.]],
 	},
 }
 

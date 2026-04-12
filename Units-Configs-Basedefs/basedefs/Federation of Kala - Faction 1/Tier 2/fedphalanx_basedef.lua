@@ -97,6 +97,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				  = "mobile",
 		unitrole				 = "Anti-Air - Tech 2",
+		buildmenucategory        = "Support",
 		canbetransported 		 = "true",
 		needed_cover             = 1,
 		death_sounds             = "generic",
@@ -106,7 +107,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		
+		unitguide = [[The Phalanx is the Federation's dedicated Tier 2 anti-air platform, trading the Crasher's guided missiles for a high-velocity burst machinegun that saturates a column of airspace with an overwhelming volume of fire. Its long range and high burst count make it extremely difficult for aircraft to approach without taking crippling damage. Slow and lightly armored, it should always operate behind a frontline screen — but positioned correctly, it makes enemy air operations against your forces an expensive proposition.]],
 	},
 }
 
