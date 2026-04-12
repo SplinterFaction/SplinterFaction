@@ -156,6 +156,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A plasma cannon that detonates on impact, scattering burning energy across a small area. Effective against grouped units or anything unable to clear the blast zone in time.]],
 		},
 		damage                   = {
 			default              = 60,
@@ -201,6 +202,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Fires a burst of guided cluster missiles that track their target and deliver substantial damage on impact. The combined payload of a full volley is enough to cripple or destroy most smaller units.]],
 		},
 		damage                   = {
 			default              = 100,

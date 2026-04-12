@@ -146,6 +146,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A dedicated anti-air machine gun that saturates the sky with a high volume of fire. The sheer density of rounds makes it exceptionally difficult for aircraft to pass through unscathed.]],
 		},
 		damage                   = {
 			default              = 10,

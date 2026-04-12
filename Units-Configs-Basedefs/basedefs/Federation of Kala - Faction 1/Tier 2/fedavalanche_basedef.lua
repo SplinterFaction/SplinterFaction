@@ -162,6 +162,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Why aim for one target when you can cover the whole area? This long-range burst artillery scatters a volley of shells across a wide footprint, leaving little safe ground in the impact zone.]],
 		},
 		damage                   = {
 			default              = 440,

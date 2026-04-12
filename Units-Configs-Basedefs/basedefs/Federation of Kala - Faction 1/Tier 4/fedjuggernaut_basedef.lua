@@ -182,6 +182,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A particle beam cannon that combines punishing individual shot damage with a refire rate that leaves targets no time to recover between impacts. The relentless stream of high-energy pulses dismantles even heavily armored units with alarming speed.]],
 		},
 		damage                   = {
 			default              = 400,
@@ -223,6 +224,7 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A very heavy plasma cannon delivering devastating damage in a single shot. The sheer energy output of each blast is enough to cripple or outright destroy most units it is aimed at.]],
 		},
 		damage                   = {
 			default              = 1670,
@@ -266,6 +268,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Guided cluster rockets that track their target and deliver solid damage across the impact area. The combination of reliable tracking and multi-warhead payload makes it a consistent and effective threat.]],
 		},
 		damage                   = {
 			default              = 120,
@@ -311,6 +314,7 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A vertically launched missile delivering large damage per impact with a reasonably fast reload rate. The combination of heavy payload and consistent availability makes it a reliable source of sustained heavy firepower.]],
 		},
 		damage                   = {
 			default              = 800,

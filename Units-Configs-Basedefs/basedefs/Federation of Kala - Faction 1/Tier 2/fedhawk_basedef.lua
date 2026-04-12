@@ -174,6 +174,7 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A guided missile capable of engaging both air and ground targets with reliable tracking and high maneuverability. Its flexibility makes it a consistent threat regardless of what it is pointed at.]],
 		},
 		damage                   = {
 			default              = 60,

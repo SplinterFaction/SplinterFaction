@@ -131,6 +131,7 @@ weaponDefs = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A particle beam with an extremely fast refire rate that punishes any unit that fails to vacate its firing arc immediately. The sustained volume of fire makes staying in range a rapidly terminal decision.]],
 		},
 		damage                   = {
 			default              = 10,

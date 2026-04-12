@@ -148,7 +148,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			single_hit          = "true",
 			disruptionweapon    = 1,
-			weaponguide         = [[Disruption will cause the target unit to become increasingly non-functional until it shorts out causing a lockout period.]],
+			weaponguide = [[Applies a stacking disruption effect that increasingly impairs the target's functionality until it shorts out completely. The resulting lockout leaves the unit inoperable for 10 seconds.]],
 		},
 		damage                   = {
 			default              = 150,

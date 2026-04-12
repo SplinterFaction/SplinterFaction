@@ -172,6 +172,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Hurls a volley of heavy plasma projectiles that slam into the target area and erupt in scorching overlapping blasts. Anything clustered within the impact zone absorbs the full wrath of the combined detonations.]],
 		},
 		damage                   = {
 			default              = 96,
@@ -214,6 +215,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A precision laser cannon that concentrates an enormous amount of energy into a single focused beam, burning straight through whatever it is aimed at. There is no splash, no spread — just pinpoint devastation.]],
 		},
 		damage                    = {
 			default               = 450,

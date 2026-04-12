@@ -154,15 +154,13 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A plasma cannon that delivers searing, high-damage blasts at targets well beyond the range many weapons can threaten. Distance offers little comfort against its scorching payload.]],
 		},      
 		damage                   = {
 			default              = 230,
 		},
 	},
 	particlebeamcannon                 = {
-
-		accuracy                 = 0,
-		AreaOfEffect             = 10,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -196,6 +194,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A long-range particle beam cannon with a fast refire rate and pinpoint accuracy. Sustained precise fire allows it to methodically dismantle targets well before they can close the distance.]],
 		},
 		damage                   = {
 			default              = 50,

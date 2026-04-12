@@ -209,6 +209,7 @@ weaponDefs                 = {
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A nuclear payload that turns a substantial stretch of battlefield into a smoldering wasteland in a single blinding instant. Whatever stood in the blast radius is simply no longer a concern.]],
 		},
 		damage                   = {
 			default              = 13000,

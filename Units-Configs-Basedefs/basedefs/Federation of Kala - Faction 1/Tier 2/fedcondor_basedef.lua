@@ -249,6 +249,7 @@ weaponDefs                 = {
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			-- light_radius_mult   = 1.25,
+			weaponguide = [[A ferocious fusion of particle beam and laser technology that carves through ground targets with ruthless efficiency. Few surface units are built to withstand the concentrated devastation it delivers.]],
 		},
 		damage                   = {
 			default              = 40,

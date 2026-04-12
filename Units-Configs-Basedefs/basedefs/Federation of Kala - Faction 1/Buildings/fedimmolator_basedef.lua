@@ -126,6 +126,7 @@ weaponDefs = {
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A high-velocity plasma cannon that screams superheated payloads downrange with blistering speed and bone-crushing impact force. Modest reload times ensure the pressure never lets up for long.]],
 		},
 		damage                   = {
 			default              = 2000,

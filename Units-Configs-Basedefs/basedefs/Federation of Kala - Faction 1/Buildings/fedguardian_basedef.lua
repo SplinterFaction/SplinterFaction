@@ -124,6 +124,7 @@ weaponDefs                  = {
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A high-damage plasma cannon designed to deny and control areas of the battlefield rather than pick off individual targets. The devastating blast radius more than justifies the lengthy reload time between shots.]],
 		},
 		damage                   = {
 			default              = 3500,

@@ -179,6 +179,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Launches a devastating barrage of plasma projectiles at long range, blanketing a small area with high-damage impacts. Grouped units and static structures caught in the footprint face near-certain destruction.]],
 		},
 		damage                   = {
 			default              = 100,
@@ -220,6 +221,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Hurls machinegun projectiles skyward that detonate at range, throwing a dense blanket of flak across the airspace. Aircraft pushing through the barrage do so at their own considerable peril.]],
 		},
 		damage                   = {
 			default              = 1,
@@ -263,6 +265,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Unleashes a swarming burst of tracking cluster rockets that lock onto their target and converge in a punishing storm of high-damage impacts. A full volley leaves little question about the outcome.]],
 		},
 		damage                   = {
 			default              =120,

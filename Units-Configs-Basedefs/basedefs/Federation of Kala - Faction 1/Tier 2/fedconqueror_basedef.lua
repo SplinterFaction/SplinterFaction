@@ -151,6 +151,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A plasma cannon that fires in a rapid burst, delivering heavy damage across multiple consecutive shots. The combined impact of a full burst is enough to tear through all but the most heavily armored targets.]],
 		},
 		damage                   = {
 			default              = 250,

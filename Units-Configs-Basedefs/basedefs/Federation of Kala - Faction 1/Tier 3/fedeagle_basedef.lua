@@ -250,6 +250,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.1, -- Use this sparingly
+			weaponguide = [[Fires bursts of low-damage rockets that individually deal modest damage but accumulate quickly into a substantial total impact. Sustained fire ensures the damage adds up faster than most targets can handle.]],
 		},
 		damage                   = {
 			default              = 20,

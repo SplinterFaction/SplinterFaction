@@ -122,6 +122,7 @@ weaponDefs = {
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A very fast guided anti-air rocket that closes on aerial targets with little time for evasive action. The combination of high speed and reliable tracking makes it extremely difficult for aircraft to outrun or outmaneuver.]],
 		},
 		damage                   = {
 			default              = 270,

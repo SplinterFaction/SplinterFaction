@@ -193,6 +193,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Fires a burst of plasma projectiles that blanket a small area with heavy overlapping damage. The concentrated spread makes it devastating against anything caught within the tight impact zone.]],
 		},
 		damage                   = {
 			default              = 250,
@@ -238,14 +239,13 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A vertically launched missile that climbs skyward before arcing down onto its target with high-damage precision. The fast refire rate ensures a near continuous stream of deadly payloads raining down on the enemy.]],
 		},
 		damage                   = {
 			default              = 800,
 		},
 	},
 	particlebeamcannon = {
-
-		accuracy                 = 0,
 		avoidFeature             = false,
 		avoidFriendly            = false,
 		collideFeature           = false,
@@ -261,7 +261,7 @@ weaponDefs                 = {
 
 		minintensity             = 1,
 		impulseFactor            = 0,
-		name                     = "Something with Flames",
+		name                     = "Particle Beam Cannon",
 		range                    = 1400,
 		reloadtime               = 0.1,
 		WeaponType               = [[LaserCannon]],
@@ -279,6 +279,7 @@ weaponDefs                 = {
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[Rattles off particle beam pulses at a blistering rate, each individual shot modest on its own but stacking into a withering stream of accumulated damage. Targets melt under the sustained barrage before they realize how much they have taken.]],
 		},
 		damage                   = {
 			default              = 10,
@@ -319,6 +320,7 @@ weaponDefs                 = {
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
+			weaponguide = [[A single massive ball of superheated plasma launched with devastating intent. One shot is all it takes to remind the target exactly why plasma weapons demand respect.]],
 		},
 		damage                   = {
 			default              = 230,
