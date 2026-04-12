@@ -60,6 +60,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Razor is the Loz Alliance's Tier 1 light anti-air turret, firing rapid bursts of chained lightning that arc across aircraft attempting to pass through its coverage zone. Individually each burst deals modest damage, but the fast reload and multi-arc discharge keep consistent pressure on anything airborne. Cheap and quick to build, it forms the baseline air defense layer that more expensive turrets can extend and reinforce.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Short Range Anti-Air",
@@ -173,6 +174,7 @@ weaponDefs = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[An electrical strike cannon that fires ten chained lightning arcs per burst at airborne targets. The rapid multi-arc discharge makes it difficult for aircraft to pass through the coverage zone without absorbing meaningful cumulative damage.]],
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

@@ -69,6 +69,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Basic Supply Depot is the foundational supply structure available from Tier 0, providing 20 additional unit supply capacity for a minimal metal investment. It has a small footprint and builds quickly — the first structure any commander should place when army size starts bumping against the default supply limit.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

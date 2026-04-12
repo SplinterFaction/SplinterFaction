@@ -72,6 +72,7 @@ unitDef                         = {
 		},
 	},
 	customParams                      = {
+		unitguide = [[The Air Plant is the factory responsible for producing all air units for its faction. It activates immediately on completion and can begin building aircraft as soon as it finishes. A second Air Plant can be built to run parallel production queues when air power is the primary strategic focus. Keep it away from the front line — a destroyed factory cannot be replaced quickly.]],
 		unittype				      = "building",
 		unitrole 				      = "Factory",
 		buildmenucategory		  	  = "Production",

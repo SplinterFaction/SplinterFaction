@@ -62,6 +62,7 @@ unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The E->M Converter is the primary metal income structure for both factions, converting energy into metal at a rate scaled by the map's metalSpot_value and the converter's tech tier. Output and energy consumption are set dynamically at runtime by the metal maker scaling system — the higher the map's spot value and the higher the tier, the more metal it produces and the more energy it draws. Higher tiers multiply the base output substantially: Tier 1 doubles it, Tier 2 triples it, Tier 3 produces more than five times the base rate, and Tier 4 more than ten. Place converters on high-value spots and upgrade them as your tech and energy economy allows.]],
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",

@@ -198,6 +198,7 @@ unitDef                    = {
 
 
 	customParams                 = {
+		unitguide = [[The Titan is the Loz Alliance's Tier 3 massive transport, capable of carrying far heavier cargo than the Crane and armed with a microwave beam cannon that suppresses ground targets during deployment. At Tier 3 it can lift the Alliance's largest ground units and deliver them directly into the enemy's operational depth. The strategic threat it poses is severe — an enemy that doesn't account for the Titan's reach will find entire armies appearing where they were never expected.]],
 		unittype				 = "air",
 		unitrole				 = "Massive Transport",
 		buildmenucategory        = "Skirmisher",
@@ -252,6 +253,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = true,
 		customparams              = {
+			weaponguide = [[A sustained microwave beam cannon that suppresses ground targets beneath the transport during loading and unloading. It provides meaningful cover during the vulnerable deployment window without pretending the Titan is a gunship.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

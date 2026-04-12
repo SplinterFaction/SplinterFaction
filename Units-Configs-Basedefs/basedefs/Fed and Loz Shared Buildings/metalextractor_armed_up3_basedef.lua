@@ -80,6 +80,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[An armed upgrade variant of the Tier 3 E->M Converter, mounting twin neutron beams for long-range coverage and two gamma ray beams for close defense. The dual neutron beams give it serious anti-ground reach, making it genuinely dangerous to approach without dedicated fire support. At this tier the installation defends itself aggressively.]],
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",
@@ -139,6 +140,7 @@ weaponDefs = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[Close-range gamma ray beams that cover the installation's immediate perimeter against anything that gets past the neutron beams. The last line of self-defense.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -185,6 +187,7 @@ weaponDefs = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[Twin long-range neutron beams that cover a wide arc around the installation, engaging ground and naval threats at significant range. At this tier the converter's self-defense is genuinely dangerous and demands serious fire support to overcome.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

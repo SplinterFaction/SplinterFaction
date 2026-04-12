@@ -122,9 +122,7 @@ unitDef                    = {
 		nofriendlyfire	         = "1",
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
-		unitguide                = [[Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.]],
+		unitguide = [[The Loz Alliance Commander is the player's starting unit and the irreplaceable center of every match. It builds all structures, repairs friendly units, reclaims wreckage, and captures enemy buildings, while its heat ray weapon accumulates thermal stress on targets with every burst — a sufficiently overheated unit will malfunction and shut down entirely. The Commander upgrades through four tiers alongside tech progression, gaining range and dramatically increased damage output at each step. Losing the Commander ends the game; using it aggressively while keeping it alive is the defining challenge of every match.]],
 	},
 }
 

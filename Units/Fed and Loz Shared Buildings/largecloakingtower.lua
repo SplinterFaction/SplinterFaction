@@ -77,6 +77,7 @@ local unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Large Cloaking Tower is the Tier 3 upgrade to the Cloaking Tower, projecting a 800-radius cloaking field that conceals an entire sector of the map from enemy detection. Like its smaller counterpart it costs nothing to operate and activates immediately. The coverage radius is large enough to hide substantial force concentrations, forward bases, or entire defensive lines from enemy observation.]],
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole				  = "Support Building",

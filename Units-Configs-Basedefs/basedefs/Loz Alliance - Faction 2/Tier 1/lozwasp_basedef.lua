@@ -131,6 +131,7 @@ unitDef                    = {
 
 
 	customParams                 = {
+		unitguide = [[The Wasp is the Loz Alliance's Tier 1 interceptor, armed with a forward-firing particle beam cannon that hits hard and reloads quickly. Purpose-built to kill aircraft, it cannot engage ground targets and has no business in any other role. What it does, it does extremely well — get it into the airspace and anything flying becomes a problem.]],
 		unittype				 = "air",
 		unitrole				 = "Interceptor",
 		buildmenucategory        = "Skirmisher",
@@ -178,6 +179,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 3000,
 		customparams             = {
+			weaponguide = [[A forward-firing particle beam cannon that delivers high single-shot damage to aircraft at long range. Fast refire, excellent tracking — anything airborne that wanders into range is in serious trouble.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

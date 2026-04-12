@@ -173,6 +173,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Dragonfly is the Loz Alliance's basic Tier 1 air transport, capable of lifting small ground units and repositioning them anywhere on the map. It carries no weapons and has no business in contested airspace — its value is entirely in the strategic flexibility it provides. Keep it behind friendly air cover and use it to exploit gaps in the enemy's positioning.]],
 		unittype				 = "air",
 		unitrole				 = "Basic Transport",
 		buildmenucategory        = "Utility",

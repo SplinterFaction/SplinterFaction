@@ -165,6 +165,7 @@ unitDef                    = {
 
 
 	customParams                 = {
+		unitguide = [[The Locust is a Tier 3 heavy bomber that drops massive incendiary bomb clusters and defends itself in every direction with six lightning cannons covering all approach angles simultaneously. The bombs set large areas ablaze and deal devastating damage to anything caught beneath the drop pattern, while the omnidirectional lightning coverage makes intercept attempts extremely costly. It is not fast, but aircraft that try to shoot it down from any direction face immediate return fire.]],
 		unittype				 = "air",
 		unitrole				 = "Heavy Bomber",
 		buildmenucategory        = "Skirmisher",
@@ -209,6 +210,7 @@ weaponDefs                 = {
 		sprayangle               = 2000,
 
 		customparams             = {
+			weaponguide = [[A massive incendiary bomb dropped in clusters of three that detonates on impact and leaves a burning area that continues damaging everything caught in the zone. The combined blast and persistent fire turns a single pass into a prolonged threat.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -261,6 +263,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[Six lightning cannons mounted to cover every approach angle — forward, rear, above, below, and both sides. Any aircraft attempting to intercept the Locust from any direction faces immediate suppressive electrical fire.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second

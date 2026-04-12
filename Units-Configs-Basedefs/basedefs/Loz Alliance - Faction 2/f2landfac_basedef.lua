@@ -72,6 +72,7 @@ unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Land Factory is the Loz Alliance's primary ground production facility, responsible for producing the full range of land units available at its current tech tier. It requires a Tech Facility to unlock higher-tier units and Supply Depots to field a larger army. Running two factories in parallel when metal income allows it dramatically accelerates unit production. Losing a factory is a serious setback — keep it away from the front.]],
 		unittype				  = "building",
 		unitrole 				  = "Factory",
 		buildmenucategory		  = "Production",

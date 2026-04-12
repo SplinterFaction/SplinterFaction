@@ -89,6 +89,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Pulverizer is the Loz Alliance's Tier 2 anti-air support tank, combining a lightning cannon for engaging light ground and air targets with a burst flak cannon that detonates at altitude and saturates the surrounding airspace with lethal shrapnel. The two systems together create overlapping coverage — the lightning cannon handles closer threats while the flak denies higher-altitude approaches. Aircraft that attempt to operate within its reach do so at serious cost.]],
 		unittype				 = "mobile",
 		unitrole				 = "Anti-Air - Tech 2",
 		buildmenucategory        = "Support",
@@ -141,6 +142,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[An electrical strike cannon capable of engaging both ground and air targets. Its long range and burst arc make it effective harassment fire against lightly armored threats approaching from any angle.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -189,6 +191,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 3000,
 		customparams             = {
+			weaponguide = [[A burst flak cannon that fires self-detonating projectiles that explode in mid-air, scattering lethal fragments across a wide area. Aircraft flying through the detonation zone absorb devastating area damage.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

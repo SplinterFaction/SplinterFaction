@@ -66,6 +66,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Menlo is the Federation of Kala's Tier 1 light anti-ground turret, hosing down anything in its short range with an extremely rapid particle beam that individually deals light damage but accumulates quickly under the relentless fire rate. It is best suited to stopping swarms of cheap raiders before they reach more valuable structures — anything that lingers in its arc long enough takes a punishing total amount of fire. Cheap, fast to build, and effective in clusters.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Anti-Swarm Turret",

@@ -60,6 +60,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Javelin is the Federation of Kala's Tier 2 long-range anti-air turret, firing pairs of fast guided missiles with excellent tracking that make escape extremely difficult for aircraft at range. Its coverage extends well beyond most Tier 1 anti-air, giving the Federation a credible defensive layer against aircraft operating at standoff distance. Position it to cover approaches that shorter-range turrets cannot reach.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Medium Range Anti-Air",

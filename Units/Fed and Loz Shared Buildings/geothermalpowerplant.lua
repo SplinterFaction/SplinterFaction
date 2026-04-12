@@ -68,6 +68,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Geothermal Energy Generator taps into natural thermal vents to produce 350 energy at Tier 1, outperforming the Fusion Generator at comparable cost when sited correctly. It must be placed on geothermal vent terrain. If your map has accessible vents, this is one of the most efficient early energy investments available to either faction.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

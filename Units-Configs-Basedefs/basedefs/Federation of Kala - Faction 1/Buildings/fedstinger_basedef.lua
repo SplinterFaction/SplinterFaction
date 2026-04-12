@@ -62,6 +62,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Stinger is the Federation of Kala's Tier 1 light anti-air turret, spraying fifteen-round bursts of machine gun fire into the airspace above at high rate of fire. Individual rounds deal minimal damage but the sheer volume of the burst makes passing through it costly for anything airborne. Cheap and fast to build, it forms the base layer of Federation air defense — stack several to cover wider areas or key approach vectors.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Short Range Anti-Air",

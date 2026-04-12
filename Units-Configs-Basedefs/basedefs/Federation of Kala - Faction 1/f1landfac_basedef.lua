@@ -66,6 +66,7 @@ unitDef                      = {
 		},
 	},
 	customParams                   = {
+		unitguide = [[The Land Factory is the Federation of Kala's primary ground production facility, responsible for building the full range of land units available at its tech tier. It requires a Tech Facility to unlock higher-tier units and Supply Depots to support a larger army. A second factory running in parallel dramatically increases unit output when metal income is sufficient to sustain it. Keep it away from the front — a destroyed factory sets production back significantly.]],
 		unittype				  = "building",
 		unitrole 				  = "Factory",
 		buildmenucategory		  = "Production",

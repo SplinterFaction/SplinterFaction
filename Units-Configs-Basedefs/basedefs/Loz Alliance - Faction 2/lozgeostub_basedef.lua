@@ -68,6 +68,7 @@ unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Geothermal Stub is a placeholder structure placed on geothermal vent sites to reserve and claim the location. It has no function on its own, but it marks the vent as yours and prevents the enemy from building there. Once placed, engineers can upgrade it into a Geothermal Power Plant, a Geothermal E->M Converter, or other vent-specific structures depending on what the economy requires.]],
 		unittype				  = "building",
 		unitrole 				  = "Construction Stub",
 		buildmenucategory		  = "Utility",

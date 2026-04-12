@@ -86,6 +86,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Protector is the Loz Alliance's dedicated shield tank, projecting a wide protective bubble around itself and any nearby friendly units. It carries no offensive weapons and cannot fight — its value is entirely in the cover it provides. A Protector embedded in an advancing formation absorbs incoming fire that would otherwise shred your units, buying them the time to close with the enemy. Keep it behind the frontline and keep it alive.]],
 		unittype				 = "mobile",
 		unitrole				 = "Support",
 		buildmenucategory        = "Utility",
@@ -156,6 +157,7 @@ weaponDefs                 = {
 		turret                  = true,
 		weaponVelocity          = 3000,
 		customparams            = {
+			weaponguide = [[A smart exterior shield bubble that intercepts incoming weapons fire and absorbs damage on behalf of nearby friendly units. The shield regenerates over time when not under fire.]],
 		},
 		damage                  = {
 			default = 0,

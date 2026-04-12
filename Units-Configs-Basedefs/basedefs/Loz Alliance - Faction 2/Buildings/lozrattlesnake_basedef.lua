@@ -60,6 +60,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Rattlesnake is the Loz Alliance's Tier 2 anti-air turret, firing high-explosive flak rounds that detonate in the airspace above and scatter lethal fragments across a wide area. Its large blast radius and high damage per shot make it exceptionally effective against both individual aircraft and formations attempting to pass through its coverage zone. Aircraft that ignore the Rattlesnake rarely get a second chance to do so.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Medium Range Anti-Air",
@@ -118,6 +119,7 @@ weaponDefs                  = {
 		turret                   = true,
 		weaponVelocity           = 5000,
 		customparams             = {
+			weaponguide = [[A high-explosive flak cannon that fires self-detonating rounds into the airspace, creating a large lethal fragment cloud on detonation. The enormous area of effect and high damage per shot make it one of the most dangerous anti-air emplacements in the game.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

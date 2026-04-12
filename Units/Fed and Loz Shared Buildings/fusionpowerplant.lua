@@ -69,6 +69,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Fusion Energy Generator is the Tier 2 power plant, producing 200 energy from a medium-sized installation. It represents a meaningful step up from the Fission Generator and provides a stable energy foundation for mid-game economies without requiring the investment of higher-tier structures. Build several to sustain the energy demands that Tier 2 units and upgrades introduce.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

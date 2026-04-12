@@ -133,6 +133,7 @@ unitDef                    = {
 
 
 	customParams                 = {
+		unitguide = [[The Bumblebee is the Loz Alliance's Tier 1 assault bomber, delivering napalm-laced explosive payloads that set the impact zone ablaze long after the initial strike. A rear-facing high-velocity cannon provides limited self-defense against pursuing interceptors, though the Bumblebee should never be flying unescorted. Its slow bomb reload demands careful target selection — commit it to something worth the wait.]],
 		unittype				 = "air",
 		unitrole				 = "Assault Bomber",
 		buildmenucategory        = "Support",
@@ -182,6 +183,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 2000,
 		customparams             = {
+			weaponguide = [[A rapid-fire high-velocity cannon mounted to defend against pursuing aircraft. Its damage per shot is negligible, but the sheer rate of fire makes it a deterrent against anything chasing the bomber through a turn.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -318,6 +320,7 @@ weaponDefs                 = {
 		startVelocity            = 175,
 
 		customparams             = {
+			weaponguide = [[A napalm-laden air-to-ground missile that detonates on impact and leaves a burning zone that continues dealing damage to anything caught in the area. The persistent fire effect turns a single strike into a prolonged hazard.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

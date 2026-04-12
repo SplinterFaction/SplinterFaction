@@ -66,6 +66,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Menlo Mk2 is the Federation of Kala's Tier 1.5 upgraded anti-ground turret, trading the original Menlo's blistering fire rate for noticeably higher damage per shot and a longer reach. It covers a wider engagement zone and hits meaningfully harder against anything that enters it, making it more useful against armored targets while remaining effective against raider swarms. A natural upgrade path from the basic Menlo for players who need their defenses to handle heavier threats.]],
 		unittype				  = "building",
 		unitrole				  = "Anti-Swarm Turret",
 		buildmenucategory		  = "Combat",
@@ -118,6 +119,7 @@ weaponDefs = {
 		weaponVelocity           = 1000,
 		sprayangle				 = 100,
 		customparams             = {
+			weaponguide = [[An upgraded particle beam cannon with a longer range and higher damage per shot than the standard Menlo. The fast refire rate remains — it just hits harder and reaches further, making it a credible threat against light and medium armored targets alike.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

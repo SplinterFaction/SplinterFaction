@@ -76,6 +76,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Flea is the Loz Alliance's dedicated scout, built exclusively for speed and vision range. It carries no weapons and cannot fight — its job is to stay alive and relay information. The fastest ground unit the Alliance fields at Tier 1, it is exceptionally difficult to catch when handled correctly. Use it to probe enemy positions, spot for artillery, and maintain map awareness without committing combat units.]],
 		unittype				 = "mobile",
 		unitrole				 = "Scout",
 		buildmenucategory        = "Scout",

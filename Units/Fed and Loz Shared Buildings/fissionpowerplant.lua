@@ -68,6 +68,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Fission Energy Generator is the game's first available power plant, producing 25 energy from a compact footprint at essentially no tech requirement. Its output is modest but its cost is low and it can be built early, making it the foundation of any energy economy before more advanced generators become available. Stack several to bridge the gap to Tier 2 power.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

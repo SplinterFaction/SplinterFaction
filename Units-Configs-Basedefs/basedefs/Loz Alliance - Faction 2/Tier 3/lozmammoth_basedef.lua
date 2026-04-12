@@ -94,6 +94,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Mammoth is the Loz Alliance's Tier 3 main battle tank, bringing three simultaneous weapon systems to bear: a heavy beam railgun for long-range precision damage, a rapid-fire electromagnetic pulse laser for sustained suppression, and a heat-accumulating wave laser that thermally degrades any target that holds in range. The combination means the Mammoth applies escalating pressure across multiple damage types simultaneously — no single defense handles all three. It is slow and massive, but it fights like three units at once.]],
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 3",
 		buildmenucategory        = "Skirmisher",
@@ -190,6 +191,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A heavy beam railgun delivering high sustained damage to a single target at long range. The sustained beam punishes anything unable to disengage before absorbing the full duration.]],
 			--single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
@@ -231,6 +233,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 800,
 		customparams             = {
+			weaponguide = [[A rapid-fire electromagnetic pulse laser that maintains constant suppression fire at range. Low individual damage accumulates quickly under a sustained cadence that leaves targets little breathing room.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -325,6 +328,7 @@ weaponDefs                 = {
 		waterweapon				 = false,
 		noexplode                 = true,
 		customparams              = {
+			weaponguide = [[A heat-accumulating wave laser that stacks thermal stress with every burst. Targets that cannot disengage eventually malfunction entirely from accumulated heat, regardless of remaining health.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

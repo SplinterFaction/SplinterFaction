@@ -63,6 +63,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[A shielded variant of the E->M Converter that projects a protective bubble around itself, intercepting incoming weapons fire. The shield provides meaningful protection against direct attacks, making this variant more survivable in contested resource locations than the standard unarmed version.]],
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",

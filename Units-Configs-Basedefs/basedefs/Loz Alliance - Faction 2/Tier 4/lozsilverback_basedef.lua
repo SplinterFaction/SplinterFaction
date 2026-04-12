@@ -94,6 +94,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Silverback is the Loz Alliance's Tier 4 apex ground unit — an Endbringer-class mobile target evaporator that fields a sustained heavy beam railgun, a rapid-fire secondary railgun, and a forward microwave beam that scorches anything in its frontal arc. The heavy railgun alone deals damage that few units in the game can absorb; combined with the secondary railgun's constant suppression and the microwave beam's close-range annihilation capability, the Silverback represents a convergence of firepower that most armies are simply not built to answer. Move it slowly, position it carefully, and let it work.]],
 		isupgraded			  	 = isUpgraded,
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 3",
@@ -189,6 +190,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A sustained heavy beam railgun that fires a prolonged high-energy beam capable of destroying virtually any unit it is held on target. The raw damage output is among the highest of any weapon in the game — what it hits tends to cease being a problem.]],
 			--single_hit		 	 = true,
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
@@ -231,6 +233,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 2000,
 		customparams             = {
+			weaponguide = [[A secondary rapid-fire railgun that delivers consistent, sustained damage between heavy railgun cycles. The near-constant suppression fire ensures the target has no safe moment to reposition or recover.]],
 			--single_hit		 	 = true,
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
@@ -279,6 +282,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A forward-arc microwave beam that carves through anything in close range with sustained thermal energy. In the Silverback's frontal cone, there is nowhere to stand that isn't dangerous.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

@@ -67,6 +67,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Cold Fusion Energy Generator is the Tier 3 power plant, producing 1000 energy from a large footprint installation. It sits between the Fusion Generator and the Black Hole Facility in both cost and output, filling the Tier 3 energy gap for commanders who need substantial power before reaching the game's final tier. Its explosion is spectacular — build it somewhere defensible.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

@@ -81,6 +81,7 @@ local unitDef                     = {
 	},
 
 	customParams                  = {
+		unitguide = [[The Large Shield Generator projects a 750-radius protective bubble that intercepts incoming weapons fire on behalf of everything inside. With 10,000 shield power and 300 regeneration per second it can absorb a significant volume of fire before failing, and the 25-second recharge delay means a collapsed shield requires careful positioning until it recovers. It is the Loz Alliance's primary Tier 3 area defense against projectile weapons.]],
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole 				  = "Support Building",

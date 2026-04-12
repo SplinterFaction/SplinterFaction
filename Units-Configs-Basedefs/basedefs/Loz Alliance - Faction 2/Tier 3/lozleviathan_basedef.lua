@@ -118,6 +118,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Leviathan is the Loz Alliance's Tier 3 battleship, the most powerful naval unit the faction fields below Tier 4. It carries twin forward lightning cannons for direct engagement and four broadside beam lasers — two per side — covering both flanks at extreme range. The combination of forward arc and full broadside coverage leaves very few approach vectors that don't walk into sustained fire. It is slow and expensive, but what it commits to engaging tends not to survive the experience.]],
 		unittype				 = "ship",
 		unitrole				 = "Battleship",
 		buildmenucategory        = "Skirmisher",
@@ -173,6 +174,7 @@ weaponDefs                 = {
 		weaponVelocity          = 750,
 		waterweapon             = false,
 		customparams            = {
+			weaponguide = [[Broadside beam lasers mounted two per side, covering both flanks with sustained beam fire at extreme range. Anything attempting to approach the Leviathan from the sides runs directly into overlapping coverage.]],
 			--single_hit		 	 = true,
 			expl_light_color   = blue, -- As a string, RGB
 			expl_light_radius  = mediumExplosion, -- In Elmos
@@ -219,6 +221,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[Twin forward-firing electrical strike cannons that fire sustained bursts of chained lightning at surface targets. Together they provide formidable direct-fire capability at the Leviathan's considerable engagement range.]],
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

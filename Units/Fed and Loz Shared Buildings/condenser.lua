@@ -65,6 +65,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Geothermal Condenser is a combined resource storage and supply depot that provides 2000 metal and energy storage alongside 100 supply capacity in a single building. It must be placed on geothermal vent sites. The combination of storage and supply in one structure makes it an efficient use of a vent location when you need both.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

@@ -110,6 +110,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Federation Commander is the player's starting unit and the foundation of every match. It builds all structures, repairs friendly units, reclaims wreckage, and captures enemy buildings, while its EMG Disruption Cannon provides a meaningful self-defense option that stacks impairment on anything it hits. The Commander upgrades through four tiers alongside overall tech progression, gaining range and dramatically increased weapon damage at each step — by Tier 4 a single hit from its cannon is a serious statement. Losing the Commander ends the game; protecting it while using it aggressively is the central tension of every match.]],
 		unittype				 = "mobile",
 		unitrole 				 = "Commander",
 		area_mex_def			 = areamexdef,

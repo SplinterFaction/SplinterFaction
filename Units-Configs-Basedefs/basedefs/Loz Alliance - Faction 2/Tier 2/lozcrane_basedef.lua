@@ -200,6 +200,7 @@ unitDef                    = {
 
 
 	customParams                 = {
+		unitguide = [[The Crane is the Loz Alliance's Tier 2 combat transport, capable of lifting heavier cargo than the Dragonfly and armed with a downward-firing railgun to suppress ground targets during loading and unloading. It is not a gunship — it exists to deliver an army somewhere unexpected — but the railgun makes approach and extraction far less one-sided than a defenseless transport would permit.]],
 		unittype				 = "air",
 		unitrole				 = "Combat Transport",
 		buildmenucategory        = "Skirmisher",
@@ -245,6 +246,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 2000,
 		customparams             = {
+			weaponguide = [[A downward-firing railgun that suppresses ground targets beneath the transport during deployment operations. Its purpose is survivability during the loading window, not sustained combat.]],
 			--single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos

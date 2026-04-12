@@ -130,6 +130,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Executioner is the Loz Alliance's Tier 2 destroyer, mounting four broadside beam cannons — two per side — supplemented by a torpedo launcher for anti-ship engagements. The broadside beams cover both flanks simultaneously and deal sustained damage to anything alongside the hull, while the torpedo provides a harder-hitting forward threat against naval targets. A formidable fleet anchor that punishes enemies on any approach vector.]],
 		unittype				 = "ship",
 		unitrole				 = "Destroyer",
 		buildmenucategory        = "Skirmisher",
@@ -224,6 +225,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A broadside beam cannon that sustains continuous fire against targets on either flank. Four of these weapons — two per side — deliver an overlapping field of beam damage that makes approaching the Executioner from the side extremely costly.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -262,6 +264,7 @@ weaponDefs                 = {
 		weaponAcceleration       = 25,
 		weaponVelocity           = 250,
 		customparams             = {
+			weaponguide = [[A guided torpedo that tracks surface targets at range and delivers heavy damage on impact. Complements the broadside beams by providing a direct forward threat against naval targets.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

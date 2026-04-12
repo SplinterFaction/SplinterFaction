@@ -132,6 +132,7 @@ unitDef                    = {
 
 
 	customParams                 = {
+		unitguide = [[The Hornet is the Loz Alliance's Tier 2 strike fighter, carrying both dedicated air-to-air missiles and a burst air-to-ground missile rack. Its air-to-air missile handles interceptor duties with reliable tracking, while the ground attack rack delivers three-missile bursts against surface targets. The combination makes it genuinely flexible — it can clear airspace and then immediately turn its attention to the ground without switching modes.]],
 		unittype				 = "air",
 		unitrole				 = "Strike Fighter",
 		buildmenucategory        = "Skirmisher",
@@ -178,6 +179,7 @@ weaponDefs                 = {
 		weaponVelocity           = 3000,
 		sprayangle               = 20000,
 		customparams             = {
+			weaponguide = [[A fast-tracking air-to-air missile with high maneuverability and solid damage per hit. Reliable against most aircraft that attempt to engage the Hornet or escape from it.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -219,6 +221,7 @@ weaponDefs                 = {
 		weaponVelocity           = 3000,
 		sprayangle               = 20000,
 		customparams             = {
+			weaponguide = [[A burst-fire air-to-ground missile that launches three rockets per reload cycle, each tracking independently. The combined payload of a full burst is substantial enough to threaten most ground units.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

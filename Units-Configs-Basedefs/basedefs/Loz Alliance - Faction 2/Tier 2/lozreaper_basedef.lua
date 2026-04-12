@@ -89,6 +89,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Reaper is the Loz Alliance's Tier 2 main battle tank, pairing a sustained beam railgun with a rapid-fire pulse cannon that adds consistent suppression fire alongside the primary weapon. The railgun delivers heavy per-shot damage while the pulse cannon fills the gaps between reloads with a stream of lighter hits. Together they make the Reaper a persistent and punishing threat across the full engagement range.]],
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 2",
 		buildmenucategory        = "Skirmisher",
@@ -186,6 +187,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A beam railgun that delivers high sustained damage to a single target at range. The continuous beam punishes anything that fails to disengage before it takes the full duration of fire.]],
 			--single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
@@ -260,6 +262,7 @@ weaponDefs                 = {
 		turret                 = true,
 		weaponVelocity         = 800,
 		customparams             = {
+			weaponguide = [[A rapid-fire pulse cannon that maintains suppression fire between railgun reloads. Low individual damage but consistent enough to chip down targets and deny easy repositioning.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

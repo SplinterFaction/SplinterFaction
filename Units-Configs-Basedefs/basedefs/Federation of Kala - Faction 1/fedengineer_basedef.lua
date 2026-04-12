@@ -89,6 +89,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Federation Engineer is the dedicated ground construction unit, capable of building structures, assisting factory production, repairing friendly units, reclaiming wreckage, and capturing enemy buildings. Engineers are the backbone of any expanding economy — build them early, build them often, and keep them busy. They upgrade through four tiers, gaining build speed with each level. An engineer doing nothing is metal and supply wasted.]],
 		unittype         = "mobile",
 		unitrole		 = "Builder",
 		area_mex_def     = areamexdef,

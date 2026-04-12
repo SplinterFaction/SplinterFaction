@@ -75,6 +75,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[An armed upgrade variant of the Tier 2 E->M Converter, mounting a long-range neutron beam alongside two flanking gamma ray beams. The neutron beam reaches threatening ground targets well before they close to the installation, while the gamma beams handle closer threats. A meaningful step up in self-defense capability over the Tier 1 armed variant.]],
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",
@@ -134,6 +135,7 @@ weaponDefs = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A close-range gamma ray beam that handles threats that reach the installation's inner perimeter. Covers the short-range gap that the neutron beam leaves.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -180,6 +182,7 @@ weaponDefs = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A long-range neutron beam that engages ground and naval threats well before they reach the installation. Heavier and slower than the gamma beam, it punishes anything attempting a direct approach from a distance.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

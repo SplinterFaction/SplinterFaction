@@ -84,6 +84,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Scorpion is the Loz Alliance's Tier 1 artillery tank, firing long-range lightning bolts that can engage ground, air, and naval targets indiscriminately. Its electrical strike cannon arcs multiple bursts per shot over a considerable distance, making it useful for area suppression as well as direct fire. Fragile and slow, it must be kept behind a frontline screen — but positioned correctly it reaches targets that most units cannot.]],
 		unittype				 = "mobile",
 		unitrole				 = "Artillery",
 		buildmenucategory        = "Support",
@@ -179,6 +180,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[An electrical strike cannon that fires bursts of chained lightning over long range, hitting ground, air, and naval targets alike. The multi-arc discharge makes it effective against both individual targets and clustered formations.]],
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

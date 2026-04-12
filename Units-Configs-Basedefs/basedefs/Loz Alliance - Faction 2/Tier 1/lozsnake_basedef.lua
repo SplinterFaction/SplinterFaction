@@ -88,6 +88,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Snake is the Loz Alliance's Tier 1 torpedo corvette — fast, cheap, and armed with a rapid-cycling torpedo launcher that deals substantial damage per hit. Its unguided torpedo relies on raw speed to intercept moving targets, and its quick reload keeps pressure sustained. Best used in packs to overwhelm heavier vessels before they can respond.]],
 		unittype				 = "ship",
 		unitrole				 = "Corvette",
 		buildmenucategory        = "Skirmisher",
@@ -133,6 +134,7 @@ weaponDefs                 = {
 		weaponAcceleration       = 25,
 		weaponVelocity           = 250,
 		customparams             = {
+			weaponguide = [[A fast unguided torpedo that relies on its speed alone to intercept moving targets. The damage per hit is substantial and the reload is quick — sustained fire keeps the pressure on before the target can disengage.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

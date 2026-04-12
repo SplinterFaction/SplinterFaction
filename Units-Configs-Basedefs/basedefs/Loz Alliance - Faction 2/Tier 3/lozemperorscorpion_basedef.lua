@@ -84,6 +84,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Emperor Scorpion is a massive Tier 3 artillery vehicle that fires enormous bolts of chain lightning across a range that most units cannot answer. Its electrical strike cannon fires twenty-arc bursts that jump between targets in the impact zone, and a single volley delivers damage that would destroy most units outright. Slow, fragile for its cost, and incapable of defending itself — it must be heavily screened — but positioned behind a solid line it can devastate entire formations before they reach engagement range.]],
 		unittype				 = "mobile",
 		unitrole				 = "Support",
 		buildmenucategory        = "Support",
@@ -177,6 +178,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[A massive electrical strike cannon that fires twenty chained lightning arcs per burst over extreme range. The arcs jump between targets in the impact zone, making each volley a serious threat to any grouped formation unlucky enough to be in the area.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

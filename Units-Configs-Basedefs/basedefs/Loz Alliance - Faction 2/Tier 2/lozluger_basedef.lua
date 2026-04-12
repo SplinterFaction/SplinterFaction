@@ -84,6 +84,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Luger is a self-propelled long-range artillery piece that lobs massive plasma shells at extreme range with a slow but devastating reload cycle. It defaults to hold-fire and must be directed manually — its enormous per-shot damage and wide blast radius make it capable of erasing grouped formations or key structures in a single volley. It is not a frontline unit and will not survive direct engagement; it needs screening, good positioning, and patience.]],
 		unittype				  = "mobile",
 		unitrole				 = "Artillery - Tech 2",
 		buildmenucategory        = "Support",
@@ -142,6 +143,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 250,
 		customparams             = {
+			weaponguide = [[A massive high-explosive plasma shell fired in a high arc at extreme range. The blast radius and raw damage output are enough to destroy or cripple most units caught anywhere near the impact point. Slow reload, catastrophic result.]],
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second

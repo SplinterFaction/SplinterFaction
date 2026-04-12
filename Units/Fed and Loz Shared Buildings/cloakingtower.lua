@@ -77,6 +77,7 @@ local unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Cloaking Tower projects a 300-radius area cloaking field that conceals all friendly units within it from enemy detection. It activates instantly on completion, cloaks itself, and runs at no energy cost. It is fragile and provides no defensive capability of its own — its value is entirely in the invisibility it grants to whatever you position underneath it. A well-placed tower can make an entire defensive line or advance staging area disappear.]],
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole				  = "Support Building",

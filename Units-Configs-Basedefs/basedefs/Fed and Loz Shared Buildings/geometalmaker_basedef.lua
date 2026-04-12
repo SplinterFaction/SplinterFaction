@@ -60,6 +60,7 @@ unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Geothermal E->M Converter is the highest-output metal production structure in the game, placed on geothermal vents and operating at the Tier 4 multiplier — over 21 times the base extraction rate. Like the standard converters its output scales with the map's metalSpot_value. A single well-sited Geothermal Converter on a high-value vent generates more metal than most players can spend in real time. Protect it as the strategic asset it is.]],
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",

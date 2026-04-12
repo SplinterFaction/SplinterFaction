@@ -68,6 +68,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Large Resource Storage Facility provides 20,000 units of combined metal and energy storage alongside 500 supply capacity — the largest storage structure in the game. At Tier 3 it enables the resource reserves needed to sustain prolonged Tier 3 and Tier 4 operations without income fluctuation disrupting critical build queues. The supply grant also contributes meaningfully to fielding larger armies.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

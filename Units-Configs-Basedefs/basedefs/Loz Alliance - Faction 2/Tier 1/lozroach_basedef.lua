@@ -83,6 +83,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Roach is the Loz Alliance's Tier 1 main battle tank, wielding a beam railgun that delivers consistent damage at respectable range. It is slower than the Diamondback raiders but significantly more durable, and its sustained beam fire is effective against armored targets that skirmishers cannot reliably threaten. The workhorse of any early Alliance ground push.]],
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank",
 		buildmenucategory        = "Skirmisher",
@@ -212,6 +213,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A beam laser railgun that delivers steady, sustained damage to a single target at range. The continuous beam punishes anything that holds still and rewards a commander who keeps it in the fight.]],
 			--single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos

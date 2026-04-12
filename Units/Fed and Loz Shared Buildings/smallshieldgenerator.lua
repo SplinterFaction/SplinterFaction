@@ -81,6 +81,7 @@ local unitDef                     = {
 	},
 
 	customParams                  = {
+		unitguide = [[The Small Shield Generator projects a 250-radius protective bubble that intercepts incoming fire for anything underneath it. With 1200 shield power and modest regeneration it is not designed to weather sustained fire, but it provides meaningful protection against lighter attacks and buys time for units to reposition when under pressure. The Loz Alliance's entry-level area shield at Tier 2.]],
 		RequireTech				 = techrequired,
 		unittype				  = "building",
 		unitrole 				  = "Support Building",

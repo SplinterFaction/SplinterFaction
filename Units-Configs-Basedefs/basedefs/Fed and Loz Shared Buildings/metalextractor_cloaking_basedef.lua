@@ -74,6 +74,7 @@ unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[A cloaked variant of the E->M Converter that conceals itself and nearby units within a cloaking field, making it invisible to enemy detection. It generates the same metal as its standard counterpart while remaining hidden from observation. The cloaking field protects not just the converter but the surrounding area, making it valuable in forward or contested positions.]],
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",

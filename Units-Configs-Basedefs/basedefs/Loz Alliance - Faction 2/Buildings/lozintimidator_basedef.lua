@@ -62,6 +62,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Intimidator is the Loz Alliance's Tier 3 long-range artillery turret, capable of firing massive plasma shells at targets up to 8000 elmos away — a range so extreme that most enemies cannot answer it without dedicated counter-artillery. It defaults to hold-fire and must be manually directed. A single shot deals enough damage to destroy most units outright, and the blast radius punishes clustering. Place it deep in your territory and let it reach out to places your opponent thought were safe.]],
 		unittype				  = "building",
 		unitrole				  = "Artillery Turret",
 		unitrole_sound            = "turret",
@@ -120,6 +121,7 @@ weaponDefs = {
 		weaponTimer            = 1,
 		weaponVelocity         = 1200,
 		customparams             = {
+			weaponguide = [[A massive high-explosive plasma shell fired at extreme range with a large blast radius. The damage per shot is enough to destroy most units outright, and the range of 8000 elmos means few things on the map are beyond its reach if it is positioned well.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second

@@ -83,6 +83,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Diamondback (Heat variant) is a fast wheeled raider equipped with a heat-building beam weapon. It applies escalating thermal stress to targets with each hit, rewarding sustained engagement — a target that has absorbed enough heat becomes critically impaired regardless of its remaining health. Best used in packs to stack heat quickly before the target can disengage.]],
 		unittype				 = "mobile",
 		unitrole				 = "Scout",
 		sightdistanceoverride	 = true,
@@ -139,6 +140,7 @@ weaponDefs                 = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A beam weapon that builds heat in the target with each hit, applying escalating thermal stress. Units that absorb enough heat begin to malfunction and eventually shut down entirely, regardless of their remaining health.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

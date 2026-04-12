@@ -76,6 +76,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Heal Station projects a 500-radius repair field that continuously restores health to all friendly units within range, with a brief pause after any unit takes damage before healing resumes. It does not repair during active combat — it is a recovery tool for units rotating off the front line or holding a position between engagements. Place it far enough behind the line that units can actually benefit from its field without being destroyed before healing completes.]],
 		RequireTech				 = tech,
 		unittype				  = "building",
 		buildmenucategory		  = "Utility",

@@ -103,6 +103,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Warlord is the Loz Alliance's Tier 2 heavy cruiser, packing three long-range plasma cannons for surface bombardment and twin lightning cannons that provide anti-air and supplemental ground coverage. The plasma cannons reach out to extreme range and hit hard, while the lightning cannons discourage aircraft from thinking the Warlord is an easy target. Slow and expensive, it earns its place by being able to threaten targets that most ships cannot reach.]],
 		unittype				 = "ship",
 		unitrole				 = "Heavy Cruiser",
 		buildmenucategory        = "Skirmisher",
@@ -148,6 +149,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 500,
 		customparams             = {
+			weaponguide = [[A long-range plasma cannon that lobs high-explosive rounds at surface targets across an enormous engagement envelope. Three of these weapons firing together make the Warlord a serious long-range bombardment platform.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -242,6 +244,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[An electrical strike cannon with dual coverage — capable of engaging both aircraft and surface targets. The sustained arc damage makes it difficult for aircraft to approach and provides supplemental ground fire support.]],
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

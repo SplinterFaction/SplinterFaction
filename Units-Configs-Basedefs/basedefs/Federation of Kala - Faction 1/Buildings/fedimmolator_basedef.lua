@@ -61,6 +61,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Immolator is the Federation of Kala's Tier 2 medium anti-ground turret, firing a high-arc plasma cannon that delivers massive single-shot damage to ground and naval targets at long range. Its high-trajectory shell can clear terrain and reach targets behind cover that flat-firing turrets cannot touch. The reload is deliberate but the payoff per shot is severe — units that wander into its range without support rarely get a second chance.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Single-Target Turret",

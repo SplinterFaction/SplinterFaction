@@ -61,6 +61,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Inferno is the Loz Alliance's Tier 2 heavy anti-armor turret, deploying a sustained microwave beam that burns through ground and naval targets at long range with a fast reload cycle. Unlike most turrets it stays on target continuously rather than firing in bursts, making it exceptionally punishing against anything that holds still within its reach. Position it where enemy advances are expected to stall — it excels at finishing what the front line slows down.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Single-Target Turret",
@@ -128,6 +129,7 @@ weaponDefs                  = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A sustained microwave beam cannon that locks onto its target and delivers continuous thermal damage at long range with a very short reload. The persistent beam punishes anything unable to immediately disengage from its arc.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

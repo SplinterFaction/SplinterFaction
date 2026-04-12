@@ -83,6 +83,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Diamondback (Disruption variant) is a fast wheeled raider that trades the standard heat beam for a disruption laser, applying a stacking impairment effect with every hit. Swift enough to outrun most frontline units, it excels at darting into formations, locking down high-value targets, and retreating before a response can be organized. It hits lightly but the disruption payoff rewards persistence.]],
 		unittype				 = "mobile",
 		unitrole				 = "Scout",
 		sightdistanceoverride	 = true,
@@ -183,6 +184,7 @@ weaponDefs                 = {
 		weaponVelocity            = 2000,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A short-range disruption laser that applies a stacking impairment effect with each hit, progressively degrading the target's ability to function. Sustained fire eventually locks the target unit down completely.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

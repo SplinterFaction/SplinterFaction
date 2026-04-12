@@ -82,6 +82,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Flashpoint is the Loz Alliance's Tier 1 direct-fire tank, built around a heat-accumulating wave laser that gets more dangerous the longer it stays on target. Each burst adds thermal stress to whatever it hits, and a sufficiently heated target will begin malfunctioning before it can disengage. Its short sight range demands aggressive positioning, but units that fail to kite it pay for the mistake.]],
 		unittype				 = "mobile",
 		unitrole				 = "Heatray Tank",
 		buildmenucategory        = "Skirmish",
@@ -139,6 +140,7 @@ weaponDefs                 = {
 		waterweapon				 = false,
 		noexplode                 = true,
 		customparams              = {
+			weaponguide = [[A high-intensity wave laser fired in rapid bursts that accumulates heat in the target with every hit. Units that absorb enough thermal energy begin to malfunction — the longer the Flashpoint stays in range, the worse the outcome for anything in front of it.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

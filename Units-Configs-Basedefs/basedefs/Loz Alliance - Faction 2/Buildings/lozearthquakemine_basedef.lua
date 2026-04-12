@@ -74,6 +74,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Earthquake Mine is a cheap, cloaked Tier 1 proximity mine that deploys invisibly and waits for ground or naval units to wander into its trigger radius. When tripped it fires a tight shotgun burst that shreds lightly armored units and deals meaningful damage even to heavier targets. Inexpensive enough to scatter liberally across chokepoints and approach routes — an enemy that doesn't sweep for mines will pay for it.]],
 		unittype				  = "building",
 		unitrole				  = "Mine",
 		unitrole_sound            = "turret",
@@ -132,6 +133,7 @@ weaponDefs = {
 		turret                 = true,
 		weaponVelocity         = 400,
 		customparams             = {
+			weaponguide = [[A close-range shotgun burst fired in ten rapid-succession rounds when a target enters the trigger radius. The combined damage of a full burst is substantial against light units and chips meaningfully against heavier targets.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

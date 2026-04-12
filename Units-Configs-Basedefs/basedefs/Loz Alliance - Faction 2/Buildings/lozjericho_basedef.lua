@@ -66,6 +66,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Jericho is the Loz Alliance's Tier 1 light anti-ground turret, firing a rapid gamma ray beam that deals consistent damage to any ground or naval unit that ventures into its short-to-medium range. Its fast reload and continuous fire make it effective against raider swarms that would overwhelm a slower turret, though it lacks the punch to threaten heavier units reliably. Cheap enough to layer multiple in a defensive cluster.]],
 		buildtimemultiplier       = buildtimemultiplier,
 		unittype				  = "building",
 		unitrole				  = "Anti-Swarm Turret",
@@ -133,6 +134,7 @@ weaponDefs = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A rapid-cycling gamma ray beam that fires at very short reload intervals, delivering sustained damage to ground and naval targets at close-to-medium range. Its speed of fire makes it well-suited to suppressing swarms of lighter units.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

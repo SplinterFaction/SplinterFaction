@@ -62,6 +62,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Bertha is the Federation of Kala's Tier 3 long-range artillery turret, capable of lobbing fifty plasma projectiles in a single volley across a range of 8000 elmos. The scatter pattern from that many simultaneous shots blankets a wide area with overlapping explosions, making it devastating against clustered formations or anything too slow to clear the impact zone. It defaults to hold-fire and must be manually directed — a wasted volley is expensive, but a well-placed one can erase an entire force.]],
 		unittype				  = "building",
 		unitrole				  = "Artillery Turret",
 		buildmenucategory		  = "Combat",
@@ -123,6 +124,7 @@ weaponDefs = {
 		weaponTimer            = 1,
 		weaponVelocity         = 1200,
 		customparams             = {
+			weaponguide = [[A volley of fifty plasma projectiles fired simultaneously across an extreme range, spreading on impact to blanket a wide area with overlapping explosions. Individual shot damage is modest but fifty of them at once make the combined effect overwhelming against anything caught in the pattern.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

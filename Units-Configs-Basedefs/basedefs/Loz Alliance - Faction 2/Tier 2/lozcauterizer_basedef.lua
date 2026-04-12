@@ -83,6 +83,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Cauterizer is the Loz Alliance's Tier 2 heat ray tank, carrying a significantly upgraded wave laser that burns through targets with greater intensity than its Flashpoint predecessor. The heat accumulation mechanic remains — each burst stacks thermal stress until the target malfunctions — but the Cauterizer hits harder and reaches further, making it far more threatening against armored Tier 2 opposition.]],
 		unittype				 = "mobile",
 		unitrole				 = "Heatray Tank - Tech 2",
 		buildmenucategory        = "Skirmisher",
@@ -139,6 +140,7 @@ weaponDefs                 = {
 		waterweapon				 = false,
 		noexplode                 = true,
 		customparams              = {
+			weaponguide = [[An upgraded high-intensity wave laser that fires in rapid bursts, stacking heat damage with every hit. Targets that absorb enough thermal energy malfunction and shut down entirely, a fate increasingly unavoidable the longer the Cauterizer stays on them.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

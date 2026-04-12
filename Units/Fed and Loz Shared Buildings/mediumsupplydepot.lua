@@ -64,6 +64,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Medium Supply Depot provides 100 supply capacity at Tier 2, enabling a meaningfully larger standing army than the basic depot allows. It has no storage or other function — it exists solely to raise your unit ceiling. Build them when your army composition is consistently hitting supply limits before you run out of metal to spend.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

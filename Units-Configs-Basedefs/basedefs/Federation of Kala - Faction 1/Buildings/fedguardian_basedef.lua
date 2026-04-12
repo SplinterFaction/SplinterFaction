@@ -61,6 +61,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Guardian is the Federation of Kala's Tier 3 heavy anti-armor turret, firing a massive plasma shell that detonates with a large blast radius exclusively against MASSIVE-category targets. Its enormous per-shot damage and area of effect make it the definitive answer to enemy heavy units and capital ships that smaller turrets cannot reliably threaten. Keep it screened from raiders — it has no interest in small targets and will not protect itself.]],
 		unittype				  = "building",
 		unitrole				  = "Special Turret",
 		buildmenucategory		  = "Combat",

@@ -94,6 +94,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Loz Alliance Engineer is the dedicated ground construction unit, capable of building structures, assisting factory production, repairing friendly units, reclaiming wreckage, and capturing enemy buildings. Engineers are the engine of any expanding economy — build them constantly and keep them busy. They upgrade through four tiers with increasing build speed at each level. A stationary engineer is a wasted investment.]],
 		unittype         = "mobile",
 		unitrole		 = "Builder",
 		area_mex_def     = areamexdef,

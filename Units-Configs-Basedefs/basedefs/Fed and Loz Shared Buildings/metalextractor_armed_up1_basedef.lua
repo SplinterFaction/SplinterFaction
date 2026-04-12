@@ -70,6 +70,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[An armed upgrade variant of the Tier 1 E->M Converter, equipped with dual gamma ray beams that defend the installation against approaching ground and naval threats at close range. It generates the same metal output as its unarmed counterpart while being able to discourage raiders from approaching without fire support. The self-defense capability comes at a higher build cost.]],
 		RequireTech				  = tech,
 		unittype				  = "building",
 		unitrole				  = "Economy",
@@ -129,6 +130,7 @@ weaponDefs = {
 		weaponVelocity            = 750,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A close-range gamma ray beam that fires rapidly at approaching ground and naval targets. Individually modest in damage, but two of them together deal enough to discourage light raiders from approaching the installation without backup.]],
 			expl_light_color	= yellow, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

@@ -64,6 +64,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Medium Resource Storage Facility provides 2000 units each of metal and energy storage in a moderate footprint at Tier 2. Its primary value is extending the resource buffer available during mid-game expansion — preventing income spikes from going to waste and smoothing out the energy fluctuations that come with running multiple production facilities simultaneously.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

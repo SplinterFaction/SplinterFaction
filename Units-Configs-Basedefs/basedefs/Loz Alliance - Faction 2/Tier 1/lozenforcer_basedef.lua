@@ -89,6 +89,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Enforcer is the Loz Alliance's Tier 1 frigate, combining a heavy railgun for surface engagements with a lightning cannon that arcs across multiple targets in anti-air roles. The railgun hits hard at a comfortable range while the lightning cannon provides credible defense against aircraft attempting to operate overhead. A solid all-around naval escort that holds its own against most Tier 1 threats.]],
 		unittype				 = "ship",
 		unitrole				 = "Frigate",
 		buildmenucategory        = "Skirmish",
@@ -135,6 +136,7 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 1500,
 		customparams             = {
+			weaponguide = [[A high-velocity railgun bolt that delivers substantial single-target damage at long range. Consistent, reliable, and hard-hitting — the backbone of the Enforcer's offensive capability.]],
 			--single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
@@ -182,6 +184,7 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 400,
 		customparams             = {
+			weaponguide = [[An electrical strike cannon that arcs bursts of lightning at nearby aircraft. The rapid multi-arc burst makes it difficult for aircraft to pass through without absorbing significant accumulated damage.]],
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

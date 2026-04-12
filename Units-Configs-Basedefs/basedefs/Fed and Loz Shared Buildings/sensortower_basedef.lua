@@ -69,6 +69,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
+		unitguide = [[The Seismic Sensor is an extremely cheap cloaked structure that detects the seismic signatures of enemy ground units moving within 300 elmos, revealing their positions without requiring line of sight. It is invisible to the enemy until it detects something and decloaks momentarily. At 10 metal it is essentially disposable — scatter them across key chokepoints, river crossings, and expected approach routes to maintain awareness of enemy ground movement at minimal cost.]],
 		unittype				  = "building",
 		unitrole				  = "Seismic Sensor",
 		buildmenucategory		  = "Utility",

@@ -68,6 +68,7 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
+		unitguide = [[The Black Hole Power Facility is the apex energy generator available to both factions, harnessing singularity-based power conversion to produce 4000 energy — more than any other structure in the game. Its enormous footprint, extreme cost, and Tier 4 requirement make it a late-game commitment, but a single facility can sustain an energy economy that nothing else can match at comparable size. Protect it accordingly.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",

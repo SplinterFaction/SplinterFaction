@@ -83,6 +83,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
+		unitguide = [[The Diamondback is the Loz Alliance's standard fast raider, built for hit-and-run harassment of lightly defended targets. Its disruption laser deals modest damage but applies a stacking impairment effect, making it dangerous to economy units and constructors that cannot easily escape its reach. Deploy in packs and exploit its superior speed to stay out of return fire.]],
 		unittype				 = "mobile",
 		unitrole				 = "Scout",
 		buildmenucategory        = "Scout",
@@ -184,6 +185,7 @@ weaponDefs                 = {
 		weaponVelocity            = 2000,
 		waterweapon				 = false,
 		customparams              = {
+			weaponguide = [[A disruption laser that deals light damage but stacks an impairment effect on the target with each hit. Prolonged engagement progressively degrades the target's combat capability.]],
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

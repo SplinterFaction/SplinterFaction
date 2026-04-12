@@ -68,6 +68,7 @@ unitDef                      = {
 		},
 	},
 	customParams                   = {
+		unitguide = [[The Sea Plant is the naval production facility for its faction, built on water and capable of producing the full range of naval units. It must be placed in sufficiently deep water to operate. A second Sea Plant allows parallel naval build queues when controlling water is a strategic priority. Position it in a sheltered bay or behind a defensive line if possible — it is difficult to replace quickly once lost.]],
 		unittype				  = "building",
 		unitrole 				  = "Factory",
 		buildmenucategory		  = "Production",
