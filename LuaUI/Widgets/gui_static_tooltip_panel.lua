@@ -1137,7 +1137,6 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 	DrawTextFitted("Weapons", x1 + math_floor(10 * uiScale), yTop - math_floor(16 * uiScale), HEADER_SIZE, w - math_floor(20 * uiScale), HEADER_TEXT, "o")
 
-	glScissor(x1, clipBottom, w, yTop - clipBottom)
 	local cyTop = yTop - math_floor(26 * uiScale)
 
 	local col1w = math_floor(110 * uiScale)
@@ -1191,7 +1190,6 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 		cyTop = by1 - CARD_GAP
 	end
 
-	glScissor(false)
 	return y1 - SECTION_GAP
 end
 
@@ -1214,15 +1212,11 @@ local function DrawGuideSection(guideText, x1, yTop, w, clipBottom)
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 	DrawTextFitted("Unit Guide", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
 
-	glScissor(x1, clipBottom, w, yTop - clipBottom)
 	local cy = yTop - math_floor(34 * uiScale)
 	for i = 1, #lines do
-		if cy >= clipBottom then
-			DrawTextFitted(lines[i], x1 + pad, cy, BODY_SIZE, w - pad * 2, SUBTEXT_COLOR, "o")
-		end
+		DrawTextFitted(lines[i], x1 + pad, cy, BODY_SIZE, w - pad * 2, SUBTEXT_COLOR, "o")
 		cy = cy - lineH
 	end
-	glScissor(false)
 
 	return y1 - SECTION_GAP
 end
@@ -1635,6 +1629,34 @@ local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, a
 			end
 			-- hint section
 			cy = cy + math_floor(26 * uiScale) + SECTION_GAP
+			-- build info
+			if extraSections.buildTime or extraSections.buildPower then
+				cy = cy + math_floor(64 * uiScale) + SECTION_GAP
+			end
+			-- weapon cards
+			if extraSections.weaponCards and #extraSections.weaponCards > 0 then
+				local baseCardH  = math_floor(52 * uiScale)
+				local guideLineH = math_floor(11 * uiScale)
+				local totalCardsH = 0
+				for i = 1, #extraSections.weaponCards do
+					local card = extraSections.weaponCards[i]
+					local extraH = 0
+					if card.guide and card.guide ~= "" then
+						local guideLines = WrapText(card.guide, cWidth - math_floor(32 * uiScale), SMALL_SIZE)
+						extraH = #guideLines * guideLineH + math_floor(6 * uiScale)
+					end
+					totalCardsH = totalCardsH + baseCardH + extraH
+					if i < #extraSections.weaponCards then totalCardsH = totalCardsH + CARD_GAP end
+				end
+				cy = cy + math_floor(22 * uiScale) + totalCardsH + math_floor(10 * uiScale) + SECTION_GAP
+			end
+			-- unit guide
+			if extraSections.unitGuide and extraSections.unitGuide ~= "" then
+				local guideLines = WrapText(extraSections.unitGuide, cWidth - math_floor(20 * uiScale), BODY_SIZE)
+				if #guideLines > 0 then
+					cy = cy + math_floor(26 * uiScale) + #guideLines * math_floor(13 * uiScale) + math_floor(10 * uiScale) + SECTION_GAP
+				end
+			end
 		elseif panelData.type == "selection" then
 			local rows    = panelData.rows or {}
 			local headerH = math_floor(22 * uiScale)
