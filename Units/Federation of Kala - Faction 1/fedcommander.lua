@@ -4,7 +4,7 @@ unitName = [[fedcommander]]
 
 --------------------------------------------------------------------------------
 
-humanname = [[Federation of Kala Command Unit - Tech 0]]
+humanname = [[Federation of Kala Command Unit]]
 buildpicture = [[fedcommander.png]]
 buildcostmetal = 75
 buildCostEnergy = 500

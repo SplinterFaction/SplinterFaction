@@ -23,8 +23,6 @@ local TOTAL_HEIGHT_FRAC     = 0.70
 local ORDER_HEIGHT_FRAC     = 0.28
 local GAP_BETWEEN_PANELS    = 10
 local PANEL_RADIUS          = 10
-local PANEL_BG              = {0.08, 0.08, 0.09, 0.88}
-local PANEL_BORDER          = {1.0, 1.0, 1.0, 0.12}
 local PANEL_OUTER_COLOR     = {0, 0, 0, 0.85}
 local PANEL_INNER_COLOR     = {0.15, 0.15, 0.15, 0.85}
 local TOOLTIP_ACCENT_COLOR    = {0.00, 0.50, 1.00, 1}
@@ -36,7 +34,6 @@ local SECTION_ACCENT_COLOR       = {1.0, 1.0, 1.0, 0.035}
 local CATEGORY_CARD_ACCENT_COLOR = {1.0, 1.0, 1.0, 0.035}
 local SECTION_ACCENT_HEIGHT      = 5
 
-local SECTION_BG            = {0.14, 0.14, 0.15, 0.90}
 local CATEGORY_BG           = {0.20, 0.20, 0.21, 0.55}
 local HEADER_TEXT           = {1.0, 1.0, 1.0, 1.0}
 local SUBTEXT_COLOR         = {0.80, 0.82, 0.86, 1.0}
@@ -79,6 +76,8 @@ local NEGATIVE_TEXT_COLOR   = {1.0, 0.35, 0.35, 1.0}
 local SHIELD_TEXT_COLOR     = {0.62, 0.72, 1.0, 1.0}
 local OVERSHIELD_TEXT_COLOR = {0.82, 0.82, 1.0, 1.0}
 local PARALYZE_TEXT_COLOR   = {0.55, 1.0, 1.0, 1.0}
+local DISRUPT_TEXT_COLOR    = {0.80, 0.55, 1.0, 1.0}
+local HEAT_TEXT_COLOR       = {1.0,  0.55, 0.20, 1.0}
 
 local TOOLTIP_HINT_TEXT     = "Press Spacebar for Additional Info"
 local ADDITIONAL_HINT_TEXT  = "Press Spacebar to toggle off/on"
@@ -114,12 +113,10 @@ local glRect                   = gl.Rect
 local glText                   = gl.Text
 local glBeginEnd               = gl.BeginEnd
 local glVertex                 = gl.Vertex
-local glLineWidth              = gl.LineWidth
 local glScissor                = gl.Scissor
 local glTexture                = gl.Texture
 local glTexCoord               = gl.TexCoord
 local GL_TRIANGLE_FAN          = GL.TRIANGLE_FAN
-local GL_LINE_LOOP             = GL.LINE_LOOP
 local GL_QUADS                 = GL.QUADS
 
 local math_abs                 = math.abs
@@ -151,8 +148,8 @@ local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 -- after DrawSectionBox which it depends on)
 --------------------------------------------------------------------------------
 
-local HERO_IMG_HEIGHT  = 236   -- base pixels; will be scaled by uiScale
-local HERO_IMG_PAD     = 6     -- horizontal inset inside the section box
+local HERO_IMG_ASPECT = 16 / 9  -- width:height ratio; images should be 16:9 (e.g. 420x236)
+local HERO_IMG_PAD    = 6       -- horizontal inset inside the section box
 
 local heroTextureCache = {}    -- unitName -> texture path or false (not found)
 
@@ -265,18 +262,17 @@ local addDragOffset         = 0
 
 local staticList     = nil
 local dynamicList    = nil
-local additionalList = nil
 
 local cachedPanelData   = nil
 local cachedIsOrder     = false
 local cachedResolvedKey = nil
 local cachedIsLiveUnit    = false
+local cachedIsLiveFeature = false
 local lastShowAdditional  = false  -- tracks what was baked into staticList
 
 local function FreeDisplayLists()
 	if staticList     then gl.DeleteList(staticList)     ; staticList     = nil end
 	if dynamicList    then gl.DeleteList(dynamicList)    ; dynamicList    = nil end
-	if additionalList then gl.DeleteList(additionalList) ; additionalList = nil end
 end
 
 -- Track the values that went into the last dynamic list compile.
@@ -442,14 +438,6 @@ local function DrawRoundedRect(x1, y1, x2, y2, r, color)
 	end)
 end
 
-local function DrawRoundedOutline(x1, y1, x2, y2, r, color)
-	glColor(color)
-	glLineWidth(1)
-	glBeginEnd(GL_LINE_LOOP, function()
-		RoundedRectVertices(x1, y1, x2, y2, r, 6)
-	end)
-end
-
 local function DrawRectRound(px, py, sx, sy, cs)
 	glTexCoord(0.8, 0.8)
 	glVertex(px + cs, py, 0)
@@ -542,8 +530,9 @@ local function DrawHeroImage(unitName, x1, yTop, w)
 	local path = GetHeroTexturePath(unitName)
 	if not path then return yTop end
 
-	local scaledH = math_floor(HERO_IMG_HEIGHT * uiScale)
 	local pad     = math_floor(HERO_IMG_PAD * uiScale)
+	local imgW    = w - pad * 2
+	local scaledH = math_floor(imgW / HERO_IMG_ASPECT)
 	local totalH  = scaledH + pad * 2
 	local y1      = yTop - totalH
 
@@ -619,7 +608,7 @@ local TECH_REQUIREMENT_MAP = {
 
 local function GetTechTag(ud)
 	if not ud or not ud.customParams then return nil end
-	local req = ud.customParams.requiretech
+	local req = ud.customParams.techlevel or ud.customParams.requiretech
 	if not req then return nil end
 	return TECH_REQUIREMENT_MAP[string_lower(tostring(req))]
 end
@@ -678,19 +667,23 @@ local function BuildWeaponCards(ud)
 				local dps = damage / reloadTime
 				local energyPerSecond = (weap.energyCost or 0) * dpsConversion
 				local isDisruptor = weap.damages and weap.damages.paralyzeDamageTime and weap.damages.paralyzeDamageTime > 0
+				local isDisrupt   = weap.customParams and weap.customParams.disruptionweapon and weap.customParams.disruptionweapon ~= "0"
+				local isHeat      = weap.customParams and weap.customParams.heatweapon      and weap.customParams.heatweapon      ~= "0"
 
 				card = {
-					title = key,
-					count = 1,
-					perShot = damage,
-					dps = dps,
-					aoe = weap.damageAreaOfEffect or 0,
-					range = weap.range or 0,
-					eps = energyPerSecond,
+					title    = key,
+					count    = 1,
+					perShot  = damage,
+					dps      = dps,
+					aoe      = weap.damageAreaOfEffect or 0,
+					range    = weap.range or 0,
+					eps      = energyPerSecond,
 					paralyze = isDisruptor,
-					reload = reloadTime,
-					water = weap.waterWeapon and true or false,
-					guide = (weap.customParams and weap.customParams.weaponguide) or nil,
+					disrupt  = isDisrupt,
+					heat     = isHeat,
+					reload   = reloadTime,
+					water    = weap.waterWeapon and true or false,
+					guide    = (weap.customParams and weap.customParams.weaponguide) or nil,
 				}
 				dedupe[key] = card
 				cards[#cards + 1] = card
@@ -919,28 +912,28 @@ local function DrawStatsSection_Static(data, x1, yTop, w)
 	end
 	if data.healthText then
 		DrawTextFitted("HP", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit then
+		if not data.isLiveUnit and not data.isLiveFeature then
 			DrawTextFitted(data.healthText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
 		end
 		cy = cy - LINE_H
 	end
 	if data.overshieldText then
 		DrawTextFitted("OverShield", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit then
+		if not data.isLiveUnit and not data.isLiveFeature then
 			DrawTextFitted(data.overshieldText, x1 + col, cy, BODY_SIZE, w - col - pad, OVERSHIELD_TEXT_COLOR, "o")
 		end
 		cy = cy - LINE_H
 	end
 	if data.shieldText then
 		DrawTextFitted("Shield", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit then
+		if not data.isLiveUnit and not data.isLiveFeature then
 			DrawTextFitted(data.shieldText, x1 + col, cy, BODY_SIZE, w - col - pad, SHIELD_TEXT_COLOR, "o")
 		end
 		cy = cy - LINE_H
 	end
 	if data.statusText then
 		DrawTextFitted("Status", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit then
+		if not data.isLiveUnit and not data.isLiveFeature then
 			DrawTextFitted(data.statusText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
 		end
 	end
@@ -992,66 +985,109 @@ local function DrawStatsDynamic(data, pos)
 end
 
 local function DrawEconomySection_Static(data, x1, yTop, w)
-	local h  = math_floor(92 * uiScale)
+	local hasStorage = data.storageText ~= nil
+	local h  = math_floor((hasStorage and 106 or 92) * uiScale)
 	local y1 = yTop - h
 	DrawSectionBox(x1, y1, x1 + w, yTop)
 
 	local pad  = math_floor(10 * uiScale)
 	local col  = math_floor(98 * uiScale)
-	local col2 = math_floor(110 * uiScale)
-	local col3 = math_floor(66 * uiScale)
 
 	DrawTextFitted("Economy", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
 
 	DrawTextFitted("Metal",   x1 + pad, yTop - math_floor(34 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
 	DrawTextFitted("Energy",  x1 + pad, yTop - math_floor(48 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("Supply",  x1 + pad, yTop - math_floor(62 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("Flow",    x1 + pad, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("M ",  x1 + col,        yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(16 * uiScale), MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("   E ", x1 + col2 + math_floor(42 * uiScale), yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(24 * uiScale), MUTED_TEXT_COLOR, "o")
+	if hasStorage then
+		DrawTextFitted("Storage", x1 + pad, yTop - math_floor(62 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+		DrawTextFitted("Supply",  x1 + pad, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+		DrawTextFitted("Flow",    x1 + pad, yTop - math_floor(90 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+	else
+		DrawTextFitted("Supply",  x1 + pad, yTop - math_floor(62 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+		DrawTextFitted("Flow",    x1 + pad, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+	end
 
-	if not data.isLiveUnit then
+	if not data.isLiveUnit and not data.isLiveFeature then
 		DrawTextFitted(data.metalCostText  or "-", x1 + col, yTop - math_floor(34 * uiScale), BODY_SIZE, w - col - pad, METAL_TEXT_COLOR,  "o")
 		DrawTextFitted(data.energyCostText or "-", x1 + col, yTop - math_floor(48 * uiScale), BODY_SIZE, w - col - pad, ENERGY_TEXT_COLOR, "o")
-		local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-		DrawTextFitted(data.supplyText or "-",     x1 + col, yTop - math_floor(62 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
-		local mv = data.metalFlowText
-		local ev = data.energyFlowText
-		local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-		local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-		DrawTextFitted(mv or "-", x1 + col2,        yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), mvColor, "o")
-		DrawTextFitted(ev or "-", x1 + col2 + col3, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), evColor, "o")
+		if hasStorage then
+			local st  = data.storageText
+			local fx  = x1 + col
+			local fy  = yTop - math_floor(62 * uiScale)
+			glColor(MUTED_TEXT_COLOR)  glText("M: ",    fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth("M: ")    * BODY_SIZE)
+			glColor(METAL_TEXT_COLOR)  glText(st.m,     fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(st.m)     * BODY_SIZE)
+			glColor(MUTED_TEXT_COLOR)  glText(" / E: ", fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(" / E: ") * BODY_SIZE)
+			glColor(ENERGY_TEXT_COLOR) glText(st.e,     fx, fy, BODY_SIZE, "o")
+			local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
+			DrawTextFitted(data.supplyText or "-", x1 + col, yTop - math_floor(76 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
+			local mv = data.metalFlowText
+			local ev = data.energyFlowText
+			local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+			local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+			local ffx = x1 + col
+			local ffy = yTop - math_floor(90 * uiScale)
+			glColor(MUTED_TEXT_COLOR)  glText("M: ",     ffx, ffy, BODY_SIZE, "o")  ffx = ffx + math_floor(gl.GetTextWidth("M: ")     * BODY_SIZE)
+			glColor(mvColor)           glText(mv or "-", ffx, ffy, BODY_SIZE, "o")  ffx = ffx + math_floor(gl.GetTextWidth(mv or "-") * BODY_SIZE)
+			glColor(MUTED_TEXT_COLOR)  glText(" / E: ",  ffx, ffy, BODY_SIZE, "o")  ffx = ffx + math_floor(gl.GetTextWidth(" / E: ")  * BODY_SIZE)
+			glColor(evColor)           glText(ev or "-", ffx, ffy, BODY_SIZE, "o")
+		else
+			local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
+			DrawTextFitted(data.supplyText or "-", x1 + col, yTop - math_floor(62 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
+			local mv = data.metalFlowText
+			local ev = data.energyFlowText
+			local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+			local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+			local fx  = x1 + col
+			local function drawAndAdvance(text, color)
+				glColor(color)
+				glText(text, fx, yTop - math_floor(76 * uiScale), BODY_SIZE, "o")
+				fx = fx + math_floor(gl.GetTextWidth(text) * BODY_SIZE)
+			end
+			drawAndAdvance("M: ",        MUTED_TEXT_COLOR)
+			drawAndAdvance(mv or "-",    mvColor)
+			drawAndAdvance(" / E: ",     MUTED_TEXT_COLOR)
+			drawAndAdvance(ev or "-",    evColor)
+		end
 	end
 
 	return y1 - SECTION_GAP
 end
 
 local function DrawEconomyDynamic(data, x1, yTop, w)
+	local hasStorage = data.storageText ~= nil
 	local pad  = math_floor(10 * uiScale)
 	local col  = math_floor(98 * uiScale)
-	local col2 = math_floor(110 * uiScale)
-	local col3 = math_floor(66 * uiScale)
+	local storageY = math_floor(62 * uiScale)
+	local supplyY  = hasStorage and math_floor(76 * uiScale) or math_floor(62 * uiScale)
+	local flowY    = hasStorage and math_floor(90 * uiScale) or math_floor(76 * uiScale)
+
 	DrawTextFitted(data.metalCostText  or "-", x1 + col, yTop - math_floor(34 * uiScale), BODY_SIZE, w - col - pad, METAL_TEXT_COLOR,  "o")
 	DrawTextFitted(data.energyCostText or "-", x1 + col, yTop - math_floor(48 * uiScale), BODY_SIZE, w - col - pad, ENERGY_TEXT_COLOR, "o")
+
+	if hasStorage then
+		local st  = data.storageText
+		local fx  = x1 + col
+		local fy  = yTop - storageY
+		glColor(MUTED_TEXT_COLOR)  glText("M: ",    fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth("M: ")    * BODY_SIZE)
+		glColor(METAL_TEXT_COLOR)  glText(st.m,     fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(st.m)     * BODY_SIZE)
+		glColor(MUTED_TEXT_COLOR)  glText(" / E: ", fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(" / E: ") * BODY_SIZE)
+		glColor(ENERGY_TEXT_COLOR) glText(st.e,     fx, fy, BODY_SIZE, "o")
+	end
+
 	local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-	DrawTextFitted(data.supplyText or "-",     x1 + col, yTop - math_floor(62 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
+	DrawTextFitted(data.supplyText or "-", x1 + col, yTop - supplyY, BODY_SIZE, w - col - pad, supplyColor, "o")
+
 	local mv = data.metalFlowText
 	local ev = data.energyFlowText
 	local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
 	local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-	DrawTextFitted(mv or "-", x1 + col2,        yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), mvColor, "o")
-	DrawTextFitted(ev or "-", x1 + col2 + col3, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(52 * uiScale), evColor, "o")
+	local fx  = x1 + col
+	local fy  = yTop - flowY
+	glColor(MUTED_TEXT_COLOR)  glText("M: ",     fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth("M: ")     * BODY_SIZE)
+	glColor(mvColor)           glText(mv or "-", fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(mv or "-") * BODY_SIZE)
+	glColor(MUTED_TEXT_COLOR)  glText(" / E: ",  fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(" / E: ")  * BODY_SIZE)
+	glColor(evColor)           glText(ev or "-", fx, fy, BODY_SIZE, "o")
 end
 
--- Original combined versions kept for non-live paths (order, feature) where
--- there is no split needed and we just want a single draw call.
-local function DrawStatsSection(data, x1, yTop, w)
-	return DrawStatsSection_Static(data, x1, yTop, w)
-end
-
-local function DrawEconomySection(data, x1, yTop, w)
-	return DrawEconomySection_Static(data, x1, yTop, w)
-end
 
 
 local function DrawBuildSection(data, x1, yTop, w)
@@ -1139,11 +1175,6 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 
 	local cyTop = yTop - math_floor(26 * uiScale)
 
-	local col1w = math_floor(110 * uiScale)
-	local col2w = math_floor(78  * uiScale)
-	local col3x = math_floor(178 * uiScale)
-	local col3w = math_floor(62  * uiScale)
-
 	for i = 1, #layout do
 		local entry = layout[i]
 		local card = entry.card
@@ -1160,20 +1191,31 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 			local dmgLabel = card.paralyze and "Paralyze" or "DPS"
 			local dmgColor = card.paralyze and PARALYZE_TEXT_COLOR or HEADER_TEXT
 
-			DrawTextFitted(dmgLabel .. ": " .. FormatNbr(card.dps, 1), x1 + pad2, by2 - math_floor(28 * uiScale), SMALL_SIZE, col1w, dmgColor, "o")
-			DrawTextFitted("Range: " .. FormatNbr(card.range, 0),      x1 + col1w + pad, by2 - math_floor(28 * uiScale), SMALL_SIZE, col2w, SUBTEXT_COLOR, "o")
-			DrawTextFitted("AoE: "   .. FormatNbr(card.aoe, 0),        x1 + col3x, by2 - math_floor(28 * uiScale), SMALL_SIZE, col3w, SUBTEXT_COLOR, "o")
+			-- Stats line: DPS: x / Range: x / AoE: x
+			local statY  = by2 - math_floor(28 * uiScale)
+			local statStr = dmgLabel .. ": " .. FormatNbr(card.dps, 1)
+					.. " / Range: " .. FormatNbr(card.range, 0)
+					.. " / AoE: "   .. FormatNbr(card.aoe,   0)
+			DrawTextFitted(statStr, x1 + pad2, statY, SMALL_SIZE, w - math_floor(32 * uiScale), dmgColor, "o")
 
-			local extra = ""
+			-- Tags line: E/s, WATER, DISRUPT, HEAT
+			local tagY  = by2 - math_floor(41 * uiScale)
+			local tagX  = x1 + pad2
+			local tagW  = w - math_floor(32 * uiScale)
+			local tags  = {}
 			if card.eps and card.eps > 0 then
-				extra = extra .. "E/s " .. FormatNbr(card.eps, 1)
+				tags[#tags + 1] = { text = "E/s " .. FormatNbr(card.eps, 1), color = ENERGY_TEXT_COLOR }
 			end
-			if card.water then
-				if extra ~= "" then extra = extra .. "   " end
-				extra = extra .. "WATER"
-			end
-			if extra ~= "" then
-				DrawTextFitted(extra, x1 + pad2, by2 - math_floor(41 * uiScale), SMALL_SIZE, w - math_floor(32 * uiScale), ENERGY_TEXT_COLOR, "o")
+			if card.water   then tags[#tags + 1] = { text = "WATER",   color = SUBTEXT_COLOR       } end
+			if card.disrupt then tags[#tags + 1] = { text = "DISRUPT", color = DISRUPT_TEXT_COLOR   } end
+			if card.heat    then tags[#tags + 1] = { text = "HEAT",    color = HEAT_TEXT_COLOR      } end
+			local tx = tagX
+			for t = 1, #tags do
+				local approxW = TextWidthApprox(tags[t].text, SMALL_SIZE)
+				if tx + approxW <= x1 + w - pad then
+					DrawTextFitted(tags[t].text, tx, tagY, SMALL_SIZE, approxW + math_floor(4 * uiScale), tags[t].color, "o")
+					tx = tx + approxW + math_floor(8 * uiScale)
+				end
 			end
 
 			if entry.guideLines and #entry.guideLines > 0 then
@@ -1273,6 +1315,14 @@ local function RefreshLiveUnitFields(panelData, unitID)
 	end
 end
 
+local function RefreshLiveFeatureFields(panelData, featureID)
+	local reclaimLeft, metal, energy = spGetFeatureResources(featureID)
+	local health, maxHealth = spGetFeatureHealth(featureID)
+	panelData.healthText    = health and maxHealth and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil
+	panelData.metalCostText  = metal    and FormatNbr(metal,  0) or "-"
+	panelData.energyCostText = energy   and FormatNbr(energy, 0) or "-"
+end
+
 local function BuildUnitPanelData(unitID)
 	local ud = UnitDefs[spGetUnitDefID(unitID)]
 	if not ud then return nil end
@@ -1323,6 +1373,9 @@ local function BuildUnitPanelData(unitID)
 		metalCostText = FormatNbr(ud.metalCost or 0, 0),
 		energyCostText = FormatNbr(ud.energyCost or 0, 0),
 		supplyText = supplyText,
+		storageText = ((ud.metalStorage or 0) > 0 or (ud.energyStorage or 0) > 0)
+				and { m = FormatNbr(ud.metalStorage or 0, 0), e = FormatNbr(ud.energyStorage or 0, 0) }
+				or nil,
 		metalFlowText = metalFlowText,
 		energyFlowText = energyFlowText,
 
@@ -1371,6 +1424,9 @@ local function BuildBuildPanelData(buildData)
 		metalCostText = FormatNbr(buildData.metalCost or (ud and ud.metalCost or 0), 0),
 		energyCostText = FormatNbr(buildData.energyCost or (ud and ud.energyCost or 0), 0),
 		supplyText = supplyText,
+		storageText = (ud and ((ud.metalStorage or 0) > 0 or (ud.energyStorage or 0) > 0))
+				and { m = FormatNbr(ud.metalStorage or 0, 0), e = FormatNbr(ud.energyStorage or 0, 0) }
+				or nil,
 		metalFlowText = nil,
 		energyFlowText = nil,
 
@@ -1407,9 +1463,9 @@ local function BuildFeaturePanelData(featureID)
 		healthText = health and maxHealth and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil,
 		shieldText = nil,
 		overshieldText = nil,
-		statusText = reclaimLeft and ("Reclaim left: " .. FormatNbr(reclaimLeft, 0) .. "%") or nil,
+		statusText = nil,
 
-		metalCostText = metal and FormatNbr(metal, 0) or "-",
+		metalCostText  = metal  and FormatNbr(metal,  0) or "-",
 		energyCostText = energy and FormatNbr(energy, 0) or "-",
 		supplyText = nil,
 		metalFlowText = nil,
@@ -1420,6 +1476,7 @@ local function BuildFeaturePanelData(featureID)
 
 		weaponCards = {},
 		unitGuideText = nil,
+		isLiveFeature = true,
 	}
 end
 
@@ -1470,9 +1527,12 @@ local function BuildSelectionPanelData(units)
 		local ud = g.ud
 		if ud then
 			local tech = nil
-			if ud.customParams and ud.customParams.requiretech then
+			if ud.customParams then
 				local TECH_MAP = { tech0="T0", tech1="T1", tech2="T2", tech3="T3", tech4="T4" }
-				tech = TECH_MAP[string_lower(tostring(ud.customParams.requiretech))]
+				local req = ud.customParams.techlevel or ud.customParams.requiretech
+				if req then
+					tech = TECH_MAP[string_lower(tostring(req))]
+				end
 			end
 			rows[#rows + 1] = {
 				name  = ud.humanName or ud.name or "Unknown",
@@ -1593,6 +1653,106 @@ local function DrawSelectionSection(panelData, x1, yTop, w)
 	return y1 - SECTION_GAP
 end
 
+-- Measures the total content height for a panel without drawing anything.
+-- Must be kept in sync with the draw pass in BakePanel.
+local function MeasureContent(panelData, isOrder, extraSections, cWidth)
+	local cy = 0
+	local titleH = math_floor(44 * uiScale) + SECTION_GAP
+	cy = cy + titleH
+
+	if extraSections and extraSections.additionalOnly then
+		-- hero image (if present)
+		if extraSections.unitName and GetHeroTexturePath(extraSections.unitName) then
+			local pad  = math_floor(HERO_IMG_PAD * uiScale)
+			local imgW = cWidth - pad * 2
+			cy = cy + math_floor(imgW / HERO_IMG_ASPECT) + pad * 2 + SECTION_GAP
+		end
+		-- hint section
+		cy = cy + math_floor(26 * uiScale) + SECTION_GAP
+		-- build info
+		if extraSections.buildTime or extraSections.buildPower then
+			cy = cy + math_floor(64 * uiScale) + SECTION_GAP
+		end
+		-- weapon cards
+		if extraSections.weaponCards and #extraSections.weaponCards > 0 then
+			local baseCardH  = math_floor(52 * uiScale)
+			local guideLineH = math_floor(11 * uiScale)
+			local totalCardsH = 0
+			for i = 1, #extraSections.weaponCards do
+				local card = extraSections.weaponCards[i]
+				local extraH = 0
+				if card.guide and card.guide ~= "" then
+					local guideLines = WrapText(card.guide, cWidth - math_floor(32 * uiScale), SMALL_SIZE)
+					extraH = #guideLines * guideLineH + math_floor(6 * uiScale)
+				end
+				totalCardsH = totalCardsH + baseCardH + extraH
+				if i < #extraSections.weaponCards then totalCardsH = totalCardsH + CARD_GAP end
+			end
+			cy = cy + math_floor(22 * uiScale) + totalCardsH + math_floor(10 * uiScale) + SECTION_GAP
+		end
+		-- unit guide
+		if extraSections.unitGuide and extraSections.unitGuide ~= "" then
+			local guideLines = WrapText(extraSections.unitGuide, cWidth - math_floor(20 * uiScale), BODY_SIZE)
+			if #guideLines > 0 then
+				cy = cy + math_floor(26 * uiScale) + #guideLines * math_floor(13 * uiScale) + math_floor(10 * uiScale) + SECTION_GAP
+			end
+		end
+	elseif panelData.type == "selection" then
+		local rows    = panelData.rows or {}
+		local headerH = math_floor(22 * uiScale)
+		local footerH = math_floor(28 * uiScale)
+		cy = cy + headerH + #rows * LINE_H + footerH + math_floor(10 * uiScale) + SECTION_GAP
+	elseif isOrder then
+		local body = panelData.body or ""
+		local lines = 1
+		for _ in body:gmatch("\n") do lines = lines + 1 end
+		lines = Clamp(lines, 2, 9)
+		cy = cy + math_floor(34 * uiScale) + lines * math_floor(13 * uiScale) + SECTION_GAP
+		cy = cy + math_floor(26 * uiScale) + SECTION_GAP  -- hint
+	else
+		-- Stats
+		local statLines = 3
+		if panelData.healthText     then statLines = statLines + 1 end
+		if panelData.overshieldText then statLines = statLines + 1 end
+		if panelData.shieldText     then statLines = statLines + 1 end
+		if panelData.statusText     then statLines = statLines + 1 end
+		cy = cy + math_floor(24 * uiScale) + statLines * LINE_H + SECTION_GAP
+		cy = cy + math_floor((panelData.storageText and 106 or 92) * uiScale) + SECTION_GAP  -- Economy
+		cy = cy + math_floor(26 * uiScale) + SECTION_GAP  -- Hint
+	end
+
+	-- Extra sections (non-additionalOnly path, kept for extensibility)
+	if extraSections and not extraSections.additionalOnly then
+		if extraSections.buildTime or extraSections.buildPower then
+			cy = cy + math_floor(64 * uiScale) + SECTION_GAP
+		end
+		if extraSections.weaponCards and #extraSections.weaponCards > 0 then
+			local baseCardH  = math_floor(52 * uiScale)
+			local guideLineH = math_floor(11 * uiScale)
+			local totalCardsH = 0
+			for i = 1, #extraSections.weaponCards do
+				local card = extraSections.weaponCards[i]
+				local extraH = 0
+				if card.guide and card.guide ~= "" then
+					local guideLines = WrapText(card.guide, cWidth - math_floor(32 * uiScale), SMALL_SIZE)
+					extraH = #guideLines * guideLineH + math_floor(6 * uiScale)
+				end
+				totalCardsH = totalCardsH + baseCardH + extraH
+				if i < #extraSections.weaponCards then totalCardsH = totalCardsH + CARD_GAP end
+			end
+			cy = cy + math_floor(22 * uiScale) + totalCardsH + math_floor(10 * uiScale) + SECTION_GAP
+		end
+		if extraSections.unitGuide and extraSections.unitGuide ~= "" then
+			local guideLines = WrapText(extraSections.unitGuide, cWidth - math_floor(20 * uiScale), BODY_SIZE)
+			if #guideLines > 0 then
+				cy = cy + math_floor(26 * uiScale) + #guideLines * math_floor(13 * uiScale) + math_floor(10 * uiScale) + SECTION_GAP
+			end
+		end
+	end
+
+	return cy
+end
+
 -- Returns total content height drawn for a panel, given a scroll offset and
 -- whether to actually draw (draw=true) or just measure (draw=false).
 -- When drawing, applies glScissor to clip content to the panel interior and
@@ -1614,108 +1774,7 @@ local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, a
 
 	DrawPanel(px1, py1, px2, py2, accentColor)
 
-	-- Measure content by doing a dry-run without drawing
-	-- We track cy descending from 0 (content-space), then convert to screen-space
-	local function MeasureContent()
-		local cy = 0   -- content-space: 0 at top, grows downward
-		local titleH = math_floor(44 * uiScale) + SECTION_GAP
-		cy = cy + titleH
-
-		-- If this is purely an extra-sections panel (additional info), skip main sections
-		if extraSections and extraSections.additionalOnly then
-			-- hero image (if present)
-			if extraSections.unitName and GetHeroTexturePath(extraSections.unitName) then
-				cy = cy + math_floor(HERO_IMG_HEIGHT * uiScale) + math_floor(HERO_IMG_PAD * uiScale) * 2 + SECTION_GAP
-			end
-			-- hint section
-			cy = cy + math_floor(26 * uiScale) + SECTION_GAP
-			-- build info
-			if extraSections.buildTime or extraSections.buildPower then
-				cy = cy + math_floor(64 * uiScale) + SECTION_GAP
-			end
-			-- weapon cards
-			if extraSections.weaponCards and #extraSections.weaponCards > 0 then
-				local baseCardH  = math_floor(52 * uiScale)
-				local guideLineH = math_floor(11 * uiScale)
-				local totalCardsH = 0
-				for i = 1, #extraSections.weaponCards do
-					local card = extraSections.weaponCards[i]
-					local extraH = 0
-					if card.guide and card.guide ~= "" then
-						local guideLines = WrapText(card.guide, cWidth - math_floor(32 * uiScale), SMALL_SIZE)
-						extraH = #guideLines * guideLineH + math_floor(6 * uiScale)
-					end
-					totalCardsH = totalCardsH + baseCardH + extraH
-					if i < #extraSections.weaponCards then totalCardsH = totalCardsH + CARD_GAP end
-				end
-				cy = cy + math_floor(22 * uiScale) + totalCardsH + math_floor(10 * uiScale) + SECTION_GAP
-			end
-			-- unit guide
-			if extraSections.unitGuide and extraSections.unitGuide ~= "" then
-				local guideLines = WrapText(extraSections.unitGuide, cWidth - math_floor(20 * uiScale), BODY_SIZE)
-				if #guideLines > 0 then
-					cy = cy + math_floor(26 * uiScale) + #guideLines * math_floor(13 * uiScale) + math_floor(10 * uiScale) + SECTION_GAP
-				end
-			end
-		elseif panelData.type == "selection" then
-			local rows    = panelData.rows or {}
-			local headerH = math_floor(22 * uiScale)
-			local footerH = math_floor(28 * uiScale)
-			cy = cy + headerH + #rows * LINE_H + footerH + math_floor(10 * uiScale) + SECTION_GAP
-		elseif isOrder then
-			local body = panelData.body or ""
-			local lines = 1
-			for _ in body:gmatch("\n") do lines = lines + 1 end
-			lines = Clamp(lines, 2, 9)
-			cy = cy + math_floor(34 * uiScale) + lines * math_floor(13 * uiScale) + SECTION_GAP
-			cy = cy + math_floor(26 * uiScale) + SECTION_GAP  -- hint
-		else
-			-- Stats
-			local statLines = 3
-			if panelData.healthText     then statLines = statLines + 1 end
-			if panelData.overshieldText then statLines = statLines + 1 end
-			if panelData.shieldText     then statLines = statLines + 1 end
-			if panelData.statusText     then statLines = statLines + 1 end
-			cy = cy + math_floor(24 * uiScale) + statLines * LINE_H + SECTION_GAP
-			-- Economy
-			cy = cy + math_floor(92 * uiScale) + SECTION_GAP
-			-- Hint
-			cy = cy + math_floor(26 * uiScale) + SECTION_GAP
-		end
-
-		-- Extra sections (additional panel: build info, weapons, guide)
-		if extraSections and not extraSections.additionalOnly then
-			if extraSections.buildTime or extraSections.buildPower then
-				cy = cy + math_floor(64 * uiScale) + SECTION_GAP
-			end
-			if extraSections.weaponCards and #extraSections.weaponCards > 0 then
-				local baseCardH = math_floor(52 * uiScale)
-				local guideLineH = math_floor(11 * uiScale)
-				local totalCardsH = 0
-				for i = 1, #extraSections.weaponCards do
-					local card = extraSections.weaponCards[i]
-					local extraH = 0
-					if card.guide and card.guide ~= "" then
-						local guideLines = WrapText(card.guide, cWidth - math_floor(32 * uiScale), SMALL_SIZE)
-						extraH = #guideLines * guideLineH + math_floor(6 * uiScale)
-					end
-					totalCardsH = totalCardsH + baseCardH + extraH
-					if i < #extraSections.weaponCards then totalCardsH = totalCardsH + CARD_GAP end
-				end
-				cy = cy + math_floor(22 * uiScale) + totalCardsH + math_floor(10 * uiScale) + SECTION_GAP
-			end
-			if extraSections.unitGuide and extraSections.unitGuide ~= "" then
-				local guideLines = WrapText(extraSections.unitGuide, cWidth - math_floor(20 * uiScale), BODY_SIZE)
-				if #guideLines > 0 then
-					cy = cy + math_floor(26 * uiScale) + #guideLines * math_floor(13 * uiScale) + math_floor(10 * uiScale) + SECTION_GAP
-				end
-			end
-		end
-
-		return cy
-	end
-
-	local contentH = MeasureContent()
+	local contentH = MeasureContent(panelData, isOrder, extraSections, cWidth)
 	local needsScroll = contentH > viewH
 	local clampedOffset = Clamp(scrollOffset, 0, math_max(0, contentH - viewH))
 
@@ -1758,7 +1817,7 @@ local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, a
 		dynamicEconomyTop = cy
 		dynamicEconomyW   = cWidth
 
-		if panelData.isLiveUnit then
+		if panelData.isLiveUnit or panelData.isLiveFeature then
 			local lines = 3
 			if panelData.healthText     then lines = lines + 1 end
 			if panelData.shieldText     then lines = lines + 1 end
@@ -1906,7 +1965,7 @@ local function RebuildAllLists(panelData, isOrder, showAdditional)
 		BakeStaticList(panelData, isOrder, showAdditional)
 	end)
 
-	if panelData.isLiveUnit then
+	if panelData.isLiveUnit or panelData.isLiveFeature then
 		dynamicList = gl.CreateList(function()
 			BakeDynamicList(panelData)
 		end)
@@ -2100,7 +2159,8 @@ function widget:DrawScreen()
 		cachedResolvedKey = key
 		if resolved then
 			cachedPanelData, cachedIsOrder = BuildPanelDataFromResolved(resolved)
-			cachedIsLiveUnit = (resolved.type == "unit")
+			cachedIsLiveUnit    = (resolved.type == "unit")
+			cachedIsLiveFeature = (resolved.type == "feature")
 			if cachedPanelData then
 				cachedPanelData.isLiveUnit = cachedIsLiveUnit
 			end
@@ -2109,6 +2169,7 @@ function widget:DrawScreen()
 			cachedPanelData  = nil
 			cachedIsOrder    = false
 			cachedIsLiveUnit = false
+			cachedIsLiveFeature = false
 		end
 		lastDynValues = {}
 		lastShowAdditional = showAdditional
@@ -2123,6 +2184,16 @@ function widget:DrawScreen()
 
 	elseif cachedIsLiveUnit and cachedPanelData then
 		RefreshLiveUnitFields(cachedPanelData, resolved.id)
+		if not dynamicList or DynamicValuesChanged(cachedPanelData) then
+			SaveDynamicValues(cachedPanelData)
+			if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end
+			dynamicList = gl.CreateList(function()
+				BakeDynamicList(cachedPanelData)
+			end)
+		end
+
+	elseif cachedIsLiveFeature and cachedPanelData then
+		RefreshLiveFeatureFields(cachedPanelData, resolved.id)
 		if not dynamicList or DynamicValuesChanged(cachedPanelData) then
 			SaveDynamicValues(cachedPanelData)
 			if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end

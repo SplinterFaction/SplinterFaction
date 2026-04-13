@@ -14,7 +14,7 @@ unitDef                      = {
 	canstop                        = true,
 	category                       = "BUILDING",
 
-	description                    = [[Build a Tech Facility to unlock units. Build Supply Depots to increase your army size.]],
+	description                   = [[Builds Units]],
 	energyStorage                  = 0,
 	energyUse                      = 0,
 	energyMake                     = 0,
@@ -37,7 +37,7 @@ unitDef                      = {
 	repairable		               = false,
 	selfDestructAs                 = explodeAs,
 	showNanoSpray                     = true,
-	sightDistance                  = 388,
+	sightDistance                  = 500,
 	smoothAnim                     = true,
 	TEDClass                       = "PLANT",
 	unitname                       = unitName,

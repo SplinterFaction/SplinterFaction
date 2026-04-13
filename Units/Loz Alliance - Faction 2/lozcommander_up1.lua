@@ -4,7 +4,7 @@ unitName = [[lozcommander_up1]]
 
 --------------------------------------------------------------------------------
 
-humanname = [[Loz Alliance Command Unit - Tech 1]]
+humanname = [[Loz Alliance Command Unit]]
 buildpicture = [[lozcommander.png]]
 
 techprovided = [[tech0, tech1, -overseer]]
