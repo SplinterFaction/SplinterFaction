@@ -43,12 +43,12 @@ local enemyT2Notification = 0
 local enemyT3Notification = 0
 local enemyT4Notification = 0
 
-local meT1Notification = 0
+local meT1Notification = 1
 local meT2Notification = 0
 local meT3Notification = 0
 local meT4Notification = 0
 
-local dontRemindMeToTechToT1 = 0
+local dontRemindMeToTechToT1 = 1
 local dontRemindMeToTechToT2 = 0
 local dontRemindMeToTechToT3 = 0
 local dontRemindMeToTechToT4 = 0
