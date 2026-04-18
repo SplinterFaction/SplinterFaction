@@ -148,7 +148,7 @@ local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 -- after DrawSectionBox which it depends on)
 --------------------------------------------------------------------------------
 
-local HERO_IMG_ASPECT = 16 / 9  -- width:height ratio; images should be 16:9 (e.g. 420x236)
+local HERO_IMG_ASPECT = 16 / 9  -- width:height ratio; images should be 16:9 (e.g. 840×473)
 local HERO_IMG_PAD    = 6       -- horizontal inset inside the section box
 
 local heroTextureCache = {}    -- unitName -> texture path or false (not found)
@@ -158,7 +158,7 @@ local function GetHeroTexturePath(unitName)
 	if heroTextureCache[unitName] ~= nil then
 		return heroTextureCache[unitName] or nil
 	end
-	local path = "unitpics-hero/" .. unitName .. "-hero.dds"
+	local path = "unitpics-hero/" .. unitName .. "-hero.png"
 	if VFS.FileExists(path) then
 		heroTextureCache[unitName] = path
 		return path
