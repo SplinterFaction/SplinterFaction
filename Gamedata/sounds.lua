@@ -26,55 +26,55 @@ local Sounds = {
 		--FailedCommand = {
 		--	file = "sounds/ui/cantdo.wav",
 		--},
-		
-		--ExampleSound = {
-			--- some things you can do with this file
 
-			--- can be either ogg or wav
+		--ExampleSound = {
+		--- some things you can do with this file
+
+		--- can be either ogg or wav
 		--	file = "somedir/subdir/soundfile.ogg",
 
-			--- loudness, > 1 is louder, < 1  is more quiet, you will most likely not set it to 0
+		--- loudness, > 1 is louder, < 1  is more quiet, you will most likely not set it to 0
 		--	gain = 1,
 
-			--- > 1 -> high pitched, < 1 lowered
+		--- > 1 -> high pitched, < 1 lowered
 		--	pitch = 1,
 
-			--- If > 0.0 then this adds a random amount to gain each time the sound is played.
-			--- Clamped between 0.0 and 1.0. The result is in the range [(gain * (1 + gainMod)), (gain * (1 - gainMod))].
+		--- If > 0.0 then this adds a random amount to gain each time the sound is played.
+		--- Clamped between 0.0 and 1.0. The result is in the range [(gain * (1 + gainMod)), (gain * (1 - gainMod))].
 		--	gainmod = 0.0,
 
-			--- If > 0.0 then this adds a random amount to pitch each time the sound is played.
-			--- Clamped between 0.0 and 1.0. The result is in the range [(pitch * (1 + pitchMod)), (pitch * (1 - pitchMod))].
+		--- If > 0.0 then this adds a random amount to pitch each time the sound is played.
+		--- Clamped between 0.0 and 1.0. The result is in the range [(pitch * (1 + pitchMod)), (pitch * (1 - pitchMod))].
 		--	pitchmod = 0.0,
 
-			--- how unit / camera speed affects the sound, to exagerate it, use values > 1
-			--- dopplerscale = 0 completely disables the effect
+		--- how unit / camera speed affects the sound, to exagerate it, use values > 1
+		--- dopplerscale = 0 completely disables the effect
 		--	dopplerscale = 1,
 
-			--- when lots of sounds are played, sounds with lwoer priority are more likely to get cut off
-			--- priority > 0 will never be cut of (priorities can be negative)
+		--- when lots of sounds are played, sounds with lwoer priority are more likely to get cut off
+		--- priority > 0 will never be cut of (priorities can be negative)
 		--	priority = 0,
 
-			--- this sound will not be played more than 16 times at a time
+		--- this sound will not be played more than 16 times at a time
 		--	maxconcurrent = 16,
 
-			--- cutoff distance
+		--- cutoff distance
 		--	maxdist = 20000,
 
-			--- how fast it becomes more quiet in the distance (0 means aleays the same loudness regardless of dist)
+		--- how fast it becomes more quiet in the distance (0 means aleays the same loudness regardless of dist)
 		--	rolloff = 1,
 
-			--- non-3d sounds do always came out of the front-speakers (or the center one)
-			--- 3d sounds are, well, in 3d
+		--- non-3d sounds do always came out of the front-speakers (or the center one)
+		--- 3d sounds are, well, in 3d
 		--	in3d = true,
 
-			--- you can loop it for X miliseconds
+		--- you can loop it for X miliseconds
 		--	looptime = 0,
 		--},
 
 		--default = {
-			-- new since 89.0
-			-- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
+		-- new since 89.0
+		-- you can overwrite the fallback profile here (used when no corresponding SoundItem is defined for a sound)
 		--	gainmod = 0.35,
 		--	pitchmod = 0.05,
 		--	pitch = 0.7,
@@ -103,49 +103,49 @@ local Sounds = {
 -- local files = VFS.DirList("sounds/explosions/")
 -- local t = Sounds.SoundItems
 -- for i=1,#files do
-   -- local fileName = files[i]
-   -- t[fileName] = {
-      -- file     = fileName;
-      -- pitchmod = 0.3;
-      ----gainmod  = 0.2;
-      -- maxconcurrent = 16;
-	  -- rolloff = 2,
-	  -- dopplerscale = 2,
-	  -- in3d = true,
-   -- }
+-- local fileName = files[i]
+-- t[fileName] = {
+-- file     = fileName;
+-- pitchmod = 0.3;
+----gainmod  = 0.2;
+-- maxconcurrent = 16;
+-- rolloff = 2,
+-- dopplerscale = 2,
+-- in3d = true,
+-- }
 -- end
 
 -- local files = VFS.DirList("sounds/deathsounds/nuke/")
 -- local t = Sounds.SoundItems
 -- for i=1,#files do
-   -- local fileName = files[i]
-   -- t[fileName] = {
-      -- file     = fileName;
-      -- pitchmod = 0.3;
-      ----gainmod  = 0.2;
-      -- maxconcurrent = 16;
-	  -- rolloff = 2,
-	  -- dopplerscale = 2,
-	  -- in3d = true,
-   -- }
+-- local fileName = files[i]
+-- t[fileName] = {
+-- file     = fileName;
+-- pitchmod = 0.3;
+----gainmod  = 0.2;
+-- maxconcurrent = 16;
+-- rolloff = 2,
+-- dopplerscale = 2,
+-- in3d = true,
+-- }
 -- end
 
- --local files = VFS.DirList("sounds/weapons/")
- --local t = Sounds.SoundItems
- --for i=1,#files do
- --   local fileName = files[i]
- --   t[fileName] = {
- --      file     = fileName;
-	--	-- gain = 1 * 0.3,
-	--	pitchmod = 0.02,
-	--	-- gainmod  = 0.2 * 0.3,
-	--	dopplerscale = 0,
-	--	maxconcurrent = 32,
-	--	rolloff = 0,
-	--	priority = 1,
-	--	in3d = true,
- --   }
- --end
+--local files = VFS.DirList("sounds/weapons/")
+--local t = Sounds.SoundItems
+--for i=1,#files do
+--   local fileName = files[i]
+--   t[fileName] = {
+--      file     = fileName;
+--	-- gain = 1 * 0.3,
+--	pitchmod = 0.02,
+--	-- gainmod  = 0.2 * 0.3,
+--	dopplerscale = 0,
+--	maxconcurrent = 32,
+--	rolloff = 0,
+--	priority = 1,
+--	in3d = true,
+--   }
+--end
 
 --local files = VFS.DirList("sounds/selfdcountdown/")
 --local t = Sounds.SoundItems
@@ -164,7 +164,7 @@ local Sounds = {
 local soundData = {
 
 	['ui'] = {
-		gain = 1,
+		gain = 0.15,
 		--pitchmod = 0,
 		gainmod = 0,
 		dopplerscale = 0,
@@ -173,18 +173,17 @@ local soundData = {
 	},
 
 	['commands'] = {
-		gain = 1.3,
+		gain = 0.3,
 		--pitchmod = 0.02,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
 		maxconcurrent = 32,
-		rolloff = 0.5,
+		rolloff = 0,
 		priority = 1,
-		in3d = true,
 	},
 
 	['unitselections'] = {
-		gain = 1.1,
+		gain = 0.1,
 		--pitchmod = 0.02,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
@@ -194,25 +193,25 @@ local soundData = {
 	},
 
 	['weapons'] = {
-		gain = 5,  -- 1.75 * 0.3 = 0.525
+		gain = 0.525,  -- 1.75 * 0.3 = 0.525
 		--pitchmod = 0.17,
-		--gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['weaponsloud'] = {
-		gain = 10,  -- 5 * 0.3 = 1.5
+		gain = 1.5,  -- 5 * 0.3 = 1.5
 		--pitchmod = 0.17,
-		--gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
+		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 16,
 		dopplerscale = 1.0,
 		rolloff = 0.5,
 	},
 
 	['impacts'] = {
-		gain = 1.9,  -- 3 * 0.3 = 0.9
+		gain = 0.9,  -- 3 * 0.3 = 0.9
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -221,7 +220,7 @@ local soundData = {
 	},
 
 	['impacts/generic'] = {
-		gain = 1.9,  -- 3 * 0.3 = 0.9
+		gain = 0.9,  -- 3 * 0.3 = 0.9
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -230,7 +229,7 @@ local soundData = {
 	},
 
 	['deathsounds/generic'] = {
-		gain = 2.2,  -- 4 * 0.3 = 1.2
+		gain = 1.2,  -- 4 * 0.3 = 1.2
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -248,7 +247,7 @@ local soundData = {
 	},
 
 	['misc'] = {
-		gain = 1.36,  -- 1.2 * 0.3 = 0.36
+		gain = 0.36,  -- 1.2 * 0.3 = 0.36
 		--pitchmod = 0.17,
 		gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		maxconcurrent = 7,
@@ -258,7 +257,7 @@ local soundData = {
 	},
 
 	['selfdcountdown'] = {
-		gain = 1.36,  -- 1.2 * 0.3 = 0.36
+		gain = 0.36,  -- 1.2 * 0.3 = 0.36
 		--pitchmod = 0.02,
 		--gainmod = 0.06,  -- 0.2 * 0.3 = 0.06
 		dopplerscale = 0,
