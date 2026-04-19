@@ -63,7 +63,7 @@ return function(featureDefs, unitDefs)
 		end
 
 		-- Auto-unblock small features and vegetation
-		if fd.footprintX <= 8 or fd.footprintZ <= 8 then
+		if tonumber(fd.footprintX) <= 8 or tonumber(fd.footprintZ) <= 8 then
 			local cat = string.lower(fd.category or "")
 			if cat == "vegitation" or cat == "vegetation" then
 				fd.blocking = false

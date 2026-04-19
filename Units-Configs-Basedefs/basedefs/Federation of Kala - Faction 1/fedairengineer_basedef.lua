@@ -121,6 +121,7 @@ unitDef                    = {
 		unitguide = [[The Air Engineer is the Federation of Kala's flying construction unit, capable of building, repairing, reclaiming, and capturing structures from the air. It can reach terrain and positions that ground engineers cannot, making it invaluable for forward construction, island operations, or establishing infrastructure in areas where ground access is contested. It is lightly built and cannot survive direct engagement — escort it or keep it clear of the front.]],
 		unittype         = "air",
 		unitrole		 = "Air Builder",
+		buildmenucategory = "Utility",
 		area_mex_def     = areamexdef,
 		requiretech      = requiretech,
 		supply_cost      = 1,

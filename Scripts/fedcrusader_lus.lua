@@ -1,5 +1,5 @@
 
-base, gatlingbarrel1, gatlingspins1, gatlingfirepoint1, rocketturret1, rocketbarrel1, rocketfirepoint1 = piece ('base', 'gatlingbarrel1', 'gatlingspins1', 'gatlingfirepoint1', 'rocketturret1', 'rocketbarrel1', 'rocketfirepoint1')
+base, gatlingbarrel1, gatlingspins1, gatlingfirepoint1, rocketturret1, rocketbarrel1, rocketfirepoint1, wake = piece ('base', 'gatlingbarrel1', 'gatlingspins1', 'gatlingfirepoint1', 'rocketturret1', 'rocketbarrel1', 'rocketfirepoint1', 'wake')
 
 local SIG_AIM = {}
 local SIG_AIM2 = {}
@@ -25,7 +25,7 @@ end
 
 function script.Bubbles()
 	while isMoving do
-		common.CustomEmitter(base, "bubbles")
+		common.CustomEmitter(wake, "bubbles")
 		Sleep(100)
 	end
 end

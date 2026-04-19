@@ -121,6 +121,7 @@ unitDef                    = {
 		unitguide = [[The Loz Alliance Air Engineer is a flying construction unit capable of building structures, assisting factory production, repairing friendly units, reclaiming wreckage, and capturing enemy buildings from the air. It reaches terrain and positions inaccessible to ground engineers, making it essential for island maps, amphibious operations, or establishing forward infrastructure in contested areas. It cannot survive direct engagement — keep it escorted or well clear of any fighting.]],
 		unittype         = "air",
 		unitrole		 = "Air Builder",
+		buildmenucategory = "Utility",
 		area_mex_def     = areamexdef,
 		requiretech      = requiretech,
 		supply_cost      = 1,

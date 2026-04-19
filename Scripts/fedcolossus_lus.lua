@@ -1,5 +1,5 @@
 
-base, cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, missileturret1, missilebarrel1, missilefirepoint1, missileturret2, missilebarrel2, missilefirepoint2, phalanxturret1, phalanxbarrel1, phalanxfirepoint1, phalanxfirepoint2, phalanxfirepoint3, phalanxfirepoint4, torpedofirepoint1 = piece('base', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'cannonturret2', 'cannonbarrel2', 'cannonfirepoint2', 'cannonturret3', 'cannonbarrel3', 'cannonfirepoint3', 'missileturret1', 'missilebarrel1', 'missilefirepoint1', 'missileturret2', 'missilebarrel2', 'missilefirepoint2', 'phalanxturret1', 'phalanxbarrel1', 'phalanxfirepoint1', 'phalanxfirepoint2', 'phalanxfirepoint3', 'phalanxfirepoint4', 'torpedofirepoint1')
+base, cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, missileturret1, missilebarrel1, missilefirepoint1, missileturret2, missilebarrel2, missilefirepoint2, phalanxturret1, phalanxbarrel1, phalanxfirepoint1, phalanxfirepoint2, phalanxfirepoint3, phalanxfirepoint4, torpedofirepoint1, wake = piece('base', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'cannonturret2', 'cannonbarrel2', 'cannonfirepoint2', 'cannonturret3', 'cannonbarrel3', 'cannonfirepoint3', 'missileturret1', 'missilebarrel1', 'missilefirepoint1', 'missileturret2', 'missilebarrel2', 'missilefirepoint2', 'phalanxturret1', 'phalanxbarrel1', 'phalanxfirepoint1', 'phalanxfirepoint2', 'phalanxfirepoint3', 'phalanxfirepoint4', 'torpedofirepoint1', 'wake')
 
 common = include("headers/common_includes_lus.lua")
 
@@ -26,7 +26,7 @@ end
 
 function script.Bubbles()
 	while isMoving do
-		common.CustomEmitter(base, "bubbles")
+		common.CustomEmitter(wake, "bubbles")
 		Sleep(100)
 	end
 end

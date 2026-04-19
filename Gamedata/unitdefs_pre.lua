@@ -40,6 +40,7 @@ Shared.buildListFedSeaPlant = {
 	[[fedcrusader]],
 	[[fedcolossus]],
 	[[fedconqueror]],
+	[[fedharbinger]],
 }
 
 Shared.buildListf2landfac = {
@@ -80,6 +81,7 @@ Shared.buildListLozSeaPlant = {
 	[[lozenforcer]],
 	[[lozexecutioner]],
 	[[lozwarlord]],
+	[[lozleviathan]],
 }
 
 

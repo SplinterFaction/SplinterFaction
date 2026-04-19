@@ -127,6 +127,7 @@ unitDef                    = {
 	customParams                 = {
 		unittype				 = "air",
 		unitrole				 = "Air Scout",
+		buildmenucategory        = "Scout",
 		death_sounds             = "generic",
 		stockpileLimit           = 1,
 		nofriendlyfire           = "1",

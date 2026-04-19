@@ -15,24 +15,24 @@ unitDef                    = {
 -- Flight Characteristics Settings
 
 	maxVelocity        = 6,
-	acceleration       = 0.35,    -- A bit slower off the line
-	maxAcc             = 0.9,     -- Slightly less reactive to heading corrections
+	acceleration        = 0.45,   -- was 0.4
+	maxAcc              = 1.35,   -- was 1.0  (biggest “snappy” lever)
 
-	turnRadius         = 110,     -- Larger turn radius to reflect heavier frame
+	turnRadius          = 70,     -- was 80   (starts committing to turns sooner)
 
-	wingDrag           = 0.065,   -- A touch more drag, feels heavier
-	wingAngle          = 0.075,   -- Slightly less lift — slower climb/turn-in
+	wingDrag            = 0.062,  -- was 0.06 (tiny bump to keep it from gliding through turns)
+	wingAngle           = 0.075,  -- was 0.07 (slightly more lift/authority)
 
-	crashDrag          = 0.005,   -- Keep same
+	crashDrag           = 0.005,
 
-	maxBank            = 0.65,    -- Lower = shallower roll angle, more stable in turns
-	maxPitch           = 0.5,     -- Slightly reduced pitch agility
+	maxBank             = 0.75,   -- was 0.7  (tighter circle)
+	maxPitch            = 0.60,   -- was 0.55
 
-	verticalSpeed      = 3.2,     -- Can still climb/dive well, but not as zippy
+	maxAileron          = 0.016,  -- was 0.012 (faster roll-in to bank)
+	maxElevator         = 0.014,  -- was 0.012
+	maxRudder           = 0.0030, -- was 0.002 (more “bite” without getting weird)
 
-	maxAileron         = 0.010,   -- Slower roll rate
-	maxElevator        = 0.010,   -- Slower pitch
-	maxRudder          = 0.0018,  -- Slight yaw for minor heading adjustments
+	verticalSpeed       = 3.8,    -- was 3.5
 
 	useSmoothMesh		= true,
 
