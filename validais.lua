@@ -6,9 +6,9 @@ return {
   {
     name = 'ChickensAI',
 	desc = 'Chicken Defence. Spawns waves of enemies.'
-  }
+  },
   {
     name = 'Sandbox',
 	desc = 'Does absolutely Nothing',
-  }
+  },
 }
