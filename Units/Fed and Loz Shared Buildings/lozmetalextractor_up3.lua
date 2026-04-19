@@ -7,7 +7,7 @@ buildCostMetal = 1200
 
 primaryCEG = "custom:fusionreactionnuclear-4color"
 
-humanName = [[E->M Converter (Tech 3)]]
+humanName = [[E->M Converter]]
 description = [[Converts energy to metal]]
 
 iconType = [[structuremetalgeneratort3]]

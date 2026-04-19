@@ -69,7 +69,7 @@ local SHOW_TECHREQ_CONFIG   = "evo_showtechreq"
 
 local FAMILY_CATEGORY_ORDER = {
     Factory = { "Scout", "Skirmish", "Support", "Utility", "Unsorted" },
-    Builder = { "Economy", "Production", "Combat", "Utility", "Unsorted" },
+    Builder = { "Economy", "Geothermal", "Production", "Combat", "Utility", "Unsorted" },
 }
 
 local FAMILY_SECTION_TITLES = {
@@ -523,7 +523,7 @@ local function ProcessAllCommands(flush)
     local familyData = GetSelectedProducerFamilyData()
     local grouped = {
         Factory = { Scout = {}, Skirmish = {}, Support = {}, Utility = {}, Unsorted = {} },
-        Builder = { Economy = {}, Production = {}, Combat = {}, Utility = {}, Unsorted = {} },
+        Builder = { Economy = {}, Production = {}, Combat = {}, Utility = {}, Geothermal = {}, Unsorted = {} },
     }
     local fallback = {}
 

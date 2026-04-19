@@ -805,19 +805,19 @@ local function ResolveTooltipData()
 		return buildData
 	end
 
-	-- Selection fallback comes before order buttons, so a multi-selection is
-	-- never clobbered by the engine's unit-info tooltip string.
+	-- Check order buttons before selection — hovering an order button while a
+	-- unit is selected should show the order tooltip, not the unit stats.
+	local orderData = ResolveOrderFromTooltip(currentTooltip)
+	if orderData then
+		return orderData
+	end
+
+	-- Selection fallback: shown when no build/order button is being hovered.
 	local selectedUnits = spGetSelectedUnits()
 	if selectedUnits and #selectedUnits == 1 then
 		return { type = "unit", id = selectedUnits[1] }
 	elseif selectedUnits and #selectedUnits > 1 then
 		return { type = "selection", units = selectedUnits }
-	end
-
-	-- Only reach order resolution when nothing is selected and no build is hovered.
-	local orderData = ResolveOrderFromTooltip(currentTooltip)
-	if orderData then
-		return orderData
 	end
 
 	return nil
@@ -2078,7 +2078,7 @@ function widget:MouseWheel(up, value)
 
 	-- Tooltip panel scroll
 	local tp = tooltipPanel
-	if mx >= tp.x1 and mx <= tp.x2 and my >= tp.y1 and my <= tp.y2 and tooltipContentH > tooltipViewH then
+	if cachedPanelData and mx >= tp.x1 and mx <= tp.x2 and my >= tp.y1 and my <= tp.y2 and tooltipContentH > tooltipViewH then
 		local delta = up and -step or step
 		local newOff = Clamp(tooltipScrollOffset + delta, 0, math_max(0, tooltipContentH - tooltipViewH))
 		if newOff ~= tooltipScrollOffset then
@@ -2090,7 +2090,7 @@ function widget:MouseWheel(up, value)
 
 	-- Additional panel scroll
 	local ap = additionalPanel
-	if mx >= ap.x1 and mx <= ap.x2 and my >= ap.y1 and my <= ap.y2 and addContentH > addViewH then
+	if lastShowAdditional and mx >= ap.x1 and mx <= ap.x2 and my >= ap.y1 and my <= ap.y2 and addContentH > addViewH then
 		local delta = up and -step or step
 		local newOff = Clamp(addScrollOffset + delta, 0, math_max(0, addContentH - addViewH))
 		if newOff ~= addScrollOffset then
