@@ -13,7 +13,7 @@ return {
 	name='SplinterFaction',
 	description='SplinterFaction',
 	shortname='SF',
-	version='0.1.64', -- 0.1.64
+	version='0.1.65', -- 0.1.65
 	-- DON'T FORGET TO UPDATE THE AUTOHOST!
 	mutator='Official',
 	game='SplinterFaction',
