@@ -79,6 +79,11 @@ local icontypes = {
 		size=iconSize,
 		--radiusadjust=true,
 	},
+	botcounterintelt2 = {
+		bitmap='icons/supcomish/botcounterintelt2.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
 	botcounterintelt3 = {
 		bitmap='icons/supcomish/botcounterintelt3.png',
 		size=iconSize,
@@ -180,6 +185,11 @@ local icontypes = {
 	},
 	tankintelt1 = {
 		bitmap='icons/supcomish/tankintelt1.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
+	tankshieldt2 = {
+		bitmap='icons/supcomish/tankshieldt2.png',
 		size=iconSize,
 		--radiusadjust=true,
 	},
