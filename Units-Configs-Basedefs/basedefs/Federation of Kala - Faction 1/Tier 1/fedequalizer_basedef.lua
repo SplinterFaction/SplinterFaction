@@ -114,6 +114,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	particlebeamcannon                 = {
+		areaofeffect           = 25,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,

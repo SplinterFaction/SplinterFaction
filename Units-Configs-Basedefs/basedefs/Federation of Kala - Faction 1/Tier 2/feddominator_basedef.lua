@@ -113,6 +113,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	disruptionweapon                	= {
+		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,

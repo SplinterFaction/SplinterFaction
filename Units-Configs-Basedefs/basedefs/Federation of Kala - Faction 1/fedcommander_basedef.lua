@@ -136,6 +136,7 @@ unitDef                    = {
 
 weaponDefs                 = {
 	particlebeamcannon                 = {
+		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -179,6 +180,7 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up1                 = {
+		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -222,6 +224,7 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up2                 = {
+		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -265,6 +268,7 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up3                 = {
+		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -308,6 +312,7 @@ weaponDefs                 = {
 	},
 
 	particlebeamcannon_up4                 = {
+		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
