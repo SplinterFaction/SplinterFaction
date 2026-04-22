@@ -40,11 +40,12 @@ local enableMouseoverRings          = true
 -- Per-ring enable flags. Set any of these to false to completely skip maintaining
 -- and drawing that ring class. This is the best place to expose player options later.
 local ringEnabled = {
-	attack = true,
-	radar  = true,
-	sensor = true,
-	sight  = true,
-	build  = true,
+	attack   = true,
+	radar    = true,
+	sensor   = true,
+	sight    = true,
+	build    = true,
+	areaheal = true,
 }
 
 local colorConfig = {
@@ -94,6 +95,14 @@ local colorConfig = {
 		groupselectionfadescale = 0.06,
 		externallinethickness = 2.3,
 		internallinethickness = 1.3,
+	},
+
+	areaheal = {
+		color = { 0, 1, 0, 0.60 },
+		fadeparams = { 2500, 5000, 1.0, 0.0 },
+		groupselectionfadescale = 0.45,
+		externallinethickness = 60,
+		internallinethickness = 1.5,
 	},
 }
 
@@ -160,6 +169,8 @@ local unitSeismicDistance = {}
 local unitWeapons         = {}
 local unitMaxWeaponRange  = {}
 local unitIsStaticDefense = {}
+local unitAreaHealRadius  = {}
+local unitIsMobile        = {}  -- true if the unit can ever move (used for position caching)
 
 for udid, ud in pairs(UnitDefs) do
 	unitBuilder[udid]         = ud.isBuilder and (ud.canAssist or ud.canReclaim) and not (ud.isFactory and #ud.buildOptions > 0)
@@ -174,6 +185,10 @@ for udid, ud in pairs(UnitDefs) do
 	local mobile = (ud.speed or 0) > 0 or ud.canMove == true
 	local builderOnly = unitBuilder[udid] and not hasAttack
 	unitIsStaticDefense[udid] = hasAttack and (not mobile) and (not builderOnly)
+	unitIsMobile[udid]        = mobile
+
+	local cp = ud.customParams
+	unitAreaHealRadius[udid] = cp and tonumber(cp.areaheal_radius) or 0
 end
 
 --------------------------------------------------------------------------------
@@ -184,7 +199,7 @@ local circleSegments = math.max(8, circleDivs or 32)
 local circleVBO = nil
 local rangeShader = nil
 
-local rangeClasses = { "attack", "radar", "sensor", "sight", "build" }
+local rangeClasses = { "attack", "radar", "sensor", "sight", "build", "areaheal" }
 local rangeVAOs = {
 	selected  = {},
 	mine      = {},
@@ -253,16 +268,16 @@ local function initGL4()
 	for _, bucket in ipairs({ "selected", "mine", "other", "mouseover" }) do
 		for _, className in ipairs(rangeClasses) do
 			rangeVAOs[bucket][className] = InstanceVBOTable.makeInstanceVBOTable(
-				circleInstanceVBOLayout,
-				24,
-				bucket .. "_" .. className .. "_rangeoverview_gl4",
-				6
+					circleInstanceVBOLayout,
+					24,
+					bucket .. "_" .. className .. "_rangeoverview_gl4",
+					6
 			)
 
 			rangeVAOs[bucket][className].vertexVBO = circleVBO
 			rangeVAOs[bucket][className].VAO = InstanceVBOTable.makeVAOandAttach(
-				rangeVAOs[bucket][className].vertexVBO,
-				rangeVAOs[bucket][className].instanceVBO
+					rangeVAOs[bucket][className].vertexVBO,
+					rangeVAOs[bucket][className].instanceVBO
 			)
 		end
 	end
@@ -292,6 +307,31 @@ local selBuilderCount = 0
 
 local dirtySelection = false
 local dirtyBuildState = false
+local dirtyPersistent = false  -- set by unit creation/visibility events to trigger an early refresh
+
+-- #4: Pool of reusable instances tables to avoid per-unit GC allocation churn.
+local instancesPool = {}
+local function acquireInstances()
+	local t = instancesPool[#instancesPool]
+	if t then
+		instancesPool[#instancesPool] = nil
+		return t
+	end
+	return {}
+end
+local function releaseInstances(t)
+	for k in pairs(t) do t[k] = nil end
+	instancesPool[#instancesPool + 1] = t
+end
+
+-- #2: Static unit position cache.  Only populated for non-mobile units.
+-- Key: unitID, value: {x, y, z}
+local staticPositionCache = {}
+
+-- #3: Static unit attack range cache.  Avoids spGetUnitWeaponState for units
+-- whose ranges are fixed by their UnitDef and never change at runtime.
+-- Key: unitID, value: range (number)
+local staticAttackRangeCache = {}
 
 local cacheTable = {}
 for i = 1, 24 do
@@ -303,14 +343,15 @@ end
 --------------------------------------------------------------------------------
 
 local classOffsets = {
-	attack = 1,
-	radar  = 2,
-	sensor = 3,
-	sight  = 4,
-	build  = 5,
+	attack   = 1,
+	radar    = 2,
+	sensor   = 3,
+	sight    = 4,
+	build    = 5,
+	areaheal = 6,
 }
 
-local drawOrder = { "build", "radar", "sensor", "sight", "attack" }
+local drawOrder = { "build", "radar", "sensor", "sight", "attack", "areaheal" }
 
 local function IsRingClassEnabled(className)
 	return ringEnabled[className] ~= false
@@ -324,7 +365,7 @@ local function WantsClassForMode(mode, className)
 		if className == "build" then
 			return true
 		end
-		return className == "attack" or className == "radar" or className == "sensor" or className == "sight"
+		return className == "attack" or className == "radar" or className == "sensor" or className == "sight" or className == "areaheal"
 	elseif mode == "persistent_sight" then
 		return className == "sight"
 	elseif mode == "persistent_attack" then
@@ -340,9 +381,22 @@ local function IsAllied(unitID)
 end
 
 local function GetAttackRange(unitID, unitDefID)
+	-- #3: Static defenses have fixed weapon ranges — use the cache to avoid
+	-- a spGetUnitWeaponState call on every add.
+	if not unitIsMobile[unitDefID] then
+		local cached = staticAttackRangeCache[unitID]
+		if cached then
+			return cached
+		end
+	end
+
 	local weapons = unitWeapons[unitDefID]
 	if not weapons or #weapons == 0 then
-		return unitMaxWeaponRange[unitDefID] or 0
+		local r = unitMaxWeaponRange[unitDefID] or 0
+		if not unitIsMobile[unitDefID] then
+			staticAttackRangeCache[unitID] = r
+		end
+		return r
 	end
 
 	local best = 0
@@ -356,6 +410,10 @@ local function GetAttackRange(unitID, unitDefID)
 		if r > best then
 			best = r
 		end
+	end
+
+	if not unitIsMobile[unitDefID] then
+		staticAttackRangeCache[unitID] = best
 	end
 	return best
 end
@@ -446,11 +504,12 @@ local function MakeInstanceID(unitID, className, bucket)
 end
 
 local function classToStencilMask(className)
-	if className == "attack" then return 1 end
-	if className == "radar"  then return 2 end
-	if className == "sensor" then return 4 end
-	if className == "sight"  then return 8 end
-	if className == "build"  then return 16 end
+	if className == "attack"   then return 1  end
+	if className == "radar"    then return 2  end
+	if className == "sensor"   then return 4  end
+	if className == "sight"    then return 8  end
+	if className == "build"    then return 16 end
+	if className == "areaheal" then return 32 end
 	return 1
 end
 
@@ -519,6 +578,10 @@ local function RemoveUnitFromCollection(unitID, collection)
 		popElementInstance(rangeVAOs[entry.vaoBucket][className], instanceID)
 	end
 
+	-- #4: Return the instances table to the pool for reuse.
+	releaseInstances(entry.instances)
+	entry.instances = nil
+
 	collection[unitID] = nil
 end
 
@@ -528,7 +591,22 @@ local function AddUnitToCollection(unitID, collection, mode)
 	local unitDefID = spGetUnitDefID(unitID)
 	if not unitDefID then return end
 
-	local x, y, z = spGetUnitPosition(unitID, true, true)
+	local x, y, z
+	-- #2: For static units, use the cached position if available; otherwise
+	-- query and store it so future adds skip the Spring call entirely.
+	if not unitIsMobile[unitDefID] then
+		local cached = staticPositionCache[unitID]
+		if cached then
+			x, y, z = cached[1], cached[2], cached[3]
+		else
+			x, y, z = spGetUnitPosition(unitID, true, true)
+			if x then
+				staticPositionCache[unitID] = { x, y or 0, z }
+			end
+		end
+	else
+		x, y, z = spGetUnitPosition(unitID, true, true)
+	end
 	if not x then return end
 
 	local vaoBucket = "selected"
@@ -541,10 +619,11 @@ local function AddUnitToCollection(unitID, collection, mode)
 	end
 
 	local alphaScale = (vaoBucket == "mouseover") and 1.15 or 1.0
+	-- #4: Acquire a recycled instances table rather than allocating a new one.
 	local entry = {
 		unitDefID = unitDefID,
 		vaoBucket = vaoBucket,
-		instances = {},
+		instances = acquireInstances(),
 		posx = x,
 		posy = y or 0,
 		posz = z,
@@ -568,6 +647,9 @@ local function AddUnitToCollection(unitID, collection, mode)
 		if ShouldShowBuildRange(unitDefID) then
 			maybeAdd("build", unitBuildDistance[unitDefID] or 0)
 		end
+		if IsAllied(unitID) then
+			maybeAdd("areaheal", unitAreaHealRadius[unitDefID] or 0)
+		end
 	elseif mode == "persistent_sight" then
 		maybeAdd("sight", unitSightDistance[unitDefID] or 0)
 	elseif mode == "persistent_attack" then
@@ -583,10 +665,17 @@ local function AddUnitToCollection(unitID, collection, mode)
 		if ShouldShowBuildRange(unitDefID) then
 			maybeAdd("build", unitBuildDistance[unitDefID] or 0)
 		end
+		if IsAllied(unitID) then
+			maybeAdd("areaheal", unitAreaHealRadius[unitDefID] or 0)
+		end
 	end
 
 	if next(entry.instances) then
 		collection[unitID] = entry
+	else
+		-- Nothing was added; return the table to the pool immediately.
+		releaseInstances(entry.instances)
+		entry.instances = nil
 	end
 end
 
@@ -659,6 +748,7 @@ local function UpdateSelectionState()
 end
 
 local function RefreshPersistentUnits()
+	dirtyPersistent = false
 	local cx, _, cz = spGetCameraPosition()
 	local visibleUnits = spGetVisibleUnits(-1, nil, false)
 
@@ -670,7 +760,21 @@ local function RefreshPersistentUnits()
 		if not selectedSet[unitID] and unitID ~= mouseoverUnitID then
 			local unitDefID = spGetUnitDefID(unitID)
 			if unitDefID then
-				local x, y, z = spGetUnitPosition(unitID, true, true)
+				local x, y, z
+				-- #2: Avoid spGetUnitPosition for static units whose position is already known.
+				if not unitIsMobile[unitDefID] then
+					local cached = staticPositionCache[unitID]
+					if cached then
+						x, y, z = cached[1], cached[2], cached[3]
+					else
+						x, y, z = spGetUnitPosition(unitID, true, true)
+						if x then
+							staticPositionCache[unitID] = { x, y or 0, z }
+						end
+					end
+				else
+					x, y, z = spGetUnitPosition(unitID, true, true)
+				end
 				if x then
 					local dx = x - cx
 					local dz = z - cz
@@ -684,8 +788,8 @@ local function RefreshPersistentUnits()
 						if allied and (wantsAlliedSight or wantsAlliedDefenseAttack) then
 							keepMine[unitID] = true
 							local desiredMode = (wantsAlliedSight and wantsAlliedDefenseAttack) and "persistent_combo"
-								or (wantsAlliedDefenseAttack and "persistent_attack")
-								or "persistent_sight"
+									or (wantsAlliedDefenseAttack and "persistent_attack")
+									or "persistent_sight"
 							local entry = persistentUnitsMine[unitID]
 							local needsSight = desiredMode == "persistent_sight" or desiredMode == "persistent_combo"
 							local needsAttack = desiredMode == "persistent_attack" or desiredMode == "persistent_combo"
@@ -820,18 +924,18 @@ local function DrawRingBucket(bucket, primitiveType, thicknessKey, thicknessMult
 			local vao = rangeVAOs[bucket][className]
 
 			if vao and vao.VAO and vao.usedElements and vao.usedElements > 0 then
-			if thicknessKey then
-				local width = colorConfig[className][thicknessKey]
-				if bucket == "mouseover" then
-					width = width * 1.15
+				if thicknessKey then
+					local width = colorConfig[className][thicknessKey]
+					if bucket == "mouseover" then
+						width = width * 1.15
+					end
+					glLineWidth(width * thicknessMult)
 				end
-				glLineWidth(width * thicknessMult)
-			end
 
-			local stencilMask = classToStencilMask(className)
-			glStencilMask(stencilMask)
-			glStencilFunc(GL_NOTEQUAL, stencilMask, stencilMask)
-			vao.VAO:DrawArrays(primitiveType, circleSegments, 0, vao.usedElements, 0)
+				local stencilMask = classToStencilMask(className)
+				glStencilMask(stencilMask)
+				glStencilFunc(GL_NOTEQUAL, stencilMask, stencilMask)
+				vao.VAO:DrawArrays(primitiveType, circleSegments, 0, vao.usedElements, 0)
 			end
 		end
 	end
@@ -961,6 +1065,26 @@ function widget:UnitDestroyed(unitID)
 	if mouseoverUnitID == unitID then
 		mouseoverUnitID = nil
 	end
+	-- #2/#3: Clean up static caches so the slot can be reused if the unitID is recycled.
+	staticPositionCache[unitID] = nil
+	staticAttackRangeCache[unitID] = nil
+end
+
+-- #1: Flag a persistent refresh so newly created/finished units appear promptly
+-- without waiting up to persistentRefreshFrames frames.
+-- Also seed the static position cache here for buildings (#2) since they won't move.
+function widget:UnitCreated(unitID, unitDefID)
+	dirtyPersistent = true
+	if unitDefID and not unitIsMobile[unitDefID] then
+		local x, y, z = spGetUnitPosition(unitID, true, true)
+		if x then
+			staticPositionCache[unitID] = { x, y or 0, z }
+		end
+	end
+end
+
+function widget:UnitFinished(unitID, unitDefID)
+	dirtyPersistent = true
 end
 
 function widget:Update()
@@ -985,7 +1109,9 @@ function widget:Update()
 		dirtyBuildState = false
 	end
 
-	if gameFrame % persistentRefreshFrames == 0 then
+	-- #1: Run an early persistent refresh when a unit event dirtied the flag,
+	-- or fall back to the regular periodic poll.
+	if dirtyPersistent or gameFrame % persistentRefreshFrames == 0 then
 		RefreshPersistentUnits()
 	end
 
@@ -1000,10 +1126,10 @@ function widget:DrawWorld()
 	end
 
 	local hasAny =
-		(next(selections) ~= nil) or
-		(next(persistentUnitsMine) ~= nil) or
-		(next(persistentUnitsOther) ~= nil) or
-		(next(mouseovers) ~= nil)
+	(next(selections) ~= nil) or
+			(next(persistentUnitsMine) ~= nil) or
+			(next(persistentUnitsOther) ~= nil) or
+			(next(mouseovers) ~= nil)
 
 	if not hasAny then
 		return
