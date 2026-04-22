@@ -1,9 +1,8 @@
-
 function widget:GetInfo()
 	return {
 		name      = "Reclaim Field Highlight",
 		desc      = "Highlights clusters of reclaimable material",
-		author    = "ivand, refactored by esainane, edited for BAR by Lexon",
+		author    = "ivand, refactored by esainane, edited for BAR by Lexon, edited for SF",
 		date      = "2022",
 		license   = "public",
 		layer     = 1000,
@@ -27,17 +26,17 @@ VFS.Include("LuaRules/Configs/customcmds.h.lua")
 --Always show reclaim highlight
 local showHighlight_Always = false
 
-	--Show reclaim when f4 resource view is active
-	local showHighlight_Ecoview = true
+--Show reclaim when f4 resource view is active
+local showHighlight_Ecoview = true
 
-	--Show reclaim when any unit that can reclaim is selected
-	local showHighlight_AnyReclaimerSelected = true
+--Show reclaim when any unit that can reclaim is selected
+local showHighlight_AnyReclaimerSelected = true
 
-		--Show reclaim when a ressurection bot is selected
-		local showHighlight_ResBotSelected = true
+--Show reclaim when a ressurection bot is selected
+local showHighlight_ResBotSelected = true
 
-		--Show reclaim when reclaim order is selected
-		local showHighlight_ReclaimOrder = true
+--Show reclaim when reclaim order is selected
+local showHighlight_ReclaimOrder = true
 
 
 --------------------------------------------------------------------------------
@@ -46,10 +45,13 @@ local showHighlight_Always = false
 local includeEnergy = false
 
 --Metal value font
-local numberColor = {1, 1, 1, 0.8}
+local numberColor = {0.45, 0.75, 1.00, 1}
+local energyColor = {1.0, 1.0, 0.0, 0.8}
 local fontSizeMin = 30
-local fontSizeMax = 250
+local fontSizeMax = 150
 local fontScaling = 0.6
+
+local font
 
 --Field color
 local reclaimColor = {0, 0, 0, 0.2}
@@ -313,7 +315,7 @@ function Optics.new(incPoints, incNeighborMatrix, incMinPoints)
 						for si = sepStart, sepEnd - 1 do
 							clPoints[#clPoints + 1] = ordered[si].fID
 						end
-					--	TableEcho({clPoints=clPoints}, "clPoints")
+						--	TableEcho({clPoints=clPoints}, "clPoints")
 
 						clusters[#clusters + 1] = {}
 						clusters[#clusters].members = clPoints
@@ -335,7 +337,7 @@ end
 
 local function cross(p, q, r)
 	return (q.z - p.z) * (r.x - q.x)
-		 - (q.x - p.x) * (r.z - q.z)
+			- (q.x - p.x) * (r.z - q.z)
 end
 
 --- JARVIS MARCH
@@ -352,9 +354,9 @@ local function MonotoneChain(points)
 	if numPoints < 3 then return end
 
 	table.sort(points,
-		function(a, b)
-			return a.x == b.x and a.z > b.z or a.x > b.x
-		end
+	           function(a, b)
+		           return a.x == b.x and a.z > b.z or a.x > b.x
+	           end
 	)
 
 	local lower = {}
@@ -473,9 +475,9 @@ local function UpdateDrawEnabled()
 	if actionActive then return true end
 	local ecoview = (spGetMapDrawMode() == 'metal')
 	if showHighlight_Always or
-		(showHighlight_Ecoview and ecoview) or
-		(showHighlight_AnyReclaimerSelected and reclaimerSelected) or
-		(showHighlight_ResBotSelected and resBotSelected) then
+			(showHighlight_Ecoview and ecoview) or
+			(showHighlight_AnyReclaimerSelected and reclaimerSelected) or
+			(showHighlight_ResBotSelected and resBotSelected) then
 		return true
 	end
 	if showHighlight_ReclaimOrder then
@@ -570,6 +572,7 @@ local function UpdateFeatures(gf)
 			f.drawAlt = ((fy > 0 and fy) or 0) --+ f.height
 
 			f.metal = metal
+			f.energy = energy
 
 			knownFeatures[fID] = f
 
@@ -591,7 +594,7 @@ local function UpdateFeatures(gf)
 				knownFeatures[fID].drawAlt = ((fy > 0 and fy) or 0) --+ knownFeatures[fID].height
 
 				UpdateFeatureNeighborsMatrix(fID, false, true, false)
-			featuresUpdated = true
+				featuresUpdated = true
 			end
 
 			if knownFeatures[fID].metal ~= metal then
@@ -600,9 +603,12 @@ local function UpdateFeatures(gf)
 					--spEcho("knownFeatures[fID].clID")
 					local thisCluster = featureClusters[ knownFeatures[fID].clID ]
 					thisCluster.metal = thisCluster.metal - knownFeatures[fID].metal
+					thisCluster.energy = (thisCluster.energy or 0) - (knownFeatures[fID].energy or 0)
 					if metal >= minFeatureMetal then
 						thisCluster.metal = thisCluster.metal + metal
+						thisCluster.energy = (thisCluster.energy or 0) + energy
 						knownFeatures[fID].metal = metal
+						knownFeatures[fID].energy = energy
 						--spEcho("clusterMetalUpdated = true", thisCluster.metal)
 						clusterMetalUpdated = true
 					else
@@ -637,7 +643,7 @@ local function UpdateFeatures(gf)
 			knownFeatures[fID].clID = nil
 		end
 	end
-	
+
 end
 
 
@@ -674,6 +680,7 @@ local function ClusterizeFeatures()
 
 
 		local metal = 0
+		local energy = 0
 		for j = 1, #thisCluster.members do
 			local fID = thisCluster.members[j]
 			local fInfo = knownFeatures[fID]
@@ -684,11 +691,13 @@ local function ClusterizeFeatures()
 			thisCluster.zmax = max(thisCluster.zmax, fInfo.z)
 
 			metal = metal + fInfo.metal
+			energy = energy + (fInfo.energy or 0)
 			knownFeatures[fID].clID = i
 			unclusteredPoints[fID] = nil
 		end
 
 		thisCluster.metal = metal
+		thisCluster.energy = energy
 	end
 
 	for fID, _ in pairs(unclusteredPoints) do --add Singlepoint featureClusters
@@ -697,6 +706,7 @@ local function ClusterizeFeatures()
 
 		thisCluster.members = {fID}
 		thisCluster.metal = fInfo.metal
+		thisCluster.energy = fInfo.energy or 0
 
 		thisCluster.xmin = fInfo.x
 		thisCluster.xmax = fInfo.x
@@ -749,16 +759,16 @@ local function ClustersToConvexHull()
 			}
 			--Spring.MarkerAddPoint(knownFeatures[fID].x, 0, knownFeatures[fID].z, string.format("%i(%i)", fc, fcm))
 		end
-		
+
 		--- TODO perform pruning as described in the article below, if convex hull algo will start to choke out
 		-- http://mindthenerd.blogspot.ru/2012/05/fastest-convex-hull-algorithm-ever.html
-		
+
 		local convexHull
 		if #clusterPoints >= 3 and lineCheck(clusterPoints) then
 			--spEcho("#clusterPoints >= 3")
 			--convexHull = ConvexHull.JarvisMarch(clusterPoints)
 			convexHull = MonotoneChain(clusterPoints) --twice faster
-		else 
+		else
 			--spEcho("not #clusterPoints >= 3")
 			local thisCluster = featureClusters[fc]
 
@@ -796,7 +806,7 @@ local function ClustersToConvexHull()
 			cz = cz + convexHullPoint.z
 			cy = max(cy, convexHullPoint.y)
 		end
-		
+
 		local totalArea = 0
 		local pt1 = convexHull[1]
 		for i = 2, #convexHull - 1 do
@@ -811,17 +821,17 @@ local function ClustersToConvexHull()
 			local triangleArea = sqrt(p * (p - a) * (p - b) * (p - c))
 			totalArea = totalArea + triangleArea
 		end
-		
+
 		convexHull.area = totalArea
 		convexHull.center = {x = cx/#convexHull, z = cz/#convexHull, y = cy + 1}
 
 		featureConvexHulls[fc] = convexHull
 
---[[
-		for i = 1, #convexHull do
-			Sppring.MarkerAddPoint(convexHull[i].x, convexHull[i].y, convexHull[i].z, string.format("C%i(%i)", fc, i))
-		end
-]]--
+		--[[
+				for i = 1, #convexHull do
+					Sppring.MarkerAddPoint(convexHull[i].x, convexHull[i].y, convexHull[i].z, string.format("C%i(%i)", fc, i))
+				end
+		]]--
 	end
 end
 
@@ -830,7 +840,7 @@ end
 
 function widget:Initialize()
 	screenx, screeny = widgetHandler:GetViewSizes()
-	
+	font = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 60, 2, 2)
 	widgetHandler:AddAction("reclaim_highlight", enableHighlight, nil, "p")
 	widgetHandler:AddAction("reclaim_highlight", disableHighlight, nil, "r")
 end
@@ -889,19 +899,27 @@ local function DrawFeatureClusterText()
 		fontSize = min(fontSize, fontSizeMax)
 
 		local metal = featureClusters[i].metal
-		local metalText
-		--Spring.Debug.TableEcho(Spring.GetCameraState())
-		if metal < 1000 then
-			metalText = string.format("%.0f", metal) --exact number
-		elseif metal < 10000 then
-			metalText = string.format("%.1fK", math.floor(metal / 100) / 10) --4.5K
-		else
-			metalText = string.format("%.0fK", math.floor(metal / 1000)) --40K
+		local energy = featureClusters[i].energy or 0
+
+		local function formatValue(v)
+			if v < 1000 then
+				return string.format("%.0f", v)
+			elseif v < 10000 then
+				return string.format("%.1fK", math.floor(v / 100) / 10)
+			else
+				return string.format("%.0fK", math.floor(v / 1000))
+			end
 		end
 
-		glColor(numberColor)
+		local metalText  = "" .. formatValue(metal)
+		local energyText = "" .. formatValue(energy)
 
-		glText(metalText, 0, 0, fontSize, "cv")--cvo for outline
+		local lineSpacing = fontSize * 1.1
+
+		font:SetTextColor(numberColor[1], numberColor[2], numberColor[3], numberColor[4])
+		font:Print(metalText,  0,  lineSpacing * 0.5, fontSize, "cvo")
+		font:SetTextColor(energyColor[1], energyColor[2], energyColor[3], energyColor[4])
+		font:Print(energyText, 0, -lineSpacing * 0.5, fontSize, "cvo")
 
 		glPopMatrix()
 	end
@@ -1022,4 +1040,5 @@ function widget:Shutdown()
 	if drawFeatureClusterTextList then
 		glDeleteList(drawFeatureClusterTextList)
 	end
+	if font then gl.DeleteFont(font) end
 end

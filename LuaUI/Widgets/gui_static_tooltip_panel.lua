@@ -928,15 +928,18 @@ local function CalcStatsEconLayout(data, x1, yTop, w)
 
 	-- Right column rows (economy)
 	local hasStorage = data.storageText ~= nil
+	local isFeature  = data.isFeature
 	local rightRows  = {}
-	rightRows[#rightRows+1] = { lbl="Metal",   val=data.metalCostText  or "-", valColor=METAL_TEXT_COLOR,  live=true  }
-	rightRows[#rightRows+1] = { lbl="Energy",  val=data.energyCostText or "-", valColor=ENERGY_TEXT_COLOR, live=true  }
+	rightRows[#rightRows+1] = { lbl=isFeature and "M. Left" or "Metal",  val=data.metalCostText  or "-", valColor=METAL_TEXT_COLOR,  live=true  }
+	rightRows[#rightRows+1] = { lbl=isFeature and "E. Left" or "Energy", val=data.energyCostText or "-", valColor=ENERGY_TEXT_COLOR, live=true  }
 	if hasStorage then
 		rightRows[#rightRows+1] = { lbl="Storage", val="storage", valColor=nil, live=false, isStorage=true }
 	end
-	local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-	rightRows[#rightRows+1] = { lbl="Supply",  val=data.supplyText or "-",     valColor=supplyColor,       live=true  }
-	rightRows[#rightRows+1] = { lbl="Flow",    val="flow",                     valColor=nil,               live=true,  isFlow=true }
+	if not isFeature then
+		local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
+		rightRows[#rightRows+1] = { lbl="Supply",  val=data.supplyText or "-",     valColor=supplyColor,       live=true  }
+		rightRows[#rightRows+1] = { lbl="Flow",    val="flow",                     valColor=nil,               live=true,  isFlow=true }
+	end
 
 	local headerH  = math_floor(24 * uiScale)
 	local rowCount = math_max(#leftRows, #rightRows)
@@ -1021,16 +1024,24 @@ local function DrawStatsEconDynamic(data, L)
 	local colW   = L.colW
 	local valOff = L.valOff
 
-	-- Left column live values
+	-- Left column live values (read from data, not stale row.val)
 	local cy = L.yTop - L.headerH - math_floor(4 * uiScale)
 	for _, row in ipairs(L.leftRows) do
 		if row.live then
-			DrawTextFitted(row.val, L.x1 + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, row.valColor, "o")
+			local val, color
+			if     row.lbl == "HP"         then val = data.healthText;     color = HEADER_TEXT
+			elseif row.lbl == "OvrShield"  then val = data.overshieldText; color = OVERSHIELD_TEXT_COLOR
+			elseif row.lbl == "Shield"     then val = data.shieldText;     color = SHIELD_TEXT_COLOR
+			elseif row.lbl == "Status"     then val = data.statusText;     color = HEADER_TEXT
+			end
+			if val then
+				DrawTextFitted(val, L.x1 + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, color, "o")
+			end
 		end
 		cy = cy - LINE_H
 	end
 
-	-- Right column live values
+	-- Right column live values (read from data, not stale row.val)
 	cy = L.yTop - L.headerH - math_floor(4 * uiScale)
 	for _, row in ipairs(L.rightRows) do
 		if row.live then
@@ -1044,12 +1055,13 @@ local function DrawStatsEconDynamic(data, L)
 				DrawText(mv or "-",fx, cy, BODY_SIZE, "o", mvColor)           fx = fx + math_floor(GetTextWidth(mv or "-")* BODY_SIZE) + math_floor(2 * uiScale)
 				DrawText("E:",     fx, cy, BODY_SIZE, "o", MUTED_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth("E:")     * BODY_SIZE) + math_floor(2 * uiScale)
 				DrawText(ev or "-",fx, cy, BODY_SIZE, "o", evColor)
-			else
+			elseif row.lbl == "Metal" or row.lbl == "M. Left" then
+				DrawTextFitted(data.metalCostText or "-", mid + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, METAL_TEXT_COLOR, "o")
+			elseif row.lbl == "Energy" or row.lbl == "E. Left" then
+				DrawTextFitted(data.energyCostText or "-", mid + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, ENERGY_TEXT_COLOR, "o")
+			elseif row.lbl == "Supply" then
 				local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-				local vc = row.isStorage and nil or (row.lbl == "Supply" and supplyColor or row.valColor)
-				if vc then
-					DrawTextFitted(row.val, mid + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, vc, "o")
-				end
+				DrawTextFitted(data.supplyText or "-", mid + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, supplyColor, "o")
 			end
 		end
 		cy = cy - LINE_H
@@ -1284,7 +1296,7 @@ local function RefreshLiveUnitFields(panelData, unitID)
 end
 
 local function RefreshLiveFeatureFields(panelData, featureID)
-	local reclaimLeft, metal, energy = spGetFeatureResources(featureID)
+	local metal, _, energy, _, reclaimLeft = spGetFeatureResources(featureID)
 	local health, maxHealth = spGetFeatureHealth(featureID)
 	panelData.healthText    = health and maxHealth and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil
 	panelData.metalCostText  = metal    and FormatNbr(metal,  0) or "-"
@@ -1419,7 +1431,7 @@ local function BuildFeaturePanelData(featureID)
 	local fd = featureDefID and FeatureDefs[featureDefID]
 	if not fd then return nil end
 
-	local reclaimLeft, metal, energy = spGetFeatureResources(featureID)
+	local metal, _, energy, _, reclaimLeft = spGetFeatureResources(featureID)
 	local health, maxHealth = spGetFeatureHealth(featureID)
 
 	return {
@@ -1436,6 +1448,7 @@ local function BuildFeaturePanelData(featureID)
 		metalCostText  = metal  and FormatNbr(metal,  0) or "-",
 		energyCostText = energy and FormatNbr(energy, 0) or "-",
 		supplyText = nil,
+		storageText = nil,
 		metalFlowText = nil,
 		energyFlowText = nil,
 
@@ -1445,6 +1458,7 @@ local function BuildFeaturePanelData(featureID)
 		weaponCards = {},
 		unitGuideText = nil,
 		isLiveFeature = true,
+		isFeature = true,
 	}
 end
 
@@ -1953,8 +1967,30 @@ function widget:ViewResize()
 	FreeDisplayLists()
 end
 
+local dynamicDirty = false
+
 function widget:Update()
 	ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
+
+	-- Refresh live values every frame and flag for redraw if anything changed.
+	-- GL list creation must happen in DrawScreen, so we just set a dirty flag here.
+	if cachedIsLiveFeature and cachedPanelData and cachedResolvedKey then
+		local featureID = tonumber(cachedResolvedKey:match("feature:(.+)"))
+		if featureID then
+			RefreshLiveFeatureFields(cachedPanelData, featureID)
+			if DynamicValuesChanged(cachedPanelData) then
+				dynamicDirty = true
+			end
+		end
+	elseif cachedIsLiveUnit and cachedPanelData and cachedResolvedKey then
+		local unitID = tonumber(cachedResolvedKey:match("unit:(.+)"))
+		if unitID then
+			RefreshLiveUnitFields(cachedPanelData, unitID)
+			if DynamicValuesChanged(cachedPanelData) then
+				dynamicDirty = true
+			end
+		end
+	end
 end
 
 function widget:KeyPress(key, mods, isRepeat)
@@ -2115,7 +2151,8 @@ function widget:DrawScreen()
 			cachedIsLiveUnit    = (resolved.type == "unit")
 			cachedIsLiveFeature = (resolved.type == "feature")
 			if cachedPanelData then
-				cachedPanelData.isLiveUnit = cachedIsLiveUnit
+				cachedPanelData.isLiveUnit    = cachedIsLiveUnit
+				cachedPanelData.isLiveFeature = cachedIsLiveFeature
 			end
 			PlayHoverSound()
 		else
@@ -2136,24 +2173,20 @@ function widget:DrawScreen()
 		end
 
 	elseif cachedIsLiveUnit and cachedPanelData then
-		RefreshLiveUnitFields(cachedPanelData, resolved.id)
-		if not dynamicList or DynamicValuesChanged(cachedPanelData) then
-			SaveDynamicValues(cachedPanelData)
-			if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end
-			dynamicList = gl.CreateList(function()
-				BakeDynamicList(cachedPanelData)
-			end)
-		end
+		-- live refresh handled in widget:Update
 
 	elseif cachedIsLiveFeature and cachedPanelData then
-		RefreshLiveFeatureFields(cachedPanelData, resolved.id)
-		if not dynamicList or DynamicValuesChanged(cachedPanelData) then
-			SaveDynamicValues(cachedPanelData)
-			if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end
-			dynamicList = gl.CreateList(function()
-				BakeDynamicList(cachedPanelData)
-			end)
-		end
+		-- live refresh handled in widget:Update
+	end
+
+	-- Rebuild dynamic list if Update flagged a value change
+	if dynamicDirty and cachedPanelData then
+		dynamicDirty = false
+		SaveDynamicValues(cachedPanelData)
+		if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end
+		dynamicList = gl.CreateList(function()
+			BakeDynamicList(cachedPanelData)
+		end)
 	end
 
 	if not staticList then return end

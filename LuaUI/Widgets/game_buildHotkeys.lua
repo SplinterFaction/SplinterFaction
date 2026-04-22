@@ -1,84 +1,64 @@
 function widget:GetInfo()
 	return {
-	version   = "1.0",
-	name      = "SplinterFaction Build Hotkeys",
-	desc      = "Use hotkeys to build units",
-	author    = "CommonPlayer",
-	date      = "5 Oct 2018",
-	license   = "GNU GPL, v2 or later",
-	layer     = 0,
-	enabled   = true,
-	handler   = true, --can use widgetHandler:x()
+		version   = "1.1",
+		name      = "SplinterFaction Build Hotkeys",
+		desc      = "Use hotkeys to build units",
+		author    = "CommonPlayer",
+		date      = "5 Oct 2018",
+		license   = "GNU GPL, v2 or later",
+		layer     = 0,
+		enabled   = true,
+		handler   = true, --can use widgetHandler:x()
 	}
 end
 
 VFS.Include("luaui/configs/evo_buildHotkeysConfig.lua")
 
 -- Taken from gui_red_buildordermenu
-local sGetSelectedUnitsCount = Spring.GetSelectedUnitsCount
 local sGetActiveCmdDescs = Spring.GetActiveCmdDescs
 local ssub = string.sub
 
+-- Hiddencmds defined once at module level, not inside GetCommands() every call
+local hiddencmds = {
+	[76] = true, --load units clone
+	[65] = true, --selfd
+	[9] = true, --gatherwait
+	[8] = true, --squadwait
+	[7] = true, --deathwait
+	[6] = true, --timewait
+	[39812] = true, --raw move
+	[34922] = true, -- set unit target
+	--[34923] = true, -- set target
+}
+
 local function GetCommands()
-	local hiddencmds = {
-		[76] = true, --load units clone
-		[65] = true, --selfd
-		[9] = true, --gatherwait
-		[8] = true, --squadwait
-		[7] = true, --deathwait
-		[6] = true, --timewait
-		[39812] = true, --raw move
-		[34922] = true, -- set unit target
-		--[34923] = true, -- set target
-	}
 	local buildcmds = {}
-	local statecmds = {}
-	local othercmds = {}
 	local buildcmdscount = 0
-	local statecmdscount = 0
-	local othercmdscount = 0
-	for index,cmd in pairs(sGetActiveCmdDescs()) do
+	for index, cmd in pairs(sGetActiveCmdDescs()) do
 		if (type(cmd) == "table") then
 			if (
-			(not hiddencmds[cmd.id]) and
-			(cmd.action ~= nil) and
-			--(not cmd.disabled) and
-			(not widgetHandler.commands[index].hidden) and --apparently GetActiveCmdDescs is bugged and returns hidden for every command
-			(cmd.type ~= 21) and
-			(cmd.type ~= 18) and
-			(cmd.type ~= 17)
+					(not hiddencmds[cmd.id]) and
+							(cmd.action ~= nil) and
+							(not widgetHandler.commands[index].hidden) and
+							(cmd.type ~= 21) and
+							(cmd.type ~= 18) and
+							(cmd.type ~= 17)
 			) then
-				if (((cmd.type == 20) --build building
-				or (ssub(cmd.action,1,10) == "buildunit_"))) then
+				if ((cmd.type == 20) or (ssub(cmd.action, 1, 10) == "buildunit_")) then
 					buildcmdscount = buildcmdscount + 1
 					buildcmds[buildcmdscount] = cmd
-				elseif (cmd.type == 5) then
-					statecmdscount = statecmdscount + 1
-					statecmds[statecmdscount] = cmd
-				else
-					othercmdscount = othercmdscount + 1
-					othercmds[othercmdscount] = cmd
 				end
 			end
 		end
 	end
-	local tempcmds = {}
-	for i=1,statecmdscount do
-		tempcmds[i] = statecmds[i]
-	end
-	for i=1,othercmdscount do
-		tempcmds[i+statecmdscount] = othercmds[i]
-	end
-	othercmdscount = othercmdscount + statecmdscount
-	othercmds = tempcmds
-	
-	return buildcmds,othercmds
+	return buildcmds
 end
 
-local sPlaySoundFile = Spring.PlaySoundFile
 local sGetModKeyState = Spring.GetModKeyState
 local sGetCmdDescIndex = Spring.GetCmdDescIndex
 local sSetActiveCommand = Spring.SetActiveCommand
+local sGetConfigInt    = Spring.GetConfigInt
+local schar            = string.char
 
 local updateCommands = false
 local buildOptions = {}
@@ -87,94 +67,121 @@ local lengBuildOptions = 0
 local lengKeysPressed = 0
 local keysPressed = {}
 
-local sGetKeySymbol = Spring.GetKeySymbol
-
--- VFS.Include("LuaUI/Headers/keysym.h.lua", nil, VFS.RAW_FIRST)
--- local keyCodeToString = {}
--- for k, v in pairs(KEYSYMS) do keyCodeToString[v] = k:sub(1, 1) .. k:sub(2):lower() end
-
 local hotkeyText = ""
+local hotkeyDirty = false  -- only redraw text when state actually changes
 local screenWidth = gl.GetViewSizes()
+
+-- Pre-allocated reusable staging table for building hotkeyText
+local hotkeyParts = {}
+
 local function updateHotkeyText()
 	if lengKeysPressed > 0 then
-		hotkeyText = "Build hotkey: "
+		hotkeyParts[1] = "Build hotkey: "
+		local n = 1
 		for i = 1, lengKeysPressed do
-		    -- hotkeyText = hotkeyText .. keyCodeToString[keysPressed[i]] .. " + "
-		    if keysPressed[i] >= 97 and keysPressed[i] <= 122 then hotkeyText = hotkeyText .. string.char(keysPressed[i]):upper() .. " + " end
-		    -- local keySymbol = sGetKeySymbol(keysPressed[i])
-		    -- hotkeyText = hotkeyText .. keySymbol:sub(1, 1):upper() .. keySymbol:sub(2) .. " + "
-		    -- if i < lengKeysPressed then str = str .. " + " end
+			local k = keysPressed[i]
+			if k >= 97 and k <= 122 then
+				n = n + 1
+				hotkeyParts[n] = schar(k):upper()
+				n = n + 1
+				hotkeyParts[n] = " + "
+			end
 		end
-
-	else hotkeyText = "" end
+		hotkeyText = table.concat(hotkeyParts, "", 1, n)
+	else
+		hotkeyText = ""
+	end
+	hotkeyDirty = false
 end
-local function shortenHotkeyText() hotkeyText = hotkeyText:sub(1, -4) end
-local function hotkeyTargetDisabled() hotkeyText = hotkeyText:sub(1, -4) .. ' (Locked)' end
+
+local function shortenHotkeyText()
+	hotkeyText = hotkeyText:sub(1, -4)
+end
+
+local function hotkeyTargetDisabled()
+	hotkeyText = hotkeyText:sub(1, -4) .. ' (Locked)'
+end
+
 WG.buildHotkeys = {}
 WG.buildHotkeys.keysPressed = {}
 WG.buildHotkeys.hasUpdated = false
+
+-- Clears a table in-place to avoid allocating a new one each call
+local function clearTable(t)
+	for k in pairs(t) do t[k] = nil end
+end
+
 local function updateWidgetVar()
-	WG.buildHotkeys.keysPressed = {}
+	local wkp = WG.buildHotkeys.keysPressed
+	clearTable(wkp)
 	for i = 1, lengKeysPressed do
-		if keysPressed[i] >= 97 and keysPressed[i] <= 122 then WG.buildHotkeys.keysPressed[i] = string.char(keysPressed[i]):upper() end
-		-- local keySymbol = sGetKeySymbol(keysPressed[i])
-		-- WG.buildHotkeys.keysPressed[i] = keySymbol:sub(1, 1):upper() .. keySymbol:sub(2)
+		local k = keysPressed[i]
+		if k >= 97 and k <= 122 then wkp[i] = schar(k):upper() end
 	end
 	WG.buildHotkeys.hasUpdated = true
 end
 
-local sGetConfigInt = Spring.GetConfigInt
-
 function widget:CommandsChanged()
 	updateCommands = true
 end
+
 local oldBuildOptions, oldLengBuildOptions
+
 function widget:Update(dt)
-	if updateCommands then
-		updateCommands = false
-		
-		local same = true
-		if not oldLengBuildOptions then same = false end
-		buildOptions = {}
-		lengBuildOptions = 0
-		local buildcmds, othercmds = GetCommands()
-		for i = 1, #buildcmds do
-			local name = buildcmds[i].name
-			if name:find("_up", -5) then name = name:sub(1, -5) end
-			--if nameToKeyCode[name] and not buildcmds[i].disabled then
-			if nameToKeyCode[name] then
-				lengBuildOptions = lengBuildOptions + 1
-				buildOptions[lengBuildOptions] = {
-					keyCode = nameToKeyCode[name],
-					id = buildcmds[i].id,
-					disabled = buildcmds[i].disabled
-				}
-				if same and
+	if not updateCommands then return end
+	updateCommands = false
+
+	local same = (oldLengBuildOptions ~= nil)
+	buildOptions = {}
+	lengBuildOptions = 0
+	local buildcmds = GetCommands()
+	for i = 1, #buildcmds do
+		local name = buildcmds[i].name
+		if name:find("_up", -5) then name = name:sub(1, -5) end
+		if nameToKeyCode[name] then
+			lengBuildOptions = lengBuildOptions + 1
+			buildOptions[lengBuildOptions] = {
+				keyCode  = nameToKeyCode[name],
+				id       = buildcmds[i].id,
+				disabled = buildcmds[i].disabled
+			}
+			if same and
 					(lengBuildOptions > oldLengBuildOptions or
-					buildOptions[lengBuildOptions].keyCode ~= oldBuildOptions[lengBuildOptions].keyCode) then
-					same = false
-				end
+							buildOptions[lengBuildOptions].keyCode ~= oldBuildOptions[lengBuildOptions].keyCode) then
+				same = false
 			end
 		end
-		if not same then
-			lengKeysPressed = 0
-			keysPressed = {}
-			updateHotkeyText()
-		end
-		oldBuildOptions = buildOptions
-		oldLengBuildOptions = lengBuildOptions
 	end
+	if not same then
+		lengKeysPressed = 0
+		keysPressed = {}
+		updateHotkeyText()
+	end
+	oldBuildOptions = buildOptions
+	oldLengBuildOptions = lengBuildOptions
+end
+
+-- Reusable match result table — avoids allocation on every keypress
+local matches = {}
+local matchDisabled = {}
+local matchSameLeng = {}
+
+local function resetKeys()
+	lengKeysPressed = 0
+	keysPressed = {}
+	updateHotkeyText()
+	updateWidgetVar()
 end
 
 function widget:KeyPress(key, mods, isRepeat)
-	if key == 304 or key == 306 or key == 308 then return false end -- shift, ctrl, alt keys
+	if key == 304 or key == 306 or key == 308 then return false end -- shift, ctrl, alt
+
 	lengKeysPressed = lengKeysPressed + 1
 	keysPressed[lengKeysPressed] = key
 	updateHotkeyText()
 	updateWidgetVar()
 
 	local lengMatches = 0
-	local matches = {}
 	for i = 1, lengBuildOptions do
 		local getKeyCode = buildOptions[i].keyCode
 		local lengKeyCode = #getKeyCode
@@ -188,65 +195,57 @@ function widget:KeyPress(key, mods, isRepeat)
 			end
 			if match then
 				lengMatches = lengMatches + 1
-				matches[lengMatches] = {
-					id = buildOptions[i].id,
-					disabled = buildOptions[i].disabled,
-					sameLeng = lengKeyCode == lengKeysPressed
-				}
+				matches[lengMatches]     = buildOptions[i].id
+				matchDisabled[lengMatches] = buildOptions[i].disabled
+				matchSameLeng[lengMatches] = (lengKeyCode == lengKeysPressed)
 			end
 		end
 	end
-	if matches[1] then
+
+	if lengMatches > 0 then
 		for i = 1, lengMatches do
-			if matches[i].sameLeng then
-				-- if playSounds then
-				-- 	sPlaySoundFile(sound_queue_add, 0.75, 'ui')
-				-- end
-				if matches[i].disabled then
+			if matchSameLeng[i] then
+				if matchDisabled[i] then
 					hotkeyTargetDisabled()
 				else
 					local alt, ctrl, meta, shift = sGetModKeyState()
 					local rmb = 1
 					if sGetConfigInt("evo_ctrl_dequeue", 1) == 1 then rmb, ctrl = ctrl and 3 or 1, false end
-					local index = sGetCmdDescIndex(matches[i].id)
+					local index = sGetCmdDescIndex(matches[i])
 					sSetActiveCommand(index, rmb, true, false, alt, ctrl, meta, shift)
 					shortenHotkeyText()
 					updateWidgetVar()
 				end
 				keysPressed[lengKeysPressed] = nil
-				lengKeysPressed = lengKeysPressed - 1 -- so you can B + Q + Q + Q to spam units
-				if matches[i].disabled then updateWidgetVar() end -- Don't show you that you have a locked building selected
+				lengKeysPressed = lengKeysPressed - 1
+				if matchDisabled[i] then updateWidgetVar() end
 				return true
 			end
 		end
-	else -- reset
-		lengKeysPressed = 0
-		keysPressed = {}
-		updateHotkeyText()
-		updateWidgetVar()
+	else
+		resetKeys()
 	end
 	return false
 end
 
 function widget:MousePress(x, y, button)
-	-- reset on left click or right click (button = 2 for clicking mouse wheel because ???)
-	--if button == 1 or button == 3 then building = -1 end
 	if button == 1 or button == 3 then
-		lengKeysPressed = 0
-		keysPressed = {}
-		updateHotkeyText()
-		updateWidgetVar()
+		resetKeys()
 	end
 	return false
 end
 
 function widget:RecvLuaMsg(msg, playerID)
-	if msg:sub(1,18) == 'LobbyOverlayActive' then
-		chobbyInterface = (msg:sub(1,19) == 'LobbyOverlayActive1')
+	if msg:sub(1, 18) == 'LobbyOverlayActive' then
+		chobbyInterface = (msg:sub(1, 19) == 'LobbyOverlayActive1')
 	end
 end
 
+function widget:ViewResize(vsx, vsy)
+	screenWidth = vsx
+end
+
 function widget:DrawScreen()
-	if chobbyInterface then return end
+	if chobbyInterface or hotkeyText == "" then return end
 	gl.Text(hotkeyText, screenWidth * 0.5, 60, 20, "onc")
 end
