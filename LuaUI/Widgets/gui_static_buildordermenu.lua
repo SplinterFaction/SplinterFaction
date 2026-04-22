@@ -37,7 +37,7 @@ local SCROLLBAR_THUMB_HOVER = {1.0, 1.0, 1.0, 0.30}
 -- UI scaling.  Change BASE_RESOLUTION to match your "designed-for" height.
 -- At that resolution uiScale == 1.0 and all sizes are their base values.
 -- At higher/lower resolutions everything scales proportionally.
-local BASE_RESOLUTION = 1440
+local BASE_RESOLUTION = 1080
 
 local uiScale = 1.0  -- computed in UpdatePanelRects
 
@@ -124,6 +124,8 @@ local glVertex               = gl.Vertex
 local GL_TRIANGLE_FAN        = GL.TRIANGLE_FAN
 local GL_LINE_LOOP           = GL.LINE_LOOP
 local GL_QUADS               = GL.QUADS
+
+local font
 
 local math_min               = math.min
 local math_max               = math.max
@@ -689,14 +691,17 @@ local function DrawPanel(x1, y1, x2, y2)
     glTexture(false)
 end
 
-local function DrawTextFitted(text, x, y, size, opts, maxWidth)
+local function DrawTextFitted(text, x, y, size, opts, maxWidth, color)
     if not text or text == '' then return end
-    local estWidth = gl.GetTextWidth(text) * size
+    local estWidth = font:GetTextWidth(text) * size
     local drawSize = size
     if maxWidth and estWidth > maxWidth and estWidth > 0 then
         drawSize = size * (maxWidth / estWidth)
     end
-    glText(text, x, y, drawSize, opts)
+    if color then
+        font:SetTextColor(color[1], color[2], color[3], color[4] or 1)
+    end
+    font:Print(text, x, y, drawSize, opts)
 end
 
 local function GetInfoTextBaseSizes(buttonW)
@@ -827,13 +832,11 @@ local function BuildButtonLayout_Bake(scrollOffset)
 
             if item.kind == "section" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 7, SECTION_BG)
-                glColor(HEADER_TEXT)
-                DrawTextFitted(item.text, item.x1 + math_floor(8 * uiScale), iy1 + math_floor(6 * uiScale), math_floor(13 * uiScale), "o", item.x2 - item.x1 - math_floor(16 * uiScale))
+                DrawTextFitted(item.text, item.x1 + math_floor(8 * uiScale), iy1 + math_floor(6 * uiScale), math_floor(13 * uiScale), "o", item.x2 - item.x1 - math_floor(16 * uiScale), HEADER_TEXT)
 
             elseif item.kind == "category" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 6, CATEGORY_BG)
-                glColor(HEADER_TEXT)
-                DrawTextFitted(item.text, item.x1 + math_floor(12 * uiScale), iy1 + math_floor(4 * uiScale), math_floor(11 * uiScale), "o", item.x2 - item.x1 - math_floor(20 * uiScale))
+                DrawTextFitted(item.text, item.x1 + math_floor(12 * uiScale), iy1 + math_floor(4 * uiScale), math_floor(11 * uiScale), "o", item.x2 - item.x1 - math_floor(20 * uiScale), HEADER_TEXT)
 
             elseif item.kind == "buildbutton" then
                 local cmd      = item.cmd
@@ -856,14 +859,13 @@ local function BuildButtonLayout_Bake(scrollOffset)
                     local iconH   = iconY2 - iconY1
                     local qSize   = math_max(math_floor(11 * uiScale), math_floor(iconH * 0.16))
                     local qPadX, qPadY = math_floor(5 * uiScale), math_floor(4 * uiScale)
-                    local panelW2 = math_floor(gl.GetTextWidth(queueText) * qSize + qPadX * 2)
+                    local panelW2 = math_floor(font:GetTextWidth(queueText) * qSize + qPadX * 2)
                     local panelH2 = math_floor(qSize + qPadY * 2)
                     local qx2, qy2 = item.x2 - math_floor(4 * uiScale), iconY2 - math_floor(4 * uiScale)
                     local qx1, qy1 = qx2 - panelW2, qy2 - panelH2
                     DrawRoundedRect(qx1, qy1, qx2, qy2, 4, {0.08, 0.08, 0.09, 0.88})
                     DrawRoundedOutline(qx1, qy1, qx2, qy2, 4, {1.0, 1.0, 1.0, 0.10})
-                    glColor(1.0, 1.0, 1.0, 1.0)
-                    DrawTextFitted(queueText, qx2 - qPadX + math_floor(QUEUE_BADGE_TEXT_OFFSET_X * uiScale), qy1 + qPadY + math_floor(QUEUE_BADGE_TEXT_OFFSET_Y * uiScale), qSize, "or")
+                    DrawTextFitted(queueText, qx2 - qPadX + math_floor(QUEUE_BADGE_TEXT_OFFSET_X * uiScale), qy1 + qPadY + math_floor(QUEUE_BADGE_TEXT_OFFSET_Y * uiScale), qSize, "or", nil, {1.0, 1.0, 1.0, 1.0})
                 end
 
                 -- Text overlays
@@ -891,31 +893,28 @@ local function BuildButtonLayout_Bake(scrollOffset)
                 local bottomY = infoY1 + math_floor(4 * uiScale)
 
                 if leftTop then
-                    glColor(hotkeyMatch and {0.2, 1.0, 0.2, 1.0} or {1.0, 1.0, 1.0, 1.0})
                     DrawTextFitted(leftTop, item.x1 + panelPad, topY, topSize, "o",
-                                   (item.x2 - item.x1) - panelPad * 2 - rightTopReserve)
+                                   (item.x2 - item.x1) - panelPad * 2 - rightTopReserve,
+                                   hotkeyMatch and {0.2, 1.0, 0.2, 1.0} or {1.0, 1.0, 1.0, 1.0})
                 end
                 if rightTop then
-                    glColor(TECH_TEXT_COLORS[rightTop] or {1.0, 0.75, 0.30, 1.0})
-                    DrawTextFitted(rightTop, item.x2 - panelPad, topY, topSize, "or", math_floor(topSize * 3.2))
+                    DrawTextFitted(rightTop, item.x2 - panelPad, topY, topSize, "or", math_floor(topSize * 3.2),
+                                   TECH_TEXT_COLORS[rightTop] or {1.0, 0.75, 0.30, 1.0})
                 end
                 if bottomLeft then
-                    local metalWidth  = overlay.metal  and gl.GetTextWidth(overlay.metal)  * bottomSize or 0
-                    local slashWidth  = (overlay.metal and overlay.energy) and gl.GetTextWidth(" / ") * bottomSize or 0
+                    local metalWidth  = overlay.metal  and font:GetTextWidth(overlay.metal)  * bottomSize or 0
+                    local slashWidth  = (overlay.metal and overlay.energy) and font:GetTextWidth(" / ") * bottomSize or 0
                     local maxW = (item.x2 - item.x1) - panelPad * 2 - bottomRightReserve
-                    glColor(METAL_TEXT_COLOR)
-                    DrawTextFitted(overlay.metal or bottomLeft, item.x1 + panelPad, bottomY, bottomSize, "o", maxW)
+                    DrawTextFitted(overlay.metal or bottomLeft, item.x1 + panelPad, bottomY, bottomSize, "o", maxW, METAL_TEXT_COLOR)
                     if overlay.metal and overlay.energy then
                         local energyX = item.x1 + panelPad + metalWidth
-                        glColor(1.0, 1.0, 1.0, 1.0)
-                        DrawTextFitted(" / ", energyX, bottomY, bottomSize, "o", maxW)
-                        glColor(ENERGY_TEXT_COLOR)
-                        DrawTextFitted(overlay.energy, energyX + slashWidth, bottomY, bottomSize, "o", maxW)
+                        DrawTextFitted(" / ", energyX, bottomY, bottomSize, "o", maxW, {1.0, 1.0, 1.0, 1.0})
+                        DrawTextFitted(overlay.energy, energyX + slashWidth, bottomY, bottomSize, "o", maxW, ENERGY_TEXT_COLOR)
                     end
                 end
                 if bottomRight then
-                    glColor(1.0, 0.7, 0.2, 1.0)
-                    DrawTextFitted(bottomRight, item.x2 - panelPad, bottomY, bottomSize, "or", math_floor(bottomSize * 4.2))
+                    DrawTextFitted(bottomRight, item.x2 - panelPad, bottomY, bottomSize, "or", math_floor(bottomSize * 4.2),
+                                   {1.0, 0.7, 0.2, 1.0})
                 end
 
                 -- Cache screen-space hitbox for dynamic overlay pass
@@ -1050,8 +1049,7 @@ local function DrawOrderButtons_Static()
         DrawRoundedRect(bx1, by1, bx2, by2, 6, {0.14, 0.14, 0.15, 0.85})
 
         local caption = cmd.name == "Repair" and "Build" or cmd.name
-        glColor(1, 1, 1, 1)
-        DrawTextFitted(caption, bx1 + math_floor(6 * uiScale), by1 + bh * 0.45, math_floor(11 * uiScale), "o", bw - math_floor(12 * uiScale))
+        DrawTextFitted(caption, bx1 + math_floor(6 * uiScale), by1 + bh * 0.45, math_floor(11 * uiScale), "o", bw - math_floor(12 * uiScale), {1, 1, 1, 1})
 
         if entry.state then
             DrawStateBars(cmd, bx1, by1, bx2, by2)
@@ -1160,12 +1158,14 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+    font = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
     UpdatePanelRects()
     OverrideDefaultMenu()
 end
 
 function widget:Shutdown()
     FreeDisplayLists()
+    if font then gl.DeleteFont(font) end
     widgetHandler:ConfigLayoutHandler(nil)
     spForceLayoutUpdate()
 end

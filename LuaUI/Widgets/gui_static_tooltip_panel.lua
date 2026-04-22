@@ -50,7 +50,7 @@ local TOOLTIP_GAP_X         = 10
 -- UI scaling.  Change BASE_RESOLUTION to match your "designed-for" height.
 -- At that resolution uiScale == 1.0 and all sizes are their base values.
 -- At higher/lower resolutions everything scales proportionally.
-local BASE_RESOLUTION = 1440
+local BASE_RESOLUTION = 1080
 
 local uiScale     = 1.0   -- computed in UpdateRects from actual viewport height
 
@@ -142,6 +142,8 @@ local table_concat             = table.concat
 local ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
 local bgcorner   = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
 local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
+
+local font
 
 --------------------------------------------------------------------------------
 -- Hero image (constants and cache only — DrawHeroImage is defined later,
@@ -547,18 +549,29 @@ local function DrawHeroImage(unitName, x1, yTop, w)
 end
 
 local function TextWidthApprox(text, size)
-	return #tostring(text or "") * size * 0.55
+	return font:GetTextWidth(tostring(text or "")) * size
 end
 
 local function DrawTextFitted(text, x, y, size, maxWidth, color, align)
 	text = tostring(text or "")
-	glColor(color or HEADER_TEXT)
+	local c = color or HEADER_TEXT
+	font:SetTextColor(c[1], c[2], c[3], c[4] or 1)
 	local drawSize = size
 	local approxW = TextWidthApprox(text, size)
 	if approxW > maxWidth and approxW > 0 then
 		drawSize = size * (maxWidth / approxW)
 	end
-	glText(text, x, y, drawSize, (align or "o"))
+	font:Print(text, x, y, drawSize, (align or "o"))
+end
+
+local function DrawText(text, x, y, size, opts, color)
+	local c = color or HEADER_TEXT
+	font:SetTextColor(c[1], c[2], c[3], c[4] or 1)
+	font:Print(text, x, y, size, opts or "o")
+end
+
+local function GetTextWidth(text)
+	return font:GetTextWidth(text)
 end
 
 local function WrapText(text, maxWidth, size)
@@ -888,204 +901,159 @@ local function DrawTitleSection(data, x1, yTop, w)
 	return y1 - SECTION_GAP
 end
 
-local function DrawStatsSection_Static(data, x1, yTop, w)
-	local lines = 3
-	if data.healthText     then lines = lines + 1 end
-	if data.overshieldText then lines = lines + 1 end
-	if data.shieldText     then lines = lines + 1 end
-	if data.statusText     then lines = lines + 1 end
+--------------------------------------------------------------------------------
+-- Merged Stats / Economy two-column section
+--
+-- Left column  (x1 .. mid):  Role, HP, OverShield, Shield, Status
+-- Right column (mid .. x2):  Metal, Energy, Storage, Supply, Flow
+--
+-- Both columns share one section box and one "Stats / Economy" header.
+-- The section height is driven by whichever column is taller.
+--------------------------------------------------------------------------------
 
-	local h  = math_floor(24 * uiScale) + lines * LINE_H
-	local y1 = yTop - h
-	DrawSectionBox(x1, y1, x1 + w, yTop)
+local function CalcStatsEconLayout(data, x1, yTop, w)
+	local pad      = math_floor(10 * uiScale)
+	local mid      = x1 + math_floor(w * 0.5)  -- column split
+	local colW     = math_floor(w * 0.5) - pad  -- usable width per column
+	local lblW     = math_floor(52 * uiScale)   -- label column within each half
+	local valOff   = math_floor(58 * uiScale)   -- value x offset from column x1
 
-	local pad  = math_floor(10 * uiScale)
-	local col  = math_floor(98 * uiScale)
-	local lblW = math_floor(80 * uiScale)
+	-- Left column rows (stats)
+	local leftRows = {}
+	if data.roleText       then leftRows[#leftRows+1] = { lbl="Role",       val=data.roleText,       valColor=HEADER_TEXT,         live=false } end
+	if data.healthText     then leftRows[#leftRows+1] = { lbl="HP",         val=data.healthText,     valColor=HEADER_TEXT,         live=true  } end
+	if data.overshieldText then leftRows[#leftRows+1] = { lbl="OvrShield",  val=data.overshieldText, valColor=OVERSHIELD_TEXT_COLOR,live=true  } end
+	if data.shieldText     then leftRows[#leftRows+1] = { lbl="Shield",     val=data.shieldText,     valColor=SHIELD_TEXT_COLOR,   live=true  } end
+	if data.statusText     then leftRows[#leftRows+1] = { lbl="Status",     val=data.statusText,     valColor=HEADER_TEXT,         live=true  } end
 
-	DrawTextFitted("Stats", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
-
-	local cy = yTop - math_floor(32 * uiScale)
-	if data.roleText then
-		DrawKVLine(x1 + pad, cy, "Role", data.roleText, MUTED_TEXT_COLOR, HEADER_TEXT)
-		cy = cy - LINE_H
-	end
-	if data.healthText then
-		DrawTextFitted("HP", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit and not data.isLiveFeature then
-			DrawTextFitted(data.healthText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
-		end
-		cy = cy - LINE_H
-	end
-	if data.overshieldText then
-		DrawTextFitted("OverShield", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit and not data.isLiveFeature then
-			DrawTextFitted(data.overshieldText, x1 + col, cy, BODY_SIZE, w - col - pad, OVERSHIELD_TEXT_COLOR, "o")
-		end
-		cy = cy - LINE_H
-	end
-	if data.shieldText then
-		DrawTextFitted("Shield", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit and not data.isLiveFeature then
-			DrawTextFitted(data.shieldText, x1 + col, cy, BODY_SIZE, w - col - pad, SHIELD_TEXT_COLOR, "o")
-		end
-		cy = cy - LINE_H
-	end
-	if data.statusText then
-		DrawTextFitted("Status", x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
-		if not data.isLiveUnit and not data.isLiveFeature then
-			DrawTextFitted(data.statusText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
-		end
-	end
-
-	return y1 - SECTION_GAP
-end
-
--- Returns the y positions where dynamic values should be drawn, so the
--- dynamic list can draw just the value strings at the right coordinates.
-local function CalcStatsDynamicPositions(data, x1, yTop, w)
-	local lines = 3
-	if data.healthText     then lines = lines + 1 end
-	if data.overshieldText then lines = lines + 1 end
-	if data.shieldText     then lines = lines + 1 end
-	if data.statusText     then lines = lines + 1 end
-
-	local h  = math_floor(24 * uiScale) + lines * LINE_H
-	local y1 = yTop - h
-
-	local cy = yTop - math_floor(32 * uiScale)
-	if data.roleText then cy = cy - LINE_H end
-
-	local col = math_floor(98 * uiScale)
-	local positions = { sectionY1 = y1, x1 = x1, w = w, baseY = cy, col = col }
-	return positions
-end
-
-local function DrawStatsDynamic(data, pos)
-	local cy  = pos.baseY
-	local x1  = pos.x1
-	local w   = pos.w
-	local col = pos.col or math_floor(98 * uiScale)
-	local pad = math_floor(10 * uiScale)
-	if data.healthText then
-		DrawTextFitted(data.healthText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
-		cy = cy - LINE_H
-	end
-	if data.overshieldText then
-		DrawTextFitted(data.overshieldText, x1 + col, cy, BODY_SIZE, w - col - pad, OVERSHIELD_TEXT_COLOR, "o")
-		cy = cy - LINE_H
-	end
-	if data.shieldText then
-		DrawTextFitted(data.shieldText, x1 + col, cy, BODY_SIZE, w - col - pad, SHIELD_TEXT_COLOR, "o")
-		cy = cy - LINE_H
-	end
-	if data.statusText then
-		DrawTextFitted(data.statusText, x1 + col, cy, BODY_SIZE, w - col - pad, HEADER_TEXT, "o")
-	end
-end
-
-local function DrawEconomySection_Static(data, x1, yTop, w)
+	-- Right column rows (economy)
 	local hasStorage = data.storageText ~= nil
-	local h  = math_floor((hasStorage and 106 or 92) * uiScale)
-	local y1 = yTop - h
-	DrawSectionBox(x1, y1, x1 + w, yTop)
-
-	local pad  = math_floor(10 * uiScale)
-	local col  = math_floor(98 * uiScale)
-
-	DrawTextFitted("Economy", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
-
-	DrawTextFitted("Metal",   x1 + pad, yTop - math_floor(34 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-	DrawTextFitted("Energy",  x1 + pad, yTop - math_floor(48 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+	local rightRows  = {}
+	rightRows[#rightRows+1] = { lbl="Metal",   val=data.metalCostText  or "-", valColor=METAL_TEXT_COLOR,  live=true  }
+	rightRows[#rightRows+1] = { lbl="Energy",  val=data.energyCostText or "-", valColor=ENERGY_TEXT_COLOR, live=true  }
 	if hasStorage then
-		DrawTextFitted("Storage", x1 + pad, yTop - math_floor(62 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-		DrawTextFitted("Supply",  x1 + pad, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-		DrawTextFitted("Flow",    x1 + pad, yTop - math_floor(90 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-	else
-		DrawTextFitted("Supply",  x1 + pad, yTop - math_floor(62 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
-		DrawTextFitted("Flow",    x1 + pad, yTop - math_floor(76 * uiScale), BODY_SIZE, math_floor(80 * uiScale), MUTED_TEXT_COLOR, "o")
+		rightRows[#rightRows+1] = { lbl="Storage", val="storage", valColor=nil, live=false, isStorage=true }
 	end
-
-	if not data.isLiveUnit and not data.isLiveFeature then
-		DrawTextFitted(data.metalCostText  or "-", x1 + col, yTop - math_floor(34 * uiScale), BODY_SIZE, w - col - pad, METAL_TEXT_COLOR,  "o")
-		DrawTextFitted(data.energyCostText or "-", x1 + col, yTop - math_floor(48 * uiScale), BODY_SIZE, w - col - pad, ENERGY_TEXT_COLOR, "o")
-		if hasStorage then
-			local st  = data.storageText
-			local fx  = x1 + col
-			local fy  = yTop - math_floor(62 * uiScale)
-			glColor(MUTED_TEXT_COLOR)  glText("M: ",    fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth("M: ")    * BODY_SIZE)
-			glColor(METAL_TEXT_COLOR)  glText(st.m,     fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(st.m)     * BODY_SIZE)
-			glColor(MUTED_TEXT_COLOR)  glText(" / E: ", fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(" / E: ") * BODY_SIZE)
-			glColor(ENERGY_TEXT_COLOR) glText(st.e,     fx, fy, BODY_SIZE, "o")
-			local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-			DrawTextFitted(data.supplyText or "-", x1 + col, yTop - math_floor(76 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
-			local mv = data.metalFlowText
-			local ev = data.energyFlowText
-			local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-			local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-			local ffx = x1 + col
-			local ffy = yTop - math_floor(90 * uiScale)
-			glColor(MUTED_TEXT_COLOR)  glText("M: ",     ffx, ffy, BODY_SIZE, "o")  ffx = ffx + math_floor(gl.GetTextWidth("M: ")     * BODY_SIZE)
-			glColor(mvColor)           glText(mv or "-", ffx, ffy, BODY_SIZE, "o")  ffx = ffx + math_floor(gl.GetTextWidth(mv or "-") * BODY_SIZE)
-			glColor(MUTED_TEXT_COLOR)  glText(" / E: ",  ffx, ffy, BODY_SIZE, "o")  ffx = ffx + math_floor(gl.GetTextWidth(" / E: ")  * BODY_SIZE)
-			glColor(evColor)           glText(ev or "-", ffx, ffy, BODY_SIZE, "o")
-		else
-			local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-			DrawTextFitted(data.supplyText or "-", x1 + col, yTop - math_floor(62 * uiScale), BODY_SIZE, w - col - pad, supplyColor, "o")
-			local mv = data.metalFlowText
-			local ev = data.energyFlowText
-			local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-			local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-			local fx  = x1 + col
-			local function drawAndAdvance(text, color)
-				glColor(color)
-				glText(text, fx, yTop - math_floor(76 * uiScale), BODY_SIZE, "o")
-				fx = fx + math_floor(gl.GetTextWidth(text) * BODY_SIZE)
-			end
-			drawAndAdvance("M: ",        MUTED_TEXT_COLOR)
-			drawAndAdvance(mv or "-",    mvColor)
-			drawAndAdvance(" / E: ",     MUTED_TEXT_COLOR)
-			drawAndAdvance(ev or "-",    evColor)
-		end
-	end
-
-	return y1 - SECTION_GAP
-end
-
-local function DrawEconomyDynamic(data, x1, yTop, w)
-	local hasStorage = data.storageText ~= nil
-	local pad  = math_floor(10 * uiScale)
-	local col  = math_floor(98 * uiScale)
-	local storageY = math_floor(62 * uiScale)
-	local supplyY  = hasStorage and math_floor(76 * uiScale) or math_floor(62 * uiScale)
-	local flowY    = hasStorage and math_floor(90 * uiScale) or math_floor(76 * uiScale)
-
-	DrawTextFitted(data.metalCostText  or "-", x1 + col, yTop - math_floor(34 * uiScale), BODY_SIZE, w - col - pad, METAL_TEXT_COLOR,  "o")
-	DrawTextFitted(data.energyCostText or "-", x1 + col, yTop - math_floor(48 * uiScale), BODY_SIZE, w - col - pad, ENERGY_TEXT_COLOR, "o")
-
-	if hasStorage then
-		local st  = data.storageText
-		local fx  = x1 + col
-		local fy  = yTop - storageY
-		glColor(MUTED_TEXT_COLOR)  glText("M: ",    fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth("M: ")    * BODY_SIZE)
-		glColor(METAL_TEXT_COLOR)  glText(st.m,     fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(st.m)     * BODY_SIZE)
-		glColor(MUTED_TEXT_COLOR)  glText(" / E: ", fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(" / E: ") * BODY_SIZE)
-		glColor(ENERGY_TEXT_COLOR) glText(st.e,     fx, fy, BODY_SIZE, "o")
-	end
-
 	local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
-	DrawTextFitted(data.supplyText or "-", x1 + col, yTop - supplyY, BODY_SIZE, w - col - pad, supplyColor, "o")
+	rightRows[#rightRows+1] = { lbl="Supply",  val=data.supplyText or "-",     valColor=supplyColor,       live=true  }
+	rightRows[#rightRows+1] = { lbl="Flow",    val="flow",                     valColor=nil,               live=true,  isFlow=true }
 
-	local mv = data.metalFlowText
-	local ev = data.energyFlowText
-	local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-	local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
-	local fx  = x1 + col
-	local fy  = yTop - flowY
-	glColor(MUTED_TEXT_COLOR)  glText("M: ",     fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth("M: ")     * BODY_SIZE)
-	glColor(mvColor)           glText(mv or "-", fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(mv or "-") * BODY_SIZE)
-	glColor(MUTED_TEXT_COLOR)  glText(" / E: ",  fx, fy, BODY_SIZE, "o")  fx = fx + math_floor(gl.GetTextWidth(" / E: ")  * BODY_SIZE)
-	glColor(evColor)           glText(ev or "-", fx, fy, BODY_SIZE, "o")
+	local headerH  = math_floor(24 * uiScale)
+	local rowCount = math_max(#leftRows, #rightRows)
+	local h        = headerH + rowCount * LINE_H + math_floor(8 * uiScale)
+	local y1       = yTop - h
+
+	return {
+		x1=x1, yTop=yTop, w=w, y1=y1,
+		pad=pad, mid=mid, colW=colW, lblW=lblW, valOff=valOff,
+		headerH=headerH,
+		leftRows=leftRows, rightRows=rightRows,
+		hasStorage=hasStorage,
+	}
+end
+
+local function DrawStatsEconSection_Static(data, x1, yTop, w)
+	local L = CalcStatsEconLayout(data, x1, yTop, w)
+	DrawSectionBox(x1, L.y1, x1 + w, yTop)
+
+	local pad    = L.pad
+	local mid    = L.mid
+	local colW   = L.colW
+	local lblW   = L.lblW
+	local valOff = L.valOff
+
+	DrawTextFitted("Stats / Economy", x1 + pad, yTop - math_floor(16 * uiScale), HEADER_SIZE, w - pad * 2, HEADER_TEXT, "o")
+
+	-- Vertical divider
+	glColor(1, 1, 1, 0.07)
+	glRect(mid, L.y1 + math_floor(4 * uiScale), mid + 1, yTop - math_floor(20 * uiScale))
+
+	-- Left column (stats)
+	local cy = yTop - L.headerH - math_floor(4 * uiScale)
+	for _, row in ipairs(L.leftRows) do
+		DrawTextFitted(row.lbl, x1 + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
+		if not row.live or (not data.isLiveUnit and not data.isLiveFeature) then
+			DrawTextFitted(row.val, x1 + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, row.valColor, "o")
+		end
+		cy = cy - LINE_H
+	end
+
+	-- Right column (economy)
+	cy = yTop - L.headerH - math_floor(4 * uiScale)
+	for _, row in ipairs(L.rightRows) do
+		DrawTextFitted(row.lbl, mid + pad, cy, BODY_SIZE, lblW, MUTED_TEXT_COLOR, "o")
+		if not row.live or (not data.isLiveUnit and not data.isLiveFeature) then
+			if row.isStorage then
+				local st = data.storageText
+				local fx = mid + pad + valOff
+				DrawText("M:",   fx, cy, BODY_SIZE, "o", MUTED_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth("M:") * BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText(st.m,   fx, cy, BODY_SIZE, "o", METAL_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth(st.m) * BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText("E:",   fx, cy, BODY_SIZE, "o", MUTED_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth("E:") * BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText(st.e,   fx, cy, BODY_SIZE, "o", ENERGY_TEXT_COLOR)
+			elseif row.isFlow then
+				local mv = data.metalFlowText
+				local ev = data.energyFlowText
+				local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+				local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+				local fx = mid + pad + valOff
+				DrawText("M:",     fx, cy, BODY_SIZE, "o", MUTED_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth("M:")     * BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText(mv or "-",fx, cy, BODY_SIZE, "o", mvColor)           fx = fx + math_floor(GetTextWidth(mv or "-")* BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText("E:",     fx, cy, BODY_SIZE, "o", MUTED_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth("E:")     * BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText(ev or "-",fx, cy, BODY_SIZE, "o", evColor)
+			else
+				DrawTextFitted(row.val, mid + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, row.valColor, "o")
+			end
+		end
+		cy = cy - LINE_H
+	end
+
+	return L.y1 - SECTION_GAP
+end
+
+-- Returns layout table needed by the dynamic pass
+local function CalcStatsEconDynamicPositions(data, x1, yTop, w)
+	return CalcStatsEconLayout(data, x1, yTop, w)
+end
+
+local function DrawStatsEconDynamic(data, L)
+	local pad    = L.pad
+	local mid    = L.mid
+	local colW   = L.colW
+	local valOff = L.valOff
+
+	-- Left column live values
+	local cy = L.yTop - L.headerH - math_floor(4 * uiScale)
+	for _, row in ipairs(L.leftRows) do
+		if row.live then
+			DrawTextFitted(row.val, L.x1 + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, row.valColor, "o")
+		end
+		cy = cy - LINE_H
+	end
+
+	-- Right column live values
+	cy = L.yTop - L.headerH - math_floor(4 * uiScale)
+	for _, row in ipairs(L.rightRows) do
+		if row.live then
+			if row.isFlow then
+				local mv = data.metalFlowText
+				local ev = data.energyFlowText
+				local mvColor = (mv and mv:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+				local evColor = (ev and ev:sub(1,1) == "-") and NEGATIVE_TEXT_COLOR or POSITIVE_TEXT_COLOR
+				local fx = mid + pad + valOff
+				DrawText("M:",     fx, cy, BODY_SIZE, "o", MUTED_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth("M:")     * BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText(mv or "-",fx, cy, BODY_SIZE, "o", mvColor)           fx = fx + math_floor(GetTextWidth(mv or "-")* BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText("E:",     fx, cy, BODY_SIZE, "o", MUTED_TEXT_COLOR)  fx = fx + math_floor(GetTextWidth("E:")     * BODY_SIZE) + math_floor(2 * uiScale)
+				DrawText(ev or "-",fx, cy, BODY_SIZE, "o", evColor)
+			else
+				local supplyColor = data.supplyText and SUPPLY_TEXT_COLOR or HEADER_TEXT
+				local vc = row.isStorage and nil or (row.lbl == "Supply" and supplyColor or row.valColor)
+				if vc then
+					DrawTextFitted(row.val, mid + pad + valOff, cy, BODY_SIZE, colW - valOff - pad, vc, "o")
+				end
+			end
+		end
+		cy = cy - LINE_H
+	end
 end
 
 
@@ -1584,10 +1552,7 @@ local function CanShowAdditionalInfo(resolved)
 end
 
 -- These store the layout coords needed by the dynamic pass for live units.
-local dynamicStatsPos   = nil   -- from CalcStatsDynamicPositions
-local dynamicEconomyX1  = nil
-local dynamicEconomyTop = nil
-local dynamicEconomyW   = nil
+local dynamicStatsEconLayout = nil  -- from CalcStatsEconDynamicPositions
 
 --------------------------------------------------------------------------------
 -- Display list baking
@@ -1810,27 +1775,16 @@ local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, a
 		cy = DrawOrderSection(panelData, sx, cy, cWidth)
 		DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, cWidth)
 	else
-		cy = DrawStatsSection_Static(panelData, sx, cy, cWidth)
+		local sectionYTop = cy  -- cy before drawing is the top of the section
+		cy = DrawStatsEconSection_Static(panelData, sx, cy, cWidth)
 
-		-- Record dynamic pass coordinates (screen-space, scroll-adjusted)
-		dynamicEconomyX1  = sx
-		dynamicEconomyTop = cy
-		dynamicEconomyW   = cWidth
-
+		-- Record layout for the dynamic pass (live units only)
 		if panelData.isLiveUnit or panelData.isLiveFeature then
-			local lines = 3
-			if panelData.healthText     then lines = lines + 1 end
-			if panelData.shieldText     then lines = lines + 1 end
-			if panelData.overshieldText then lines = lines + 1 end
-			if panelData.statusText     then lines = lines + 1 end
-			local statsH = math_floor(24 * uiScale) + lines * LINE_H
-			local statsYTop = cy + statsH + SECTION_GAP
-			dynamicStatsPos = CalcStatsDynamicPositions(panelData, sx, statsYTop, cWidth)
+			dynamicStatsEconLayout = CalcStatsEconDynamicPositions(panelData, sx, sectionYTop, cWidth)
 		else
-			dynamicStatsPos = nil
+			dynamicStatsEconLayout = nil
 		end
 
-		cy = DrawEconomySection_Static(panelData, sx, cy, cWidth)
 		DrawHintSection(TOOLTIP_HINT_TEXT, sx, cy, cWidth)
 	end
 
@@ -1949,11 +1903,8 @@ end
 
 local function BakeDynamicList(panelData)
 	-- Only called for live units; draws just the changing value strings.
-	if dynamicStatsPos then
-		DrawStatsDynamic(panelData, dynamicStatsPos)
-	end
-	if dynamicEconomyX1 then
-		DrawEconomyDynamic(panelData, dynamicEconomyX1, dynamicEconomyTop, dynamicEconomyW)
+	if dynamicStatsEconLayout then
+		DrawStatsEconDynamic(panelData, dynamicStatsEconLayout)
 	end
 end
 
@@ -1977,6 +1928,7 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	font = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
 	UpdateRects()
 	spSendCommands({"tooltip 0"})
 	spSetDrawSelectionInfo(false)
@@ -1990,6 +1942,7 @@ end
 
 function widget:Shutdown()
 	FreeDisplayLists()
+	if font then gl.DeleteFont(font) end
 	spSendCommands({"tooltip 1"})
 end
 

@@ -42,7 +42,7 @@ local ENERGY_USE_CHANNEL = "cue"
 -- If you find energy isn't being drained, flip this to -1.
 local ENERGY_SIGN = 1
 
--- Your original balance numbers were tuned around metalSpot_value = 3.
+-- The original balance numbers were tuned around metalSpot_value = 3.
 local BASE_SPOT_VALUE = 3
 
 -- ------------------------------------------------------------
@@ -51,22 +51,22 @@ local BASE_SPOT_VALUE = 3
 
 -- Tier multipliers (metalSpot_value * multiplier)
 local multipliersByName = {
-	lozmetalextractor     = 1.0,
-	fedmetalextractor     = 1.0,
+	lozmetalextractor     = 0.5,
+	fedmetalextractor     = 0.5,
 
-	lozmetalextractor_up1 = 2.0,
-	fedmetalextractor_up1 = 2.0,
+	lozmetalextractor_up1 = 1,
+	fedmetalextractor_up1 = 1,
 
-	lozmetalextractor_up2 = 3.0,
-	fedmetalextractor_up2 = 3.0,
+	lozmetalextractor_up2 = 2,
+	fedmetalextractor_up2 = 2,
 
-	lozmetalextractor_up3 = 5.333,
-	fedmetalextractor_up3 = 5.333,
+	lozmetalextractor_up3 = 3,
+	fedmetalextractor_up3 = 3,
 
-	lozmetalextractor_up4 = 10.666,
-	fedmetalextractor_up4 = 10.666,
+	lozmetalextractor_up4 = 6,
+	fedmetalextractor_up4 = 6,
 
-	geometalmaker         = 21.333,
+	geometalmaker         = 10,
 }
 
 -- Base energy upkeep by tier (these are the numbers for metalSpot_value == 3)
