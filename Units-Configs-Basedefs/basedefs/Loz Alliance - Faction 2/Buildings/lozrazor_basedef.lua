@@ -65,6 +65,7 @@ unitDef                     = {
 		unittype				  = "building",
 		unitrole				  = "Short Range Anti-Air",
 		unitrole_sound            = "turret",
+		buildmenucategory         = "Combat",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		--supply_cost               = supply,
@@ -159,7 +160,7 @@ weaponDefs = {
 		intensity                = 24,
 		laserFlareSize           = 1,
 
-		name			         = "elighttank3weapon",
+		name			         = "Directed Lightning",
 		noSelfDamage             = true,
 		range                    = 700,
 		reloadtime               = 1,

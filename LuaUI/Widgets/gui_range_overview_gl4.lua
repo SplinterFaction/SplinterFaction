@@ -40,12 +40,14 @@ local enableMouseoverRings          = true
 -- Per-ring enable flags. Set any of these to false to completely skip maintaining
 -- and drawing that ring class. This is the best place to expose player options later.
 local ringEnabled = {
-	attack   = true,
-	radar    = true,
-	sensor   = true,
-	sight    = true,
-	build    = true,
-	areaheal = true,
+	attack    = true,
+	radar     = true,
+	sensor    = true,
+	sight     = true,
+	build     = true,
+	areaheal  = true,
+	areacloak = true,
+	shield    = true,
 }
 
 local colorConfig = {
@@ -101,8 +103,24 @@ local colorConfig = {
 		color = { 0, 1, 0, 0.60 },
 		fadeparams = { 2500, 5000, 1.0, 0.0 },
 		groupselectionfadescale = 0.45,
-		externallinethickness = 60,
+		externallinethickness = 30,
 		internallinethickness = 1.5,
+	},
+
+	areacloak = {
+		color = { 0.55, 0.55, 1.00, 0.60 },
+		fadeparams = { 2500, 5000, 1.0, 0.0 },
+		groupselectionfadescale = 0.45,
+		externallinethickness = 10,
+		internallinethickness = 1.5,
+	},
+
+	shield = {
+		color = { 0.20, 0.55, 1.00, 0.65 },
+		fadeparams = { 2500, 5000, 1.0, 0.0 },
+		groupselectionfadescale = 0.55,
+		externallinethickness = 10,
+		internallinethickness = 1.8,
 	},
 }
 
@@ -170,6 +188,8 @@ local unitWeapons         = {}
 local unitMaxWeaponRange  = {}
 local unitIsStaticDefense = {}
 local unitAreaHealRadius  = {}
+local unitAreaCloakRadius = {}
+local unitShieldRadius    = {}
 local unitIsMobile        = {}  -- true if the unit can ever move (used for position caching)
 
 for udid, ud in pairs(UnitDefs) do
@@ -188,7 +208,20 @@ for udid, ud in pairs(UnitDefs) do
 	unitIsMobile[udid]        = mobile
 
 	local cp = ud.customParams
-	unitAreaHealRadius[udid] = cp and tonumber(cp.areaheal_radius) or 0
+	unitAreaHealRadius[udid]  = cp and tonumber(cp.areaheal_radius)  or 0
+	unitAreaCloakRadius[udid] = cp and tonumber(cp.area_cloak_radius) or 0
+
+	-- Largest shieldRadius across all weapons on this UnitDef.
+	local bestShield = 0
+	local weapons = ud.weapons or {}
+	for i = 1, #weapons do
+		local wdid = weapons[i].weaponDef
+		local wd = wdid and WeaponDefs[wdid]
+		if wd and (wd.shieldRadius or 0) > bestShield then
+			bestShield = wd.shieldRadius
+		end
+	end
+	unitShieldRadius[udid] = bestShield
 end
 
 --------------------------------------------------------------------------------
@@ -199,7 +232,7 @@ local circleSegments = math.max(8, circleDivs or 32)
 local circleVBO = nil
 local rangeShader = nil
 
-local rangeClasses = { "attack", "radar", "sensor", "sight", "build", "areaheal" }
+local rangeClasses = { "attack", "radar", "sensor", "sight", "build", "areaheal", "areacloak", "shield" }
 local rangeVAOs = {
 	selected  = {},
 	mine      = {},
@@ -343,15 +376,17 @@ end
 --------------------------------------------------------------------------------
 
 local classOffsets = {
-	attack   = 1,
-	radar    = 2,
-	sensor   = 3,
-	sight    = 4,
-	build    = 5,
-	areaheal = 6,
+	attack    = 1,
+	radar     = 2,
+	sensor    = 3,
+	sight     = 4,
+	build     = 5,
+	areaheal  = 6,
+	areacloak = 7,
+	shield    = 8,
 }
 
-local drawOrder = { "build", "radar", "sensor", "sight", "attack", "areaheal" }
+local drawOrder = { "build", "radar", "sensor", "sight", "attack", "areaheal", "areacloak", "shield" }
 
 local function IsRingClassEnabled(className)
 	return ringEnabled[className] ~= false
@@ -365,7 +400,8 @@ local function WantsClassForMode(mode, className)
 		if className == "build" then
 			return true
 		end
-		return className == "attack" or className == "radar" or className == "sensor" or className == "sight" or className == "areaheal"
+		return className == "attack" or className == "radar" or className == "sensor" or className == "sight"
+				or className == "areaheal" or className == "areacloak" or className == "shield"
 	elseif mode == "persistent_sight" then
 		return className == "sight"
 	elseif mode == "persistent_attack" then
@@ -504,12 +540,14 @@ local function MakeInstanceID(unitID, className, bucket)
 end
 
 local function classToStencilMask(className)
-	if className == "attack"   then return 1  end
-	if className == "radar"    then return 2  end
-	if className == "sensor"   then return 4  end
-	if className == "sight"    then return 8  end
-	if className == "build"    then return 16 end
-	if className == "areaheal" then return 32 end
+	if className == "attack"    then return 1   end
+	if className == "radar"     then return 2   end
+	if className == "sensor"    then return 4   end
+	if className == "sight"     then return 8   end
+	if className == "build"     then return 16  end
+	if className == "areaheal"  then return 32  end
+	if className == "areacloak" then return 64  end
+	if className == "shield"    then return 128 end
 	return 1
 end
 
@@ -648,8 +686,10 @@ local function AddUnitToCollection(unitID, collection, mode)
 			maybeAdd("build", unitBuildDistance[unitDefID] or 0)
 		end
 		if IsAllied(unitID) then
-			maybeAdd("areaheal", unitAreaHealRadius[unitDefID] or 0)
+			maybeAdd("areaheal",  unitAreaHealRadius[unitDefID]  or 0)
+			maybeAdd("areacloak", unitAreaCloakRadius[unitDefID] or 0)
 		end
+		maybeAdd("shield", unitShieldRadius[unitDefID] or 0)
 	elseif mode == "persistent_sight" then
 		maybeAdd("sight", unitSightDistance[unitDefID] or 0)
 	elseif mode == "persistent_attack" then
@@ -666,8 +706,10 @@ local function AddUnitToCollection(unitID, collection, mode)
 			maybeAdd("build", unitBuildDistance[unitDefID] or 0)
 		end
 		if IsAllied(unitID) then
-			maybeAdd("areaheal", unitAreaHealRadius[unitDefID] or 0)
+			maybeAdd("areaheal",  unitAreaHealRadius[unitDefID]  or 0)
+			maybeAdd("areacloak", unitAreaCloakRadius[unitDefID] or 0)
 		end
+		maybeAdd("shield", unitShieldRadius[unitDefID] or 0)
 	end
 
 	if next(entry.instances) then

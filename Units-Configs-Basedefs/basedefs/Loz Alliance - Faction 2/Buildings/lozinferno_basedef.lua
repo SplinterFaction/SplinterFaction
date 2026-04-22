@@ -66,6 +66,7 @@ unitDef                     = {
 		unittype				  = "building",
 		unitrole				  = "Single-Target Turret",
 		unitrole_sound            = "turret",
+		buildmenucategory         = "Combat",
 		needed_cover              = 5,
 		--supply_cost               = supply,
 		RequireTech				  = tech,

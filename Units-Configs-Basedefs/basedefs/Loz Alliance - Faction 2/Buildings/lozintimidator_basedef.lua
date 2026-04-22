@@ -66,6 +66,7 @@ unitDef                     = {
 		unittype				  = "building",
 		unitrole				  = "Artillery Turret",
 		unitrole_sound            = "turret",
+		buildmenucategory         = "Combat",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		--supply_cost               = supply,

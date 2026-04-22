@@ -11,7 +11,7 @@ local techrequired				 = [[tech3]]
 local shield1Power               = 10000
 local shield1PowerRegen          = 300
 local shield1PowerRegenEnergy    = 0
-local buildCostMetal 			  = 7000
+local buildCostMetal 			  = 3000
 local maxDamage					  = buildCostMetal * 12.5
 local shieldRechargeDelay		 = 25
 

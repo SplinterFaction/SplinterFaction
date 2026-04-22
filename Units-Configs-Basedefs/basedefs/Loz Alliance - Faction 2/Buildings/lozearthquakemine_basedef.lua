@@ -78,6 +78,7 @@ unitDef                     = {
 		unittype				  = "building",
 		unitrole				  = "Mine",
 		unitrole_sound            = "turret",
+		buildmenucategory         = "Combat",
 		decloakradiushalved		  = "true",
 		RequireTech				  = tech,
 		--supply_cost               = supply,

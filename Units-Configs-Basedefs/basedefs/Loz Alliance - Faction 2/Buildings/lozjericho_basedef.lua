@@ -71,6 +71,7 @@ unitDef                     = {
 		unittype				  = "building",
 		unitrole				  = "Anti-Swarm Turret",
 		unitrole_sound            = "turret",
+		buildmenucategory         = "Combat",
 		sightdistanceoverride	 = true,
 		RequireTech				  = tech,
 		hasovershield             = overshield,
