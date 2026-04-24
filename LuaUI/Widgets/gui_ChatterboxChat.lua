@@ -343,6 +343,22 @@ local function ParseChatLine(line)
 		end
 	end
 
+	-- Map marker: "playername added point:" / "playername added point: label text"
+	do
+		local player, label = text:match("^(.+) added point:%s*(.*)$")
+		if player then
+			local body = label ~= "" and "added point: " .. label or "added point:"
+			return {
+				channel   = "system",
+				player    = player,
+				nameColor = GetPlayerColorByName(player),
+				bodyColor = COLOR_ALLY,
+				body      = body,
+				raw       = raw,
+			}
+		end
+	end
+
 	-- Fallback/system line
 	return {
 		channel   = "system",

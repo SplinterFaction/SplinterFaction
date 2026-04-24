@@ -135,7 +135,8 @@ if gadgetHandler:IsSyncedCode() then
 	local unitSetTargetCircleCmdDesc = {
 		id = CMD_UNIT_SET_TARGET,
 		type = CMDTYPE.ICON_UNIT_OR_AREA,
-		name = 'Set Target', --extra spaces center the 'Set' text
+		name = [[Set
+Target]], --extra spaces center the 'Set' text
 		action = 'settarget',
 		cursor = 'settarget',
 		tooltip = tooltipText,
@@ -145,7 +146,8 @@ if gadgetHandler:IsSyncedCode() then
 	local unitCancelTargetCmdDesc = {
 		id = CMD_UNIT_CANCEL_TARGET,
 		type = CMDTYPE.ICON,
-		name = 'Cancel Target',
+		name = [[Cancel
+Target]],
 		action = 'canceltarget',
 		tooltip = 'Removes top priority target, if set',
 		hidden = false,

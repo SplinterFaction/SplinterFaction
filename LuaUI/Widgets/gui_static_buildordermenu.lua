@@ -53,7 +53,7 @@ local SECTION_GAP           = 6
 local CATEGORY_GAP          = 4
 local BUILD_GRID_GAP        = 8
 local ORDER_GRID_GAP        = 6
-local BUILD_INFO_H          = 40
+local BUILD_INFO_H          = 56
 local SCROLLBAR_W           = 10
 local SCROLL_STEP           = 56
 
@@ -339,6 +339,15 @@ local function FormatSupplyValue(v)
     return tostring(v)
 end
 
+local function FormatCost(v)
+    local n = tonumber(v)
+    if not n then return tostring(v) end
+    if n >= 1000 then
+        return string.format("%.1fk", n / 1000)
+    end
+    return tostring(math_floor(n))
+end
+
 local function ParseBuildOverlay(cmd)
     local supplyText, metalText, energyText, techText = nil, nil, nil, nil
 
@@ -359,11 +368,11 @@ local function ParseBuildOverlay(cmd)
 
         local s, e = string_find(cmd.tooltip, 'Metal cost %d*')
         if s and e then
-            metalText = string_sub(cmd.tooltip, s + 11, e)
+            metalText = FormatCost(string_sub(cmd.tooltip, s + 11, e))
         end
         s, e = string_find(cmd.tooltip, 'Energy cost %d*')
         if s and e then
-            energyText = string_sub(cmd.tooltip, s + 12, e)
+            energyText = FormatCost(string_sub(cmd.tooltip, s + 12, e))
         end
     end
 
@@ -705,16 +714,9 @@ local function DrawTextFitted(text, x, y, size, opts, maxWidth, color)
 end
 
 local function GetInfoTextBaseSizes(buttonW)
-    local rowH = BUILD_INFO_H * 0.5
-    local widthTop    = math_floor(buttonW * 0.105)
-    local widthBottom = math_floor(buttonW * 0.095)
-    local heightTop    = math_floor(rowH * 0.68)
-    local heightBottom = math_floor(rowH * 0.58)
-
-    local topSize    = math_max(math_floor(8 * uiScale),  math_min(widthTop,    heightTop))
-    local bottomSize = math_max(math_floor(7 * uiScale),  math_min(widthBottom, heightBottom))
-
-    return topSize, bottomSize
+    local rowH = BUILD_INFO_H / 2
+    local sz   = math_max(math_floor(9 * uiScale), math_min(math_floor(buttonW * 0.120), math_floor(rowH * 0.74)))
+    return sz, sz, sz   -- topSize, midSize, botSize (uniform for now, easy to tune)
 end
 
 local function DrawIcon(x1, y1, x2, y2, texture)
@@ -873,48 +875,60 @@ local function BuildButtonLayout_Bake(scrollOffset)
                 local hotkeyText, hotkeyMatch = GetHotkeyText(cmd)
                 local leftTop  = hotkeyText
                 local rightTop = overlay.tech
-                local bottomLeft, bottomRight = nil, nil
-
-                if overlay.metal and overlay.energy then
-                    bottomLeft = overlay.metal .. " / " .. overlay.energy
-                elseif overlay.metal then
-                    bottomLeft = overlay.metal
-                elseif overlay.energy then
-                    bottomLeft = overlay.energy
-                end
-                if overlay.supply then bottomRight = overlay.supply end
 
                 local panelPad  = math_floor(5 * uiScale)
                 local infoW     = item.x2 - item.x1
-                local topSize, bottomSize = GetInfoTextBaseSizes(infoW)
-                local rightTopReserve    = rightTop    and math_floor(topSize    * 3.8) or 0
-                local bottomRightReserve = bottomRight and math_floor(bottomSize * 4.8) or 0
-                local topY    = infoY1 + BUILD_INFO_H - topSize - math_floor(3 * uiScale)
-                local bottomY = infoY1 + math_floor(4 * uiScale)
+                local topSize, midSize, botSize = GetInfoTextBaseSizes(infoW)
+                local maxW    = infoW - panelPad * 2
+                local rowH    = BUILD_INFO_H / 3
 
+                -- Row Y positions: divide the strip into 3 equal bands,
+                -- baseline at the vertical centre of each (band 0=bottom, 1=mid, 2=top).
+                local BOT_PAD = math_floor(4 * uiScale)
+                local function RowY(sz, band)
+                    local bandBase = infoY1 + band * rowH
+                    local centre = math_floor(bandBase + (rowH - sz) * 0.5)
+                    if band == 0 then centre = centre + BOT_PAD end
+                    return centre
+                end
+                local topY = RowY(topSize, 2)
+                local midY = RowY(midSize, 1)
+                local botY = RowY(botSize, 0)
+
+                -- Row 1: hotkey (left) + tech tier (right)
+                local rightTopReserve = rightTop and math_floor(topSize * 3.8) or 0
                 if leftTop then
                     DrawTextFitted(leftTop, item.x1 + panelPad, topY, topSize, "o",
-                                   (item.x2 - item.x1) - panelPad * 2 - rightTopReserve,
+                                   maxW - rightTopReserve,
                                    hotkeyMatch and {0.2, 1.0, 0.2, 1.0} or {1.0, 1.0, 1.0, 1.0})
                 end
                 if rightTop then
                     DrawTextFitted(rightTop, item.x2 - panelPad, topY, topSize, "or", math_floor(topSize * 3.2),
                                    TECH_TEXT_COLORS[rightTop] or {1.0, 0.75, 0.30, 1.0})
                 end
-                if bottomLeft then
-                    local metalWidth  = overlay.metal  and font:GetTextWidth(overlay.metal)  * bottomSize or 0
-                    local slashWidth  = (overlay.metal and overlay.energy) and font:GetTextWidth(" / ") * bottomSize or 0
-                    local maxW = (item.x2 - item.x1) - panelPad * 2 - bottomRightReserve
-                    DrawTextFitted(overlay.metal or bottomLeft, item.x1 + panelPad, bottomY, bottomSize, "o", maxW, METAL_TEXT_COLOR)
+
+                -- Row 2: Metal / Energy inline
+                do
+                    local curX = item.x1 + panelPad
+                    if overlay.metal then
+                        local w = font:GetTextWidth(overlay.metal) * midSize
+                        DrawTextFitted(overlay.metal, curX, midY, midSize, "o", maxW, METAL_TEXT_COLOR)
+                        curX = curX + w
+                    end
                     if overlay.metal and overlay.energy then
-                        local energyX = item.x1 + panelPad + metalWidth
-                        DrawTextFitted(" / ", energyX, bottomY, bottomSize, "o", maxW, {1.0, 1.0, 1.0, 1.0})
-                        DrawTextFitted(overlay.energy, energyX + slashWidth, bottomY, bottomSize, "o", maxW, ENERGY_TEXT_COLOR)
+                        local sep = " / "
+                        local w = font:GetTextWidth(sep) * midSize
+                        DrawTextFitted(sep, curX, midY, midSize, "o", maxW, {1.0, 1.0, 1.0, 1.0})
+                        curX = curX + w
+                    end
+                    if overlay.energy then
+                        DrawTextFitted(overlay.energy, curX, midY, midSize, "o", maxW, ENERGY_TEXT_COLOR)
                     end
                 end
-                if bottomRight then
-                    DrawTextFitted(bottomRight, item.x2 - panelPad, bottomY, bottomSize, "or", math_floor(bottomSize * 4.2),
-                                   {1.0, 0.7, 0.2, 1.0})
+
+                -- Row 3: Supply (if present), right-justified
+                if overlay.supply then
+                    DrawTextFitted(overlay.supply, item.x2 - panelPad, botY, botSize, "or", maxW, {1.0, 0.7, 0.2, 1.0})
                 end
 
                 -- Cache screen-space hitbox for dynamic overlay pass
@@ -1321,6 +1335,14 @@ function widget:MousePress(x, y, button)
             PlayRightClickSound()
         end
         return ApplyCommand(hoveredItem.cmd.id, button)
+    end
+
+    -- Block clicks from passing through to the game world
+    if showBuildPanel and IsInside(x, y, buildPanel.x1, buildPanel.y1, buildPanel.x2, buildPanel.y2) then
+        return true
+    end
+    if showOrderPanel and IsInside(x, y, orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2) then
+        return true
     end
 
     return false
