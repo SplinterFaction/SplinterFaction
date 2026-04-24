@@ -152,94 +152,6 @@ weaponDefs                 = {
 		impulseFactor          = 0,
 		--interceptedByShieldType  = 4,
 		name                   = "E.M.G. Disruption Cannon",
-		range                  = 400,
-		reloadtime             = 1,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "disruption-laser",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.6,
-		thickness              = 6,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 1500,
-		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-			single_hit          = "true",
-			disruptionweapon    = 1,
-			weaponguide = [[Applies a stacking disruption effect that increasingly impairs the target's functionality until it shorts out completely. The resulting lockout leaves the unit inoperable for 10 seconds.]],
-		},
-		damage                   = {
-			default              = 70,
-		},
-	},
-
-	particlebeamcannon_up1                 = {
-		areaofeffect           = 50,
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "1 0 0",
-		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
-		edgeEffectiveness	   = 1,
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.25,
-		impulseFactor          = 0,
-		--interceptedByShieldType  = 4,
-		name                   = "E.M.G. Disruption Cannon",
-		range                  = 500,
-		reloadtime             = 1,
-		--projectiles			   = 5,
-		weaponType		       = "LaserCannon",
-		soundStart             = "disruption-laser",
-		texture1               = "shot",
-		texture2               = "empty",
-		coreThickness          = 0.6,
-		thickness              = 6,
-		tolerance              = 10000,
-		turret                 = true,
-		weaponTimer            = 1,
-		weaponVelocity         = 1500,
-		customparams             = {
-			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= smallExplosion, -- In Elmos
-			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
-			expl_light_opacity  = 0.25, -- Use this sparingly
-			single_hit          = "true",
-			disruptionweapon    = 1,
-			weaponguide = [[Applies a stacking disruption effect that increasingly impairs the target's functionality until it shorts out completely. The resulting lockout leaves the unit inoperable for 10 seconds.]],
-		},
-		damage                   = {
-			default              = 70,
-		},
-	},
-
-	particlebeamcannon_up2                 = {
-		areaofeffect           = 50,
-		avoidFriendly          = false,
-		avoidFeature 		   = false,
-		collideFriendly        = false,
-		collideFeature         = false,
-		cegTag                 = "railgun",
-		rgbColor               = "1 0 0",
-		rgbColor2              = "1 1 1",
-		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
-		edgeEffectiveness	   = 1,
-		energypershot          = 0,
-		fallOffRate            = 0,
-		duration			   = 0.25,
-		impulseFactor          = 0,
-		--interceptedByShieldType  = 4,
-		name                   = "E.M.G. Disruption Cannon",
 		range                  = 550,
 		reloadtime             = 1,
 		--projectiles			   = 5,
@@ -255,19 +167,19 @@ weaponDefs                 = {
 		weaponVelocity         = 1500,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= mediumExplosion, -- In Elmos
-			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			single_hit          = "true",
 			disruptionweapon    = 1,
-			weaponguide = [[Applies a stacking disruption effect that increasingly impairs the target's functionality until it shorts out completely. The resulting lockout leaves the unit inoperable for 10 seconds.]],
+			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively — and so does its ability to perceive the battlefield. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted — the arc still spreads to those around it.]],
 		},
 		damage                   = {
-			default              = 2000,
+			default              = 70,
 		},
 	},
 
-	particlebeamcannon_up3                 = {
+	particlebeamcannon_up1                 = {
 		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -299,19 +211,19 @@ weaponDefs                 = {
 		weaponVelocity         = 1500,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
-			expl_light_radius	= largeExplosion, -- In Elmos
-			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_radius	= smallExplosion, -- In Elmos
+			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			single_hit          = "true",
 			disruptionweapon    = 1,
-			weaponguide = [[Applies a stacking disruption effect that increasingly impairs the target's functionality until it shorts out completely. The resulting lockout leaves the unit inoperable for 10 seconds.]],
+			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively — and so does its ability to perceive the battlefield. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted — the arc still spreads to those around it.]],
 		},
 		damage                   = {
-			default              = 20000,
+			default              = 70,
 		},
 	},
 
-	particlebeamcannon_up4                 = {
+	particlebeamcannon_up2                 = {
 		areaofeffect           = 50,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -343,12 +255,100 @@ weaponDefs                 = {
 		weaponVelocity         = 1500,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit          = "true",
+			disruptionweapon    = 1,
+			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively — and so does its ability to perceive the battlefield. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted — the arc still spreads to those around it.]],
+		},
+		damage                   = {
+			default              = 2000,
+		},
+	},
+
+	particlebeamcannon_up3                 = {
+		areaofeffect           = 50,
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		rgbColor               = "1 0 0",
+		rgbColor2              = "1 1 1",
+		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.25,
+		impulseFactor          = 0,
+		--interceptedByShieldType  = 4,
+		name                   = "E.M.G. Disruption Cannon",
+		range                  = 700,
+		reloadtime             = 1,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "disruption-laser",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.6,
+		thickness              = 6,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 1500,
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
+			expl_light_radius	= largeExplosion, -- In Elmos
+			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+			single_hit          = "true",
+			disruptionweapon    = 1,
+			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively — and so does its ability to perceive the battlefield. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted — the arc still spreads to those around it.]],
+		},
+		damage                   = {
+			default              = 20000,
+		},
+	},
+
+	particlebeamcannon_up4                 = {
+		areaofeffect           = 50,
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "railgun",
+		rgbColor               = "1 0 0",
+		rgbColor2              = "1 1 1",
+		explosionGenerator     = "custom:genericshellexplosion-medium-sparks-burn",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		fallOffRate            = 0,
+		duration			   = 0.25,
+		impulseFactor          = 0,
+		--interceptedByShieldType  = 4,
+		name                   = "E.M.G. Disruption Cannon",
+		range                  = 750,
+		reloadtime             = 1,
+		--projectiles			   = 5,
+		weaponType		       = "LaserCannon",
+		soundStart             = "disruption-laser",
+		texture1               = "shot",
+		texture2               = "empty",
+		coreThickness          = 0.6,
+		thickness              = 6,
+		tolerance              = 10000,
+		turret                 = true,
+		weaponTimer            = 1,
+		weaponVelocity         = 1500,
+		customparams             = {
+			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			single_hit          = "true",
 			disruptionweapon    = 1,
-			weaponguide = [[Applies a stacking disruption effect that increasingly impairs the target's functionality until it shorts out completely. The resulting lockout leaves the unit inoperable for 10 seconds.]],
+			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively — and so does its ability to perceive the battlefield. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted — the arc still spreads to those around it.]],
 		},
 		damage                   = {
 			default              = 50000,

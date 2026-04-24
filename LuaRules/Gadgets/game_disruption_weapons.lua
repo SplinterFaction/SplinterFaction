@@ -26,7 +26,10 @@ local LOCKOUT_SECONDS   = 10
 local LOCKOUT_FRAMES    = LOCKOUT_SECONDS * GAME_SPEED
 local POST_TRIGGER_RESET = 0.55
 
--- Decay only begins this long after the last disruption hit
+-- Disruption chaining
+local CHAIN_TARGETS  = 3
+local CHAIN_FRACTION = 0.25
+local CHAIN_RADIUS   = 300
 local RECENT_HIT_DELAY_SECONDS = 2
 local RECENT_HIT_DELAY_FRAMES  = RECENT_HIT_DELAY_SECONDS * GAME_SPEED
 
@@ -43,6 +46,7 @@ local RULESPARAM_EPSILON_PERCENT = 0.5
 local MIN_SPEED_MULT = 0.25
 local MIN_ACCEL_MULT = 0.25
 local MIN_TURN_MULT  = 0.25
+local MIN_LOS_RADIUS = 50  -- elmos; tiny floor to avoid engine weirdness at zero
 
 --------------------------------------------------------------------------------
 -- optional customparams
@@ -70,11 +74,16 @@ local spValidUnitID         = Spring.ValidUnitID
 local spGetUnitHealth       = Spring.GetUnitHealth
 local spGetUnitDefID        = Spring.GetUnitDefID
 local spSetUnitRulesParam   = Spring.SetUnitRulesParam
+local spSetUnitSensorRadius = Spring.SetUnitSensorRadius
+local spGetUnitSensorRadius = Spring.GetUnitSensorRadius
 local spGiveOrderToUnit     = Spring.GiveOrderToUnit
 local spGetAllUnits         = Spring.GetAllUnits
 local spGetUnitIsDead       = Spring.GetUnitIsDead
 local spGetUnitPosition     = Spring.GetUnitPosition
 local spSpawnCEG            = Spring.SpawnCEG
+local spGetUnitsInSphere    = Spring.GetUnitsInSphere
+local spGetUnitTeam         = Spring.GetUnitTeam
+local spAreTeamsAllied      = Spring.AreTeamsAllied
 
 local MoveCtrl              = Spring.MoveCtrl
 local mcGetGroundMoveTypeData = MoveCtrl and MoveCtrl.GetGroundMoveTypeData
@@ -105,6 +114,7 @@ local unitImmune = {}
 local moveTypeCache = {}
 -- moveTypeCache[unitID] = {
 --   kind = "ground"/"none",
+--   baseLOS = ...,
 --   baseMove = {
 --     maxSpeed = ...,
 --     accRate  = ...,
@@ -162,6 +172,7 @@ local function CacheMoveType(unitID, unitDefID)
 
 	local cache = {
 		kind = "ground",
+		baseLOS  = spGetUnitSensorRadius(unitID, "los") or 0,
 		baseMove = {},
 	}
 
@@ -254,6 +265,11 @@ local function RestoreMovement(unitID)
 	end
 
 	pcall(mcSetGroundMoveTypeData, unitID, values)
+
+	-- Restore LOS
+	if cache.baseLOS and cache.baseLOS > 0 then
+		spSetUnitSensorRadius(unitID, "los", cache.baseLOS)
+	end
 end
 
 local function SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
@@ -296,13 +312,15 @@ local function GetDecayRateForPercent(pct)
 	end
 end
 
-local function TriggerFullDisruption(unitID, frame)
+local function TriggerFullDisruption(unitID, frame, noStop)
 	local cap = disruptionCapacity[unitID] or 1
 	disruption[unitID] = cap
 	disruptedUntil[unitID] = frame + LOCKOUT_FRAMES
 	activeUnits[unitID] = true
 
-	spGiveOrderToUnit(unitID, CMD.STOP, {}, 0)
+	if not noStop then
+		spGiveOrderToUnit(unitID, CMD.STOP, {}, 0)
+	end
 end
 
 local function InitUnitState(unitID, unitDefID)
@@ -377,15 +395,74 @@ function gadget:UnitGiven(unitID, unitDefID)
 end
 
 --------------------------------------------------------------------------------
+-- Chaining
+--------------------------------------------------------------------------------
+
+local function ApplyChainDisruption(sourceUnitID, sourceTeam, chainAmount, frame)
+	local x, y, z = spGetUnitPosition(sourceUnitID)
+	if not x then return end
+
+	local nearby = spGetUnitsInSphere(x, y, z, CHAIN_RADIUS)
+	if not nearby or #nearby == 0 then return end
+
+	-- Build candidate list: enemy, alive, not the source, not immune, not already fully disrupted
+	local candidates = {}
+	for i = 1, #nearby do
+		local uid = nearby[i]
+		if uid ~= sourceUnitID
+				and spValidUnitID(uid)
+				and not spGetUnitIsDead(uid)
+				and not unitImmune[uid]
+				and not IsUnitFullyDisrupted(uid, frame) then
+			local uteam = spGetUnitTeam(uid)
+			if uteam and uteam ~= sourceTeam and not spAreTeamsAllied(sourceTeam, uteam) then
+				candidates[#candidates + 1] = uid
+			end
+		end
+	end
+
+	if #candidates == 0 then return end
+
+	-- Fisher-Yates shuffle then take up to CHAIN_TARGETS
+	for i = #candidates, 2, -1 do
+		local j = math.random(i)
+		candidates[i], candidates[j] = candidates[j], candidates[i]
+	end
+
+	local hits = math_min(CHAIN_TARGETS, #candidates)
+	for i = 1, hits do
+		local uid = candidates[i]
+
+		local resist = unitResistMult[uid] or 1
+		local amount = chainAmount * resist
+
+		local cap = disruptionCapacity[uid]
+		if not cap or cap <= 0 then
+			local maxHealth = GetUnitMaxHealth(uid)
+			cap = math_max(1, maxHealth * (unitCapacityMult[uid] or 1))
+			disruptionCapacity[uid] = cap
+		end
+
+		disruption[uid] = math_min(cap, (disruption[uid] or 0) + amount)
+		lastDisruptionHit[uid] = frame
+		activeUnits[uid] = true
+
+		if disruption[uid] >= cap then
+			TriggerFullDisruption(uid, frame, true)
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
 -- Damage interception
 --------------------------------------------------------------------------------
 
-function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponID, attackerID, attackerDefID, attackerTeam)
-	if not weaponID then
+function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
+	if not weaponDefID then
 		return damage
 	end
 
-	local wd = WeaponDefs[weaponID]
+	local wd = WeaponDefs[weaponDefID]
 	if not wd then
 		return damage
 	end
@@ -403,9 +480,14 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
 
 	-- Target is already fully disrupted: block the hit and stop the attacker
 	-- so it immediately drops its target and looks for something else.
+	-- Chain still fires so disruption weapons aren't wasted on a locked-out target.
 	if IsUnitFullyDisrupted(unitID, frame) then
 		if attackerID and spValidUnitID(attackerID) then
 			spGiveOrderToUnit(attackerID, CMD.STOP, {}, 0)
+		end
+		local disruptAmount = tonumber(cp.disruptiondamage) or damage or 0
+		if disruptAmount > 0 then
+			ApplyChainDisruption(unitID, attackerTeam, disruptAmount * CHAIN_FRACTION, frame)
 		end
 		return 0
 	end
@@ -432,6 +514,10 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
 	if disruption[unitID] >= cap then
 		TriggerFullDisruption(unitID, frame)
 	end
+
+	-- Chain 25% of the disruption amount to up to 3 nearby enemies
+	local chainAmount = disruptAmount * CHAIN_FRACTION
+	ApplyChainDisruption(unitID, attackerTeam, chainAmount, frame)
 
 	return 0
 end
@@ -513,11 +599,25 @@ function gadget:GameFrame(frame)
 
 			ApplyMovementPenalty(unitID, speedMult, accelMult, turnMult)
 
+			-- LOS ramping: same shaped curve, floors at MIN_LOS_RADIUS
+			local cache = moveTypeCache[unitID]
+			if cache and cache.baseLOS and cache.baseLOS > 0 then
+				local losMult
+				if fullyDisrupted then
+					losMult = 0
+				else
+					local shaped = pct ^ 0.7
+					losMult = 1 - shaped
+				end
+				local newLOS = math.max(MIN_LOS_RADIUS, math.floor(cache.baseLOS * losMult))
+				spSetUnitSensorRadius(unitID, "los", newLOS)
+			end
+
 			SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
 
 			if (not fullyDisrupted) and current <= 0.001 then
 				disruption[unitID] = 0
-				RestoreMovement(unitID)
+				RestoreMovement(unitID)  -- also restores LOS
 				SetDisplayedRulesParams(unitID, 0, false)
 				spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
 				activeUnits[unitID] = nil

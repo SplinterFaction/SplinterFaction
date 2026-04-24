@@ -25,7 +25,7 @@ unitDef                    = {
 	footprintX                   = 3,
 	footprintZ                   = 3,
 	highTrajectory		   		 = 2,
-	iconType                     = "botassaultt2",
+	iconType                     = "botdisruptort2",
 	idleAutoHeal                 = .5,
 	idleTime                     = 2200,
 	leaveTracks                  = false,
@@ -150,7 +150,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			single_hit          = "true",
 			disruptionweapon    = 1,
-			weaponguide = [[Applies a stacking disruption effect that increasingly impairs the target's functionality until it shorts out completely. The resulting lockout leaves the unit inoperable for 10 seconds.]],
+			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively — and so does its ability to perceive the battlefield. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted — the arc still spreads to those around it.]],
 		},
 		damage                   = {
 			default              = 150,

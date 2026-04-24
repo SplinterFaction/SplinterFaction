@@ -34,6 +34,16 @@ local icontypes = {
 		size=iconSize,
 		--radiusadjust=true,
 	},
+	botdisruptort1 = {
+		bitmap='icons/supcomish/botdisruptort1.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
+	botdisruptort2 = {
+		bitmap='icons/supcomish/botdisruptort2.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
 	botassaultt1 = {
 		bitmap='icons/supcomish/botassaultt1.png',
 		size=iconSize,
@@ -140,6 +150,16 @@ local icontypes = {
 	--tanks
 	tankraidert1 = {
 		bitmap='icons/supcomish/tankraidert1.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
+	tankheatt1 = {
+		bitmap='icons/supcomish/tankheatt1.png',
+		size=iconSize,
+		--radiusadjust=true,
+	},
+	tankheatt2 = {
+		bitmap='icons/supcomish/tankheatt2.png',
 		size=iconSize,
 		--radiusadjust=true,
 	},
