@@ -76,6 +76,8 @@ local spGetUnitDefID        = Spring.GetUnitDefID
 local spSetUnitRulesParam   = Spring.SetUnitRulesParam
 local spSetUnitSensorRadius = Spring.SetUnitSensorRadius
 local spGetUnitSensorRadius = Spring.GetUnitSensorRadius
+local spGetUnitWeaponState  = Spring.GetUnitWeaponState
+local spSetUnitWeaponState  = Spring.SetUnitWeaponState
 local spGiveOrderToUnit     = Spring.GiveOrderToUnit
 local spGetAllUnits         = Spring.GetAllUnits
 local spGetUnitIsDead       = Spring.GetUnitIsDead
@@ -112,6 +114,8 @@ local unitCapacityMult = {}
 local unitImmune = {}
 
 local moveTypeCache = {}
+local weaponCache = {}
+-- weaponCache[unitID] = { [weaponNum] = { reloadTime = ... }, ... }
 -- moveTypeCache[unitID] = {
 --   kind = "ground"/"none",
 --   baseLOS = ...,
@@ -198,6 +202,20 @@ local function CacheMoveType(unitID, unitDefID)
 	moveTypeCache[unitID] = cache
 end
 
+local function CacheWeapons(unitID, unitDefID)
+	local ud = UnitDefs[unitDefID]
+	if not ud or not ud.weapons then return end
+
+	local cache = {}
+	for i = 1, #ud.weapons do
+		local ws = spGetUnitWeaponState(unitID, i, "reloadTime")
+		if ws then
+			cache[i] = { reloadTime = ws }
+		end
+	end
+	weaponCache[unitID] = cache
+end
+
 local function SpawnCEG(unitID, cegName, radius)
 	local x, y, z = spGetUnitPosition(unitID)
 	if not x then return end
@@ -270,6 +288,14 @@ local function RestoreMovement(unitID)
 	if cache.baseLOS and cache.baseLOS > 0 then
 		spSetUnitSensorRadius(unitID, "los", cache.baseLOS)
 	end
+
+	-- Restore weapon reload times
+	local wcache = weaponCache[unitID]
+	if wcache then
+		for weaponNum, wdata in pairs(wcache) do
+			spSetUnitWeaponState(unitID, weaponNum, "reloadTime", wdata.reloadTime)
+		end
+	end
 end
 
 local function SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
@@ -296,6 +322,7 @@ local function ClearUnitState(unitID)
 	unitCapacityMult[unitID] = nil
 	unitImmune[unitID] = nil
 	moveTypeCache[unitID] = nil
+	weaponCache[unitID] = nil
 
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
@@ -319,7 +346,8 @@ local function TriggerFullDisruption(unitID, frame, noStop)
 	activeUnits[unitID] = true
 
 	if not noStop then
-		spGiveOrderToUnit(unitID, CMD.STOP, {}, 0)
+
+		-- spGiveOrderToUnit(unitID, CMD.STOP, {}, 0)
 	end
 end
 
@@ -348,6 +376,7 @@ local function InitUnitState(unitID, unitDefID)
 	unitImmune[unitID] = immune
 
 	CacheMoveType(unitID, unitDefID)
+	CacheWeapons(unitID, unitDefID)
 
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
@@ -375,6 +404,7 @@ end
 
 function gadget:UnitFinished(unitID, unitDefID)
 	CacheMoveType(unitID, unitDefID)
+	CacheWeapons(unitID, unitDefID)
 end
 
 function gadget:UnitDestroyed(unitID)
@@ -611,6 +641,16 @@ function gadget:GameFrame(frame)
 				end
 				local newLOS = math.max(MIN_LOS_RADIUS, math.floor(cache.baseLOS * losMult))
 				spSetUnitSensorRadius(unitID, "los", newLOS)
+			end
+
+			-- Reload time penalty: same shaped curve, max 2x at full disruption
+			local wcache = weaponCache[unitID]
+			if wcache then
+				local shaped = fullyDisrupted and 1 or (pct ^ 0.7)
+				local reloadMult = 1 + shaped
+				for weaponNum, wdata in pairs(wcache) do
+					spSetUnitWeaponState(unitID, weaponNum, "reloadTime", wdata.reloadTime * reloadMult)
+				end
 			end
 
 			SetDisplayedRulesParams(unitID, pct, fullyDisrupted)

@@ -108,7 +108,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		unitguide = [[The Equalizer carries an EMG Disruption Cannon that applies a stacking impairment effect with every hit, eventually locking a target unit down entirely for ten seconds. Against individual targets it is a reliable disabler; against a column, a coordinated volley can bring an entire advance to a standstill. Its moderate speed and health make it a solid frontline skirmisher as long as it stays in the fight long enough to stack its effect.]],
+		unitguide = [[The Equalizer carries an EMG Disruption Cannon that applies a stacking impairment effect with every hit, eventually locking a target unit down entirely for a time. Against individual targets it is a reliable disabler; against a column, a coordinated volley can bring an entire advance to a standstill. Its moderate speed and health make it a solid frontline skirmisher as long as it stays in the fight long enough to stack its effect.]],
 	},
 }
 
@@ -150,7 +150,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 			single_hit          = "true",
 			disruptionweapon    = 1,
-			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively — and so does its ability to perceive the battlefield. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted — the arc still spreads to those around it.]],
+			weaponguide = [[Disruption weapons deal no direct damage, instead building disruptive interference within the target's systems. As disruption accumulates, the target's movement degrades progressively, its weapons become slower to cycle, and its ability to perceive the battlefield diminishes. At full disruption, the target is locked out entirely: immobilized, nearly blind, and unable to fire for several seconds. Disruption also arcs to nearby enemies on impact, making these weapons particularly effective against clustered formations. Continued fire on a locked-out target is not wasted, as the arc still spreads to those around it.]],
 		},
 		damage                   = {
 			default              = 70,
