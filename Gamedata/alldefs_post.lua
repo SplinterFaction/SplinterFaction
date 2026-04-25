@@ -56,8 +56,8 @@ function UnitDef_Post(name, uDef)
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	--Use DDS for Buildpics
-	local buildpicfilename = uDef.unitname .. ".dds"
+	--Set format for Buildpics
+	local buildpicfilename = uDef.unitname .. ".png"
 	uDef.buildpic = tostring(buildpicfilename)
 	--Spring.Echo (buildpicfilename .. " <-> " .. uDef.buildpicname)
 

@@ -5,7 +5,7 @@ function widget:GetInfo()
 		author  = "",
 		date    = "2026-03-03",
 		license = "GPLv2",
-		layer   = 0,
+		layer   = 2,
 		enabled = true,
 	}
 end
@@ -140,7 +140,7 @@ local function GetHoverSpotAndBuildDef(screenX, screenY)
 	return spot, mexDefID, bx, by, bz
 end
 
-function widget:DrawWorld()
+function widget:DrawWorldPreUnit()
 	-- MODE A: placement snapping mode (your original behavior)
 	local _, cmdID = spGetActiveCommand()
 	if cmdID and isMetalMaker(-cmdID) then
