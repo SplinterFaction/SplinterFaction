@@ -154,7 +154,7 @@ function widget:DrawWorldPreUnit()
 		local spot = GetClosestSpot(bx, bz)
 		if not spot then return end
 
-		local sy = math.max(0, spGetGroundHeight(spot.x, spot.z))
+		local sy = spGetGroundHeight(spot.x, spot.z)  -- negative when underwater; intentional
 
 		glDepthTest(false)
 		glLineWidth(2.0)
@@ -170,7 +170,7 @@ function widget:DrawWorldPreUnit()
 	local spot, mexDefID, bx, by, bz = GetHoverSpotAndBuildDef(mx, my)
 	if not spot then return end
 
-	local sy = math.max(0, spGetGroundHeight(spot.x, spot.z))
+	local sy = spGetGroundHeight(spot.x, spot.z)  -- negative when underwater; intentional
 
 	-- guide line (mouse -> spot)
 	glDepthTest(false)
