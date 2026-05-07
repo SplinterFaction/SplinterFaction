@@ -19,7 +19,7 @@ function gadget:GetInfo()
 		date      = "January, 2010",
 		license   = "GNU GPL, v2 or later",
 		layer     = 0,
-		enabled   = true  --  loaded by default?
+		enabled   = true
 	}
 end
 
@@ -54,19 +54,24 @@ local validStartComm = {
 }
 
 local ACCESS_LEVEL = {
-    -- pick one of the two below choose whether enemies can see faction choice
+	-- pick one of the two below to choose whether enemies can see faction choice
 	private = true,
-    -- public = true,
+	-- public = true,
 }
+
+-- human teams waiting on a faction choice before spawning
+local pendingTeams = {}
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
 local modOptions = Spring.GetModOptions()
 
-function IsTeamAI(teamID)
-	_, _, _, isAiTeam=Spring.GetTeamInfo(teamID)
-	return isAiTeam
+local function IsTeamAI(teamID)
+	-- GetTeamInfo's isAiTeam field is unreliable in Recoil.
+	-- If no human (non-spectator) player is on this team, treat it as AI.
+	local players = Spring.GetPlayerList(teamID, true)
+	return not players or #players == 0
 end
 
 local function GetStartUnit(teamID)
@@ -75,62 +80,59 @@ local function GetStartUnit(teamID)
 		return UnitDefs[reqStartUnit].name
 	end
 
-	-- get the team startup info
+	-- No choice stored — fall back to side from script, or random
 	local side = select(5, Spring.GetTeamInfo(teamID))
-	local startUnit
 
 	if IsTeamAI(teamID) then
-		Spring.Echo ("Enemy is an AI so it gets an AI Specific Overseer!")
-		--local factionrandom = math.random(0,1)
+		Spring.Echo("[Game Spawn] AI team — picking random faction")
 		math.random(); math.random(); math.random()
-		local sidedata = factionDefComms[math.random(0,1)]
-		if sidedata == nil then
-			Spring.Echo("[Game Spawn] AI Faction: nil")
-		else
-			Spring.Echo("[Game Spawn] AI Faction: " .. sidedata)
-		end
-
+		local sidedata = factionDefComms[math.random(0, 1)]
+		Spring.Echo("[Game Spawn] AI Faction: " .. tostring(sidedata))
 		local aiCommData = aiStartUnits[sidedata] or {}
-		local aiCommIndex = math.random(1, #aiCommData)
-		startUnit = aiCommData[aiCommIndex]
+		return aiCommData[math.random(1, #aiCommData)]
 	else
-		-- If a side isn't selected, flip a coin
-		if (side == "") then
-			local factionIndex = math.random(0, 1)
-			startUnit = factionDefComms[factionIndex]
+		if side ~= "" then
+			return Spring.GetSideData(side)
 		else
-			startUnit = Spring.GetSideData(side)
+			Spring.Echo("[Game Spawn] No faction choice received for team " .. teamID .. " — picking randomly")
+			return factionDefComms[math.random(0, 1)]
 		end
 	end
-
-	return startUnit
 end
 
 local function SpawnStartUnit(teamID)
 	local startUnit = GetStartUnit(teamID)
 
-	if (startUnit and startUnit ~= "") then
+	if startUnit and startUnit ~= "" then
 
+		-- Resolve faction label
+		local playerFaction
 		if startUnit == "fedcommander" then
 			playerFaction = "Federation of Kala"
 		elseif startUnit == "lozcommander" then
 			playerFaction = "Loz Alliance"
-		elseif startUnit == nil then
-			playerFaction = "Script is Fucked"
-			Spring.Echo("[Game Spawn] If you're seeing this message that means that the code which sets the player's faction is absolutely fucked somewhere. On the next line I will echo the playerFaction variable. If it says anything other than the factions listed above, at least it will provide a clue.")
 		else
 			playerFaction = startUnit
-			Spring.Echo(playerFaction)
+			Spring.Echo("[Game Spawn] Unrecognised start unit: " .. tostring(startUnit))
 		end
-
 
 		Spring.Echo("[Game Spawn] TeamID " .. teamID .. "'s starting faction is " .. playerFaction)
 		Spring.SetTeamRulesParam(teamID, "faction", playerFaction)
 
-		-- spawn the specified start unit
-		local x,y,z = Spring.GetTeamStartPosition(teamID)
+		-- Resolve t1 commander — starting tech is always t1
+		local newStartUnit
+		if startUnit == "fedcommander" then
+			newStartUnit = "fedcommander_up1"
+		elseif startUnit == "lozcommander" then
+			newStartUnit = "lozcommander_up1"
+		else
+			newStartUnit = startUnit   -- AI-specific or fallback units pass through unchanged
+		end
+
+		-- Determine spawn position
+		local x, y, z = Spring.GetTeamStartPosition(teamID)
 		if IsTeamAI(teamID) then
-			local _,_,_,_,_,allyID = Spring.GetTeamInfo(teamID)
+			local _, _, _, _, _, allyID = Spring.GetTeamInfo(teamID)
 			local startBoxXmin, startBoxZmin, startBoxXmax, startBoxZmax = Spring.GetAllyTeamStartBox(allyID)
 			local mx = Game.mapSizeX
 			local mz = Game.mapSizeZ
@@ -140,77 +142,43 @@ local function SpawnStartUnit(teamID)
 				z = math.random(startBoxZmin, startBoxZmax)
 			end
 		end
-		-- snap to 16x16 grid
-		x, z = 16*math.floor((x+8)/16), 16*math.floor((z+8)/16)
+
+		-- Snap to 16x16 grid
+		x = 16 * math.floor((x + 8) / 16)
+		z = 16 * math.floor((z + 8) / 16)
 		y = Spring.GetGroundHeight(x, z)
-		-- facing toward map center
-		local facing=math.abs(Game.mapSizeX/2 - x) > math.abs(Game.mapSizeZ/2 - z)
-				and ((x>Game.mapSizeX/2) and "west" or "east")
-				or ((z>Game.mapSizeZ/2) and "north" or "south")
 
-		--------------------------------------------------------------------------------
-		--------------------------------------------------------------------------------
-		-- I'm hijacking the start unit here so that the player can start and various tech levels
+		-- Face toward map center
+		local facing = math.abs(Game.mapSizeX / 2 - x) > math.abs(Game.mapSizeZ / 2 - z)
+				and ((x > Game.mapSizeX / 2) and "west" or "east")
+				or  ((z > Game.mapSizeZ / 2) and "north" or "south")
 
-		-- Spring.Echo([[[Game Spawn] startUnit is ]] .. startUnit)
-		local startingTechLevel = modOptions.t0ort1
-		-- Spring.Echo([[[Game Spawn] Starting Tech level is ]] .. startingTechLevel )
-		local newStartUnit
-		if startingTechLevel == [[t0]] then
-			newStartUnit = startUnit
-		end
-		if startingTechLevel == [[t1]] then
-			-- Spring.Echo([[[Game Spawn] 1.. ]])
-			if startUnit == "fedcommander" then
-				-- Spring.Echo([[[Game Spawn] 2.. ]])
-				newStartUnit = "fedcommander_up1"
-			end
-			if startUnit == "lozcommander" then
-				-- Spring.Echo([[[Game Spawn] 3.. ]])
-				newStartUnit = "lozcommander_up1"
-			end
-		end
-		-- Spring.Echo([[[Game Spawn] startUnit is now ]] .. newStartUnit)
-
-		local unitID = Spring.CreateUnit(newStartUnit, x, y, z, facing, teamID)
-
-		-- Fun times
-		-- if startUnit == "ecommander" then
-		--id1=Spring.CreateUnit("eorb", x+100, y+200, z, facing, teamID)
-		--id1=Spring.CreateUnit("eorb", x-100, y-200, z, facing, teamID)
-		--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
-		-- end
-		-- if startUnit == "zarm" then
-		--	id1=Spring.CreateUnit("ztumor", x+100, y+200, z, facing, teamID)
-		--	id1=Spring.CreateUnit("ztumor", x-100, y-200, z, facing, teamID)
-		--Spring.GiveOrderToUnit(id1,CMD.GUARD,{unitID}, {"shift"})
-		-- end
+		Spring.CreateUnit(newStartUnit, x, y, z, facing, teamID)
 	end
 
-	-- set start resources, either from mod options or custom team keys
+	-- Set start resources from mod options or custom team keys
 	local teamOptions = select(8, Spring.GetTeamInfo(teamID))
 	local m = teamOptions.startmetal  or modOptions.startmetal  or 1000
 	local e = teamOptions.startenergy or modOptions.startenergy or 1000
 
-	-- using SetTeamResource to get rid of any existing resource without affecting stats
-	-- using AddTeamResource to add starting resource and counting it as income
-	if (m and tonumber(m) ~= 0) then
-		-- remove the pre-existing storage
-		--   must be done after the start unit is spawned,
-		--   otherwise the starting resources are lost!
-		Spring.SetTeamResource(teamID, "ms", tonumber(m)) --Use tonumber(m) to have it match the startmetal amounts
+	if m and tonumber(m) ~= 0 then
+		Spring.SetTeamResource(teamID, "ms", tonumber(m))
 		Spring.SetTeamResource(teamID, "m", 0)
 		Spring.AddTeamResource(teamID, "m", tonumber(m))
 	end
-	if (e and tonumber(e) ~= 0) then
-		-- remove the pre-existing storage
-		--   must be done after the start unit is spawned,
-		--   otherwise the starting resources are lost!
-		Spring.SetTeamResource(teamID, "es", tonumber(e)) --Use tonumber(e) to have it match the startenergy amounts
+	if e and tonumber(e) ~= 0 then
+		Spring.SetTeamResource(teamID, "es", tonumber(e))
 		Spring.SetTeamResource(teamID, "e", 0)
 		Spring.AddTeamResource(teamID, "e", tonumber(e))
-	end	
+	end
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+-- Frames to wait for a human faction choice before forcing a random spawn.
+-- 30 seconds at 30 fps = 900 frames.
+local CHOICE_TIMEOUT_FRAMES = 900
 
 function gadget:RecvLuaMsg(msg, playerID)
 	if msg:find("\138") ~= 1 then
@@ -223,25 +191,51 @@ function gadget:RecvLuaMsg(msg, playerID)
 	end
 
 	local teamID = select(4, Spring.GetPlayerInfo(playerID, false))
-	--Spring.Echo("Setting start unit for team", teamID, " to ", requestedCommDefID)
 	Spring.SetTeamRulesParam(teamID, "startUnit", requestedCommDefID, ACCESS_LEVEL)
+	Spring.Echo("[Game Spawn] Stored faction choice for team " .. teamID .. ": defID " .. requestedCommDefID)
 end
 
-
 function gadget:GameStart()
-	-- only activate if engine didn't already spawn units (compatibility)
-	if (#Spring.GetAllUnits() > 0) then
+	-- Only activate if engine didn't already spawn units (compatibility)
+	if #Spring.GetAllUnits() > 0 then
 		return
 	end
 
-	-- spawn start units
 	local gaiaTeamID = Spring.GetGaiaTeamID()
 	local teams = Spring.GetTeamList()
-	for i = 1,#teams do
+
+	for i = 1, #teams do
 		local teamID = teams[i]
-		-- don't spawn a start unit for the Gaia team
-		if (teamID ~= gaiaTeamID) then
+		if teamID ~= gaiaTeamID then
+			if IsTeamAI(teamID) then
+				-- AI has no player to choose — spawn immediately
+				SpawnStartUnit(teamID)
+			else
+				-- Human team: defer, but record the deadline frame
+				pendingTeams[teamID] = CHOICE_TIMEOUT_FRAMES
+				Spring.Echo("[Game Spawn] TeamID " .. teamID .. " waiting for faction choice (timeout: " .. CHOICE_TIMEOUT_FRAMES .. " frames)")
+			end
+		end
+	end
+end
+
+function gadget:GameFrame(n)
+	if next(pendingTeams) == nil then return end
+
+	for teamID, deadline in pairs(pendingTeams) do
+		local choice = Spring.GetTeamRulesParam(teamID, "startUnit")
+		if choice then
+			-- Player made a choice
 			SpawnStartUnit(teamID)
+			pendingTeams[teamID] = nil
+		elseif n >= deadline then
+			-- Timed out — pick randomly and spawn regardless
+			Spring.Echo("[Game Spawn] TeamID " .. teamID .. " timed out — forcing random faction")
+			local factionIndex = math.random(0, 1)
+			local forcedComm   = factionDefComms[factionIndex]
+			Spring.SetTeamRulesParam(teamID, "startUnit", UnitDefNames[forcedComm].id, ACCESS_LEVEL)
+			SpawnStartUnit(teamID)
+			pendingTeams[teamID] = nil
 		end
 	end
 end
