@@ -1,0 +1,66 @@
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+function widget:GetInfo()
+    return {
+        name    = "Select n Center!",
+        desc    = "Selects and centers the Commander when it spawns.",
+        author  = "quantum and Evil4Zerggin",
+        date    = "19 April 2008",
+        license = "GNU GPL, v2 or later",
+        layer   = 5,
+        enabled = true,
+    }
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+function widget:Update()
+    -- Remove immediately if spectating
+    local _, _, spectator = Spring.GetPlayerInfo(Spring.GetMyPlayerID())
+    if spectator then
+        widgetHandler:RemoveWidget()
+        return
+    end
+
+    -- Wait until the game is running
+    if Spring.GetGameFrame() == 0 then return end
+
+    -- Wait until a unit exists for our team
+    local units = Spring.GetTeamUnits(Spring.GetMyTeamID())
+    if not units or not units[1] then return end
+
+    -- Commander has spawned — center and select
+    local x, y, z = Spring.GetUnitPosition(units[1])
+    Spring.SetCameraState({
+                              name = "spring",
+                              mode = 2,
+                              dist = 900,
+                              px   = x,
+                              py   = y,
+                              pz   = z,
+                          }, 5)
+    -- It's not documented, but the 5 here is transition time/speed. Internally I think it's referred to as "camTime".
+    --  These are the arguments for Spring.SetCameraState() for the spring camera
+    --  name, spring
+    --  dist, 3150.0271
+    --  px, 3171.03955
+    --  py, 211.709076
+    --  pz, 882.631409
+    --  rz, 0
+    --  dx, 0
+    --  dy, -0.8940042
+    --  dz, -0.4480586
+    --  fov, 45
+    --  ry, 0
+    --  mode, 2
+    --  rx, 2.67700005
+    --  Spring.SelectUnitArray{unitArray[1]}
+    Spring.SelectUnitArray({ units[1] })
+
+    widgetHandler:RemoveWidget()
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------

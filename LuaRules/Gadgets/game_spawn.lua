@@ -154,8 +154,10 @@ local function SpawnStartUnit(teamID)
 				or  ((z > Game.mapSizeZ / 2) and "north" or "south")
 
 		Spring.CreateUnit(newStartUnit, x, y, z, facing, teamID)
-	end
+	end   -- if startUnit
+end   -- SpawnStartUnit
 
+local function SetStartResources(teamID)
 	-- Set start resources from mod options or custom team keys
 	local teamOptions = select(8, Spring.GetTeamInfo(teamID))
 	local m = teamOptions.startmetal  or modOptions.startmetal  or 1000
@@ -207,14 +209,11 @@ function gadget:GameStart()
 	for i = 1, #teams do
 		local teamID = teams[i]
 		if teamID ~= gaiaTeamID then
-			if IsTeamAI(teamID) then
-				-- AI has no player to choose — spawn immediately
-				SpawnStartUnit(teamID)
-			else
-				-- Human team: defer, but record the deadline frame
-				pendingTeams[teamID] = CHOICE_TIMEOUT_FRAMES
-				Spring.Echo("[Game Spawn] TeamID " .. teamID .. " waiting for faction choice (timeout: " .. CHOICE_TIMEOUT_FRAMES .. " frames)")
-			end
+			-- Set resources immediately for all teams regardless of spawn timing
+			SetStartResources(teamID)
+			-- All teams wait for the deadline — AI will get a random faction then
+			pendingTeams[teamID] = CHOICE_TIMEOUT_FRAMES
+			Spring.Echo("[Game Spawn] TeamID " .. teamID .. " queued for spawn at frame " .. CHOICE_TIMEOUT_FRAMES)
 		end
 	end
 end
@@ -223,17 +222,14 @@ function gadget:GameFrame(n)
 	if next(pendingTeams) == nil then return end
 
 	for teamID, deadline in pairs(pendingTeams) do
-		local choice = Spring.GetTeamRulesParam(teamID, "startUnit")
-		if choice then
-			-- Player made a choice
-			SpawnStartUnit(teamID)
-			pendingTeams[teamID] = nil
-		elseif n >= deadline then
-			-- Timed out — pick randomly and spawn regardless
-			Spring.Echo("[Game Spawn] TeamID " .. teamID .. " timed out — forcing random faction")
-			local factionIndex = math.random(0, 1)
-			local forcedComm   = factionDefComms[factionIndex]
-			Spring.SetTeamRulesParam(teamID, "startUnit", UnitDefNames[forcedComm].id, ACCESS_LEVEL)
+		if n >= deadline then
+			-- Deadline reached — spawn with whatever choice arrived, or random if none
+			local choice = Spring.GetTeamRulesParam(teamID, "startUnit")
+			if not choice then
+				Spring.Echo("[Game Spawn] TeamID " .. teamID .. " timed out — forcing random faction")
+				local forcedComm = factionDefComms[math.random(0, 1)]
+				Spring.SetTeamRulesParam(teamID, "startUnit", UnitDefNames[forcedComm].id, ACCESS_LEVEL)
+			end
 			SpawnStartUnit(teamID)
 			pendingTeams[teamID] = nil
 		end

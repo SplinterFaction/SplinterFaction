@@ -93,8 +93,6 @@ local glTexRect      = gl.TexRect
 
 local spGetViewGeometry  = Spring.GetViewGeometry
 local spGetMouseState    = Spring.GetMouseState
-local spGetMyPlayerID    = Spring.GetMyPlayerID
-local spGetPlayerInfo    = Spring.GetPlayerInfo
 local spPlaySoundFile    = Spring.PlaySoundFile
 local spSendLuaRulesMsg  = Spring.SendLuaRulesMsg
 
@@ -106,14 +104,17 @@ local vsx, vsy       = spGetViewGeometry()
 local widgetScale    = 1
 local cards          = {}          -- computed geometry per faction card
 local chosen         = false       -- true once local player has sent their choice
+local chosenCommName = nil         -- commName of the chosen faction
 local lastHovered    = nil
+local gameStarted    = false       -- true once GameFrame > 0
 
 -- Countdown
-local COUNTDOWN_TOTAL   = 30      -- seconds before auto-pick
+local COUNTDOWN_TOTAL   = 30      -- seconds before auto-pick and game begins
 local COUNTDOWN_BEEP_AT = 10      -- play tick sound for final N seconds
-local countdownStart    = nil     -- Spring.GetTimer() value set on GameStart
+local TIMER_BAR_H       = 6       -- height of the countdown bar in base px
+local countdownStart    = nil     -- set once game clock starts
 local secondsLeft       = COUNTDOWN_TOTAL
-local lastBeepSecond    = nil     -- tracks which second we last beeped on
+local lastBeepSecond    = nil
 
 --------------------------------------------------------------------------------
 -- Font
@@ -219,7 +220,8 @@ local function DrawCard(card, hovered)
 	RectRound(x1, y1, x2, y2, outerCorner)
 
 	-- Inner panel
-	local bg = GetPanelBGColor(hovered)
+	local isChosenCard = chosen and (fd.commName == chosenCommName)
+	local bg = GetPanelBGColor(hovered or isChosenCard)
 	glColor(bg[1], bg[2], bg[3], bg[4])
 	RectRound(x1 + inset, y1 + inset, x2 - inset, y2 - inset - 0.06, innerCorner)
 
@@ -229,9 +231,10 @@ local function DrawCard(card, hovered)
 	glTexRect(x1 + inset, y2 - inset - accentH, x2 - inset, y2 - inset - 0.06)
 	glTexture(false)
 
-	-- Hover tint
-	if hovered then
-		glColor(ac[1], ac[2], ac[3], 0.08)
+	-- Hover tint — also applied permanently to the chosen card
+	local isChosen = chosen and (fd.commName == chosenCommName)
+	if hovered or isChosen then
+		glColor(ac[1], ac[2], ac[3], isChosen and 0.15 or 0.08)
 		RectRound(x1 + inset + 1, y1 + inset + 1, x2 - inset - 1, y2 - inset - 1, innerCorner)
 	end
 
@@ -342,8 +345,9 @@ end
 
 local function DrawTitle()
 	local titleSize     = math.floor(22 * widgetScale)
-	local countdownSize = math.floor(16 * widgetScale)
-	local topY          = cards[1] and (cards[1].y2 + math.floor(36 * widgetScale)) or (vsy * 0.75)
+	local countdownSize = math.floor(14 * widgetScale)
+	local topY          = cards[1] and (cards[1].y2 + math.floor(72 * widgetScale)) or (vsy * 0.75)
+	local urgent        = secondsLeft <= COUNTDOWN_BEEP_AT
 
 	font:Begin()
 	font:Print(
@@ -353,36 +357,43 @@ local function DrawTitle()
 			titleSize,
 			"con"
 	)
-
-	-- Countdown line below the title
-	if countdownStart then
-		local color = secondsLeft <= COUNTDOWN_BEEP_AT and COUNTDOWN_COLOR_URGENT or COUNTDOWN_COLOR_NORMAL
-		font:Print(
-				color .. "Auto-selecting in " .. secondsLeft .. "s",
-				vsx * 0.5,
-				topY - math.floor(titleSize * 1.5),
-				countdownSize,
-				"con"
-		)
-	end
 	font:End()
-end
 
-local function DrawWaitingScreen()
-	-- Still show a dim overlay so game world isn't distracting
-	glColor(OVERLAY_BG[1], OVERLAY_BG[2], OVERLAY_BG[3], OVERLAY_BG[4])
-	glRect(0, 0, vsx, vsy)
+	if not countdownStart then return end
 
-	local sz = math.floor(16 * widgetScale)
+	-- Seconds label
+	local labelY     = topY - math.floor(titleSize * 1.6)
+	local labelColor = urgent and COUNTDOWN_COLOR_URGENT or COUNTDOWN_COLOR_NORMAL
 	font:Begin()
 	font:Print(
-			WAITING_COLOR .. "Waiting for other players...",
+			labelColor .. secondsLeft .. "s",
 			vsx * 0.5,
-			vsy * 0.5,
-			sz,
+			labelY,
+			countdownSize,
 			"con"
 	)
 	font:End()
+
+	-- Progress bar spanning the full width of both cards
+	local barH   = math.floor(TIMER_BAR_H * widgetScale)
+	local barY2  = labelY - math.floor(6 * widgetScale)
+	local barY1  = barY2 - barH
+	local barX1  = cards[1] and cards[1].x1 or math.floor(vsx * 0.2)
+	local barX2  = cards[#cards] and cards[#cards].x2 or math.floor(vsx * 0.8)
+	local barW   = barX2 - barX1
+	local frac   = math.max(0, math.min(1, secondsLeft / COUNTDOWN_TOTAL))
+
+	-- Track (empty)
+	glColor(0.12, 0.12, 0.14, 0.9)
+	glRect(barX1, barY1, barX2, barY2)
+
+	-- Fill — drains from right to left
+	if urgent then
+		glColor(0.90, 0.22, 0.22, 1)
+	else
+		glColor(0.28, 0.62, 1.0, 0.9)
+	end
+	glRect(barX1, barY1, barX1 + math.floor(barW * frac), barY2)
 end
 
 --------------------------------------------------------------------------------
@@ -406,48 +417,48 @@ function widget:ViewResize()
 end
 
 function widget:GameStart()
-	-- Start the countdown clock
 	countdownStart = Spring.GetTimer()
 end
 
-local function LocalPlayerHasSpawned()
-	local playerID = spGetMyPlayerID()
-	local _, _, _, teamID = spGetPlayerInfo(playerID, false)
-	if not teamID then return false end
-	local units = Spring.GetTeamUnits(teamID)
-	return units and #units > 0
-end
-
 local function AutoPickFaction()
-	-- Pick a random faction and send it as if the player chose
 	local pick = cards[math.random(1, #cards)]
 	local commDefID = UnitDefNames[pick.faction.commName] and UnitDefNames[pick.faction.commName].id
 	if commDefID then
 		spSendLuaRulesMsg(SPAWN_MSG_BYTE .. commDefID)
-		chosen = true
+		chosen         = true
+		chosenCommName = pick.faction.commName
 	end
 end
 
 function widget:Update()
-	if LocalPlayerHasSpawned() then
-		widgetHandler:RemoveWidget(self)
+	-- Don't show or tick until the game has started
+	if not gameStarted then
+		if Spring.GetGameFrame() > 0 then
+			gameStarted    = true
+			countdownStart = Spring.GetTimer()
+		end
 		return
 	end
 
-	if chosen or not countdownStart then return end
+	if not countdownStart then return end
 
 	local elapsed = Spring.DiffTimers(Spring.GetTimer(), countdownStart)
 	secondsLeft   = math.max(0, math.ceil(COUNTDOWN_TOTAL - elapsed))
 
-	-- Tick sound for final COUNTDOWN_BEEP_AT seconds
+	-- Tick sound in final COUNTDOWN_BEEP_AT seconds — plays regardless of chosen state
 	if secondsLeft <= COUNTDOWN_BEEP_AT and secondsLeft ~= lastBeepSecond and secondsLeft > 0 then
-		spPlaySoundFile("rightclick", 1.0, "ui")
+		spPlaySoundFile("hover", 0.6, "ui")
 		lastBeepSecond = secondsLeft
 	end
 
-	-- Time's up — auto-pick
-	if secondsLeft == 0 then
+	-- Auto-pick if player still hasn't chosen
+	if not chosen and secondsLeft == 0 then
 		AutoPickFaction()
+	end
+
+	-- Remove widget when countdown is fully done
+	if secondsLeft == 0 then
+		widgetHandler:RemoveWidget(self)
 	end
 end
 
@@ -456,19 +467,21 @@ end
 --------------------------------------------------------------------------------
 
 function widget:MousePress(x, y, button)
+	if not gameStarted then return false end   -- don't swallow clicks during start position phase
 	if button ~= 1 then return false end
-	if chosen then return true end   -- block clicks during "waiting" screen
+	if chosen then return true end
 
 	for i = 1, #cards do
 		local c = cards[i]
 		if IsOnRect(x, y, c.x1, c.y1, c.x2, c.y2) then
-			return true   -- claim the press
+			return true
 		end
 	end
-	return true   -- block all clicks while chooser is visible
+	return true
 end
 
 function widget:MouseRelease(x, y, button)
+	if not gameStarted then return false end   -- don't swallow clicks during start position phase
 	if button ~= 1 then return false end
 	if chosen then return true end
 
@@ -479,7 +492,8 @@ function widget:MouseRelease(x, y, button)
 			if commDefID then
 				PlayClickSound()
 				spSendLuaRulesMsg(SPAWN_MSG_BYTE .. commDefID)
-				chosen = true
+				chosen         = true
+				chosenCommName = c.faction.commName
 			end
 			return true
 		end
@@ -492,10 +506,8 @@ end
 --------------------------------------------------------------------------------
 
 function widget:DrawScreen()
-	if chosen then
-		DrawWaitingScreen()
-		return
-	end
+	-- Don't show anything during start position phase
+	if not gameStarted then return end
 
 	DrawOverlay()
 	DrawTitle()
@@ -505,14 +517,17 @@ function widget:DrawScreen()
 
 	for i = 1, #cards do
 		local c = cards[i]
-		local hovered = IsOnRect(mx, my, c.x1, c.y1, c.x2, c.y2)
+		-- Once chosen, don't highlight hover on unchosen cards
+		local hovered = not chosen and IsOnRect(mx, my, c.x1, c.y1, c.x2, c.y2)
 		if hovered then currentHovered = i end
 		DrawCard(c, hovered)
 	end
 
-	-- Hover sound dedup
-	if currentHovered ~= lastHovered then
-		if currentHovered then PlayHoverSound() end
-		lastHovered = currentHovered
+	-- Hover sound dedup (only before choosing)
+	if not chosen then
+		if currentHovered ~= lastHovered then
+			if currentHovered then PlayHoverSound() end
+			lastHovered = currentHovered
+		end
 	end
 end
