@@ -264,8 +264,8 @@ local playerReadyState = {}
 local numberOfSpecs = 0
 
 --To determine faction at start
-local sideOneDefID = UnitDefNames.fedcommander.id
-local sideTwoDefID = UnitDefNames.lozcommander.id
+local sideOneDefID = UnitDefNames.fedcommander_up1.id
+local sideTwoDefID = UnitDefNames.lozcommander_up1.id
 
 local teamSideOne = "Federation of Kala"
 local teamSideTwo = "Loz Alliance"
