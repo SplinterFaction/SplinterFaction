@@ -1,7 +1,7 @@
 function gadget:GetInfo()
 	return {
-		name    = "Share Preserve Orders",
-		desc    = "Re-issues command queues on units transferred via the Static Share Menu widget.",
+		name    = "Unit Sharing Preserve Orders",
+		desc    = "Re-issues command queues on units transferred via the Static Share Menu widget if the shared unit comes from an ally.",
 		author  = "",
 		date    = "2026-05-09",
 		license = "GNU GPL, v2 or later",
@@ -109,14 +109,19 @@ function gadget:UnitGiven(unitID, unitDefID, newTeamID, oldTeamID)
 	local pending = pendingOrders[unitID]
 	if not pending then return end
 
-	-- Verify the unit ended up on the expected team
-	if newTeamID ~= pending.teamID then
-		Spring.Echo(string.format(
-				"[SharePreserveOrders] UnitGiven team mismatch: expected %d got %d for unit %d",
-				pending.teamID, newTeamID, unitID))
-	end
-
 	pendingOrders[unitID] = nil
+
+	-- Only re-issue orders if the old and new teams are allied.
+	-- This prevents shenanigans where an enemy transfer could carry
+	-- orders that cause problems for the receiving team.
+	local oldAllyTeam = select(6, Spring.GetTeamInfo(oldTeamID, false))
+	local newAllyTeam = select(6, Spring.GetTeamInfo(newTeamID, false))
+	if oldAllyTeam ~= newAllyTeam then
+		Spring.Echo(string.format(
+				"[SharePreserveOrders] Skipping order re-issue: unit %d transferred between non-allied teams (%d -> %d)",
+				unitID, oldTeamID, newTeamID))
+		return
+	end
 
 	local cmds = pending.cmds
 	if not cmds or #cmds == 0 then return end
