@@ -108,13 +108,16 @@ local chosenCommName = nil         -- commName of the chosen faction
 local lastHovered    = nil
 local gameStarted    = false       -- true once GameFrame > 0
 
--- Countdown
-local COUNTDOWN_TOTAL   = 30      -- seconds before auto-pick and game begins
+-- Countdown — driven by game frames, not wall clock, so it respects game speed/pause
+-- Must match CHOICE_TIMEOUT_FRAMES in game_spawn.lua
+local DEADLINE_FRAME    = 900     -- frame at which game_spawn forces a spawn
 local COUNTDOWN_BEEP_AT = 10      -- play tick sound for final N seconds
 local TIMER_BAR_H       = 6       -- height of the countdown bar in base px
-local countdownStart    = nil     -- set once game clock starts
-local secondsLeft       = COUNTDOWN_TOTAL
+local secondsLeft       = 30      -- updated each Update() from frame count
 local lastBeepSecond    = nil
+
+-- Spectator
+local isSpectator       = false   -- set in Initialize and GameStart
 
 --------------------------------------------------------------------------------
 -- Font
@@ -343,15 +346,20 @@ local function DrawOverlay()
 	glRect(0, 0, vsx, vsy)
 end
 
+local COUNTDOWN_TOTAL = DEADLINE_FRAME / 30   -- nominal seconds (at 30fps, 1× speed)
+
 local function DrawTitle()
 	local titleSize     = math.floor(22 * widgetScale)
 	local countdownSize = math.floor(14 * widgetScale)
 	local topY          = cards[1] and (cards[1].y2 + math.floor(72 * widgetScale)) or (vsy * 0.75)
 	local urgent        = secondsLeft <= COUNTDOWN_BEEP_AT
 
+	-- Title text differs for spectators vs players
+	local titleText = isSpectator and "Players Are Choosing Their Factions" or "Choose Your Faction"
+
 	font:Begin()
 	font:Print(
-			TEXT_COLOR .. "Choose Your Faction",
+			TEXT_COLOR .. titleText,
 			vsx * 0.5,
 			topY,
 			titleSize,
@@ -359,7 +367,7 @@ local function DrawTitle()
 	)
 	font:End()
 
-	if not countdownStart then return end
+	if not gameStarted then return end
 
 	-- Seconds label
 	local labelY     = topY - math.floor(titleSize * 1.6)
@@ -374,12 +382,18 @@ local function DrawTitle()
 	)
 	font:End()
 
-	-- Progress bar spanning the full width of both cards
+	-- Progress bar — for spectators, span most of the screen width; for players, span the cards
 	local barH   = math.floor(TIMER_BAR_H * widgetScale)
 	local barY2  = labelY - math.floor(6 * widgetScale)
 	local barY1  = barY2 - barH
-	local barX1  = cards[1] and cards[1].x1 or math.floor(vsx * 0.2)
-	local barX2  = cards[#cards] and cards[#cards].x2 or math.floor(vsx * 0.8)
+	local barX1, barX2
+	if isSpectator then
+		barX1 = math.floor(vsx * 0.2)
+		barX2 = math.floor(vsx * 0.8)
+	else
+		barX1 = cards[1] and cards[1].x1 or math.floor(vsx * 0.2)
+		barX2 = cards[#cards] and cards[#cards].x2 or math.floor(vsx * 0.8)
+	end
 	local barW   = barX2 - barX1
 	local frac   = math.max(0, math.min(1, secondsLeft / COUNTDOWN_TOTAL))
 
@@ -401,6 +415,7 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	isSpectator = Spring.GetSpectatingState()
 	LoadWidgetFont()
 	RecalculateGeometry()
 end
@@ -417,7 +432,7 @@ function widget:ViewResize()
 end
 
 function widget:GameStart()
-	countdownStart = Spring.GetTimer()
+	isSpectator = Spring.GetSpectatingState()
 end
 
 local function AutoPickFaction()
@@ -431,19 +446,19 @@ local function AutoPickFaction()
 end
 
 function widget:Update()
-	-- Don't show or tick until the game has started
+	-- Don't tick until the game has started
 	if not gameStarted then
 		if Spring.GetGameFrame() > 0 then
-			gameStarted    = true
-			countdownStart = Spring.GetTimer()
+			gameStarted = true
 		end
 		return
 	end
 
-	if not countdownStart then return end
-
-	local elapsed = Spring.DiffTimers(Spring.GetTimer(), countdownStart)
-	secondsLeft   = math.max(0, math.ceil(COUNTDOWN_TOTAL - elapsed))
+	-- Frame-based countdown: tracks actual simulation progress, respects speed changes and pause
+	local frame      = Spring.GetGameFrame()
+	local framesLeft = math.max(0, DEADLINE_FRAME - frame)
+	local gameSpeed  = Spring.GetGameSpeed() or 1   -- sim speed multiplier (1 = normal, 2 = 2×, etc.)
+	secondsLeft      = math.ceil(framesLeft / (30 * gameSpeed))
 
 	-- Tick sound in final COUNTDOWN_BEEP_AT seconds — plays regardless of chosen state
 	if secondsLeft <= COUNTDOWN_BEEP_AT and secondsLeft ~= lastBeepSecond and secondsLeft > 0 then
@@ -451,13 +466,21 @@ function widget:Update()
 		lastBeepSecond = secondsLeft
 	end
 
+	if isSpectator then
+		-- Spectators just watch the bar drain; remove widget when time is up
+		if framesLeft == 0 then
+			widgetHandler:RemoveWidget(self)
+		end
+		return
+	end
+
 	-- Auto-pick if player still hasn't chosen
-	if not chosen and secondsLeft == 0 then
+	if not chosen and framesLeft == 0 then
 		AutoPickFaction()
 	end
 
 	-- Remove widget when countdown is fully done
-	if secondsLeft == 0 then
+	if framesLeft == 0 then
 		widgetHandler:RemoveWidget(self)
 	end
 end
@@ -468,6 +491,7 @@ end
 
 function widget:MousePress(x, y, button)
 	if not gameStarted then return false end   -- don't swallow clicks during start position phase
+	if isSpectator then return false end
 	if button ~= 1 then return false end
 	if chosen then return true end
 
@@ -482,6 +506,7 @@ end
 
 function widget:MouseRelease(x, y, button)
 	if not gameStarted then return false end   -- don't swallow clicks during start position phase
+	if isSpectator then return false end
 	if button ~= 1 then return false end
 	if chosen then return true end
 
@@ -511,6 +536,9 @@ function widget:DrawScreen()
 
 	DrawOverlay()
 	DrawTitle()
+
+	-- Spectators only see the overlay + title/countdown, no faction cards
+	if isSpectator then return end
 
 	local mx, my = spGetMouseState()
 	local currentHovered = nil
