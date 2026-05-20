@@ -61,7 +61,7 @@ unitDef                    = {
 		}, 
 
 		explosiongenerators      = {
-			"custom:factorysparks",
+			"custom:gdhcannon",
 			"custom:emptydirt",
 			"custom:blacksmoke",
 		},
@@ -77,7 +77,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "railgunbeam",
+			def                  = "railgunballistic",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -147,7 +147,7 @@ weaponDefs                 = {
 		avoidFeature 		   = false,
 		collideFriendly        = false,
 		collideFeature         = false,
-		cegTag                 = "plasmacannontrail-blue-short",
+		cegTag                 = "plasmacannontrail-blue-short-roach",
 		explosionGenerator     = "custom:genericshellexplosion-medium",
 		energypershot          = 0,
 		impulseFactor          = 0,
@@ -160,9 +160,11 @@ weaponDefs                 = {
 		--projectiles			   = 5,
 		weaponType		       = "Cannon",
 		soundStart             = "lozroach-maingun",
+		texture1               = "flashside3",
+		texture2               = "empty",
 		tolerance              = 10000,
 		turret                 = true,
-		weaponVelocity         = 1500,
+		weaponVelocity         = 400,
 		customparams             = {
 			--single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB

@@ -403,6 +403,34 @@ function WeaponDef_Post(name, wDef)
 
 	wDef.soundhit = "impact-29439"
 	wDef.soundhitwet = "subhitbomb"
+
+	--------------------------------------------------------------------------------
+	----- Sanitize weapon timing to 30Hz frame boundaries
+	--------------------------------------------------------------------------------
+	if Game.gameSpeed == 30 then
+		local function round_to_frames(key)
+			local v = wDef[key]
+			if not v then return end
+			local frames = math.max(1, math.floor((v + 1E-3) * Game.gameSpeed))
+			local sanitized = frames / Game.gameSpeed + 1E-5
+			if math.abs(v - sanitized) > 1E-3 then
+				Spring.Echo("[AllDefsPost] " .. key .. " auto-sanitized: " .. name .. " " .. v .. " -> " .. sanitized)
+			end
+			wDef[key] = sanitized
+		end
+		round_to_frames("reloadtime")
+		round_to_frames("burstrate")
+
+		if wDef.weapontype == "LaserCannon" and wDef.range and wDef.weaponvelocity and wDef.range > 1 then
+			local range = wDef.range
+			local frames = math.max(1, math.round and math.round(range * Game.gameSpeed / wDef.weaponvelocity) or math.floor(range * Game.gameSpeed / wDef.weaponvelocity + 0.5))
+			local sanitized_velocity = (range * Game.gameSpeed) / frames
+			if math.abs(wDef.weaponvelocity - sanitized_velocity) > 1 then
+				Spring.Echo("[AllDefsPost] LaserCannon velocity auto-sanitized: " .. name .. " vel " .. wDef.weaponvelocity .. " -> " .. math.floor(sanitized_velocity + 0.5) .. " (to preserve range " .. range .. ")")
+			end
+			wDef.weaponvelocity = sanitized_velocity + 1E-5
+		end
+	end
 end
 
 
@@ -1289,6 +1317,36 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * unitHealthModifier --Look in the top of this file for default health modifier
 				--Spring.Echo(uDef.name)
 				--Spring.Echo(uDef.maxdamage)
+			end
+
+			for id,wDef in pairs(WeaponDefs) do
+				--------------------------------------------------------------------------------
+				----- Sanitize weapon timing to 30Hz frame boundaries
+				--------------------------------------------------------------------------------
+				if Game.gameSpeed == 30 then
+					local function round_to_frames(key)
+						local v = wDef[key]
+						if not v then return end
+						local frames = math.max(1, math.floor((v + 1E-3) * Game.gameSpeed))
+						local sanitized = frames / Game.gameSpeed + 1E-5
+						if math.abs(v - sanitized) > 1E-3 then
+							Spring.Echo("[AllDefsPost] " .. key .. " auto-sanitized: " .. name .. " " .. v .. " -> " .. sanitized)
+						end
+						wDef[key] = sanitized
+					end
+					round_to_frames("reloadtime")
+					round_to_frames("burstrate")
+
+					if wDef.weapontype == "LaserCannon" and wDef.range and wDef.weaponvelocity and wDef.range > 1 then
+						local range = wDef.range
+						local frames = math.max(1, math.round and math.round(range * Game.gameSpeed / wDef.weaponvelocity) or math.floor(range * Game.gameSpeed / wDef.weaponvelocity + 0.5))
+						local sanitized_velocity = (range * Game.gameSpeed) / frames
+						if math.abs(wDef.weaponvelocity - sanitized_velocity) > 1 then
+							Spring.Echo("[AllDefsPost] LaserCannon velocity auto-sanitized: " .. name .. " vel " .. wDef.weaponvelocity .. " -> " .. math.floor(sanitized_velocity + 0.5) .. " (to preserve range " .. range .. ")")
+						end
+						wDef.weaponvelocity = sanitized_velocity + 1E-5
+					end
+				end
 			end
 		end
 	end

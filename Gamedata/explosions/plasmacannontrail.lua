@@ -95,6 +95,53 @@ return {
 		},
 	},
 
+	["plasmacannontrail-blue-short-roach"] = {
+		flame = {
+			air                = true,
+			class              = [[CBitmapMuzzleFlame]],
+			count              = 1,
+			ground             = true,
+			underwater         = true,
+			water              = true,
+			properties = {
+				colormap           = [[0 0 0.5 0.01   0 0 0.5 0.01   0 0 0.5 0.01   0 0 0 0.01]],
+				dir                = [[dir]],
+				frontoffset        = 0,
+				fronttexture       = [[none]],
+				length             = -3,
+				sidetexture        = [[muzzleside]],
+				size               = 10,
+				sizegrowth         = -0.05,
+				ttl                = 3,
+				useairlos          = true,
+			},
+
+		},
+	},
+
+	["plasmacannontrail-purple-short"] = {
+		flame = {
+			air                = true,
+			class              = [[CBitmapMuzzleFlame]],
+			count              = 1,
+			ground             = true,
+			underwater         = true,
+			water              = true,
+			properties = {
+				colormap           = [[0.29 0 0.5 0.006   0.5 0 0.5 0.005   0.84 0.74 0.84 0.004   0 0 0 0.01]],
+				dir                = [[dir]],
+				frontoffset        = 0,
+				fronttexture       = [[none]],
+				length             = -1.5,
+				sidetexture        = [[muzzleside]],
+				size               = 2,
+				sizegrowth         = -0.05,
+				ttl                = 3,
+				useairlos          = true,
+			},
+		},
+	},
+
 	["plasmacannontrail-purple"] = {
 		flame = {
 			air                = true,

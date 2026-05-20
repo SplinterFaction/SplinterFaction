@@ -1,6 +1,5 @@
--- Evolution RTS does not use unitdefs_post, see alldefs_post.lua 
--- basically, DONT TOUCH this! 
-
+-- SplinterFaction does not use unitdefs_post, see alldefs_post.lua
+-- basically, DONT TOUCH this!
 
 -- see alldefs.lua for documentation
 -- load the games _Post functions for defs, and find out if saving to custom params is wanted
