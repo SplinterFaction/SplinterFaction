@@ -129,6 +129,7 @@ weaponDefs                 = {
 		highTrajectory		   = 2,
 		impulseFactor          = 0,
 		interceptedByShieldType  = 4,
+		model                  = "projectile/projectileorange2x.s3o",
 		name                   = "Plasma Cannon",
 		--noExplode			   = true,
 		range                  = 650,

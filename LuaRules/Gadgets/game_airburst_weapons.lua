@@ -159,6 +159,7 @@ local function ParseDef(weaponDefID)
 	end
 
 	local data = {
+		subCEGTag     = subDef.cegtag or "",
 		subDefID      = subNameDef.id,
 		subGravity    = subGravity,
 		subTTL        = subTTL,
@@ -283,6 +284,7 @@ local function SpawnSubmunitions(data, ownerID, teamID, px, py, pz, vx, vy, vz, 
 			owner   = ownerID,
 			team    = teamID,
 			gravity = data.subGravity,
+			cegTag  = data.subCEGTag,
 		})
 		if subProjID then
 			trackedSubs[subProjID] = spawnFrame + data.subTTL
