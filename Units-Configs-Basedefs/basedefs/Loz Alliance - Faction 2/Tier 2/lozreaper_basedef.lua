@@ -78,7 +78,7 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "railgun",
+			def                  = "pulsecannonmain",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
@@ -260,7 +260,7 @@ weaponDefs                 = {
 		soundStart             = "lozreaper-sideguns",
 		tolerance              = 10000,
 		turret                 = true,
-		weaponVelocity         = 800,
+		weaponVelocity         = 600,
 		customparams             = {
 			weaponguide = [[A rapid-fire pulse cannon that maintains suppression fire between railgun reloads. Low individual damage but consistent enough to chip down targets and deny easy repositioning.]],
 			expl_light_color	= red, -- As a string, RGB
@@ -270,6 +270,40 @@ weaponDefs                 = {
 		},
 		damage                   = {
 			default              = 50,
+		},
+	},
+
+	pulsecannonmain                = {
+		avoidFriendly          = false,
+		avoidFeature 		   = false,
+		collideFriendly        = false,
+		collideFeature         = false,
+		cegTag                 = "plasmacannontrail-blue",
+		explosionGenerator     = "custom:genericshellexplosion-medium",
+		edgeEffectiveness	   = 1,
+		energypershot          = 0,
+		impulseFactor          = 0,
+		highTrajectory         = 0,
+		interceptedByShieldType  = 4,
+		name                   = "Electromagnetic Cannon",
+		model                  = "projectile/projectileorange1-5x.s3o",
+		range                  = 850,
+		reloadtime             = 3,
+		--projectiles			   = 5,
+		weaponType		       = "Cannon",
+		soundStart             = "lozreaper-maingun3",
+		tolerance              = 10000,
+		turret                 = true,
+		weaponVelocity         = 800,
+		customparams             = {
+			weaponguide = [[A projectile that delivers high damage to a single target at range.]],
+			expl_light_color	= blue, -- As a string, RGB
+			expl_light_radius	= mediumExplosion, -- In Elmos
+			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
+			expl_light_opacity  = 0.25, -- Use this sparingly
+		},
+		damage                   = {
+			default              = 255,
 		},
 	},
 }

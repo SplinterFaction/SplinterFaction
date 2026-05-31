@@ -54,7 +54,7 @@ unitDef                    = {
 	acceleration 				 = 0.075,
 	brakeRate                    = 0.075,
 	turninplace 				 = true,
---	turninplacespeedlimit 		 = 10,
+	turninplacespeedlimit 		 = 1,
 	turnInPlaceAngleLimit		 = 90,
 	turnrate 				 	 = 500,
 	--------------
