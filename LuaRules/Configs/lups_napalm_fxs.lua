@@ -72,14 +72,48 @@ local heat = {
   },
 }
 
+
+
+local function CopyTable(tableToCopy, deep)
+	local copy = {}
+	for key, value in pairs(tableToCopy) do
+		if (deep and type(value) == "table") then
+			copy[key] = CopyTable(value, true)
+		else
+			copy[key] = value
+		end
+	end
+	return copy
+end
+
+
+local function MergeTable(primary, secondary, deep)
+	local new = CopyTable(primary, deep)
+	for i, v in pairs(secondary) do
+		-- key not used in primary, assign it the value at same key in secondary
+		if not new[i] then
+			if (deep and type(v) == "table") then
+				new[i] = CopyTable(v, true)
+			else
+				new[i] = v
+			end
+		-- values at key in both primary and secondary are tables, merge those
+		elseif type(new[i]) == "table" and type(v) == "table"  then
+			new[i] = MergeTable(new[i], v, deep)
+		end
+	end
+	return new
+end
+
+
 for name,def in pairs(napalm) do
 	if name ~= "default" then
-		napalm[name] = Spring.Utilities.MergeTable(def,napalm.default,true)
+		napalm[name] = MergeTable(def,napalm.default,true)
 	end
 end
 for name,def in pairs(heat) do
 	if name ~= "default" then
-		heat[name] = Spring.Utilities.MergeTable(def,heat.default,true)
+		heat[name] = MergeTable(def,heat.default,true)
 	end
 end
 
