@@ -1,4 +1,3 @@
-
 local fx = {
     flame_heat = {
       class        = 'JitterParticles2',
@@ -6,7 +5,7 @@ local fx = {
       count        = 6,
       life         = 24,
       delaySpread  = 25,
-      force        = {0,1.5,0},
+      force        = {-10,0,0},
       --forceExp     = 0.2,
 
       emitRotSpread= 10,
@@ -21,6 +20,31 @@ local fx = {
       scale        = 1.5,
       strength     = 1.0,
       heat         = 2,
+    },
+    
+    sonic_distort = {
+      class        = 'SphereDistortion',
+      colormap     = { {1,1,1,1},{1,1,1,1} },
+      count        = 1,
+      life         = 24,
+      delaySpread  = 0,
+      force        = {0,0,0},
+      --forceExp     = 0.2,
+
+      emitRotSpread= 180,
+
+      speed        = 0,
+      
+      speedSpread  = 0,
+      speedExp     = 0,
+
+      size         = 50,
+      sizeGrowth   = 0,
+
+      scale        = 5,
+      strength     = 10,
+      growth	   = 0,
+      heat         = 20,
     },
 
     flame1 = {
@@ -53,7 +77,7 @@ local fx = {
       sizeExp      = 0.7,
 
       --texture     = "bitmaps/smoke/smoke06.tga",
-      texture     = altFlameTexture and "bitmaps/GPL/flame_alt.png" or "bitmaps/GPL/flame.png",
+      texture     = "bitmaps/GPL/flame.png",
     },
 
     flame2 = {
@@ -61,7 +85,7 @@ local fx = {
       colormap     = { {1, 1, 1, 0.01}, {0, 0, 0, 0.01} },
       count        = 20,
       --delay        = 20,
-      life         = 6,
+      life         = 10,
       lifeSpread   = 20,
       delaySpread  = 15,
 
@@ -82,19 +106,22 @@ local fx = {
       sizeExp      = 0.65,
 
       --texture     = "bitmaps/smoke/smoke06.tga",
-      texture     = altFlameTexture and "bitmaps/GPL/flame_alt.png" or "bitmaps/GPL/flame.png",
+      texture     = "bitmaps/GPL/flame.png",
     },
 }
 
 
 local tbl = {
 	--[[
-	corpyro_flamethrower = {
+	jumpraid_flamethrower = {
 		{class = "JitterParticles2", options = fx.flame_heat},
 		{class = "SimpleParticles2", options = fx.flame1},
 		{class = "SimpleParticles2", options = fx.flame2},
 	},
 	]]--
+	hoverscout_sonicgun = {
+		{class = "JitterParticles2", options = fx.sonic_distort},
+	},
 }
 local tbl2 = {}
 

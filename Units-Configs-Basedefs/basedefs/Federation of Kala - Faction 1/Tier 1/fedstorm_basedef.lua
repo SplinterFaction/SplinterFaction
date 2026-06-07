@@ -108,7 +108,7 @@ unitDef                    = {
 		normaltex               = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Federation of Kala",
-		unitguide = [[A skirmisher built around an arc-trajectory guided rocket that crests terrain and ridgelines to strike targets that would otherwise be out of reach. Slower than dedicated raiders but more threatening to armored units, the Storm rewards positioning — fire from behind cover and let the rocket do the work. Avoid buildings; it's not what this bot was built for.]],
+		unitguide = [[A skirmisher built for fighting on the frontline. It's rocket is a bit on the slow side, but is high damage. It is best used in conjuction with maneuvering so that it's rockets hit while deftly dodging incoming fire.]],
 	},
 }
 
@@ -163,15 +163,15 @@ weaponDefs                 = {
 		collideFeature           = false,
 		cegTag                   = "amphibrocktrail-optimized",
 		explosionGenerator       = "custom:genericshellexplosion-small",
-		-- burst 					 = 16,
-		-- burstrate 				 = 0.25,
+		--burst 					 = 4,
+		--burstrate 				 = 0.25,
 		energypershot            = 0,
 		fireStarter              = 70,
-		tracks                   = false,
+		--tracks                   = false,
 		impulseFactor            = 0,
 		interceptedByShieldType  = 4,
 		model                    = "neutralmissilex1.s3o",
-		name                     = "Rockets",
+		name                     = "Rocket",
 		range                    = 500,
 		reloadtime               = 1.2,
 		weaponType		         = "MissileLauncher",
@@ -179,20 +179,19 @@ weaponDefs                 = {
 		soundStart               = "sabotlaunch",
 		soundHit                 = "explode5",
 		soundTrigger             = true,
-		startVelocity            = 100,
+		startVelocity            = 500,
 		tolerance                = 2000,
-		turnrate                 = 1000,
+		--turnrate                 = 3000,
 		turret                   = true,
-		trajectoryHeight		 = 1.25,
-		weaponAcceleration       = 300,
-		flightTime               = 3,
-		weaponVelocity           = 1000,
+		--trajectoryHeight		 = 1.5,
+		flightTime               = 1,
+		weaponVelocity           = 500,
 		customparams             = {
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
 			expl_light_opacity  = 0.25, -- Use this sparingly
-			weaponguide = [[Launched at a steep 45-degree arc, this guided rocket crests hills and obstructions that would otherwise shelter its target. What's behind the ridge is no longer safe.]],
+			weaponguide = [[The rocket is slow but with a heavy warhead. It's range isn't so it will need to get in close.]],
 		},
 		damage                   = {
 			default              = 80,

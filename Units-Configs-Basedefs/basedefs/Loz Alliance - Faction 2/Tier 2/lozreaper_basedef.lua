@@ -78,18 +78,18 @@ unitDef                    = {
 	},
 	weapons                      = {
 		[1]                      = {
-			def                  = "pulsecannonmain",
+			def                  = "maingun",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 		[2]                      = {
-			def                  = "pulsecannon",
+			def                  = "pulselaser",
 			badTargetCategory     = "BUILDING",
 			onlyTargetCategory    = "GROUND BUILDING SHIP",
 		},
 	},
 	customParams                 = {
-		unitguide = [[The Reaper is the Loz Alliance's Tier 2 main battle tank, pairing a sustained beam railgun with a rapid-fire pulse cannon that adds consistent suppression fire alongside the primary weapon. The railgun delivers heavy per-shot damage while the pulse cannon fills the gaps between reloads with a stream of lighter hits. Together they make the Reaper a persistent and punishing threat across the full engagement range.]],
+		unitguide = [[The Reaper is the Loz Alliance's Tier 2 main battle tank, pairing a pulse beam with a rapid-fire pulse laser that adds consistent suppression fire alongside the primary weapon. The beam delivers heavy per-shot damage while the pulse laser fills the gaps between reloads with a stream of lighter hits. Together they make the Reaper a persistent and punishing threat across the full engagement range.]],
 		unittype				 = "mobile",
 		unitrole				 = "Main Battle Tank - Tech 2",
 		buildmenucategory        = "Skirmish",
@@ -107,7 +107,7 @@ unitDef                    = {
 }
 
 weaponDefs                 = {
-	railgun_old               = {
+	maingun               = {
 		areaofeffect		   = 25,
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
@@ -128,16 +128,17 @@ weaponDefs                 = {
 		reloadtime             = 3,
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
-		soundStart             = "lozreaper-maingun",
-		texture1               = "shot",
+		soundStart             = "lozreaper-maingun3",
+		texture1               = "megaparticle",
 		texture2               = "empty",
 		coreThickness          = 0.4,
 		thickness              = 16,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 2000,
+		weaponVelocity         = 800,
 		customparams             = {
+			weaponguide = [[A projectile that delivers high damage to a single target at range.]],
 			single_hit		 	 = true,
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
@@ -199,7 +200,7 @@ weaponDefs                 = {
 		},
 	},
 
-	lasercannon                = {
+	pulselaser                = {
 		avoidFriendly          = false,
 		avoidFeature 		   = false,
 		collideFriendly        = false,
@@ -220,15 +221,16 @@ weaponDefs                 = {
 		--projectiles			   = 5,
 		weaponType		       = "LaserCannon",
 		soundStart             = "lozreaper-sideguns",
-		texture1               = "shot",
+		texture1               = "megaparticle",
 		texture2               = "empty",
 		coreThickness          = 0.3,
 		thickness              = 10,
 		tolerance              = 10000,
 		turret                 = true,
 		weaponTimer            = 1,
-		weaponVelocity         = 800,
+		weaponVelocity         = 600,
 		customparams             = {
+			weaponguide = [[A rapid-fire pulse laser that maintains suppression fire between maingun reloads. Low individual damage but consistent enough to chip down targets and deny easy repositioning.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
