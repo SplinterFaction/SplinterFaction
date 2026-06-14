@@ -116,7 +116,7 @@ weaponDefs                 = {
 
 		cegTag                   = "plasmacannontrail-purple-large",
 		avoidNeutral	         = false,
-		explosionGenerator       = "custom:genericshellexplosion-large",
+		explosionGenerator       = "custom:genericshellexplosion-large-purple",
 		energypershot            = 0,
 		edgeEffectiveness	     = 0.1,
 		impulseFactor            = 0,

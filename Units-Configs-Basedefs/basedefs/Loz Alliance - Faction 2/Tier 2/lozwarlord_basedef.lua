@@ -130,7 +130,7 @@ weaponDefs                 = {
 
 		--cegTag                   = "artyshot2",
 		avoidNeutral	         = false,
-		explosionGenerator       = "custom:genericshellexplosion-medium",
+		explosionGenerator       = "custom:genericshellexplosion-medium-orange",
 		energypershot            = 0,
 
 		model                    = "projectile/projectileorange1-5x.s3o",
