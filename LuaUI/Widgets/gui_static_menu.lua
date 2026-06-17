@@ -73,6 +73,15 @@ local BUTTONS = {
 		end
 	},
 	{
+		label = "Graph",
+		accent = {0.55, 0.35, 0.95, 1}, -- purple, distinct from the other three
+		onClick = function()
+			if WG.StaticEndGraph and WG.StaticEndGraph.Toggle then
+				WG.StaticEndGraph.Toggle()
+			end
+		end
+	},
+	{
 		label = "Resign",
 		accent = {0.95, 0.65, 0.18, 1}, -- amber
 		onClick = function()
