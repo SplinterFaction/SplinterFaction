@@ -11,17 +11,43 @@ local wind           = Game.windMax
 local mapsizeX       = Game.mapSizeX
 local mapsizeZ       = Game.mapSizeZ
 local gameShortName  = Game.gameShortName
+local gaiaTeamID     = Spring.GetGaiaTeamID()
 
 -- ============================================================
 -- CONSTANTS
 -- ============================================================
 
 local WAVE_INTERVAL     = 3600   -- frames between attack wave launches
-local WAVE_MIN_ARMY     = 6      -- minimum combat units before attacking
-local WAVE_MUSTER_SIZE  = 5      -- units that must be at muster point to trigger launch
+local WAVE_MIN_ARMY     = 4      -- minimum combat units before attacking
+local WAVE_MUSTER_SIZE  = 4      -- units that must be at muster point to trigger launch
+local WAVE_BIG_ARMY     = 9      -- if we have this many ground units, attack even if not fully mustered
 local MUSTER_RADIUS     = 600    -- how close a unit must be to count as "at muster"
-local RETREAT_HP        = 0.75   -- retreat threshold
-local CONSTRUCTOR_MAX   = 3     -- max constructors per team
+local RETREAT_HP        = 0.75   -- combat-unit retreat threshold
+
+-- Commander survival
+local COMM_RETREAT_HP   = 0.65   -- commander starts running below this HP fraction
+local COMM_DANGER_R     = 750    -- enemy within this range counts as "in danger" while retreating
+local COMM_HAVEN_REACH  = 250    -- considered "arrived" at a haven within this distance
+
+-- Constructor caps
+local CONSTRUCTOR_MAX         = 4   -- max constructors for normal AI teams
+local CONSTRUCTOR_MAX_CON_AI  = 12  -- higher cap for dedicated SimpleConstructorAI teams
+-- Minimum frames between STARTING any new constructor on a team. Because every
+-- factory on a team is evaluated in the same GameFrame tick, without this they
+-- all read the same stale count and queue a constructor at once. This rate-limit
+-- lets the count catch up so the hard cap is actually respected.
+local CON_BUILD_SPACING      = 150  -- ~5s at 30Hz
+
+-- Higher-tier preference. Per-unit build weight scales with (techTier+1)^bias,
+-- so advanced units/factories are chosen far more often while lower tiers still appear.
+local TECH_UNIT_BIAS    = 1.8    -- combat unit tech preference
+local TECH_FAC_BIAS     = 2.4    -- factory tech preference (want advanced plants to unlock advanced units)
+
+-- Weak-point attack targeting
+local ATTACK_SCAN_R     = 650    -- radius around an enemy building used to tally its defenders
+local ATTACK_DIST_W     = 0.10   -- how strongly distance-from-muster penalises a candidate target
+local ATTACK_RETARGET   = 300    -- frames between weak-point re-scans during an active push
+
 local MEX_TARGET_EARLY  = 2      -- grab this many mexes before anything else
 local MEX_TARGET_MID    = 8      -- expand to this many once economy is running
 local MEX_RANGE_EARLY   = 2000   -- mex search radius before base established
@@ -30,7 +56,7 @@ local CONVERTER_MAX     = 3      -- max energy converters per team
 local FACTORY_MAX       = 12      -- max factories per team
 local LAND_FAC_MIN      = 3      -- build at least this many land factories before any air/sea
 local TURRET_CAP        = 20     -- absolute max turrets to build per team
-local WAVE_COOLDOWN     = 2700   -- minimum frames between launches (~45s)
+local WAVE_COOLDOWN     = 1500   -- minimum frames between launches (~50s at 30Hz)
 
 -- Factory unit names that are air or sea plants.
 -- Everything else that is a factory is treated as a land factory.
@@ -72,6 +98,7 @@ SimpleT1Mexes          = {}
 SimpleConstructorCount = {}
 SimpleFactoryDelay     = {}
 SimpleConstructorDelay = {}
+SimpleLastConStart     = {}   -- frame the team last STARTED a constructor (rate limit)
 
 -- enhanced state
 local SimpleArmyCount      = {}
@@ -87,6 +114,11 @@ local SimpleLandFacCount   = {}   -- land-only factory count per team
 local SimpleMusterPos      = {}   -- rally point where ground units assemble
 local SimpleSquadState     = {}   -- "mustering" | "attacking" per team
 local SimpleLastLaunch     = {}   -- frame of last wave launch (cooldown)
+local SimpleLastTargetScan = {}   -- frame of last weak-point target scan
+
+-- Commander retreat state machine
+local SimpleCommRetreating = {}   -- bool: is the commander currently fleeing?
+local SimpleCommRetreatPos = {}   -- committed haven {x,y,z} for the current retreat
 
 -- tech / faction state
 local TeamTechLevel  = {}   -- 0-4 per team
@@ -138,6 +170,7 @@ for i = 1, #teams do
 		SimpleConstructorCount[teamID] = 0
 		SimpleFactoryDelay[teamID]     = 0
 		SimpleConstructorDelay[teamID] = 0
+		SimpleLastConStart[teamID]     = -CON_BUILD_SPACING
 		SimpleArmyCount[teamID]        = 0
 		SimpleAttackWave[teamID]       = nil
 		SimpleAttackTimer[teamID]      = WAVE_INTERVAL
@@ -149,6 +182,9 @@ for i = 1, #teams do
 		SimpleMusterPos[teamID]        = nil   -- set when first factory/commander known
 		SimpleSquadState[teamID]       = "mustering"
 		SimpleLastLaunch[teamID]       = 0
+		SimpleLastTargetScan[teamID]   = 0
+		SimpleCommRetreating[teamID]   = false
+		SimpleCommRetreatPos[teamID]   = nil
 		TeamTechLevel[teamID]          = 1   -- game starts at tech1
 		TeamFaction[teamID]            = nil
 		TeamCommID[teamID]             = nil
@@ -353,6 +389,33 @@ local function GetBuildable(teamID, cat)
 end
 
 -- ============================================================
+-- GET BUILDABLE LIST (TECH-WEIGHTED)
+-- Like GetBuildable, but repeats higher-tech defIDs more often so the
+-- downstream shuffle-and-pick favours advanced units/factories while
+-- still occasionally choosing cheaper lower-tier options.
+-- biasPow controls the skew: weight per unit = (techTier + 1) ^ biasPow.
+-- ============================================================
+local function GetBuildableTechBiased(teamID, cat, biasPow)
+	local techLevel = TeamTechLevel[teamID] or 1
+	local result    = {}
+	local lists     = TeamBuildLists[teamID]
+	if not lists then return result end
+	biasPow = biasPow or 1.8
+	for t = 0, techLevel do
+		local bucket = lists[t] and lists[t][cat]
+		if bucket and #bucket > 0 then
+			local weight = math.max(1, math.floor((t + 1) ^ biasPow + 0.5))
+			for _, id in ipairs(bucket) do
+				for _ = 1, weight do
+					result[#result + 1] = id
+				end
+			end
+		end
+	end
+	return result
+end
+
+-- ============================================================
 -- UTILITY HELPERS
 -- ============================================================
 
@@ -431,6 +494,126 @@ local function ComputeMusterPos(teamID)
 	mx = math.max(256, math.min(mapsizeX - 256, mx))
 	mz = math.max(256, math.min(mapsizeZ - 256, mz))
 	return { x = mx, z = mz, y = Spring.GetGroundHeight(mx, mz) }
+end
+
+-- ============================================================
+-- COMMANDER HAVEN SELECTION
+-- Deterministically picks ONE safe spot to flee to: a friendly building
+-- that is far from the threat but not absurdly far from the commander,
+-- with a strong bonus for turret cover. No randomness, so repeated calls
+-- return a stable destination (prevents retreat-order thrashing).
+-- ============================================================
+local function FindCommanderHaven(unitID, teamID, enemyID)
+	local ux, uy, uz = Spring.GetUnitPosition(unitID)
+	local ex, ez
+	if enemyID then
+		local x, _, z = Spring.GetUnitPosition(enemyID)
+		ex, ez = x, z
+	end
+
+	local teamUnits = Spring.GetTeamUnits(teamID)
+	local best, bestScore
+	for i = 1, #teamUnits do
+		local cand = teamUnits[i]
+		if cand ~= unitID then
+			local cDefID = Spring.GetUnitDefID(cand)
+			if cDefID and UnitDefs[cDefID] and UnitDefs[cDefID].isBuilding then
+				local bx, by, bz = Spring.GetUnitPosition(cand)
+				local cdx, cdz = bx - ux, bz - uz
+				local distComm = math.sqrt(cdx * cdx + cdz * cdz)
+				local distEnemy = 100000
+				if ex then
+					local edx, edz = bx - ex, bz - ez
+					distEnemy = math.sqrt(edx * edx + edz * edz)
+				end
+				-- Want: far from enemy, close-ish to commander, prefer turret cover
+				local score = distEnemy - distComm * 0.5
+				if IsTurret[cDefID] then score = score + 1000 end
+				if not bestScore or score > bestScore then
+					bestScore = score
+					best = { x = bx, y = by, z = bz }
+				end
+			end
+		end
+	end
+
+	if best then return best end
+
+	-- No buildings left: flee directly away from the enemy.
+	if ex then
+		local fx = ux + (ux - ex)
+		local fz = uz + (uz - ez)
+		fx = math.max(256, math.min(mapsizeX - 256, fx))
+		fz = math.max(256, math.min(mapsizeZ - 256, fz))
+		return { x = fx, y = Spring.GetGroundHeight(fx, fz), z = fz }
+	end
+	return nil
+end
+
+-- ============================================================
+-- WEAK-POINT ATTACK TARGETING
+-- Scans all enemy structures and tallies the defensive strength near each
+-- (combat units + armed turrets within ATTACK_SCAN_R, weighted by their HP).
+-- Returns the lowest-defended structure, lightly penalised by distance from
+-- our muster so we don't trek across the map for a marginally softer target.
+-- ============================================================
+local function FindWeakestEnemyTarget(teamID)
+	local allUnits = Spring.GetAllUnits()
+	local enemyBuildings = {}
+	local threats = {}
+
+	for i = 1, #allUnits do
+		local uid = allUnits[i]
+		local ut  = Spring.GetUnitTeam(uid)
+		if ut ~= teamID and ut ~= gaiaTeamID then
+			local allied = Spring.AreTeamsAllied(teamID, ut)
+			if not allied then   -- nil (unallied) or false both count as enemy
+				local dID = Spring.GetUnitDefID(uid)
+				local ud  = dID and UnitDefs[dID]
+				if ud then
+					local x, _, z = Spring.GetUnitPosition(uid)
+					if ud.isBuilding then
+						enemyBuildings[#enemyBuildings + 1] = { x = x, z = z }
+					end
+					if ud.weapons and #ud.weapons > 0 then
+						local _, maxHP = Spring.GetUnitHealth(uid)
+						threats[#threats + 1] = { x = x, z = z, w = (maxHP or 100) }
+					end
+				end
+			end
+		end
+	end
+
+	if #enemyBuildings == 0 then return nil end
+
+	local origin = SimpleMusterPos[teamID] or SimpleEnemyBasePos[teamID]
+	local scanR2 = ATTACK_SCAN_R * ATTACK_SCAN_R
+
+	local best, bestScore
+	for _, b in ipairs(enemyBuildings) do
+		local defense = 0
+		for _, t in ipairs(threats) do
+			local dx, dz = t.x - b.x, t.z - b.z
+			if dx * dx + dz * dz < scanR2 then
+				defense = defense + t.w
+			end
+		end
+		local distPen = 0
+		if origin then
+			local dx, dz = b.x - origin.x, b.z - origin.z
+			distPen = math.sqrt(dx * dx + dz * dz) * ATTACK_DIST_W
+		end
+		local score = defense + distPen
+		if not bestScore or score < bestScore then
+			bestScore = score
+			best = b
+		end
+	end
+
+	if best then
+		return { x = best.x, z = best.z, y = Spring.GetGroundHeight(best.x, best.z) }
+	end
+	return nil
 end
 
 local function SimpleBuildOrder(cUnitID, building)
@@ -567,6 +750,12 @@ local function SimpleConstructionProjectSelection(
 
 	local success = false
 
+	local nowFrame   = Spring.GetGameFrame()
+	-- True only if enough frames have passed since this team last STARTED a
+	-- constructor. Shared by every factory/builder so the whole team starts at
+	-- most one constructor per CON_BUILD_SPACING, letting the count catch up.
+	local conSpacingOk = (nowFrame - (SimpleLastConStart[unitTeam] or 0)) >= CON_BUILD_SPACING
+
 	local supplyUsed = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyUsed") or 0)
 	local supplyMax  = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyMax")  or 0)
 	local mcurrent, mstorage, _, mincome = Spring.GetTeamResources(unitTeam, "metal")
@@ -650,9 +839,9 @@ local function SimpleConstructionProjectSelection(
 	local turrets      = GetBuildable(unitTeam, "turret")
 	local supplies     = GetBuildable(unitTeam, "supply")
 	local storages     = GetBuildable(unitTeam, "storage")
-	local factories    = GetBuildable(unitTeam, "factory")
+	local factories    = GetBuildableTechBiased(unitTeam, "factory", TECH_FAC_BIAS)
 	local constructors = GetBuildable(unitTeam, "constructor")
-	local combats      = GetBuildable(unitTeam, "combat")
+	local combats      = GetBuildableTechBiased(unitTeam, "combat", TECH_UNIT_BIAS)
 	local buildings    = GetBuildable(unitTeam, "building")
 
 	-- Split factories: only offer air/sea once we have enough land factories
@@ -726,16 +915,21 @@ local function SimpleConstructionProjectSelection(
 
 			-- PRIORITY 8: expand constructors
 		elseif ecurrent > estorage * 0.50 and mcurrent > mstorage * 0.45
-				and SimpleConstructorDelay[unitTeam] <= 0
+				and conSpacingOk
 				and SimpleConstructorCount[unitTeam] < CONSTRUCTOR_MAX
 				and supplyUsed < supplyMax - 5 then
 
-			SimpleConstructorDelay[unitTeam] = 15
+			-- A commander may occasionally assist-build another commander; that
+			-- does not count against the constructor rate limit.
 			if buildType == "Commander" and math.random(0, 2) == 0 then
 				success = TryBuild(SimpleCommanderDefs, function(p) NearMe(p) end)
 			end
 			if not success then
-				success = TryBuild(constructors, function(p) NearMe(p) end)
+				local builtCon = TryBuild(constructors, function(p) NearMe(p) end)
+				if builtCon then
+					SimpleLastConStart[unitTeam] = nowFrame
+					success = true
+				end
 			end
 
 			-- PRIORITY 9: more factories
@@ -806,16 +1000,30 @@ local function SimpleConstructionProjectSelection(
 	elseif buildType == "Factory" then
 		if #Spring.GetFullBuildQueue(unitID, 0) < 10 and supplyUsed < supplyMax * 0.95 then
 			local luaAI = Spring.GetTeamLuaAI(unitTeam)
-			local wantConstructor = math.random(0, 5) == 0
-					or string.sub(luaAI, 1, 19) == 'SimpleConstructorAI'
-					or supplyUsed > supplyMax * 0.85
-					or (econPressure > 0.4 and SimpleConstructorCount[unitTeam] < CONSTRUCTOR_MAX)
+			local isConAI = string.sub(luaAI, 1, 19) == 'SimpleConstructorAI'
+			local conCap  = isConAI and CONSTRUCTOR_MAX_CON_AI or CONSTRUCTOR_MAX
+			-- Two-part guard against worker floods:
+			--   1. Hard cap: never exceed conCap live constructors.
+			--   2. Spacing: only ONE constructor may START per team per window.
+			-- Without (2) every factory evaluates in the same tick, all see the
+			-- same stale count, and all queue a constructor at once. Dedicated
+			-- SimpleConstructorAI teams skip the spacing (it's their whole job)
+			-- but are still bounded by the higher cap.
+			local haveConRoom = (SimpleConstructorCount[unitTeam] or 0) < conCap
+			local wantConstructor = haveConRoom
+					and (isConAI or conSpacingOk)
+					and (
+						isConAI
+						or math.random(0, 5) == 0
+						or supplyUsed > supplyMax * 0.85
+						or econPressure > 0.4 )
 
 			if wantConstructor then
 				success = TryBuild(constructors, function(p)
 					local x, y, z = Spring.GetUnitPosition(unitID)
 					Spring.GiveOrderToUnit(unitID, -p, { x, y, z, 0 }, 0)
 				end)
+				if success then SimpleLastConStart[unitTeam] = nowFrame end
 			end
 			if not success then
 				success = TryBuild(combats, function(p)
@@ -904,8 +1112,13 @@ if gadgetHandler:IsSyncedCode() then
 					end
 
 					-- Squad state transitions
-					local readyToLaunch = atMuster >= WAVE_MUSTER_SIZE
-							and (n - SimpleLastLaunch[teamID] >= WAVE_COOLDOWN)
+					-- Launch when a wave has mustered, OR when we already have a big
+					-- army (don't sit forever waiting for perfect muster), OR when
+					-- the base is under attack and we have at least a token force.
+					local cooldownOk    = (n - SimpleLastLaunch[teamID]) >= WAVE_COOLDOWN
+					local readyToLaunch = cooldownOk
+							and (atMuster >= WAVE_MUSTER_SIZE or totalGround >= WAVE_BIG_ARMY)
+							and totalGround >= WAVE_MIN_ARMY
 					local forceAttack   = SimpleUnderAttack[teamID]
 							and totalGround >= 3
 							and (n - SimpleLastLaunch[teamID] >= WAVE_COOLDOWN / 2)
@@ -914,11 +1127,16 @@ if gadgetHandler:IsSyncedCode() then
 							and SimpleSquadState[teamID] == "mustering" then
 						SimpleSquadState[teamID] = "attacking"
 						SimpleLastLaunch[teamID] = n
-						local target = SimpleEnemyBasePos[teamID] or {
-							x = mapsizeX / 2 + math.random(-500, 500),
-							z = mapsizeZ / 2 + math.random(-500, 500),
-							y = Spring.GetGroundHeight(mapsizeX / 2, mapsizeZ / 2),
-						}
+						SimpleLastTargetScan[teamID] = n
+						-- Aim at the WEAKEST-defended enemy structure, not the
+						-- centre of mass (which is usually the most fortified spot).
+						local target = FindWeakestEnemyTarget(teamID)
+								or SimpleEnemyBasePos[teamID]
+								or {
+									x = mapsizeX / 2 + math.random(-500, 500),
+									z = mapsizeZ / 2 + math.random(-500, 500),
+									y = Spring.GetGroundHeight(mapsizeX / 2, mapsizeZ / 2),
+								}
 						SimpleAttackWave[teamID] = target
 						-- Issue FIGHT to all healthy ground units simultaneously
 						for k = 1, #units do
@@ -935,6 +1153,15 @@ if gadgetHandler:IsSyncedCode() then
 								end
 							end
 						end
+					end
+
+					-- While pushing, periodically re-scan for the softest target so
+					-- the wave rolls onto fresh weak points as defences collapse.
+					if SimpleSquadState[teamID] == "attacking"
+							and (n - SimpleLastTargetScan[teamID]) >= ATTACK_RETARGET then
+						SimpleLastTargetScan[teamID] = n
+						local newTarget = FindWeakestEnemyTarget(teamID)
+						if newTarget then SimpleAttackWave[teamID] = newTarget end
 					end
 
 					-- Return to mustering when army is spent
@@ -957,28 +1184,50 @@ if gadgetHandler:IsSyncedCode() then
 							-- ======== COMMANDERS ========
 							if IsCommander[unitDefID] then
 
-								local nearEnemy = Spring.GetUnitNearestEnemy(unitID, 500, true)
+								local nearEnemy = Spring.GetUnitNearestEnemy(unitID, COMM_DANGER_R, true)
 
-								if nearEnemy and hpRatio <= RETREAT_HP then
-									-- Low health: retreat to nearest friendly building
-									local retreated = false
-									for x = 1, 15 do
-										local candidate = units[math.random(1, #units)]
-										local cDefID    = Spring.GetUnitDefID(candidate)
-										if cDefID and UnitDefs[cDefID].isBuilding
-												and candidate ~= unitID then
-											local tx, ty, tz = Spring.GetUnitPosition(candidate)
-											Spring.GiveOrderToUnit(unitID, CMD.MOVE,
-											                       { tx + math.random(-150, 150), ty,
-											                         tz + math.random(-150, 150) }, 0)
-											retreated = true
-											break
+								if SimpleCommRetreating[teamID] then
+									-- Already fleeing. Commit to the chosen haven; only re-issue
+									-- an order when we genuinely need to, so the commander runs
+									-- in one direction instead of re-rolling every time it's hit.
+									if not nearEnemy then
+										-- Threat gone: stop fleeing, resume normal duties next tick.
+										SimpleCommRetreating[teamID] = false
+										SimpleCommRetreatPos[teamID] = nil
+									else
+										local rp = SimpleCommRetreatPos[teamID]
+										local needNew = (rp == nil)
+										if rp then
+											local dx, dz = ux - rp.x, uz - rp.z
+											if (dx * dx + dz * dz) < (COMM_HAVEN_REACH * COMM_HAVEN_REACH) then
+												-- Reached the haven but still in danger: pick a fresh one.
+												needNew = true
+											end
 										end
+										if needNew then
+											rp = FindCommanderHaven(unitID, teamID, nearEnemy)
+											SimpleCommRetreatPos[teamID] = rp
+											if rp then
+												Spring.GiveOrderToUnit(unitID, CMD.MOVE,
+												                       { rp.x, rp.y, rp.z }, 0)
+											end
+										elseif unitCmds == 0 and rp then
+											-- Order queue emptied unexpectedly: resume toward the
+											-- SAME committed haven (do not pick a new direction).
+											Spring.GiveOrderToUnit(unitID, CMD.MOVE,
+											                       { rp.x, rp.y, rp.z }, 0)
+										end
+										-- Otherwise: leave the existing move order alone.
 									end
-									if not retreated then
-										local ex2, _, ez2 = Spring.GetUnitPosition(nearEnemy)
+
+								elseif nearEnemy and hpRatio <= COMM_RETREAT_HP then
+									-- Drop into retreat: choose ONE haven and commit to it.
+									local rp = FindCommanderHaven(unitID, teamID, nearEnemy)
+									SimpleCommRetreating[teamID] = true
+									SimpleCommRetreatPos[teamID] = rp
+									if rp then
 										Spring.GiveOrderToUnit(unitID, CMD.MOVE,
-										                       { ux + (ux - ex2), uy, uz + (uz - ez2) }, 0)
+										                       { rp.x, rp.y, rp.z }, 0)
 									end
 
 								elseif nearEnemy and unitCmds == 0 then
@@ -1281,6 +1530,8 @@ if gadgetHandler:IsSyncedCode() then
 				if IsCommander[unitDefID] then
 					-- Commander died; allow faction re-detection on respawn
 					TeamCommID[unitTeam] = nil
+					SimpleCommRetreating[unitTeam] = false
+					SimpleCommRetreatPos[unitTeam] = nil
 				end
 				break
 			end
