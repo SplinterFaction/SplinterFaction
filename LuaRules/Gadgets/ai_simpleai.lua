@@ -43,10 +43,28 @@ local CON_BUILD_SPACING      = 150  -- ~5s at 30Hz
 local TECH_UNIT_BIAS    = 1.8    -- combat unit tech preference
 local TECH_FAC_BIAS     = 2.4    -- factory tech preference (want advanced plants to unlock advanced units)
 
+-- Combat composition. Multiplies a unit's build weight by its role so the AI
+-- leans on skirmishers (the bread-and-butter line) while still fielding support.
+-- Keyed by customParams.buildmenucategory (SF factory categories). Tune freely.
+local COMBAT_ROLE_WEIGHT = {
+	Skirmish = 1.00,   -- general-purpose front-line units: build the most of these
+	Support  = 0.40,   -- good and needed, but secondary
+	Scout    = 0.30,
+	Utility  = 0.35,
+	Unsorted = 0.60,   -- uncategorised armed units
+	default  = 0.60,   -- anything with no/unknown buildmenucategory
+}
+
 -- Weak-point attack targeting
 local ATTACK_SCAN_R     = 650    -- radius around an enemy building used to tally its defenders
 local ATTACK_DIST_W     = 0.10   -- how strongly distance-from-muster penalises a candidate target
 local ATTACK_RETARGET   = 300    -- frames between weak-point re-scans during an active push
+
+-- Base defense
+local BASE_DEFEND_RADIUS = 1600  -- enemy within this range of base centre is an "intruder"
+local TURRET_BASE        = 2     -- always want at least this many turrets once a factory exists
+local TURRET_PER_FAC     = 1     -- + this many wanted per factory
+local TURRET_PER_MEX_DIV = 3     -- + 1 wanted per this many mexes
 
 local MEX_TARGET_EARLY  = 2      -- grab this many mexes before anything else
 local MEX_TARGET_MID    = 8      -- expand to this many once economy is running
@@ -120,6 +138,9 @@ local SimpleLastTargetScan = {}   -- frame of last weak-point target scan
 local SimpleCommRetreating = {}   -- bool: is the commander currently fleeing?
 local SimpleCommRetreatPos = {}   -- committed haven {x,y,z} for the current retreat
 
+-- Base defense
+local SimpleBaseThreat     = {}   -- nearest enemy inside the base {x,y,z,uid} or nil
+
 -- tech / faction state
 local TeamTechLevel  = {}   -- 0-4 per team
 local TeamFaction    = {}   -- "fed" | "loz" | "neutral" per team
@@ -185,6 +206,7 @@ for i = 1, #teams do
 		SimpleLastTargetScan[teamID]   = 0
 		SimpleCommRetreating[teamID]   = false
 		SimpleCommRetreatPos[teamID]   = nil
+		SimpleBaseThreat[teamID]       = nil
 		TeamTechLevel[teamID]          = 1   -- game starts at tech1
 		TeamFaction[teamID]            = nil
 		TeamCommID[teamID]             = nil
@@ -416,8 +438,44 @@ local function GetBuildableTechBiased(teamID, cat, biasPow)
 end
 
 -- ============================================================
--- UTILITY HELPERS
+-- COMBAT ROLE WEIGHT
+-- Looks up a unit's build-menu category and returns the composition weight
+-- (skirmishers high, support/scout/utility lower). Used to skew which combat
+-- units the factories produce without ever fully excluding a role.
 -- ============================================================
+local function CombatRoleWeight(defID)
+	local ud  = UnitDefs[defID]
+	local cat = ud and ud.customParams and ud.customParams.buildmenucategory
+	return COMBAT_ROLE_WEIGHT[cat] or COMBAT_ROLE_WEIGHT.default
+end
+
+-- ============================================================
+-- GET WEIGHTED BUILDABLE  ->  { {id=defID, w=weight}, ... }
+-- Combines tech weight (advanced tiers favoured) with an optional per-unit
+-- weight function (e.g. combat role). Returns weighted pairs for a weighted
+-- random pick, so we get composition control without duplicating list entries.
+-- ============================================================
+local function GetWeightedBuildable(teamID, cat, biasPow, weightFn)
+	local techLevel = TeamTechLevel[teamID] or 1
+	local out       = {}
+	local lists     = TeamBuildLists[teamID]
+	if not lists then return out end
+	biasPow = biasPow or 1.8
+	for t = 0, techLevel do
+		local bucket = lists[t] and lists[t][cat]
+		if bucket then
+			local techW = (t + 1) ^ biasPow
+			for _, id in ipairs(bucket) do
+				local w = techW
+				if weightFn then w = w * weightFn(id) end
+				if w > 0 then
+					out[#out + 1] = { id = id, w = w }
+				end
+			end
+		end
+	end
+	return out
+end
 
 local function SimpleGetClosestMexSpot(x, z, maxRange)
 	local bestSpot
@@ -794,6 +852,34 @@ local function SimpleConstructionProjectSelection(
 		return false
 	end
 
+	-- Weighted-random variant: takes {id=,w=} pairs (from GetWeightedBuildable),
+	-- filters to what this builder/factory can actually make, and picks one with
+	-- probability proportional to weight. Used for combat composition control.
+	local function TryBuildWeighted(weighted, orderFn)
+		if not weighted or #weighted == 0 then return false end
+		local cands, total = {}, 0
+		for _, e in ipairs(weighted) do
+			for i2 = 1, #buildOptions do
+				if buildOptions[i2] == e.id then
+					cands[#cands + 1] = e
+					total = total + e.w
+					break
+				end
+			end
+		end
+		if total <= 0 then return false end
+		local roll, acc = math.random() * total, 0
+		for _, e in ipairs(cands) do
+			acc = acc + e.w
+			if roll <= acc then
+				orderFn(e.id)
+				return true
+			end
+		end
+		orderFn(cands[#cands].id)   -- float-rounding fallback
+		return true
+	end
+
 	local function NearMe(project)
 		local x, y, z = Spring.GetUnitPosition(unitID)
 		-- Use a larger offset so we don't place inside the caller's own footprint.
@@ -841,7 +927,7 @@ local function SimpleConstructionProjectSelection(
 	local storages     = GetBuildable(unitTeam, "storage")
 	local factories    = GetBuildableTechBiased(unitTeam, "factory", TECH_FAC_BIAS)
 	local constructors = GetBuildable(unitTeam, "constructor")
-	local combats      = GetBuildableTechBiased(unitTeam, "combat", TECH_UNIT_BIAS)
+	local combats      = GetWeightedBuildable(unitTeam, "combat", TECH_UNIT_BIAS, CombatRoleWeight)
 	local buildings    = GetBuildable(unitTeam, "building")
 
 	-- Split factories: only offer air/sea once we have enough land factories
@@ -863,6 +949,14 @@ local function SimpleConstructionProjectSelection(
 
 	local turretCount  = SimpleTurretCount[unitTeam] or 0
 	local belowTurretCap = turretCount < TURRET_CAP
+	-- How many turrets this base actually wants, scaled to its size.
+	local desiredTurrets = math.min(TURRET_CAP,
+		TURRET_BASE
+		+ (SimpleFactoriesCount[unitTeam] or 0) * TURRET_PER_FAC
+		+ math.floor((SimpleT1Mexes[unitTeam] or 0) / TURRET_PER_MEX_DIV))
+	local underDefended = (SimpleFactoriesCount[unitTeam] or 0) > 0
+		and turretCount < desiredTurrets and belowTurretCap
+	local canAffordTurret = ecurrent > estorage * 0.20 and mcurrent > mstorage * 0.15
 
 	-- -------------------------------------------------------
 	-- BUILDER / COMMANDER priority chain
@@ -903,11 +997,24 @@ local function SimpleConstructionProjectSelection(
 				success = true
 			end
 
+			-- PRIORITY 5b: REACTIVE defense — if the base is under attack and we
+			-- are under-defended, throw up a turret immediately (jumps the queue).
+		elseif SimpleUnderAttack[unitTeam] and underDefended and canAffordTurret
+				and buildType ~= "Commander" then
+			success = TryBuild(turrets, function(p) SimpleBuildOrder(unitID, p) end)
+
 			-- PRIORITY 6: mid-game mex expansion (factory exists, energy healthy)
 		elseif mexspot and SimpleT1Mexes[unitTeam] < MEX_TARGET_MID
 				and SimpleFactoriesCount[unitTeam] > 0
 				and ecurrent > estorage * 0.30 then
 			success = TryBuild(extractors, function(p) AtMex(p, mexspot) end)
+
+			-- PRIORITY 6b: STEADY defense — keep building toward the desired turret
+			-- count. Gated by a coin-flip so it interleaves with expansion rather
+			-- than monopolising the builder. (Builders only; commander keeps teching.)
+		elseif underDefended and canAffordTurret and buildType ~= "Commander"
+				and math.random(0, 1) == 0 then
+			success = TryBuild(turrets, function(p) SimpleBuildOrder(unitID, p) end)
 
 			-- PRIORITY 7: econ-biased generator building (to hit tech income target)
 		elseif econPressure > 0.3 and goal and eincome < goal.e then
@@ -969,9 +1076,9 @@ local function SimpleConstructionProjectSelection(
 			end
 			success = true
 
-			-- PRIORITY 13: turrets — only build if below the cap, and only a modest
-			-- random chance (r == 5 or 6: 2/21 ~ 10%) so they don't dominate spending.
-		elseif (r == 5 or r == 6) and belowTurretCap then
+			-- PRIORITY 13: extra defense only if still under the desired count
+			-- (steady/reactive slots above are the primary defense builders).
+		elseif (r == 5 or r == 6) and underDefended and canAffordTurret then
 			success = TryBuild(turrets, function(p) SimpleBuildOrder(unitID, p) end)
 
 			-- PRIORITY 14: area repair sweep
@@ -1026,7 +1133,7 @@ local function SimpleConstructionProjectSelection(
 				if success then SimpleLastConStart[unitTeam] = nowFrame end
 			end
 			if not success then
-				success = TryBuild(combats, function(p)
+				success = TryBuildWeighted(combats, function(p)
 					local x, y, z = Spring.GetUnitPosition(unitID)
 					Spring.GiveOrderToUnit(unitID, -p, { x, y, z, 0 }, 0)
 				end)
@@ -1111,15 +1218,52 @@ if gadgetHandler:IsSyncedCode() then
 						end
 					end
 
+					-- ---- Base intruder detection ----
+					-- Find the enemy unit nearest our base centre that's inside the
+					-- defend radius. The home guard will hunt it down. This is what
+					-- stops units strolling past raiders chewing on the base.
+					local baseThreat = nil
+					do
+						local bx, bz, bc = 0, 0, 0
+						for k = 1, #units do
+							local uDefID = Spring.GetUnitDefID(units[k])
+							if uDefID and UnitDefs[uDefID] and UnitDefs[uDefID].isBuilding then
+								local px, _, pz = Spring.GetUnitPosition(units[k])
+								bx = bx + px; bz = bz + pz; bc = bc + 1
+							end
+						end
+						if bc > 0 then
+							bx, bz = bx / bc, bz / bc
+							local near = Spring.GetUnitsInCylinder(bx, bz, BASE_DEFEND_RADIUS)
+							local bestD
+							for _, eu in ipairs(near) do
+								local et = Spring.GetUnitTeam(eu)
+								if et ~= teamID and et ~= gaiaTeamID
+										and not Spring.AreTeamsAllied(teamID, et) then
+									local ex, ey, ez = Spring.GetUnitPosition(eu)
+									local dx, dz = ex - bx, ez - bz
+									local d = dx * dx + dz * dz
+									if not bestD or d < bestD then
+										bestD = d
+										baseThreat = { x = ex, y = ey, z = ez, uid = eu }
+									end
+								end
+							end
+						end
+					end
+					SimpleBaseThreat[teamID] = baseThreat
+
 					-- Squad state transitions
 					-- Launch when a wave has mustered, OR when we already have a big
 					-- army (don't sit forever waiting for perfect muster), OR when
 					-- the base is under attack and we have at least a token force.
+					-- An active base intruder suppresses outward launches so the home
+					-- guard stays to deal with it instead of marching off.
 					local cooldownOk    = (n - SimpleLastLaunch[teamID]) >= WAVE_COOLDOWN
-					local readyToLaunch = cooldownOk
+					local readyToLaunch = cooldownOk and not baseThreat
 							and (atMuster >= WAVE_MUSTER_SIZE or totalGround >= WAVE_BIG_ARMY)
 							and totalGround >= WAVE_MIN_ARMY
-					local forceAttack   = SimpleUnderAttack[teamID]
+					local forceAttack   = SimpleUnderAttack[teamID] and not baseThreat
 							and totalGround >= 3
 							and (n - SimpleLastLaunch[teamID] >= WAVE_COOLDOWN / 2)
 
@@ -1380,27 +1524,42 @@ if gadgetHandler:IsSyncedCode() then
 										end
 
 									else
-										-- Muster mode: walk to staging area.
-										-- Fight back only if enemy is right on top of us.
-										local nearEnemy = Spring.GetUnitNearestEnemy(
-												unitID, 500, true)
-										if nearEnemy and unitCmds == 0 then
-											local tx, ty, tz = Spring.GetUnitPosition(nearEnemy)
-											Spring.GiveOrderToUnit(unitID, CMD.FIGHT,
-											                       { tx, ty, tz }, { "shift", "alt", "ctrl" })
-											-- Queue return to muster after fight
-											if muster then
-												Spring.GiveOrderToUnit(unitID, CMD.MOVE,
-												                       { muster.x + math.random(-150, 150),
-												                         muster.y,
-												                         muster.z + math.random(-150, 150) },
-												                       { "shift" })
+										-- Muster / home-guard mode.
+										local bthreat = SimpleBaseThreat[teamID]
+										if bthreat then
+											-- Intruder in the base: lock onto the specific unit so we
+											-- chase and kill it instead of strolling past. ATTACK on the
+											-- unitID tracks it if it moves. Only (re)issue if we are not
+											-- already on this exact target, to avoid order thrashing.
+											local cmds  = Spring.GetCommandQueue(unitID, 1)
+											local first = cmds and cmds[1]
+											local onIt  = first and first.id == CMD.ATTACK
+												    and first.params and first.params[1] == bthreat.uid
+											if not onIt then
+												Spring.GiveOrderToUnit(unitID, CMD.ATTACK, { bthreat.uid }, 0)
 											end
-										elseif unitCmds == 0 and muster then
-											Spring.GiveOrderToUnit(unitID, CMD.MOVE,
-											                       { muster.x + math.random(-200, 200),
-											                         muster.y,
-											                         muster.z + math.random(-200, 200) }, 0)
+										else
+											-- No intruder: attack-move to the staging area so we engage
+											-- anything we pass on the way. (Plain MOVE used to ignore
+											-- enemies en route, which is why units walked past raiders.)
+											local nearEnemy = Spring.GetUnitNearestEnemy(unitID, 600, true)
+											if nearEnemy and unitCmds == 0 then
+												local tx, ty, tz = Spring.GetUnitPosition(nearEnemy)
+												Spring.GiveOrderToUnit(unitID, CMD.FIGHT,
+												                       { tx, ty, tz }, { "shift", "alt", "ctrl" })
+												if muster then
+													Spring.GiveOrderToUnit(unitID, CMD.FIGHT,
+													                       { muster.x + math.random(-150, 150),
+													                         muster.y,
+													                         muster.z + math.random(-150, 150) },
+													                       { "shift" })
+												end
+											elseif unitCmds == 0 and muster then
+												Spring.GiveOrderToUnit(unitID, CMD.FIGHT,
+												                       { muster.x + math.random(-200, 200),
+												                         muster.y,
+												                         muster.z + math.random(-200, 200) }, 0)
+											end
 										end
 									end
 								end
