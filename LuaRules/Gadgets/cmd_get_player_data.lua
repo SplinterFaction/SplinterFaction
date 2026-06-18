@@ -14,9 +14,9 @@ function gadget:GetInfo()
 end
 
 local authorized = {
-	['[Evo]Forboding_Angel'] = true,
-	["[teh]Flow"] = true,
-	['Player'] = true,
+	--['[Evo]Forboding_Angel'] = true,
+	--["[teh]Flow"] = true,
+	--['Player'] = true,
 }
 
 if (gadgetHandler:IsSyncedCode()) then

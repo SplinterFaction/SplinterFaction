@@ -73,8 +73,17 @@ local BUTTONS = {
 		end
 	},
 	{
+		label = "Sharing",
+		accent = {0.22, 0.78, 0.35, 1}, -- green
+		onClick = function()
+			if WG.StaticShareMenu and WG.StaticShareMenu.Toggle then
+				WG.StaticShareMenu.Toggle()
+			end
+		end
+	},
+	{
 		label = "Graph",
-		accent = {0.55, 0.35, 0.95, 1}, -- purple, distinct from the other three
+		accent = {0.55, 0.35, 0.95, 1}, -- purple
 		onClick = function()
 			if WG.StaticEndGraph and WG.StaticEndGraph.Toggle then
 				WG.StaticEndGraph.Toggle()

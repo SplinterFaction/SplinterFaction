@@ -5,7 +5,7 @@ function widget:GetInfo()
 		author    = "",
 		date      = "2026-03-22",
 		license   = "GNU GPL, v2 or later",
-		layer     = -1,
+		layer     = 1002,
 		enabled   = true,
 	}
 end
@@ -134,6 +134,7 @@ local panelRect   = {x1=0, y1=0, x2=0, y2=0}
 local geom        = {}
 
 local team         = {}     -- {id, color={r,g,b,1}, name, show, array, hasData}
+local visibleTeams = {}     -- indices into team[] that are currently readable, packed
 local selectedStat = 1
 local isDelta      = false
 
@@ -192,9 +193,9 @@ end
 
 local function ColorEscape(r, g, b)
 	return "\255" .. string.char(
-		math_max(1, math_min(255, math_floor((r or 1)*255))),
-		math_max(1, math_min(255, math_floor((g or 1)*255))),
-		math_max(1, math_min(255, math_floor((b or 1)*255)))
+			math_max(1, math_min(255, math_floor((r or 1)*255))),
+			math_max(1, math_min(255, math_floor((g or 1)*255))),
+			math_max(1, math_min(255, math_floor((b or 1)*255)))
 	)
 end
 
@@ -267,33 +268,34 @@ local function getTeamInfo()
 	for _, engineID in ipairs(spGetTeamList() or {}) do
 		if engineID ~= gaia then
 			local _, teamLeader, _, isAI = spGetTeamInfo(engineID, false)
-			local name, isActive = spGetPlayerInfo(teamLeader, false)
+			local name = spGetPlayerInfo(teamLeader, false)
 
 			if isAI then
 				local _, botID, _, shortName = spGetAIInfo(engineID)
 				if botID then
 					name = tostring(botID) .. ' (' .. tostring(shortName) .. ')'
 				end
-				isActive = true
 			end
 
 			if name == nil or name == "" then
 				name = "Team " .. engineID
 			end
 
-			-- Include AI teams and any team with a (real) leader entry; dead teams
-			-- still have historical stats worth showing in an end graph.
-			if isActive or isAI then
-				local r, g, b = spGetTeamColor(engineID)
-				team[#team + 1] = {
-					id      = engineID,
-					color   = {r or 1, g or 1, b or 1, 1},
-					name    = name,
-					show    = true,
-					array   = nil,
-					hasData = false,
-				}
-			end
+			-- Gather every non-Gaia team unconditionally. Resigned or eliminated
+			-- teams still own a full stats history and belong in an end graph, so
+			-- we no longer drop them on an "is the leader active" check. Whether a
+			-- given team is actually drawn is decided later by hasData, which
+			-- respects engine access gating: an enemy stays hidden for a live
+			-- non-spectator, while a resigned ally (or anyone, post-game) appears.
+			local r, g, b = spGetTeamColor(engineID)
+			team[#team + 1] = {
+				id      = engineID,
+				color   = {r or 1, g or 1, b or 1, 1},
+				name    = name,
+				show    = true,
+				array   = nil,
+				hasData = false,
+			}
 		end
 	end
 end
@@ -359,6 +361,16 @@ local function RefreshData()
 				tm.array   = arr
 				tm.hasData = true
 			end
+		end
+	end
+
+	-- Pack the teams whose data is currently readable into contiguous legend
+	-- slots. Recomputed here rather than in BuildGeometry because readability
+	-- changes at game over (enemy teams become visible) without a resize.
+	visibleTeams = {}
+	for t = 1, #team do
+		if team[t].hasData then
+			visibleTeams[#visibleTeams + 1] = t
 		end
 	end
 
@@ -531,32 +543,30 @@ end
 
 local function BakeLegend()
 	font:Begin()
-	for i = 1, #team do
-		local r = geom.legendRows[i]
+	for slot = 1, #visibleTeams do
+		local r = geom.legendRows[slot]
 		if not r then break end
-		local tm = team[i]
+		local tm = team[visibleTeams[slot]]
 		local c  = tm.color
-		-- color swatch
 		local sw = 12*uiScale
 		local sy = r.y1 + (r.y2-r.y1)*0.5
-		if tm.show and tm.hasData then
+
+		if tm.show then
+			-- filled swatch + team-colored name = line is ON
 			glColor(c[1], c[2], c[3], 1)
+			glRect(r.x1+4*uiScale, sy-sw*0.5, r.x1+4*uiScale+sw, sy+sw*0.5)
+			font:Print(ColorEscape(c[1], c[2], c[3]) .. tm.name,
+			           r.x1+4*uiScale+sw+6*uiScale, sy-5*uiScale, 10*uiScale, "lo")
 		else
-			glColor(c[1]*0.4, c[2]*0.4, c[3]*0.4, 1)
+			-- hollow swatch + dim name = line is OFF (click to re-enable)
+			glColor(c[1]*0.45, c[2]*0.45, c[3]*0.45, 1)
+			glRect(r.x1+4*uiScale, sy-sw*0.5, r.x1+4*uiScale+sw, sy+sw*0.5)
+			glColor(0.08, 0.08, 0.09, 1)
+			glRect(r.x1+4*uiScale+1.5*uiScale, sy-sw*0.5+1.5*uiScale,
+			       r.x1+4*uiScale+sw-1.5*uiScale, sy+sw*0.5-1.5*uiScale)
+			font:Print(TEXT_DIM .. tm.name,
+			           r.x1+4*uiScale+sw+6*uiScale, sy-5*uiScale, 10*uiScale, "lo")
 		end
-		glRect(r.x1+4*uiScale, sy-sw*0.5, r.x1+4*uiScale+sw, sy+sw*0.5)
-		-- name
-		local nameCol
-		if not tm.hasData then
-			nameCol = TEXT_DIM
-		elseif tm.show then
-			nameCol = ColorEscape(c[1], c[2], c[3])
-		else
-			nameCol = TEXT_DIM
-		end
-		local label = tm.name
-		if not tm.hasData then label = label .. "  --" end
-		font:Print(nameCol .. label, r.x1+4*uiScale+sw+6*uiScale, sy-5*uiScale, 10*uiScale, "lo")
 	end
 	font:End()
 end
@@ -663,7 +673,7 @@ local function BakeValueLabels()
 		local l = labels[i]
 		local yy = Clamp(l.y, p.y1, panelRect.y2 - 8*uiScale)
 		font:Print(ColorEscape(l.color[1], l.color[2], l.color[3]) .. l.text,
-			p.x2 + 5*uiScale, yy - 5*uiScale, 10*uiScale, "lo")
+		           p.x2 + 5*uiScale, yy - 5*uiScale, 10*uiScale, "lo")
 	end
 	font:End()
 end
@@ -673,7 +683,7 @@ local function BakeNoData()
 	DrawBox(p.x1, p.y1, p.x2, p.y2, PLOT_BG, 3)
 	font:Begin()
 	font:Print(TEXT_DIM .. "Collecting stats data...",
-		p.x1+(p.x2-p.x1)*0.5, p.y1+(p.y2-p.y1)*0.5-6*uiScale, 13*uiScale, "co")
+	           p.x1+(p.x2-p.x1)*0.5, p.y1+(p.y2-p.y1)*0.5-6*uiScale, 13*uiScale, "co")
 	font:End()
 end
 
@@ -721,13 +731,14 @@ local function DrawHoverAndTooltip(mx, my)
 		end
 	end
 
-	-- Legend rows (only those with data are interactive)
-	for i = 1, #team do
-		local r = geom.legendRows[i]
-		if r and team[i].hasData and InRect(mx, my, r) then
+	-- Legend rows (packed; every shown slot is interactive)
+	for slot = 1, #visibleTeams do
+		local r = geom.legendRows[slot]
+		if not r then break end
+		if InRect(mx, my, r) then
 			glColor(HOVER_OVERLAY[1], HOVER_OVERLAY[2], HOVER_OVERLAY[3], HOVER_OVERLAY[4])
 			RectRound(r.x1, r.y1, r.x2, r.y2, 4*uiScale)
-			newHover = "team"..i
+			newHover = "team"..slot
 		end
 	end
 
@@ -750,7 +761,7 @@ local function DrawHoverAndTooltip(mx, my)
 			local t = (gameTime / math_max(1, p.x2-p.x1)) * (mx - p.x1)
 			local s = (graphMax / math_max(1, p.y2-p.y1)) * (my - p.y1)
 			local txt = TEXT_DIM.."Time "..TEXT_COLOR..formatTime(t, true)
-				.. TEXT_DIM.."   Score "..TEXT_COLOR..numFormat(s)
+					.. TEXT_DIM.."   Score "..TEXT_COLOR..numFormat(s)
 
 			local boxW = font:GetTextWidth(txt) * 11*uiScale + 12*uiScale
 			local boxH = 20*uiScale
@@ -850,12 +861,14 @@ function widget:MouseRelease(x, y, button)
 		end
 	end
 
-	-- Legend toggles (only teams with data)
-	for i = 1, #team do
-		local r = geom.legendRows[i]
-		if r and team[i].hasData and InRect(x, y, r) then
-			team[i].show = not team[i].show
-			RefreshData()   -- recompute graphMax over shown teams
+	-- Legend toggles: click a team to hide/show its line. Packed slot -> team.
+	for slot = 1, #visibleTeams do
+		local r = geom.legendRows[slot]
+		if not r then break end
+		if InRect(x, y, r) then
+			local ti = visibleTeams[slot]
+			team[ti].show = not team[ti].show
+			RefreshData()   -- rescale graphMax over the still-shown teams
 			contentDirty = true
 			PlayClickSound()
 			return true

@@ -768,11 +768,13 @@ function widget:Initialize()
 	fontfileScale = (0.5 + (vsx * vsy / 5700000))
 	font = gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8)
 	BuildGeometry()
+	WG.StaticShareMenu = { Toggle = Toggle, Show = Open, Hide = Close }
 end
 
 function widget:Shutdown()
 	if font then gl.DeleteFont(font) end
 	Spring.SendCommands("bind h sharedialog")
+	WG.StaticShareMenu = nil
 end
 
 function widget:ViewResize(nx, ny)
