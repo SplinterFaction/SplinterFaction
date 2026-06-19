@@ -73,6 +73,13 @@ local MEX_RANGE_MID     = 5000   -- mex search radius once we have 2+ factories
 local CONVERTER_MAX     = 3      -- max energy converters per team
 local FACTORY_MAX       = 12      -- max factories per team
 local LAND_FAC_MIN      = 3      -- build at least this many land factories before any air/sea
+-- Factory build pacing. A flat frame-based limiter (like the constructor one)
+-- replaces the old escalating delay, so the Nth factory is no slower to start
+-- than the 2nd. When resources are overflowing we build them much faster, since
+-- extra production capacity is the best sink for a surplus.
+local FACTORY_SPACING       = 90   -- normal min frames between starting factories (~3s)
+local FACTORY_SPACING_FLOOD = 45   -- min frames when overflowing (~1.5s)
+local FACTORY_OVERFLOW      = 0.62 -- metal & energy storage fraction that counts as "overflowing"
 local TURRET_CAP        = 20     -- absolute max turrets to build per team
 local WAVE_COOLDOWN     = 1500   -- minimum frames between launches (~50s at 30Hz)
 
@@ -117,6 +124,7 @@ SimpleConstructorCount = {}
 SimpleFactoryDelay     = {}
 SimpleConstructorDelay = {}
 SimpleLastConStart     = {}   -- frame the team last STARTED a constructor (rate limit)
+SimpleLastFacStart     = {}   -- frame the team last STARTED a factory (rate limit)
 
 -- enhanced state
 local SimpleArmyCount      = {}
@@ -192,6 +200,7 @@ for i = 1, #teams do
 		SimpleFactoryDelay[teamID]     = 0
 		SimpleConstructorDelay[teamID] = 0
 		SimpleLastConStart[teamID]     = -CON_BUILD_SPACING
+		SimpleLastFacStart[teamID]     = -FACTORY_SPACING
 		SimpleArmyCount[teamID]        = 0
 		SimpleAttackWave[teamID]       = nil
 		SimpleAttackTimer[teamID]      = WAVE_INTERVAL
@@ -822,6 +831,16 @@ local function SimpleConstructionProjectSelection(
 	local buildOptions = UnitDefs[unitDefID].buildOptions
 	local techLevel    = TeamTechLevel[unitTeam] or 1
 
+	-- Factory pacing: a single per-team frame limiter (no escalating delay), so
+	-- factory #8 starts as readily as factory #2. When both metal and energy are
+	-- piling up we drop to the faster "flood" spacing and pour the surplus into
+	-- new production lines.
+	local overflowing  = mstorage > 0 and estorage > 0
+			and mcurrent > mstorage * FACTORY_OVERFLOW
+			and ecurrent > estorage * FACTORY_OVERFLOW
+	local facSpacing   = overflowing and FACTORY_SPACING_FLOOD or FACTORY_SPACING
+	local facSpacingOk = (nowFrame - (SimpleLastFacStart[unitTeam] or 0)) >= facSpacing
+
 	-- econPressure: 0 = at target, approaches 1 when far below next tech threshold
 	local goal = TECH_INCOME_GOALS[techLevel]
 	local econPressure = 0
@@ -994,6 +1013,7 @@ local function SimpleConstructionProjectSelection(
 		elseif SimpleFactoriesCount[unitTeam] == 0 and SimpleFactoryDelay[unitTeam] <= 0 then
 			if TryBuild(factories, function(p) SimpleBuildOrder(unitID, p) end) then
 				SimpleFactoryDelay[unitTeam] = 120
+				SimpleLastFacStart[unitTeam] = nowFrame
 				success = true
 			end
 
@@ -1002,6 +1022,18 @@ local function SimpleConstructionProjectSelection(
 		elseif SimpleUnderAttack[unitTeam] and underDefended and canAffordTurret
 				and buildType ~= "Commander" then
 			success = TryBuild(turrets, function(p) SimpleBuildOrder(unitID, p) end)
+
+			-- PRIORITY 5c: OVERFLOW → production. If resources are piling up, the
+			-- single best thing to do is add a factory. This jumps ahead of mex
+			-- expansion / generators / constructors / roaming so a surplus turns
+			-- into production capacity fast instead of sitting in storage.
+		elseif overflowing and SimpleFactoriesCount[unitTeam] > 0
+				and SimpleFactoriesCount[unitTeam] < FACTORY_MAX
+				and facSpacingOk then
+			if TryBuild(factories, function(p) SimpleBuildOrder(unitID, p) end) then
+				SimpleLastFacStart[unitTeam] = nowFrame
+				success = true
+			end
 
 			-- PRIORITY 6: mid-game mex expansion (factory exists, energy healthy)
 		elseif mexspot and SimpleT1Mexes[unitTeam] < MEX_TARGET_MID
@@ -1039,12 +1071,12 @@ local function SimpleConstructionProjectSelection(
 				end
 			end
 
-			-- PRIORITY 9: more factories
-		elseif ecurrent > estorage * 0.55 and mcurrent > mstorage * 0.55
+			-- PRIORITY 9: more factories (steady expansion when resources allow)
+		elseif ecurrent > estorage * 0.50 and mcurrent > mstorage * 0.50
 				and SimpleFactoriesCount[unitTeam] < FACTORY_MAX
-				and SimpleFactoryDelay[unitTeam] <= 0 then
+				and facSpacingOk then
 			if TryBuild(factories, function(p) SimpleBuildOrder(unitID, p) end) then
-				SimpleFactoryDelay[unitTeam] = 60 * math.max(1, SimpleFactoriesCount[unitTeam])
+				SimpleLastFacStart[unitTeam] = nowFrame
 				success = true
 			end
 
