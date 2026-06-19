@@ -83,6 +83,30 @@ return {
         texture            = [[generated-walloffire]],
       },
     },
+    brightflare = {
+      air                = true,
+      class              = [[CBitmapMuzzleFlame]],
+      count              = 1,
+      ground             = true,
+      underwater         = true,
+      water              = true,
+      properties = {
+        colormap            = [[1 1 1 0.1   1 1 1 0.1   1 1 1 0.1   1 1 1 0.1   0 0 0 0]],
+        dir                = [[0, 1, 0]],
+        --gravity            = [[0.0, 0.1, 0.0]],
+        frontoffset        = 0,
+        animParams          = [[6,6,20]], --[xTiles, yTiles, animLength in game frames]
+        fronttexture       = [[generated-furnace]],
+        length             = 40,
+        sidetexture        = [[none]],
+        size               = 10,
+        sizegrowth         = 0,
+        ttl                = 20,
+        pos                = [[0, 3, 0]],
+        --rotParams          = [[-10 r20, -20 r40, -180 r360]],
+        drawOrder          = 0,
+      },
+    },
   },
 }
 

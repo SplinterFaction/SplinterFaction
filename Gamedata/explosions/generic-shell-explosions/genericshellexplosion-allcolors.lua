@@ -1,14 +1,45 @@
--- genericshellexplosion-purple
+-- genericshellexplosion (all colors)
 -- Programmatically generated: edit the tables below, not the output.
 
-local color = {
-  -- explosionwave colormap and groundflash RGB (kept in sync)
-  wavemap   = [[0.10999999940395 0 0.28999999165535 0.05  0 0 0 0.0]],
-  groundRGB = { 0.50999999940395, 0, 0.68999999165535 },
-  -- unitpoofs mid-stop color
-  poofsmap  = [[1.0 1.0 1.0 0.04  0.11 0 0.29 0.01  0.1 0.1 0.1 0.01]],
-  -- outerflash texture (color-specific nova texture)
-  outerTex  = [[purplenovaexplo]],
+-- Per-color values. Add/remove a color here and the loop at the bottom
+-- emits the full small/medium/large set for it automatically.
+local colors = {
+  green = {
+    wavemap   = [[0 1 0 0.05  0 0 0 0.0]],
+    groundRGB = { 0, 1, 0 },
+    poofsmap  = [[1.0 1.0 1.0 0.04  0.5 1.0 0.5 0.01  0.1 0.1 0.1 0.01]],
+    outerTex  = [[greennovaexplo]],
+  },
+  orange = {
+    wavemap   = [[1 0.5 0 0.05  0 0 0 0.0]],
+    groundRGB = { 1, 0.5, 0 },
+    poofsmap  = [[1.0 1.0 1.0 0.04  1.0 0.5 0.0 0.01  0.1 0.1 0.1 0.01]],
+    outerTex  = [[orangenovaexplo]],
+  },
+  purple = {
+    wavemap   = [[0.10999999940395 0 0.28999999165535 0.05  0 0 0 0.0]],
+    groundRGB = { 0.50999999940395, 0, 0.68999999165535 },
+    poofsmap  = [[1.0 1.0 1.0 0.04  0.11 0 0.29 0.01  0.1 0.1 0.1 0.01]],
+    outerTex  = [[purplenovaexplo]],
+  },
+  red = {
+    wavemap   = [[1 0 0 0.05  0 0 0 0.0]],
+    groundRGB = { 1, 0, 0 },
+    poofsmap  = [[1.0 1.0 1.0 0.04  1.0 0.5 0.5 0.01  0.1 0.1 0.1 0.01]],
+    outerTex  = [[rednovaexplo]],
+  },
+  white = {
+    wavemap   = [[1 1 1 0.05  0 0 0 0.0]],
+    groundRGB = { 1, 1, 1 },
+    poofsmap  = [[1.0 1.0 1.0 0.04  1.0 1.0 1.0 0.01  0.1 0.1 0.1 0.01]],
+    outerTex  = [[brightblueexplo]],
+  },
+  blue = {
+    wavemap   = [[0 0 1 0.05  0 0 0 0.0]],
+    groundRGB = { 0, 0, 1 },
+    poofsmap  = [[1.0 1.0 1.0 0.04  0.5 0.5 1.0 0.01  0.1 0.1 0.1 0.01]],
+    outerTex  = [[bluenovaexplo]],
+  },
 }
 
 -- Per-size scaling values. Everything that changes between small/medium/large lives here.
@@ -63,7 +94,8 @@ local sizes = {
   },
 }
 
-local function makeExplosion(s)
+-- s = size params, c = color params
+local function makeExplosion(s, c)
   return {
     centerflare = {
       air        = true,
@@ -96,7 +128,7 @@ local function makeExplosion(s)
       properties = {
         airdrag             = 0.87,
         alwaysvisible       = true,
-        colormap            = color.wavemap, -- same as groundflash colors
+        colormap            = c.wavemap, -- same as groundflash colors
         directional         = false,
         emitrot             = 90,
         emitrotspread       = 5,
@@ -128,9 +160,9 @@ local function makeExplosion(s)
       water         = true,
       underwater    = true,
       color = {
-        [1] = color.groundRGB[1],
-        [2] = color.groundRGB[2],
-        [3] = color.groundRGB[3],
+        [1] = c.groundRGB[1],
+        [2] = c.groundRGB[2],
+        [3] = c.groundRGB[3],
       },
     },
 
@@ -237,7 +269,7 @@ local function makeExplosion(s)
     --    size          = 1,
     --    sizegrowth    = s.outerSizegrowth,
     --    speed         = [[0, 1 0, 0]],
-    --    texture       = color.outerTex,
+    --    texture       = c.outerTex,
     --  },
     --},
 
@@ -273,12 +305,40 @@ local function makeExplosion(s)
         -- castshadow          = true,
       },
     },
+
+    brightflare = {
+      air                = true,
+      class              = [[CBitmapMuzzleFlame]],
+      count              = 1,
+      ground             = true,
+      underwater         = true,
+      water              = true,
+      properties = {
+        colormap            = [[1 1 1 0.1   1 1 1 0.1   1 1 1 0.1   1 1 1 0.1   0 0 0 0]],
+        dir                = [[0, 1, 0]],
+        --gravity            = [[0.0, 0.1, 0.0]],
+        frontoffset        = 0,
+        animParams          = [[6,6,30]], --[xTiles, yTiles, animLength in game frames]
+        fronttexture       = [[generated-furnace]],
+        length             = 40,
+        sidetexture        = [[none]],
+        size               = s.fireballSize,
+        sizegrowth         = 0,
+        ttl                = 15,
+        pos                = [[0, 3, 0]],
+        --rotParams          = [[-10 r20, -20 r40, -180 r360]],
+        drawOrder          = 0,
+      },
+    },
   }
 end
 
--- Build and return the final table
+-- Build and return the final table.
+-- Keys stay identical to the old per-color files: genericshellexplosion-<size>-<color>
 local result = {}
-for sizeName, sizeParams in pairs(sizes) do
-  result["genericshellexplosion-" .. sizeName .. "-purple"] = makeExplosion(sizeParams)
+for colorName, c in pairs(colors) do
+  for sizeName, s in pairs(sizes) do
+    result["genericshellexplosion-" .. sizeName .. "-" .. colorName] = makeExplosion(s, c)
+  end
 end
 return result
