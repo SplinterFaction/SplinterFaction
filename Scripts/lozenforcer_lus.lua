@@ -1,6 +1,10 @@
 
 base, railgunturret1, railgunbarrel1, railgunfirepoint1, laserbarrel1, laserfirepoint1, wake = piece ('base', 'railgunturret1', 'railgunbarrel1', 'railgunfirepoint1', 'laserbarrel1', 'laserfirepoint1', 'wake')
 
+local deathPieces = {
+	railgunturret1, railgunbarrel1, railgunfirepoint1, laserbarrel1, laserfirepoint1, wake,
+}
+
 local SIG_AIM = {}
 local SIG_AIM2 = {}
 
@@ -87,8 +91,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

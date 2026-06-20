@@ -1,4 +1,8 @@
 base, wheels1, wheels2, wheels3, wheels4, wheels5, wheels6, dirt, turret, barrel1, firepoint1 = piece('base', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'wheels5', 'wheels6', 'dirt', 'turret', 'barrel1', 'firepoint1')
+
+local deathPieces = {
+	base, wheels1, wheels2, wheels3, wheels4, wheels5, wheels6, dirt, turret, barrel1, firepoint1,
+}
 local SIG_AIM = {}
 
 common = include("headers/common_includes_lus.lua")
@@ -61,13 +65,6 @@ function script.FireWeapon(weaponID)
 end
 
 function script.Killed()
-	Explode(wheels1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(wheels2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(wheels3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(wheels4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(wheels5, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(wheels6, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(barrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

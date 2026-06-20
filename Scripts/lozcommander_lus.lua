@@ -2,6 +2,10 @@
 
 base, nano1, wheels1, wheels2, wheels3, wheels4, wheels5, laserturret1, laserbarrel1, laserfirepoint1, emitter1, emitterfirepoint1 = piece('base', 'nano1', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'wheels5', 'laserturret1', 'laserbarrel1', 'laserfirepoint1', 'emitter1', 'emitterfirepoint1')
 
+local deathPieces = {
+	base, nano1, wheels1, wheels2, wheels3, wheels4, wheels5, laserturret1, laserbarrel1, laserfirepoint1, emitter1, emitterfirepoint1,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local SIG_AIM1 = {}
@@ -101,6 +105,6 @@ function script.QueryNanoPiece()
 end
 
 function script.Killed()
-    Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

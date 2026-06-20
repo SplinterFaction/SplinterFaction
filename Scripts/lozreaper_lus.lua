@@ -1,5 +1,9 @@
 base, wheels1, wheels2, wheels3, wheels4, laserturret1, laserturret2, railgunturret1, laserbarrel1, laserbarrel2, railgunbarrel1, laserfirepoint1, laserfirepoint2, railgunfirepoint1= piece('base', 'wheels1', 'wheels2', 'wheels3', 'wheels4', 'laserturret1', 'laserturret2', 'railgunturret1', 'laserbarrel1', 'laserbarrel2', 'railgunbarrel1', 'laserfirepoint1', 'laserfirepoint2', 'railgunfirepoint1')
 
+local deathPieces = {
+	base, wheels1, wheels2, wheels3, wheels4, laserturret1, laserturret2, railgunturret1, laserbarrel1, laserbarrel2, railgunbarrel1, laserfirepoint1, laserfirepoint2, railgunfirepoint1,
+}
+
 local SIG_AIM = {}
 local SIG_AIM2 = {}
 local SIG_AIM3 = {}
@@ -92,13 +96,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-		Explode(railgunturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(laserbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

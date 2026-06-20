@@ -1,6 +1,10 @@
 
 base, spinner, sfxpoint, tank_up1, tank_up2, tank_up3, tank_up4 = piece('base', 'spinner', 'sfxpoint', 'tank_up1', 'tank_up2', 'tank_up3', 'tank_up4')
 
+local deathPieces = {
+	base, spinner, sfxpoint, tank_up1, tank_up2, tank_up3, tank_up4,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 -- state variables
@@ -46,11 +50,6 @@ end
 sleep1 = math.random(2000,4000)
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(spinner, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(tank_up1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	-- Explode(tank_up2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	-- Explode(tank_up3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	-- Explode(tank_up4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

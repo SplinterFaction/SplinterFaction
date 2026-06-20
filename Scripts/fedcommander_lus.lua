@@ -1,5 +1,9 @@
 base, mandible, rr1, rr2, rrdirt, rf1, rf2, rfdirt, lf1, lf2, lfdirt, lr1, lr2, lrdirt, nanopoint1, firepoint1, turret2, barrel2, firepoint2 = piece('base', 'mandible', 'rr1', 'rr2', 'rrdirt', 'rf1', 'rf2', 'rfdirt', 'lf1', 'lf2', 'lfdirt', 'lr1', 'lr2', 'lrdirt', 'nanopoint1', 'firepoint1', 'turret2', 'barrel2', 'firepoint2')
 
+local deathPieces = {
+	base, mandible, rr1, rr2, rrdirt, rf1, rf2, rfdirt, lf1, lf2, lfdirt, lr1, lr2, lrdirt, nanopoint1, firepoint1, turret2, barrel2, firepoint2,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local SIG_AIM = {}
@@ -97,9 +101,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(turret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(barrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(mandible, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

@@ -1,6 +1,10 @@
 
 base, cannonturret1, cannonbarrel1, cannonfirepoint1 = piece('base', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1')
 
+local deathPieces = {
+	base, cannonturret1, cannonbarrel1, cannonfirepoint1,
+}
+
 local SIG_AIM = {}
 
 common = include("headers/common_includes_lus.lua")
@@ -42,7 +46,6 @@ function script.AimWeapon(weaponID, heading, pitch)
 end
 
 function script.Killed()
-    Explode(cannonturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

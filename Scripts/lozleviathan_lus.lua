@@ -6,6 +6,10 @@ base, lightningturret1, lightningbarrel1, lightningfirepoint1, lightningturret2,
 		'fueltanks1', 'fueltanks2', 'wake1', 'wake2'
 )
 
+local deathPieces = {
+	lightningturret1, lightningbarrel1, lightningfirepoint1, lightningturret2, lightningbarrel2, lightningfirepoint2, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2, laserturret3, laserbarrel3, laserfirepoint3, laserturret4, laserbarrel4, laserfirepoint4, fueltanks1, fueltanks2, wake1, wake2,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local SIG_AIM = {}
@@ -158,19 +162,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(lightningturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(lightningbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(lightningturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(lightningbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(fueltanks1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(fueltanks2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

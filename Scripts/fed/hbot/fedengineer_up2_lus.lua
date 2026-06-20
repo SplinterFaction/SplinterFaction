@@ -1,5 +1,9 @@
 pelvis, turret, nanos, nanos2, nanopoint1, nanopoint2, nanopoint3, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot = piece('pelvis', 'turret', 'nanos', 'nanos2', 'nanopoint1', 'nanopoint2', 'nanopoint3', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot')
 
+local deathPieces = {
+	pelvis, turret, nanos, nanos2, nanopoint1, nanopoint2, nanopoint3, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local SIG_AIM = {}
@@ -70,9 +74,6 @@ function script.QueryNanoPiece()
 end
 
 function script.Killed()
-		Explode(nanos, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(pelvis, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(nanos2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

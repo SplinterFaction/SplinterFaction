@@ -1,6 +1,10 @@
 
 base, cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2, wake = piece('base', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'cannonturret2', 'cannonbarrel2', 'cannonfirepoint2', 'cannonturret3', 'cannonbarrel3', 'cannonfirepoint3', 'laserturret1', 'laserbarrel1', 'laserfirepoint1', 'laserturret2', 'laserbarrel2', 'laserfirepoint2','wake')
 
+local deathPieces = {
+	cannonturret1, cannonbarrel1, cannonfirepoint1, cannonturret2, cannonbarrel2, cannonfirepoint2, cannonturret3, cannonbarrel3, cannonfirepoint3, laserturret1, laserbarrel1, laserfirepoint1, laserturret2, laserbarrel2, laserfirepoint2, wake,
+}
+
 
 common = include("headers/common_includes_lus.lua")
 
@@ -144,33 +148,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	--[[
-	local explosionPieces = {
-		base,
-		cannonturret1, cannonbarrel1, cannonfirepoint1,
-		cannonturret2, cannonbarrel2, cannonfirepoint2,
-		cannonturret3, cannonbarrel3, cannonfirepoint3,
-		laserturret1, laserbarrel1, laserfirepoint1,
-		laserturret2, laserbarrel2, laserfirepoint2,
-		wake,
-	}
-
-	for i = 1, #explosionPieces do
-		common.CustomEmitter(explosionPieces[i], "genericunitexplosion-small")
-		Sleep(math.random(50, 120)) -- stagger timing slightly
-	end
-	]]--
-
-	Explode(cannonturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(cannonturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(cannonbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(cannonturret3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(cannonbarrel3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(laserbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

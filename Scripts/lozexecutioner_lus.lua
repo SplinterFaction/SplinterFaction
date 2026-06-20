@@ -1,6 +1,10 @@
 
 base, railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, cannonturret1, cannonbarrel1, cannonfirepoint1, wake = piece('base', 'railgunturret1', 'railgunbarrel1', 'railgunfirepoint1', 'railgunturret2', 'railgunbarrel2', 'railgunfirepoint2', 'railgunturret3', 'railgunbarrel3', 'railgunfirepoint3', 'railgunturret4', 'railgunbarrel4', 'railgunfirepoint4', 'cannonturret1', 'cannonbarrel1', 'cannonfirepoint1', 'wake')
 
+local deathPieces = {
+	railgunturret1, railgunbarrel1, railgunfirepoint1, railgunturret2, railgunbarrel2, railgunfirepoint2, railgunturret3, railgunbarrel3, railgunfirepoint3, railgunturret4, railgunbarrel4, railgunfirepoint4, cannonturret1, cannonbarrel1, cannonfirepoint1, wake,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local SIG_AIM = {}
@@ -140,16 +144,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(railgunturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunturret2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunturret3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunturret4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunbarrel3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(railgunbarrel4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(cannonturret1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

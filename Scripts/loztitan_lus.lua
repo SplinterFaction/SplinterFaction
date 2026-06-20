@@ -1,6 +1,10 @@
 
 base, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, turretball1, turretball2, turretball3, turretball4, turretball5, turretball6, turretball7, turretball8, turretball9, turretball10, link = piece ('base', 'engine1', 'engine2', 'engine3', 'engine4', 'engine5', 'engine6', 'engine7', 'engine8', 'turretball1', 'turretball2', 'turretball3', 'turretball4', 'turretball5', 'turretball6', 'turretball7', 'turretball8', 'turretball9', 'turretball10', 'link')
 
+local deathPieces = {
+	base, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, turretball1, turretball2, turretball3, turretball4, turretball5, turretball6, turretball7, turretball8, turretball9, turretball10, link,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 -- state variables
@@ -62,17 +66,6 @@ function script.EndTransport(passengerID)
 end
 
 function script.Killed()
-    Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball5, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball6, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball7, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball8, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball9, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turretball10, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-
-    return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

@@ -1,4 +1,8 @@
 base, turret, cannonbarrel1, cannonbarrelfirepoint1, wheels1, wheels2, wheels3 = piece('base', 'turret', 'cannonbarrel1', 'cannonbarrelfirepoint1', 'wheels1', 'wheels2', 'wheels3')
+
+local deathPieces = {
+	base, turret, cannonbarrel1, cannonbarrelfirepoint1, wheels1, wheels2, wheels3,
+}
 local SIG_AIM = {}
 
 -- state variables
@@ -55,10 +59,6 @@ function script.FireWeapon(weaponID)
 end
 
 function script.Killed()
-		Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

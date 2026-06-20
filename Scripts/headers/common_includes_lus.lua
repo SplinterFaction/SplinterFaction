@@ -139,6 +139,17 @@ common = {
 		end
 	end,
 
+	-----KILLED-----
+	-- Explode a list of pieces with shared SFX flags.
+	-- Defaults to the standard death-debris flags. Call from script.Killed().
+	ExplodePieces = function (pieces, flags)
+		flags = flags or (SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+		for i = 1, #pieces do
+			Explode(pieces[i], flags)
+		end
+	end,
+
+
 	WalkScript = function ()
 
 		------------------------------------------------------------------------------------------------------------------------------------

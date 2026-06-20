@@ -1,5 +1,9 @@
 base, firepoint1, wake = piece('base', 'firepoint1', 'wake')
 
+local deathPieces = {
+	firepoint1, wake,
+}
+
 local SIG_AIM = {}
 
 common = include("headers/common_includes_lus.lua")
@@ -55,5 +59,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

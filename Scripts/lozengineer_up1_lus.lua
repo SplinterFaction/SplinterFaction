@@ -1,4 +1,8 @@
 base, nanopoint1, nanopoint2, frontwheels, rearwheels, dirt = piece('base', 'nanopoint1', 'nanopoint2', 'frontwheels', 'rearwheels', 'dirt')
+
+local deathPieces = {
+	base, nanopoint1, nanopoint2, frontwheels, rearwheels, dirt,
+}
 local SIG_AIM = {}
 
 local nanoPieces = {[0] = nanopoint1, nanopoint2}
@@ -62,6 +66,6 @@ function script.QueryNanoPiece()
 end
 
 function script.Killed()
-		Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

@@ -1,5 +1,9 @@
 pelvis, dirt, legs, rthigh, rleg, rfoot, lthigh, lleg, lfoot, turret, barrels1, firepoint1, firepoint2, barrels2, firepoint3, firepoint4 = piece('pelvis', 'dirt', 'legs', 'rthigh', 'rleg', 'rfoot', 'lthigh', 'lleg', 'lfoot', 'turret', 'barrels1', 'firepoint1', 'firepoint2', 'barrels2', 'firepoint3', 'firepoint4')
 
+local deathPieces = {
+	pelvis, dirt, legs, rthigh, rleg, rfoot, lthigh, lleg, lfoot, turret, barrels1, firepoint1, firepoint2, barrels2, firepoint3, firepoint4,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local SIG_AIM = {}
@@ -63,9 +67,6 @@ function script.AimWeapon(weaponID, heading, pitch)
 end
 
 function script.Killed()
-    local pieces = {pelvis, dirt, legs, rthigh, rleg, rfoot, lthigh, lleg, lfoot, turret, barrels1, firepoint1, firepoint2, barrels2, firepoint3, firepoint4}
-    for _, piece in ipairs(pieces) do
-        Explode(piece, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    end
-    return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

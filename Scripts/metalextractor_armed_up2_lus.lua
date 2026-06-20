@@ -1,6 +1,10 @@
 
 base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, bottom1, topspin1, sfxpointt1, bottom2, topspin2, sfxpointt2, laserturret1, laserbarrel1, laserfirepoint11, laserfirepoint12, laserturret2, laserbarrel2, laserfirepoint21, laserfirepoint22, flameturret1, flamebarrel1, flamefirepoint1 = piece('base', 'pivotpoint', 'armleft', 'armright', 'armrear', 'armfront', 'sfxpoint1', 'bottom1', 'topspin1', 'sfxpointt1', 'bottom2', 'topspin2', 'sfxpointt2', 'laserturret1', 'laserbarrel1', 'laserfirepoint11', 'laserfirepoint12', 'laserturret2', 'laserbarrel2', 'laserfirepoint21', 'laserfirepoint22', 'flameturret1', 'flamebarrel1', 'flamefirepoint1')
 
+local deathPieces = {
+	base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, bottom1, topspin1, sfxpointt1, bottom2, topspin2, sfxpointt2, laserturret1, laserbarrel1, laserfirepoint11, laserfirepoint12, laserturret2, laserbarrel2, laserfirepoint21, laserfirepoint22, flameturret1, flamebarrel1, flamefirepoint1,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 -- state variables
@@ -117,14 +121,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(armleft, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(armright, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(armrear, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(armfront, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(topspin1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(topspin2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(bottom1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(bottom2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

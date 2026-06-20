@@ -1,6 +1,10 @@
 
 base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, ball, tech1ring, tech2ring, tech3ring, bottom1, topspin1, sfxpointt1, techball1, bottom2, topspin2, sfxpointt2, techball2, bottom3, topspin3, sfxpointt3, techball3, bottom4, topspin4, sfxpointt4, techball4 = piece('base', 'pivotpoint', 'armleft', 'armright', 'armrear', 'armfront', 'sfxpoint1', 'ball', 'tech1ring', 'tech2ring', 'tech3ring', 'bottom1', 'topspin1', 'sfxpointt1', 'techball1', 'bottom2', 'topspin2', 'sfxpointt2', 'techball2', 'bottom3', 'topspin3', 'sfxpointt3', 'techball3', 'bottom4', 'topspin4', 'sfxpointt4', 'techball4')
 
+local deathPieces = {
+	base, pivotpoint, armleft, armright, armrear, armfront, sfxpoint1, ball, tech1ring, tech2ring, tech3ring, bottom1, topspin1, sfxpointt1, techball1, bottom2, topspin2, sfxpointt2, techball2, bottom3, topspin3, sfxpointt3, techball3, bottom4, topspin4, sfxpointt4, techball4,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 -- state variables
@@ -81,18 +85,6 @@ function script.Skyhateceg4()
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(ball, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(tech1ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(tech2ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(tech3ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(topspin1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(topspin2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(topspin3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(topspin4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(techball1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(techball2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(techball3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(techball4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

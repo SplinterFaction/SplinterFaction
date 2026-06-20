@@ -1,5 +1,9 @@
 base, sfxpoint1, ball, tech1ring, tech2ring, tech3ring = piece('base', 'sfxpoint1', 'ball', 'tech1ring', 'tech2ring', 'tech3ring')
 
+local deathPieces = {
+	base, sfxpoint1, ball, tech1ring, tech2ring, tech3ring,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 -- state variables
@@ -20,10 +24,6 @@ function script.Skyhateceg()
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(ball, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(tech1ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(tech2ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(tech3ring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

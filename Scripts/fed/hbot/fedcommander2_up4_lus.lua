@@ -1,5 +1,9 @@
 pelvis, dirt, lthigh, lleg, lfoot, rthigh, rleg, rfoot, turret, barrel1, firepoint1, nanoarm1, nano1, nanopoint1, nanoarm2, nano2, nanopoint2, nano0, nanopoint0, nanoarm3, nano3, nanopoint3, nanoarm4, nano4, nanopoint4 = piece('pelvis', 'dirt', 'lthigh', 'lleg', 'lfoot', 'rthigh', 'rleg', 'rfoot', 'turret', 'barrel1', 'firepoint1', 'nanoarm1', 'nano1', 'nanopoint1', 'nanoarm2', 'nano2', 'nanopoint2', 'nano0', 'nanopoint0', 'nanoarm3', 'nano3', 'nanopoint3', 'nanoarm4', 'nano4', 'nanopoint4')
 
+local deathPieces = {
+	pelvis, dirt, lthigh, lleg, lfoot, rthigh, rleg, rfoot, turret, barrel1, firepoint1, nanoarm1, nano1, nanopoint1, nanoarm2, nano2, nanopoint2, nano0, nanopoint0, nanoarm3, nano3, nanopoint3, nanoarm4, nano4, nanopoint4,
+}
+
 
 common = include("headers/common_includes_lus.lua")
 
@@ -102,24 +106,6 @@ function script.AimWeapon(weaponID, heading, pitch)
 end
 
 function script.Killed()
-	Explode(pelvis, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(dirt, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(lthigh, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(lleg, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(lfoot, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(rthigh, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(rleg, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(rfoot, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(barrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano0, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

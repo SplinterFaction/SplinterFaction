@@ -1,6 +1,10 @@
 
 pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, gatlingturret1, gatlingbarrel1, gatlingbarrel2, gatlingfirepoint1, gatlingfirepoint2, gatlingspins1, gatlingspins2, cannonturret1, cannonturret2, cannonbarrel1, cannonbarrel2, cannonfirepoint1, cannonfirepoint2, rocketturret1, rocketturret2, rocketbarrel1, rocketbarrel2, rocketfirepoint1, rocketfirepoint2, missilebarrel1, missilebarrel2, missilefirepoint1, missilefirepoint2, armorplate1, armorplate2, backplate1, backplate2, backplate3, fueltank1, fueltank2, fueltank3, fueltank11, fueltank12, fueltank13, fueltank21, fueltank22, fueltank23, fueltank31, fueltank32, fueltank33 = piece('pelvis', 'dirt', 'lthigh', 'rthigh', 'lleg', 'rleg', 'lfoot', 'rfoot', 'turret', 'gatlingturret1', 'gatlingbarrel1', 'gatlingbarrel2', 'gatlingfirepoint1', 'gatlingfirepoint2', 'gatlingspins1', 'gatlingspins2', 'cannonturret1', 'cannonturret2', 'cannonbarrel1', 'cannonbarrel2', 'cannonfirepoint1', 'cannonfirepoint2', 'rocketturret1', 'rocketturret2', 'rocketbarrel1', 'rocketbarrel2', 'rocketfirepoint1', 'rocketfirepoint2', 'missilebarrel1', 'missilebarrel2', 'missilefirepoint1', 'missilefirepoint2', 'armorplate1', 'armorplate2', 'backplate1', 'backplate2', 'backplate3', 'fueltank1', 'fueltank2', 'fueltank3', 'fueltank11', 'fueltank12', 'fueltank13', 'fueltank21', 'fueltank22', 'fueltank23', 'fueltank31', 'fueltank32', 'fueltank33')
 
+local deathPieces = {
+	pelvis, dirt, lthigh, rthigh, lleg, rleg, lfoot, rfoot, turret, gatlingturret1, gatlingbarrel1, gatlingbarrel2, gatlingfirepoint1, gatlingfirepoint2, gatlingspins1, gatlingspins2, cannonturret1, cannonturret2, cannonbarrel1, cannonbarrel2, cannonfirepoint1, cannonfirepoint2, rocketturret1, rocketturret2, rocketbarrel1, rocketbarrel2, rocketfirepoint1, rocketfirepoint2, missilebarrel1, missilebarrel2, missilefirepoint1, missilefirepoint2, armorplate1, armorplate2, backplate1, backplate2, backplate3, fueltank1, fueltank2, fueltank3, fueltank11, fueltank12, fueltank13, fueltank21, fueltank22, fueltank23, fueltank31, fueltank32, fueltank33,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local SIG_AIM = {}
@@ -154,19 +158,6 @@ function script.AimWeapon(WeaponID, heading, pitch)
 end
 
 function script.Killed()
-    Explode(gatlingbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(cannonbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(gatlingbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(cannonbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(missilebarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(missilebarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(rocketbarrel1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(rocketbarrel2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(turret, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(pelvis, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(rthigh, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(rleg, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(lthigh, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    Explode(lleg, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-    return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

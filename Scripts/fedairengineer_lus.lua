@@ -1,4 +1,8 @@
 base, wing1, wing2, nanoarm1, nano1, nanopoint1, nanoarm2, nano2, nanopoint2, nanoarm3, nano3, nanopoint3, nanoarm4, nano4, nanopoint4, thruster1, thruster2 = piece('base', 'wing1', 'wing2', 'nanoarm1', 'nano1', 'nanopoint1', 'nanoarm2', 'nano2', 'nanopoint2', 'nanoarm3', 'nano3', 'nanopoint3', 'nanoarm4', 'nano4', 'nanopoint4', 'thruster1', 'thruster2')
+
+local deathPieces = {
+	base, wing1, wing2, nanoarm1, nano1, nanopoint1, nanoarm2, nano2, nanopoint2, nanoarm3, nano3, nanopoint3, nanoarm4, nano4, nanopoint4, thruster1, thruster2,
+}
 local SIG_AIM = {}
 
 local nanoPieces = {[0] = nanopoint1, nanopoint2, nanopoint3, nanopoint4}
@@ -58,16 +62,6 @@ function script.QueryNanoPiece()
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(wing1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(wing2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nanoarm4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano4, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

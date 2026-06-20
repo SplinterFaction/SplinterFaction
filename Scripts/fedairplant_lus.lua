@@ -1,6 +1,10 @@
 
 base, nano1, nanopoint1, nano2, nanopoint2, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, nanopad = piece('base', 'nano1', 'nanopoint1', 'nano2', 'nanopoint2', 'engine1', 'engine2', 'engine3', 'engine4', 'engine5', 'engine6', 'engine7', 'engine8', 'nanopad')
 
+local deathPieces = {
+	base, nano1, nanopoint1, nano2, nanopoint2, engine1, engine2, engine3, engine4, engine5, engine6, engine7, engine8, nanopad,
+}
+
 common = include("headers/common_includes_lus.lua")
 
 local nanoPieces = {[0] = nanopoint1, nanopoint2}
@@ -92,8 +96,6 @@ function script.QueryBuildInfo()
 end
 
 function script.Killed()
-	Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-	Explode(nano2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
+	common.ExplodePieces(deathPieces)
 	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

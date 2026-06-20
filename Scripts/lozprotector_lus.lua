@@ -1,5 +1,9 @@
 base, wheels1, wheels2, wheels3, emitter1, emitter2 = piece('base', 'wheels1', 'wheels2', 'wheels3', 'emitter1', 'emitter2')
 
+local deathPieces = {
+	base, wheels1, wheels2, wheels3, emitter1, emitter2,
+}
+
 -- state variables
 isMoving = "isMoving"
 terrainType = "terrainType"
@@ -38,10 +42,6 @@ function script.FireWeapon(weaponID)
 end
 
 function script.Killed()
-		Explode(emitter1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(emitter2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels1, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels2, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(wheels3, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end

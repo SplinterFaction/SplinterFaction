@@ -1,4 +1,8 @@
 base, ball, topring, middlering = piece('base', 'ball', 'topring', 'middlering')
+
+local deathPieces = {
+	base, ball, topring, middlering,
+}
 local SIG_AIM = {}
 
 -- state variables
@@ -36,9 +40,6 @@ function script.AimWeapon(weaponID, heading, pitch)
 end
 
 function script.Killed()
-		Explode(base, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(ball, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(topring, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		Explode(middlering, SFX.EXPLODE_ON_HIT + SFX.NO_HEATCLOUD)
-		return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
+	common.ExplodePieces(deathPieces)
+	return 1   -- spawn ARMSTUMP_DEAD corpse / This is the equivalent of corpsetype = 1; in bos
 end
