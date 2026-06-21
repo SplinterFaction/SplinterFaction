@@ -18,6 +18,10 @@ local bgcorner  = "LuaUI/Images/bgcorner.png"
 local accentImg = ":n:LuaUI/Images/staticgui_accent.png"
 local allyPic   = ":n:LuaUI/Images/ally.dds"
 
+-- Network-cell glyphs: plain letters read best at this small size.
+local GLYPH_CPU  = "C"
+local GLYPH_PING = "P"
+
 local BASE_RESOLUTION     = 1080
 local PANEL_WIDTH         = 300
 local MARGIN_X            = 14
@@ -210,6 +214,17 @@ local function numFormatRes(v)
 	if v >= 1000000 then return string.sub(v/1000000 .. '', 0, 4) .. 'M'
 	elseif v >= 10000 then return string.sub(v/1000 .. '', 0, 4) .. 'k'
 	else return tostring(v) end
+end
+
+-- The system string is scraped from infolog's <User System> block, whose lines
+-- carry a "[t=HH:MM:SS.ffffff]" frame-time prefix. The upstream builder strips
+-- "[t=" but leaves the "HH:MM:SS.ffffff]" tail, which then leaks mid-line when
+-- core lines get joined. Scrub both the full prefix and the leftover fragments.
+local function SanitizeSystemString(s)
+	s = tostring(s or "")
+	s = s:gsub("%[t=[%d:%.]+%]", "")          -- full "[t=00:00:00.008274]"
+	s = s:gsub("%d%d:%d%d:%d%d%.%d+%]", "")   -- leftover "00:00:00.008274]"
+	return s
 end
 
 local function GetBorderColor() return BORDER_COLOR end
@@ -579,8 +594,8 @@ local function DrawResBar(x1, y1, x2, y2, cur, maxv, col)
 	end
 end
 
-local function DrawNetCell(x1, y1, x2, y2, lvl, spec)
-	if spec or not lvl then
+local function DrawNetCell(x1, y1, x2, y2, lvl)
+	if not lvl then
 		glColor(0.45, 0.45, 0.45, 0.7)
 	else
 		local c = pingCpuColors[lvl]
@@ -646,19 +661,25 @@ local function BakeRow(r)
 	-- network cells (cpu left, ping right) + fps — players only
 	if r.kind == "player" then
 		local cw = (r.netX2 - r.netX1 - 2*uiScale) * 0.5
-		local cellY1 = midY - 6*uiScale
-		local cellY2 = midY + 6*uiScale
-		DrawNetCell(r.netX1, cellY1, r.netX1+cw, cellY2, GetCpuLvl(r.cpu), false)
-		DrawNetCell(r.netX2-cw, cellY1, r.netX2, cellY2, GetPingLvl(r.ping), false)
+		local cellY1 = midY - 7*uiScale
+		local cellY2 = midY + 7*uiScale
+		DrawNetCell(r.netX1, cellY1, r.netX1+cw, cellY2, GetCpuLvl(r.cpu))
+		DrawNetCell(r.netX2-cw, cellY1, r.netX2, cellY2, GetPingLvl(r.ping))
 
+		local cpuCX  = r.netX1 + cw*0.5
+		local pingCX = r.netX2 - cw*0.5
 		local fps = lastFpsData[r.playerID]
+
+		font:Begin()
+		-- 'v' = engine vertical-center on midY; white + outline reads on any cell color
+		font:Print("\255\255\255\255" .. GLYPH_CPU,  cpuCX,  midY, 11*uiScale, "cvo")
+		font:Print("\255\255\255\255" .. GLYPH_PING, pingCX, midY, 11*uiScale, "cvo")
 		if fps ~= nil then
 			if fps > 999 then fps = 999 end
 			local bright = Clamp(0.55 + (tonumber(fps) or 0)/180, 0.55, 1.0)
-			font:Begin()
-			font:Print(ColorEscape(bright, bright, bright) .. tostring(fps), r.fpsX2, midY - 4*uiScale, 9*uiScale, "ro")
-			font:End()
+			font:Print(ColorEscape(bright, bright, bright) .. tostring(fps), r.fpsX2, midY, 10*uiScale, "rvo")
 		end
+		font:End()
 	end
 
 	-- bottom separator
@@ -723,8 +744,9 @@ local function DrawSystemPopup(r, mx, my)
 
 	local lines = {header, line2}
 	if system then
-		for ln in tostring(system):gmatch("([^\r\n]+)") do
-			lines[#lines+1] = ln
+		for ln in SanitizeSystemString(system):gmatch("([^\r\n]+)") do
+			ln = ln:gsub("%s%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+			if ln ~= "" then lines[#lines+1] = ln end
 		end
 	end
 

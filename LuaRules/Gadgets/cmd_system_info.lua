@@ -105,10 +105,10 @@ else
 					ds = '  |  '
 				end
 				if string.find(line, 'Physical CPU Cores') then
-					s_cpuCoresPhysical = string.match(line, '([0-9].*)')
+					s_cpuCoresPhysical = string.match(line, 'Physical CPU Cores:%s*([0-9]+)')
 				end
 				if string.find(line, 'Logical CPU Cores') then
-					s_cpuCoresLogical = string.match(line, '([0-9].*)')
+					s_cpuCoresLogical = string.match(line, 'Logical CPU Cores:%s*([0-9]+)')
 				end
 				if (string.find(line:lower(), 'hardware config: ')) then
 					s_cpu = string.sub(line, select(2, string.find(line:lower(), 'hardware config: ')))

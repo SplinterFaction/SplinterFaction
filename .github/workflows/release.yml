@@ -4,19 +4,60 @@ on:
   release:
     types: [created]
 
+env:
+  RELEASE_BRANCH: release       # the branch your release tags must live on
+
 jobs:
   build-sdz:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write          # needed to attach the .sdz to the release
     steps:
-      - uses: actions/checkout@v2
-      - uses: FranzDiebold/github-env-vars-action@v2.3.0
-      - run: sudo apt install -y zip
-      - run: zip -r repo.sdz * -x .git @
-      - uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check out the release tag
+        uses: actions/checkout@v4
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./repo.sdz
-          asset_name: ${{ env.CI_REPOSITORY_NAME }}-${{ env.CI_REF_NAME }}.sdz
-          asset_content_type: application/zip
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0         # full history — needed for the branch check
+
+      - name: Validate the tag (format + on release branch)
+        id: gate
+        shell: bash
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          # 1. Must look like a version number: X.X.X
+          if [[ ! "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::warning::Tag '$TAG' is not X.X.X — no .sdz built."
+            echo "match=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 2. The 'release' branch must exist.
+          if ! git fetch --no-tags origin \
+                 "+refs/heads/$RELEASE_BRANCH:refs/remotes/origin/$RELEASE_BRANCH" 2>/dev/null; then
+            echo "::warning::No '$RELEASE_BRANCH' branch found — no .sdz built."
+            echo "match=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 3. The tagged commit must be part of the 'release' branch history.
+          if git merge-base --is-ancestor HEAD "refs/remotes/origin/$RELEASE_BRANCH"; then
+            echo "Tag '$TAG' is on '$RELEASE_BRANCH' — building."
+            echo "match=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Release '$TAG' is not on the '$RELEASE_BRANCH' branch — no .sdz built. Re-publish with Target set to '$RELEASE_BRANCH'."
+            echo "match=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build the .sdz
+        if: steps.gate.outputs.match == 'true'
+        run: git archive --format=zip HEAD -o release.sdz
+
+      - name: Attach the .sdz to the release
+        if: steps.gate.outputs.match == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          asset="${REPO}_${TAG}.sdz"
+          mv release.sdz "$asset"
+          gh release upload "$TAG" "$asset" --clobber
