@@ -4,9 +4,6 @@ on:
   release:
     types: [created]
 
-env:
-  RELEASE_BRANCH: release       # the branch your release tags must live on
-
 jobs:
   build-sdz:
     runs-on: ubuntu-24.04
@@ -17,33 +14,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.release.tag_name }}
-          fetch-depth: 0         # full history — needed for the branch check
 
-      - name: Validate the tag (format + on release branch)
+      - name: Only build version-shaped tags (e.g. 2.3.0)
         id: gate
         shell: bash
         env:
           TAG: ${{ github.event.release.tag_name }}
         run: |
-          # 1. Must look like a version number: X.X.X
-          if [[ ! "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::warning::Tag '$TAG' is not X.X.X — no .sdz built."
-            echo "match=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # 2. The 'release' branch must exist.
-          if ! git fetch --no-tags origin \
-                 "+refs/heads/$RELEASE_BRANCH:refs/remotes/origin/$RELEASE_BRANCH" 2>/dev/null; then
-            echo "::warning::No '$RELEASE_BRANCH' branch found — no .sdz built."
-            echo "match=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # 3. The tagged commit must be part of the 'release' branch history.
-          if git merge-base --is-ancestor HEAD "refs/remotes/origin/$RELEASE_BRANCH"; then
-            echo "Tag '$TAG' is on '$RELEASE_BRANCH' — building."
+          if [[ "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "match=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::warning::Release '$TAG' is not on the '$RELEASE_BRANCH' branch — no .sdz built. Re-publish with Target set to '$RELEASE_BRANCH'."
+            echo "::warning::Tag '$TAG' is not X.X.X — no .sdz built."
             echo "match=false" >> "$GITHUB_OUTPUT"
           fi
 
