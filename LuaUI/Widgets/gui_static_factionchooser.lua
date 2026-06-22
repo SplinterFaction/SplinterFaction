@@ -108,9 +108,12 @@ local chosenCommName = nil         -- commName of the chosen faction
 local lastHovered    = nil
 local gameStarted    = false       -- true once GameFrame > 0
 
--- Countdown — driven by game frames, not wall clock, so it respects game speed/pause
--- Must match CHOICE_TIMEOUT_FRAMES in game_spawn.lua
-local DEADLINE_FRAME    = 900     -- frame at which game_spawn forces a spawn
+-- Countdown — driven by game frames, not wall clock, so it respects game speed/pause.
+-- DEADLINE_FRAME is the local fallback; the gadget broadcasts the real deadline via
+-- the "factionDeadlineFrame" game rules param, which may be shortened when all players
+-- have chosen.  We read it each Update() and use whichever is smaller.
+local DEADLINE_FRAME    = 900     -- fallback matching CHOICE_TIMEOUT_FRAMES in game_spawn.lua
+local COUNTDOWN_TOTAL   = 30      -- nominal seconds for progress-bar reference (don't change)
 local COUNTDOWN_BEEP_AT = 10      -- play tick sound for final N seconds
 local TIMER_BAR_H       = 6       -- height of the countdown bar in base px
 local secondsLeft       = 30      -- updated each Update() from frame count
@@ -346,8 +349,6 @@ local function DrawOverlay()
 	glRect(0, 0, vsx, vsy)
 end
 
-local COUNTDOWN_TOTAL = DEADLINE_FRAME / 30   -- nominal seconds (at 30fps, 1× speed)
-
 local function DrawTitle()
 	local titleSize     = math.floor(22 * widgetScale)
 	local countdownSize = math.floor(14 * widgetScale)
@@ -454,32 +455,46 @@ function widget:Update()
 		return
 	end
 
-	-- Frame-based countdown: tracks actual simulation progress, respects speed changes and pause
-	local frame      = Spring.GetGameFrame()
-	local framesLeft = math.max(0, DEADLINE_FRAME - frame)
-	local gameSpeed  = Spring.GetGameSpeed() or 1   -- sim speed multiplier (1 = normal, 2 = 2×, etc.)
+	-- ── Phase guard ───────────────────────────────────────────────────────────
+	-- The gadget broadcasts the current phase via game rules params.  Once the
+	-- phase is no longer "faction" (i.e. placement has started or the game is
+	-- already done), our job here is finished.
+	local currentPhase = Spring.GetGameRulesParam("phase")
+	if currentPhase ~= nil and currentPhase ~= "faction" then
+		widgetHandler:RemoveWidget(self)
+		return
+	end
+
+	-- ── Deadline ──────────────────────────────────────────────────────────────
+	-- Read the authoritative deadline from the gadget.  It may be shortened
+	-- when all players confirm early (3-second advance).
+	local frame = Spring.GetGameFrame()
+	local gadgetDeadline = Spring.GetGameRulesParam("factionDeadlineFrame")
+	local effectiveDeadline = gadgetDeadline or DEADLINE_FRAME
+
+	local framesLeft = math.max(0, effectiveDeadline - frame)
+	local gameSpeed  = Spring.GetGameSpeed() or 1
 	secondsLeft      = math.ceil(framesLeft / (30 * gameSpeed))
 
-	-- Tick sound in final COUNTDOWN_BEEP_AT seconds — plays regardless of chosen state
+	-- Tick sound in final COUNTDOWN_BEEP_AT seconds
 	if secondsLeft <= COUNTDOWN_BEEP_AT and secondsLeft ~= lastBeepSecond and secondsLeft > 0 then
 		spPlaySoundFile("hover", 0.6, "ui")
 		lastBeepSecond = secondsLeft
 	end
 
 	if isSpectator then
-		-- Spectators just watch the bar drain; remove widget when time is up
 		if framesLeft == 0 then
 			widgetHandler:RemoveWidget(self)
 		end
 		return
 	end
 
-	-- Auto-pick if player still hasn't chosen
+	-- Auto-pick if player still hasn't chosen at deadline
 	if not chosen and framesLeft == 0 then
 		AutoPickFaction()
 	end
 
-	-- Remove widget when countdown is fully done
+	-- Remove widget at deadline (phase-change path above handles the normal case)
 	if framesLeft == 0 then
 		widgetHandler:RemoveWidget(self)
 	end
@@ -490,7 +505,7 @@ end
 --------------------------------------------------------------------------------
 
 function widget:MousePress(x, y, button)
-	if not gameStarted then return false end   -- don't swallow clicks during start position phase
+	if not gameStarted then return false end
 	if isSpectator then return false end
 	if button ~= 1 then return false end
 	if chosen then return true end
@@ -505,7 +520,7 @@ function widget:MousePress(x, y, button)
 end
 
 function widget:MouseRelease(x, y, button)
-	if not gameStarted then return false end   -- don't swallow clicks during start position phase
+	if not gameStarted then return false end
 	if isSpectator then return false end
 	if button ~= 1 then return false end
 	if chosen then return true end
@@ -531,7 +546,6 @@ end
 --------------------------------------------------------------------------------
 
 function widget:DrawScreen()
-	-- Don't show anything during start position phase
 	if not gameStarted then return end
 
 	DrawOverlay()
