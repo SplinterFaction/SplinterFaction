@@ -58,8 +58,10 @@ local LOCKED_OVERLAY      = {0.18, 0.52, 0.98, 0.20}
 local RES_METAL_C         = {0.55, 0.78, 0.90, 1}
 local RES_ENERGY_C        = {0.95, 0.85, 0.25, 1}
 local RES_TRACK_C         = {0.04, 0.04, 0.05, 0.85}
-local ALLY_ON_C           = {0.22, 0.78, 0.35, 1}
-local ALLY_OFF_C          = {0.45, 0.45, 0.48, 1}
+local ALLY_MUTUAL_C       = {0, 1, 0, 1}   -- both sides allied (full ally)
+local ALLY_WEOFFER_C      = {1, 0.5, 0, 1}   -- we allied them, not reciprocated
+local ALLY_THEYOFFER_C    = {0.30, 0.66, 0.96, 1}   -- they allied us, click to accept
+local ALLY_OFF_C          = {1, 0, 0, 1}   -- not allied (enemy)
 
 local ACCENT_PANEL  = {0.18, 0.52, 0.98, 1}
 
@@ -200,6 +202,14 @@ local function GetPingLvl(p)
 	if p < 0.15 then return 1 elseif p < 0.30 then return 2
 	elseif p < 0.70 then return 3 elseif p < 1.50 then return 4 else return 5 end
 end
+
+-- Dynamic-alliance direction. Verified against engine behavior: issuing
+-- "ally <theirAllyTeam> 1" (our outgoing offer) makes AreTeamsAllied(theirTeam, myTeam)
+-- become true -- i.e. AreTeamsAllied(A, B) reports whether B has allied A. So:
+--   our alliance toward team T  = AreTeamsAllied(T, myTeam)
+--   their alliance toward us    = AreTeamsAllied(myTeam, T)
+local function WeAllied(teamID)   return spAreTeamsAllied(teamID, myTeamID) end
+local function TheyAllied(teamID) return spAreTeamsAllied(myTeamID, teamID) end
 
 local function ColorEscape(r, g, b)
 	return "\255" .. string.char(
@@ -438,8 +448,10 @@ local function RefreshPlayers()
 				local r, g, b = spGetTeamColor(teamID)
 				local color = {r or 1, g or 1, b or 1}
 
-				-- resources (gated: spec sees all; player sees own + allied)
-				local readable = mySpecStatus or (allyTeam == myAllyTeam)
+				-- resources (gated: spec sees all; player sees own + anyone we're
+				-- allied with, including dynamic allies). The nil-check below still
+				-- guards if the engine declines a given team.
+				local readable = mySpecStatus or spAreTeamsAllied(myTeamID, teamID)
 				local mCur, mMax, eCur, eMax
 				if readable then
 					local m, ms = spGetTeamResources(teamID, "metal")
@@ -632,8 +644,15 @@ local function BakeRow(r)
 
 	-- alliance button
 	if r.allyRect then
-		local allied = spAreTeamsAllied(r.teamID, myTeamID)
-		local ac = allied and ALLY_ON_C or ALLY_OFF_C
+		-- AreTeamsAllied is directional; WeAllied/TheyAllied encode the verified
+		-- engine convention so the two offer directions don't get crossed.
+		local weToThem = WeAllied(r.teamID)    -- we have allied them (our offer)
+		local themToUs = TheyAllied(r.teamID)  -- they have allied us
+		local ac
+		if weToThem and themToUs then ac = ALLY_MUTUAL_C        -- mutual ally
+		elseif weToThem then          ac = ALLY_WEOFFER_C       -- we offered, awaiting them
+		elseif themToUs then          ac = ALLY_THEYOFFER_C     -- they offered, click to accept
+		else                          ac = ALLY_OFF_C end       -- enemy
 		glColor(ac[1], ac[2], ac[3], 1)
 		glTexture(allyPic)
 		glTexRect(r.allyRect.x1, r.allyRect.y1, r.allyRect.x2, r.allyRect.y2)
@@ -781,9 +800,39 @@ local function DrawSystemPopup(r, mx, my)
 	font:End()
 end
 
+local function AllyStateTip(weToThem, themToUs)
+	if weToThem and themToUs then return "Allied \194\183 click to break", ALLY_MUTUAL_C end
+	if weToThem then              return "Alliance offered \194\183 click to withdraw", ALLY_WEOFFER_C end
+	if themToUs then              return "They offered alliance \194\183 click to accept", ALLY_THEYOFFER_C end
+	return "Not allied \194\183 click to offer alliance", ALLY_OFF_C
+end
+
+local function DrawMiniTooltip(text, mx, my, accent)
+	local fsize = 11 * uiScale
+	local boxW = font:GetTextWidth(text) * fsize + 14*uiScale
+	local boxH = 20 * uiScale
+	local bx2 = mx - 8*uiScale
+	local bx1 = bx2 - boxW
+	if bx1 < 4*uiScale then bx1 = 4*uiScale ; bx2 = bx1 + boxW end
+	local by2 = Clamp(my + 18*uiScale, boxH + 4*uiScale, vsy - 4*uiScale)
+	local by1 = by2 - boxH
+	glColor(0, 0, 0, 0.88)
+	RectRound(bx1, by1, bx2, by2, 4*uiScale)
+	if accent then
+		glColor(accent[1], accent[2], accent[3], 1)
+		glTexture(accentImg)
+		glTexRect(bx1, by2-3*uiScale, bx2, by2)
+		glTexture(false)
+	end
+	font:Begin()
+	font:Print(TEXT_COLOR .. text, bx1 + 7*uiScale, by1 + boxH*0.5, fsize, "vo")
+	font:End()
+end
+
 local function DrawHover(mx, my)
 	local newHover = nil
 	local popupRow = nil
+	local allyTipRow = nil
 
 	for i = 1, #rows do
 		local r = rows[i]
@@ -793,6 +842,7 @@ local function DrawHover(mx, my)
 				glColor(HOVER_OVERLAY[1], HOVER_OVERLAY[2], HOVER_OVERLAY[3], 0.18)
 				RectRound(r.allyRect.x1, r.allyRect.y1, r.allyRect.x2, r.allyRect.y2, 3*uiScale)
 				newHover = "ally"..i
+				allyTipRow = r
 			end
 			-- whole-row hover (for click-to-follow when spectating)
 			if mySpecStatus and r.playerID and mx >= r.x1 and mx <= r.x2 and my >= r.y1 and my <= r.y2 then
@@ -814,6 +864,10 @@ local function DrawHover(mx, my)
 	end
 
 	if popupRow then DrawSystemPopup(popupRow, mx, my) end
+	if allyTipRow then
+		local text, accent = AllyStateTip(WeAllied(allyTipRow.teamID), TheyAllied(allyTipRow.teamID))
+		DrawMiniTooltip(text, mx, my, accent)
+	end
 
 	if newHover ~= hoveredKey then
 		if newHover then PlayHoverSound() end
@@ -852,7 +906,8 @@ function widget:MouseRelease(x, y, button)
 			-- alliance toggle
 			if r.allyRect and InRect(x, y, r.allyRect) then
 				if drawAllyButton then
-					if spAreTeamsAllied(r.teamID, myTeamID) then
+					-- toggle OUR outgoing alliance toward them
+					if WeAllied(r.teamID) then
 						spSendCommands("ally " .. r.allyTeam .. " 0")
 					else
 						spSendCommands("ally " .. r.allyTeam .. " 1")

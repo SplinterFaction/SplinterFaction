@@ -891,7 +891,27 @@ end
 -- Lifecycle
 --------------------------------------------------------------------------------
 
+local gameOverHandled = false
+local function HandleGameOver()
+	if gameOverHandled then return end
+	gameOverHandled = true
+	-- Open FIRST so a helper error can never leave the panel shut.
+	isOpen       = true
+	contentDirty = true
+	refreshTimer = 0
+	-- Guarded: a throw in here must not propagate and disable the widget.
+	pcall(function()
+		getTeamInfo()   -- engine grants fullRead at game over; re-read teams
+		BuildGeometry()
+		RefreshData()
+	end)
+end
+
 function widget:Update(dt)
+	-- This engine does not deliver the GameOver callin to LuaUI, so poll for it.
+	if not gameOverHandled and Spring.IsGameOver and Spring.IsGameOver() then
+		HandleGameOver()
+	end
 	if not isOpen then return end
 	refreshTimer = refreshTimer + dt
 	if refreshTimer >= 2.0 then
@@ -917,14 +937,10 @@ function widget:DrawScreen()
 	DrawHoverAndTooltip(mx, my)
 end
 
-function widget:GameOver()
-	-- Engine grants fullRead at game over: refresh teams so all become readable.
-	getTeamInfo()
-	BuildGeometry()
-	RefreshData()
-	isOpen = true
-	contentDirty = true
-	refreshTimer = 0
+function widget:GameOver(winningAllyTeams)
+	-- Kept in case a future engine build delivers this callin to LuaUI; the
+	-- Update poll handles it today. gameOverHandled dedupes either way.
+	HandleGameOver()
 end
 
 function widget:Initialize()

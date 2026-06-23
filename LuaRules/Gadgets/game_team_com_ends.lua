@@ -73,6 +73,8 @@ local function commanderDeath(teamID, attackerUnitID, originX, originZ) -- optio
 			Spring.KillTeam(teamID)
 		end
 	end
+	local d = select(3, Spring.GetTeamInfo(teamID, false))
+	Spring.Echo("[com_ends] isDead type=" .. type(d) .. " val=" .. tostring(d))
 end
 
 function gadget:GameFrame(gf)
