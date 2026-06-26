@@ -29,6 +29,12 @@ local MAX_BOX_WIDTH        = 650
 local DRAW_BACKGROUND      = false
 local HIDE_DEFAULT_CONSOLE = true -- set true if you want to hide engine console/chat
 
+-- Persistent scrollback shared with the Static Log panel (gui_static_chatlog.lua).
+-- Every parsed line is appended here regardless of channel; the floating overlay
+-- still only shows actual chat. MAX_LOG caps retained history.
+local MAX_LOG  = 1000
+local LOG_SLACK = 64   -- compact in chunks so trimming is amortized, not per-line
+
 --------------------------------------------------------------------------------
 -- Speedups
 --------------------------------------------------------------------------------
@@ -39,6 +45,7 @@ local spGetPlayerInfo   = Spring.GetPlayerInfo
 local spGetTeamColor    = Spring.GetTeamColor
 local spIsGUIHidden     = Spring.IsGUIHidden
 local spSendCommands    = Spring.SendCommands
+local spGetGameSeconds  = Spring.GetGameSeconds
 
 local glColor = gl.Color
 local glRect  = gl.Rect
@@ -50,6 +57,7 @@ local glRect  = gl.Rect
 local font
 local vsx, vsy = 0, 0
 local chatLines = {}
+local fullLog   = {}   -- persistent scrollback (all channels); read by the Log panel
 
 local myPlayerNames = {}      -- lowercase name -> true for local user(s)
 local cachedPlayerData = {}   -- lowercase name -> {name=..., teamID=..., isSpec=..., color={r,g,b,1}}
@@ -242,6 +250,28 @@ local function PushChatLine(data)
 	chatLines[#chatLines + 1] = data
 end
 
+-- A line counts as "chat" (shown in the floating overlay and the Log panel's
+-- Chat tab) when it is anything other than raw console output. Only the
+-- fallback "system" channel is non-chat; map markers use their own "marker"
+-- channel so they remain chat while still being distinguishable from console.
+local function IsChat(entry)
+	return entry ~= nil and entry.channel ~= "system"
+end
+
+local function AppendFullLog(entry)
+	fullLog[#fullLog + 1] = entry
+	local n = #fullLog
+	if n >= MAX_LOG + LOG_SLACK then
+		local drop = n - MAX_LOG
+		for i = 1, n - drop do
+			fullLog[i] = fullLog[i + drop]
+		end
+		for i = n - drop + 1, n do
+			fullLog[i] = nil
+		end
+	end
+end
+
 --------------------------------------------------------------------------------
 -- Chat parsing
 --------------------------------------------------------------------------------
@@ -349,7 +379,7 @@ local function ParseChatLine(line)
 		if player then
 			local body = label ~= "" and "added point: " .. label or "added point:"
 			return {
-				channel   = "system",
+				channel   = "marker",
 				player    = player,
 				nameColor = GetPlayerColorByName(player),
 				bodyColor = COLOR_ALLY,
@@ -398,6 +428,12 @@ function widget:Initialize()
 	if HIDE_DEFAULT_CONSOLE then
 		spSendCommands("console 0")
 	end
+
+	-- Shared interface for the Static Log panel (gui_static_chatlog.lua).
+	WG.Chatterbox = {
+		GetLog = function() return fullLog end,
+		IsChat = IsChat,
+	}
 end
 
 function widget:Shutdown()
@@ -406,6 +442,8 @@ function widget:Shutdown()
 		font = nil
 	end
 
+	WG.Chatterbox = nil
+
 	if HIDE_DEFAULT_CONSOLE then
 		spSendCommands("console 1")
 	end
@@ -413,18 +451,26 @@ end
 
 function widget:AddConsoleLine(line, priority)
 	local parsed = ParseChatLine(line)
-	if parsed then
-		PushChatLine(parsed)
-		if parsed.player then
-			if parsed.channel == "whisper" then
-				Spring.PlaySoundFile("chat", 1.0, ui)
-			elseif parsed.channel == "ally" then
-				Spring.PlaySoundFile("allychat", 1.0, ui)
-			elseif parsed.channel == "spectator" then
-				Spring.PlaySoundFile("specchat", 1.0, ui)
-			elseif parsed.channel == "public" then
-				Spring.PlaySoundFile("chat", 1.0, ui)
-			end
+	if not parsed then return end
+
+	parsed.gtime = spGetGameSeconds and math.floor(spGetGameSeconds()) or 0
+	AppendFullLog(parsed)
+
+	-- Only real chat reaches the floating overlay; console output is logged but
+	-- never flashed on screen.
+	if not IsChat(parsed) then return end
+
+	PushChatLine(parsed)
+
+	if parsed.player then
+		if parsed.channel == "whisper" then
+			Spring.PlaySoundFile("chat", 1.0, "ui")
+		elseif parsed.channel == "ally" then
+			Spring.PlaySoundFile("allychat", 1.0, "ui")
+		elseif parsed.channel == "spectator" then
+			Spring.PlaySoundFile("specchat", 1.0, "ui")
+		elseif parsed.channel == "public" then
+			Spring.PlaySoundFile("chat", 1.0, "ui")
 		end
 	end
 end

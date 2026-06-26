@@ -91,6 +91,15 @@ local BUTTONS = {
 		end
 	},
 	{
+		label = "Log",
+		accent = {0.20, 0.75, 0.80, 1}, -- teal
+		onClick = function()
+			if WG.StaticChatLog and WG.StaticChatLog.Toggle then
+				WG.StaticChatLog.Toggle()
+			end
+		end
+	},
+	{
 		label = "Resign",
 		accent = {0.95, 0.65, 0.18, 1}, -- amber
 		onClick = function()
