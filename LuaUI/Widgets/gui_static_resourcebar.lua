@@ -36,6 +36,11 @@ local SUPPLY_SHRINK_DELAY = 90    -- frames before shrinking display cap
 
 local SHOW_NET_FIRST   = true     -- "net  (+in / -out)" layout
 
+-- research points (RP): a pure accumulator, no storage cap, no share slider.
+local RP_WIDTH          = 200    -- compact panel; no fill bar or slider
+local RP_RATE_WINDOW    = 150    -- frames (~5s) used to smooth the +/s readout
+local RP_FLASH_DURATION = 1.5    -- seconds a spend "-N" stays visible
+
 --------------------------------------------------------------------------------
 -- locals
 --------------------------------------------------------------------------------
@@ -63,8 +68,14 @@ local glRect       = gl.Rect
 local vsx, vsy = spGetViewGeometry()
 local widgetScale = 1
 local posx, posy = 0, 0
-local width = (BAR_WIDTH * 3) + (BAR_GAP * 2)
-local height = BAR_HEIGHT
+-- 2x2 grid: metal/energy on the top row, supply/research beneath them.
+local ROW_GAP   = 10                    -- vertical gap between the two rows
+local COL2_X    = BAR_WIDTH + BAR_GAP    -- x-origin of the right column
+local ROW_TOP_Y = BAR_HEIGHT + ROW_GAP   -- y-origin of the top row (metal/energy)
+local ROW_BOT_Y = 0                      -- y-origin of the bottom row (supply/research)
+
+local width = (BAR_WIDTH * 2) + BAR_GAP
+local height = (BAR_HEIGHT * 2) + ROW_GAP
 
 local fontfileScale = 1
 local fontfileSize = 23
@@ -82,6 +93,7 @@ local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 local supplyTexture = LUAUI_DIRNAME .. "Images/supply.png"
 local energyTexture = LUAUI_DIRNAME .. "Images/energy2.png"
 local metalTexture  = LUAUI_DIRNAME .. "Images/metal.png"
+local researchTexture = LUAUI_DIRNAME .. "Images/research.png"  -- add this asset; panel still reads fine without it
 
 local barTexture = LUAUI_DIRNAME .. "Images/resbar.dds"
 local barGlowCenterTexture = LUAUI_DIRNAME .. "Images/barglow-center.dds"
@@ -93,10 +105,20 @@ local red      = "\255\255\0\1"
 local orange   = "\255\255\135\1"
 local yellow   = "\255\255\255\1"
 local skyblue  = "\255\136\197\226"
+local violet   = "\255\190\120\255"  -- research accent, matches morph tooltip
 
 local supplyDisplayCap = SUPPLY_MIN_CAP
 local supplyShrinkFrame = 0
 local chobbyInterface = false
+
+-- research point display state (computed widget-side)
+local rpValue        = 0      -- current balance
+local rpPrevValue    = nil    -- last sampled balance (spend detection)
+local rpSmoothedRate = 0      -- +/s, smoothed over RP_RATE_WINDOW
+local rpSamples      = {}     -- ring of { frame=, value= }
+local rpLastFrame    = -1
+local rpFlashAmount  = 0      -- size of the most recent spend
+local rpFlashTimer   = 0      -- seconds remaining on the spend flash
 
 --------------------------------------------------------------------------------
 -- Share level state
@@ -319,15 +341,10 @@ end
 local function GetBarWorldRect(resource)
 	local barX1 = INNER_PADDING
 	local barX2 = BAR_WIDTH - INNER_PADDING
-	local barY1 = 8
+	local barY1 = ROW_TOP_Y + 8
 	local barY2 = barY1 + FILL_HEIGHT
 
-	local localX
-	if resource == "metal" then
-		localX = BAR_WIDTH + BAR_GAP
-	else
-		localX = (BAR_WIDTH + BAR_GAP) * 2
-	end
+	local localX = (resource == "metal") and 0 or COL2_X
 
 	local wx1 = posx + (localX + barX1) * widgetScale
 	local wx2 = posx + (localX + barX2) * widgetScale
@@ -386,19 +403,13 @@ local function BuildBackgroundList()
 		glTranslate(posx, posy, 0)
 		glScale(widgetScale, widgetScale, 1)
 
-		local x = 0
-		local y = 0
+		-- top row: metal (left), energy (right)
+		DrawPanel(0,      ROW_TOP_Y, BAR_WIDTH,          ROW_TOP_Y + BAR_HEIGHT, 0.45, 0.75, 1.00, 0.60) -- metal (sky blue)
+		DrawPanel(COL2_X, ROW_TOP_Y, COL2_X + BAR_WIDTH, ROW_TOP_Y + BAR_HEIGHT, 0.95, 0.85, 0.25, 0.60) -- energy (yellow)
 
-		-- supply (green)
-		DrawPanel(x, y, x + BAR_WIDTH, y + BAR_HEIGHT, 0.30, 0.90, 0.35, 0.60)
-
-		-- metal (sky blue)
-		x = x + BAR_WIDTH + BAR_GAP
-		DrawPanel(x, y, x + BAR_WIDTH, y + BAR_HEIGHT, 0.45, 0.75, 1.00, 0.60)
-
-		-- energy (yellow)
-		x = x + BAR_WIDTH + BAR_GAP
-		DrawPanel(x, y, x + BAR_WIDTH, y + BAR_HEIGHT, 0.95, 0.85, 0.25, 0.60)
+		-- bottom row: supply (under metal), research (under energy, narrower, left-aligned)
+		DrawPanel(0,      ROW_BOT_Y, BAR_WIDTH,          ROW_BOT_Y + BAR_HEIGHT, 0.30, 0.90, 0.35, 0.60) -- supply (green)
+		DrawPanel(COL2_X, ROW_BOT_Y, COL2_X + RP_WIDTH,  ROW_BOT_Y + BAR_HEIGHT, 0.745, 0.470, 1.0, 0.60) -- research (violet)
 
 		glPopMatrix()
 	end)
@@ -415,9 +426,10 @@ local function BuildStaticList()
 		glScale(widgetScale, widgetScale, 1)
 
 		local blocks = {
-			{ x = 0,                         icon = supplyTexture, label = "SUPPLY", color = {0.30, 0.90, 0.35, 1} }, -- green
-			{ x = BAR_WIDTH + BAR_GAP,       icon = metalTexture,  label = "METAL",  color = {0.45, 0.75, 1.00, 1} }, -- sky blue
-			{ x = (BAR_WIDTH + BAR_GAP) * 2, icon = energyTexture, label = "ENERGY", color = {0.95, 0.85, 0.25, 1} }, -- yellow
+			{ x = 0,      y = ROW_TOP_Y, icon = metalTexture,    label = "METAL",    color = {0.45, 0.75, 1.00, 1} }, -- sky blue
+			{ x = COL2_X, y = ROW_TOP_Y, icon = energyTexture,   label = "ENERGY",   color = {0.95, 0.85, 0.25, 1} }, -- yellow
+			{ x = 0,      y = ROW_BOT_Y, icon = supplyTexture,   label = "SUPPLY",   color = {0.30, 0.90, 0.35, 1} }, -- green
+			{ x = COL2_X, y = ROW_BOT_Y, icon = researchTexture, label = "RESEARCH", color = {0.745, 0.470, 1.0, 1} }, -- violet
 		}
 
 		font2:Begin()
@@ -428,9 +440,9 @@ local function BuildStaticList()
 			glTexture(b.icon)
 			glTexRect(
 					b.x + INNER_PADDING,
-					BAR_HEIGHT - INNER_PADDING - ICON_SIZE,
+					b.y + BAR_HEIGHT - INNER_PADDING - ICON_SIZE,
 					b.x + INNER_PADDING + ICON_SIZE,
-					BAR_HEIGHT - INNER_PADDING
+					b.y + BAR_HEIGHT - INNER_PADDING
 			)
 			glTexture(false)
 
@@ -438,7 +450,7 @@ local function BuildStaticList()
 			font2:Print(
 					b.label,
 					b.x + INNER_PADDING + ICON_SIZE + 8,
-					BAR_HEIGHT - 22,
+					b.y + BAR_HEIGHT - 22,
 					16,
 					"o"
 			)
@@ -520,10 +532,34 @@ local function BuildDynamicList()
 		local barY1 = 8
 		local barY2 = barY1 + FILL_HEIGHT
 
-		-- supply
+		-- metal (top-left)
 		do
-			local x = 0
-			DrawFillBar(x + barX1, barY1, x + barX2, barY2, supplyPct, supplyR, supplyG, supplyB, true)
+			local x, y = 0, ROW_TOP_Y
+			DrawFillBar(x + barX1, y + barY1, x + barX2, y + barY2, metalPct, metalR, metalG, metalB, true)
+
+			local metalText = GetResourceText(mc, ms, mi, mp, skyblue)
+			font2:Begin()
+			font2:SetTextColor(1,1,1,1)
+			font2:Print(metalText, x + BAR_WIDTH - INNER_PADDING, y + 23, 16, "or")
+			font2:End()
+		end
+
+		-- energy (top-right)
+		do
+			local x, y = COL2_X, ROW_TOP_Y
+			DrawFillBar(x + barX1, y + barY1, x + barX2, y + barY2, energyPct, energyR, energyG, energyB, true)
+
+			local energyText = GetResourceText(ec, es, ei, ep, yellow)
+			font2:Begin()
+			font2:SetTextColor(1,1,1,1)
+			font2:Print(energyText, x + BAR_WIDTH - INNER_PADDING, y + 23, 16, "or")
+			font2:End()
+		end
+
+		-- supply (bottom-left)
+		do
+			local x, y = 0, ROW_BOT_Y
+			DrawFillBar(x + barX1, y + barY1, x + barX2, y + barY2, supplyPct, supplyR, supplyG, supplyB, true)
 
 			local supplyText =
 			white .. supplyUsed .. "/" .. supplyMax ..
@@ -535,31 +571,7 @@ local function BuildDynamicList()
 
 			font2:Begin()
 			font2:SetTextColor(1,1,1,1)
-			font2:Print(supplyText, x + BAR_WIDTH - INNER_PADDING, 23, 16, "or")
-			font2:End()
-		end
-
-		-- metal
-		do
-			local x = BAR_WIDTH + BAR_GAP
-			DrawFillBar(x + barX1, barY1, x + barX2, barY2, metalPct, metalR, metalG, metalB, true)
-
-			local metalText = GetResourceText(mc, ms, mi, mp, skyblue)
-			font2:Begin()
-			font2:SetTextColor(1,1,1,1)
-			font2:Print(metalText, x + BAR_WIDTH - INNER_PADDING, 23, 16, "or")
-			font2:End()
-		end
-
-		-- energy
-		do
-			local x = (BAR_WIDTH + BAR_GAP) * 2
-			DrawFillBar(x + barX1, barY1, x + barX2, barY2, energyPct, energyR, energyG, energyB, true)
-
-			local energyText = GetResourceText(ec, es, ei, ep, yellow)
-			font2:Begin()
-			font2:SetTextColor(1,1,1,1)
-			font2:Print(energyText, x + BAR_WIDTH - INNER_PADDING, 23, 16, "or")
+			font2:Print(supplyText, x + BAR_WIDTH - INNER_PADDING, y + 23, 16, "or")
 			font2:End()
 		end
 
@@ -600,12 +612,81 @@ function widget:RecvLuaMsg(msg)
 	end
 end
 
+-- Sample the RP balance once per sim frame, smooth the income rate over a
+-- window, and detect spends (only a spend lowers the balance).
+local function SampleResearch(dt)
+	local myTeamID = spGetMyTeamID()
+	if not myTeamID then return end
+
+	local value = spGetTeamRulesParam(myTeamID, "researchPoints") or 0
+	rpValue = value
+
+	if rpPrevValue and value < rpPrevValue then
+		rpFlashAmount = rpPrevValue - value
+		rpFlashTimer  = RP_FLASH_DURATION
+	end
+	rpPrevValue = value
+
+	if rpFlashTimer > 0 then
+		rpFlashTimer = rpFlashTimer - (dt or 0)
+		if rpFlashTimer < 0 then rpFlashTimer = 0 end
+	end
+
+	local frame = spGetGameFrame()
+	if frame ~= rpLastFrame then
+		rpLastFrame = frame
+		rpSamples[#rpSamples + 1] = { frame = frame, value = value }
+		while #rpSamples > 1 and (frame - rpSamples[1].frame) > RP_RATE_WINDOW do
+			table.remove(rpSamples, 1)
+		end
+		local first = rpSamples[1]
+		local span  = frame - first.frame
+		if span > 0 then
+			rpSmoothedRate = (value - first.value) / (span / 30)
+		else
+			rpSmoothedRate = 0
+		end
+	end
+end
+
+-- Immediate-mode RP panel content: big total (bottom-right), smoothed income
+-- (bottom-left), and the fading spend flash (top-right). No fill bar.
+-- Lives in the bottom-right column, left-aligned under the energy panel.
+local function DrawResearchPanel()
+	local rpX = COL2_X
+
+	glPushMatrix()
+	glTranslate(posx, posy, 0)
+	glScale(widgetScale, widgetScale, 1)
+
+	font2:Begin()
+
+	font2:SetTextColor(1, 1, 1, 1)
+	font2:Print(tostring(math.floor(rpValue + 0.5)),
+		rpX + RP_WIDTH - INNER_PADDING, 10, 22, "or")
+
+	font2:SetTextColor(0, 1, 0, 1)
+	font2:Print(string.format("+%.1f/s", rpSmoothedRate),
+		rpX + INNER_PADDING, 12, 14, "o")
+
+	if rpFlashTimer > 0 and rpFlashAmount > 0 then
+		local a = rpFlashTimer / RP_FLASH_DURATION
+		font2:SetTextColor(1, 0.15, 0.15, a)
+		font2:Print("-" .. tostring(math.floor(rpFlashAmount + 0.5)),
+			rpX + RP_WIDTH - INNER_PADDING, 30, 16, "or")
+	end
+
+	font2:End()
+	glPopMatrix()
+end
+
 function widget:Update(dt)
 	local newOpacity = GetUIOpacity()
 	if newOpacity ~= ui_opacity then
 		ui_opacity = newOpacity
 		BuildBackgroundList()
 	end
+	SampleResearch(dt)
 end
 
 function widget:IsAbove(x, y)
@@ -659,6 +740,10 @@ function widget:DrawScreen()
 	glCallList(displayListStatic)
 	glCallList(displayListDynamic)
 
+	-- research panel content is immediate-mode: the number counts constantly,
+	-- so it must not live in the cached dynamic list.
+	DrawResearchPanel()
+
 	-- Share level sliders — drawn immediate mode on top of everything
 	DrawShareSlider("metal",  metalShareLevel,  draggingMetal)
 	DrawShareSlider("energy", energyShareLevel, draggingEnergy)
@@ -668,8 +753,8 @@ function widget:ViewResize(newX, newY)
 	vsx, vsy = newX, newY
 
 	widgetScale = 0.82 + ((vsx * vsy) / 10000000)
-	width = (BAR_WIDTH * 3) + (BAR_GAP * 2)
-	height = BAR_HEIGHT
+	width = (BAR_WIDTH * 2) + BAR_GAP
+	height = (BAR_HEIGHT * 2) + ROW_GAP
 
 	posx = math.floor((vsx - (width * widgetScale)) * 0.5)
 	posy = math.floor(vsy - (height * widgetScale) - TOP_MARGIN)

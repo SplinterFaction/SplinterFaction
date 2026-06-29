@@ -36,7 +36,7 @@ unitDef                    = {
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
-	buildCostEnergy         = 5000,
+	buildCostEnergy         = buildCostEnergy,
 	buildCostMetal          = 0.1,
 	buildDistance           = buildDistance,
 	builder                 = true,
@@ -71,7 +71,7 @@ unitDef                    = {
 	idleTime                = 2200,
 	leaveTracks             = false,
 	maxDamage               = maxDamage,
-	maxVelocity             = 2,
+	maxVelocity             = 5,
 	maxWaterDepth           = 10,
 	metalStorage            = 0,
 	name                    = humanName,

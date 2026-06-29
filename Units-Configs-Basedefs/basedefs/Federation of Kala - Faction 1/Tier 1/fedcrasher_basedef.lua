@@ -148,7 +148,7 @@ weaponDefs                 = {
 			weaponguide = [[A modest anti-air missile with underwhelming individual damage. In volleys, it turns contested airspace into a deadly gauntlet for any aircraft.]],
 		},     
 		damage                   = {
-			default              = 17,
+			default              = 51,
 		},
 	},
 }

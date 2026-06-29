@@ -132,7 +132,7 @@ weaponDefs = {
 			weaponguide = [[Throws an absolute wall of bullets into the airspace with little regard for individual shot damage. The sheer density of the hail ensures that anything flying through it collects enough hits to matter.]],
 		},
 		damage                   = {
-			default              = 9,
+			default              = 27,
 		},
 	},
 }

@@ -5,6 +5,8 @@ unitName = "fedairengineer"
 
 --------------------------------------------------------------------------------
 
+buildCostEnergy = 1000
+
 buildDistance = 200
 
 buildpic = [[fedairengineer.dds]]
@@ -24,7 +26,7 @@ objectName = [[fedairengineer.s3o]]
 script = [[fedairengineer_lus.lua]]
 
 areamexdef = [[fedmetalextractor]]
-requiretech = [[tech0]]
+requiretech = [[tech1]]
 
 explodeAs = [[mediumexplosiongenericgreen]]
 

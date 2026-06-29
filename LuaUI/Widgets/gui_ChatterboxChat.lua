@@ -389,6 +389,27 @@ local function ParseChatLine(line)
 		end
 	end
 
+	-- Spectator chat: this engine renders it as "[PlayerName] message".
+	-- The engine also emits bracketed status tags (e.g. "[com_ends] ...") that
+	-- are NOT chat, so only accept the bracket form when the name matches a
+	-- known player/spectator in the cache. Unknown tags fall through to system.
+	do
+		local player, body = text:match("^%[([^%]]+)%]%s*(.*)$")
+		if player then
+			local key = Lower(Trim(player))
+			if cachedPlayerData[key] then
+				return {
+					channel   = "spectator",
+					player    = Trim(player),
+					nameColor = GetPlayerColorByName(player),
+					bodyColor = COLOR_SPEC,
+					body      = body,
+					raw       = raw,
+				}
+			end
+		end
+	end
+
 	-- Fallback/system line
 	return {
 		channel   = "system",

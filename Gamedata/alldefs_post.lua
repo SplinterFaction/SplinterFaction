@@ -1175,19 +1175,19 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			-- Set global Buildspeed
 			if unitDef.customparams then
-				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Factory" or unitDef.customparams.unitrole == "Commander" then
+				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Air Builder" or unitDef.customparams.unitrole == "Factory" or unitDef.customparams.unitrole == "Commander" then
 					unitDef.workertime = 8
 				end
 			end
 			-- Set Global Capturespeed
 			if unitDef.customparams then
-				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Commander" then
+				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Air Builder" or unitDef.customparams.unitrole == "Commander" then
 					unitDef.capturespeed = unitDef.workertime * 0.25
 				end
 			end
 			-- Set Global Repairspeed
 			if unitDef.customparams then
-				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Commander" then
+				if unitDef.customparams.unitrole == "Builder" or unitDef.customparams.unitrole == "Air Builder" or unitDef.customparams.unitrole == "Commander" then
 					unitDef.repairspeed = unitDef.workertime
 				end
 			end

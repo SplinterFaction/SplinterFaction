@@ -4,7 +4,7 @@ unitName = "lozseaplant"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 300
+buildCostMetal = 100
 
 humanName = [[Sea Factory]]
 

@@ -189,6 +189,7 @@ if (gadgetHandler:IsSyncedCode()) then
   CyanStr    = "\255\001\255\255"
   YellowStr  = "\255\255\255\001"
   MagentaStr = "\255\255\001\255"
+  ResearchStr = "\255\190\120\255"   -- violet, used for research point costs
 
   Colors = {}
   Colors.white   = { 1.0, 1.0, 1.0, 1.0 }
@@ -457,6 +458,9 @@ if (gadgetHandler:IsSyncedCode()) then
       --Spring.Echo("morph to: "..morphData.into.." metal: "..(morphData.metal or "nil").." | energy: "..(morphData.energy or "nil"))
       newData.metal  = morphData.metal  or DefCost('metalCost',  udSrc, udDst)
       newData.energy = morphData.energy or DefCost('energyCost', udSrc, udDst)
+      -- Research points: designer-specified only, default 0. Unlike metal/energy
+      -- there is no unit-def field to derive a cost from, so it is never auto-filled.
+      newData.research = tonumber(morphData.research) or 0
       --Spring.Echo(" metal: "..newData.metal.." | energy: "..newData.energy.." | m-inc: "..newData.increment * newData.metal.." | e-inc: "..newData.increment * newData.energy)
       newData.resTable = {
         m = (newData.increment * newData.metal),
@@ -638,6 +642,9 @@ if (gadgetHandler:IsSyncedCode()) then
     end
     if (morphDef.energy > 0) then
       tt = tt .. YellowStr .. 'energy: ' .. morphDef.energy   .. '\n'
+    end
+    if (morphDef.research and morphDef.research > 0) then
+      tt = tt .. ResearchStr .. 'research: ' .. morphDef.research .. '\n'
     end
 
 ------ This adds the metal/energy cost per second line
@@ -893,6 +900,17 @@ if (gadgetHandler:IsSyncedCode()) then
     if not isDone(unitID) or not morphDef then
       return true end
 
+    -- Research point gate: pay the full RP cost up front. If the ledger is present
+    -- and the team cannot afford it, abort before the morph is set up. Metal/energy
+    -- still drain over time as before; only RP is charged here as a lump sum.
+    local researchCost = morphDef.research or 0
+    if researchCost > 0 then
+      if not (GG.Research and GG.Research.Spend(teamID, researchCost)) then
+        spSendMessageToTeam(teamID, "Upgrade needs " .. researchCost .. " research points")
+        return true
+      end
+    end
+
     --Spring.SetUnitHealth(unitID, { paralyze = 1.0e9 })    --// turns mexes and mm off (paralyze the unit)
     --Spring.SetUnitResourcing(unitID,"e",0)                --// turns solars off
     --Spring.GiveOrderToUnit(unitID, CMD.ONOFF, { 0 }, { "alt" }) --// turns radars/jammers off
@@ -1049,6 +1067,15 @@ if (gadgetHandler:IsSyncedCode()) then
   local function StopMorph(unitID, morphData)
     checkQueue(unitID, morphData.teamID)
     morphingUnits[unitID] = nil
+
+    -- Refund the unspent fraction of research (it was paid in full up front).
+    local researchCost = morphData.def.research or 0
+    if researchCost > 0 and GG.Research then
+      local refund = math.floor(researchCost * (1 - morphData.progress))
+      if refund > 0 then
+        GG.Research.Add(morphData.teamID, refund, "morph_refund")
+      end
+    end
 
     --Spring.SetUnitHealth(unitID, { paralyze = -1})
     local scale = morphData.progress * stopPenalty
@@ -1319,6 +1346,7 @@ if (gadgetHandler:IsSyncedCode()) then
           require = unitDef.customParams.morphdef__require,
           metal = tonumber(unitDef.customParams.morphdef__metal),
           energy = tonumber(unitDef.customParams.morphdef__energy),
+          research = tonumber(unitDef.customParams.morphdef__research),
           --TODO: xp, rank, tech, texture
           cmdname = unitDef.customParams.morphdef__cmdname,
           text = unitDef.customParams.morphdef__text,

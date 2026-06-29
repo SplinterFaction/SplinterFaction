@@ -29,7 +29,10 @@ local POST_TRIGGER_RESET = 0.55
 -- Disruption chaining
 local CHAIN_TARGETS  = 3
 local CHAIN_FRACTION = 0.25
-local CHAIN_RADIUS   = 300
+local CHAIN_RADIUS   = 100
+
+-- Feature toggles
+local ENABLE_RELOAD_PENALTY = false
 local RECENT_HIT_DELAY_SECONDS = 2
 local RECENT_HIT_DELAY_FRAMES  = RECENT_HIT_DELAY_SECONDS * GAME_SPEED
 
@@ -644,12 +647,14 @@ function gadget:GameFrame(frame)
 			end
 
 			-- Reload time penalty: same shaped curve, max 2x at full disruption
-			local wcache = weaponCache[unitID]
-			if wcache then
-				local shaped = fullyDisrupted and 1 or (pct ^ 0.7)
-				local reloadMult = 1 + shaped
-				for weaponNum, wdata in pairs(wcache) do
-					spSetUnitWeaponState(unitID, weaponNum, "reloadTime", wdata.reloadTime * reloadMult)
+			if ENABLE_RELOAD_PENALTY then
+				local wcache = weaponCache[unitID]
+				if wcache then
+					local shaped = fullyDisrupted and 1 or (pct ^ 0.7)
+					local reloadMult = 1 + shaped
+					for weaponNum, wdata in pairs(wcache) do
+						spSetUnitWeaponState(unitID, weaponNum, "reloadTime", wdata.reloadTime * reloadMult)
+					end
 				end
 			end
 

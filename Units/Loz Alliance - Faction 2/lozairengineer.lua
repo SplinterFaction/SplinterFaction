@@ -7,6 +7,8 @@ unitName = "lozairengineer"
 
 buildDistance = 200
 
+buildCostEnergy = 1000
+
 buildpic = [[lozairengineer.dds]]
 
 maxDamage = 1000
@@ -24,7 +26,7 @@ objectName = [[lozairengineer.s3o]]
 script = [[lozairengineer_lus.lua]]
 
 areamexdef = [[lozmetalextractor]]
-requiretech = [[tech0]]
+requiretech = [[tech1]]
 
 explodeAs = [[mediumexplosiongenericgreen]]
 

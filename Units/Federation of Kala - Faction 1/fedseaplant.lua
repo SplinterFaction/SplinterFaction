@@ -4,7 +4,7 @@ unitName = "fedseaplant"
 
 --------------------------------------------------------------------------------
 
-buildCostMetal = 300
+buildCostMetal = 100
 
 humanName = [[Sea Factory]]
 
