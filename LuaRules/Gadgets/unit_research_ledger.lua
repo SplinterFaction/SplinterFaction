@@ -38,6 +38,16 @@ local LOSS_REWARD_FRACTION = 0      -- "learn from your losses"; fraction of the
 local RULES_PARAM = "researchPoints"          -- read with Spring.GetTeamRulesParam
 local PARAM_OPTS  = { allied = true }         -- self + allies can read, enemies cannot
 
+-- Generators: a building with this unit customParam produces that many research
+-- points per second just by existing, while finished, switched on, and not stunned.
+-- The gadget itself charges the energy upkeep (RP_ENERGY_PARAM, energy per second)
+-- and only credits RP when the team can pay, so it stops when the team runs dry --
+-- the same feel as metal makers. Put the energy cost in this customParam, NOT in
+-- the unitdef's energyUse, or the team would be charged twice. Placement rules
+-- (e.g. must sit on a geothermal vent) are enforced by other gadgets.
+local RP_INCOME_PARAM = "rp_income"
+local RP_ENERGY_PARAM = "rp_energy_cost"
+
 --------------------------------------------------------------------------------
 
 if not gadgetHandler:IsSyncedCode() then
@@ -53,10 +63,21 @@ end
 local spGetTeamList       = Spring.GetTeamList
 local spGetGaiaTeamID     = Spring.GetGaiaTeamID
 local spSetTeamRulesParam = Spring.SetTeamRulesParam
+local spGetUnitTeam       = Spring.GetUnitTeam
+local spGetUnitDefID      = Spring.GetUnitDefID
+local spGetUnitIsActive   = Spring.GetUnitIsActive
+local spGetUnitIsStunned  = Spring.GetUnitIsStunned
+local spGetTeamResources  = Spring.GetTeamResources
+local spUseTeamResource   = Spring.UseTeamResource
+local spGetUnitHealth     = Spring.GetUnitHealth
+local spGetAllUnits       = Spring.GetAllUnits
 local floor               = math.floor
 
 local points  = {}                  -- points[teamID] = number (authoritative)
 local gaiaID  = spGetGaiaTeamID()
+
+local rpIncome   = {}               -- [unitDefID] = research points per second (from customParam)
+local generators = {}               -- [unitID]    = perSecond (live, finished generators)
 
 local function mirror(teamID)
   spSetTeamRulesParam(teamID, RULES_PARAM, points[teamID] or 0, PARAM_OPTS)
@@ -117,28 +138,84 @@ function gadget:Initialize()
       mirror(teamID)
     end
   end
-end
 
---------------------------------------------------------------------------------
--- Income source: passive floor (optional)
---------------------------------------------------------------------------------
+  -- Cache which unit defs generate RP, and the energy each costs per second.
+  for udid, ud in pairs(UnitDefs) do
+    local cp = ud.customParams or {}
+    local rp = tonumber(cp[RP_INCOME_PARAM])
+    if rp and rp > 0 then
+      rpIncome[udid] = { rp = rp, e = tonumber(cp[RP_ENERGY_PARAM]) or 0 }
+    end
+  end
 
-if PASSIVE_PER_SECOND ~= 0 then
-  function gadget:GameFrame(n)
-    if n % 30 == 0 then             -- once per second at 30fps
-      for teamID in pairs(points) do
-        GG.Research.Add(teamID, PASSIVE_PER_SECOND, "passive")
+  -- Mid-game luarules reload: pick up generators that are already finished.
+  for _, unitID in ipairs(spGetAllUnits()) do
+    local udid = spGetUnitDefID(unitID)
+    if udid and rpIncome[udid] then
+      local _, _, _, _, bp = spGetUnitHealth(unitID)
+      if (bp == nil) or (bp >= 1) then
+        generators[unitID] = rpIncome[udid]
       end
     end
   end
 end
 
+-- Returns the owning team if the generator may produce this tick, AFTER charging
+-- its energy upkeep. Stops on EMP / under-construction (stunned), when switched
+-- off or engine-disabled (not active), or when the team cannot pay the energy cost
+-- this tick. Charging through the gadget (rather than reading the energy level) is
+-- what makes the stop reliable: a failed payment is ground truth that the energy
+-- was not there, banked or incoming.
+local function chargeAndGetTeam(unitID, energyCost)
+  if spGetUnitIsStunned(unitID) then return nil end
+  if spGetUnitIsActive(unitID) == false then return nil end
+  local teamID = spGetUnitTeam(unitID)
+  if not teamID then return nil end
+
+  if energyCost > 0 then
+    local cur = spGetTeamResources(teamID, "energy")
+    if not cur or cur < energyCost then return nil end   -- dry: no RP this tick
+    spUseTeamResource(teamID, { e = energyCost })        -- pay the upkeep ourselves
+  end
+
+  return teamID
+end
+
 --------------------------------------------------------------------------------
--- Income source: kills (and optional "learn from your losses") (optional)
+-- Per-second income: passive floor (optional) + generators
 --------------------------------------------------------------------------------
 
-if KILL_REWARD_FRACTION ~= 0 then
-  function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDefID, attackerTeamID)
+function gadget:UnitFinished(unitID, unitDefID, teamID)
+  if rpIncome[unitDefID] then
+    generators[unitID] = rpIncome[unitDefID]
+  end
+end
+
+function gadget:GameFrame(n)
+  if n % 30 ~= 0 then return end          -- once per second at 30fps
+
+  if PASSIVE_PER_SECOND ~= 0 then
+    for teamID in pairs(points) do
+      GG.Research.Add(teamID, PASSIVE_PER_SECOND, "passive")
+    end
+  end
+
+  for unitID, gen in pairs(generators) do
+    local teamID = chargeAndGetTeam(unitID, gen.e)   -- nil if stunned/off/can't pay
+    if teamID then
+      GG.Research.Add(teamID, gen.rp, "generator")
+    end
+  end
+end
+
+--------------------------------------------------------------------------------
+-- Unit removal: clean up generators (always) and pay kill rewards (optional)
+--------------------------------------------------------------------------------
+
+function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDefID, attackerTeamID)
+  generators[unitID] = nil            -- also covers the reclaim a morph performs
+
+  if KILL_REWARD_FRACTION ~= 0 then
     if not attackerTeamID then return end          -- no killer (selfd, reclaim, ...)
     if attackerTeamID == teamID then return end     -- ignore killing your own units
     if attackerTeamID == gaiaID then return end
@@ -160,7 +237,6 @@ if KILL_REWARD_FRACTION ~= 0 then
 end
 
 --------------------------------------------------------------------------------
--- Territorial generators plug in here later with no ledger changes:
---   GG.Research.Add(teamID, amountPerTick, "generator")
--- ...wherever your on-spot building gadget ticks.
+-- Territorial / on-spot rules (must sit on a geothermal vent, etc.) are enforced
+-- by other gadgets, which simply avoid placing the generator unit off-spot.
 --------------------------------------------------------------------------------

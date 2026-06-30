@@ -167,8 +167,23 @@ local function LoadMapSpots()
 		Spring.Echo("[Game Spawn] FFA detected — all spots open to all players")
 		-- all spots remain with allyteam = -1
 	else
-		-- Assign each spot to the nearest allyteam centroid computed from
-		-- the engine-assigned start positions.
+		-- Balanced, spatially-coherent spot partition.
+		--
+		-- Goals:
+		--   1. Each team's spots should form a contiguous cluster — no teammate
+		--      stranded in the middle of the enemy side.
+		--   2. The split should be balanced (equal spot counts where possible).
+		--
+		-- For the common 2-team case we project every spot onto the axis that
+		-- separates the two sides (the line between the engine-assigned team
+		-- centroids), sort along it, and cut at the quota boundary.  This yields
+		-- a clean half-space split (left/right, top/bottom, or whatever diagonal
+		-- the map intends) that is both contiguous and balanced.
+		--
+		-- For 3+ allyteams (rare in sided play) we fall back to a balanced greedy
+		-- auction by centroid distance.
+
+		-- Centroid per allyteam from engine-assigned start positions
 		local centroids = {}
 		for atID in pairs(atTeamCounts) do
 			local cx, cz, n = 0, 0, 0
@@ -185,16 +200,106 @@ local function LoadMapSpots()
 			end
 		end
 
-		for i, spot in pairs(mapSpots) do
-			local bestAT, bestDist = -1, math.huge
-			for atID, c in pairs(centroids) do
-				local dx = spot.x - c.x
-				local dz = spot.z - c.z
-				local d  = dx * dx + dz * dz
-				if d < bestDist then bestDist = d; bestAT = atID end
+		-- Deterministic ordered list of participating allyteams
+		local allyteamIDs = {}
+		for atID in pairs(centroids) do
+			allyteamIDs[#allyteamIDs + 1] = atID
+		end
+		table.sort(allyteamIDs)
+
+		local numAT  = #allyteamIDs
+		local base   = math.floor(spotTotal / numAT)
+		local extras = spotTotal - base * numAT   -- first `extras` teams get base+1
+
+		local quota = {}
+		for i, atID in ipairs(allyteamIDs) do
+			quota[atID] = base + (i <= extras and 1 or 0)
+		end
+
+		Spring.Echo(string.format("[Game Spawn] Partition: %d spots across %d allyteams (quota ~%d each)",
+		                          spotTotal, numAT, base))
+
+		if numAT == 2 then
+			-- ── Axis-projection split (contiguous + balanced) ─────────────────
+			local at1, at2 = allyteamIDs[1], allyteamIDs[2]
+			local c1, c2   = centroids[at1], centroids[at2]
+
+			-- Separating axis = direction from c1 to c2
+			local ax, az = c2.x - c1.x, c2.z - c1.z
+			local axisLen2 = ax * ax + az * az
+
+			-- Degenerate centroids (both teams start at ~same point): fall back to
+			-- the principal axis of the spot cloud (direction of maximum spread).
+			if axisLen2 < 1 then
+				local mx, mz, n = 0, 0, 0
+				for _, spot in pairs(mapSpots) do
+					mx = mx + spot.x; mz = mz + spot.z; n = n + 1
+				end
+				mx, mz = mx / n, mz / n
+				local sxx, sxz, szz = 0, 0, 0
+				for _, spot in pairs(mapSpots) do
+					local dx, dz = spot.x - mx, spot.z - mz
+					sxx = sxx + dx * dx
+					sxz = sxz + dx * dz
+					szz = szz + dz * dz
+				end
+				-- Dominant eigenvector angle of the 2×2 covariance matrix
+				local theta = 0.5 * math.atan2(2 * sxz, sxx - szz)
+				ax, az = math.cos(theta), math.sin(theta)
+				Spring.Echo("[Game Spawn] Centroids degenerate — using principal axis of spot cloud")
 			end
-			spot.allyteam = bestAT
-			Spring.Echo(string.format("[Game Spawn]   spot[%d] (%.0f, %.0f) → allyteam %d", i, spot.x, spot.z, bestAT))
+
+			-- Project every spot onto the axis and sort ascending.  Spots with
+			-- lower projection lie nearer c1's side.
+			local ordered = {}
+			for spotIdx, spot in pairs(mapSpots) do
+				ordered[#ordered + 1] = { s = spotIdx, p = spot.x * ax + spot.z * az }
+			end
+			table.sort(ordered, function(a, b) return a.p < b.p end)
+
+			-- First quota[at1] spots → at1, remainder → at2
+			for rank, item in ipairs(ordered) do
+				local owner = (rank <= quota[at1]) and at1 or at2
+				mapSpots[item.s].allyteam = owner
+			end
+
+			Spring.Echo(string.format("[Game Spawn] Axis split: dir=(%.2f, %.2f)  at%d gets first %d spots",
+			                          ax, az, at1, quota[at1]))
+		else
+			-- ── Balanced greedy auction (3+ allyteams) ────────────────────────
+			local candidates = {}
+			for spotIdx, spot in pairs(mapSpots) do
+				for _, atID in ipairs(allyteamIDs) do
+					local c  = centroids[atID]
+					local dx = spot.x - c.x
+					local dz = spot.z - c.z
+					candidates[#candidates + 1] = { s = spotIdx, a = atID, d = dx*dx + dz*dz }
+				end
+			end
+			table.sort(candidates, function(a, b) return a.d < b.d end)
+
+			local assigned   = {}
+			local teamCounts = {}
+			for _, atID in ipairs(allyteamIDs) do teamCounts[atID] = 0 end
+
+			for _, cand in ipairs(candidates) do
+				if not assigned[cand.s] and teamCounts[cand.a] < quota[cand.a] then
+					mapSpots[cand.s].allyteam = cand.a
+					assigned[cand.s]          = true
+					teamCounts[cand.a]        = teamCounts[cand.a] + 1
+				end
+			end
+
+			for spotIdx in pairs(mapSpots) do
+				if not assigned[spotIdx] then
+					mapSpots[spotIdx].allyteam = allyteamIDs[1]
+				end
+			end
+		end
+
+		for i, spot in pairs(mapSpots) do
+			Spring.Echo(string.format("[Game Spawn]   spot[%d] (%.0f, %.0f) → allyteam %d",
+			                          i, spot.x, spot.z, spot.allyteam))
 		end
 	end
 
@@ -460,8 +565,8 @@ function gadget:GameStart()
 
 	Spring.Echo("[Game Spawn] Phase: faction  deadline=" .. factionDeadline)
 	Spring.Echo("[Game Spawn] Human teams=" .. #humanTeams ..
-		"  AI teams=" .. (#allNonGaiaTeams - #humanTeams) ..
-		"  usePlacement=" .. tostring(usePlacement))
+			            "  AI teams=" .. (#allNonGaiaTeams - #humanTeams) ..
+			            "  usePlacement=" .. tostring(usePlacement))
 
 	-- Edge case: all-AI game, advance faction immediately
 	if #humanTeams == 0 then
@@ -490,7 +595,7 @@ function gadget:RecvLuaMsg(msg, playerID)
 			pendingFactionAdvance = true
 		end
 
-	-- ── Spot selection (tentative) ────────────────────────────────────────────
+		-- ── Spot selection (tentative) ────────────────────────────────────────────
 	elseif firstByte == SELECT_BYTE then
 		if phase ~= "placement" then return end
 
@@ -521,7 +626,7 @@ function gadget:RecvLuaMsg(msg, playerID)
 		Spring.SetTeamRulesParam(teamID, "claimedSpot",  spotIdx, ALLIED)
 		Spring.SetTeamRulesParam(teamID, "selectedSpot", spotIdx, ALLIED)
 
-	-- ── Placement confirm ─────────────────────────────────────────────────────
+		-- ── Placement confirm ─────────────────────────────────────────────────────
 	elseif firstByte == CONFIRM_BYTE then
 		if phase ~= "placement" then return end
 
@@ -602,7 +707,7 @@ function gadget:GameFrame(n)
 			end
 		end
 
-	-- ── Placement phase ───────────────────────────────────────────────────────
+		-- ── Placement phase ───────────────────────────────────────────────────────
 	elseif phase == "placement" then
 
 		-- All humans confirmed: collapse deadline to n + 3 s
