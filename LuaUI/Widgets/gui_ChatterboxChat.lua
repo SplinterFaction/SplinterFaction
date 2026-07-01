@@ -35,6 +35,15 @@ local HIDE_DEFAULT_CONSOLE = true -- set true if you want to hide engine console
 local MAX_LOG  = 1000
 local LOG_SLACK = 64   -- compact in chunks so trimming is amortized, not per-line
 
+-- Game events (speed changes, pause/unpause) surfaced in chat as channel "event".
+local SHOW_SPEED_CHANGES = true
+local SHOW_PAUSE_EVENTS  = true
+-- Rapid speed steps (e.g. dragging the speed slider) arrive as dozens of
+-- "Speed set to X" lines in under a second. Collapse a burst into a single
+-- message showing the final value once no new speed line has arrived for this
+-- many real-time seconds.
+local SPEED_DEBOUNCE     = 0.6
+
 --------------------------------------------------------------------------------
 -- Speedups
 --------------------------------------------------------------------------------
@@ -59,6 +68,9 @@ local vsx, vsy = 0, 0
 local chatLines = {}
 local fullLog   = {}   -- persistent scrollback (all channels); read by the Log panel
 
+local pendingSpeed  = nil   -- coalesced speed-change entry awaiting flush
+local pendingSpeedT = 0     -- os.clock() of the last speed line seen
+
 local myPlayerNames = {}      -- lowercase name -> true for local user(s)
 local cachedPlayerData = {}   -- lowercase name -> {name=..., teamID=..., isSpec=..., color={r,g,b,1}}
 
@@ -71,6 +83,7 @@ local COLOR_ALLY    = {0.00, 1.00, 0.00, 1.00}
 local COLOR_WHISPER = {1.00, 0.35, 0.35, 1.00}
 local COLOR_SPEC    = {1.00, 1.00, 0.00, 1.00}
 local COLOR_SYSTEM  = {0.75, 0.75, 0.75, 1.00}
+local COLOR_EVENT   = {0.55, 0.82, 1.00, 1.00}   -- speed / pause game events
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -191,7 +204,7 @@ local function BuildWrappedEntry(entry)
 	end
 
 	local nameText = entry.player
-	local separatorText = ":"
+	local separatorText = entry.separator or ":"
 
 	local nameWidth = MeasureText(nameText, FONT_SIZE)
 	local separatorWidth = MeasureText(separatorText, FONT_SIZE)
@@ -268,6 +281,30 @@ local function AppendFullLog(entry)
 		end
 		for i = n - drop + 1, n do
 			fullLog[i] = nil
+		end
+	end
+end
+
+-- Stamp, log, and (for chat) push to the floating overlay + play its sound.
+-- Single choke point so both the console callin and the deferred speed flush
+-- behave identically.
+local function EmitEntry(entry)
+	entry.gtime = spGetGameSeconds and math.floor(spGetGameSeconds()) or 0
+	AppendFullLog(entry)
+
+	if not IsChat(entry) then return end
+
+	PushChatLine(entry)
+
+	if entry.player then
+		if entry.channel == "whisper" then
+			Spring.PlaySoundFile("chat", 1.0, "ui")
+		elseif entry.channel == "ally" then
+			Spring.PlaySoundFile("allychat", 1.0, "ui")
+		elseif entry.channel == "spectator" then
+			Spring.PlaySoundFile("specchat", 1.0, "ui")
+		elseif entry.channel == "public" then
+			Spring.PlaySoundFile("chat", 1.0, "ui")
 		end
 	end
 end
@@ -389,6 +426,70 @@ local function ParseChatLine(line)
 		end
 	end
 
+	-- Speed change: "Speed set to N [player]" (the trailing [player] is optional).
+	-- The bracket is at the END here, so it never collides with the leading-[name]
+	-- spectator form below.
+	do
+		local n, player = text:match("^Speed set to%s+([%d%.]+)%s+%[([^%]]+)%]%s*$")
+		if not n then
+			n = text:match("^Speed set to%s+([%d%.]+)%s*$")
+		end
+		if n then
+			if player and player ~= "" then
+				return {
+					channel   = "event",
+					eventKind = "speed",
+					player    = Trim(player),
+					nameColor = GetPlayerColorByName(player),
+					bodyColor = COLOR_EVENT,
+					separator = "",
+					body      = "set speed to " .. n .. "x",
+					raw       = raw,
+				}
+			end
+			return {
+				channel   = "event",
+				eventKind = "speed",
+				player    = nil,
+				nameColor = nil,
+				bodyColor = COLOR_EVENT,
+				body      = "Speed set to " .. n .. "x",
+				raw       = raw,
+			}
+		end
+	end
+
+	-- Pause / unpause: "<player> paused the game" / "<player> unpaused the game".
+	-- Check unpaused first so it is never mistaken for a paused match.
+	do
+		local player = text:match("^(.-)%s+unpaused the game%s*$")
+		if player and player ~= "" then
+			return {
+				channel   = "event",
+				eventKind = "pause",
+				player    = Trim(player),
+				nameColor = GetPlayerColorByName(player),
+				bodyColor = COLOR_EVENT,
+				separator = "",
+				body      = "unpaused the game",
+				raw       = raw,
+			}
+		end
+		player = text:match("^(.-)%s+paused the game%s*$")
+		if player and player ~= "" then
+			return {
+				channel   = "event",
+				eventKind = "pause",
+				player    = Trim(player),
+				nameColor = GetPlayerColorByName(player),
+				bodyColor = COLOR_EVENT,
+				separator = "",
+				body      = "paused the game",
+				raw       = raw,
+			}
+		end
+	end
+
 	-- Spectator chat: this engine renders it as "[PlayerName] message".
 	-- The engine also emits bracketed status tags (e.g. "[com_ends] ...") that
 	-- are NOT chat, so only accept the bracket form when the name matches a
@@ -474,25 +575,35 @@ function widget:AddConsoleLine(line, priority)
 	local parsed = ParseChatLine(line)
 	if not parsed then return end
 
-	parsed.gtime = spGetGameSeconds and math.floor(spGetGameSeconds()) or 0
-	AppendFullLog(parsed)
-
-	-- Only real chat reaches the floating overlay; console output is logged but
-	-- never flashed on screen.
-	if not IsChat(parsed) then return end
-
-	PushChatLine(parsed)
-
-	if parsed.player then
-		if parsed.channel == "whisper" then
-			Spring.PlaySoundFile("chat", 1.0, "ui")
-		elseif parsed.channel == "ally" then
-			Spring.PlaySoundFile("allychat", 1.0, "ui")
-		elseif parsed.channel == "spectator" then
-			Spring.PlaySoundFile("specchat", 1.0, "ui")
-		elseif parsed.channel == "public" then
-			Spring.PlaySoundFile("chat", 1.0, "ui")
+	if parsed.channel == "event" then
+		if parsed.eventKind == "speed" then
+			if not SHOW_SPEED_CHANGES then
+				-- Keep it in the log as plain console output, off the overlay.
+				parsed.channel = "system"
+				parsed.body    = parsed.raw
+				EmitEntry(parsed)
+				return
+			end
+			-- Coalesce a burst of rapid speed steps into one final message.
+			pendingSpeed  = parsed
+			pendingSpeedT = os.clock()
+			return
+		elseif parsed.eventKind == "pause" and not SHOW_PAUSE_EVENTS then
+			parsed.channel = "system"
+			parsed.body    = parsed.raw
+			EmitEntry(parsed)
+			return
 		end
+	end
+
+	EmitEntry(parsed)
+end
+
+function widget:Update(dt)
+	if pendingSpeed and (os.clock() - pendingSpeedT) >= SPEED_DEBOUNCE then
+		local entry = pendingSpeed
+		pendingSpeed = nil
+		EmitEntry(entry)
 	end
 end
 
@@ -553,6 +664,8 @@ local function DrawWrappedEntry(x, y, wrapped, alpha)
 		local glow = 0.0
 		if entry.channel == "ally" or entry.channel == "spectator" or entry.channel == "whisper" then
 			glow = 0.28
+		elseif entry.channel == "event" then
+			glow = 0.22
 		end
 
 		for i = 1, #wrapped.bodyLines do

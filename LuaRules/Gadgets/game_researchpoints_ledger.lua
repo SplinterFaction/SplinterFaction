@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --
---  file:    unit_research_ledger.lua
+--  file:    game_researchpoints_ledger.lua
 --  brief:   Source-agnostic Research Point economy. Owns the per-team RP balance
 --           and exposes GG.Research { Get, CanAfford, Add, Spend } to the rest of
 --           the codebase. Income sources (passive tick, kills, generators, ...)
@@ -15,7 +15,7 @@
 
 function gadget:GetInfo()
   return {
-    name    = "ResearchLedger",
+    name    = "Research Points Ledger",
     desc    = "Per-team Research Point ledger and income (GG.Research API)",
     author  = "SF",
     date    = "2026",
@@ -51,8 +51,41 @@ local RP_ENERGY_PARAM = "rp_energy_cost"
 --------------------------------------------------------------------------------
 
 if not gadgetHandler:IsSyncedCode() then
-  -- Unsynced side has nothing to do; balances travel via the team rules param,
-  -- which any widget can read directly.
+  --------------------------------------------------------------------------------
+  -- Unsynced: forward sampled RP history to LuaUI, gated to what THIS client may
+  -- see. The samples arrive from synced (identical on every client); this filter
+  -- reproduces the graph's access rules -- spectators and post-game see every
+  -- team, players see only their own + allied -- so enemy RP is never leaked
+  -- mid-game, yet is revealed to everyone once the game is over.
+  --------------------------------------------------------------------------------
+  local spGetSpectatingState = Spring.GetSpectatingState
+  local spGetMyTeamID        = Spring.GetMyTeamID
+  local spAreTeamsAllied     = Spring.AreTeamsAllied
+  local spIsGameOver         = Spring.IsGameOver
+
+  local function maySee(teamID)
+    if spIsGameOver and spIsGameOver() then return true end
+    if spGetSpectatingState() then return true end
+    local my = spGetMyTeamID()
+    -- allied in either direction (covers initial and dynamic allies); a true
+    -- enemy has no alliance either way, so their RP stays hidden.
+    return spAreTeamsAllied(my, teamID) or spAreTeamsAllied(teamID, my)
+  end
+
+  local function onSample(_, teamID, index, value)
+    if maySee(teamID) and Script.LuaUI("ResearchSampleEvent") then
+      Script.LuaUI.ResearchSampleEvent(teamID, index, value)
+    end
+  end
+
+  function gadget:Initialize()
+    gadgetHandler:AddSyncAction("rpSample", onSample)
+  end
+
+  function gadget:Shutdown()
+    gadgetHandler:RemoveSyncAction("rpSample")
+  end
+
   return
 end
 
@@ -61,6 +94,7 @@ end
 --------------------------------------------------------------------------------
 
 local spGetTeamList       = Spring.GetTeamList
+local spGetTeamInfo       = Spring.GetTeamInfo
 local spGetGaiaTeamID     = Spring.GetGaiaTeamID
 local spSetTeamRulesParam = Spring.SetTeamRulesParam
 local spGetUnitTeam       = Spring.GetUnitTeam
@@ -75,6 +109,15 @@ local floor               = math.floor
 
 local points  = {}                  -- points[teamID] = number (authoritative)
 local gaiaID  = spGetGaiaTeamID()
+
+-- End-game graph history: sample every team's balance at this interval and
+-- broadcast it (gated per client, unsynced side) so the graph has a complete,
+-- access-correct RP series for everyone -- including enemy lines revealed at
+-- game over, which a widget-side sampler could never backfill.
+local RP_HISTORY_PERIOD = 12        -- seconds between history samples
+local rpHist    = {}                -- rpHist[teamID] = { v1, v2, ... }
+local rpSamples = 0                 -- samples taken so far
+local rpResent  = false             -- game-over full resend done?
 
 local rpIncome   = {}               -- [unitDefID] = research points per second (from customParam)
 local generators = {}               -- [unitID]    = perSecond (live, finished generators)
@@ -196,7 +239,11 @@ function gadget:GameFrame(n)
 
   if PASSIVE_PER_SECOND ~= 0 then
     for teamID in pairs(points) do
-      GG.Research.Add(teamID, PASSIVE_PER_SECOND, "passive")
+      -- Skip dead/resigned teams: their balance freezes at death (kept in `points`
+      -- so the end-game graph still samples them as a flat line to game end).
+      if not select(3, spGetTeamInfo(teamID, false)) then
+        GG.Research.Add(teamID, PASSIVE_PER_SECOND, "passive")
+      end
     end
   end
 
@@ -204,6 +251,30 @@ function gadget:GameFrame(n)
     local teamID = chargeAndGetTeam(unitID, gen.e)   -- nil if stunned/off/can't pay
     if teamID then
       GG.Research.Add(teamID, gen.rp, "generator")
+    end
+  end
+
+  -- Sample every team's balance for the end-game graph and broadcast it. The
+  -- unsynced side decides which teams each client is allowed to receive.
+  if n % (RP_HISTORY_PERIOD * 30) == 0 then
+    rpSamples = rpSamples + 1
+    for teamID in pairs(points) do
+      local h = rpHist[teamID]
+      if not h then h = {} ; rpHist[teamID] = h end
+      local v = points[teamID] or 0
+      h[rpSamples] = v
+      SendToUnsynced("rpSample", teamID, rpSamples, v)
+    end
+  end
+
+  -- On game over, resend the full series once so every client ends up with the
+  -- complete history (the unsynced filter reveals all teams post-game).
+  if not rpResent and Spring.IsGameOver and Spring.IsGameOver() then
+    rpResent = true
+    for teamID, h in pairs(rpHist) do
+      for i = 1, #h do
+        SendToUnsynced("rpSample", teamID, i, h[i])
+      end
     end
   end
 end

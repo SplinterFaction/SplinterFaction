@@ -26,6 +26,7 @@ local statName = {
 	{'damageReceived'  , 'Damage Received'},
 	{'unitsProduced'   , 'Units Built'},
 	{'unitsKilled'     , 'Units Killed'},
+	{'__researchPoints', 'Research Points'},   -- sampled by us (not in engine history)
 }
 
 --------------------------------------------------------------------------------
@@ -137,6 +138,8 @@ local team         = {}     -- {id, color={r,g,b,1}, name, show, array, hasData}
 local visibleTeams = {}     -- indices into team[] that are currently readable, packed
 local selectedStat = 1
 local isDelta      = false
+
+local rpHistory      = {}   -- rpHistory[teamID][sampleIndex] = RP value (from ledger broadcast)
 
 local graphLength  = 0
 local graphMax     = 0
@@ -334,6 +337,7 @@ local function RefreshData()
 	end
 
 	local statKey = statName[selectedStat][1]
+	local isRP = (statKey == '__researchPoints')
 	graphMax = 0
 
 	for t = 1, #team do
@@ -341,25 +345,53 @@ local function RefreshData()
 		tm.array   = nil
 		tm.hasData = false
 
-		local stats = spGetTeamStatsHistory(tm.id, 0, graphLength)
-		if stats and stats[1] then
-			local arr = {}
-			local n   = 0
-			for i = 1, graphLength - 1 do
-				local row = stats[i]
-				if not row then break end
-				local v = row[statKey] or 0
-				if isDelta then
-					local nrow = stats[i+1]
-					v = ((nrow and (nrow[statKey] or 0)) or v) - v
+		if isRP then
+			-- Research Points come from the ledger's broadcast (authoritative, access
+			-- -gated per client), not GetTeamStatsHistory. The series has its own
+			-- uniform cadence, so plot by its length rather than the engine's.
+			local hist = rpHistory[tm.id]
+			if hist then
+				-- contiguous run from index 1 (guards gaps for a late-joining client)
+				local total = 0
+				while hist[total+1] ~= nil do total = total + 1 end
+				if total >= 2 then
+					local arr = {}
+					local n   = 0
+					local upto = isDelta and (total - 1) or total
+					for i = 1, upto do
+						local v = hist[i]
+						if isDelta then v = (hist[i+1] or v) - v end
+						n = n + 1
+						arr[n] = v
+						if tm.show and v > graphMax then graphMax = v end
+					end
+					if n > 0 then
+						tm.array   = arr
+						tm.hasData = true
+					end
 				end
-				n = n + 1
-				arr[n] = v
-				if tm.show and v > graphMax then graphMax = v end
 			end
-			if n > 0 then
-				tm.array   = arr
-				tm.hasData = true
+		else
+			local stats = spGetTeamStatsHistory(tm.id, 0, graphLength)
+			if stats and stats[1] then
+				local arr = {}
+				local n   = 0
+				for i = 1, graphLength - 1 do
+					local row = stats[i]
+					if not row then break end
+					local v = row[statKey] or 0
+					if isDelta then
+						local nrow = stats[i+1]
+						v = ((nrow and (nrow[statKey] or 0)) or v) - v
+					end
+					n = n + 1
+					arr[n] = v
+					if tm.show and v > graphMax then graphMax = v end
+				end
+				if n > 0 then
+					tm.array   = arr
+					tm.hasData = true
+				end
 			end
 		end
 	end
@@ -921,6 +953,18 @@ function widget:Update(dt)
 	end
 end
 
+-- Receives RP samples from game_researchpoints_ledger (gadget). The gadget's
+-- unsynced side has already gated which teams this client may receive, so we can
+-- store whatever arrives. Refresh the view if it's open and RP is being shown.
+function ResearchSampleEvent(teamID, index, value)
+	local arr = rpHistory[teamID]
+	if not arr then arr = {} ; rpHistory[teamID] = arr end
+	arr[index] = value
+	if isOpen and statName[selectedStat][1] == '__researchPoints' then
+		contentDirty = true
+	end
+end
+
 function widget:DrawScreen()
 	if spIsGUIHidden() then return end
 	if not isOpen then return end
@@ -952,6 +996,8 @@ function widget:Initialize()
 	getTeamInfo()
 	BuildGeometry()
 
+	widgetHandler:RegisterGlobal('ResearchSampleEvent', ResearchSampleEvent)
+
 	WG.StaticEndGraph = {
 		Toggle = Toggle,
 		Show   = Open,
@@ -962,6 +1008,7 @@ end
 function widget:Shutdown()
 	if contentList then gl.DeleteList(contentList) ; contentList = nil end
 	if font then gl.DeleteFont(font) end
+	widgetHandler:DeregisterGlobal('ResearchSampleEvent')
 	WG.StaticEndGraph = nil
 	Spring.SendCommands("endgraph 1")   -- restore engine graph for other widgets
 end
