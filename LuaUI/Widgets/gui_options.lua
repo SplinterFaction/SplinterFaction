@@ -2893,7 +2893,7 @@ function widget:Initialize()
 
 		-- Force Enable High Res Textures
 		Spring.SetConfigFloat("MaxTextureAtlasSizeX",8192)
-		Spring.SetConfigFloat("MaxTextureAtlasSizeZ",8192)
+		Spring.SetConfigFloat("MaxTextureAtlasSizeY",8192)
 
 		--if Platform ~= nil and Platform.gpuVendor ~= 'Nvidia' then	-- because UsePBO displays tiled map texture bug for ATI/AMD cards
 		--Spring.SetConfigInt("UsePBO",0)
