@@ -34,7 +34,7 @@ end
 --------------------------------------------------------------------------------
 
 local DEF_COST     = 100
-local DEF_MULT     = 2.0
+local DEF_MULT     = 5.0
 local DEF_ADD      = 0
 local DEF_DURATION = 20      -- seconds
 

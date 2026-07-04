@@ -28,8 +28,8 @@ local POST_TRIGGER_RESET = 0.55
 
 -- Disruption chaining
 local CHAIN_TARGETS  = 3
-local CHAIN_FRACTION = 0.25
-local CHAIN_RADIUS   = 100
+local CHAIN_FRACTION = 0.1
+local CHAIN_RADIUS   = 300
 
 -- Feature toggles
 local ENABLE_RELOAD_PENALTY = false

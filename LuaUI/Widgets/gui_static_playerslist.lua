@@ -976,6 +976,15 @@ function widget:Initialize()
 	widgetHandler:RegisterGlobal('SystemEvent', SystemEvent)
 	widgetHandler:RegisterGlobal('CameraBroadcastEvent', CameraBroadcastEvent)
 
+	-- Published geometry: other widgets (e.g. Static Abilities) anchor to this
+	-- panel. panelRect is reassigned by BuildGeometry, so the closure always
+	-- returns the live rect -- including runtime height changes (specs
+	-- expanding, players resigning).
+	WG.StaticPlayersList = WG.StaticPlayersList or {}
+	WG.StaticPlayersList.GetRect = function()
+		return panelRect.x1, panelRect.y1, panelRect.x2, panelRect.y2
+	end
+
 	RefreshPlayers()
 	BuildGeometry()
 	PublishApi()
@@ -990,6 +999,8 @@ function widget:Shutdown()
 	widgetHandler:DeregisterGlobal('GpuMemEvent')
 	widgetHandler:DeregisterGlobal('SystemEvent')
 	widgetHandler:DeregisterGlobal('CameraBroadcastEvent')
+
+	WG.StaticPlayersList = nil
 
 	WG['advplayerlist_api'] = nil
 
