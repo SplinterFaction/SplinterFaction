@@ -10,9 +10,12 @@ function gadget:GetInfo()
 	}
 end
 
-if not gadgetHandler:IsSyncedCode() then
-	return
-end
+if gadgetHandler:IsSyncedCode() then
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- SYNCED
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
 -- Config
@@ -36,14 +39,14 @@ local POST_TRIGGER_RESET = 0.55 -- come back online at 55% (stage 1: still blind
 -- Overload nova (fires when a unit hits full disruption)
 -- Applies NOVA_FRACTION of the SOURCE unit's capacity to the source's allies
 -- within NOVA_RADIUS. Victims' own disruptionresist still applies.
-local NOVA_RADIUS   = 150
+local NOVA_RADIUS   = 300
 local NOVA_FRACTION = 0.25
 
 -- Stage CEGs (stubs -- define these)
 local STAGE_CEGS = {
 	[1] = "transformerblow-stage1",
 	[2] = "transformerblow-stage2",
-	[3] = "transformerblow-stage3",
+	[3] = "empty",
 }
 local NOVA_CEG    = "transformerblow-large"
 local AMBIENT_CEG = "lightning_stormbolt" -- crackle on units at stage >= 1
@@ -101,6 +104,8 @@ local spGetUnitsInSphere    = Spring.GetUnitsInSphere
 local spGetUnitTeam         = Spring.GetUnitTeam
 local spAreTeamsAllied      = Spring.AreTeamsAllied
 local spGetGroundHeight     = Spring.GetGroundHeight
+
+local SendToUnsynced = SendToUnsynced
 
 local MoveCtrl                = Spring.MoveCtrl
 local mcGetGroundMoveTypeData = MoveCtrl and MoveCtrl.GetGroundMoveTypeData
@@ -327,6 +332,7 @@ local function SetStage(unitID, newStage)
 	if newStage > oldStage then
 		for stage = oldStage + 1, newStage do
 			SpawnCEGAtUnit(unitID, STAGE_CEGS[stage], 0)
+			SendToUnsynced("disruptionStageUp", unitID, stage)
 		end
 	end
 
@@ -684,4 +690,74 @@ function gadget:GameFrame(frame)
 			end
 		end
 	end
+end
+
+else
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- UNSYNCED: 3D stage-up sounds
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+-- Sound files (stubs -- supply these). Stage 3 fires at the same moment as
+-- the overload nova, so make it the big one.
+local STAGE_SOUNDS = {
+	[1] = { file = "sounds/weapons/electricboom.wav", volume = 0.8 },
+	[2] = { file = "sounds/weapons/electricboom.wav", volume = 0.9 },
+	[3] = { file = "sounds/impacts/phasegun1hit.wav", volume = 1.0 },
+}
+local SOUND_CHANNEL = "battle"
+
+local spPlaySoundFile     = Spring.PlaySoundFile
+local spGetUnitPosition   = Spring.GetUnitPosition
+local spIsUnitInLos       = Spring.IsUnitInLos
+local spGetMyAllyTeamID   = Spring.GetMyAllyTeamID
+local spGetSpectatingState = Spring.GetSpectatingState
+
+local function CanLocalPlayerSee(unitID)
+	local spec, fullView = spGetSpectatingState()
+	if spec and fullView then
+		return true
+	end
+	return spIsUnitInLos(unitID, spGetMyAllyTeamID())
+end
+
+local function OnStageUp(_, unitID, stage)
+	local snd = STAGE_SOUNDS[stage]
+	if not snd then
+		return
+	end
+
+	-- SendToUnsynced reaches every client; without this guard, enemies would
+	-- hear stage-up sounds on units hidden in the fog.
+	if not CanLocalPlayerSee(unitID) then
+		return
+	end
+
+	local x, y, z = spGetUnitPosition(unitID)
+	if not x then
+		return
+	end
+
+	spPlaySoundFile(snd.file, snd.volume, x, y, z, SOUND_CHANNEL)
+end
+
+function gadget:Initialize()
+	-- Disable entries whose files don't exist yet, and say so once instead
+	-- of spamming warnings on every stage-up.
+	for stage, snd in pairs(STAGE_SOUNDS) do
+		if not VFS.FileExists(snd.file) then
+			Spring.Echo("[Disruption] stage " .. stage .. " sound missing: "
+				.. snd.file .. " -- sound disabled until supplied")
+			STAGE_SOUNDS[stage] = nil
+		end
+	end
+
+	gadgetHandler:AddSyncAction("disruptionStageUp", OnStageUp)
+end
+
+function gadget:Shutdown()
+	gadgetHandler:RemoveSyncAction("disruptionStageUp")
+end
+
 end
