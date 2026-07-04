@@ -21,9 +21,13 @@ SaveDefsToCustomParams = false
 -------------------------
 -- Process relevant modoptions and gamewide features first
 -------------------------
-local unitHealthModifier = tonumber(Spring.GetModOptions().unithealthmodifier)
-if unitHealthModifier == nil then
-	unitHealthModifier = 100
+
+local unitHealthModifier = 100
+if (Spring.GetModOptions) then
+	local modOptions = Spring.GetModOptions()
+	if modOptions.unithealthmodifier == nil then
+		unitHealthModifier = tonumber(modOptions.unithealthmodifier)
+	end
 end
 
 unitHealthModifier = unitHealthModifier * 0.01
