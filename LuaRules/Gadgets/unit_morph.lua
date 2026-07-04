@@ -262,6 +262,7 @@ if (gadgetHandler:IsSyncedCode()) then
   --// per team Queue Units
   --- TODO: Make it global, accessible by UNSYNCED
   local teamQueuedUnits = {}  -- [team:1..n]={ queuedUnits }
+  local rpWaiting = {}        -- [teamID] = unitID of a queue head parked awaiting research points
   local unitsToDestroy = {}   -- [uid:1..n]={frame:number}  :: Frame it was set to be removed from game
   --local queuedUnits = {}    -- [idx:1..n]={unitID=n, morphData={}}
   --local teamJustMorphed = {}       -- [teamID] = unitID | nil
@@ -951,6 +952,8 @@ if (gadgetHandler:IsSyncedCode()) then
   end
 
   local function StartQueue(teamID)
+    local prevWaitingUnit = rpWaiting[teamID]   -- for the once-per-head message throttle
+    rpWaiting[teamID] = nil                     -- always re-derived below; never goes stale
     local queuedUnits = teamQueuedUnits[teamID]
     if queuedUnits and #queuedUnits > 0 then
       -- TODO: => Next Morph Set
@@ -980,6 +983,20 @@ if (gadgetHandler:IsSyncedCode()) then
 
       local unitDefName = UnitDefs[spGetUnitDefID(nextMorph.unitID)].name
       local morphDef = morphDefs[unitDefName][nextMorph.cmdID]
+
+      -- Research-point gate for the queue: if the head can't afford its RP cost,
+      -- leave it at the head and mark the team as waiting; GameFrame retries once
+      -- per second until the balance catches up. StartMorph's Spend stays the
+      -- single atomic deduction point, so nothing can double-spend.
+      local researchCost = (morphDef and morphDef.research) or 0
+      if researchCost > 0 and GG.Research and not GG.Research.CanAfford(teamID, researchCost) then
+        rpWaiting[teamID] = nextMorph.unitID
+        if prevWaitingUnit ~= nextMorph.unitID then   -- announce once per head unit, not per retry
+          spSendMessageToTeam(teamID, "Upgrade queued: waiting for " .. researchCost .. " research points")
+        end
+        return
+      end
+
       StartMorph(nextMorph.unitID, morphDef, nextMorph.teamID) --nextMorph.teamID, cmdID, unitID
     end
   end
@@ -1397,6 +1414,7 @@ if (gadgetHandler:IsSyncedCode()) then
     --// make it global for unsynced access via SYNCED
     _G.morphUnits = morphingUnits
     _G.teamQUnits = teamQueuedUnits
+    _G.rpWaiting  = rpWaiting
     _G.morphDefs  = morphDefs
     _G.extraUnitMorphDefs  = extraUnitMorphDefs
 
@@ -1662,6 +1680,19 @@ if (gadgetHandler:IsSyncedCode()) then
       end
     end
 
+    -- Retry research-point-blocked queue heads once per second. Keys are collected
+    -- into an array first because StartQueue clears and may re-set rpWaiting[teamID],
+    -- and re-adding a key while pairs() iterates is undefined behavior in Lua 5.1.
+    if n % 30 == 0 and next(rpWaiting) then
+      local waiting = {}
+      for teamID in pairs(rpWaiting) do
+        waiting[#waiting + 1] = teamID
+      end
+      for i = 1, #waiting do
+        StartQueue(waiting[i])
+      end
+    end
+
     --if n % 5 < 0.01 then
     --    for uID, frame in pairs(cleanRulesParam) do
     --        if n >= frame then
@@ -1797,11 +1828,8 @@ if (gadgetHandler:IsSyncedCode()) then
       end
       -- If there are no morphingUnits, start morphing this immediately
       if #teamQueuedUnits[teamID] == 0 then
-        local morphDef = getMorphDef(unitID, unitDefID, startCmdID)
-        --if not morphDef then
-        --  return true, true end      --// command was used, remove it
         QueueMorph(unitID, teamID, startCmdID)
-        StartMorph(unitID, morphDef, teamID)
+        StartQueue(teamID)  -- applies the research-point gate; may park the head as waiting
       else
         QueueMorph(unitID, teamID, startCmdID)
       end

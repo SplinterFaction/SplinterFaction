@@ -79,29 +79,30 @@ function gadget:GameFrame(frame)
 						local su, sm = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyUsed") or 0), math.round(Spring.GetTeamRulesParam(unitTeam, "supplyMax") or 0)
 						local ec, es, ep, ei, ee = Spring.GetTeamResources(unitTeam, "energy")
 						local mc, ms, mp, mi, me = Spring.GetTeamResources(unitTeam, "metal")
+						local rp = Spring.GetTeamRulesParam(unitTeam, "researchPoints") or 0
 						local unitDefID = Spring.GetUnitDefID(unitID)
 						local commTech = commTechLevel[unitDefID] or 0
 
 						if commTech == 0 then
-							if mi >= 10 and ei >= 170 then
+							if rp >= 150 then
 								Spring.GiveOrderToUnit(unitID, CMD_MORPH_QUEUE, {}, {"shift"})
 							end
 						end
 
 						if commTech == 1 then
-							if mi >= 20 and ei >= 560 then
+							if rp >= 300 then
 								Spring.GiveOrderToUnit(unitID, CMD_MORPH_QUEUE, {}, {"shift"})
 							end
 						end
 
 						if commTech == 2 then
-							if mi >= 40 and ei >= 1040 then
+							if rp >= 600 then
 								Spring.GiveOrderToUnit(unitID, CMD_MORPH_QUEUE, {}, {"shift"})
 							end
 						end
 
 						if commTech == 3 then
-							if mi >= 80 and ei >= 3120 then
+							if rp >= 1200 then
 								Spring.GiveOrderToUnit(unitID, CMD_MORPH_QUEUE, {}, {"shift"})
 							end
 						end

@@ -1,9 +1,9 @@
 function gadget:GetInfo()
 	return {
 		name    = "Disruption Damage",
-		desc    = "Converts marked weapon damage into disruption buildup; progressive impairment; full disruption at 100%",
+		desc    = "Disruption buildup with staged system shutdowns; overload nova at full disruption",
 		author  = "",
-		date    = "2026-03-14",
+		date    = "2026-07-04",
 		license = "MIT",
 		layer   = 0,
 		enabled = true,
@@ -21,22 +21,38 @@ end
 local GAME_SPEED = 30
 local IN_LOS = { inlos = true }
 
+-- Shutdown stages
+-- Stage 1 (>= 33%): sensors offline (LOS collapses to MIN_LOS_RADIUS)
+-- Stage 2 (>= 66%): weapons offline (enforced in AllowWeaponTarget)
+-- Stage 3 (100%):   engines dead for LOCKOUT_SECONDS + overload nova
+local STAGE_1_THRESHOLD = 0.33
+local STAGE_2_THRESHOLD = 0.66
+
 -- Full disruption
-local LOCKOUT_SECONDS   = 10
-local LOCKOUT_FRAMES    = LOCKOUT_SECONDS * GAME_SPEED
-local POST_TRIGGER_RESET = 0.55
+local LOCKOUT_SECONDS    = 10
+local LOCKOUT_FRAMES     = LOCKOUT_SECONDS * GAME_SPEED
+local POST_TRIGGER_RESET = 0.55 -- come back online at 55% (stage 1: still blind, weapons back)
 
--- Disruption chaining
-local CHAIN_TARGETS  = 3
-local CHAIN_FRACTION = 0.1
-local CHAIN_RADIUS   = 300
+-- Overload nova (fires when a unit hits full disruption)
+-- Applies NOVA_FRACTION of the SOURCE unit's capacity to the source's allies
+-- within NOVA_RADIUS. Victims' own disruptionresist still applies.
+local NOVA_RADIUS   = 150
+local NOVA_FRACTION = 0.25
 
--- Feature toggles
-local ENABLE_RELOAD_PENALTY = false
+-- Stage CEGs (stubs -- define these)
+local STAGE_CEGS = {
+	[1] = "transformerblow-stage1",
+	[2] = "transformerblow-stage2",
+	[3] = "transformerblow-stage3",
+}
+local NOVA_CEG    = "transformerblow-large"
+local AMBIENT_CEG = "lightning_stormbolt" -- crackle on units at stage >= 1
+
+-- Decay pauses briefly after a disruption hit
 local RECENT_HIT_DELAY_SECONDS = 2
 local RECENT_HIT_DELAY_FRAMES  = RECENT_HIT_DELAY_SECONDS * GAME_SPEED
 
--- Decay rates are based on max HP per second
+-- Decay rates are based on capacity per second
 local DECAY_HIGH = 0.02 -- >70%
 local DECAY_MID  = 0.04 -- 30-70%
 local DECAY_LOW  = 0.06 -- <30%
@@ -45,11 +61,9 @@ local DECAY_LOW  = 0.06 -- <30%
 local UPDATE_FRAMES = 6
 local RULESPARAM_EPSILON_PERCENT = 0.5
 
--- Penalty floors at 100% disruption
-local MIN_SPEED_MULT = 0.25
-local MIN_ACCEL_MULT = 0.25
-local MIN_TURN_MULT  = 0.25
-local MIN_LOS_RADIUS = 50  -- elmos; tiny floor to avoid engine weirdness at zero
+-- Stage effect floors
+local MIN_LOS_RADIUS = 50 -- elmos; tiny floor to avoid engine weirdness at zero
+local ENGINE_DEAD_SPEED_MULT = 0.001 -- near-zero; true zero can misbehave
 
 --------------------------------------------------------------------------------
 -- optional customparams
@@ -79,9 +93,6 @@ local spGetUnitDefID        = Spring.GetUnitDefID
 local spSetUnitRulesParam   = Spring.SetUnitRulesParam
 local spSetUnitSensorRadius = Spring.SetUnitSensorRadius
 local spGetUnitSensorRadius = Spring.GetUnitSensorRadius
-local spGetUnitWeaponState  = Spring.GetUnitWeaponState
-local spSetUnitWeaponState  = Spring.SetUnitWeaponState
-local spGiveOrderToUnit     = Spring.GiveOrderToUnit
 local spGetAllUnits         = Spring.GetAllUnits
 local spGetUnitIsDead       = Spring.GetUnitIsDead
 local spGetUnitPosition     = Spring.GetUnitPosition
@@ -89,8 +100,9 @@ local spSpawnCEG            = Spring.SpawnCEG
 local spGetUnitsInSphere    = Spring.GetUnitsInSphere
 local spGetUnitTeam         = Spring.GetUnitTeam
 local spAreTeamsAllied      = Spring.AreTeamsAllied
+local spGetGroundHeight     = Spring.GetGroundHeight
 
-local MoveCtrl              = Spring.MoveCtrl
+local MoveCtrl                = Spring.MoveCtrl
 local mcGetGroundMoveTypeData = MoveCtrl and MoveCtrl.GetGroundMoveTypeData
 local mcSetGroundMoveTypeData = MoveCtrl and MoveCtrl.SetGroundMoveTypeData
 
@@ -104,30 +116,45 @@ local math_abs   = math.abs
 -- Tables
 --------------------------------------------------------------------------------
 
-local disruption = {}
-local disruptionCapacity = {}
-local lastDisruptionHit = {}
-local disruptedUntil = {}
-local activeUnits = {}
-local lastShownPercent = {}
+local disruption         = {} -- current buildup
+local disruptionCapacity = {} -- maxHP * disruptioncapacitymult
+local lastDisruptionHit  = {} -- frame of last disruption hit
+local disruptedUntil     = {} -- lockout end frame
+local activeUnits        = {} -- units with nonzero disruption
+local lastShownPercent   = {} -- rulesParam epsilon throttling
+local currentStage       = {} -- 0..3
 
-local unitResistMult = {}
+local unitResistMult   = {}
 local unitRecoveryMult = {}
 local unitCapacityMult = {}
-local unitImmune = {}
+local unitImmune       = {}
 
 local moveTypeCache = {}
-local weaponCache = {}
--- weaponCache[unitID] = { [weaponNum] = { reloadTime = ... }, ... }
 -- moveTypeCache[unitID] = {
 --   kind = "ground"/"none",
 --   baseLOS = ...,
---   baseMove = {
---     maxSpeed = ...,
---     accRate  = ...,
---     turnRate = ...,
---   }
+--   baseMove = { maxSpeed = ..., accRate = ..., turnRate = ... },
 -- }
+
+-- Weapon defs flagged as disruption weapons, resolved once at load
+local disruptionWeaponDef    = {} -- [weaponDefID] = true
+local disruptionWeaponDamage = {} -- [weaponDefID] = explicit disruptiondamage or nil
+
+for wdid = 0, #WeaponDefs do
+	local wd = WeaponDefs[wdid]
+	if wd then
+		local cp = wd.customParams
+		if cp and tonumber(cp.disruptionweapon) == 1 then
+			disruptionWeaponDef[wdid] = true
+			disruptionWeaponDamage[wdid] = tonumber(cp.disruptiondamage)
+		end
+	end
+end
+
+-- Overload nova work queue (queue instead of recursion so cascades are stack-safe)
+local novaQueue      = {}
+local novaCount      = 0
+local processingNova = false
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -146,28 +173,28 @@ end
 
 local function IsUnitFullyDisrupted(unitID, frame)
 	local untilFrame = disruptedUntil[unitID]
-	return untilFrame and untilFrame > frame
+	return untilFrame ~= nil and untilFrame > frame
 end
 
-local function GetPenaltyMultipliersFromPercent(pct, fullyDisrupted)
-	-- Stronger early ramp than linear, but still ends at 25% at 100%.
-	local shaped = pct ^ 0.7
-
-	local speedMult = 1 - (shaped * 0.75)
-	local accelMult = 1 - (shaped * 0.75)
-	local turnMult  = 1 - (shaped * 0.75)
-
-	speedMult = math_max(MIN_SPEED_MULT, speedMult)
-	accelMult = math_max(MIN_ACCEL_MULT, accelMult)
-	turnMult  = math_max(MIN_TURN_MULT, turnMult)
-
+local function GetStageForPercent(pct, fullyDisrupted)
 	if fullyDisrupted then
-		speedMult = MIN_SPEED_MULT
-		accelMult = MIN_ACCEL_MULT
-		turnMult  = MIN_TURN_MULT
+		return 3
+	elseif pct >= STAGE_2_THRESHOLD then
+		return 2
+	elseif pct >= STAGE_1_THRESHOLD then
+		return 1
 	end
+	return 0
+end
 
-	return speedMult, accelMult, turnMult
+local function GetDecayRateForPercent(pct)
+	if pct > 0.70 then
+		return DECAY_HIGH
+	elseif pct >= 0.30 then
+		return DECAY_MID
+	else
+		return DECAY_LOW
+	end
 end
 
 local function CacheMoveType(unitID, unitDefID)
@@ -205,57 +232,61 @@ local function CacheMoveType(unitID, unitDefID)
 	moveTypeCache[unitID] = cache
 end
 
-local function CacheWeapons(unitID, unitDefID)
-	local ud = UnitDefs[unitDefID]
-	if not ud or not ud.weapons then return end
+local function SpawnCEGAtUnit(unitID, cegName, radius)
+	if not cegName then return end
 
-	local cache = {}
-	for i = 1, #ud.weapons do
-		local ws = spGetUnitWeaponState(unitID, i, "reloadTime")
-		if ws then
-			cache[i] = { reloadTime = ws }
-		end
-	end
-	weaponCache[unitID] = cache
-end
-
-local function SpawnCEG(unitID, cegName, radius)
 	local x, y, z = spGetUnitPosition(unitID)
 	if not x then return end
 
-	radius = radius or 20
+	radius = radius or 0
 
-	local rx = (math.random() * 2 - 1) * radius
-	local rz = (math.random() * 2 - 1) * radius
+	local px, pz = x, z
+	if radius > 0 then
+		px = x + (math.random() * 2 - 1) * radius
+		pz = z + (math.random() * 2 - 1) * radius
+	end
 
-	local gy = Spring.GetGroundHeight(x + rx, z + rz)
-	local py = math.max(y, gy)
+	local gy = spGetGroundHeight(px, pz)
+	local py = math_max(y, gy or y)
 
-	spSpawnCEG(cegName, x + rx, py, z + rz, 0, 1, 0)
+	spSpawnCEG(cegName, px, py, pz, 0, 1, 0)
 end
 
-local function ApplyMovementPenalty(unitID, speedMult, accelMult, turnMult)
+--------------------------------------------------------------------------------
+-- Stage effects
+--------------------------------------------------------------------------------
+
+local function ApplyLOSCollapse(unitID)
+	local cache = moveTypeCache[unitID]
+	if cache and cache.baseLOS and cache.baseLOS > 0 then
+		spSetUnitSensorRadius(unitID, "los", math_min(MIN_LOS_RADIUS, cache.baseLOS))
+	end
+end
+
+local function RestoreLOS(unitID)
+	local cache = moveTypeCache[unitID]
+	if cache and cache.baseLOS and cache.baseLOS > 0 then
+		spSetUnitSensorRadius(unitID, "los", cache.baseLOS)
+	end
+end
+
+local function ApplyEngineKill(unitID)
 	if not mcSetGroundMoveTypeData then return end
 
 	local cache = moveTypeCache[unitID]
-	if not cache or cache.kind ~= "ground" then
-		return
-	end
+	if not cache or cache.kind ~= "ground" then return end
 
 	local bm = cache.baseMove
-	if not bm or not bm.maxSpeed then
-		return
-	end
+	if not bm or not bm.maxSpeed then return end
 
 	local values = {
-		maxSpeed = bm.maxSpeed * speedMult,
+		maxSpeed = math_max(0.001, bm.maxSpeed * ENGINE_DEAD_SPEED_MULT),
 	}
-
 	if bm.accRate then
-		values.accRate = bm.accRate * accelMult
+		values.accRate = math_max(0.0001, bm.accRate * ENGINE_DEAD_SPEED_MULT)
 	end
 	if bm.turnRate then
-		values.turnRate = bm.turnRate * turnMult
+		values.turnRate = math_max(0.0001, bm.turnRate * ENGINE_DEAD_SPEED_MULT)
 	end
 
 	pcall(mcSetGroundMoveTypeData, unitID, values)
@@ -265,19 +296,14 @@ local function RestoreMovement(unitID)
 	if not mcSetGroundMoveTypeData then return end
 
 	local cache = moveTypeCache[unitID]
-	if not cache or cache.kind ~= "ground" then
-		return
-	end
+	if not cache or cache.kind ~= "ground" then return end
 
 	local bm = cache.baseMove
-	if not bm or not bm.maxSpeed then
-		return
-	end
+	if not bm or not bm.maxSpeed then return end
 
 	local values = {
 		maxSpeed = bm.maxSpeed,
 	}
-
 	if bm.accRate then
 		values.accRate = bm.accRate
 	end
@@ -286,19 +312,40 @@ local function RestoreMovement(unitID)
 	end
 
 	pcall(mcSetGroundMoveTypeData, unitID, values)
+end
 
-	-- Restore LOS
-	if cache.baseLOS and cache.baseLOS > 0 then
-		spSetUnitSensorRadius(unitID, "los", cache.baseLOS)
+-- Transitions the unit between shutdown stages. Fires a CEG for every stage
+-- crossed on the way UP (a single big hit can announce stage 1, 2, and 3).
+-- Recovery transitions are silent. Stage 2 (weapons offline) has no apply/
+-- restore logic here; it is enforced passively in AllowWeaponTarget.
+local function SetStage(unitID, newStage)
+	local oldStage = currentStage[unitID] or 0
+	if newStage == oldStage then
+		return
 	end
 
-	-- Restore weapon reload times
-	local wcache = weaponCache[unitID]
-	if wcache then
-		for weaponNum, wdata in pairs(wcache) do
-			spSetUnitWeaponState(unitID, weaponNum, "reloadTime", wdata.reloadTime)
+	if newStage > oldStage then
+		for stage = oldStage + 1, newStage do
+			SpawnCEGAtUnit(unitID, STAGE_CEGS[stage], 0)
 		end
 	end
+
+	-- Stage 1+: sensors offline
+	if newStage >= 1 and oldStage < 1 then
+		ApplyLOSCollapse(unitID)
+	elseif newStage < 1 and oldStage >= 1 then
+		RestoreLOS(unitID)
+	end
+
+	-- Stage 3: engines dead
+	if newStage >= 3 and oldStage < 3 then
+		ApplyEngineKill(unitID)
+	elseif newStage < 3 and oldStage >= 3 then
+		RestoreMovement(unitID)
+	end
+
+	currentStage[unitID] = newStage
+	spSetUnitRulesParam(unitID, "disruption_stage", newStage, IN_LOS)
 end
 
 local function SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
@@ -313,6 +360,109 @@ local function SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", fullyDisrupted and 1 or 0, IN_LOS)
 end
 
+--------------------------------------------------------------------------------
+-- Disruption application + overload nova
+--------------------------------------------------------------------------------
+
+local function EnqueueNova(unitID, amount)
+	novaCount = novaCount + 1
+	novaQueue[novaCount] = { unitID = unitID, amount = amount }
+end
+
+local function TriggerFullDisruption(unitID, frame)
+	local cap = disruptionCapacity[unitID] or 1
+	disruption[unitID] = cap
+	disruptedUntil[unitID] = frame + LOCKOUT_FRAMES
+	activeUnits[unitID] = true
+
+	SetStage(unitID, 3)
+	EnqueueNova(unitID, cap * NOVA_FRACTION)
+end
+
+-- Adds disruption to a unit (victim resist applied here), updates its stage,
+-- and triggers full disruption at cap. Callers are responsible for immunity
+-- and lockout checks, and for draining the nova queue afterwards.
+local function ApplyDisruption(unitID, amount, frame)
+	amount = amount * (unitResistMult[unitID] or 1)
+	if amount <= 0 then
+		return
+	end
+
+	local cap = disruptionCapacity[unitID]
+	if not cap or cap <= 0 then
+		cap = math_max(1, GetUnitMaxHealth(unitID) * (unitCapacityMult[unitID] or 1))
+		disruptionCapacity[unitID] = cap
+	end
+
+	local current = math_min(cap, (disruption[unitID] or 0) + amount)
+	disruption[unitID] = current
+	lastDisruptionHit[unitID] = frame
+	activeUnits[unitID] = true
+
+	if current >= cap then
+		TriggerFullDisruption(unitID, frame)
+	else
+		SetStage(unitID, GetStageForPercent(current / cap, false))
+	end
+end
+
+-- The nova arcs to units ALLIED WITH THE OVERLOADING UNIT (the clumped army
+-- pays the price). The disrupting side and third parties are never affected.
+local function DoNova(nova, frame)
+	local sourceUnitID = nova.unitID
+
+	local x, y, z = spGetUnitPosition(sourceUnitID)
+	if not x then return end
+
+	SpawnCEGAtUnit(sourceUnitID, NOVA_CEG, 0)
+
+	local sourceTeam = spGetUnitTeam(sourceUnitID)
+	if not sourceTeam then return end
+
+	local nearby = spGetUnitsInSphere(x, y, z, NOVA_RADIUS)
+	if not nearby or #nearby == 0 then return end
+
+	for i = 1, #nearby do
+		local uid = nearby[i]
+		if uid ~= sourceUnitID
+				and spValidUnitID(uid)
+				and not spGetUnitIsDead(uid)
+				and not unitImmune[uid]
+				and not IsUnitFullyDisrupted(uid, frame) then
+			local uteam = spGetUnitTeam(uid)
+			if uteam and (uteam == sourceTeam or spAreTeamsAllied(sourceTeam, uteam)) then
+				ApplyDisruption(uid, nova.amount, frame)
+			end
+		end
+	end
+end
+
+-- Drains the nova queue. Novas triggered while processing (cascades through
+-- clumped units) are appended and picked up by the same loop. Cascades
+-- terminate naturally: a unit can only nova once per lockout entry, and
+-- already-locked-out units are skipped as nova targets.
+local function ProcessNovaQueue(frame)
+	if processingNova then
+		return
+	end
+	processingNova = true
+
+	local i = 1
+	while i <= novaCount do
+		local nova = novaQueue[i]
+		i = i + 1
+		DoNova(nova, frame)
+	end
+
+	novaQueue = {}
+	novaCount = 0
+	processingNova = false
+end
+
+--------------------------------------------------------------------------------
+-- Unit state lifecycle
+--------------------------------------------------------------------------------
+
 local function ClearUnitState(unitID)
 	disruption[unitID] = nil
 	disruptionCapacity[unitID] = nil
@@ -320,38 +470,16 @@ local function ClearUnitState(unitID)
 	disruptedUntil[unitID] = nil
 	activeUnits[unitID] = nil
 	lastShownPercent[unitID] = nil
+	currentStage[unitID] = nil
 	unitResistMult[unitID] = nil
 	unitRecoveryMult[unitID] = nil
 	unitCapacityMult[unitID] = nil
 	unitImmune[unitID] = nil
 	moveTypeCache[unitID] = nil
-	weaponCache[unitID] = nil
 
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
-	spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
-end
-
-local function GetDecayRateForPercent(pct)
-	if pct > 0.70 then
-		return DECAY_HIGH
-	elseif pct >= 0.30 then
-		return DECAY_MID
-	else
-		return DECAY_LOW
-	end
-end
-
-local function TriggerFullDisruption(unitID, frame, noStop)
-	local cap = disruptionCapacity[unitID] or 1
-	disruption[unitID] = cap
-	disruptedUntil[unitID] = frame + LOCKOUT_FRAMES
-	activeUnits[unitID] = true
-
-	if not noStop then
-
-		-- spGiveOrderToUnit(unitID, CMD.STOP, {}, 0)
-	end
+	spSetUnitRulesParam(unitID, "disruption_stage", 0, IN_LOS)
 end
 
 local function InitUnitState(unitID, unitDefID)
@@ -371,7 +499,7 @@ local function InitUnitState(unitID, unitDefID)
 	disruption[unitID] = disruption[unitID] or 0
 	disruptionCapacity[unitID] = math_max(1, maxHealth * capacityMult)
 	lastDisruptionHit[unitID] = lastDisruptionHit[unitID] or -999999
-	disruptedUntil[unitID] = disruptedUntil[unitID] or nil
+	currentStage[unitID] = currentStage[unitID] or 0
 
 	unitCapacityMult[unitID] = capacityMult
 	unitResistMult[unitID] = resistMult
@@ -379,11 +507,10 @@ local function InitUnitState(unitID, unitDefID)
 	unitImmune[unitID] = immune
 
 	CacheMoveType(unitID, unitDefID)
-	CacheWeapons(unitID, unitDefID)
 
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
-	spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
+	spSetUnitRulesParam(unitID, "disruption_stage", 0, IN_LOS)
 end
 
 --------------------------------------------------------------------------------
@@ -406,84 +533,40 @@ function gadget:UnitCreated(unitID, unitDefID)
 end
 
 function gadget:UnitFinished(unitID, unitDefID)
+	-- If the nanoframe was disrupted while under construction, lift the LOS
+	-- collapse before recaching so we don't capture the collapsed radius as base.
+	local stage = currentStage[unitID] or 0
+	if stage >= 1 then
+		RestoreLOS(unitID)
+	end
+
 	CacheMoveType(unitID, unitDefID)
-	CacheWeapons(unitID, unitDefID)
+
+	-- Re-apply current stage effects against the fresh cache
+	if stage >= 1 then
+		ApplyLOSCollapse(unitID)
+	end
+	if stage >= 3 then
+		ApplyEngineKill(unitID)
+	end
 end
 
 function gadget:UnitDestroyed(unitID)
-	RestoreMovement(unitID)
 	ClearUnitState(unitID)
 end
 
 function gadget:UnitTaken(unitID, unitDefID)
 	RestoreMovement(unitID)
+	RestoreLOS(unitID)
 	ClearUnitState(unitID)
 	InitUnitState(unitID, unitDefID)
 end
 
 function gadget:UnitGiven(unitID, unitDefID)
 	RestoreMovement(unitID)
+	RestoreLOS(unitID)
 	ClearUnitState(unitID)
 	InitUnitState(unitID, unitDefID)
-end
-
---------------------------------------------------------------------------------
--- Chaining
---------------------------------------------------------------------------------
-
-local function ApplyChainDisruption(sourceUnitID, sourceTeam, chainAmount, frame)
-	local x, y, z = spGetUnitPosition(sourceUnitID)
-	if not x then return end
-
-	local nearby = spGetUnitsInSphere(x, y, z, CHAIN_RADIUS)
-	if not nearby or #nearby == 0 then return end
-
-	-- Build candidate list: enemy, alive, not the source, not immune, not already fully disrupted
-	local candidates = {}
-	for i = 1, #nearby do
-		local uid = nearby[i]
-		if uid ~= sourceUnitID
-				and spValidUnitID(uid)
-				and not spGetUnitIsDead(uid)
-				and not unitImmune[uid]
-				and not IsUnitFullyDisrupted(uid, frame) then
-			local uteam = spGetUnitTeam(uid)
-			if uteam and uteam ~= sourceTeam and not spAreTeamsAllied(sourceTeam, uteam) then
-				candidates[#candidates + 1] = uid
-			end
-		end
-	end
-
-	if #candidates == 0 then return end
-
-	-- Fisher-Yates shuffle then take up to CHAIN_TARGETS
-	for i = #candidates, 2, -1 do
-		local j = math.random(i)
-		candidates[i], candidates[j] = candidates[j], candidates[i]
-	end
-
-	local hits = math_min(CHAIN_TARGETS, #candidates)
-	for i = 1, hits do
-		local uid = candidates[i]
-
-		local resist = unitResistMult[uid] or 1
-		local amount = chainAmount * resist
-
-		local cap = disruptionCapacity[uid]
-		if not cap or cap <= 0 then
-			local maxHealth = GetUnitMaxHealth(uid)
-			cap = math_max(1, maxHealth * (unitCapacityMult[uid] or 1))
-			disruptionCapacity[uid] = cap
-		end
-
-		disruption[uid] = math_min(cap, (disruption[uid] or 0) + amount)
-		lastDisruptionHit[uid] = frame
-		activeUnits[uid] = true
-
-		if disruption[uid] >= cap then
-			TriggerFullDisruption(uid, frame, true)
-		end
-	end
 end
 
 --------------------------------------------------------------------------------
@@ -491,17 +574,7 @@ end
 --------------------------------------------------------------------------------
 
 function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
-	if not weaponDefID then
-		return damage
-	end
-
-	local wd = WeaponDefs[weaponDefID]
-	if not wd then
-		return damage
-	end
-
-	local cp = wd.customParams
-	if not cp or tonumber(cp.disruptionweapon) ~= 1 then
+	if not weaponDefID or not disruptionWeaponDef[weaponDefID] then
 		return damage
 	end
 
@@ -511,46 +584,19 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
 
 	local frame = spGetGameFrame()
 
-	-- Target is already fully disrupted: block the hit and stop the attacker
-	-- so it immediately drops its target and looks for something else.
-	-- Chain still fires so disruption weapons aren't wasted on a locked-out target.
+	-- Already locked out: dead hit. AllowWeaponTarget steers attackers to
+	-- other targets, so this only absorbs in-flight projectiles.
 	if IsUnitFullyDisrupted(unitID, frame) then
-		if attackerID and spValidUnitID(attackerID) then
-			spGiveOrderToUnit(attackerID, CMD.STOP, {}, 0)
-		end
-		local disruptAmount = tonumber(cp.disruptiondamage) or damage or 0
-		if disruptAmount > 0 then
-			ApplyChainDisruption(unitID, attackerTeam, disruptAmount * CHAIN_FRACTION, frame)
-		end
 		return 0
 	end
 
-	local disruptAmount = tonumber(cp.disruptiondamage) or damage or 0
+	local disruptAmount = disruptionWeaponDamage[weaponDefID] or damage or 0
 	if disruptAmount <= 0 then
 		return 0
 	end
 
-	local resist = unitResistMult[unitID] or 1
-	disruptAmount = disruptAmount * resist
-
-	local cap = disruptionCapacity[unitID]
-	if not cap or cap <= 0 then
-		local maxHealth = GetUnitMaxHealth(unitID)
-		cap = math_max(1, maxHealth * (unitCapacityMult[unitID] or 1))
-		disruptionCapacity[unitID] = cap
-	end
-
-	disruption[unitID] = math_min(cap, (disruption[unitID] or 0) + disruptAmount)
-	lastDisruptionHit[unitID] = frame
-	activeUnits[unitID] = true
-
-	if disruption[unitID] >= cap then
-		TriggerFullDisruption(unitID, frame)
-	end
-
-	-- Chain 25% of the disruption amount to up to 3 nearby enemies
-	local chainAmount = disruptAmount * CHAIN_FRACTION
-	ApplyChainDisruption(unitID, attackerTeam, chainAmount, frame)
+	ApplyDisruption(unitID, disruptAmount, frame)
+	ProcessNovaQueue(frame)
 
 	return 0
 end
@@ -559,22 +605,18 @@ end
 -- Weapon control
 --------------------------------------------------------------------------------
 
-function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag, synced)
-	-- Block manual attack orders while fully disrupted.
-	if cmdID == CMD.ATTACK or cmdID == CMD.FIGHT then
-		local frame = spGetGameFrame()
-		if IsUnitFullyDisrupted(unitID, frame) then
-			return false
-		end
-	end
-	return true
-end
-
 function gadget:AllowWeaponTarget(attackerID, targetID, attackerWeaponNum, attackerWeaponDefID, defPriority)
-	local frame = spGetGameFrame()
+	-- Stage 2+: this unit's weapons are offline.
+	if (currentStage[attackerID] or 0) >= 2 then
+		return false
+	end
 
-	-- Fully disrupted units cannot fire at all.
-	if IsUnitFullyDisrupted(attackerID, frame) then
+	-- Disruption weapons refuse locked-out targets so the engine retargets
+	-- naturally. Normal weapons can still shoot (and kill) disrupted units.
+	if targetID
+			and attackerWeaponDefID
+			and disruptionWeaponDef[attackerWeaponDefID]
+			and IsUnitFullyDisrupted(targetID, spGetGameFrame()) then
 		return false
 	end
 
@@ -600,8 +642,8 @@ function gadget:GameFrame(frame)
 			local current = disruption[unitID] or 0
 			local fullyDisrupted = IsUnitFullyDisrupted(unitID, frame)
 
-			SpawnCEG(unitID, "lightning_stormbolt", 20)
-
+			-- Lockout expiry: come back online at POST_TRIGGER_RESET.
+			-- 55% lands in stage 1: weapons and engines back, still blind.
 			if disruptedUntil[unitID] and disruptedUntil[unitID] <= frame then
 				disruptedUntil[unitID] = nil
 				current = cap * POST_TRIGGER_RESET
@@ -610,6 +652,7 @@ function gadget:GameFrame(frame)
 				lastDisruptionHit[unitID] = frame
 			end
 
+			-- Decay (paused briefly after a recent hit, never during lockout)
 			if (not fullyDisrupted) and current > 0 then
 				local lastHit = lastDisruptionHit[unitID] or -999999
 				if frame - lastHit > RECENT_HIT_DELAY_FRAMES then
@@ -623,48 +666,20 @@ function gadget:GameFrame(frame)
 				end
 			end
 
-			local pct = current / cap
-			pct = Clamp(pct, 0, 1)
+			local pct = Clamp(current / cap, 0, 1)
+			local stage = GetStageForPercent(pct, fullyDisrupted)
+			SetStage(unitID, stage)
 
-			local speedMult, accelMult, turnMult = GetPenaltyMultipliersFromPercent(pct, fullyDisrupted)
-
-			spSetUnitRulesParam(unitID, "disruption_speedmult", speedMult, IN_LOS)
-
-			ApplyMovementPenalty(unitID, speedMult, accelMult, turnMult)
-
-			-- LOS ramping: same shaped curve, floors at MIN_LOS_RADIUS
-			local cache = moveTypeCache[unitID]
-			if cache and cache.baseLOS and cache.baseLOS > 0 then
-				local losMult
-				if fullyDisrupted then
-					losMult = 0
-				else
-					local shaped = pct ^ 0.7
-					losMult = 1 - shaped
-				end
-				local newLOS = math.max(MIN_LOS_RADIUS, math.floor(cache.baseLOS * losMult))
-				spSetUnitSensorRadius(unitID, "los", newLOS)
-			end
-
-			-- Reload time penalty: same shaped curve, max 2x at full disruption
-			if ENABLE_RELOAD_PENALTY then
-				local wcache = weaponCache[unitID]
-				if wcache then
-					local shaped = fullyDisrupted and 1 or (pct ^ 0.7)
-					local reloadMult = 1 + shaped
-					for weaponNum, wdata in pairs(wcache) do
-						spSetUnitWeaponState(unitID, weaponNum, "reloadTime", wdata.reloadTime * reloadMult)
-					end
-				end
+			if stage >= 1 then
+				SpawnCEGAtUnit(unitID, AMBIENT_CEG, 20)
 			end
 
 			SetDisplayedRulesParams(unitID, pct, fullyDisrupted)
 
 			if (not fullyDisrupted) and current <= 0.001 then
 				disruption[unitID] = 0
-				RestoreMovement(unitID)  -- also restores LOS
+				SetStage(unitID, 0) -- restores sensors; engines already restored on leaving stage 3
 				SetDisplayedRulesParams(unitID, 0, false)
-				spSetUnitRulesParam(unitID, "disruption_speedmult", 1, IN_LOS)
 				activeUnits[unitID] = nil
 			end
 		end

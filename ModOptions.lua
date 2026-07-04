@@ -102,6 +102,18 @@ local options= {
 		type   = 'section',
 	},
 	{
+		key    = 'ai_neverstall',
+		name   = 'NeverStall',
+		desc   = 'Makes it so that the AI will never stall out on resources',
+		type="list",
+		def="enabled",
+		section= "aioptions",
+		items={
+			{key="disabled", name="Disabled", desc="Clean, non cheating AI"},
+			{key="enabled", name="Enabled", desc="Laughs in hardcore"},
+		}
+	},
+	{
 		key    = 'ai_enableincomemultiplier',
 		name   = 'Enable AI resource cheats',
 		desc   = 'Enable AI resource cheats',
