@@ -46,7 +46,7 @@ local COST_RP          = 100                -- research points per sweep (team p
 local COOLDOWN_SECONDS = 20                 -- per PLAYER, not per team
 local REVEAL_SECONDS   = 5                  -- probe lifetime
 local PROBE_UNITDEF    = "scanner_probe"    -- must exist in unitdefs
-local SWEEP_CEG        = "scanner-sweep"    -- optional visual at target; harmless if undefined
+local SWEEP_CEG        = "scannersweep"    -- optional visual at target; harmless if undefined
 
 local MSG_SWEEP        = "scanner_sweep"    -- "scanner_sweep <x> <z>"
 local MSG_QUERY        = "scanner_query"
@@ -177,6 +177,7 @@ local function DoSweep(playerID, x, z)
   -- Optional flourish at the target; SpawnCEG on an undefined name is a no-op.
   if SWEEP_CEG then
     spSpawnCEG(SWEEP_CEG, x, y + 8, z, 0, 1, 0)
+    Spring.PlaySoundFile("scannersweep", 1)
   end
 end
 
