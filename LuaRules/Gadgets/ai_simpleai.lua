@@ -22,7 +22,21 @@ local WAVE_MIN_ARMY     = 4      -- minimum combat units before attacking
 local WAVE_MUSTER_SIZE  = 4      -- units that must be at muster point to trigger launch
 local WAVE_BIG_ARMY     = 9      -- if we have this many ground units, attack even if not fully mustered
 local MUSTER_RADIUS     = 600    -- how close a unit must be to count as "at muster"
-local RETREAT_HP        = 0.75   -- combat-unit retreat threshold
+
+-- Retreat hysteresis, on EFFECTIVE hp: (hull + shield) / (maxHull + maxShield).
+-- SF has no repair. Fed hulls autoheal; Loz hulls never recover but their shield
+-- (up to half their pool) does. A single threshold on raw hull therefore benches
+-- Loz units forever. Instead: enter retreat low, exit when recovered ENOUGH --
+-- where "enough" for Loz is a full shield (the best that unit will ever be again).
+local RETREAT_ENTER     = 0.50   -- effective-hp fraction that triggers retreat
+local RETREAT_EXIT      = 0.75   -- effective-hp fraction that ends retreat (Fed heals to this)
+local RETREAT_TIMEOUT   = 750    -- frames (~25s); catch-all exit so nothing wedges
+
+-- Build Boost policy (unit_research_buildboost.lua). Keep CMD id and default
+-- cost in sync with that gadget (CMD_BUILD_BOOST / DEF_COST).
+local CMD_BUILD_BOOST   = 35410
+local BOOST_RP_RESERVE  = 150    -- RP kept back for commander morphs; waived at tech 4
+local BOOST_COOLDOWN    = 300    -- min frames between boosts per team (~10s)
 
 -- Commander survival
 local COMM_RETREAT_HP   = 0.65   -- commander starts running below this HP fraction
@@ -149,6 +163,14 @@ local SimpleCommRetreatPos = {}   -- committed haven {x,y,z} for the current ret
 -- Base defense
 local SimpleBaseThreat     = {}   -- nearest enemy inside the base {x,y,z,uid} or nil
 
+-- Retreat hysteresis: per-UNIT (not per-team). [unitID] = frame retreat began.
+-- Cleared on exit conditions and unconditionally in UnitDestroyed (unitIDs are
+-- recycled by the engine, so a stale entry could tag a brand-new unit).
+local SimpleRetreatState   = {}
+
+-- Build Boost pacing: [teamID] = frame of last boost order.
+local SimpleLastBoost      = {}
+
 -- tech / faction state
 local TeamTechLevel  = {}   -- 0-4 per team
 local TeamFaction    = {}   -- "fed" | "loz" | "neutral" per team
@@ -216,6 +238,7 @@ for i = 1, #teams do
 		SimpleCommRetreating[teamID]   = false
 		SimpleCommRetreatPos[teamID]   = nil
 		SimpleBaseThreat[teamID]       = nil
+		SimpleLastBoost[teamID]        = 0
 		TeamTechLevel[teamID]          = 1   -- game starts at tech1
 		TeamFaction[teamID]            = nil
 		TeamCommID[teamID]             = nil
@@ -308,6 +331,37 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 			IsAir[unitDefID] = true
 		end
 	end
+end
+
+-- Shield capacity per def (unit_protoss_style_shields.lua). Lets us compute
+-- EFFECTIVE hp -- hull + current shield over hull max + shield max -- since
+-- GetUnitHealth alone sees only hull and badly misjudges Loz units.
+-- Default mirrors the shield gadget's fallback (100).
+local ShieldMax = {}
+-- Build Boost cost per FACTORY def (unit_research_buildboost.lua). Only defs the
+-- boost gadget actually configures get an entry, so we never issue dead orders.
+-- Default mirrors that gadget's DEF_COST (100).
+local BoostCost = {}
+for unitDefID, unitDef in pairs(UnitDefs) do
+	local cp = unitDef.customParams or {}
+	if cp.isshieldedunit == "1" then
+		ShieldMax[unitDefID] = tonumber(cp.shield_max_strength) or 100
+	end
+	if IsFactory[unitDefID] and (unitDef.buildSpeed or 0) > 0
+			and cp.buildboost ~= "false" then
+		BoostCost[unitDefID] = tonumber(cp.buildboost_cost) or 100
+	end
+end
+
+-- Effective hp ratio in [0,1]: hull + personal shield over the combined pool.
+-- For unshielded (Fed) units this is plain hull fraction.
+local function EffectiveRatio(unitID, unitDefID, hp, maxhp)
+	local smax = ShieldMax[unitDefID]
+	if smax then
+		local s = Spring.GetUnitRulesParam(unitID, "personalShield") or 0
+		return (hp + s) / (maxhp + smax)
+	end
+	return hp / maxhp
 end
 
 -- ============================================================
@@ -789,26 +843,6 @@ local function SimpleBuildOrder(cUnitID, building)
 	return false
 end
 
-local function SimpleRepairNearest(unitID, teamID, radius)
-	local units = Spring.GetTeamUnits(teamID)
-	local ux, _, uz = Spring.GetUnitPosition(unitID)
-	for i = 1, #units do
-		local target = units[i]
-		if target ~= unitID then
-			local hp, maxhp = Spring.GetUnitHealth(target)
-			if hp and maxhp and hp < maxhp * 0.7 then
-				local tx, _, tz = Spring.GetUnitPosition(target)
-				local dx, dz = ux - tx, uz - tz
-				if dx * dx + dz * dz < radius * radius then
-					Spring.GiveOrderToUnit(unitID, CMD.REPAIR, { target }, { "shift" })
-					return true
-				end
-			end
-		end
-	end
-	return false
-end
-
 -- ============================================================
 -- CONSTRUCTION PROJECT SELECTION
 -- ============================================================
@@ -1110,17 +1144,10 @@ local function SimpleConstructionProjectSelection(
 
 			-- PRIORITY 13: extra defense only if still under the desired count
 			-- (steady/reactive slots above are the primary defense builders).
+			-- (There is no repair in SF, so the old area-repair slot is gone;
+			-- r == 7 now falls through to the fallback below.)
 		elseif (r == 5 or r == 6) and underDefended and canAffordTurret then
 			success = TryBuild(turrets, function(p) SimpleBuildOrder(unitID, p) end)
-
-			-- PRIORITY 14: area repair sweep
-		elseif r == 7 and buildType ~= "Commander" then
-			local cx, cz = mapsizeX / 2, mapsizeZ / 2
-			Spring.GiveOrderToUnit(unitID, CMD.REPAIR,
-			                       { cx + math.random(-200, 200), Spring.GetGroundHeight(cx, cz),
-			                         cz + math.random(-200, 200),
-			                         math.ceil(math.sqrt(mapsizeX * mapsizeX + mapsizeZ * mapsizeZ)) }, 0)
-			success = true
 
 			-- FALLBACK: misc buildings only — no extra turret roll here
 		else
@@ -1231,20 +1258,27 @@ if gadgetHandler:IsSyncedCode() then
 					end
 					local muster = SimpleMusterPos[teamID]
 
-					-- Count ground combat units and how many are at the muster point
+					-- Count ground combat units. Units in retreat are counted in
+					-- totalGround but NOT in readyGround/atMuster: the recovering
+					-- garrison must not inflate launch math, or waves fire with
+					-- fewer real attackers than the numbers claim.
 					local atMuster    = 0
 					local totalGround = 0
+					local readyGround = 0
 					if muster then
 						for k = 1, #units do
 							local uid    = units[k]
 							local uDefID = Spring.GetUnitDefID(uid)
 							if uDefID and IsCombat[uDefID] and not IsAir[uDefID] then
 								totalGround = totalGround + 1
-								local ux2, _, uz2 = Spring.GetUnitPosition(uid)
-								local dx2 = ux2 - muster.x
-								local dz2 = uz2 - muster.z
-								if dx2*dx2 + dz2*dz2 < MUSTER_RADIUS * MUSTER_RADIUS then
-									atMuster = atMuster + 1
+								if not SimpleRetreatState[uid] then
+									readyGround = readyGround + 1
+									local ux2, _, uz2 = Spring.GetUnitPosition(uid)
+									local dx2 = ux2 - muster.x
+									local dz2 = uz2 - muster.z
+									if dx2*dx2 + dz2*dz2 < MUSTER_RADIUS * MUSTER_RADIUS then
+										atMuster = atMuster + 1
+									end
 								end
 							end
 						end
@@ -1285,6 +1319,40 @@ if gadgetHandler:IsSyncedCode() then
 					end
 					SimpleBaseThreat[teamID] = baseThreat
 
+					-- ---- Build Boost policy ----
+					-- Spend RP on a factory surge in exactly two moments it pays:
+					-- resources overflowing (banked surplus -> units NOW, alongside
+					-- the new-factory overflow response) or the base under attack.
+					-- A reserve protects the commander's morph RP until tech is
+					-- maxed, and a per-team cooldown stops one tick from boosting
+					-- every factory at once.
+					if GG.Research then
+						local boostReady = (n - (SimpleLastBoost[teamID] or 0)) >= BOOST_COOLDOWN
+						local overflowing = mstorage > 0 and estorage > 0
+								and mcurrent > mstorage * FACTORY_OVERFLOW
+								and ecurrent > estorage * FACTORY_OVERFLOW
+						if boostReady and (overflowing or SimpleUnderAttack[teamID]) then
+							local reserve = ((TeamTechLevel[teamID] or 1) >= 4)
+									and 0 or BOOST_RP_RESERVE
+							for k = 1, #units do
+								local uid    = units[k]
+								local uDefID = Spring.GetUnitDefID(uid)
+								local cost   = uDefID and BoostCost[uDefID]
+								if cost and IsFactory[uDefID]
+										and GG.Research.CanAfford(teamID, cost + reserve) then
+									local endF = Spring.GetUnitRulesParam(uid, "buildboost_end") or 0
+									local _, _, _, _, bp = Spring.GetUnitHealth(uid)
+									if endF <= n and ((bp == nil) or bp >= 1)
+											and #Spring.GetFullBuildQueue(uid, 0) > 0 then
+										Spring.GiveOrderToUnit(uid, CMD_BUILD_BOOST, {}, 0)
+										SimpleLastBoost[teamID] = n
+										break
+									end
+								end
+							end
+						end
+					end
+
 					-- Squad state transitions
 					-- Launch when a wave has mustered, OR when we already have a big
 					-- army (don't sit forever waiting for perfect muster), OR when
@@ -1293,10 +1361,10 @@ if gadgetHandler:IsSyncedCode() then
 					-- guard stays to deal with it instead of marching off.
 					local cooldownOk    = (n - SimpleLastLaunch[teamID]) >= WAVE_COOLDOWN
 					local readyToLaunch = cooldownOk and not baseThreat
-							and (atMuster >= WAVE_MUSTER_SIZE or totalGround >= WAVE_BIG_ARMY)
-							and totalGround >= WAVE_MIN_ARMY
+							and (atMuster >= WAVE_MUSTER_SIZE or readyGround >= WAVE_BIG_ARMY)
+							and readyGround >= WAVE_MIN_ARMY
 					local forceAttack   = SimpleUnderAttack[teamID] and not baseThreat
-							and totalGround >= 3
+							and readyGround >= 3
 							and (n - SimpleLastLaunch[teamID] >= WAVE_COOLDOWN / 2)
 
 					if (readyToLaunch or forceAttack)
@@ -1314,13 +1382,12 @@ if gadgetHandler:IsSyncedCode() then
 									y = Spring.GetGroundHeight(mapsizeX / 2, mapsizeZ / 2),
 								}
 						SimpleAttackWave[teamID] = target
-						-- Issue FIGHT to all healthy ground units simultaneously
+						-- Issue FIGHT to all non-retreating ground units simultaneously
 						for k = 1, #units do
 							local uid    = units[k]
 							local uDefID = Spring.GetUnitDefID(uid)
 							if uDefID and IsCombat[uDefID] and not IsAir[uDefID] then
-								local uhp, umhp = Spring.GetUnitHealth(uid)
-								if uhp and umhp and (uhp / umhp) >= RETREAT_HP then
+								if not SimpleRetreatState[uid] then
 									Spring.GiveOrderToUnit(uid, CMD.FIGHT,
 									                       { target.x + math.random(-200, 200),
 									                         target.y,
@@ -1341,7 +1408,7 @@ if gadgetHandler:IsSyncedCode() then
 					end
 
 					-- Return to mustering when army is spent
-					if SimpleSquadState[teamID] == "attacking" and totalGround < 3 then
+					if SimpleSquadState[teamID] == "attacking" and readyGround < 3 then
 						SimpleSquadState[teamID] = "mustering"
 						SimpleAttackWave[teamID]  = nil
 					end
@@ -1353,7 +1420,12 @@ if gadgetHandler:IsSyncedCode() then
 						local unitHealth, unitMaxHealth = Spring.GetUnitHealth(unitID)
 
 						if unitDefID and unitHealth then
-							local hpRatio    = unitHealth / unitMaxHealth
+							-- EFFECTIVE hp: hull + personal shield (Loz) over the
+							-- combined pool. All retreat/flee thresholds below key
+							-- off this, so a Loz unit with a healthy shield is not
+							-- treated as wounded just because its hull is scratched.
+							local hpRatio    = EffectiveRatio(unitID, unitDefID,
+							                                  unitHealth, unitMaxHealth)
 							local ux, uy, uz = Spring.GetUnitPosition(unitID)
 							local unitCmds   = Spring.GetCommandQueue(unitID, 0)
 
@@ -1427,7 +1499,6 @@ if gadgetHandler:IsSyncedCode() then
 									Spring.GiveOrderToUnit(unitID, CMD.RECLAIM, { nearEnemy }, 0)
 
 								elseif nearEnemy then
-									local fled = false
 									for x = 1, 50 do
 										local candidate = units[math.random(1, #units)]
 										local cDefID    = Spring.GetUnitDefID(candidate)
@@ -1436,11 +1507,9 @@ if gadgetHandler:IsSyncedCode() then
 											Spring.GiveOrderToUnit(unitID, CMD.MOVE,
 											                       { tx + math.random(-100, 100), ty,
 											                         tz + math.random(-100, 100) }, 0)
-											fled = true
 											break
 										end
 									end
-									if fled then SimpleRepairNearest(unitID, teamID, 400) end
 
 								elseif unitCmds == 0 then
 									-- Check if we are very close to a factory (within its footprint).
@@ -1475,11 +1544,9 @@ if gadgetHandler:IsSyncedCode() then
 									end
 
 									if not tooClose then
-										if not SimpleRepairNearest(unitID, teamID, 300) then
-											SimpleConstructionProjectSelection(
-													unitID, unitDefID, teamID, allyTeamID,
-													units, allunits, "Builder")
-										end
+										SimpleConstructionProjectSelection(
+												unitID, unitDefID, teamID, allyTeamID,
+												units, allunits, "Builder")
 									end
 								end
 
@@ -1525,13 +1592,55 @@ if gadgetHandler:IsSyncedCode() then
 
 									-- GROUND / SEA: squad staging system
 								else
-									-- Retreat if badly wounded, regardless of state
-									if hpRatio < RETREAT_HP and unitCmds == 0 then
+									-- ---- Retreat hysteresis ----
+									-- Enter low on EFFECTIVE hp; exit on recovery,
+									-- full shield (Loz's ceiling: hull never heals,
+									-- so a topped-off shield means this unit is as
+									-- good as it will ever get -- field it), or a
+									-- timeout so nothing can wedge in retreat.
+									local retreatFrame = SimpleRetreatState[unitID]
+									if retreatFrame then
+										local exitNow = hpRatio >= RETREAT_EXIT
+												or (n - retreatFrame) >= RETREAT_TIMEOUT
+										if not exitNow then
+											local smax = ShieldMax[unitDefID]
+											if smax then
+												local s = Spring.GetUnitRulesParam(
+														unitID, "personalShield") or 0
+												if s >= smax then exitNow = true end
+											end
+										end
+										if exitNow then
+											SimpleRetreatState[unitID] = nil
+											retreatFrame = nil
+										end
+									elseif hpRatio < RETREAT_ENTER then
+										-- Enter retreat: break off IMMEDIATELY
+										-- (replace the queue; a unit this hurt must
+										-- not finish walking a FIGHT queue first).
+										SimpleRetreatState[unitID] = n
+										retreatFrame = n
 										if muster then
 											Spring.GiveOrderToUnit(unitID, CMD.MOVE,
 											                       { muster.x + math.random(-100, 100),
 											                         muster.y,
 											                         muster.z + math.random(-100, 100) }, 0)
+										end
+									end
+
+									if retreatFrame then
+										-- Holding: if idle and drifted from muster,
+										-- head back. Otherwise sit and recover.
+										if unitCmds == 0 and muster and retreatFrame ~= n then
+											local rdx = ux - muster.x
+											local rdz = uz - muster.z
+											if rdx * rdx + rdz * rdz
+													> MUSTER_RADIUS * MUSTER_RADIUS then
+												Spring.GiveOrderToUnit(unitID, CMD.MOVE,
+												                       { muster.x + math.random(-100, 100),
+												                         muster.y,
+												                         muster.z + math.random(-100, 100) }, 0)
+											end
 										end
 
 									elseif SimpleSquadState[teamID] == "attacking" then
@@ -1686,6 +1795,9 @@ if gadgetHandler:IsSyncedCode() then
 	-- ============================================================
 	function gadget:UnitDestroyed(unitID, unitDefID, unitTeam,
 	                              attackerID, attackerDefID, attackerTeam)
+		-- Unconditional: the engine RECYCLES unitIDs, so a stale retreat entry
+		-- would tag a brand-new unit as wounded. Clear regardless of team.
+		SimpleRetreatState[unitID] = nil
 		for i = 1, SimpleAITeamIDsCount do
 			if SimpleAITeamIDs[i] == unitTeam then
 				if IsFactory[unitDefID] then
