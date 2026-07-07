@@ -127,6 +127,7 @@ local TECH_ECONOMY_BIAS = 0.5
 
 local SimpleAITeamIDs             = {}
 local SimpleAITeamIDsCount        = 0
+local IsAITeamID                  = {}   -- [teamID] = true; O(1) membership for per-event callins
 local SimpleCheaterAITeamIDs      = {}
 local SimpleCheaterAITeamIDsCount = 0
 
@@ -214,6 +215,7 @@ for i = 1, #teams do
 		enabled = true
 		SimpleAITeamIDsCount = SimpleAITeamIDsCount + 1
 		SimpleAITeamIDs[SimpleAITeamIDsCount] = teamID
+		IsAITeamID[teamID] = true
 
 		SimpleFactoriesCount[teamID]   = 0
 		SimpleFactories[teamID]        = {}
@@ -565,12 +567,18 @@ local function EstimateEnemyBase(teamID)
 	for i = 1, #allUnits do
 		local uid    = allUnits[i]
 		local uteam  = Spring.GetUnitTeam(uid)
-		local uDefID = Spring.GetUnitDefID(uid)
-		if uteam ~= teamID and uDefID and UnitDefs[uDefID] and UnitDefs[uDefID].isBuilding then
-			local ux, _, uz = Spring.GetUnitPosition(uid)
-			ex = ex + ux
-			ez = ez + uz
-			count = count + 1
+		-- Allies and gaia are NOT enemies: without this guard the "enemy base"
+		-- centroid gets dragged toward allied bases in team games, and builder
+		-- reclaim roams (which aim at this point) wander into friendly territory.
+		if uteam ~= teamID and uteam ~= gaiaTeamID
+				and not Spring.AreTeamsAllied(teamID, uteam) then
+			local uDefID = Spring.GetUnitDefID(uid)
+			if uDefID and UnitDefs[uDefID] and UnitDefs[uDefID].isBuilding then
+				local ux, _, uz = Spring.GetUnitPosition(uid)
+				ex = ex + ux
+				ez = ez + uz
+				count = count + 1
+			end
 		end
 	end
 	if count > 0 then
@@ -1717,20 +1725,15 @@ if gadgetHandler:IsSyncedCode() then
 	end
 
 	-- ============================================================
-	-- UNIT CREATED
-	-- Detect faction from the first commander; populate build lists.
+	-- COUNTER BOOKKEEPING
+	-- Units enter a team by being BUILT or GIVEN (share menu) and leave
+	-- by DYING or being TAKEN. All four paths must move the same counters,
+	-- or the caps (constructors, factories, turrets, converters, ...) drift
+	-- permanently the first time a unit is shared to or from an AI team.
 	-- ============================================================
-	function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
-		-- Only act on teams this gadget manages
-		local isAITeam = false
-		for i = 1, SimpleAITeamIDsCount do
-			if SimpleAITeamIDs[i] == unitTeam then
-				isAITeam = true
-				break
-			end
-		end
-		if not isAITeam then return end
-
+	local function RegisterUnit(unitID, unitDefID, unitTeam)
+		-- Faction detection also runs here so an AI team that RECEIVES its
+		-- first commander (rather than starting with one) gets build lists.
 		if IsCommander[unitDefID] and TeamFaction[unitTeam] == nil then
 			local cp = UnitDefs[unitDefID].customParams or {}
 			local fn = cp.factionname or ""
@@ -1772,6 +1775,15 @@ if gadgetHandler:IsSyncedCode() then
 	end
 
 	-- ============================================================
+	-- UNIT CREATED
+	-- ============================================================
+	function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
+		if IsAITeamID[unitTeam] then
+			RegisterUnit(unitID, unitDefID, unitTeam)
+		end
+	end
+
+	-- ============================================================
 	-- UNIT FINISHED
 	-- Mirrors ai_Commander_AutoUpgrade: read techlevel from
 	-- commander customparams after each morph completes.
@@ -1790,6 +1802,45 @@ if gadgetHandler:IsSyncedCode() then
 		end
 	end
 
+	local function UnregisterUnit(unitID, unitDefID, unitTeam)
+		if IsFactory[unitDefID] then
+			SimpleFactoriesCount[unitTeam] =
+			math.max(0, SimpleFactoriesCount[unitTeam] - 1)
+			SimpleFactories[unitTeam][unitDefID] =
+			math.max(0, (SimpleFactories[unitTeam][unitDefID] or 1) - 1)
+			local uname = UnitDefs[unitDefID] and UnitDefs[unitDefID].name
+			if not AIR_FACTORY_NAMES[uname] and not SEA_FACTORY_NAMES[uname] then
+				SimpleLandFacCount[unitTeam] =
+				math.max(0, (SimpleLandFacCount[unitTeam] or 1) - 1)
+			end
+		end
+		if IsExtractor[unitDefID] then
+			SimpleT1Mexes[unitTeam] = math.max(0, SimpleT1Mexes[unitTeam] - 1)
+		end
+		if IsConstructor[unitDefID] then
+			SimpleConstructorCount[unitTeam] =
+			math.max(0, SimpleConstructorCount[unitTeam] - 1)
+		end
+		if IsCombat[unitDefID] then
+			SimpleArmyCount[unitTeam] =
+			math.max(0, (SimpleArmyCount[unitTeam] or 1) - 1)
+		end
+		if IsConverter[unitDefID] then
+			SimpleConverterCount[unitTeam] =
+			math.max(0, (SimpleConverterCount[unitTeam] or 1) - 1)
+		end
+		if IsTurret[unitDefID] then
+			SimpleTurretCount[unitTeam] =
+			math.max(0, (SimpleTurretCount[unitTeam] or 1) - 1)
+		end
+		if IsCommander[unitDefID] and TeamCommID[unitTeam] == unitID then
+			-- Commander gone (died OR shared away); allow re-detection later
+			TeamCommID[unitTeam] = nil
+			SimpleCommRetreating[unitTeam] = false
+			SimpleCommRetreatPos[unitTeam] = nil
+		end
+	end
+
 	-- ============================================================
 	-- UNIT DESTROYED
 	-- ============================================================
@@ -1798,46 +1849,31 @@ if gadgetHandler:IsSyncedCode() then
 		-- Unconditional: the engine RECYCLES unitIDs, so a stale retreat entry
 		-- would tag a brand-new unit as wounded. Clear regardless of team.
 		SimpleRetreatState[unitID] = nil
-		for i = 1, SimpleAITeamIDsCount do
-			if SimpleAITeamIDs[i] == unitTeam then
-				if IsFactory[unitDefID] then
-					SimpleFactoriesCount[unitTeam] =
-					math.max(0, SimpleFactoriesCount[unitTeam] - 1)
-					SimpleFactories[unitTeam][unitDefID] =
-					math.max(0, (SimpleFactories[unitTeam][unitDefID] or 1) - 1)
-					local uname = UnitDefs[unitDefID] and UnitDefs[unitDefID].name
-					if not AIR_FACTORY_NAMES[uname] and not SEA_FACTORY_NAMES[uname] then
-						SimpleLandFacCount[unitTeam] =
-						math.max(0, (SimpleLandFacCount[unitTeam] or 1) - 1)
-					end
-				end
-				if IsExtractor[unitDefID] then
-					SimpleT1Mexes[unitTeam] = math.max(0, SimpleT1Mexes[unitTeam] - 1)
-				end
-				if IsConstructor[unitDefID] then
-					SimpleConstructorCount[unitTeam] =
-					math.max(0, SimpleConstructorCount[unitTeam] - 1)
-				end
-				if IsCombat[unitDefID] then
-					SimpleArmyCount[unitTeam] =
-					math.max(0, (SimpleArmyCount[unitTeam] or 1) - 1)
-				end
-				if IsConverter[unitDefID] then
-					SimpleConverterCount[unitTeam] =
-					math.max(0, (SimpleConverterCount[unitTeam] or 1) - 1)
-				end
-				if IsTurret[unitDefID] then
-					SimpleTurretCount[unitTeam] =
-					math.max(0, (SimpleTurretCount[unitTeam] or 1) - 1)
-				end
-				if IsCommander[unitDefID] then
-					-- Commander died; allow faction re-detection on respawn
-					TeamCommID[unitTeam] = nil
-					SimpleCommRetreating[unitTeam] = false
-					SimpleCommRetreatPos[unitTeam] = nil
-				end
-				break
-			end
+		if IsAITeamID[unitTeam] then
+			UnregisterUnit(unitID, unitDefID, unitTeam)
+		end
+	end
+
+	-- ============================================================
+	-- UNIT GIVEN / TAKEN (share menu, /take, capture)
+	-- The engine fires BOTH on a transfer: UnitTaken for the old team,
+	-- UnitGiven for the new one -- so each side moves its own counters
+	-- exactly once and nothing double-counts.
+	-- ============================================================
+	function gadget:UnitGiven(unitID, unitDefID, unitTeam, oldTeam)
+		-- unitTeam is the NEW owner
+		if IsAITeamID[unitTeam] then
+			RegisterUnit(unitID, unitDefID, unitTeam)
+		end
+	end
+
+	function gadget:UnitTaken(unitID, unitDefID, unitTeam, newTeam)
+		-- unitTeam is the OLD owner
+		if IsAITeamID[unitTeam] then
+			UnregisterUnit(unitID, unitDefID, unitTeam)
+			-- The AI should not remember a unit it no longer owns; if the unit
+			-- comes back later it re-enters retreat on its own merits.
+			SimpleRetreatState[unitID] = nil
 		end
 	end
 
@@ -1848,18 +1884,29 @@ if gadgetHandler:IsSyncedCode() then
 	                            attackerID, attackerDefID, attackerTeam, isParalyzer)
 		if not unitDefID then return end
 		local teamID = Spring.GetUnitTeam(unitID)
-		for i = 1, SimpleAITeamIDsCount do
-			if SimpleAITeamIDs[i] == teamID then
-				if UnitDefs[unitDefID] and UnitDefs[unitDefID].isBuilding then
-					SimpleUnderAttack[teamID] = true
-					-- Fast-track the next wave launch on base attack
-					if SimpleLastLaunch[teamID] and (SimpleLastLaunch[teamID] + WAVE_COOLDOWN / 2) > 0 then
-						SimpleLastLaunch[teamID] = math.min(SimpleLastLaunch[teamID],
-						                                    SimpleLastLaunch[teamID] - WAVE_COOLDOWN / 2)
-					end
-				end
-				break
-			end
+		if not IsAITeamID[teamID] then return end
+
+		-- Only ENEMY damage counts as being under attack. Self-damage (our own
+		-- disruption splash), ally accidents, and gaia debris must not trigger
+		-- defensive turret spam, force-launches, or boost surges.
+		if not attackerTeam
+				or attackerTeam == teamID
+				or attackerTeam == gaiaTeamID
+				or Spring.AreTeamsAllied(teamID, attackerTeam) then
+			return
+		end
+
+		if UnitDefs[unitDefID] and UnitDefs[unitDefID].isBuilding then
+			SimpleUnderAttack[teamID] = true
+			-- Fast-track the next wave: reduce the REMAINING cooldown to at most
+			-- half, by clamping the launch timestamp against the CURRENT frame.
+			-- min() makes this idempotent under sustained fire -- the old version
+			-- subtracted WAVE_COOLDOWN/2 on EVERY damage event, driving the
+			-- timestamp unboundedly negative and deleting the cooldown for the
+			-- rest of the game after the first base attack.
+			local nowF = Spring.GetGameFrame()
+			SimpleLastLaunch[teamID] = math.min(SimpleLastLaunch[teamID] or 0,
+			                                    nowF - WAVE_COOLDOWN / 2)
 		end
 	end
 
