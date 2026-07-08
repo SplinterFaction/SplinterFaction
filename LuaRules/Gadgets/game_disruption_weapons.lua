@@ -26,7 +26,7 @@ local IN_LOS = { inlos = true }
 
 -- Shutdown stages
 -- Stage 1 (>= 33%): sensors offline (LOS collapses to MIN_LOS_RADIUS)
--- Stage 2 (>= 66%): weapons offline (enforced in AllowWeaponTarget)
+-- Stage 2 (>= 66%): weapons offline (ranges collapsed to WEAPON_DEAD_RANGE)
 -- Stage 3 (100%):   engines dead for LOCKOUT_SECONDS + overload nova
 local STAGE_1_THRESHOLD = 0.33
 local STAGE_2_THRESHOLD = 0.66
@@ -46,7 +46,7 @@ local NOVA_FRACTION = 0.25
 local STAGE_CEGS = {
 	[1] = "transformerblow-stage1",
 	[2] = "transformerblow-stage2",
-	[3] = "empty",
+	[3] = "transformerblow-stage3",
 }
 local NOVA_CEG    = "transformerblow-large"
 local AMBIENT_CEG = "lightning_stormbolt" -- crackle on units at stage >= 1
@@ -67,6 +67,7 @@ local RULESPARAM_EPSILON_PERCENT = 0.5
 -- Stage effect floors
 local MIN_LOS_RADIUS = 50 -- elmos; tiny floor to avoid engine weirdness at zero
 local ENGINE_DEAD_SPEED_MULT = 0.001 -- near-zero; true zero can misbehave
+local WEAPON_DEAD_RANGE = 1 -- elmos; weapon + acquisition range while weapons offline
 
 --------------------------------------------------------------------------------
 -- optional customparams
@@ -104,6 +105,11 @@ local spGetUnitsInSphere    = Spring.GetUnitsInSphere
 local spGetUnitTeam         = Spring.GetUnitTeam
 local spAreTeamsAllied      = Spring.AreTeamsAllied
 local spGetGroundHeight     = Spring.GetGroundHeight
+local spGetUnitWeaponState  = Spring.GetUnitWeaponState
+local spSetUnitWeaponState  = Spring.SetUnitWeaponState
+local spGetUnitMaxRange     = Spring.GetUnitMaxRange
+local spSetUnitMaxRange     = Spring.SetUnitMaxRange
+local spSetUnitTarget       = Spring.SetUnitTarget
 
 local SendToUnsynced = SendToUnsynced
 
@@ -139,6 +145,12 @@ local moveTypeCache = {}
 --   kind = "ground"/"none",
 --   baseLOS = ...,
 --   baseMove = { maxSpeed = ..., accRate = ..., turnRate = ... },
+-- }
+
+local weaponRangeCache = {}
+-- weaponRangeCache[unitID] = {
+--   weapons = { { num = weaponNum, baseRange = ... }, ... }, -- shields excluded
+--   baseMaxRange = ...,
 -- }
 
 -- Weapon defs flagged as disruption weapons, resolved once at load
@@ -319,10 +331,72 @@ local function RestoreMovement(unitID)
 	pcall(mcSetGroundMoveTypeData, unitID, values)
 end
 
+-- Caches live per-weapon ranges + unit max range so stage 2 can collapse and
+-- restore them. Shield weapons are excluded: collapsing a shield's "range"
+-- would shrink the shield bubble itself.
+local function CacheWeaponRanges(unitID, unitDefID)
+	local ud = UnitDefs[unitDefID]
+	local cache = { weapons = {} }
+
+	local udWeapons = ud and ud.weapons
+	if udWeapons then
+		for num = 1, #udWeapons do
+			local wd = WeaponDefs[udWeapons[num].weaponDef]
+			if wd and wd.type ~= "Shield" then
+				local baseRange = spGetUnitWeaponState(unitID, num, "range")
+					or wd.range
+				if baseRange and baseRange > WEAPON_DEAD_RANGE then
+					cache.weapons[#cache.weapons + 1] = {
+						num = num,
+						baseRange = baseRange,
+					}
+				end
+			end
+		end
+	end
+
+	local maxRange = spGetUnitMaxRange(unitID)
+	if maxRange and maxRange > WEAPON_DEAD_RANGE then
+		cache.baseMaxRange = maxRange
+	end
+
+	weaponRangeCache[unitID] = cache
+end
+
+local function ApplyWeaponsOffline(unitID)
+	local cache = weaponRangeCache[unitID]
+	if not cache then return end
+
+	local weapons = cache.weapons
+	for i = 1, #weapons do
+		spSetUnitWeaponState(unitID, weapons[i].num, "range", WEAPON_DEAD_RANGE)
+	end
+
+	if cache.baseMaxRange then
+		spSetUnitMaxRange(unitID, WEAPON_DEAD_RANGE)
+	end
+
+	-- Range changes don't cancel an already-acquired target; drop it now
+	spSetUnitTarget(unitID)
+end
+
+local function RestoreWeapons(unitID)
+	local cache = weaponRangeCache[unitID]
+	if not cache then return end
+
+	local weapons = cache.weapons
+	for i = 1, #weapons do
+		spSetUnitWeaponState(unitID, weapons[i].num, "range", weapons[i].baseRange)
+	end
+
+	if cache.baseMaxRange then
+		spSetUnitMaxRange(unitID, cache.baseMaxRange)
+	end
+end
+
 -- Transitions the unit between shutdown stages. Fires a CEG for every stage
 -- crossed on the way UP (a single big hit can announce stage 1, 2, and 3).
--- Recovery transitions are silent. Stage 2 (weapons offline) has no apply/
--- restore logic here; it is enforced passively in AllowWeaponTarget.
+-- Recovery transitions are silent.
 local function SetStage(unitID, newStage)
 	local oldStage = currentStage[unitID] or 0
 	if newStage == oldStage then
@@ -341,6 +415,13 @@ local function SetStage(unitID, newStage)
 		ApplyLOSCollapse(unitID)
 	elseif newStage < 1 and oldStage >= 1 then
 		RestoreLOS(unitID)
+	end
+
+	-- Stage 2+: weapons offline (ranges collapsed)
+	if newStage >= 2 and oldStage < 2 then
+		ApplyWeaponsOffline(unitID)
+	elseif newStage < 2 and oldStage >= 2 then
+		RestoreWeapons(unitID)
 	end
 
 	-- Stage 3: engines dead
@@ -482,6 +563,7 @@ local function ClearUnitState(unitID)
 	unitCapacityMult[unitID] = nil
 	unitImmune[unitID] = nil
 	moveTypeCache[unitID] = nil
+	weaponRangeCache[unitID] = nil
 
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
@@ -513,6 +595,7 @@ local function InitUnitState(unitID, unitDefID)
 	unitImmune[unitID] = immune
 
 	CacheMoveType(unitID, unitDefID)
+	CacheWeaponRanges(unitID, unitDefID)
 
 	spSetUnitRulesParam(unitID, "disruption", 0, IN_LOS)
 	spSetUnitRulesParam(unitID, "disruption_disrupted", 0, IN_LOS)
@@ -539,18 +622,25 @@ function gadget:UnitCreated(unitID, unitDefID)
 end
 
 function gadget:UnitFinished(unitID, unitDefID)
-	-- If the nanoframe was disrupted while under construction, lift the LOS
-	-- collapse before recaching so we don't capture the collapsed radius as base.
+	-- If the nanoframe was disrupted while under construction, lift the stage
+	-- effects before recaching so we don't capture collapsed values as base.
 	local stage = currentStage[unitID] or 0
 	if stage >= 1 then
 		RestoreLOS(unitID)
 	end
+	if stage >= 2 then
+		RestoreWeapons(unitID)
+	end
 
 	CacheMoveType(unitID, unitDefID)
+	CacheWeaponRanges(unitID, unitDefID)
 
 	-- Re-apply current stage effects against the fresh cache
 	if stage >= 1 then
 		ApplyLOSCollapse(unitID)
+	end
+	if stage >= 2 then
+		ApplyWeaponsOffline(unitID)
 	end
 	if stage >= 3 then
 		ApplyEngineKill(unitID)
@@ -564,6 +654,7 @@ end
 function gadget:UnitTaken(unitID, unitDefID)
 	RestoreMovement(unitID)
 	RestoreLOS(unitID)
+	RestoreWeapons(unitID)
 	ClearUnitState(unitID)
 	InitUnitState(unitID, unitDefID)
 end
@@ -571,6 +662,7 @@ end
 function gadget:UnitGiven(unitID, unitDefID)
 	RestoreMovement(unitID)
 	RestoreLOS(unitID)
+	RestoreWeapons(unitID)
 	ClearUnitState(unitID)
 	InitUnitState(unitID, unitDefID)
 end
@@ -612,13 +704,13 @@ end
 --------------------------------------------------------------------------------
 
 function gadget:AllowWeaponTarget(attackerID, targetID, attackerWeaponNum, attackerWeaponDefID, defPriority)
-	-- Stage 2+: this unit's weapons are offline.
-	if (currentStage[attackerID] or 0) >= 2 then
-		return false
-	end
+	-- Stage 2 weapons-offline is enforced by collapsing weapon ranges in
+	-- SetStage; no attacker check needed here.
 
-	-- Disruption weapons refuse locked-out targets so the engine retargets
-	-- naturally. Normal weapons can still shoot (and kill) disrupted units.
+	-- Best-effort retarget assist: disruption weapons refuse locked-out
+	-- targets so the engine picks something useful. This callin isn't
+	-- consulted on every targeting path, but when it fails UnitPreDamaged
+	-- still absorbs the hit as 0 damage, so it's harmless.
 	if targetID
 			and attackerWeaponDefID
 			and disruptionWeaponDef[attackerWeaponDefID]
@@ -702,9 +794,9 @@ else
 -- Sound files (stubs -- supply these). Stage 3 fires at the same moment as
 -- the overload nova, so make it the big one.
 local STAGE_SOUNDS = {
-	[1] = { file = "sounds/weapons/electricboom.wav", volume = 0.8 },
-	[2] = { file = "sounds/weapons/electricboom.wav", volume = 0.9 },
-	[3] = { file = "sounds/impacts/phasegun1hit.wav", volume = 1.0 },
+	[1] = { file = "sounds/disruption_stage1.wav", volume = 0.8 },
+	[2] = { file = "sounds/disruption_stage2.wav", volume = 0.9 },
+	[3] = { file = "sounds/disruption_stage3.wav", volume = 1.0 },
 }
 local SOUND_CHANNEL = "battle"
 
