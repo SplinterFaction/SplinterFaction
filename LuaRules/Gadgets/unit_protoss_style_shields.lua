@@ -28,16 +28,54 @@ local cachedShieldParams = {}
 
 -- Initialize a new shielded unit
 local function initShieldedUnit(unitID, shieldParams)
+	local baseMax   = shieldParams.shieldMaxStrength or 100
+	local baseRegen = shieldParams.shieldRegenerationRate or 5
 	local shieldedUnit = {
 		unitID = unitID,
 		lastFrameDamaged = -10000,
-		shieldStrength = shieldParams.shieldMaxStrength or 100,
-		shieldMaxStrength = shieldParams.shieldMaxStrength or 100,
-		shieldRegenerationRate = shieldParams.shieldRegenerationRate or 5,
+		shieldStrength = baseMax,
+		shieldMaxStrength = baseMax,
+		shieldRegenerationRate = baseRegen,
 		shieldRegenerationDelay = shieldParams.shieldRegenerationDelay * 30 or 300,
+		-- Base values, kept so external systems (team upgrades) can scale
+		-- absolute-from-base rather than compounding.
+		baseMaxStrength = baseMax,
+		baseRegenerationRate = baseRegen,
 	}
 	IterableMap.Add(shieldedUnits, unitID, shieldedUnit)
 	Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength, IN_LOS)
+	-- Live max, so displays don't have to rely on the frozen unitdef customparam
+	Spring.SetUnitRulesParam(unitID, "personalShieldMax", baseMax, IN_LOS)
+end
+
+--------------------------------------------------------------------------------
+-- External API: scale a unit's shield from its BASE values (idempotent).
+-- Used by game_team_upgrades.lua for armor upgrades. regenScale is optional
+-- (default 1 = base regen rate regardless of capacity).
+--------------------------------------------------------------------------------
+
+GG.PersonalShields = GG.PersonalShields or {}
+
+function GG.PersonalShields.SetScale(unitID, maxScale, regenScale)
+	local shieldedUnit = IterableMap.Get(shieldedUnits, unitID)
+	if not shieldedUnit then return false end          -- not a shielded unit (e.g. Kala)
+
+	local oldMax = shieldedUnit.shieldMaxStrength
+	local newMax = shieldedUnit.baseMaxStrength * (maxScale or 1)
+	shieldedUnit.shieldMaxStrength = newMax
+	shieldedUnit.shieldRegenerationRate = shieldedUnit.baseRegenerationRate * (regenScale or 1)
+
+	-- Preserve the charge FRACTION, same rule as hull scaling: a shield at 60%
+	-- stays at 60% of the new capacity.
+	if oldMax > 0 then
+		shieldedUnit.shieldStrength = shieldedUnit.shieldStrength * (newMax / oldMax)
+	else
+		shieldedUnit.shieldStrength = newMax
+	end
+
+	Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength, IN_LOS)
+	Spring.SetUnitRulesParam(unitID, "personalShieldMax", newMax, IN_LOS)
+	return true
 end
 
 function gadget:Initialize()

@@ -36,6 +36,8 @@ local SUPPLY_SHRINK_DELAY = 90    -- frames before shrinking display cap
 
 local SHOW_NET_FIRST   = true     -- "net  (+in / -out)" layout
 
+local PCT_STEPS        = 200      -- fill-bar quantization steps (~1px at default width)
+
 -- research points (RP): a pure accumulator, no storage cap, no share slider.
 local RP_WIDTH          = 200    -- compact panel; no fill bar or slider
 local RP_RATE_WINDOW    = 150    -- frames (~5s) used to smooth the +/s readout
@@ -120,6 +122,14 @@ local rpLastFrame    = -1
 local rpFlashAmount  = 0      -- size of the most recent spend
 local rpFlashTimer   = 0      -- seconds remaining on the spend flash
 
+-- cached formatted strings; rebuilt only when the displayed value changes so
+-- DrawResearchPanel allocates no garbage per draw frame
+local rpValueStr     = "0"
+local rpRateStr      = "+0.0/s"
+local rpFlashStr     = "-0"
+local rpValueInt     = 0
+local rpRateRounded  = 0
+
 --------------------------------------------------------------------------------
 -- Share level state
 --------------------------------------------------------------------------------
@@ -141,6 +151,7 @@ local SLIDER_DRAG_COLOR= {1.0, 1.0, 0.4, 1.0}
 -- Last values used to build the dynamic list. The list is only rebuilt when
 -- any of these change, instead of every frame.
 local lastDynamic = {}
+local lastBuildFrame = -1  -- last sim frame the dynamic list was sampled
 
 local function DynamicValuesChanged(supplyUsed, supplyMax, supplyFree, supplyPct,
                                     mc, ms, mi, mp, metalPct,
@@ -481,15 +492,30 @@ local function BuildDynamicList()
 	local metalPct   = (ms > 0) and (mc / ms) or 0
 	local energyPct  = (es > 0) and (ec / es) or 0
 
-	-- Only rebuild the list if any value actually changed
-	if displayListDynamic and not DynamicValuesChanged(
+	-- Quantize everything to DISPLAYED precision before the change check.
+	-- Raw resource floats tick every sim frame, so comparing them rebuilt the
+	-- display list ~30x/sec; comparing display-precision values only triggers
+	-- a rebuild when something visible actually changes.
+	mc = math.floor(mc + 0.5) ; ms = math.floor(ms + 0.5)
+	ec = math.floor(ec + 0.5) ; es = math.floor(es + 0.5)
+	mi = round(mi, 1) ; mp = round(mp, 1)
+	ei = round(ei, 1) ; ep = round(ep, 1)
+	supplyPct = math.floor(supplyPct * PCT_STEPS) / PCT_STEPS
+	metalPct  = math.floor(metalPct  * PCT_STEPS) / PCT_STEPS
+	energyPct = math.floor(energyPct * PCT_STEPS) / PCT_STEPS
+
+	-- Only rebuild the list if any displayed value actually changed
+	if displayListDynamic
+			and lastDynamic.supplyCap == supplyDisplayCap
+			and not DynamicValuesChanged(
 			supplyUsed, supplyMax, supplyFree, supplyPct,
 			mc, ms, mi, mp, metalPct,
 			ec, es, ei, ep, energyPct) then
 		return
 	end
 
-	-- Save values for next-frame comparison
+	-- Save values for next comparison
+	lastDynamic.supplyCap  = supplyDisplayCap
 	lastDynamic.supplyUsed = supplyUsed ; lastDynamic.supplyMax  = supplyMax
 	lastDynamic.supplyFree = supplyFree ; lastDynamic.supplyPct  = supplyPct
 	lastDynamic.mc = mc ; lastDynamic.ms = ms
@@ -521,59 +547,38 @@ local function BuildDynamicList()
 		energyR, energyG, energyB = 0.35, 0.95, 0.35
 	end
 
+	local metalText  = GetResourceText(mc, ms, mi, mp, skyblue)
+	local energyText = GetResourceText(ec, es, ei, ep, yellow)
+	local supplyText =
+	white .. supplyUsed .. "/" .. supplyMax ..
+			white .. "  (" ..
+			orange .. "free " .. supplyFree ..
+			white .. " / " ..
+			green .. "scale " .. supplyDisplayCap ..
+			white .. ")"
+
 	displayListDynamic = gl.CreateList(function()
 		glPushMatrix()
 		glTranslate(posx, posy, 0)
 		glScale(widgetScale, widgetScale, 1)
 
-		local textXPad = INNER_PADDING + ICON_SIZE + 8
 		local barX1 = INNER_PADDING
 		local barX2 = BAR_WIDTH - INNER_PADDING
 		local barY1 = 8
 		local barY2 = barY1 + FILL_HEIGHT
 
-		-- metal (top-left)
-		do
-			local x, y = 0, ROW_TOP_Y
-			DrawFillBar(x + barX1, y + barY1, x + barX2, y + barY2, metalPct, metalR, metalG, metalB, true)
+		-- metal (top-left), energy (top-right), supply (bottom-left)
+		DrawFillBar(barX1,          ROW_TOP_Y + barY1, barX2,          ROW_TOP_Y + barY2, metalPct,  metalR,  metalG,  metalB,  true)
+		DrawFillBar(COL2_X + barX1, ROW_TOP_Y + barY1, COL2_X + barX2, ROW_TOP_Y + barY2, energyPct, energyR, energyG, energyB, true)
+		DrawFillBar(barX1,          ROW_BOT_Y + barY1, barX2,          ROW_BOT_Y + barY2, supplyPct, supplyR, supplyG, supplyB, true)
 
-			local metalText = GetResourceText(mc, ms, mi, mp, skyblue)
-			font2:Begin()
-			font2:SetTextColor(1,1,1,1)
-			font2:Print(metalText, x + BAR_WIDTH - INNER_PADDING, y + 23, 16, "or")
-			font2:End()
-		end
-
-		-- energy (top-right)
-		do
-			local x, y = COL2_X, ROW_TOP_Y
-			DrawFillBar(x + barX1, y + barY1, x + barX2, y + barY2, energyPct, energyR, energyG, energyB, true)
-
-			local energyText = GetResourceText(ec, es, ei, ep, yellow)
-			font2:Begin()
-			font2:SetTextColor(1,1,1,1)
-			font2:Print(energyText, x + BAR_WIDTH - INNER_PADDING, y + 23, 16, "or")
-			font2:End()
-		end
-
-		-- supply (bottom-left)
-		do
-			local x, y = 0, ROW_BOT_Y
-			DrawFillBar(x + barX1, y + barY1, x + barX2, y + barY2, supplyPct, supplyR, supplyG, supplyB, true)
-
-			local supplyText =
-			white .. supplyUsed .. "/" .. supplyMax ..
-					white .. "  (" ..
-					orange .. "free " .. supplyFree ..
-					white .. " / " ..
-					green .. "scale " .. supplyDisplayCap ..
-					white .. ")"
-
-			font2:Begin()
-			font2:SetTextColor(1,1,1,1)
-			font2:Print(supplyText, x + BAR_WIDTH - INNER_PADDING, y + 23, 16, "or")
-			font2:End()
-		end
+		-- single font pass; each Begin/End pair flushes the font renderer
+		font2:Begin()
+		font2:SetTextColor(1, 1, 1, 1)
+		font2:Print(metalText,           BAR_WIDTH - INNER_PADDING, ROW_TOP_Y + 23, 16, "or")
+		font2:Print(energyText, COL2_X + BAR_WIDTH - INNER_PADDING, ROW_TOP_Y + 23, 16, "or")
+		font2:Print(supplyText,          BAR_WIDTH - INNER_PADDING, ROW_BOT_Y + 23, 16, "or")
+		font2:End()
 
 		glPopMatrix()
 	end)
@@ -624,8 +629,15 @@ local function SampleResearch(dt)
 	if rpPrevValue and value < rpPrevValue then
 		rpFlashAmount = rpPrevValue - value
 		rpFlashTimer  = RP_FLASH_DURATION
+		rpFlashStr    = "-" .. tostring(math.floor(rpFlashAmount + 0.5))
 	end
 	rpPrevValue = value
+
+	local vInt = math.floor(value + 0.5)
+	if vInt ~= rpValueInt then
+		rpValueInt = vInt
+		rpValueStr = tostring(vInt)
+	end
 
 	if rpFlashTimer > 0 then
 		rpFlashTimer = rpFlashTimer - (dt or 0)
@@ -646,6 +658,12 @@ local function SampleResearch(dt)
 		else
 			rpSmoothedRate = 0
 		end
+
+		local rateR = round(rpSmoothedRate, 1)
+		if rateR ~= rpRateRounded then
+			rpRateRounded = rateR
+			rpRateStr = string.format("+%.1f/s", rateR)
+		end
 	end
 end
 
@@ -662,29 +680,33 @@ local function DrawResearchPanel()
 	font2:Begin()
 
 	font2:SetTextColor(1, 1, 1, 1)
-	font2:Print(tostring(math.floor(rpValue + 0.5)),
-		rpX + RP_WIDTH - INNER_PADDING, 10, 22, "or")
+	font2:Print(rpValueStr, rpX + RP_WIDTH - INNER_PADDING, 10, 22, "or")
 
 	font2:SetTextColor(0, 1, 0, 1)
-	font2:Print(string.format("+%.1f/s", rpSmoothedRate),
-		rpX + INNER_PADDING, 12, 14, "o")
+	font2:Print(rpRateStr, rpX + INNER_PADDING, 12, 14, "o")
 
 	if rpFlashTimer > 0 and rpFlashAmount > 0 then
 		local a = rpFlashTimer / RP_FLASH_DURATION
 		font2:SetTextColor(1, 0.15, 0.15, a)
-		font2:Print("-" .. tostring(math.floor(rpFlashAmount + 0.5)),
-			rpX + RP_WIDTH - INNER_PADDING, 30, 16, "or")
+		font2:Print(rpFlashStr, rpX + RP_WIDTH - INNER_PADDING, 30, 16, "or")
 	end
 
 	font2:End()
 	glPopMatrix()
 end
 
+local opacityCheckTimer = 0
+
 function widget:Update(dt)
-	local newOpacity = GetUIOpacity()
-	if newOpacity ~= ui_opacity then
-		ui_opacity = newOpacity
-		BuildBackgroundList()
+	-- config reads aren't free; poll ui_opacity twice a second, not per frame
+	opacityCheckTimer = opacityCheckTimer + (dt or 0)
+	if opacityCheckTimer >= 0.5 then
+		opacityCheckTimer = 0
+		local newOpacity = GetUIOpacity()
+		if newOpacity ~= ui_opacity then
+			ui_opacity = newOpacity
+			BuildBackgroundList()
+		end
 	end
 	SampleResearch(dt)
 end
@@ -734,11 +756,18 @@ function widget:DrawScreen()
 
 	if not displayListBg then BuildBackgroundList() end
 	if not displayListStatic then BuildStaticList() end
-	BuildDynamicList()
+
+	-- resources only change on sim frames; skip sampling and the change
+	-- check entirely on intermediate draw frames
+	local frame = spGetGameFrame()
+	if frame ~= lastBuildFrame or not displayListDynamic then
+		lastBuildFrame = frame
+		BuildDynamicList()
+	end
 
 	glCallList(displayListBg)
 	glCallList(displayListStatic)
-	glCallList(displayListDynamic)
+	if displayListDynamic then glCallList(displayListDynamic) end
 
 	-- research panel content is immediate-mode: the number counts constantly,
 	-- so it must not live in the cached dynamic list.

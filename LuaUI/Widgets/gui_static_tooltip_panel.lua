@@ -1269,7 +1269,10 @@ local function RefreshLiveUnitFields(panelData, unitID)
 	local maxShieldPower = ud.shieldWeaponDef and WeaponDefs[ud.shieldWeaponDef]
 			and WeaponDefs[ud.shieldWeaponDef].shieldPower or nil
 	local overshieldStrength = spGetUnitRulesParam(unitID, "personalShield")
-	local shieldMaxStrength  = ud.customParams and ud.customParams.shield_max_strength
+	-- Live, upgrade-aware max published by the shields gadget (armor upgrades
+	-- raise it); the unitdef customparam is only the pre-upgrade fallback.
+	local shieldMaxStrength  = spGetUnitRulesParam(unitID, "personalShieldMax")
+			or tonumber(ud.customParams and ud.customParams.shield_max_strength)
 
 	panelData.healthText = health and (FormatNbr(health, 0) .. "/" .. FormatNbr(maxHealth, 0)) or nil
 
@@ -1313,7 +1316,8 @@ local function BuildUnitPanelData(unitID)
 	local hasShield, shieldPower = spGetUnitShieldState(unitID)
 	local maxShieldPower = ud.shieldWeaponDef and WeaponDefs[ud.shieldWeaponDef] and WeaponDefs[ud.shieldWeaponDef].shieldPower or nil
 	local overshieldStrength = spGetUnitRulesParam(unitID, "personalShield")
-	local shieldMaxStrength = ud.customParams and ud.customParams.shield_max_strength
+	local shieldMaxStrength = spGetUnitRulesParam(unitID, "personalShieldMax")
+			or tonumber(ud.customParams and ud.customParams.shield_max_strength)
 
 	local status = {}
 	if stunned then status[#status + 1] = "Paralyzed" end

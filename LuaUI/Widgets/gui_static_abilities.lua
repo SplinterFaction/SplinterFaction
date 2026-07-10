@@ -66,15 +66,55 @@ local COL_COOLDOWN  = "\255\255\210\120"
 --   msg        : LuaRules message name; "<msg> <x> <z>" is sent on target click
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- Abilities. Adding an ability = adding a table entry.
+--   kind    : "target"  = click button, then click the map (msg gets " <x> <z>")
+--             "instant" = click button, fires immediately (msg sent as-is)
+--   costRP  : flat cost (non-levelled abilities)
+--   levels  : levelled abilities -- { {cost=, mult=}, ... }; the button shows
+--             "<baseLabel> <nextLevel>" until maxed. Current level is read from
+--             the team rules param in levelParam (set by game_team_upgrades.lua).
+--   radius  : targeting circle radius in elmos (kind == "target" only)
+--------------------------------------------------------------------------------
+
 local ABILITIES = {
 	{
+		kind    = "target",
 		label   = "Scanner Sweep",
-		accent  = {1, 0.5, 0.0, 1},   -- teal, same family as the Log button
+		accent  = {1, 0.5, 0.0, 1},   -- orange
 		costRP  = 100,
 		cooldownSeconds = 20,          -- mirror of the gadget value, for the fill/countdown only
 		radius  = 800,
 		msg     = "scanner_sweep",
 		tooltip = "Reveal an area of the map for 5 seconds",
+	},
+	{
+		kind       = "instant",
+		baseLabel  = "Weapons Upgrade",
+		accent     = {0.90, 0.22, 0.22, 1},   -- red
+		levelParam = "upgrade_weapons_level",
+		levels     = {
+			{ cost = 250,  mult = 1.15 },
+			{ cost = 500,  mult = 1.30 },
+			{ cost = 1000, mult = 1.50 },
+		},
+		msg        = "team_upgrade weapons",
+		track      = "weapons",
+		tooltipFmt = "All your units deal +%d%% weapon damage",
+	},
+	{
+		kind       = "instant",
+		baseLabel  = "Armor Upgrade",
+		accent     = {0.18, 0.52, 0.98, 1},   -- blue
+		levelParam = "upgrade_armor_level",
+		levels     = {
+			{ cost = 250,  mult = 1.15 },
+			{ cost = 500,  mult = 1.30 },
+			{ cost = 1000, mult = 1.50 },
+		},
+		msg        = "team_upgrade armor",
+		track      = "armor",
+		tooltipFmt = "All your units gain +%d%% hull and shields",
 	},
 }
 
@@ -120,6 +160,7 @@ local myTeamID = spGetMyTeamID()
 
 local targetingIndex   = nil   -- ability index currently placing a target, or nil
 local lastHoveredIndex = nil
+local lastLevelSig     = -1
 
 -- Per-ability runtime (parallel to ABILITIES)
 local cdEndFrame = {}          -- [i] = game frame the cooldown ends (0 = ready)
@@ -220,7 +261,9 @@ local function GetPanelBGColor()
 end
 
 local function GetMyRP()
-	return tonumber(spGetTeamRulesParam(myTeamID, RP_RULES_PARAM)) or 0
+	-- NOTE: GetTeamRulesParam returns NO values (not nil) for an unset param;
+	-- the extra parentheses force exactly one value so tonumber never errors.
+	return tonumber((spGetTeamRulesParam(myTeamID, RP_RULES_PARAM))) or 0
 end
 
 local function CooldownRemaining(i)
@@ -229,8 +272,48 @@ local function CooldownRemaining(i)
 	return rem
 end
 
+--------------------------------------------------------------------------------
+-- Level-aware accessors. Non-levelled abilities (no `levels`) fall through to
+-- their flat fields; levelled ones read the current level from the team rules
+-- param, so the button flips to the next tier the moment the gadget confirms.
+--------------------------------------------------------------------------------
+
+local function CurLevel(i)
+	local a = ABILITIES[i]
+	if not a.levels then return 0 end
+	return tonumber((spGetTeamRulesParam(myTeamID, a.levelParam))) or 0
+end
+
+local function IsMaxed(i)
+	local a = ABILITIES[i]
+	return a.levels ~= nil and CurLevel(i) >= #a.levels
+end
+
+local function AbilityCost(i)
+	local a = ABILITIES[i]
+	if not a.levels then return a.costRP or 0 end
+	local nxt = a.levels[CurLevel(i) + 1]
+	return nxt and nxt.cost or 0
+end
+
+local function AbilityLabel(i)
+	local a = ABILITIES[i]
+	if not a.levels then return a.label end
+	if IsMaxed(i) then return a.baseLabel end
+	return a.baseLabel .. " " .. (CurLevel(i) + 1)
+end
+
+local function AbilityTooltip(i)
+	local a = ABILITIES[i]
+	if not a.levels then return a.tooltip end
+	if IsMaxed(i) then return a.baseLabel .. " fully researched" end
+	local nxt = a.levels[CurLevel(i) + 1]
+	return string.format(a.tooltipFmt, math_floor((nxt.mult - 1) * 100 + 0.5))
+end
+
 local function AbilityReady(i)
-	return CooldownRemaining(i) == 0 and GetMyRP() >= ABILITIES[i].costRP
+	if IsMaxed(i) then return false end
+	return CooldownRemaining(i) == 0 and GetMyRP() >= AbilityCost(i)
 end
 
 -- Anchor: right edge and top of the players list panel (or fallback corner).
@@ -326,9 +409,11 @@ local function DrawButtonStatic(i)
 
 	-- Label: left-aligned, vertically centered (row style, like players list).
 	-- Cost/countdown is dynamic (affordability colour), drawn per frame at right.
+	-- Levelled labels ("Weapons Upgrade 2") are baked here; the static list is
+	-- rebuilt when a level changes (see DrawScreen).
 	font:Begin()
 	font:Print(
-		COL_LABEL .. a.label,
+		COL_LABEL .. AbilityLabel(i),
 		x1 + (10 * uiScale),
 		y1 + ((y2 - y1) * 0.5) - (5 * uiScale),
 		13 * uiScale,
@@ -391,12 +476,21 @@ local function DrawButtonDynamic(i, mx, my)
 	local x1, y1, x2, y2 = b.x1 + inset, b.y1 + inset, b.x2 - inset, b.y2 - inset
 
 	local cdRem  = CooldownRemaining(i)
-	local rp     = GetMyRP()
-	local afford = rp >= a.costRP
+	local maxed  = IsMaxed(i)
+	local cost   = AbilityCost(i)
+	local afford = GetMyRP() >= cost
 
-	-- Right side: cost, or countdown while cooling
+	-- Right side: MAX, countdown, or cost
 	font:Begin()
-	if cdRem > 0 then
+	if maxed then
+		font:Print(
+			COL_LABEL .. "MAX",
+			b.x2 - (10 * uiScale),
+			b.y1 + ((b.y2 - b.y1) * 0.5) - (4 * uiScale),
+			11 * uiScale,
+			"ron"
+		)
+	elseif cdRem > 0 then
 		font:Print(
 			COL_COOLDOWN .. math_ceil(cdRem / 30) .. "s",
 			b.x2 - (10 * uiScale),
@@ -406,7 +500,7 @@ local function DrawButtonDynamic(i, mx, my)
 		)
 	else
 		font:Print(
-			(afford and COL_COST_OK or COL_COST_BAD) .. a.costRP .. " RP",
+			(afford and COL_COST_OK or COL_COST_BAD) .. cost .. " RP",
 			b.x2 - (10 * uiScale),
 			b.y1 + ((b.y2 - b.y1) * 0.5) - (4 * uiScale),
 			11 * uiScale,
@@ -416,7 +510,10 @@ local function DrawButtonDynamic(i, mx, my)
 	font:End()
 
 	-- Cooldown fill: dark curtain that retreats left-to-right as cd expires
-	if cdRem > 0 then
+	if maxed then
+		glColor(0, 0, 0, 0.45)
+		RectRound(x1, y1, x2, y2, innerCorner)
+	elseif cdRem > 0 then
 		local a2 = ABILITIES[i]
 		local totalFrames = ((a2.cooldownSeconds or 20) * 30)
 		local frac = cdRem / totalFrames
@@ -457,14 +554,24 @@ local function CancelTargeting()
 	targetingIndex = nil
 end
 
-local function TryStartTargeting(i)
-	if AbilityReady(i) then
-		targetingIndex = i
-		Spring.SetActiveCommand(0)      -- drop any pending build/order ghost
+local function TryActivate(i)
+	local a = ABILITIES[i]
+	if not AbilityReady(i) then
+		flashUntil[i] = os.clock() + 0.35   -- visibly "no" (maxed / broke / cooling)
+		return true                          -- still consume the click
+	end
+
+	if a.kind == "instant" then
+		-- Fire immediately; the level rules param flips when the gadget
+		-- confirms, and UpgradeDenyEvent flashes the button if it refuses.
+		spSendLuaRulesMsg(a.msg)
 		return true
 	end
-	flashUntil[i] = os.clock() + 0.35   -- visibly "no"
-	return true                          -- still consume the click
+
+	-- kind == "target": enter placement mode
+	targetingIndex = i
+	Spring.SetActiveCommand(0)      -- drop any pending build/order ghost
+	return true
 end
 
 local function FireAt(i, wx, wz)
@@ -492,6 +599,16 @@ local function OnScannerDeny(reason)
 	spSendLuaRulesMsg("scanner_query")
 end
 
+local function OnUpgradeDeny(track, reason)
+	-- Flash whichever button owns this upgrade track.
+	for i = 1, #ABILITIES do
+		if ABILITIES[i].track == track then
+			flashUntil[i] = os.clock() + 0.35
+			return
+		end
+	end
+end
+
 --------------------------------------------------------------------------------
 -- Widget lifecycle
 --------------------------------------------------------------------------------
@@ -505,6 +622,7 @@ function widget:Initialize()
 
 	widgetHandler:RegisterGlobal("ScannerCooldownEvent", OnScannerCooldown)
 	widgetHandler:RegisterGlobal("ScannerDenyEvent",     OnScannerDeny)
+	widgetHandler:RegisterGlobal("UpgradeDenyEvent",     OnUpgradeDeny)
 
 	RecalculateGeometry()
 
@@ -515,6 +633,7 @@ end
 function widget:Shutdown()
 	widgetHandler:DeregisterGlobal("ScannerCooldownEvent")
 	widgetHandler:DeregisterGlobal("ScannerDenyEvent")
+	widgetHandler:DeregisterGlobal("UpgradeDenyEvent")
 	FreeStaticList()
 	if font then gl.DeleteFont(font) end
 end
@@ -573,7 +692,7 @@ function widget:MousePress(x, y, button)
 		local b = buttons[i]
 		if IsOnRect(x, y, b.x1, b.y1, b.x2, b.y2) then
 			PlayLeftClickSound()
-			return TryStartTargeting(i)
+			return TryActivate(i)
 		end
 	end
 
@@ -616,6 +735,18 @@ function widget:DrawScreen()
 
 	FollowAnchor()
 
+	-- Levelled labels are baked into the static list: rebuild when a level flips.
+	local levelSig = 0
+	for i = 1, #ABILITIES do
+		if ABILITIES[i].levels then
+			levelSig = levelSig * 8 + CurLevel(i)
+		end
+	end
+	if levelSig ~= lastLevelSig then
+		lastLevelSig = levelSig
+		FreeStaticList()
+	end
+
 	local guiShaderActive = (WG.guishader ~= nil)
 	if not staticList or guiShaderActive ~= lastGuiShader then
 		BuildStaticList()
@@ -645,8 +776,11 @@ function widget:DrawScreen()
 
 	-- Mini tooltip popup, drawn last so it sits above the panel. Suppressed
 	-- while targeting -- the player is mid-cast, not browsing.
-	if tooltipIndex and not targetingIndex and ABILITIES[tooltipIndex].tooltip then
-		DrawMiniTooltip(ABILITIES[tooltipIndex].tooltip, mx, my, ABILITIES[tooltipIndex].accent)
+	if tooltipIndex and not targetingIndex then
+		local tip = AbilityTooltip(tooltipIndex)
+		if tip then
+			DrawMiniTooltip(tip, mx, my, ABILITIES[tooltipIndex].accent)
+		end
 	end
 
 	glColor(1, 1, 1, 1)
