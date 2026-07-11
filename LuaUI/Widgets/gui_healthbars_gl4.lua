@@ -89,7 +89,7 @@ local minReloadTime = 4 -- weapons reloading slower than this (seconds) get relo
 local visibleRefreshTime = 0.30 -- seconds between visible unit set refreshes
 local featureRefreshTime = 0.50 -- seconds between visible feature reclaim/rez sweeps
 
-local barScale         = 1
+local barScale         = 2
 local variableBarSizes = true
 local barHeight        = 0.9
 
@@ -1268,7 +1268,7 @@ function widget:GetConfigData(data)
 end
 
 function widget:SetConfigData(data)
-	barScale = data.barScale or barScale
+	--barScale = data.barScale or barScale
 	if data.variableBarSizes ~= nil then
 		variableBarSizes = data.variableBarSizes
 	end
