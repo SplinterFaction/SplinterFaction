@@ -1,7 +1,7 @@
-base, rearwheels, frontwheels, dirt, emitter, firepoint1 = piece('base', 'rearwheels', 'frontwheels', 'dirt', 'emitter', 'firepoint1')
+base, rearwheels, frontwheels, dirt, emitter = piece('base', 'rearwheels', 'frontwheels', 'dirt', 'emitter')
 
 local deathPieces = {
-	base, rearwheels, frontwheels, dirt, emitter, firepoint1,
+	base, rearwheels, frontwheels, dirt, emitter
 }
 local SIG_AIM = {}
 
@@ -12,7 +12,7 @@ isMoving = "isMoving"
 terrainType = "terrainType"
 
 function script.Create()
-    StartThread(common.SmokeUnit, {base, rearwheels, frontwheels, emitter, firepoint1})
+    StartThread(common.SmokeUnit, {base, rearwheels, frontwheels, emitter})
     Spring.UnitScript.Spin(emitter,y_axis,math.rad(5))
     building = false
 end

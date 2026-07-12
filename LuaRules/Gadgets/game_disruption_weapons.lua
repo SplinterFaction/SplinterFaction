@@ -794,9 +794,9 @@ else
 -- Sound files (stubs -- supply these). Stage 3 fires at the same moment as
 -- the overload nova, so make it the big one.
 local STAGE_SOUNDS = {
-	[1] = { file = "sounds/disruption_stage1.wav", volume = 0.8 },
-	[2] = { file = "sounds/disruption_stage2.wav", volume = 0.9 },
-	[3] = { file = "sounds/disruption_stage3.wav", volume = 1.0 },
+	[1] = { file = "sounds/weapons/electricboom.wav", volume = 0.8 },
+	[2] = { file = "sounds/weapons/electricboom.wav", volume = 0.9 },
+	[3] = { file = "sounds/impacts/phasegun1hit.wav", volume = 1.0 },
 }
 local SOUND_CHANNEL = "battle"
 

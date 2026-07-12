@@ -57,6 +57,20 @@ local BUILD_INFO_H          = 56
 local SCROLLBAR_W           = 10
 local SCROLL_STEP           = 56
 
+-- Text legibility floors (absolute pixels, NOT scaled by uiScale).
+-- Scaled text sizes never drop below these, so low resolutions (1080p and
+-- under) keep readable text even where strict proportional scaling would
+-- produce 9-11px glyphs.  All floors are chosen at or below the values that
+-- uiScale >= 1.33 (1440p) already produces, so 1440p output is unchanged.
+local MIN_INFO_TEXT_SIZE    = 12   -- build-button info strip rows
+local MIN_HEADER_TEXT_SIZE  = 13   -- section headers
+local MIN_LABEL_TEXT_SIZE   = 12   -- category headers, order captions, queue badge
+local MIN_FITTED_SIZE       = 11   -- hard floor for DrawTextFitted shrink-to-fit;
+                                   -- below this, text is ellipsized instead
+
+-- Computed in UpdatePanelRects: floored info-strip text size (drives BUILD_INFO_H)
+local INFO_TEXT_SIZE        = 12
+
 -- Queue badge text vertical nudge (positive = up, negative = down).
 -- Adjust this if the number looks off-centre in the badge at your base resolution.
 local QUEUE_BADGE_TEXT_OFFSET_X = 1
@@ -125,7 +139,22 @@ local GL_TRIANGLE_FAN        = GL.TRIANGLE_FAN
 local GL_LINE_LOOP           = GL.LINE_LOOP
 local GL_QUADS               = GL.QUADS
 
-local font
+-- Dual font instances (both the same typeface):
+--   fontMain  — atlas 24 / outline 2, for text drawn at >= FONT_SMALL_THRESHOLD px
+--   fontSmall — atlas 14 / outline 1, for small text; keeps small glyphs crisp
+--     by avoiding heavy atlas minification and sub-pixel outline smearing.
+-- Font selection is by *requested* size (not post-fit size) so measurement and
+-- drawing always use the same instance.
+local fontMain
+local fontSmall
+local FONT_SMALL_THRESHOLD = 15
+
+local function SelectFont(size)
+    if fontSmall and size < FONT_SMALL_THRESHOLD then
+        return fontSmall
+    end
+    return fontMain
+end
 
 local math_min               = math.min
 local math_max               = math.max
@@ -303,7 +332,12 @@ local function UpdatePanelRects()
     CATEGORY_GAP  = math_floor( 4 * uiScale)
     BUILD_GRID_GAP = math_floor(8 * uiScale)
     ORDER_GRID_GAP = math_floor(6 * uiScale)
-    BUILD_INFO_H  = math_floor(40 * uiScale)
+    -- Info-strip text size gets a legibility floor; the strip height is then
+    -- derived from it (3 rows) so the box grows to fit the text rather than
+    -- the text shrinking to fit the box.  The legacy 40*uiScale term keeps
+    -- higher resolutions (where the floor never binds) pixel-identical.
+    INFO_TEXT_SIZE = math_max(MIN_INFO_TEXT_SIZE, math_floor(11 * uiScale))
+    BUILD_INFO_H  = math_max(math_floor(40 * uiScale), 3 * math_floor(INFO_TEXT_SIZE * 1.25))
     SCROLLBAR_W   = math_floor(10 * uiScale)
     SCROLL_STEP   = math_floor(56 * uiScale)
 
@@ -700,23 +734,54 @@ local function DrawPanel(x1, y1, x2, y2)
     glTexture(false)
 end
 
+local ELLIPSIS = "…"   -- U+2026; present in Saira. Change to ".." if ever missing.
+
+-- Removes the last full UTF-8 character (not just the last byte) from s.
+local function TrimLastUtf8Char(s)
+    local i = #s
+    if i == 0 then return s end
+    -- Back up over UTF-8 continuation bytes (0x80..0xBF) to the char's lead byte
+    while i > 1 and string.byte(s, i) >= 128 and string.byte(s, i) <= 191 do
+        i = i - 1
+    end
+    return string_sub(s, 1, i - 1)
+end
+
+-- Draws text at `size`, shrinking to fit maxWidth — but never below
+-- MIN_FITTED_SIZE.  If text cannot fit even at the floor size, it is
+-- truncated with an ellipsis instead (truncated-but-readable beats
+-- complete-but-illegible).  Returns the actual drawn width in pixels
+-- so callers can advance a cursor reliably.
 local function DrawTextFitted(text, x, y, size, opts, maxWidth, color)
-    if not text or text == '' then return end
-    local estWidth = font:GetTextWidth(text) * size
+    if not text or text == '' then return 0 end
+    local fnt = SelectFont(size)
     local drawSize = size
-    if maxWidth and estWidth > maxWidth and estWidth > 0 then
-        drawSize = size * (maxWidth / estWidth)
+    if maxWidth then
+        local estWidth = fnt:GetTextWidth(text) * size
+        if estWidth > maxWidth and estWidth > 0 then
+            drawSize = size * (maxWidth / estWidth)
+            local minSize = math_min(size, MIN_FITTED_SIZE)
+            if drawSize < minSize then
+                drawSize = minSize
+                local s = text
+                while s ~= "" and fnt:GetTextWidth(s .. ELLIPSIS) * drawSize > maxWidth do
+                    s = TrimLastUtf8Char(s)
+                end
+                text = (s == "") and ELLIPSIS or (s .. ELLIPSIS)
+            end
+        end
     end
     if color then
-        font:SetTextColor(color[1], color[2], color[3], color[4] or 1)
+        fnt:SetTextColor(color[1], color[2], color[3], color[4] or 1)
     end
-    font:Print(text, x, y, drawSize, opts)
+    fnt:Print(text, x, y, drawSize, opts)
+    return fnt:GetTextWidth(text) * drawSize
 end
 
 local function GetInfoTextBaseSizes(buttonW)
-    local rowH = BUILD_INFO_H / 2
-    local sz   = math_max(math_floor(9 * uiScale), math_min(math_floor(buttonW * 0.120), math_floor(rowH * 0.74)))
-    return sz, sz, sz   -- topSize, midSize, botSize (uniform for now, easy to tune)
+    -- Text size drives the strip height now (see UpdatePanelRects), so all
+    -- three rows simply use the precomputed, legibility-floored size.
+    return INFO_TEXT_SIZE, INFO_TEXT_SIZE, INFO_TEXT_SIZE
 end
 
 local function DrawIcon(x1, y1, x2, y2, texture)
@@ -834,11 +899,11 @@ local function BuildButtonLayout_Bake(scrollOffset)
 
             if item.kind == "section" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 7, SECTION_BG)
-                DrawTextFitted(item.text, item.x1 + math_floor(8 * uiScale), iy1 + math_floor(6 * uiScale), math_floor(13 * uiScale), "o", item.x2 - item.x1 - math_floor(16 * uiScale), HEADER_TEXT)
+                DrawTextFitted(item.text, item.x1 + math_floor(8 * uiScale), iy1 + math_floor(6 * uiScale), math_max(MIN_HEADER_TEXT_SIZE, math_floor(13 * uiScale)), "o", item.x2 - item.x1 - math_floor(16 * uiScale), HEADER_TEXT)
 
             elseif item.kind == "category" then
                 DrawRoundedRect(item.x1, iy1, item.x2, iy2, 6, CATEGORY_BG)
-                DrawTextFitted(item.text, item.x1 + math_floor(12 * uiScale), iy1 + math_floor(4 * uiScale), math_floor(11 * uiScale), "o", item.x2 - item.x1 - math_floor(20 * uiScale), HEADER_TEXT)
+                DrawTextFitted(item.text, item.x1 + math_floor(12 * uiScale), iy1 + math_floor(4 * uiScale), math_max(MIN_LABEL_TEXT_SIZE, math_floor(11 * uiScale)), "o", item.x2 - item.x1 - math_floor(20 * uiScale), HEADER_TEXT)
 
             elseif item.kind == "buildbutton" then
                 local cmd      = item.cmd
@@ -859,9 +924,9 @@ local function BuildButtonLayout_Bake(scrollOffset)
                 if queueCount and queueCount > 0 then
                     local queueText = tostring(math_floor(queueCount))
                     local iconH   = iconY2 - iconY1
-                    local qSize   = math_max(math_floor(11 * uiScale), math_floor(iconH * 0.16))
+                    local qSize   = math_max(MIN_LABEL_TEXT_SIZE, math_floor(11 * uiScale), math_floor(iconH * 0.16))
                     local qPadX, qPadY = math_floor(5 * uiScale), math_floor(4 * uiScale)
-                    local panelW2 = math_floor(font:GetTextWidth(queueText) * qSize + qPadX * 2)
+                    local panelW2 = math_floor(SelectFont(qSize):GetTextWidth(queueText) * qSize + qPadX * 2)
                     local panelH2 = math_floor(qSize + qPadY * 2)
                     local qx2, qy2 = item.x2 - math_floor(4 * uiScale), iconY2 - math_floor(4 * uiScale)
                     local qx1, qy1 = qx2 - panelW2, qy2 - panelH2
@@ -907,22 +972,22 @@ local function BuildButtonLayout_Bake(scrollOffset)
                                    TECH_TEXT_COLORS[rightTop] or {1.0, 0.75, 0.30, 1.0})
                 end
 
-                -- Row 2: Metal / Energy inline
+                -- Row 2: Metal / Energy inline.
+                -- Cursor advances by the width DrawTextFitted actually drew
+                -- (fitting may shrink/trim), and each segment is clamped to
+                -- the width remaining on the row, so segments never overlap
+                -- or spill off the button.
                 do
-                    local curX = item.x1 + panelPad
+                    local rowX1 = item.x1 + panelPad
+                    local curX  = rowX1
                     if overlay.metal then
-                        local w = font:GetTextWidth(overlay.metal) * midSize
-                        DrawTextFitted(overlay.metal, curX, midY, midSize, "o", maxW, METAL_TEXT_COLOR)
-                        curX = curX + w
+                        curX = curX + DrawTextFitted(overlay.metal, curX, midY, midSize, "o", maxW - (curX - rowX1), METAL_TEXT_COLOR)
                     end
                     if overlay.metal and overlay.energy then
-                        local sep = " / "
-                        local w = font:GetTextWidth(sep) * midSize
-                        DrawTextFitted(sep, curX, midY, midSize, "o", maxW, {1.0, 1.0, 1.0, 1.0})
-                        curX = curX + w
+                        curX = curX + DrawTextFitted(" / ", curX, midY, midSize, "o", maxW - (curX - rowX1), {1.0, 1.0, 1.0, 1.0})
                     end
                     if overlay.energy then
-                        DrawTextFitted(overlay.energy, curX, midY, midSize, "o", maxW, ENERGY_TEXT_COLOR)
+                        DrawTextFitted(overlay.energy, curX, midY, midSize, "o", maxW - (curX - rowX1), ENERGY_TEXT_COLOR)
                     end
                 end
 
@@ -1063,7 +1128,7 @@ local function DrawOrderButtons_Static()
         DrawRoundedRect(bx1, by1, bx2, by2, 6, {0.14, 0.14, 0.15, 0.85})
 
         local caption = cmd.name == "Repair" and "Build" or cmd.name
-        DrawTextFitted(caption, bx1 + math_floor(6 * uiScale), by1 + bh * 0.45, math_floor(11 * uiScale), "o", bw - math_floor(12 * uiScale), {1, 1, 1, 1})
+        DrawTextFitted(caption, bx1 + math_floor(6 * uiScale), by1 + bh * 0.45, math_max(MIN_LABEL_TEXT_SIZE, math_floor(11 * uiScale)), "o", bw - math_floor(12 * uiScale), {1, 1, 1, 1})
 
         if entry.state then
             DrawStateBars(cmd, bx1, by1, bx2, by2)
@@ -1172,14 +1237,16 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
-    font = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
+    fontMain  = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
+    fontSmall = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1)
     UpdatePanelRects()
     OverrideDefaultMenu()
 end
 
 function widget:Shutdown()
     FreeDisplayLists()
-    if font then gl.DeleteFont(font) end
+    if fontMain  then gl.DeleteFont(fontMain)  end
+    if fontSmall then gl.DeleteFont(fontSmall) end
     widgetHandler:ConfigLayoutHandler(nil)
     spForceLayoutUpdate()
 end

@@ -60,6 +60,58 @@ local BODY_SIZE   = 11
 local SMALL_SIZE  = 10
 local LINE_H      = 14
 
+-- Text rendering config, consolidated into ONE table local.
+-- NOTE: this file's main chunk is close to Lua 5.1's hard limit of 200 local
+-- variables — add new module state as fields of TXT (or another table), not
+-- as fresh top-level locals.
+--
+-- Floors are absolute pixels (NOT scaled by uiScale): scaled text sizes never
+-- drop below them, so low resolutions keep readable text where strict
+-- proportional scaling would produce 10-11px glyphs.  All floors sit at or
+-- below what uiScale >= 1.33 (1440p) already produces, so 1440p is unchanged.
+local TXT = {
+	minTitle  = 15,
+	minHeader = 13,
+	minBody   = 12,
+	minSmall  = 11,
+	minFitted = 11,    -- hard floor for DrawTextFitted shrink-to-fit;
+	                   -- below this, text is ellipsized instead
+	ellipsis  = "…",   -- U+2026; present in Saira. Change to ".." if ever missing.
+
+	-- Dual font instances (same typeface), loaded in Initialize:
+	--   fontMain  — atlas 24 / outline 2, for text >= smallThreshold px
+	--   fontSmall — atlas 14 / outline 1, keeps small glyphs crisp by avoiding
+	--     heavy atlas minification and sub-pixel outline smearing
+	fontMain  = nil,
+	fontSmall = nil,
+	smallThreshold = 15,
+
+	-- Ratio by which floored text at low resolutions outgrows strict uiScale
+	-- proportionality (1.0 whenever no floor binds, e.g. at 1440p).  Fixed
+	-- label/value column offsets are multiplied by this so columns track the
+	-- actual text size instead of colliding with it.  Set in UpdateRects.
+	scaleCorr = 1.0,
+}
+
+-- Selection is by *requested* size so measurement and drawing always agree.
+function TXT.SelectFont(size)
+	if TXT.fontSmall and size < TXT.smallThreshold then
+		return TXT.fontSmall
+	end
+	return TXT.fontMain
+end
+
+-- Removes the last full UTF-8 character (not just the last byte) from s.
+function TXT.TrimLastUtf8Char(s)
+	local i = #s
+	if i == 0 then return s end
+	-- Back up over UTF-8 continuation bytes (0x80..0xBF) to the char's lead byte
+	while i > 1 and string.byte(s, i) >= 128 and string.byte(s, i) <= 191 do
+		i = i - 1
+	end
+	return s:sub(1, i - 1)
+end
+
 local TECH_TEXT_COLORS = {
 	T0 = {0.0, 0.8, 0.8, 1.0},
 	T1 = {1.0, 0.5, 0.0, 1.0},
@@ -143,7 +195,7 @@ local ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
 local bgcorner   = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
 local accentImg  = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 
-local font
+-- Font instances live in TXT (see config section above); loaded in Initialize.
 
 --------------------------------------------------------------------------------
 -- Hero image (constants and cache only — DrawHeroImage is defined later,
@@ -355,11 +407,14 @@ local function UpdateRects()
 
 	-- Recompute scale and all derived size constants each time the viewport changes.
 	uiScale     = vsy / BASE_RESOLUTION
-	TITLE_SIZE  = math_floor(15 * uiScale)
-	HEADER_SIZE = math_floor(12 * uiScale)
-	BODY_SIZE   = math_floor(11 * uiScale)
-	SMALL_SIZE  = math_floor(10 * uiScale)
-	LINE_H      = math_floor(14 * uiScale)
+	TITLE_SIZE  = math_max(TXT.minTitle,  math_floor(15 * uiScale))
+	HEADER_SIZE = math_max(TXT.minHeader, math_floor(12 * uiScale))
+	BODY_SIZE   = math_max(TXT.minBody,   math_floor(11 * uiScale))
+	SMALL_SIZE  = math_max(TXT.minSmall,  math_floor(10 * uiScale))
+	-- Line height tracks the (possibly floored) body size so rows never collide
+	LINE_H      = math_max(math_floor(14 * uiScale), math_floor(BODY_SIZE * 1.3))
+	-- How far floored body text outgrows strict proportional scaling (>= 1.0)
+	TXT.scaleCorr = math_max(1.0, BODY_SIZE / math_max(1, 11 * uiScale))
 	INNER_PAD   = math_floor(10 * uiScale)
 	SECTION_GAP = math_floor( 6 * uiScale)
 	CARD_GAP    = math_floor( 6 * uiScale)
@@ -549,29 +604,48 @@ local function DrawHeroImage(unitName, x1, yTop, w)
 end
 
 local function TextWidthApprox(text, size)
-	return font:GetTextWidth(tostring(text or "")) * size
+	return TXT.SelectFont(size):GetTextWidth(tostring(text or "")) * size
 end
 
+-- Draws text at `size`, shrinking to fit maxWidth — but never below
+-- TXT.minFitted.  If text cannot fit even at the floor size, it is
+-- truncated with an ellipsis instead (truncated-but-readable beats
+-- complete-but-illegible).  Returns the actual drawn width in pixels.
 local function DrawTextFitted(text, x, y, size, maxWidth, color, align)
 	text = tostring(text or "")
+	if text == "" then return 0 end
+	local fnt = TXT.SelectFont(size)
 	local c = color or HEADER_TEXT
-	font:SetTextColor(c[1], c[2], c[3], c[4] or 1)
+	fnt:SetTextColor(c[1], c[2], c[3], c[4] or 1)
 	local drawSize = size
-	local approxW = TextWidthApprox(text, size)
+	local approxW = fnt:GetTextWidth(text) * size
 	if approxW > maxWidth and approxW > 0 then
 		drawSize = size * (maxWidth / approxW)
+		local minSize = math_min(size, TXT.minFitted)
+		if drawSize < minSize then
+			drawSize = minSize
+			local s = text
+			while s ~= "" and fnt:GetTextWidth(s .. TXT.ellipsis) * drawSize > maxWidth do
+				s = TXT.TrimLastUtf8Char(s)
+			end
+			text = (s == "") and TXT.ellipsis or (s .. TXT.ellipsis)
+		end
 	end
-	font:Print(text, x, y, drawSize, (align or "o"))
+	fnt:Print(text, x, y, drawSize, (align or "o"))
+	return fnt:GetTextWidth(text) * drawSize
 end
 
 local function DrawText(text, x, y, size, opts, color)
+	local fnt = TXT.SelectFont(size)
 	local c = color or HEADER_TEXT
-	font:SetTextColor(c[1], c[2], c[3], c[4] or 1)
-	font:Print(text, x, y, size, opts or "o")
+	fnt:SetTextColor(c[1], c[2], c[3], c[4] or 1)
+	fnt:Print(text, x, y, size, opts or "o")
 end
 
+-- All call sites measure BODY_SIZE text, so measure with the font that
+-- will actually draw at BODY_SIZE.
 local function GetTextWidth(text)
-	return font:GetTextWidth(text)
+	return TXT.SelectFont(BODY_SIZE):GetTextWidth(text)
 end
 
 local function WrapText(text, maxWidth, size)
@@ -851,11 +925,13 @@ local function DrawHeaderTag(x, y, text, color)
 end
 
 local function DrawFlowLine(x, y, label, metalValue, energyValue)
-	local col1 = math_floor(88 * uiScale)
-	local col2 = math_floor(12 * uiScale)
-	local col3 = math_floor(52 * uiScale)
-	local col4 = math_floor(42 * uiScale)
-	local col5 = math_floor(24 * uiScale)
+	-- Columns track the floored text size (textScaleCorr) so labels and
+	-- values don't collide at low resolutions; 1.0 at 1440p and above.
+	local col1 = math_floor(88 * uiScale * TXT.scaleCorr)
+	local col2 = math_floor(12 * uiScale * TXT.scaleCorr)
+	local col3 = math_floor(52 * uiScale * TXT.scaleCorr)
+	local col4 = math_floor(42 * uiScale * TXT.scaleCorr)
+	local col5 = math_floor(24 * uiScale * TXT.scaleCorr)
 	DrawTextFitted(label, x, y, BODY_SIZE, math_floor(140 * uiScale), MUTED_TEXT_COLOR, "o")
 
 	local vx = x + col1
@@ -872,7 +948,7 @@ local function DrawFlowLine(x, y, label, metalValue, energyValue)
 end
 
 local function DrawKVLine(x, y, label, value, labelColor, valueColor)
-	local col = math_floor(88 * uiScale)
+	local col = math_floor(88 * uiScale * TXT.scaleCorr)
 	DrawTextFitted(label, x, y, BODY_SIZE, math_floor(140 * uiScale), labelColor or MUTED_TEXT_COLOR, "o")
 	DrawTextFitted(value or "-", x + col, y, BODY_SIZE, math_floor(220 * uiScale), valueColor or HEADER_TEXT, "o")
 end
@@ -915,8 +991,8 @@ local function CalcStatsEconLayout(data, x1, yTop, w)
 	local pad      = math_floor(10 * uiScale)
 	local mid      = x1 + math_floor(w * 0.5)  -- column split
 	local colW     = math_floor(w * 0.5) - pad  -- usable width per column
-	local lblW     = math_floor(52 * uiScale)   -- label column within each half
-	local valOff   = math_floor(58 * uiScale)   -- value x offset from column x1
+	local lblW     = math_floor(52 * uiScale * TXT.scaleCorr)   -- label column within each half
+	local valOff   = math_floor(58 * uiScale * TXT.scaleCorr)   -- value x offset from column x1
 
 	-- Left column rows (stats)
 	local leftRows = {}
@@ -1946,7 +2022,8 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
-	font = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
+	TXT.fontMain  = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
+	TXT.fontSmall = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1)
 	UpdateRects()
 	spSendCommands({"tooltip 0"})
 	spSetDrawSelectionInfo(false)
@@ -1960,7 +2037,8 @@ end
 
 function widget:Shutdown()
 	FreeDisplayLists()
-	if font then gl.DeleteFont(font) end
+	if TXT.fontMain  then gl.DeleteFont(TXT.fontMain)  end
+	if TXT.fontSmall then gl.DeleteFont(TXT.fontSmall) end
 	spSendCommands({"tooltip 1"})
 end
 
