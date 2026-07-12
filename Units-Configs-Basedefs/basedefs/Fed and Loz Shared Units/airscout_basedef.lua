@@ -40,7 +40,7 @@ unitDef                    = {
 	category                     = "AIR",
 	collide                      = false,
 	cruiseAlt                    = 75,
-	description                  = [[Scout: Can drop tiny Seismic Sensors via Stockpile]],
+	description                  = [[Fast and Nimble Air Scout with a wide sensor range.]],
 	energyMake                   = 0,
 	energyStorage                = 0,
 	energyUse                    = 0,
@@ -95,10 +95,10 @@ unitDef                    = {
 
 	-- This weapon is lolfake. Spring Sucks. Fite me.
 	weapons                      = {
-		[1]                      = {
-			def                  = "SeismicSensor",
-			onlyTargetCategory	 = "NOTHING",
-		},
+		--[1]                      = {
+		--	def                  = "SeismicSensor",
+		--	onlyTargetCategory	 = "NOTHING",
+		--},
 		--[[
 		[2]                      = {
 			def                  = "fakelaser",
