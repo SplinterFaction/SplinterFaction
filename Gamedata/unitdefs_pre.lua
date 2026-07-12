@@ -45,7 +45,7 @@ Shared.buildListFedSeaPlant = {
 
 Shared.buildListf2landfac = {
 	[[lozengineer_up1]],
-	--[[lozflea]],
+	-- [[lozflea]],
 	[[lozdiamondback]],
 	[[lozroach]],
 	[[lozscorpion]],
@@ -122,7 +122,7 @@ Shared.buildListFedSeaPlant_ai = {
 }
 
 Shared.buildListf2landfac_ai = {
-	--[[lozflea]],
+	-- [[lozflea]],
 	[[lozdiamondback]],
 	[[lozroach]],
 	[[lozscorpion]],
@@ -245,7 +245,7 @@ Shared.buildListLozUniversalBuilder = {
 	-- [[cloakingtower]],
 	[[smallshieldgenerator]],
 	[[largeshieldgenerator]],
-	--[[lozearthquakemine]],
+	-- [[lozearthquakemine]],
 	[[lozjericho]],
 	[[lozrazor]],
 	[[lozinferno]],
@@ -278,7 +278,7 @@ Shared.buildListLozUniversalBuilderCommander = {
 	-- [[cloakingtower]],
 	[[smallshieldgenerator]],
 	[[largeshieldgenerator]],
-	--[[lozearthquakemine]],
+	-- [[lozearthquakemine]],
 	[[lozjericho]],
 	[[lozrazor]],
 	[[lozinferno]],
@@ -324,7 +324,7 @@ Shared.buildListFedUniversalBuilderCommander_ai = {
 	-- [[largeshieldgenerator]],
 	[[fedmenlo]],
 	[[fedstinger]],
-	--[[fedearthquakemine]],
+	-- [[fedearthquakemine]],
 	[[fedimmolator]],
 	[[fedjavelin]],
 	-- [[fedguardian]],
