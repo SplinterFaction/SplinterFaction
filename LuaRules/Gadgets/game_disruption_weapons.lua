@@ -28,8 +28,8 @@ local IN_LOS = { inlos = true }
 -- Stage 1 (>= 33%): sensors offline (LOS collapses to MIN_LOS_RADIUS)
 -- Stage 2 (>= 66%): weapons offline (ranges collapsed to WEAPON_DEAD_RANGE)
 -- Stage 3 (100%):   engines dead for LOCKOUT_SECONDS + overload nova
-local STAGE_1_THRESHOLD = 0.33
-local STAGE_2_THRESHOLD = 0.66
+local STAGE_1_THRESHOLD = 0.50
+local STAGE_2_THRESHOLD = 0.75
 
 -- Full disruption
 local LOCKOUT_SECONDS    = 10
@@ -39,7 +39,7 @@ local POST_TRIGGER_RESET = 0.55 -- come back online at 55% (stage 1: still blind
 -- Overload nova (fires when a unit hits full disruption)
 -- Applies NOVA_FRACTION of the SOURCE unit's capacity to the source's allies
 -- within NOVA_RADIUS. Victims' own disruptionresist still applies.
-local NOVA_RADIUS   = 300
+local NOVA_RADIUS   = 100
 local NOVA_FRACTION = 0.25
 
 -- Stage CEGs (stubs -- define these)

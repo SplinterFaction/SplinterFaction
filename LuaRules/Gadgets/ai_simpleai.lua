@@ -76,6 +76,7 @@ local ctx = {
 	-- ---- unit classification (defID-keyed, immutable after load) ----
 	IsCommander = {}, IsFactory = {}, IsConstructor = {}, IsExtractor = {},
 	IsCombat    = {}, IsConverter = {}, IsTurret = {}, IsAir = {},
+	IsAATurret  = {},   -- [defID] = true: turret with a dedicated AA weapon (onlyTargetCategory "AIR")
 	ShieldMax   = {},   -- [defID] = shield capacity (Loz personal shields)
 	BoostCost   = {},   -- [defID] = Build Boost RP cost (factories only)
 	commanderDefs = {}, factoryDefs = {}, constructorDefs = {},
@@ -85,6 +86,7 @@ local ctx = {
 	counters = {
 		factories = {}, factoriesByDef = {}, mexes = {}, constructors = {},
 		army = {}, converters = {}, turrets = {}, landFactories = {},
+		aaTurrets = {},
 	},
 	pacing = {
 		factoryDelay = {}, constructorDelay = {},
@@ -92,7 +94,7 @@ local ctx = {
 		lastLaunch = {}, lastTargetScan = {}, lastBoost = {},
 	},
 	squad   = { muster = {}, state = {}, attackWave = {}, attackTimer = {} },
-	intel   = { underAttack = {}, enemyBase = {}, baseThreat = {} },
+	intel   = { underAttack = {}, enemyBase = {}, baseThreat = {}, airThreat = {} },
 	comm    = { retreating = {}, retreatPos = {}, id = {} },
 	techLevel  = {},   -- 0-4 per team
 	faction    = {},   -- "fed" | "loz" | "neutral" per team
@@ -131,7 +133,13 @@ local SimpleUnderAttack    = ctx.intel.underAttack
 local SimpleEnemyBasePos   = ctx.intel.enemyBase
 local SimpleConverterCount = ctx.counters.converters
 local SimpleTurretCount    = ctx.counters.turrets      -- total defensive turrets per team
+local SimpleAATurretCount  = ctx.counters.aaTurrets    -- dedicated AA turrets per team (subset of turrets)
 local SimpleLandFacCount   = ctx.counters.landFactories -- land-only factory count per team
+
+-- Air-threat evidence: [teamID] = frame of the last enemy-aircraft sighting
+-- (base scan in b_defense) or air-delivered damage (UnitDamaged below).
+-- Construction reads this timestamp and raises AA turrets while it is fresh.
+local SimpleAirThreat      = ctx.intel.airThreat
 
 -- Strike team / staging system
 local SimpleMusterPos      = ctx.squad.muster       -- rally point where ground units assemble
@@ -209,7 +217,9 @@ for i = 1, #teams do
 		SimpleEnemyBasePos[teamID]     = nil
 		SimpleConverterCount[teamID]   = 0
 		SimpleTurretCount[teamID]      = 0
+		SimpleAATurretCount[teamID]    = 0
 		SimpleLandFacCount[teamID]     = 0
+		SimpleAirThreat[teamID]        = nil
 		TeamTechLevel[teamID]          = 1   -- game starts at tech1
 		TeamFaction[teamID]            = nil
 		TeamCommID[teamID]             = nil
@@ -263,6 +273,24 @@ local IsCombat      = ctx.IsCombat
 local IsConverter   = ctx.IsConverter
 local IsTurret      = ctx.IsTurret
 local IsAir         = ctx.IsAir   -- canFly units get independent orders, not squad staging
+local IsAATurret    = ctx.IsAATurret
+
+-- A weapon defined with onlyTargetCategory = "AIR" appears in the Lua
+-- UnitDefs proxy as weapons[i].onlyTargets = { air = true } (the engine
+-- lowercases category names). Requiring "air" to be the ONLY key keeps the
+-- test exact -- it cannot false-positive on whatever the engine reports for
+-- unrestricted weapons, nor on mixed "AIR GROUND" restrictions.
+local function HasAAOnlyWeapon(unitDef)
+	local weps = unitDef.weapons
+	if not weps then return false end
+	for i = 1, #weps do
+		local ot = weps[i].onlyTargets
+		if ot and ot.air and next(ot, next(ot)) == nil then
+			return true
+		end
+	end
+	return false
+end
 
 -- Also keep plain lists for InList calls that need them
 local SimpleCommanderDefs     = ctx.commanderDefs
@@ -297,6 +325,9 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 
 	elseif unitDef.isBuilding and unitDef.weapons and #unitDef.weapons > 0 then
 		IsTurret[unitDefID] = true
+		if HasAAOnlyWeapon(unitDef) then
+			IsAATurret[unitDefID] = true
+		end
 
 	elseif unitDef.canMove and not unitDef.isBuilder and #(unitDef.weapons or {}) > 0 then
 		IsCombat[unitDefID] = true
@@ -658,6 +689,9 @@ if gadgetHandler:IsSyncedCode() then
 		end
 		if IsTurret[unitDefID] then
 			SimpleTurretCount[unitTeam] = (SimpleTurretCount[unitTeam] or 0) + 1
+			if IsAATurret[unitDefID] then
+				SimpleAATurretCount[unitTeam] = (SimpleAATurretCount[unitTeam] or 0) + 1
+			end
 		end
 	end
 
@@ -719,6 +753,10 @@ if gadgetHandler:IsSyncedCode() then
 		if IsTurret[unitDefID] then
 			SimpleTurretCount[unitTeam] =
 			math.max(0, (SimpleTurretCount[unitTeam] or 1) - 1)
+			if IsAATurret[unitDefID] then
+				SimpleAATurretCount[unitTeam] =
+				math.max(0, (SimpleAATurretCount[unitTeam] or 1) - 1)
+			end
 		end
 		if IsCommander[unitDefID] and TeamCommID[unitTeam] == unitID then
 			-- Commander gone (died OR shared away); allow re-detection later
@@ -781,6 +819,14 @@ if gadgetHandler:IsSyncedCode() then
 				or attackerTeam == gaiaTeamID
 				or Spring.AreTeamsAllied(teamID, attackerTeam) then
 			return
+		end
+
+		-- Enemy AIRCRAFT hitting ANY unit of ours (not just buildings) is
+		-- air-threat evidence: stamp the frame so construction raises AA
+		-- while the memory is fresh. This is the reliable signal -- it needs
+		-- no LOS scan and fires even if the bomber was never spotted coming.
+		if attackerDefID and IsAir[attackerDefID] then
+			SimpleAirThreat[teamID] = Spring.GetGameFrame()
 		end
 
 		if UnitDefs[unitDefID] and UnitDefs[unitDefID].isBuilding then

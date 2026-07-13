@@ -15,6 +15,8 @@
 --           Owns ctx state: ctx.pacing.factoryDelay / constructorDelay /
 --           lastConStart / lastFacStart; increments ctx.counters.converters
 --           optimistically on order.
+--           Reads: ctx.intel.airThreat + ctx.IsAATurret + ctx.counters.
+--           aaTurrets for the reactive anti-air rung (priority 5a).
 --
 --  license: GNU GPL, v2 or later
 --
@@ -45,6 +47,19 @@ return function(ctx, lib, cfg, services)
 	local TURRET_PER_FAC     = 1     -- + this many wanted per factory
 	local TURRET_PER_MEX_DIV = 3     -- + 1 wanted per this many mexes
 	local TURRET_CAP         = 20    -- absolute max turrets to build per team
+
+	-- Anti-air demand model. ctx.intel.airThreat[teamID] carries the frame of
+	-- the last enemy-aircraft evidence (armed air spotted inside the base scan
+	-- in b_defense, or ANY of our units damaged by enemy air, stamped by the
+	-- core). While that stamp is fresh, builders raise DEDICATED AA turrets
+	-- toward the count below -- a reactive rung that jumps the queue like the
+	-- generic under-attack turret slot, because against bombers a random
+	-- ground turret is a dead spend. AA turrets are a subset of IsTurret, so
+	-- they also count toward TURRET_CAP and the generic desired-turret model.
+	local AA_THREAT_MEMORY   = 1800  -- frames the last air evidence stays "fresh" (~60s)
+	local AA_BASE            = 2     -- AA turrets wanted while the threat is fresh...
+	local AA_PER_FAC_DIV     = 2     -- ...+1 per this many factories
+	local AA_CAP             = 6     -- absolute max AA from this reactive model
 
 	local MEX_TARGET_EARLY  = 2      -- grab this many mexes before anything else
 	local MEX_TARGET_MID    = 8      -- expand to this many once economy is running
@@ -90,7 +105,10 @@ return function(ctx, lib, cfg, services)
 	local SimpleConstructorCount = ctx.counters.constructors
 	local SimpleConverterCount   = ctx.counters.converters
 	local SimpleTurretCount      = ctx.counters.turrets
+	local SimpleAATurretCount    = ctx.counters.aaTurrets
 	local SimpleLandFacCount     = ctx.counters.landFactories
+	local IsAATurret             = ctx.IsAATurret
+	local SimpleAirThreat        = ctx.intel.airThreat
 	local SimpleFactoryDelay     = ctx.pacing.factoryDelay
 	local SimpleConstructorDelay = ctx.pacing.constructorDelay
 	local SimpleLastConStart     = ctx.pacing.lastConStart
@@ -277,6 +295,14 @@ return function(ctx, lib, cfg, services)
 			factories = landFactories
 		end
 
+		-- Dedicated AA subset of the buildable turret list. Small list,
+		-- filtered per call; the generic turret bucket keeps its AA entries
+		-- too, so the random baseline mix is unchanged.
+		local aaTurrets = {}
+		for _, id in ipairs(turrets) do
+			if IsAATurret[id] then aaTurrets[#aaTurrets + 1] = id end
+		end
+
 		local turretCount  = SimpleTurretCount[unitTeam] or 0
 		local belowTurretCap = turretCount < TURRET_CAP
 		-- How many turrets this base actually wants, scaled to its size.
@@ -287,6 +313,17 @@ return function(ctx, lib, cfg, services)
 		local underDefended = (SimpleFactoriesCount[unitTeam] or 0) > 0
 			and turretCount < desiredTurrets and belowTurretCap
 		local canAffordTurret = ecurrent > estorage * 0.20 and mcurrent > mstorage * 0.15
+
+		-- AA demand: only while air evidence is fresh, only if this faction
+		-- actually has AA turrets buildable at current tech, only below the
+		-- AA and overall turret caps.
+		local airStamp  = SimpleAirThreat[unitTeam]
+		local airFresh  = airStamp and (nowFrame - airStamp) < AA_THREAT_MEMORY
+		local desiredAA = math.min(AA_CAP, AA_BASE
+			+ math.floor((SimpleFactoriesCount[unitTeam] or 0) / AA_PER_FAC_DIV))
+		local needAA    = airFresh and #aaTurrets > 0
+			and (SimpleAATurretCount[unitTeam] or 0) < desiredAA
+			and belowTurretCap and canAffordTurret
 
 		-- -------------------------------------------------------
 		-- BUILDER / COMMANDER priority chain
@@ -327,6 +364,14 @@ return function(ctx, lib, cfg, services)
 					SimpleLastFacStart[unitTeam] = nowFrame
 					success = true
 				end
+
+				-- PRIORITY 5a: ANTI-AIR — enemy aircraft were seen over the base
+				-- or have hit us recently, and we are short of dedicated AA:
+				-- raise it immediately. Outranks the generic reactive rung
+				-- because when the attacker is a bomber, the generic slot's
+				-- random pick is usually a turret that cannot shoot back.
+			elseif needAA and buildType ~= "Commander" then
+				success = TryBuild(aaTurrets, function(p) SimpleBuildOrder(unitID, p) end)
 
 				-- PRIORITY 5b: REACTIVE defense — if the base is under attack and we
 				-- are under-defended, throw up a turret immediately (jumps the queue).

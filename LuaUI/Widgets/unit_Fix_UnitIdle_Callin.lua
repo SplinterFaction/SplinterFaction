@@ -69,13 +69,13 @@ end
 
 function widget:PlayerChanged()
 	if spGetSpectatingState() then
-		widgetHandler:RemoveWidget()
+		widgetHandler:RemoveWidget(widget)
 	end
 end
 
 function widget:Initialize()
 	if spGetSpectatingState() then
-		widgetHandler:RemoveWidget()
+		widgetHandler:RemoveWidget(widget)
 	end
 end
 

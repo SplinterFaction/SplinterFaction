@@ -10,6 +10,10 @@
 --           reactive-turret priority in construction reads underAttack).
 --
 --           Owns ctx state: ctx.intel.baseThreat.
+--           Co-writes (with the core's UnitDamaged): ctx.intel.airThreat --
+--           [teamID] = frame of last enemy-aircraft evidence. This module
+--           stamps it on SIGHTING (armed enemy air inside the base scan);
+--           the core stamps it on air-delivered DAMAGE anywhere.
 --
 --  license: GNU GPL, v2 or later
 --
@@ -24,7 +28,12 @@ return function(ctx, lib, cfg)
 	local BASE_DEFEND_RADIUS = 1600  -- enemy within this range of base centre is an "intruder"
 
 	local gaiaTeamID       = cfg.gaiaTeamID
+	local IsAir            = ctx.IsAir
 	local SimpleBaseThreat = ctx.intel.baseThreat
+	-- Air-threat stamp, shared with the core's UnitDamaged hook (which covers
+	-- air-delivered damage anywhere); this scan covers overflights of the base
+	-- BEFORE anything is hit. Both writers only ever refresh the timestamp.
+	local SimpleAirThreat  = ctx.intel.airThreat
 
 	local B = { name = "defense", order = 10 }
 
@@ -60,6 +69,12 @@ return function(ctx, lib, cfg)
 					local et = Spring.GetUnitTeam(eu)
 					if et ~= teamID and et ~= gaiaTeamID
 							and not Spring.AreTeamsAllied(teamID, et) then
+						-- Armed enemy aircraft over the base: refresh the
+						-- air-threat stamp so construction raises AA.
+						local eDefID = Spring.GetUnitDefID(eu)
+						if eDefID and IsAir[eDefID] then
+							SimpleAirThreat[teamID] = tick.frame
+						end
 						local ex, ey, ez = Spring.GetUnitPosition(eu)
 						local dx, dz = ex - bx, ez - bz
 						local d = dx * dx + dz * dz
