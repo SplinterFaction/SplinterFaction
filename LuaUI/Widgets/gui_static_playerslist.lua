@@ -67,6 +67,16 @@ local ACCENT_PANEL  = {0.18, 0.52, 0.98, 1}
 
 local TEXT_COLOR    = "\255\244\244\244"
 local TEXT_DIM      = "\255\160\162\168"
+local TEXT_DC       = "\255\255\090\090"   -- "dc" tag
+local TEXT_REJOIN   = "\255\255\180\070"   -- "rejoining"/"lagging" tag
+
+-- Rejoin/lag detection: the engine exposes no explicit "catching up" flag to
+-- LuaUI, but a rejoining client's reported ping is its time-behind while it
+-- replays the demo -- it sits at multiple seconds until caught up. So:
+-- huge ping + recent disconnect->connect transition = rejoining; huge ping
+-- without one = plain lagging. Clears itself once ping normalizes.
+local REJOIN_PING_S  = 2.0    -- seconds behind => catching up / lagging
+local REJOIN_GRACE_S = 120    -- how long after reconnect we call it "rejoining"
 local TEXT_TITLE    = "\255\185\185\185"
 local TEXT_VALUE    = "\255\230\230\230"
 
@@ -158,6 +168,10 @@ local specsExpanded = false
 
 local panelRect = {x1=0, y1=0, x2=0, y2=0}
 
+-- connection tracking (disconnect / rejoin)
+local wasConnected  = {}   -- playerID -> last seen 'active' state
+local reconnectTime = {}   -- playerID -> os.clock() of last false->true flip
+
 -- broadcast-fed per-player data
 local lastFpsData    = {}
 local lastGpuMemData = {}
@@ -210,6 +224,12 @@ end
 --   their alliance toward us    = AreTeamsAllied(myTeam, T)
 local function WeAllied(teamID)   return spAreTeamsAllied(teamID, myTeamID) end
 local function TheyAllied(teamID) return spAreTeamsAllied(myTeamID, teamID) end
+
+-- Perceptual luminance; dark team colors get a light name outline instead of
+-- the default dark one so they stay readable on the dark panel.
+local function IsDarkColor(r, g, b)
+	return ((r or 1)*0.299 + (g or 1)*0.587 + (b or 1)*0.114) < 0.36
+end
 
 local function ColorEscape(r, g, b)
 	return "\255" .. string.char(
@@ -419,12 +439,24 @@ local function RefreshPlayers()
 	local teamPlayers = {}
 	specs = {}
 	for _, pid in ipairs(spGetPlayerList() or {}) do
-		local name, _, spec, teamID, _, ping, cpu = spGetPlayerInfo(pid, false)
+		local name, active, spec, teamID, _, ping, cpu = spGetPlayerInfo(pid, false)
+		-- disconnect -> reconnect transition marks a rejoin in progress
+		if wasConnected[pid] == false and active then
+			reconnectTime[pid] = osclock()
+		end
+		wasConnected[pid] = active or false
 		if spec then
-			specs[#specs+1] = {id = pid, name = name or ("Player " .. pid)}
+			-- disconnected specs stay in GetPlayerList with active=false; hide them
+			if active then
+				specs[#specs+1] = {id = pid, name = name or ("Player " .. pid)}
+			end
 		else
+			-- disconnected players also stay in the list; keep their row, tag it
 			teamPlayers[teamID] = teamPlayers[teamID] or {}
-			teamPlayers[teamID][#teamPlayers[teamID]+1] = {id = pid, name = name or ("Player "..pid), ping = ping or 0, cpu = cpu or 0}
+			teamPlayers[teamID][#teamPlayers[teamID]+1] = {
+				id = pid, name = name or ("Player "..pid),
+				ping = ping or 0, cpu = cpu or 0, connected = active or false,
+			}
 		end
 	end
 
@@ -447,6 +479,7 @@ local function RefreshPlayers()
 				local _, leader, isDead, isAI = spGetTeamInfo(teamID, false)
 				local r, g, b = spGetTeamColor(teamID)
 				local color = {r or 1, g or 1, b or 1}
+				local dark = IsDarkColor(r, g, b)
 
 				-- resources (gated: spec sees all; player sees own + anyone we're
 				-- allied with, including dynamic allies). The nil-check below still
@@ -467,6 +500,7 @@ local function RefreshPlayers()
 						teamRows[#teamRows+1] = {
 							kind = "player", playerID = p.id, name = p.name,
 							ping = p.ping, cpu = p.cpu, isAI = false,
+							connected = p.connected,
 						}
 					end
 				elseif isAI then
@@ -477,7 +511,7 @@ local function RefreshPlayers()
 
 				if #teamRows > 0 then
 					groupTeams[#groupTeams+1] = {
-						teamID = teamID, allyTeam = allyTeam, color = color, dead = isDead,
+						teamID = teamID, allyTeam = allyTeam, color = color, dark = dark, dead = isDead,
 						readable = readable, mCur = mCur, mMax = mMax, eCur = eCur, eMax = eMax,
 						rows = teamRows,
 					}
@@ -565,7 +599,8 @@ local function BuildGeometry()
 				rows[#rows+1] = {
 					kind = r.kind, playerID = r.playerID, name = r.name,
 					ping = r.ping, cpu = r.cpu, isAI = r.isAI,
-					teamID = tm.teamID, allyTeam = tm.allyTeam, color = tm.color, dead = tm.dead,
+					connected = r.connected,
+					teamID = tm.teamID, allyTeam = tm.allyTeam, color = tm.color, dark = tm.dark, dead = tm.dead,
 					readable = tm.readable, mCur = tm.mCur, mMax = tm.mMax, eCur = tm.eCur, eMax = tm.eMax,
 					isEnemy = grp.isEnemy,
 					x1 = cx1, y1 = ry1, x2 = cx2, y2 = ry2,
@@ -659,10 +694,39 @@ local function BakeRow(r)
 		glTexture(false)
 	end
 
-	-- name (team color; dead = dim)
-	local nameCol = r.dead and TEXT_DIM or ColorEscape(r.color[1], r.color[2], r.color[3])
+	-- connection status tag (players only): dc / rejoining / lagging
+	local statusTag, statusCol
+	if r.kind == "player" then
+		if not r.connected then
+			statusTag, statusCol = "dc", TEXT_DC
+		elseif (r.ping or 0) >= REJOIN_PING_S then
+			local rt = reconnectTime[r.playerID]
+			if rt and (osclock() - rt) < REJOIN_GRACE_S then
+				statusTag, statusCol = "rejoining", TEXT_REJOIN
+			else
+				statusTag, statusCol = "lagging", TEXT_REJOIN
+			end
+		end
+	end
+
+	-- name (team color; dead/disconnected = dim; dark team color = light outline)
+	local dimmed  = r.dead or (statusTag == "dc")
+	local nameCol = dimmed and TEXT_DIM or ColorEscape(r.color[1], r.color[2], r.color[3])
+	local nameSize = 11*uiScale
 	font:Begin()
-	font:Print(nameCol .. r.name, r.nameX1, midY - 5*uiScale, 11*uiScale, "lo")
+	if r.dark and not dimmed then
+		font:SetOutlineColor(0.9, 0.9, 0.9, 1)
+	else
+		font:SetOutlineColor(0, 0, 0, 1)
+	end
+	font:Print(nameCol .. r.name, r.nameX1, midY - 5*uiScale, nameSize, "lo")
+	font:SetOutlineColor(0, 0, 0, 1)   -- outline color is sticky on the font object; restore
+	if statusTag then
+		local tagSize = 8.5*uiScale
+		local tagX = r.nameX1 + font:GetTextWidth(r.name)*nameSize + 5*uiScale
+		local tagMaxX = r.nameX2 - font:GetTextWidth(statusTag)*tagSize
+		font:Print(statusCol .. statusTag, math_min(tagX, tagMaxX), midY - 4*uiScale, tagSize, "lo")
+	end
 	font:End()
 
 	-- resource bars (metal top, energy bottom) — only if readable
@@ -682,12 +746,12 @@ local function BakeRow(r)
 		local cw = (r.netX2 - r.netX1 - 2*uiScale) * 0.5
 		local cellY1 = midY - 7*uiScale
 		local cellY2 = midY + 7*uiScale
-		DrawNetCell(r.netX1, cellY1, r.netX1+cw, cellY2, GetCpuLvl(r.cpu))
-		DrawNetCell(r.netX2-cw, cellY1, r.netX2, cellY2, GetPingLvl(r.ping))
+		DrawNetCell(r.netX1, cellY1, r.netX1+cw, cellY2, r.connected and GetCpuLvl(r.cpu) or nil)
+		DrawNetCell(r.netX2-cw, cellY1, r.netX2, cellY2, r.connected and GetPingLvl(r.ping) or nil)
 
 		local cpuCX  = r.netX1 + cw*0.5
 		local pingCX = r.netX2 - cw*0.5
-		local fps = lastFpsData[r.playerID]
+		local fps = r.connected and lastFpsData[r.playerID] or nil
 
 		font:Begin()
 		-- 'v' = engine vertical-center on midY; white + outline reads on any cell color
@@ -1017,6 +1081,28 @@ function widget:ViewResize(nx, ny)
 		if font then gl.DeleteFont(font) end
 		font = gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8)
 	end
+	RefreshPlayers()
+	BuildGeometry()
+	contentDirty = true
+end
+
+-- fires on connect/disconnect/spec-state changes; refresh immediately rather
+-- than waiting for the 1s poll so dc/rejoin tags appear without delay
+function widget:PlayerChanged(playerID)
+	RefreshPlayers()
+	BuildGeometry()
+	contentDirty = true
+end
+
+function widget:PlayerAdded(playerID)
+	RefreshPlayers()
+	BuildGeometry()
+	contentDirty = true
+end
+
+function widget:PlayerRemoved(playerID, reason)
+	wasConnected[playerID]  = nil
+	reconnectTime[playerID] = nil
 	RefreshPlayers()
 	BuildGeometry()
 	contentDirty = true
