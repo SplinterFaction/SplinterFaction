@@ -1119,14 +1119,26 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			-- Lets get rid of any funky decimal places
 			unitDef.maxdamage = math.floor(unitDef.maxdamage + 0.5)
 
+			--- Heat Weapons
 			if unitDef.customparams.unittype == "building" then
 				unitDef.customparams.heat_cooling_mult = 50
 				unitDef.customparams.heat_capacity_mult = 50
 			end
 
 			if unitDef.customparams.unitrole == "Commander" then
-				unitDef.customparams.heat_cooling_mult = 5
-				unitDef.customparams.heat_capacity_mult = 5
+				unitDef.customparams.heat_cooling_mult = 50
+				unitDef.customparams.heat_capacity_mult = 50
+			end
+
+			--- Disruption Weapons
+			if unitDef.customparams.unittype == "building" then
+				unitDef.customparams.disruptionrecovery = 50
+				unitDef.customparams.disruptioncapacitymult = 50
+			end
+
+			if unitDef.customparams.unitrole == "Commander" then
+				unitDef.customparams.disruptionrecovery = 50
+				unitDef.customparams.disruptioncapacitymult = 50
 			end
 
 

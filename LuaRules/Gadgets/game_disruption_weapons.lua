@@ -25,8 +25,8 @@ local GAME_SPEED = 30
 local IN_LOS = { inlos = true }
 
 -- Shutdown stages
--- Stage 1 (>= 33%): sensors offline (LOS collapses to MIN_LOS_RADIUS)
--- Stage 2 (>= 66%): weapons offline (ranges collapsed to WEAPON_DEAD_RANGE)
+-- Stage 1 (>= 50%): sensors offline (LOS collapses to MIN_LOS_RADIUS)
+-- Stage 2 (>= 75%): weapons offline (ranges collapsed to WEAPON_DEAD_RANGE)
 -- Stage 3 (100%):   engines dead for LOCKOUT_SECONDS + overload nova
 local STAGE_1_THRESHOLD = 0.50
 local STAGE_2_THRESHOLD = 0.75
@@ -51,14 +51,21 @@ local STAGE_CEGS = {
 local NOVA_CEG    = "transformerblow-large"
 local AMBIENT_CEG = "lightning_stormbolt" -- crackle on units at stage >= 1
 
--- Decay pauses briefly after a disruption hit
+-- Disruption capacity scales with target metal cost (same model as heat):
+-- capacity = metalCost * DISRUPTION_CAPACITY_PER_METAL * disruptioncapacitymult
+-- Bigger units => more capacity => require more disruption damage to fill.
+local DISRUPTION_CAPACITY_PER_METAL = 10
+
+-- Dissipation removes disruption energy per second (constant, the analog of
+-- heat's radiator). Because capacity scales with metal, big units shed
+-- disruption *slower in %* than small ones. Scaled per-unit by the
+-- disruptionrecovery customparam.
+local DISSIPATION_POWER_PER_SECOND = 35
+
+-- Dissipation pauses briefly after a disruption hit
+-- (same mechanism as heat's COOLING_DELAY_FRAMES, tuned to 2s here)
 local RECENT_HIT_DELAY_SECONDS = 2
 local RECENT_HIT_DELAY_FRAMES  = RECENT_HIT_DELAY_SECONDS * GAME_SPEED
-
--- Decay rates are based on capacity per second
-local DECAY_HIGH = 0.02 -- >70%
-local DECAY_MID  = 0.04 -- 30-70%
-local DECAY_LOW  = 0.06 -- <30%
 
 -- Performance / update cadence
 local UPDATE_FRAMES = 6
@@ -74,9 +81,9 @@ local WEAPON_DEAD_RANGE = 1 -- elmos; weapon + acquisition range while weapons o
 --------------------------------------------------------------------------------
 --unitdefs
 --customParams = {
---	disruptionresist = 1.0,
---	disruptionrecovery = 1.0,
---	disruptioncapacitymult = 1.0,
+--	disruptionresist = 1.0,       -- multiplier on incoming disruption
+--	disruptionrecovery = 1.0,     -- multiplier on dissipation power (radiator)
+--	disruptioncapacitymult = 1.0, -- multiplier on metal-based capacity
 --	disruptionimmune = 0,
 --}
 
@@ -92,7 +99,6 @@ local WEAPON_DEAD_RANGE = 1 -- elmos; weapon + acquisition range while weapons o
 
 local spGetGameFrame        = Spring.GetGameFrame
 local spValidUnitID         = Spring.ValidUnitID
-local spGetUnitHealth       = Spring.GetUnitHealth
 local spGetUnitDefID        = Spring.GetUnitDefID
 local spSetUnitRulesParam   = Spring.SetUnitRulesParam
 local spSetUnitSensorRadius = Spring.SetUnitSensorRadius
@@ -183,9 +189,18 @@ local function Clamp(x, lo, hi)
 	return x
 end
 
-local function GetUnitMaxHealth(unitID)
-	local _, maxHealth = spGetUnitHealth(unitID)
-	return maxHealth or 1
+local function GetUnitMetalCost(unitDefID)
+	local ud = UnitDefs[unitDefID]
+	if not ud then return 0 end
+	return (ud.metalCost or ud.metal or 0)
+end
+
+local function GetDisruptionCapacity(unitDefID, capacityMult)
+	local metalCost = GetUnitMetalCost(unitDefID)
+	if metalCost <= 0 then
+		metalCost = 1
+	end
+	return math_max(1, metalCost * DISRUPTION_CAPACITY_PER_METAL * (capacityMult or 1))
 end
 
 local function IsUnitFullyDisrupted(unitID, frame)
@@ -202,16 +217,6 @@ local function GetStageForPercent(pct, fullyDisrupted)
 		return 1
 	end
 	return 0
-end
-
-local function GetDecayRateForPercent(pct)
-	if pct > 0.70 then
-		return DECAY_HIGH
-	elseif pct >= 0.30 then
-		return DECAY_MID
-	else
-		return DECAY_LOW
-	end
 end
 
 local function CacheMoveType(unitID, unitDefID)
@@ -477,7 +482,8 @@ local function ApplyDisruption(unitID, amount, frame)
 
 	local cap = disruptionCapacity[unitID]
 	if not cap or cap <= 0 then
-		cap = math_max(1, GetUnitMaxHealth(unitID) * (unitCapacityMult[unitID] or 1))
+		local unitDefID = spGetUnitDefID(unitID)
+		cap = GetDisruptionCapacity(unitDefID, unitCapacityMult[unitID])
 		disruptionCapacity[unitID] = cap
 	end
 
@@ -576,7 +582,6 @@ local function InitUnitState(unitID, unitDefID)
 		return
 	end
 
-	local maxHealth = GetUnitMaxHealth(unitID)
 	local cp = ud.customParams or {}
 
 	local capacityMult = tonumber(cp.disruptioncapacitymult) or 1
@@ -585,7 +590,7 @@ local function InitUnitState(unitID, unitDefID)
 	local immune       = tonumber(cp.disruptionimmune) == 1
 
 	disruption[unitID] = disruption[unitID] or 0
-	disruptionCapacity[unitID] = math_max(1, maxHealth * capacityMult)
+	disruptionCapacity[unitID] = GetDisruptionCapacity(unitDefID, capacityMult)
 	lastDisruptionHit[unitID] = lastDisruptionHit[unitID] or -999999
 	currentStage[unitID] = currentStage[unitID] or 0
 
@@ -750,16 +755,16 @@ function gadget:GameFrame(frame)
 				lastDisruptionHit[unitID] = frame
 			end
 
-			-- Decay (paused briefly after a recent hit, never during lockout)
+			-- Dissipation (paused briefly after a recent hit, never during
+			-- lockout). Constant energy/sec, like heat's radiator: big units
+			-- shed disruption slower in % terms than small ones.
 			if (not fullyDisrupted) and current > 0 then
 				local lastHit = lastDisruptionHit[unitID] or -999999
 				if frame - lastHit > RECENT_HIT_DELAY_FRAMES then
-					local pct = current / cap
-					local decayRate = GetDecayRateForPercent(pct)
 					local recoveryMult = unitRecoveryMult[unitID] or 1
-					local decayAmount = cap * decayRate * recoveryMult * dt
+					local dissipated = DISSIPATION_POWER_PER_SECOND * recoveryMult * dt
 
-					current = math_max(0, current - decayAmount)
+					current = math_max(0, current - dissipated)
 					disruption[unitID] = current
 				end
 			end

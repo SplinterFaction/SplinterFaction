@@ -153,7 +153,7 @@ weaponDefs                 = {
 			weaponguide = [[Disruption weapons don't damage hulls, they damage systems. Every hit builds a target's disruption meter instead of draining health, and as it climbs the target's onboard systems fail in stages: at 33% its sensors drop out and its line of sight collapses to almost nothing, at 66% its weapons lose lock and their range collapses so it can no longer engage at range, and at 100% its engines die, immobilizing it completely for 10 seconds while it discharges an overload nova that arcs a portion of its own disruption charge to nearby allied units, so a tightly clumped formation can chain shutdowns across several units from a single overloaded target. Left alone, disruption bleeds off over time, faster at low charge and slower near the top, and after a full shutdown ends the unit doesn't reset to zero but comes back online at partial charge, sensors still down, weapons and engines restored, leaving a window of vulnerability even after the lockout ends. Disruption resistance and recovery rate vary by hull, so know which units shrug it off and which don't before you commit.]],
 		},
 		damage                   = {
-			default              = 70,
+			default              = 200,
 		},
 	},
 }
