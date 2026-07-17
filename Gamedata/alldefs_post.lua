@@ -240,29 +240,29 @@ function UnitDef_Post(name, uDef)
 		uDef.turnrate = 250
 	end
 
---[[
-	if uDef.name == "Crane" then
-		Spring.Echo(uDef.name)
+	--[[
+		if uDef.name == "Crane" then
+			Spring.Echo(uDef.name)
 
-		Spring.Echo("AirHoverfactor " .. tostring(uDef.airhoverfactor))
-		Spring.Echo("BankingAllowed " .. tostring(uDef.bankingallowed))
-		Spring.Echo("WingDrag " .. tostring(uDef.wingdrag))
-		Spring.Echo("WingAngle " .. tostring(uDef.wingangle))
-		Spring.Echo("FrontToSpeed " .. tostring(uDef.fronttospeed))
-		Spring.Echo("SpeedToFront " .. tostring(uDef.speedtofront))
-		Spring.Echo("CrashDrag " .. tostring(uDef.crashdrag))
-		Spring.Echo("MaxBank " .. tostring(uDef.maxbank))
-		Spring.Echo("MaxPitch " .. tostring(uDef.maxpitch))
-		Spring.Echo("TurnRadius " .. tostring(uDef.turnradius))
-		Spring.Echo("VerticalSpeed " .. tostring(uDef.verticalspeed))
-		Spring.Echo("MaxAileron " .. tostring(uDef.maxaileron))
-		Spring.Echo("MaxElevator " .. tostring(uDef.maxelevator))
-		Spring.Echo("MaxRudder " .. tostring(uDef.maxrudder))
-		Spring.Echo("MaxACC " .. tostring(uDef.maxacc))
-		Spring.Echo("AttackSafetyDistance " .. tostring(uDef.attacksafetydistance))
-		Spring.Echo("TurnRate " .. tostring(uDef.turnrate))
-	end
-]]--
+			Spring.Echo("AirHoverfactor " .. tostring(uDef.airhoverfactor))
+			Spring.Echo("BankingAllowed " .. tostring(uDef.bankingallowed))
+			Spring.Echo("WingDrag " .. tostring(uDef.wingdrag))
+			Spring.Echo("WingAngle " .. tostring(uDef.wingangle))
+			Spring.Echo("FrontToSpeed " .. tostring(uDef.fronttospeed))
+			Spring.Echo("SpeedToFront " .. tostring(uDef.speedtofront))
+			Spring.Echo("CrashDrag " .. tostring(uDef.crashdrag))
+			Spring.Echo("MaxBank " .. tostring(uDef.maxbank))
+			Spring.Echo("MaxPitch " .. tostring(uDef.maxpitch))
+			Spring.Echo("TurnRadius " .. tostring(uDef.turnradius))
+			Spring.Echo("VerticalSpeed " .. tostring(uDef.verticalspeed))
+			Spring.Echo("MaxAileron " .. tostring(uDef.maxaileron))
+			Spring.Echo("MaxElevator " .. tostring(uDef.maxelevator))
+			Spring.Echo("MaxRudder " .. tostring(uDef.maxrudder))
+			Spring.Echo("MaxACC " .. tostring(uDef.maxacc))
+			Spring.Echo("AttackSafetyDistance " .. tostring(uDef.attacksafetydistance))
+			Spring.Echo("TurnRate " .. tostring(uDef.turnrate))
+		end
+	]]--
 	if uDef.name == nil then
 		uDef.name = uDef.unitname
 		Spring.Echo("[AllDefs Post] Unit " .. uDef.name .. " Does not have a human name defined")
@@ -311,7 +311,7 @@ function UnitDef_Post(name, uDef)
 			uDef.sounds.build = nil
 		end
 	end
-	
+
 end
 
 --------------------------------------------------------------------------------
