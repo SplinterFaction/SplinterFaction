@@ -1,7 +1,7 @@
 unitDef                         = {
 	activatewhenbuilt                 = true,
 	buildCostEnergy                   = buildCostEnergy,
-	buildCostMetal                    = 0.1,
+	buildCostMetal                    = buildCostMetal,
 	builder                           = true,
 	buildTime                         = 2.5,
 	buildpic					 	  = "eairplant.png",

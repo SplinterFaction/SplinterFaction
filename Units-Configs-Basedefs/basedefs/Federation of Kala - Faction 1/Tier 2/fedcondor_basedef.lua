@@ -1,8 +1,8 @@
 unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
-	buildCostEnergy              = 9450,
-	buildCostMetal               = 0,
+	buildCostEnergy              = 0,
+	buildCostMetal               = 1890,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,

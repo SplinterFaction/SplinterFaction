@@ -4,7 +4,8 @@ unitName = "fedairplant"
 
 --------------------------------------------------------------------------------
 
-buildCostEnergy = 3000
+buildCostEnergy = 0
+buildCostMetal = 100
 
 humanName = [[VTOL Factory]]
 

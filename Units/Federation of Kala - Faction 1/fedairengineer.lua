@@ -5,7 +5,8 @@ unitName = "fedairengineer"
 
 --------------------------------------------------------------------------------
 
-buildCostEnergy = 1000
+buildCostEnergy = 0
+buildCostMetal = 300
 
 buildDistance = 200
 

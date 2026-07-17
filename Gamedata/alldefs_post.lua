@@ -668,7 +668,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 3
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -678,12 +678,11 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							if unitDef.customparams.unittype == "building" then
 								if unitDef.customparams.unitrole == "Factory" then
 									if unitDef.unitname == "fedairplant" or unitDef.unitname == "lozairplant" then
-										unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30)
+										unitDef.buildcostenergy = unitDef.buildcostmetal * 3
 									else
 										unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
 									end
-								else
-									unitDef.buildcostenergy = unitDef.buildcostmetal * 1.5
+
 								end
 							end
 						end
@@ -694,7 +693,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 6
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -704,12 +703,10 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							if unitDef.customparams.unittype == "building" then
 								if unitDef.customparams.unitrole == "Factory" then
 									if unitDef.unitname == "fedairplant" or unitDef.unitname == "lozairplant" then
-										unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30)
+										unitDef.buildcostenergy = unitDef.buildcostmetal * 6
 									else
 										unitDef.buildcostenergy = unitDef.buildcostmetal * 3
 									end
-								else
-									unitDef.buildcostenergy = unitDef.buildcostmetal * 3
 								end
 							end
 						end
@@ -720,7 +717,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 12
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -738,7 +735,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 24
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -756,7 +753,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 							end
 
 							if unitDef.customparams.unittype == "air" then
-								unitDef.buildcostmetal = unitDef.buildcostenergy * (1/30) -- / 30 ... Avoids any issues if energy is ever 0 for some reason
+								unitDef.buildcostenergy = unitDef.buildcostmetal * 30
 							end
 
 							if unitDef.customparams.unittype == "ship" then
@@ -791,6 +788,14 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				end
 
 				-- Lets remove any funky decimal values
+				if unitDef.buildcostmetal == nil then
+					Spring.Echo("[Alldefs Post] " .. unitDef.unitname .. "'s Metal Cost is nil. Mitigating")
+					unitDef.buildcostmetal = 0
+				end
+				if unitDef.buildcostenergy == nil then
+					Spring.Echo("[Alldefs Post] " .. unitDef.unitname .. "'s Energy Cost is nil. Mitigating")
+					unitDef.buildcostenergy = 0
+				end
 				unitDef.buildcostmetal  = math.floor(unitDef.buildcostmetal + 0.5)
 				unitDef.buildcostenergy = math.floor(unitDef.buildcostenergy + 0.5)
 
@@ -885,7 +890,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -902,7 +907,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -919,7 +924,7 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "air" then
-						unitDef.maxdamage = unitDef.buildcostenergy * 0.35
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4

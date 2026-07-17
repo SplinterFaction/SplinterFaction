@@ -5,9 +5,10 @@ unitName = "lozairengineer"
 
 --------------------------------------------------------------------------------
 
-buildDistance = 200
+buildCostEnergy = 0
+buildCostMetal = 300
 
-buildCostEnergy = 1000
+buildDistance = 200
 
 buildpic = [[lozairengineer.dds]]
 
