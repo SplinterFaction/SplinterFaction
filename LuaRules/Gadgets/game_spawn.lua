@@ -112,6 +112,13 @@ local function IsTeamAI(teamID)
 	return not players or #players == 0
 end
 
+-- Survival AI teams get a beacon instead of a commander (matches the
+-- "SurvivalAI" entries in LuaAI.lua / ai_survival.lua by prefix).
+local function IsSurvivalTeam(teamID)
+	local luaAI = Spring.GetTeamLuaAI(teamID)
+	return (luaAI ~= nil) and (luaAI ~= "") and (string.sub(luaAI, 1, 10) == "SurvivalAI")
+end
+
 --------------------------------------------------------------------------------
 -- Map spot loading and partition
 --------------------------------------------------------------------------------
@@ -416,6 +423,12 @@ end
 --------------------------------------------------------------------------------
 
 local function GetStartUnit(teamID)
+	-- Survival AI: always a beacon, regardless of any startUnit rules param the
+	-- faction-timeout loop may have force-assigned.
+	if IsSurvivalTeam(teamID) then
+		return "beacon"
+	end
+
 	local reqStartUnit = Spring.GetTeamRulesParam(teamID, "startUnit")
 	if reqStartUnit then
 		return UnitDefs[reqStartUnit].name
@@ -456,6 +469,8 @@ local function SpawnStartUnit(teamID, spawnX, spawnZ)
 		playerFaction = "Federation of Kala"
 	elseif startUnit == "lozcommander" then
 		playerFaction = "Loz Alliance"
+	elseif startUnit == "beacon" then
+		playerFaction = "Survival"
 	else
 		playerFaction = startUnit
 		Spring.Echo("[Game Spawn] Unrecognised start unit: " .. tostring(startUnit))

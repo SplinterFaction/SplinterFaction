@@ -209,11 +209,6 @@ function UnitDef_Post(name, uDef)
 		uDef.customparams.corpse = uDef.unitname .. "_dead"
 	end
 
-	if string.find(name, '_scav') then
-		VFS.Include("gamedata/scavengers/unitdef_post.lua")
-		uDef = scav_Udef_Post(name, uDef)
-	end
-
 	--------------------------------------------------------------------------------
 	----- Disable Engine Autoheal
 	--------------------------------------------------------------------------------
@@ -271,9 +266,9 @@ function UnitDef_Post(name, uDef)
 	--------------------------------------------------------------------------------
 	----- Limit Commander units to one per team
 	--------------------------------------------------------------------------------
-	if uDef.customparams and uDef.customparams.unitrole and uDef.customparams.unitrole == "Commander" then
-		uDef.unitrestricted = 1
-	end
+	--if uDef.customparams and uDef.customparams.unitrole and uDef.customparams.unitrole == "Commander" then
+	--	uDef.unitrestricted = 1
+	--end
 
 	--------------------------------------------------------------------------------
 	----- Set building start sound for all builders (This is no longer needed due to implementation of Damgam's sound gadget
@@ -377,11 +372,6 @@ function WeaponDef_Post(name, wDef)
 	--------------------------------------------------------------------------------
 	if wDef.customparams and wDef.customparams.friendlyfireexception == nil then
 		wDef.customparams.nofriendlyfire = true
-	end
-
-	if string.find(name, '_scav') then
-		VFS.Include("gamedata/scavengers/weapondef_post.lua")
-		wDef = scav_Wdef_Post(name, wDef)
 	end
 
 	if wDef.weapontype == "Cannon" then

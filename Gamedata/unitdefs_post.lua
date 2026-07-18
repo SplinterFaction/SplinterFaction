@@ -44,25 +44,6 @@ function tableMergeSpecial(t1, t2)
     return t1
 end
 
-
--- create scavenger units
-VFS.Include("gamedata/scavengers/unitdef_changes.lua")
-local scavengerUnitDefs = {}
-
-for name,uDef in pairs(UnitDefs) do
-	local faction = string.sub(name, 1, 3)
-	if not string.find(name, '_scav') then
-		if customDefs[name] ~= nil then
-			scavengerUnitDefs[name..'_scav'] = tableMergeSpecial(deepcopy(uDef), deepcopy(customDefs[name]))
-		else
-			scavengerUnitDefs[name..'_scav'] = deepcopy(uDef)
-		end
-	end
-end
-for name,ud in pairs(scavengerUnitDefs) do
-	UnitDefs[name] = ud
-end
-
 -- handle unitdefs and the weapons they contain
 for name,ud in pairs(UnitDefs) do
   UnitDef_Post(name,ud)

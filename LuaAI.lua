@@ -8,14 +8,6 @@
 --
 
 return {
-  -- {
-    -- name = 'DAI',
-    -- desc = 'Shard by AF for Spring Lua',
-  -- },
-	-- {
-	-- 	name = 'ScavengersAI',
-	-- 	desc = 'scavs',
-	-- },
 	{
 		name = 'Sandbox',
 		desc = 'Does absolutely Nothing',
@@ -33,11 +25,7 @@ return {
 		desc = 'EasyAI (Constructor)',
 	},
 	{
-		name = 'ChickensAI',
-		desc = 'Chicken Defence'
+		name = 'SurvivalAI',
+		desc = 'Survival Defence (escalating waves)',
 	},
 }
-
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------

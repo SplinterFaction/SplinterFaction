@@ -1,0 +1,37 @@
+#define TA			// This is a TA script
+
+#include "sfxtype.h"
+#include "exptype.h"
+
+piece  base, topantenna, innerring, outerring, centerring, emit;
+
+Standby()
+{
+	while( TRUE )
+	{
+		emit-sfx 1024 + 0 from emit;
+		sleep 1150;
+	}
+	sleep 50;
+	start-script Standby();
+}
+
+Create()
+{
+	spin topantenna around y-axis speed <8>;
+	spin topantenna around x-axis speed <2>;
+	spin innerring around y-axis speed <-3>;
+	spin centerring around y-axis speed <4>;
+	spin outerring around y-axis speed <-7>;
+	start-script Standby();
+}
+
+
+Killed(severity, corpsetype) // how it explodes 
+{ 
+	corpsetype = 1; 
+	explode topantenna type EXPLODE_ON_HIT;
+	explode innerring type EXPLODE_ON_HIT;
+	explode centerring type EXPLODE_ON_HIT;
+	explode outerring type EXPLODE_ON_HIT;
+}

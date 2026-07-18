@@ -4,8 +4,8 @@ return {
     desc = 'AI for SplinterFaction'
   },
   {
-    name = 'ChickensAI',
-	desc = 'Chicken Defence. Spawns waves of enemies.'
+    name = 'SurvivalAI',
+    desc = 'Survival Defence (escalating waves)',
   },
   {
     name = 'Sandbox',
