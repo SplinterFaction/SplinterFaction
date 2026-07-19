@@ -77,16 +77,16 @@ local energyBaseByName = {
 	lozmetalextractor_up1 = 25,
 	fedmetalextractor_up1 = 25,
 
-	lozmetalextractor_up2 = 50,
-	fedmetalextractor_up2 = 50,
+	lozmetalextractor_up2 = 108,
+	fedmetalextractor_up2 = 108,
 
-	lozmetalextractor_up3 = 100,
-	fedmetalextractor_up3 = 100,
+	lozmetalextractor_up3 = 233,
+	fedmetalextractor_up3 = 233,
 
-	lozmetalextractor_up4 = 250,
-	fedmetalextractor_up4 = 250,
+	lozmetalextractor_up4 = 583,
+	fedmetalextractor_up4 = 583,
 
-	geometalmaker         = 500,
+	geometalmaker         = 700,
 }
 
 -- ------------------------------------------------------------
