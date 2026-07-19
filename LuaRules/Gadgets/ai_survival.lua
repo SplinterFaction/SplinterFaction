@@ -43,13 +43,33 @@ end
 
 -- LuaAI.lua entry names -> difficulty tuning. Add variants here AND in
 -- LuaAI.lua with the exact same string, or the team is silently not recognised.
+
+local difficulty = Spring.GetModOptions().survivalaidifficulty or "normal"
+
+if difficulty == "easy" then
+	difficulty = 0.5
+	Spring.Echo ("[Survival AI] Difficulty set to Easy (" .. difficulty .. ")")
+end
+if difficulty == "normal" then
+	difficulty = 1
+	Spring.Echo ("[Survival AI] Difficulty set to Normal (" .. difficulty .. ")")
+end
+if difficulty == "hard" then
+	difficulty = 2
+	Spring.Echo ("[Survival AI] Difficulty set to Hard (" .. difficulty .. ")")
+end
+if difficulty == "impossibru" then
+	difficulty = 3
+	Spring.Echo ("[Survival AI] Difficulty set to Impossibru (" .. difficulty .. ")")
+end
+
 local DIFFICULTIES = {
-	["SurvivalAI"] = { budgetMult = 1.0 },
+	["SurvivalAI"] = { budgetMult = difficulty },
 }
 
 local GRACE_SECONDS     = 180    -- calm before the first wave (after placement)
 local WAVE_INTERVAL_SEC = 60     -- seconds between waves
-local BASE_BUDGET       = 1000   -- metal value of wave 1
+local BASE_BUDGET       = 400   -- metal value of wave 1
 local LINEAR_GROWTH     = 0.30   -- +30% of base per wave, linearly
 local COMPOUND_GROWTH   = 1.06   -- and 6% compounding on top
 local MAX_WAVE_UNITS    = 40     -- hard cap per wave per survival team (perf)
@@ -70,7 +90,7 @@ local BEACON_BUDGET_BONUS   = 0.15   -- +15% wave budget per live beacon beyond 
 local BEACON_RP_REWARD      = 250    -- research points to the killer of a beacon
 local RETALIATION_DELAY_SEC = 5      -- beacon death pulls the next wave to now + this
 local BEACON_CREEP_MIN_DIST = 900    -- new beacon spawns at least this far from its source...
-local BEACON_CREEP_MAX_DIST = 2000   -- ...and at most this far (the leash)
+local BEACON_CREEP_MAX_DIST = 3000   -- ...and at most this far (the leash)
 local SURVIVAL_DEBUG        = true   -- echo per-attempt creep placement rejections
 
 local CHECK_PERIOD_FRAMES   = 15   -- scheduler granularity
