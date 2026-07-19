@@ -5,7 +5,6 @@ unitDef                    = {
 	buildTime                    = 5,
 	buildpic					 = "lozluger.png",
 	canAttack                    = true,
-	fireState                    = 0,
 	canGuard                     = true,
 	canHover                     = false,
 	canMove                      = true,

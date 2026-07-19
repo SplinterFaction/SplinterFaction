@@ -9,7 +9,6 @@ unitDef                    = {
 	buildTime                    = 5,
 	buildpic					 = [[fedavalanche.png]],
 	canAttack                    = true,
-	fireState                    = 0,
 	canGuard                     = true,
 	canHover                     = true,
 	canMove                      = true,

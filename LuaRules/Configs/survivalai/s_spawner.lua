@@ -128,6 +128,77 @@ function M.SpawnWave(env, teamID, sx, sz, unitList, tx, tz)
 end
 
 --------------------------------------------------------------------------------
+-- M.SpawnDropWave(env, teamID, sx, sz, drop, tx, tz) -> group | nil
+--
+-- Spawns a ComposeDrop result: riders and carriers in the ring, load orders
+-- queued per carrier (first order plain, the rest shifted), walkers marched at
+-- the target immediately. Loading, transit dispatch and unload ordering are
+-- the core gadget's job -- this only sets the stage.
+--
+-- group = {
+--   carriers   = { unitID, ... },
+--   passengers = { [unitID] = true },      -- riders awaiting pickup
+--   byCarrier  = { [carrierID] = {pids} },
+--   walkers    = { unitID, ... },
+-- }
+-- Requires env.CMD_LOAD and env.OPT_SHIFT in addition to the usual bridge.
+--------------------------------------------------------------------------------
+
+function M.SpawnDropWave(env, teamID, sx, sz, drop, tx, tz)
+	local group = { carriers = {}, passengers = {}, byCarrier = {}, walkers = {} }
+
+	-- Riders first (no orders yet: they wait for pickup)
+	local groundIDs = {}
+	for i = 1, #drop.ground do
+		local ids = M.SpawnWave(env, teamID, sx, sz, { drop.ground[i] }, nil, nil)
+		groundIDs[i] = ids[1]   -- nil if placement failed; tolerated below
+	end
+
+	-- Carriers, each with its load queue
+	for p = 1, #drop.plan do
+		local row = drop.plan[p]
+		local ids = M.SpawnWave(env, teamID, sx, sz, { row.entry }, nil, nil)
+		local cid = ids[1]
+		if cid then
+			group.carriers[#group.carriers + 1] = cid
+			group.byCarrier[cid] = {}
+			local first = true
+			for _, gIdx in ipairs(row.passengers) do
+				local pid = groundIDs[gIdx]
+				if pid then
+					group.passengers[pid] = true
+					local list = group.byCarrier[cid]
+					list[#list + 1] = pid
+					env.GiveOrderToUnit(cid, env.CMD_LOAD, { pid },
+						first and 0 or env.OPT_SHIFT)
+					first = false
+				end
+			end
+		else
+			-- Carrier failed to place: its riders walk
+			for _, gIdx in ipairs(row.passengers) do
+				if groundIDs[gIdx] then
+					drop.walkers[#drop.walkers + 1] = gIdx
+				end
+			end
+		end
+	end
+
+	-- Walkers march now
+	local walkerIDs = {}
+	for i = 1, #drop.walkers do
+		local pid = groundIDs[drop.walkers[i]]
+		if pid then walkerIDs[#walkerIDs + 1] = pid end
+	end
+	if #walkerIDs > 0 and tx then
+		M.OrderToTarget(env, walkerIDs, tx, tz)
+	end
+	group.walkers = walkerIDs
+
+	return group
+end
+
+--------------------------------------------------------------------------------
 -- M.OrderToTarget(env, unitIDs, tx, tz)
 --
 -- Re-march a set of (idle) wave units at a target. Used by the core gadget's

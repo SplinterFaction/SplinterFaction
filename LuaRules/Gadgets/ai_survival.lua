@@ -49,10 +49,16 @@ local DIFFICULTIES = {
 
 local GRACE_SECONDS     = 180    -- calm before the first wave (after placement)
 local WAVE_INTERVAL_SEC = 60     -- seconds between waves
-local BASE_BUDGET       = 1000    -- metal value of wave 1
+local BASE_BUDGET       = 1000   -- metal value of wave 1
 local LINEAR_GROWTH     = 0.30   -- +30% of base per wave, linearly
 local COMPOUND_GROWTH   = 1.06   -- and 6% compounding on top
 local MAX_WAVE_UNITS    = 40     -- hard cap per wave per survival team (perf)
+local FACTION_PURE_CHANCE = 0.25 -- chance a wave draws from a single faction only
+
+-- Drop waves (gunship-carried assaults)
+local DROP_LOAD_TIMEOUT_SEC = 25   -- give up loading after this; leftovers walk
+local DROP_STANDOFF         = 350  -- unload this many elmos short of the target
+local DROP_RADIUS           = 256  -- area-unload radius at the drop point
 
 -- Minutes (on the wave clock) at which each tech tier joins the pools
 local TIER_UNLOCK_MINUTES = { [1] = 0, [2] = 10, [3] = 20 }
@@ -108,8 +114,9 @@ local pools           = nil
 local isBuildingByDef = {}  -- [unitDefID] = true (for target weighting)
 local beaconDefID     = nil
 
-local clockStarted  = false -- wave clock starts once the pre-game phase is done
-local nextWaveFrame = nil
+local clockStarted    = false -- wave clock starts once the pre-game phase is done
+local clockStartFrame = nil
+local nextWaveFrame   = nil
 local waveNumber    = 0     -- shared wave counter (all survival teams in step)
 local gameOverSeen  = false
 
@@ -131,9 +138,19 @@ local env = {
 	mapSizeX             = Game.mapSizeX,
 	mapSizeZ             = Game.mapSizeZ,
 	CMD_FIGHT            = CMD.FIGHT,
+	CMD_MOVE             = CMD.MOVE,
+	CMD_LOAD             = CMD.LOAD_UNITS,
+	CMD_UNLOAD           = CMD.UNLOAD_UNITS,
+	OPT_SHIFT            = CMD.OPT_SHIFT,
 	gaiaID               = gaiaID,
 	random               = math.random,
 }
+
+-- Live drop-wave groups (loading phase only; dispatched groups dissolve into
+-- dropPending, which maps still-embarked riders to their disembark target)
+local dropGroups  = {}   -- array of { teamID, carriers, passengers, byCarrier,
+                         --            tx, tz, dropX, dropZ, deadline }
+local dropPending = {}   -- [unitID] = { tx =, tz = }  (skip idle sweep, order on unload)
 
 -- Bridge for beacon placement (closures filled in Initialize once beaconDefID
 -- is known)
@@ -189,28 +206,82 @@ end
 -- Wave execution
 --------------------------------------------------------------------------------
 
-local function SpawnWaveForTeam(teamID, state, frame)
+local function SpawnWaveForTeam(teamID, state, frame, arch, faction, maxTier)
 	if state.defeated or TeamIsDead(teamID) then return end
 
 	if not state.spawnX then
 		state.spawnX, state.spawnZ = ResolveSpawnPoint(teamID)
 	end
 
-	local clockFrames  = frame - (state.clockStartFrame or frame)
-	local maxTier      = MaxUnlockedTier(clockFrames)
 	local beaconCount  = Beacons.Count(teamID)
 	local beaconBonus  = 1 + BEACON_BUDGET_BONUS * math.max(0, beaconCount - 1)
 	local budget       = Composer.Budget(waveNumber, BASE_BUDGET, LINEAR_GROWTH,
 	                                     COMPOUND_GROWTH, state.diff.budgetMult * beaconBonus)
 
-	local list, spent = Composer.Compose(pools, budget, maxTier, MAX_WAVE_UNITS, math.random)
-	if #list == 0 then return end
-
 	local tx, tz = Spawner.SelectTarget(env, teamID, isBuildingByDef)
 	state.targetX, state.targetZ = tx, tz
 
-	-- Split across live beacons (forward beacons carry most of the wave);
-	-- pre-beacon fallback spawns everything at the start spot.
+	----------------------------------------------------------------------------
+	-- Drop archetype: gunships load the ground contingent and haul it to the
+	-- target; the loading/dispatch state machine lives in GameFrame.
+	----------------------------------------------------------------------------
+	if arch.drop and tx then
+		local drop = Composer.ComposeDrop(pools, budget, {
+			maxTier = maxTier, maxUnits = MAX_WAVE_UNITS,
+			weights = arch.weights, faction = faction, random = math.random,
+		})
+		if #drop.plan > 0 then
+			-- Beacon closest to the target stages the drop
+			local sx, sz = state.spawnX, state.spawnZ
+			local groups = Beacons.SplitWave(teamID, { true }, tx, tz, math.random)
+			if groups[1] then sx, sz = groups[1].x, groups[1].z end
+
+			local g = Spawner.SpawnDropWave(env, teamID, sx, sz, drop, tx, tz)
+			for _, cid in ipairs(g.carriers) do waveUnits[cid] = teamID end
+			for _, wid in ipairs(g.walkers)  do waveUnits[wid] = teamID end
+
+			-- Drop point: standoff short of the target, back along the approach
+			local dx, dz = tx - sx, tz - sz
+			local len    = math.sqrt(dx * dx + dz * dz)
+			local dropX, dropZ = tx, tz
+			if len > DROP_STANDOFF then
+				dropX = tx - dx / len * DROP_STANDOFF
+				dropZ = tz - dz / len * DROP_STANDOFF
+			end
+
+			local nPassengers = 0
+			for pid in pairs(g.passengers) do
+				waveUnits[pid]   = teamID
+				dropPending[pid] = { tx = tx, tz = tz }
+				nPassengers = nPassengers + 1
+			end
+			dropGroups[#dropGroups + 1] = {
+				teamID = teamID, carriers = g.carriers, passengers = g.passengers,
+				byCarrier = g.byCarrier, tx = tx, tz = tz,
+				dropX = dropX, dropZ = dropZ,
+				deadline = frame + DROP_LOAD_TIMEOUT_SEC * 30,
+			}
+			spEcho(string.format(
+				"[Survival] Wave %d team %d [drop%s]: %d riders / %d carriers / %d walkers, budget %d",
+				waveNumber, teamID, faction and (" / " .. faction) or "",
+				nPassengers, #g.carriers, #g.walkers, budget))
+			return
+		end
+		-- No carriers could be bought: fall through and send it as ground
+	end
+
+	-- Normal (non-drop) wave: compose and split across live beacons (forward
+	-- beacons carry most of the wave); pre-beacon fallback spawns everything
+	-- at the start spot.
+	local list, spent = Composer.Compose(pools, budget, {
+		maxTier  = maxTier,
+		maxUnits = MAX_WAVE_UNITS,
+		weights  = arch.weights,
+		faction  = faction,
+		random   = math.random,
+	})
+	if #list == 0 then return end
+
 	local groups
 	if beaconCount > 0 then
 		groups = Beacons.SplitWave(teamID, list, tx, tz, math.random)
@@ -229,8 +300,9 @@ local function SpawnWaveForTeam(teamID, state, frame)
 	end
 
 	spEcho(string.format(
-		"[Survival] Wave %d team %d: %d units, %d/%d metal, tier<=%d, %d beacon(s)",
-		waveNumber, teamID, createdTotal, spent, budget, maxTier, beaconCount))
+		"[Survival] Wave %d team %d [%s%s]: %d units, %d/%d metal, tier<=%d, %d beacon(s)",
+		waveNumber, teamID, arch.name, faction and (" / " .. faction) or "",
+		createdTotal, spent, budget, maxTier, beaconCount))
 end
 
 local function CreepBeacon(teamID, state)
@@ -264,8 +336,16 @@ end
 
 local function RunWave(frame)
 	waveNumber = waveNumber + 1
+
+	local maxTier = MaxUnlockedTier(frame - (clockStartFrame or frame))
+	local arch    = Composer.PickArchetype(pools, waveNumber, maxTier, math.random)
+	local faction = nil
+	if #pools.factions > 0 and math.random() < FACTION_PURE_CHANCE then
+		faction = pools.factions[math.random(1, #pools.factions)]
+	end
+
 	for teamID, state in pairs(survivalTeams) do
-		SpawnWaveForTeam(teamID, state, frame)
+		SpawnWaveForTeam(teamID, state, frame, arch, faction, maxTier)
 	end
 
 	-- Territory creep after every Nth wave
@@ -278,6 +358,7 @@ local function RunWave(frame)
 	nextWaveFrame = frame + WAVE_INTERVAL_SEC * 30
 
 	spSetGameRulesParam("survival_waveNumber",    waveNumber)
+	spSetGameRulesParam("survival_waveType",      arch.name)
 	spSetGameRulesParam("survival_nextWaveFrame", nextWaveFrame)
 end
 
@@ -286,7 +367,8 @@ end
 local function FlushIdleUnits()
 	local byTeam = {}
 	for unitID, teamID in pairs(idleUnits) do
-		if waveUnits[unitID] then
+		-- Riders waiting for (or inside) a carrier are not stragglers
+		if waveUnits[unitID] and not dropPending[unitID] then
 			local list = byTeam[teamID]
 			if not list then list = {} ; byTeam[teamID] = list end
 			list[#list + 1] = unitID
@@ -302,6 +384,63 @@ local function FlushIdleUnits()
 				state.targetX, state.targetZ = tx, tz
 				Spawner.OrderToTarget(env, list, tx, tz)
 			end
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Drop wave state machine. A group waits in loading until every surviving
+-- rider is aboard (or the deadline hits), then dispatches: each carrier gets
+-- move -> area-unload -> fight queued, riders left on the ground walk, and
+-- embarked riders keep their dropPending entry so UnitUnloaded can order them
+-- the moment they hit dirt.
+--------------------------------------------------------------------------------
+
+local spGetUnitTransporter = Spring.GetUnitTransporter
+local spValidUnitID        = Spring.ValidUnitID
+local spGiveOrderToUnit    = Spring.GiveOrderToUnit
+
+local function DispatchDropGroup(g)
+	local dy = spGetGroundHeight(g.dropX, g.dropZ)
+	local ty = spGetGroundHeight(g.tx, g.tz)
+
+	for _, cid in ipairs(g.carriers) do
+		if spValidUnitID(cid) then
+			spGiveOrderToUnit(cid, CMD.MOVE, { g.dropX, dy, g.dropZ }, 0)
+			spGiveOrderToUnit(cid, CMD.UNLOAD_UNITS,
+				{ g.dropX, dy, g.dropZ, DROP_RADIUS }, CMD.OPT_SHIFT)
+			spGiveOrderToUnit(cid, CMD.FIGHT, { g.tx, ty, g.tz }, CMD.OPT_SHIFT)
+		end
+	end
+
+	-- Riders still on the ground at dispatch walk instead
+	local walkers = {}
+	for pid in pairs(g.passengers) do
+		if spValidUnitID(pid) and not spGetUnitTransporter(pid) then
+			walkers[#walkers + 1] = pid
+			dropPending[pid] = nil
+		end
+	end
+	if #walkers > 0 then
+		Spawner.OrderToTarget(env, walkers, g.tx, g.tz)
+	end
+end
+
+local function TickDropGroups(frame)
+	for i = #dropGroups, 1, -1 do
+		local g = dropGroups[i]
+		local ready = true
+		if frame < g.deadline then
+			for pid in pairs(g.passengers) do
+				if spValidUnitID(pid) and not spGetUnitTransporter(pid) then
+					ready = false
+					break
+				end
+			end
+		end
+		if ready then
+			DispatchDropGroup(g)
+			table.remove(dropGroups, i)
 		end
 	end
 end
@@ -424,8 +563,9 @@ function gadget:GameFrame(frame)
 	if not clockStarted then
 		local phase = (spGetGameRulesParam("phase"))
 		if phase == nil or phase == "done" then
-			clockStarted  = true
-			nextWaveFrame = frame + GRACE_SECONDS * 30
+			clockStarted    = true
+			clockStartFrame = frame
+			nextWaveFrame   = frame + GRACE_SECONDS * 30
 			for _, state in pairs(survivalTeams) do
 				state.clockStartFrame = frame
 			end
@@ -440,8 +580,21 @@ function gadget:GameFrame(frame)
 		RunWave(frame)
 	end
 
+	if #dropGroups > 0 then
+		TickDropGroups(frame)
+	end
+
 	if frame % REORDER_PERIOD_FRAMES == 0 and next(idleUnits) then
 		FlushIdleUnits()
+	end
+end
+
+function gadget:UnitUnloaded(unitID, unitDefID, unitTeam, transportID)
+	local pending = dropPending[unitID]
+	if pending then
+		dropPending[unitID] = nil
+		local ty = spGetGroundHeight(pending.tx, pending.tz)
+		spGiveOrderToUnit(unitID, CMD.FIGHT, { pending.tx, ty, pending.tz }, 0)
 	end
 end
 
@@ -465,8 +618,22 @@ end
 
 function gadget:UnitDestroyed(unitID, unitDefID, unitTeam,
                               attackerID, attackerDefID, attackerTeamID)
-	waveUnits[unitID] = nil
-	idleUnits[unitID] = nil
+	waveUnits[unitID]   = nil
+	idleUnits[unitID]   = nil
+	dropPending[unitID] = nil
+
+	-- Drop groups: forget dead riders (so all-loaded can complete) and dead
+	-- carriers (their riders fall out of GetUnitTransporter and walk at dispatch)
+	for i = 1, #dropGroups do
+		local g = dropGroups[i]
+		if g.passengers[unitID] then g.passengers[unitID] = nil end
+		if g.byCarrier[unitID] then
+			g.byCarrier[unitID] = nil
+			for c = #g.carriers, 1, -1 do
+				if g.carriers[c] == unitID then table.remove(g.carriers, c) end
+			end
+		end
+	end
 
 	-- Beacon down: bounty, retaliation wave, defeat check
 	if unitDefID == beaconDefID and Beacons.Remove(unitID) then
