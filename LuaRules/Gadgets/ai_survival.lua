@@ -62,6 +62,12 @@ if difficulty == "impossibru" then
 	difficulty = 3
 	Spring.Echo ("[Survival AI] Difficulty set to Impossibru (" .. difficulty .. ")")
 end
+-- Unknown modoption value: fall back to normal rather than letting a string
+-- reach the budget math.
+if type(difficulty) ~= "number" then
+	difficulty = 1
+	Spring.Echo ("[Survival AI] Unrecognised difficulty modoption; using Normal (1)")
+end
 
 local DIFFICULTIES = {
 	["SurvivalAI"] = { budgetMult = difficulty },
@@ -509,9 +515,11 @@ function gadget:Initialize()
 	-- Beacon placement validators.
 	-- Coordinates are snapped to the 16-elmo build grid before testing so the
 	-- 10x10 footprint is evaluated exactly where CreateUnit would place it.
-	-- TestBuildOrder: 0 = forbidden, 1 = blocked by a removable unit/feature,
-	-- 2 = fully open. Only 2 is accepted -- a large footprint near battle
-	-- debris frequently scores 1 and then fails CreateUnit anyway.
+	-- TestBuildOrder: 0 = forbidden terrain (slope/water/metal restrictions),
+	-- 1 = blocked by a removable unit/feature, 2 = fully open. CreateUnit is
+	-- not a build order and ignores removable blockers entirely, so only 0
+	-- rejects -- requiring 2 on a map littered with metal spots, decorative
+	-- features and milling wave units starves placement for no gain.
 	beaconEnv.CanPlace = function(x, z)
 		if not beaconDefID then return true end
 		x = 16 * math.floor((x + 8) / 16)
@@ -524,7 +532,7 @@ function gadget:Initialize()
 			return false
 		end
 		local test = spTestBuildOrder(beaconDefID, x, y, z, 0)
-		if test ~= 2 then
+		if test < 1 then
 			if SURVIVAL_DEBUG then
 				spEcho(string.format("[Survival] creep reject (%.0f, %.0f): TestBuildOrder=%d", x, z, test))
 			end

@@ -28,7 +28,7 @@ local ANGLE_JITTER     = math.rad(75) -- cone half-angle around the target beari
 local SPREAD_CHANCE    = 0.35         -- chance to creep from a random (not forward) beacon
 local MIN_SPACING      = 400          -- min distance between own beacons
 local ENEMY_CLEARANCE  = 500          -- don't place with enemies this close
-local PLACE_ATTEMPTS   = 12           -- attempts 7+ widen to a full circle
+local PLACE_ATTEMPTS   = 24           -- cone for the first third, then full circle
 local EDGE_MARGIN      = 96
 
 local sqrt, cos, sin, atan2, pi = math.sqrt, math.cos, math.sin, math.atan2, math.pi
@@ -128,7 +128,7 @@ function M.PickCreepSpot(env, teamID, tx, tz, minDist, maxDist)
 	for attempt = 1, PLACE_ATTEMPTS do
 		-- If the forward cone keeps failing (cliff, water, enemy base), open up
 		-- to a full circle so the network can route around obstacles.
-		local jitter = (attempt <= PLACE_ATTEMPTS / 2) and ANGLE_JITTER or pi
+		local jitter = (attempt <= PLACE_ATTEMPTS / 3) and ANGLE_JITTER or pi
 		local ang    = bearing + (env.random() * 2 - 1) * jitter
 		local d      = minDist + env.random() * (maxDist - minDist)
 		local x      = clamp(src.x + cos(ang) * d, EDGE_MARGIN, maxX)
