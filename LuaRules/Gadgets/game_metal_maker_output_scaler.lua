@@ -57,16 +57,16 @@ local multipliersByName = {
 	lozmetalextractor_up1 = 2,
 	fedmetalextractor_up1 = 2,
 
-	lozmetalextractor_up2 = 3,
-	fedmetalextractor_up2 = 3,
+	lozmetalextractor_up2 = 6.5,
+	fedmetalextractor_up2 = 6.5,
 
-	lozmetalextractor_up3 = 6,
-	fedmetalextractor_up3 = 6,
+	lozmetalextractor_up3 = 14,
+	fedmetalextractor_up3 = 14,
 
-	lozmetalextractor_up4 = 12,
-	fedmetalextractor_up4 = 12,
+	lozmetalextractor_up4 = 28,
+	fedmetalextractor_up4 = 28,
 
-	geometalmaker         = 25,
+	geometalmaker         = 35,
 }
 
 -- Base energy upkeep by tier (these are the numbers for metalSpot_value == 3)

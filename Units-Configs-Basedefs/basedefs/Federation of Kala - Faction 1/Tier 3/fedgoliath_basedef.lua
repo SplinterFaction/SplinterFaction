@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 17520,
+	buildCostMetal               = 9300,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedgoliath.png]],

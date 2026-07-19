@@ -5,7 +5,7 @@ local unitName                    = "mediumstorage"
 --------------------------------------------------------------------------------
 
 local storage					  = 2000
-local buildCostMetal 			  = 400
+local buildCostMetal 			  = 800
 
 local unitDef                     = {
 	activateWhenBuilt             = true,

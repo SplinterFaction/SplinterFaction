@@ -7,7 +7,7 @@ local unitName                    = "largestorage"
 local storage					  = 20000
 local supplygranted				  = 500
 
-local buildCostMetal 			  = 2000
+local buildCostMetal 			  = 6000
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {

@@ -5,7 +5,7 @@ unitDef                    = {
 	--**
 
 	buildCostEnergy              = 0,
-	buildCostMetal               = 5000,
+	buildCostMetal               = 2650,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = [[fedstriker.png]],

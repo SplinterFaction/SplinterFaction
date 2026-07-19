@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 18000,
+	buildCostMetal               = 9550,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozleviathan.png",

@@ -1213,15 +1213,15 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech2" then
-				unitDef.buildtime = unitDef.buildtime * (1/4)
+				unitDef.buildtime = unitDef.buildtime * (1/8)
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech3" then
-				unitDef.buildtime = unitDef.buildtime * (1/16)
+				unitDef.buildtime = unitDef.buildtime * (1/48)
 			end
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
-				unitDef.buildtime = unitDef.buildtime * (1/32)
+				unitDef.buildtime = unitDef.buildtime * (1/96)
 			end
 
 			-- Set Supply Costs

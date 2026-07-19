@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 20000,
+	buildCostMetal               = 10600,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "lozmammoth.png",

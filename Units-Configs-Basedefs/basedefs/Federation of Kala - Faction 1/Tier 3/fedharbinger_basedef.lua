@@ -1,6 +1,6 @@
 unitDef                    = {
 	buildCostEnergy              = 0,
-	buildCostMetal               = 16500,
+	buildCostMetal               = 8750,
 	builder                      = false,
 	buildTime                    = 5,
 	buildpic					 = "fedharbinger.png",

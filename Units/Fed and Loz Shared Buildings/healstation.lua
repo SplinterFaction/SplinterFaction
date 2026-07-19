@@ -9,7 +9,7 @@ humanName = [[Healstation]]
 objectName = [[healstation.s3o]]
 script = [[healstation_lus.lua]]
 
-buildCostMetal = 250
+buildCostMetal = 500
 
 workerTime = 1
 buildDistance = 350

@@ -8,7 +8,7 @@ local armortype					 = [[building]]
 
 local techrequired				 = [[tech2]]
 
-local buildCostMetal 			  = 250
+local buildCostMetal 			  = 500
 
 local unitDef                     = {
 	activateWhenBuilt             = true,

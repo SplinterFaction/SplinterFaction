@@ -5,7 +5,7 @@ local unitName                    = "mediumsupplydepot"
 --------------------------------------------------------------------------------
 
 local supplygranted				  = 100
-local buildCostMetal 			  = 400
+local buildCostMetal 			  = 800
 
 local unitDef                     = {
 	activateWhenBuilt             = true,

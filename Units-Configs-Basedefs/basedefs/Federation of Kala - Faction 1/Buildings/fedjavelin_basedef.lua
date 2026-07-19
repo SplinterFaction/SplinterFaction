@@ -1,7 +1,7 @@
 unitDef                     = {
 	buildAngle                    = 2048,
 	buildCostEnergy               = 0,
-	buildCostMetal                = 1000,
+	buildCostMetal                = 2000,
 	builder                       = false,
 	buildTime                     = 5,
 	canAttack                     = true,
