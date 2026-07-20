@@ -94,13 +94,65 @@ local pendingFactionAdvance = false -- set when all humans chose faction
 
 local placementConfirmed      = {}    -- teamID → true once spot confirmed
 local pendingPlacementAdvance = false -- set when all humans confirmed placement
-local claimedSpots  = {}   -- spotIdx → teamID (first claim wins)
-local selectedSpots = {}   -- teamID → spotIdx (tentative selection)
-local confirmedSpots = {}  -- teamID → spotIdx (final confirmed selection)
+
+-- claimedSpots is spotIdx → { [teamID]=true, ... } (a set of claiming teams).
+-- Normally each spot has at most one claimer (first-claim-wins).  When a side
+-- has more players than spots, overflow players are allowed to *share* an
+-- already-claimed same-side spot, so a spot may hold more than one team.
+-- The key is removed entirely when the last claim is released, so a nil value
+-- still means "unclaimed".
+local claimedSpots  = {}   -- spotIdx → set of teamIDs
+local selectedSpots = {}   -- teamID → spotIdx (this team's one tentative selection)
+local confirmedSpots = {}  -- teamID → spotIdx (this team's one confirmed selection)
 
 local mapSpots     = {}    -- spotIdx (1-based) → {x, z, allyteam}
 local usePlacement = false -- true when mapSpots has valid data
 local isFFA        = false
+
+-- ── Claim-set helpers ────────────────────────────────────────────────────────
+
+local function ClaimAdd(spotIdx, teamID)
+	local c = claimedSpots[spotIdx]
+	if not c then c = {}; claimedSpots[spotIdx] = c end
+	c[teamID] = true
+end
+
+local function ClaimRemove(spotIdx, teamID)
+	local c = claimedSpots[spotIdx]
+	if c then
+		c[teamID] = nil
+		if next(c) == nil then claimedSpots[spotIdx] = nil end
+	end
+end
+
+local function ClaimHas(spotIdx, teamID)
+	local c = claimedSpots[spotIdx]
+	return c ~= nil and c[teamID] == true
+end
+
+local function ClaimCount(spotIdx)
+	local c = claimedSpots[spotIdx]
+	if not c then return 0 end
+	local n = 0
+	for _ in pairs(c) do n = n + 1 end
+	return n
+end
+
+-- Count same-side spots that this team could take without sharing: either
+-- genuinely unclaimed, or claimed only by this team itself.  Used to decide
+-- whether the sharing fallback is allowed (it is only when this returns 0).
+local function FreeSameSideSpots(allyID, forTeamID)
+	local n = 0
+	for i, spot in pairs(mapSpots) do
+		if isFFA or spot.allyteam == allyID then
+			local c = claimedSpots[i]
+			if not c or (c[forTeamID] and ClaimCount(i) == 1) then
+				n = n + 1
+			end
+		end
+	end
+	return n
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -227,51 +279,107 @@ local function LoadMapSpots()
 		                          spotTotal, numAT, base))
 
 		if numAT == 2 then
-			-- ── Axis-projection split (contiguous + balanced) ─────────────────
+			-- ── Gap-search split (contiguous + balanced + barrier-aware) ──────
+			--
+			-- A straight cut perpendicular to the centroid axis works only when
+			-- the two team start positions happen to line up with the map's
+			-- intended divide.  When the engine drops the 1v1 starts diagonally,
+			-- that cut slices a corner off the wrong side — stranding teammates
+			-- across a river in team games.
+			--
+			-- Instead we search many candidate cut directions and pick the one
+			-- whose *balanced* cut falls in the largest natural gap in the spot
+			-- distribution (a river, chokepoint, or empty band).  The centroid
+			-- axis is used as the default and is only overridden when another
+			-- direction separates the two halves markedly more cleanly.  The
+			-- team centroids then decide which half belongs to which team.
+
 			local at1, at2 = allyteamIDs[1], allyteamIDs[2]
 			local c1, c2   = centroids[at1], centroids[at2]
 
-			-- Separating axis = direction from c1 to c2
-			local ax, az = c2.x - c1.x, c2.z - c1.z
-			local axisLen2 = ax * ax + az * az
-
-			-- Degenerate centroids (both teams start at ~same point): fall back to
-			-- the principal axis of the spot cloud (direction of maximum spread).
-			if axisLen2 < 1 then
-				local mx, mz, n = 0, 0, 0
-				for _, spot in pairs(mapSpots) do
-					mx = mx + spot.x; mz = mz + spot.z; n = n + 1
-				end
-				mx, mz = mx / n, mz / n
-				local sxx, sxz, szz = 0, 0, 0
-				for _, spot in pairs(mapSpots) do
-					local dx, dz = spot.x - mx, spot.z - mz
-					sxx = sxx + dx * dx
-					sxz = sxz + dx * dz
-					szz = szz + dz * dz
-				end
-				-- Dominant eigenvector angle of the 2×2 covariance matrix
-				local theta = 0.5 * math.atan2(2 * sxz, sxx - szz)
-				ax, az = math.cos(theta), math.sin(theta)
-				Spring.Echo("[Game Spawn] Centroids degenerate — using principal axis of spot cloud")
+			-- Flat spot list for repeated projection
+			local spotList = {}
+			for spotIdx, spot in pairs(mapSpots) do
+				spotList[#spotList + 1] = { s = spotIdx, x = spot.x, z = spot.z }
 			end
 
-			-- Project every spot onto the axis and sort ascending.  Spots with
-			-- lower projection lie nearer c1's side.
+			-- Cut rank for the balance point (mid split; exact per-team quota is
+			-- applied at assignment time below).
+			local kCut = math.floor(spotTotal / 2)
+
+			-- Score a direction: normalised gap between the two balanced halves.
+			-- Larger = the halves are separated by more empty space along dir.
+			local function ScoreDir(dx, dz)
+				local proj = {}
+				for i = 1, #spotList do
+					proj[i] = spotList[i].x * dx + spotList[i].z * dz
+				end
+				table.sort(proj)
+				local span = proj[#proj] - proj[1]
+				if span < 1 then return -1 end
+				return (proj[kCut + 1] - proj[kCut]) / span
+			end
+
+			-- Default direction: the centroid axis (engine intent).
+			local cax, caz = c2.x - c1.x, c2.z - c1.z
+			local clen = math.sqrt(cax * cax + caz * caz)
+			if clen < 1 then
+				-- Degenerate centroids: seed with the map's horizontal axis; the
+				-- search below will still find the best separating direction.
+				cax, caz, clen = 1, 0, 1
+			end
+			cax, caz = cax / clen, caz / clen
+
+			local bestDx, bestDz = cax, caz
+			local bestScore      = ScoreDir(cax, caz)
+			local centroidScore  = bestScore
+
+			-- Sample directions across a half-circle (a line is undirected, so
+			-- 0..π covers every distinct cut orientation).  Override the default
+			-- only when a direction is clearly better, so uniform maps with no
+			-- real barrier keep the sensible engine-intended axis.
+			local STEPS  = 36     -- 5° resolution
+			local MARGIN = 0.03   -- required improvement over the centroid axis
+			for step = 0, STEPS - 1 do
+				local theta  = math.pi * step / STEPS
+				local dx, dz = math.cos(theta), math.sin(theta)
+				local sc     = ScoreDir(dx, dz)
+				if sc > bestScore + MARGIN then
+					bestScore = sc
+					bestDx, bestDz = dx, dz
+				end
+			end
+
+			-- Project all spots along the chosen direction and sort ascending.
 			local ordered = {}
-			for spotIdx, spot in pairs(mapSpots) do
-				ordered[#ordered + 1] = { s = spotIdx, p = spot.x * ax + spot.z * az }
+			for i = 1, #spotList do
+				ordered[i] = {
+					s = spotList[i].s,
+					p = spotList[i].x * bestDx + spotList[i].z * bestDz,
+				}
 			end
 			table.sort(ordered, function(a, b) return a.p < b.p end)
 
-			-- First quota[at1] spots → at1, remainder → at2
-			for rank, item in ipairs(ordered) do
-				local owner = (rank <= quota[at1]) and at1 or at2
-				mapSpots[item.s].allyteam = owner
+			-- Which team owns the low-projection half?  The one whose centroid
+			-- projects lower along the cut direction.
+			local c1p = c1.x * bestDx + c1.z * bestDz
+			local c2p = c2.x * bestDx + c2.z * bestDz
+			local lowTeam, highTeam
+			if c1p <= c2p then
+				lowTeam, highTeam = at1, at2
+			else
+				lowTeam, highTeam = at2, at1
 			end
 
-			Spring.Echo(string.format("[Game Spawn] Axis split: dir=(%.2f, %.2f)  at%d gets first %d spots",
-			                          ax, az, at1, quota[at1]))
+			-- Assign: first quota[lowTeam] spots to the low side, rest to the high.
+			local lowQuota = quota[lowTeam]
+			for rank, item in ipairs(ordered) do
+				mapSpots[item.s].allyteam = (rank <= lowQuota) and lowTeam or highTeam
+			end
+
+			Spring.Echo(string.format(
+				"[Game Spawn] Gap split: dir=(%.2f, %.2f)  centroidScore=%.3f  bestScore=%.3f  lowTeam=%d gets %d",
+				bestDx, bestDz, centroidScore, bestScore, lowTeam, lowQuota))
 		else
 			-- ── Balanced greedy auction (3+ allyteams) ────────────────────────
 			local candidates = {}
@@ -375,6 +483,25 @@ local function AutoSelectSpot(teamID)
 		end
 	end
 
+	if bestSpot then return bestSpot end
+
+	-- ── Sharing fallback ──────────────────────────────────────────────────────
+	-- No unclaimed same-side spot remains (more players than spots on this side).
+	-- Share the least-crowded same-side spot so this team still lands on its own
+	-- side rather than at an arbitrary engine position.  Tie-break by fewest
+	-- current claimants.
+	local fewest = math.huge
+	for i, spot in pairs(mapSpots) do
+		local available = isFFA or (spot.allyteam == allyID)
+		if available then
+			local n = ClaimCount(i)
+			if n < fewest then
+				fewest   = n
+				bestSpot = i
+			end
+		end
+	end
+
 	return bestSpot
 end
 
@@ -384,12 +511,11 @@ end
 local function AssignSpot(teamID, spotIdx)
 	-- Release any previous tentative claim by this team
 	local prev = selectedSpots[teamID]
-	if prev and claimedSpots[prev] == teamID then
-		claimedSpots[prev] = nil
-		Spring.SetTeamRulesParam(teamID, "claimedSpot", -1, ALLIED)
+	if prev and ClaimHas(prev, teamID) then
+		ClaimRemove(prev, teamID)
 	end
 
-	claimedSpots[spotIdx]  = teamID
+	ClaimAdd(spotIdx, teamID)
 	selectedSpots[teamID]  = spotIdx
 	confirmedSpots[teamID] = spotIdx
 
@@ -397,7 +523,8 @@ local function AssignSpot(teamID, spotIdx)
 	Spring.SetTeamRulesParam(teamID, "selectedSpot",  spotIdx, ALLIED)
 	Spring.SetTeamRulesParam(teamID, "confirmedSpot", spotIdx, ALLIED)
 
-	Spring.Echo("[Game Spawn] Assigned spot " .. spotIdx .. " to team " .. teamID)
+	Spring.Echo("[Game Spawn] Assigned spot " .. spotIdx .. " to team " .. teamID ..
+		" (now " .. ClaimCount(spotIdx) .. " claim(s))")
 end
 
 --------------------------------------------------------------------------------
@@ -626,17 +753,25 @@ function gadget:RecvLuaMsg(msg, playerID)
 		-- Validate side (no crossing into enemy territory)
 		if not isFFA and spot.allyteam ~= allyID then return end
 
-		-- First-claim wins: reject silently if already taken by someone else
-		if claimedSpots[spotIdx] and claimedSpots[spotIdx] ~= teamID then return end
+		-- Claim rules:
+		--   • A free spot can always be claimed.
+		--   • A spot already claimed by this team is a no-op re-select (allowed).
+		--   • A spot claimed by *another* team is normally rejected (first-claim
+		--     wins) — UNLESS this team has no free same-side spot left, in which
+		--     case sharing is permitted so overflow players aren't stranded.
+		if not ClaimHas(spotIdx, teamID) and ClaimCount(spotIdx) > 0 then
+			if FreeSameSideSpots(allyID, teamID) > 0 then return end
+			-- else: sharing fallback — allow the claim to stack
+		end
 
 		-- Release previous tentative claim
 		local prev = selectedSpots[teamID]
-		if prev and claimedSpots[prev] == teamID then
-			claimedSpots[prev] = nil
+		if prev and ClaimHas(prev, teamID) then
+			ClaimRemove(prev, teamID)
 			Spring.SetTeamRulesParam(teamID, "claimedSpot", -1, ALLIED)
 		end
 
-		claimedSpots[spotIdx] = teamID
+		ClaimAdd(spotIdx, teamID)
 		selectedSpots[teamID] = spotIdx
 		Spring.SetTeamRulesParam(teamID, "claimedSpot",  spotIdx, ALLIED)
 		Spring.SetTeamRulesParam(teamID, "selectedSpot", spotIdx, ALLIED)
@@ -749,15 +884,40 @@ function gadget:GameFrame(n)
 				end
 			end
 
-			-- Spawn everyone
+			-- Group teams by their confirmed spot so shared spots can be spread out.
+			local spotTeams  = {}   -- spotIdx → { teamID, ... }
+			local noSpotTeams = {}  -- teams with no placement (engine fallback)
 			for _, teamID in ipairs(allNonGaiaTeams) do
 				local spotIdx = confirmedSpots[teamID]
-				local spot    = spotIdx and mapSpots[spotIdx]
-				if spot then
-					SpawnStartUnit(teamID, spot.x, spot.z)
+				if spotIdx and mapSpots[spotIdx] then
+					local list = spotTeams[spotIdx]
+					if not list then list = {}; spotTeams[spotIdx] = list end
+					list[#list + 1] = teamID
 				else
-					SpawnStartUnit(teamID, nil, nil)
+					noSpotTeams[#noSpotTeams + 1] = teamID
 				end
+			end
+
+			-- Spawn placed teams.  A single occupant spawns at the spot centre; a
+			-- shared spot spreads its occupants evenly around a small ring so the
+			-- commanders don't stack on top of each other.
+			local SHARE_RADIUS = 96   -- elmos between ring centre and each commander
+			for spotIdx, teamList in pairs(spotTeams) do
+				local spot = mapSpots[spotIdx]
+				if #teamList == 1 then
+					SpawnStartUnit(teamList[1], spot.x, spot.z)
+				else
+					local r = SHARE_RADIUS + 24 * (#teamList - 2)   -- widen slightly for 3+
+					for k, teamID in ipairs(teamList) do
+						local ang = (k - 1) / #teamList * 2 * math.pi
+						SpawnStartUnit(teamID, spot.x + r * math.cos(ang), spot.z + r * math.sin(ang))
+					end
+				end
+			end
+
+			-- Any team without a placement falls back to its engine start position.
+			for _, teamID in ipairs(noSpotTeams) do
+				SpawnStartUnit(teamID, nil, nil)
 			end
 
 			phase = "done"

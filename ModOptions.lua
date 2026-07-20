@@ -278,7 +278,7 @@ local options= {
 
 	{
 		key="survivalaidifficulty",
-		name="Survival AI DIccifulty",
+		name="Survival AI Difficulty",
 		desc="How hard should the Survival AI be?",
 		type="list",
 		def="normal",

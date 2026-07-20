@@ -137,11 +137,13 @@ local spotCount   = 0
 
 -- Per-frame derived data (updated in Update)
 local spotScreen    = {}   -- i → {sx, sy, visible}
-local claimCache    = {}   -- i → teamID or -1  (from spotclaim_N rules params)
+local claimCount    = {}   -- i → number of allied teams claiming spot i (0/nil = none visible)
+local claimMine     = {}   -- i → true if my own team claims spot i
 local hoveredSpot   = nil  -- index or nil
 local mySelected    = nil  -- server-acknowledged selected spot index
 local myConfirmed   = nil  -- server-acknowledged confirmed spot index
 local localPending  = nil  -- local pending index (waiting for server ack)
+local shareMode     = false -- true when no free same-side spots remain (overflow)
 
 local confirmed     = false   -- local flag: player has confirmed their spot
 local secondsLeft   = PLACEMENT_SECONDS
@@ -271,13 +273,32 @@ local function UpdateClaimCache()
 	-- Only read claims for teams on our own side.  Claim params are allied-only
 	-- (SetTeamRulesParam with {allied=true}), so enemy claims are invisible here,
 	-- which is the desired behaviour.  Spectators see all teams' params regardless.
-	claimCache = {}
+	-- Because all sharers of a same-side spot are allied, the counts we build here
+	-- are the true occupancy of every spot we care about.
+	claimCount = {}
+	claimMine  = {}
 	local allyTeams = Spring.GetTeamList(myAllyTeamID) or {}
 	for _, tID in ipairs(allyTeams) do
 		local claimed = spGetTeamRulesParam(tID, "claimedSpot")
 		if claimed and claimed ~= -1 then
-			claimCache[math.floor(claimed)] = tID
+			local si = math.floor(claimed)
+			claimCount[si] = (claimCount[si] or 0) + 1
+			if tID == myTeamID then claimMine[si] = true end
 		end
+	end
+
+	-- Sharing becomes available once no same-side spot is free.  Spectators never
+	-- place, so shareMode is irrelevant for them.
+	if isSpectator then
+		shareMode = false
+	else
+		local free = 0
+		for i, spot in pairs(spots) do
+			if (isFFA or spot.allyteam == myAllyTeamID) and not claimCount[i] then
+				free = free + 1
+			end
+		end
+		shareMode = (free == 0)
 	end
 end
 
@@ -332,19 +353,26 @@ local function DrawSpots()
 		local sc = spotScreen[i]
 		if sc and sc.visible then
 			local sx, sy = sc.sx, sc.sy
-			local claim  = claimCache[i]   -- nil = unclaimed or enemy (both look the same to us)
+			local mine     = claimMine[i]           -- my team claims this spot
+			local count    = claimCount[i] or 0     -- allied teams on this spot
+			local mySide   = isFFA or spot.allyteam == myAllyTeamID
 
 			-- Determine marker state for this spot
 			if myConfirmed and myConfirmed == i then
 				DrawConfirmedRing(sx, sy)
 				DrawMarker(sx, sy, COL_CONFIRMED, false)
-			elseif claim == myTeamID then
+			elseif mine then
 				-- My tentative or confirmed selection
 				DrawMarker(sx, sy, COL_SELECTED, false)
-			elseif claim ~= nil then
-				-- Claimed by a teammate (allied-only param, so enemies are never visible here)
-				DrawMarker(sx, sy, COL_TEAMMATE, false)
-			elseif isFFA or spot.allyteam == myAllyTeamID then
+			elseif count > 0 then
+				-- Claimed by a teammate.  In share mode it's still a valid target
+				-- (overflow players may stack onto it), so highlight on hover.
+				if mySide and shareMode and hoveredSpot == i then
+					DrawMarker(sx, sy, COL_AVAILABLE_H, false)
+				else
+					DrawMarker(sx, sy, COL_TEAMMATE, false)
+				end
+			elseif mySide then
 				-- Available on my side (or FFA where all spots are fair game)
 				local col = (hoveredSpot == i) and COL_AVAILABLE_H or COL_AVAILABLE
 				DrawMarker(sx, sy, col, false)
@@ -360,6 +388,22 @@ local function DrawSpots()
 			font:Begin()
 			font:Print(TEXT_COLOR .. i, sx, labelY, labelSz, "con")
 			font:End()
+
+			-- Share badge: when a spot is occupied by 2+ allied teams, show the
+			-- occupancy count in the top-right corner of the marker.
+			if count >= 2 then
+				local badgeSz = math.floor(LABEL_SIZE * widgetScale * 0.9)
+				local bx = sx + ms - math.floor(badgeSz * 0.3)
+				local by = sy + ms - math.floor(badgeSz * 0.9)
+				-- small dark chip behind the number
+				glColor(0.02, 0.02, 0.04, 0.85)
+				glRect(bx - badgeSz, by - math.floor(badgeSz * 0.15),
+				       bx + badgeSz, by + badgeSz + math.floor(badgeSz * 0.15))
+				font:Begin()
+				font:SetTextColor(1, 0.85, 0.35, 1)
+				font:Print("x" .. count, bx, by, badgeSz, "cn")
+				font:End()
+			end
 		end
 	end
 end
@@ -416,6 +460,10 @@ local function DrawPanel()
 		titleStr = TEXT_COLOR .. "Waiting for others\226\128\166"   -- ellipsis
 	elseif mySelected then
 		titleStr = TEXT_COLOR .. "Spot " .. mySelected .. " selected \226\128\148 confirm when ready"
+	elseif shareMode then
+		-- More players than spots on this side — all spots are taken, so allow
+		-- stacking onto an occupied one.
+		titleStr = TEXT_COLOR .. "All spots on your side are taken \226\128\148 click one to share it"
 	else
 		titleStr = SUBTEXT_COLOR .. "Click a highlighted spot to select it"
 	end
@@ -630,9 +678,11 @@ function widget:MouseRelease(x, y, button)
 			if sc.visible and math.abs(x - sc.sx) <= ms and math.abs(y - sc.sy) <= ms then
 				local spot = spots[i]
 				if spot and (isFFA or spot.allyteam == myAllyTeamID) then
-					-- Don't select an already-confirmed spot of another player
-					local claim = claimCache[i] or -1
-					if claim == -1 or claim == myTeamID then
+					-- Selectable when: unclaimed, already mine, or (share mode)
+					-- any same-side spot even if a teammate holds it.
+					local occupied = (claimCount[i] or 0) > 0
+					local selectable = not occupied or claimMine[i] or shareMode
+					if selectable then
 						PlayClickSound()
 						localPending = i
 						spSendLuaRulesMsg(SELECT_BYTE .. i)
