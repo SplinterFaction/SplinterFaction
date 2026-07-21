@@ -55,11 +55,62 @@ function M.Reset()
 	byTeam, unitOwner = {}, {}
 end
 
-function M.Register(teamID, unitID, x, z)
+function M.Register(teamID, unitID, x, z, kind, frame)
 	local t = byTeam[teamID]
 	if not t then t = {} ; byTeam[teamID] = t end
-	t[unitID] = { x = x, z = z }
+	t[unitID] = { x = x, z = z, kind = kind or "standard", birth = frame or 0, dug = false }
 	unitOwner[unitID] = teamID
+end
+
+-- Kind of a tracked beacon ("standard", "shield", "jammer", "accelerator",
+-- "forge"), or nil for untracked units.
+function M.GetKind(unitID)
+	local teamID = unitOwner[unitID]
+	local t = teamID and byTeam[teamID]
+	local b = t and t[unitID]
+	return b and b.kind
+end
+
+function M.CountKind(teamID, kind)
+	local t = byTeam[teamID]
+	if not t then return 0 end
+	local n = 0
+	for _, b in pairs(t) do
+		if b.kind == kind then n = n + 1 end
+	end
+	return n
+end
+
+-- Beacons old enough to dig in and not yet fortified.
+function M.DueForAging(teamID, frame, ageFrames)
+	local due, t = {}, byTeam[teamID]
+	if t then
+		for unitID, b in pairs(t) do
+			if (not b.dug) and (frame - b.birth) >= ageFrames then
+				due[#due + 1] = { unitID = unitID, x = b.x, z = b.z }
+			end
+		end
+	end
+	return due
+end
+
+function M.MarkDug(unitID)
+	local teamID = unitOwner[unitID]
+	local t = teamID and byTeam[teamID]
+	if t and t[unitID] then t[unitID].dug = true end
+end
+
+-- The sole survivor (unitID, x, z) when exactly one beacon remains.
+function M.GetLast(teamID)
+	local t = byTeam[teamID]
+	if not t then return nil end
+	local only, count = nil, 0
+	for unitID, b in pairs(t) do
+		only  = { unitID = unitID, x = b.x, z = b.z }
+		count = count + 1
+		if count > 1 then return nil end
+	end
+	return only and only.unitID, only and only.x, only and only.z
 end
 
 -- Returns the owning teamID (or nil if the unit wasn't a tracked beacon).
@@ -84,7 +135,7 @@ function M.GetAll(teamID)
 	local list, t = {}, byTeam[teamID]
 	if t then
 		for unitID, pos in pairs(t) do
-			list[#list + 1] = { unitID = unitID, x = pos.x, z = pos.z }
+			list[#list + 1] = { unitID = unitID, x = pos.x, z = pos.z, kind = pos.kind }
 		end
 	end
 	return list
@@ -183,7 +234,9 @@ function M.SplitWave(teamID, unitList, tx, tz, random)
 		end
 		local g = groups[pick]
 		if not g then
-			g = { x = beacons[pick].x, z = beacons[pick].z, list = {} }
+			g = { x = beacons[pick].x, z = beacons[pick].z,
+			      beaconID = beacons[pick].unitID, kind = beacons[pick].kind,
+			      list = {} }
 			groups[pick] = g
 		end
 		g.list[#g.list + 1] = unitList[u]

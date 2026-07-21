@@ -66,6 +66,14 @@ local function ArchetypeViable(pools, arch, maxTier)
 	return false
 end
 
+-- Exports for forced-archetype selection (surge waves): name lookup and the
+-- same viability test PickArchetype uses.
+M.ByName = {}
+for i = 1, #M.Archetypes do
+	M.ByName[M.Archetypes[i].name] = M.Archetypes[i]
+end
+M.IsViable = ArchetypeViable
+
 -- M.PickArchetype(pools, waveNumber, maxTier, random) -> archetype table
 function M.PickArchetype(pools, waveNumber, maxTier, random)
 	random = random or math.random

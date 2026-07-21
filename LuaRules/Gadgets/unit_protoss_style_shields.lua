@@ -56,6 +56,25 @@ end
 
 GG.PersonalShields = GG.PersonalShields or {}
 
+--------------------------------------------------------------------------------
+-- External API: dynamically grant a personal shield to a unit whose DEF is not
+-- shielded (e.g. Survival AI shield-beacon waves, the last-beacon rage shield).
+-- Idempotent-safe: returns false if the unit already has a personal shield
+-- (so Loz units are skipped rather than double-shielded) or is invalid.
+-- regenDelaySec is in seconds, like the customparam.
+--------------------------------------------------------------------------------
+
+function GG.PersonalShields.Grant(unitID, maxStrength, regenRate, regenDelaySec)
+	if not Spring.ValidUnitID(unitID) then return false end
+	if IterableMap.Get(shieldedUnits, unitID) then return false end
+	initShieldedUnit(unitID, {
+		shieldMaxStrength       = maxStrength or 100,
+		shieldRegenerationRate  = regenRate or 5,
+		shieldRegenerationDelay = regenDelaySec or 10,
+	})
+	return true
+end
+
 function GG.PersonalShields.SetScale(unitID, maxScale, regenScale)
 	local shieldedUnit = IterableMap.Get(shieldedUnits, unitID)
 	if not shieldedUnit then return false end          -- not a shielded unit (e.g. Kala)
