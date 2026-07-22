@@ -110,6 +110,20 @@ local floor               = math.floor
 local points  = {}                  -- points[teamID] = number (authoritative)
 local gaiaID  = spGetGaiaTeamID()
 
+-- No RP income (passive, generator, or kill/loss) is awarded until the
+-- faction + placement pre-game sequence finishes. game_spawn.lua flips
+-- GameRulesParam "phase" to "done" once every team has spawned; that param
+-- has no ALLIED restriction, so it's globally readable here. Cached once
+-- true since phase only ever moves forward.
+local spGetGameRulesParam = Spring.GetGameRulesParam
+local gameStarted = false
+
+local function IsGameStarted()
+  if gameStarted then return true end
+  gameStarted = (spGetGameRulesParam("phase") == "done")
+  return gameStarted
+end
+
 -- End-game graph history: sample every team's balance at this interval and
 -- broadcast it (gated per client, unsynced side) so the graph has a complete,
 -- access-correct RP series for everyone -- including enemy lines revealed at
@@ -237,7 +251,12 @@ end
 function gadget:GameFrame(n)
   if n % 30 ~= 0 then return end          -- once per second at 30fps
 
-  if PASSIVE_PER_SECOND ~= 0 then
+  -- Withhold all per-tick income until the pre-game sequence is done; the
+  -- generator loop is also skipped entirely so it never charges energy
+  -- upkeep for RP that wouldn't be granted anyway.
+  local started = IsGameStarted()
+
+  if started and PASSIVE_PER_SECOND ~= 0 then
     for teamID in pairs(points) do
       -- Skip dead/resigned teams: their balance freezes at death (kept in `points`
       -- so the end-game graph still samples them as a flat line to game end).
@@ -247,10 +266,12 @@ function gadget:GameFrame(n)
     end
   end
 
-  for unitID, gen in pairs(generators) do
-    local teamID = chargeAndGetTeam(unitID, gen.e)   -- nil if stunned/off/can't pay
-    if teamID then
-      GG.Research.Add(teamID, gen.rp, "generator")
+  if started then
+    for unitID, gen in pairs(generators) do
+      local teamID = chargeAndGetTeam(unitID, gen.e)   -- nil if stunned/off/can't pay
+      if teamID then
+        GG.Research.Add(teamID, gen.rp, "generator")
+      end
     end
   end
 
@@ -286,7 +307,7 @@ end
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDefID, attackerTeamID)
   generators[unitID] = nil            -- also covers the reclaim a morph performs
 
-  if KILL_REWARD_FRACTION ~= 0 then
+  if KILL_REWARD_FRACTION ~= 0 and IsGameStarted() then
     if not attackerTeamID then return end          -- no killer (selfd, reclaim, ...)
     if attackerTeamID == teamID then return end     -- ignore killing your own units
     if attackerTeamID == gaiaID then return end

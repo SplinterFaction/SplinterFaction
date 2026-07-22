@@ -63,16 +63,22 @@ local TRACKS = {
     param  = "upgrade_weapons_level",
     levels = {
       { cost = 250,  mult = 1.15 },
-      { cost = 500,  mult = 1.30 },
-      { cost = 1000, mult = 1.50 },
+      { cost = 400,  mult = 1.30 },
+      { cost = 650,  mult = 1.50 },
+      { cost = 1000, mult = 1.65 },
+      { cost = 1600, mult = 1.80 },
+      { cost = 2500, mult = 2.00 },
     },
   },
   armor = {
     param  = "upgrade_armor_level",
     levels = {
       { cost = 250,  mult = 1.15 },
-      { cost = 500,  mult = 1.30 },
-      { cost = 1000, mult = 1.50 },
+      { cost = 400,  mult = 1.30 },
+      { cost = 650,  mult = 1.50 },
+      { cost = 1000, mult = 1.65 },
+      { cost = 1600, mult = 1.80 },
+      { cost = 2500, mult = 2.00 },
     },
   },
 }
@@ -80,7 +86,7 @@ local TRACKS = {
 -- Armor upgrades scale personal-shield MAX capacity. Set this true to also
 -- scale the regen rate (so a bigger shield refills in the same time); false
 -- keeps base regen (bigger shield takes proportionally longer to top up).
-local SCALE_SHIELD_REGEN = false
+local SCALE_SHIELD_REGEN = true
 
 local PARAM_OPTS = { allied = true }
 local MSG_PREFIX = "team_upgrade "     -- "team_upgrade weapons" / "team_upgrade armor"

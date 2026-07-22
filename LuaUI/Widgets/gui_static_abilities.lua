@@ -95,12 +95,17 @@ local ABILITIES = {
 		levelParam = "upgrade_weapons_level",
 		levels     = {
 			{ cost = 250,  mult = 1.15 },
-			{ cost = 500,  mult = 1.30 },
-			{ cost = 1000, mult = 1.50 },
+			{ cost = 400,  mult = 1.30 },
+			{ cost = 650,  mult = 1.50 },
+			{ cost = 1000, mult = 1.65 },
+			{ cost = 1600, mult = 1.80 },
+			{ cost = 2500, mult = 2.00 },
 		},
 		msg        = "team_upgrade weapons",
 		track      = "weapons",
 		tooltipFmt = "All your units deal +%d%% weapon damage",
+		sound       = "upgrade_weapons",  -- nil to disable
+		soundVolume = 1,
 	},
 	{
 		kind       = "instant",
@@ -109,12 +114,17 @@ local ABILITIES = {
 		levelParam = "upgrade_armor_level",
 		levels     = {
 			{ cost = 250,  mult = 1.15 },
-			{ cost = 500,  mult = 1.30 },
-			{ cost = 1000, mult = 1.50 },
+			{ cost = 400,  mult = 1.30 },
+			{ cost = 650,  mult = 1.50 },
+			{ cost = 1000, mult = 1.65 },
+			{ cost = 1600, mult = 1.80 },
+			{ cost = 2500, mult = 2.00 },
 		},
 		msg        = "team_upgrade armor",
 		track      = "armor",
 		tooltipFmt = "All your units gain +%d%% hull and shields",
+		sound       = "upgrade_armor",  -- nil to disable
+		soundVolume = 1,
 	},
 }
 
@@ -565,6 +575,9 @@ local function TryActivate(i)
 		-- Fire immediately; the level rules param flips when the gadget
 		-- confirms, and UpgradeDenyEvent flashes the button if it refuses.
 		spSendLuaRulesMsg(a.msg)
+		if a.sound then
+			spPlaySoundFile(a.sound, a.soundVolume or 1.0, "ui")
+		end
 		return true
 	end
 

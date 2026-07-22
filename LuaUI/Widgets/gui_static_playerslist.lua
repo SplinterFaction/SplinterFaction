@@ -23,7 +23,7 @@ local GLYPH_CPU  = "C"
 local GLYPH_PING = "P"
 
 local BASE_RESOLUTION     = 1080
-local PANEL_WIDTH         = 300
+local PANEL_WIDTH         = 336
 local MARGIN_X            = 14
 local MARGIN_Y            = 14
 local OUTER_CORNER        = 10
@@ -41,6 +41,7 @@ local GROUP_GAP     = 7
 -- Row columns (base px, scaled by uiScale)
 local ALLY_W        = 18
 local RES_W         = 58
+local UPG_W         = 32     -- team weapons/armor upgrade levels (stacked W#/A#)
 local NET_W         = 26     -- two cells (cpu + ping)
 local FPS_W         = 22
 local COL_GAP       = 6
@@ -79,6 +80,8 @@ local REJOIN_PING_S  = 2.0    -- seconds behind => catching up / lagging
 local REJOIN_GRACE_S = 120    -- how long after reconnect we call it "rejoining"
 local TEXT_TITLE    = "\255\185\185\185"
 local TEXT_VALUE    = "\255\230\230\230"
+local TEXT_UPG_W_ON = "\255\255\150\090"   -- weapons level > 0 (warm)
+local TEXT_UPG_A_ON = "\255\120\190\255"   -- armor level > 0 (cool)
 
 -- ping/cpu colors + thresholds (matched to AdvPlayersList)
 local pingCpuColors = {
@@ -114,6 +117,7 @@ local spGetTeamColor       = Spring.GetTeamColor
 local spGetTeamList        = Spring.GetTeamList
 local spGetAllyTeamList    = Spring.GetAllyTeamList
 local spGetTeamResources   = Spring.GetTeamResources
+local spGetTeamRulesParam  = Spring.GetTeamRulesParam
 local spGetMyTeamID        = Spring.GetMyTeamID
 local spGetMyAllyTeamID    = Spring.GetMyAllyTeamID
 local spGetMyPlayerID      = Spring.GetMyPlayerID
@@ -493,6 +497,15 @@ local function RefreshPlayers()
 					if e then eCur, eMax = e, math_max(es or 1, 1) end
 				end
 
+				-- team upgrade levels ("upgrade_weapons_level"/"upgrade_armor_level"
+				-- are {allied=true} rules params -- the engine already returns nil to
+				-- non-allied, non-spectator viewers; `readable` mirrors that gate.
+				local wLvl, aLvl
+				if readable then
+					wLvl = tonumber((spGetTeamRulesParam(teamID, "upgrade_weapons_level"))) or 0
+					aLvl = tonumber((spGetTeamRulesParam(teamID, "upgrade_armor_level"))) or 0
+				end
+
 				local teamRows = {}
 				local plist = teamPlayers[teamID]
 				if plist and #plist > 0 then
@@ -513,6 +526,7 @@ local function RefreshPlayers()
 					groupTeams[#groupTeams+1] = {
 						teamID = teamID, allyTeam = allyTeam, color = color, dark = dark, dead = isDead,
 						readable = readable, mCur = mCur, mMax = mMax, eCur = eCur, eMax = eMax,
+						wLvl = wLvl, aLvl = aLvl,
 						rows = teamRows,
 					}
 				end
@@ -569,6 +583,7 @@ local function BuildGeometry()
 	-- column x-positions (right-anchored)
 	local fpsW = FPS_W * uiScale
 	local netW = NET_W * uiScale
+	local upgW = UPG_W * uiScale
 	local resW = RES_W * uiScale
 	local allyW = drawAllyButton and (ALLY_W * uiScale) or 0
 	local colGap = COL_GAP * uiScale
@@ -577,7 +592,9 @@ local function BuildGeometry()
 	local fpsX1 = fpsX2 - fpsW
 	local netX2 = fpsX1 - colGap
 	local netX1 = netX2 - netW
-	local resX2 = netX1 - colGap
+	local upgX2 = netX1 - colGap
+	local upgX1 = upgX2 - upgW
+	local resX2 = upgX1 - colGap
 	local resX1 = resX2 - resW
 	local nameX1 = cx1 + allyW + (allyW > 0 and colGap or 0)
 	local nameX2 = resX1 - colGap
@@ -602,10 +619,12 @@ local function BuildGeometry()
 					connected = r.connected,
 					teamID = tm.teamID, allyTeam = tm.allyTeam, color = tm.color, dark = tm.dark, dead = tm.dead,
 					readable = tm.readable, mCur = tm.mCur, mMax = tm.mMax, eCur = tm.eCur, eMax = tm.eMax,
+					wLvl = tm.wLvl, aLvl = tm.aLvl,
 					isEnemy = grp.isEnemy,
 					x1 = cx1, y1 = ry1, x2 = cx2, y2 = ry2,
 					nameX1 = nameX1, nameX2 = nameX2,
 					resX1 = resX1, resX2 = resX2,
+					upgX1 = upgX1, upgX2 = upgX2,
 					netX1 = netX1, netX2 = netX2,
 					fpsX1 = fpsX1, fpsX2 = fpsX2,
 					allyRect = (drawAllyButton and grp.isEnemy) and {x1=cx1, y1=ry1+2*uiScale, x2=cx1+allyW, y2=ry2-2*uiScale} or nil,
@@ -739,6 +758,18 @@ local function BakeRow(r)
 		local eY1 = eY2 - barH
 		DrawResBar(r.resX1, mY1, r.resX2, mY2, r.mCur, r.mMax, RES_METAL_C)
 		DrawResBar(r.resX1, eY1, r.resX2, eY2, r.eCur, r.eMax, RES_ENERGY_C)
+	end
+
+	-- team upgrade levels (weapons top, armor bottom) — only if readable
+	if r.readable and (r.wLvl or r.aLvl) then
+		local upgMidX = (r.upgX1 + r.upgX2) * 0.5
+		local wCol = ((r.wLvl or 0) > 0) and TEXT_UPG_W_ON or TEXT_DIM
+		local aCol = ((r.aLvl or 0) > 0) and TEXT_UPG_A_ON or TEXT_DIM
+		local upgSize = 8.5*uiScale
+		font:Begin()
+		font:Print(wCol .. "W" .. (r.wLvl or 0), upgMidX, midY + 5*uiScale, upgSize, "cvo")
+		font:Print(aCol .. "A" .. (r.aLvl or 0), upgMidX, midY - 5*uiScale, upgSize, "cvo")
+		font:End()
 	end
 
 	-- network cells (cpu left, ping right) + fps — players only

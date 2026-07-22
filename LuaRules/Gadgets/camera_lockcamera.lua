@@ -254,7 +254,7 @@ else
 	--callins
 	------------------------------------------------
 
-	Echo("<LockCamera>: Sorry for the camera switch spam, but this is the only reliable way to list camera states other than hardcoding them")
+	Echo("[LockCamera] Sorry for the camera switch spam, but this is the only reliable way to list camera states other than hardcoding them")
 	local prevCameraState = GetCameraState()
 	for name, num in pairs(CAMERA_IDS) do
 		CAMERA_NAMES[num] = name
