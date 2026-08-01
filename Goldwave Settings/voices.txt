@@ -1,0 +1,10 @@
+https://texttospeechrobot.com/texttospeechdownloadmp3.html
+
+English US Jenny
+
+Save the file as stereo
+
+effect > filter > equalizer >> boost treble x2
+effect > echo > splinterfaction voice
+
+Trim well, then insert notification sound in front

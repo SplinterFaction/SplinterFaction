@@ -19,7 +19,7 @@ local unitAllyTeamID = Spring.GetUnitAllyTeam
 -- FIX 1: Replaced 18 individual timeout variables with a single table.
 -- To add a new timeout, just add an entry here. updateNotifications() handles the rest.
 local timeouts = {
-	notification             = 10,
+	notification             = 120,
 	allyCommHP               = 60,
 	myCommHP                 = 60,
 	allyT4HP                 = 60,
@@ -226,7 +226,19 @@ end
 function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weaponDefID, projectileID, attackerID, attackerDefID, attackerTeam)
 	-- Spring.Echo("A unit is taking damage")
 	-- Spring.Echo("The Unit's Team is " .. unitTeam)
-	local unitHP,unitMaxHP = Spring.GetUnitHealth(unitID)
+	local unitHP,unitMaxHP,_,_,buildProgress = Spring.GetUnitHealth(unitID)
+	-- GetUnitHealth returns nil for an invalid or out-of-LOS unitID; bail before
+	-- any of the HP comparisons below can error on a nil value.
+	if not unitHP then
+		return
+	end
+	-- FIX 4: Units under construction have real HP scaling up from near zero toward
+	-- max, so an unfinished heavy unit sits below every warning threshold for most
+	-- of its build time and would fire "under attack" alerts while nothing is
+	-- shooting it. Gate the heavy-unit checks on completion.
+	-- Note: buildProgress also drops below 1 while a finished unit is being
+	-- reclaimed, so reclaim on a heavy unit will not raise a warning.
+	local isBuilt = (buildProgress >= 1)
 	local x,y,z = Spring.GetUnitPosition(unitID)
 	if unitTeam ~= myTeamID() then
 		-- Ally high value units under attack
@@ -241,7 +253,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				end
 			end
 		end
-		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
+		if isBuilt and UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
 			if UnitDefs[unitDefID].name == "fedjuggernaut" then
 				if timeouts.allyJuggernaut <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
@@ -279,7 +291,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				-- which suppressed future warnings even when no notification was queued.
 			end
 		end
-		if UnitDefs[unitDefID].customParams.requiretech == "tech3" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
+		if isBuilt and UnitDefs[unitDefID].customParams.requiretech == "tech3" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
 			if UnitDefs[unitDefID].name == "fedgoliath" then
 				if timeouts.goliath <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
@@ -299,7 +311,7 @@ function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, weap
 				end
 			end
 		end
-		if UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
+		if isBuilt and UnitDefs[unitDefID].customParams.requiretech == "tech4" and UnitDefs[unitDefID].customParams.unittype ~= "Commander" then
 			if UnitDefs[unitDefID].name == "fedjuggernaut" then
 				if timeouts.juggernaut <= 0 then
 					if unitHP <= unitMaxHP * 0.5 then
@@ -367,14 +379,14 @@ function widget:UnitEnteredLos(unitID, unitTeam)
 		end
 		if UnitDefs[unitDefID].name == "feddeleter" then
 			if timeouts.enemyCloakingMechSpotted <= 0 then
-				table.insert(notificationQueue, { message = "enemyt3CloakingMech" })
+				table.insert(notificationQueue, { message = "enemyCloakingMech" })
 				timeouts.enemyCloakingMechSpotted = 60
 				Spring.SetLastMessagePosition (x,y,z)
 			end
 		end
 		if UnitDefs[unitDefID].name == "lozprotector" then
 			if timeouts.enemyShieldingTankSpotted <= 0 then
-				table.insert(notificationQueue, { message = "enemyt3ShieldingTank" })
+				table.insert(notificationQueue, { message = "enemyShieldingTank" })
 				timeouts.enemyShieldingTankSpotted = 60
 				Spring.SetLastMessagePosition (x,y,z)
 			end

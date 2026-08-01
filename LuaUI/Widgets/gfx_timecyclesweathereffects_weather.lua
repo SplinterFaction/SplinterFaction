@@ -15,8 +15,8 @@ end
 -- Tuning
 --------------------------------------------------------------------------------
 
-local WEATHER_TIME_SCALE = 5   -- speeds up EVERYTHING (sun + rain) for testing; set 5 to fast-forward
-local DAY_CYCLE_SPEED = 0.15    -- sun angular speed multiplier
+local WEATHER_TIME_SCALE = 1   -- speeds up EVERYTHING (sun + rain) for testing; set 5 to fast-forward
+local DAY_CYCLE_SPEED = 0.168    -- sun angular speed multiplier
 local WAR_RAMP_RATE   = 2000    -- how fast the visible war tint chases accumulated damage (per second)
 local WAR_DECAY       = 0.9995  -- per-simframe-equivalent decay of accumulated damage
 local WAR_K_DIVISOR   = 3500    -- larger => war tint saturates slower (scaled by map area * player count)
