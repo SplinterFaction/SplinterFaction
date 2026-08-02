@@ -3,8 +3,8 @@ function widget:GetInfo()
 		name      = "Weather",
 		desc      = "Day/night cycle, war-weariness tinting, rain fog, and lightning flashes on large explosions",
 		author    = "Doo (rewritten 2026)",
-		date      = "2026-07-26",
-		version   = "2.0",
+		date      = "2026-08-02",
+		version   = "2.1",
 		license   = "GNU GPL, v2 or later",
 		layer     = -4,
 		enabled   = true,
@@ -35,11 +35,17 @@ local MIN_FLASH       = 0.025   -- flashes dimmer than this are culled
 local DIFFUSE_FLOOR   = 1.5     -- minimum r+g+b of diffuse (prevents pitch black)
 local FOG_END         = 15      -- pushed far out so fogStart alone controls density (original behavior)
 
+local SEED_PARAM      = "weather_seed" -- published once per match by LuaRules/Gadgets/weather_seed.lua
+local DEBUG           = false   -- echo the seed once it arrives
+
 -- Blend targets: what each channel is pulled toward at full night / full war / full rain.
+-- NOTE: fog has no 'war' entry on purpose. War intensity is accumulated from
+-- LOS-limited widget callins, so it differs per player; keeping it out of the
+-- fog channel is what lets fog stay identical for everyone.
 local TARGETS = {
 	diffuse  = { night = {0.035, 0.035, 0.07}, war = {0.23, 0.07, 0.035}, rain = {0.5, 0.5, 0.5} },
 	specular = { night = {0.12,  0.12,  0.20}, war = {0,    0,    0    } }, -- rain handled by wetness below
-	fog      = { night = {0.03,  0.06,  0.20}, war = {0.07, 0.05, 0.05 }, rain = {0.5, 0.5, 0.5} },
+	fog      = { night = {0.03,  0.06,  0.20},                             rain = {0.5, 0.5, 0.5} },
 	sun      = { night = {0.60,  0.95,  0.10}, war = {1,    0.95, 0.60 }, rain = {0.5, 0.5, 0.5} },
 	sky      = { night = {0.03,  0.06,  0.20}, war = {0.20, 0.06, 0.03 }, rain = {0.5, 0.5, 0.5} },
 	cloud    = { night = {0,     0,     0   }, war = {0,    0,    0    }, rain = {0.5, 0.5, 0.5} },
@@ -53,6 +59,8 @@ local spSetSunLighting  = Spring.SetSunLighting
 local spSetAtmosphere   = Spring.SetAtmosphere
 local spSetSunDirection = Spring.SetSunDirection
 local spGetPlayerRoster = Spring.GetPlayerRoster
+local spGetGameFrame    = Spring.GetGameFrame
+local spGetGameRulesParam = Spring.GetGameRulesParam
 local glGetSun          = gl.GetSun
 local glGetAtmosphere   = gl.GetAtmosphere
 local mathSin, mathCos  = math.sin, math.cos
@@ -61,6 +69,12 @@ local mathMax           = math.max
 local mathMin           = math.min
 local spEcho            = Spring.Echo
 
+-- Sub-simframe interpolation, so the sun still moves smoothly between frames.
+-- Guarded because it is the one callout here that is not universally present.
+local spGetFrameTimeOffset = Spring.GetFrameTimeOffset or function() return 0 end
+
+local GAME_SPEED = Game.gameSpeed or 30
+
 --------------------------------------------------------------------------------
 -- State (all local: the original leaked ~30 globals, including n, r, b, t, p, w)
 --------------------------------------------------------------------------------
@@ -68,8 +82,11 @@ local spEcho            = Spring.Echo
 local base       = nil   -- scene lighting captured at init, restored on shutdown
 local baseSunDir = nil
 
-local sunTime    = 0     -- drives the day/night cycle
-local elapsed    = 0     -- drives the rain cycle
+local sunSeed    = 0     -- day/night phase offset for this match (from the shared seed)
+local rainSeed   = 0     -- storm phase offset for this match
+local seeded     = false
+local lastGameTime = nil -- previous frame's game time, for the wetness/war integrators
+
 local damageHeat = 1     -- accumulated, decaying damage total ('b' in the original)
 local warRamp    = 1     -- smoothed value chasing damageHeat ('r' in the original)
 local wetness    = 0     -- ground wetness: soaks in while raining, dries out slowly
@@ -81,6 +98,8 @@ local flashPeak  = 0
 
 -- Per-frame blend weights, shared with blend() below (avoids per-frame closures)
 local kBase, kNight, kWar, kRain = 1, 0, 0, 0
+-- Separate war-free weights for the fog channel (see TARGETS note above)
+local fBase, fNight, fRain = 1, 0, 0
 
 -- Reused parameter tables: the original allocated ~12 tables per draw frame
 local sunLighting = {
@@ -121,17 +140,26 @@ local function CaptureScene()
 	return b
 end
 
--- Randomize time-of-day and rain phase. Derived from the wall clock rather than
--- math.random so we never touch (or depend on) the shared RNG state other
--- widgets use. NOTE: this is per-client random; every player sees their own
--- weather. If you want all clients/specs to see identical weather, a tiny
--- synced gadget must publish a seed via SetGameRulesParam - say the word.
+-- Time of day and storm phase are pure functions of (shared seed, game frame).
+-- Nothing is accumulated across frames, so a client that hitched during load,
+-- paused, rejoined, or is watching a replay lands in exactly the same phase as
+-- everyone else. The seed is published by the weather_seed gadget; if that
+-- gadget is missing the offsets stay at 0, which still matches across clients,
+-- it just gives every match the same opening sky.
 local TWO_PI = 2 * math.pi
-local function RandomizeWeather()
-	local seed = (os.time() % 86400) + (os.clock() % 1) * 997
+
+local function ApplySeed(seed)
 	-- combined period of the 1/15 and 1/16 sun oscillators is 2*pi*240
-	sunTime = (seed * 7.137) % (TWO_PI * 240)
-	elapsed = (seed * 13.71) % (TWO_PI * RAIN_PERIOD)
+	sunSeed  = (seed * 7.137) % (TWO_PI * 240)
+	rainSeed = (seed * 13.71) % (TWO_PI * RAIN_PERIOD)
+	seeded   = true
+	if DEBUG then
+		spEcho(string.format("[Weather] seed %d -> sun %.2f rain %.2f", seed, sunSeed, rainSeed))
+	end
+end
+
+local function GameTime()
+	return (spGetGameFrame() + (spGetFrameTimeOffset() or 0)) / GAME_SPEED * WEATHER_TIME_SCALE
 end
 
 local function RecalcMapK()
@@ -155,6 +183,14 @@ local function blend(baseC, targets, i)
 			+ targets.rain[i]  * kRain
 end
 
+-- War-free variant, used only for fog so that fog density and color are
+-- identical on every client
+local function blendFog(baseC, targets, i)
+	return baseC[i] * fBase
+			+ targets.night[i] * fNight
+			+ targets.rain[i]  * fRain
+end
+
 --------------------------------------------------------------------------------
 -- Callins
 --------------------------------------------------------------------------------
@@ -163,8 +199,12 @@ function widget:Initialize()
 	base = CaptureScene()
 	baseSunDir = { glGetSun() }
 	RecalcMapK()
-	RandomizeWeather()
 	WG.weather = WG.weather or {}
+
+	local seed = spGetGameRulesParam(SEED_PARAM)
+	if seed then
+		ApplySeed(seed)
+	end
 
 	-- Wet sheen also raises the specular exponent (gloss tightness), but probe
 	-- whether this engine build accepts the keys, since SetSunLighting errors
@@ -183,7 +223,6 @@ end
 -- The original defined a stray global GameStart() that the engine never called.
 function widget:GameStart()
 	RecalcMapK()
-	RandomizeWeather() -- fresh random sky and rain phase every match
 end
 
 function widget:PlayerChanged()
@@ -192,6 +231,8 @@ end
 
 -- The original had this commented out, which left the war-weariness factor
 -- permanently at ~0. Restored, with the damage cap the author had sketched.
+-- Still deliberately client-local: this only fires for units this player can
+-- see, so the war tint is a personal view of the battle, not a shared one.
 function widget:UnitDamaged(unitID, unitDefID, unitTeam, damage)
 	if damage > 0 then
 		if damage > DAMAGE_CAP then damage = DAMAGE_CAP end
@@ -225,8 +266,28 @@ end
 function widget:Update(dt)
 	if not base then return end
 
-	sunTime = sunTime + dt * DAY_CYCLE_SPEED * WEATHER_TIME_SCALE
-	elapsed = elapsed + dt * WEATHER_TIME_SCALE
+	-- Pick up the shared seed as soon as the gadget publishes it. The phase
+	-- snap happens at frame 0 with the pregame overlay up, so it is not visible.
+	if not seeded then
+		local seed = spGetGameRulesParam(SEED_PARAM)
+		if seed then
+			ApplySeed(seed)
+		end
+	end
+
+	-- Game-time base. dts is elapsed *game* seconds since the last Update, so
+	-- the integrators below pause with the sim and scale with game speed,
+	-- exactly like the rain cycle they follow.
+	local gameTime = GameTime()
+	local dts = 0
+	if lastGameTime then
+		dts = gameTime - lastGameTime
+		if dts < 0 then dts = 0 end -- guard against a rewind (replay seek)
+	end
+	lastGameTime = gameTime
+
+	local sunTime = sunSeed  + gameTime * DAY_CYCLE_SPEED
+	local elapsed = rainSeed + gameTime
 
 	-- Sun direction / night factor ------------------------------------------
 	local sy = 1 + mathSin(sunTime / 16)
@@ -238,8 +299,8 @@ function widget:Update(dt)
 	if p > 1 then p = 1 end
 
 	-- War weariness -----------------------------------------------------------
-	damageHeat = damageHeat * (WAR_DECAY ^ (dt * 30))
-	warRamp = warRamp + WAR_RAMP_RATE * dt
+	damageHeat = damageHeat * (WAR_DECAY ^ (dts * GAME_SPEED))
+	warRamp = warRamp + WAR_RAMP_RATE * dts
 	if warRamp > damageHeat then warRamp = damageHeat end
 	local w = 1 - mathExp(-warRamp / mapK)
 	if w > 1 then w = 1 end
@@ -255,15 +316,14 @@ function widget:Update(dt)
 
 	-- Ground wetness: soaks toward the current rain level while raining, then
 	-- dries out slowly, so the ground keeps its wet sheen after a storm passes
-	local dts = dt * WEATHER_TIME_SCALE
 	if rain > wetness then
 		wetness = wetness + (rain - wetness) * mathMin(1, dts / SOAK_TIME)
 	else
 		wetness = mathMax(rain, wetness - dts / DRY_TIME)
 	end
 
-	-- Lightning flash (time-based; the original counted Update calls, so decay
-	-- speed depended on framerate) --------------------------------------------
+	-- Lightning flash (real time, so it still fades while paused; also
+	-- client-local, since it is triggered from LOS-limited UnitDestroyed) -----
 	local flash = 0
 	if flashAge then
 		flashAge = flashAge + dt
@@ -281,6 +341,14 @@ function widget:Update(dt)
 	kNight = p    * (1 - w) * (1 - rain)
 	kWar   = w    * (1 - p) * (1 - rain)
 	kRain  = rain * (1 - p) * (1 - w)
+
+	-- Fog weights omit war entirely, so fog depends only on the shared
+	-- night/rain cycle. Dropping the war term from the weights (not just from
+	-- the targets) matters: leaving it in would still shrink the base and night
+	-- contributions per player.
+	fBase  = (1 - p) * (1 - rain)
+	fNight = p * (1 - rain)
+	fRain  = rain * (1 - p)
 
 	local dr = blend(base.diffuse, TARGETS.diffuse, 1)
 	local dg = blend(base.diffuse, TARGETS.diffuse, 2)
@@ -328,10 +396,13 @@ function widget:Update(dt)
 	spSetSunLighting(sl)
 
 	local at = atmosphere
-	at.fogStart      = 1 - mathMax(rain, w)
-	at.fogColor[1]   = blend(base.fog, TARGETS.fog, 1) + flash
-	at.fogColor[2]   = blend(base.fog, TARGETS.fog, 2) + flash
-	at.fogColor[3]   = blend(base.fog, TARGETS.fog, 3) + flash
+	-- Fog density is now rain-only (was max(rain, war)), so it matches for
+	-- every player. Lightning still brightens the fog color briefly, which is
+	-- a five-second client-local transient by design.
+	at.fogStart      = 1 - rain
+	at.fogColor[1]   = blendFog(base.fog, TARGETS.fog, 1) + flash
+	at.fogColor[2]   = blendFog(base.fog, TARGETS.fog, 2) + flash
+	at.fogColor[3]   = blendFog(base.fog, TARGETS.fog, 3) + flash
 	at.sunColor[1]   = blend(base.sun, TARGETS.sun, 1) + flash
 	at.sunColor[2]   = blend(base.sun, TARGETS.sun, 2) + flash
 	at.sunColor[3]   = blend(base.sun, TARGETS.sun, 3) + flash

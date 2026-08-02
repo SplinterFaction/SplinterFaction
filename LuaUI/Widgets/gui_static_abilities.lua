@@ -68,8 +68,11 @@ local COL_COOLDOWN  = "\255\255\210\120"
 
 --------------------------------------------------------------------------------
 -- Abilities. Adding an ability = adding a table entry.
---   kind    : "target"  = click button, then click the map (msg gets " <x> <z>")
---             "instant" = click button, fires immediately (msg sent as-is)
+--   kind    : "target"    = click button, then click the map (msg gets " <x> <z>")
+--             "instant"   = click button, fires immediately (msg sent as-is)
+--             "selection" = acts on the current selection; the button only lights
+--                           up while eligible units are selected, and issues
+--                           `cmdID` to them via GiveOrderToUnitArray
 --   costRP  : flat cost (non-levelled abilities)
 --   levels  : levelled abilities -- { {cost=, mult=}, ... }; the button shows
 --             "<baseLabel> <nextLevel>" until maxed. Current level is read from
@@ -126,6 +129,15 @@ local ABILITIES = {
 		sound       = "upgrade_armor",  -- nil to disable
 		soundVolume = 1,
 	},
+	{
+		kind    = "selection",
+		label   = "Production Boost (x5)",
+		accent  = {0.25, 0.82, 0.35, 1},   -- green
+		cmdID   = 35410,                   -- CMD_BUILD_BOOST (unit_research_buildboost.lua)
+		tooltip = "Select builders to boost their production by x5 for 20 seconds",
+		sound       = "production_boost",                 -- e.g. "upgrade_weapons"; nil to disable
+		soundVolume = 1,
+	},
 }
 
 local RP_RULES_PARAM = "researchPoints"
@@ -147,6 +159,10 @@ local spPlaySoundFile      = Spring.PlaySoundFile
 local spGetSpectatingState = Spring.GetSpectatingState
 local spGetMyTeamID        = Spring.GetMyTeamID
 local spGetTeamRulesParam  = Spring.GetTeamRulesParam
+local spGetUnitRulesParam  = Spring.GetUnitRulesParam
+local spGetUnitDefID       = Spring.GetUnitDefID
+local spGetSelectedUnits   = Spring.GetSelectedUnits
+local spGiveOrderToUnitArray = Spring.GiveOrderToUnitArray
 local spGetGameFrame       = Spring.GetGameFrame
 local spTraceScreenRay     = Spring.TraceScreenRay
 local spSendLuaRulesMsg    = Spring.SendLuaRulesMsg
@@ -179,6 +195,109 @@ local flashUntil = {}          -- [i] = os.clock() until which the deny flash sh
 for i = 1, #ABILITIES do
 	cdEndFrame[i] = 0
 	flashUntil[i] = 0
+end
+
+--------------------------------------------------------------------------------
+-- Production Boost: selection tracking
+--
+-- Mirrors the config parsing in unit_research_buildboost.lua so the button can
+-- show eligibility and cost without a synced round trip. Defaults below MUST
+-- match DEF_COST / DEF_MULT / DEF_DURATION in that gadget.
+--------------------------------------------------------------------------------
+
+local BOOST_DEF_COST     = 100
+local BOOST_DEF_MULT     = 5.0
+local BOOST_DEF_DURATION = 20     -- seconds
+
+local BOOST_REFRESH = 0.1         -- seconds between selection re-scans
+
+local boostCfg     = {}   -- [unitDefID] = { cost, mult, duration } for boostable builders
+local boostCapable = {}   -- selected unitIDs that CAN be boosted (rebuilt on SelectionChanged)
+
+-- Live summary, recomputed on a timer because "already boosted" changes with
+-- the game clock rather than with the selection.
+local boostSel = {
+	eligible     = {},   -- unitIDs to actually order (capable and not already boosted)
+	count        = 0,    -- #eligible
+	cost         = 0,    -- total RP for those
+	activeCount  = 0,    -- selected builders currently mid-boost
+	remainFrames = 0,    -- longest remaining boost in the selection
+	totalFrames  = 1,    -- that unit's full duration, for the sweep fill
+	mult         = BOOST_DEF_MULT,
+	duration     = BOOST_DEF_DURATION,
+}
+local nextBoostRefresh = 0
+
+local function BuildBoostConfig()
+	for udid, ud in pairs(UnitDefs) do
+		if (ud.buildSpeed or 0) > 0 then
+			local cp = ud.customParams or {}
+			if cp.buildboost ~= "false" then
+				boostCfg[udid] = {
+					cost     = tonumber(cp.buildboost_cost)     or BOOST_DEF_COST,
+					mult     = tonumber(cp.buildboost_mult)     or BOOST_DEF_MULT,
+					duration = tonumber(cp.buildboost_duration) or BOOST_DEF_DURATION,
+				}
+			end
+		end
+	end
+end
+
+local function RescanSelection(sel)
+	boostCapable = {}
+	local n = 0
+	for i = 1, #sel do
+		local unitID = sel[i]
+		local udid   = spGetUnitDefID(unitID)
+		if udid and boostCfg[udid] then
+			n = n + 1
+			boostCapable[n] = unitID
+		end
+	end
+	nextBoostRefresh = 0   -- force an immediate summary refresh
+end
+
+local function RefreshBoostSummary(force)
+	local now = os.clock()
+	if not force and now < nextBoostRefresh then return end
+	nextBoostRefresh = now + BOOST_REFRESH
+
+	local frame  = spGetGameFrame()
+	local elig, n, cost = {}, 0, 0
+	local activeCount, remain, total = 0, 0, 1
+	local mult, dur = BOOST_DEF_MULT, BOOST_DEF_DURATION
+
+	for i = 1, #boostCapable do
+		local unitID = boostCapable[i]
+		local udid   = spGetUnitDefID(unitID)          -- nil once the unit is gone
+		local cfg    = udid and boostCfg[udid]
+		if cfg then
+			mult, dur = cfg.mult, cfg.duration
+			local endFrame = tonumber((spGetUnitRulesParam(unitID, "buildboost_end"))) or 0
+			if endFrame > frame then
+				activeCount = activeCount + 1
+				local rem = endFrame - frame
+				if rem > remain then
+					remain = rem
+					total  = math_floor(cfg.duration * 30)
+					if total < 1 then total = 1 end
+				end
+			else
+				n = n + 1
+				elig[n] = unitID
+				cost    = cost + cfg.cost
+			end
+		end
+	end
+
+	boostSel.eligible     = elig
+	boostSel.count        = n
+	boostSel.cost         = cost
+	boostSel.activeCount  = activeCount
+	boostSel.remainFrames = remain
+	boostSel.totalFrames  = total
+	boostSel.mult         = mult
+	boostSel.duration     = dur
 end
 
 --------------------------------------------------------------------------------
@@ -301,6 +420,7 @@ end
 
 local function AbilityCost(i)
 	local a = ABILITIES[i]
+	if a.kind == "selection" then return boostSel.cost end
 	if not a.levels then return a.costRP or 0 end
 	local nxt = a.levels[CurLevel(i) + 1]
 	return nxt and nxt.cost or 0
@@ -315,6 +435,15 @@ end
 
 local function AbilityTooltip(i)
 	local a = ABILITIES[i]
+	if a.kind == "selection" then
+		if #boostCapable == 0 then return a.tooltip end
+		if boostSel.count == 0 then
+			return "All selected builders are already boosted"
+		end
+		return string.format("Boost %d builder%s: x%.1f build speed for %ds",
+			boostSel.count, (boostSel.count == 1) and "" or "s",
+			boostSel.mult, boostSel.duration)
+	end
 	if not a.levels then return a.tooltip end
 	if IsMaxed(i) then return a.baseLabel .. " fully researched" end
 	local nxt = a.levels[CurLevel(i) + 1]
@@ -322,6 +451,10 @@ local function AbilityTooltip(i)
 end
 
 local function AbilityReady(i)
+	local a = ABILITIES[i]
+	if a.kind == "selection" then
+		return boostSel.count > 0 and GetMyRP() >= boostSel.cost
+	end
 	if IsMaxed(i) then return false end
 	return CooldownRemaining(i) == 0 and GetMyRP() >= AbilityCost(i)
 end
@@ -478,8 +611,69 @@ local function BuildStaticList()
 	lastGuiShader = (WG.guishader ~= nil)
 end
 
+-- Selection-driven button (Production Boost). Three visual states:
+--   no eligible builders selected -> dark curtain, "--" on the right
+--   all selected builders boosted -> sweep fill + countdown of the longest boost
+--   eligible builders selected    -> total RP cost, coloured by affordability
+local function DrawSelectionButtonDynamic(i, mx, my)
+	local a = ABILITIES[i]
+	local b = buttons[i]
+	local inset       = INNER_INSET  * uiScale
+	local innerCorner = INNER_CORNER * uiScale
+	local x1, y1, x2, y2 = b.x1 + inset, b.y1 + inset, b.x2 - inset, b.y2 - inset
+
+	local hasEligible = boostSel.count > 0
+	local afford      = GetMyRP() >= boostSel.cost
+	local rightX      = b.x2 - (10 * uiScale)
+	local rightY      = b.y1 + ((b.y2 - b.y1) * 0.5) - (4 * uiScale)
+
+	font:Begin()
+	if hasEligible then
+		font:Print((afford and COL_COST_OK or COL_COST_BAD) .. boostSel.cost .. " RP",
+			rightX, rightY, 11 * uiScale, "ron")
+	elseif boostSel.activeCount > 0 then
+		font:Print(COL_COOLDOWN .. math_ceil(boostSel.remainFrames / 30) .. "s",
+			rightX, rightY, 11 * uiScale, "ron")
+	else
+		font:Print(COL_LABEL .. "--", rightX, rightY, 11 * uiScale, "ron")
+	end
+	font:End()
+
+	if not hasEligible then
+		if boostSel.activeCount > 0 then
+			-- Curtain retreats left-to-right as the longest boost runs out.
+			local frac = boostSel.remainFrames / boostSel.totalFrames
+			if frac > 1 then frac = 1 end
+			glColor(COOLDOWN_FILL_COLOR[1], COOLDOWN_FILL_COLOR[2], COOLDOWN_FILL_COLOR[3], COOLDOWN_FILL_COLOR[4])
+			RectRound(x1, y1, x1 + (x2 - x1) * frac, y2, innerCorner)
+		else
+			glColor(0, 0, 0, 0.45)
+			RectRound(x1, y1, x2, y2, innerCorner)
+		end
+	elseif not afford then
+		glColor(0, 0, 0, 0.45)
+		RectRound(x1, y1, x2, y2, innerCorner)
+	end
+
+	if flashUntil[i] > os.clock() then
+		glColor(FLASH_DENY_COLOR[1], FLASH_DENY_COLOR[2], FLASH_DENY_COLOR[3], FLASH_DENY_COLOR[4])
+		RectRound(x1, y1, x2, y2, innerCorner)
+	end
+
+	if AbilityReady(i) and IsOnRect(mx, my, b.x1, b.y1, b.x2, b.y2) then
+		glColor(a.accent[1], a.accent[2], a.accent[3], 0.10)
+		RectRound(x1 + 1, y1 + 1, x2 - 1, y2 - 1, innerCorner)
+		return true
+	end
+	return false
+end
+
 local function DrawButtonDynamic(i, mx, my)
 	local a = ABILITIES[i]
+	if a.kind == "selection" then
+		return DrawSelectionButtonDynamic(i, mx, my)
+	end
+
 	local b = buttons[i]
 	local inset       = INNER_INSET  * uiScale
 	local innerCorner = INNER_CORNER * uiScale
@@ -571,6 +765,16 @@ local function TryActivate(i)
 		return true                          -- still consume the click
 	end
 
+	if a.kind == "selection" then
+		-- Order only the eligible units; the gadget re-validates cost and state.
+		spGiveOrderToUnitArray(boostSel.eligible, a.cmdID, {}, 0)
+		if a.sound then
+			spPlaySoundFile(a.sound, a.soundVolume or 1.0, "ui")
+		end
+		RefreshBoostSummary(true)   -- grey the button out this frame
+		return true
+	end
+
 	if a.kind == "instant" then
 		-- Fire immediately; the level rules param flips when the gadget
 		-- confirms, and UpgradeDenyEvent flashes the button if it refuses.
@@ -637,6 +841,11 @@ function widget:Initialize()
 	widgetHandler:RegisterGlobal("ScannerDenyEvent",     OnScannerDeny)
 	widgetHandler:RegisterGlobal("UpgradeDenyEvent",     OnUpgradeDeny)
 
+	-- Production Boost: parse the builder configs once, then pick up whatever
+	-- is already selected (widget reload mid-game).
+	BuildBoostConfig()
+	RescanSelection(spGetSelectedUnits())
+
 	RecalculateGeometry()
 
 	-- Re-sync cooldown after a LuaUI/widget reload.
@@ -655,6 +864,11 @@ function widget:PlayerChanged(playerID)
 	isSpec   = spGetSpectatingState()
 	myTeamID = spGetMyTeamID()
 	if isSpec then CancelTargeting() end
+	RescanSelection(spGetSelectedUnits())
+end
+
+function widget:SelectionChanged(sel)
+	RescanSelection(sel or {})
 end
 
 function widget:ViewResize()
@@ -747,6 +961,7 @@ function widget:DrawScreen()
 	if isSpec or spIsGUIHidden() then return end
 
 	FollowAnchor()
+	RefreshBoostSummary(false)
 
 	-- Levelled labels are baked into the static list: rebuild when a level flips.
 	local levelSig = 0

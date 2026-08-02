@@ -2,9 +2,13 @@
 --------------------------------------------------------------------------------
 --
 --  file:    unit_buildboost.lua
---  brief:   Adds a "Boost" command to builder order panels. Spends research
+--  brief:   Temporary RP-paid build speed boost on builders. Spends research
 --           points (GG.Research) to temporarily multiply a builder's build
 --           speed, then restores it when the duration elapses.
+--
+--           The command is registered HIDDEN: it never appears in the order
+--           panel. The "Production Boost" button in gui_static_abilities.lua
+--           issues it to the eligible builders in the current selection.
 --  author:  SF
 --  license: GNU GPL, v2 or later
 --
@@ -31,6 +35,10 @@ end
 --   buildboost_add      = 0        -- flat build speed added on top of the mult
 --   buildboost_duration = 20       -- seconds the boost lasts
 -- Final boosted speed = base * mult + add.
+--
+-- NOTE: gui_static_abilities.lua mirrors DEF_COST / DEF_MULT / DEF_DURATION and
+-- CMD_BUILD_BOOST so the button can show cost and eligibility without a
+-- round trip. Keep the two in sync if you change them.
 --------------------------------------------------------------------------------
 
 local DEF_COST     = 100
@@ -39,8 +47,6 @@ local DEF_ADD      = 0
 local DEF_DURATION = 20      -- seconds
 
 local CMD_BUILD_BOOST = 35410   -- LuaRules range (30000-39999); free vs morph's 31410-34410
-
-local REFRESH_INTERVAL = 9      -- frames between button label/state refreshes
 
 --------------------------------------------------------------------------------
 
@@ -52,26 +58,32 @@ local GAME_SPEED = Game.gameSpeed or 30
 
 local spInsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local spFindUnitCmdDesc   = Spring.FindUnitCmdDesc
-local spEditUnitCmdDesc   = Spring.EditUnitCmdDesc
 local spSetUnitBuildSpeed = Spring.SetUnitBuildSpeed
 local spGetUnitRulesParam = Spring.GetUnitRulesParam
 local spSetUnitRulesParam = Spring.SetUnitRulesParam
 local spGetUnitDefID      = Spring.GetUnitDefID
-local spGetUnitTeam       = Spring.GetUnitTeam
 local spGetUnitHealth     = Spring.GetUnitHealth
 local spGetGameFrame      = Spring.GetGameFrame
 local spGetAllUnits       = Spring.GetAllUnits
 local spSendMessageToTeam = Spring.SendMessageToTeam
 
 local floor = math.floor
-local ceil  = math.ceil
-local max   = math.max
 
 local boostCfg = {}   -- [unitDefID] = { cost, mult, add, durationFrames } or nil
-local builders = {}   -- [unitID]    = unitDefID  (units that carry the button)
 local active   = {}   -- [unitID]    = { endFrame, base, teamID }
 
+local lastMsgFrame = {}   -- [teamID] = frame; one message per team per frame
+
 --------------------------------------------------------------------------------
+
+-- A single click can order dozens of builders at once; collapse the resulting
+-- burst of identical refusals into one line.
+local function teamMsg(teamID, text)
+  local n = spGetGameFrame()
+  if lastMsgFrame[teamID] == n then return end
+  lastMsgFrame[teamID] = n
+  spSendMessageToTeam(teamID, text)
+end
 
 local function isDone(unitID)
   local _, _, _, _, bp = spGetUnitHealth(unitID)
@@ -82,18 +94,22 @@ local function durationSecs(cfg)
   return floor(cfg.durationFrames / GAME_SPEED + 0.5)
 end
 
+-- The descriptor is registered but HIDDEN: it keeps the command valid on the
+-- unit (and available to "/buildboost" / hotkey binds) without occupying a slot
+-- in the order panel. The abilities panel drives it via GiveOrderToUnitArray.
 local function addBoostCmd(unitID, unitDefID)
   if spFindUnitCmdDesc(unitID, CMD_BUILD_BOOST) then return end
   local cfg = boostCfg[unitDefID]
   if not cfg then return end
   spInsertUnitCmdDesc(unitID, {
-    id      = CMD_BUILD_BOOST,
-    type    = CMDTYPE.ICON,
-    name    = "Boost",
-    action  = "buildboost",
-    tooltip = string.format("Build Boost: x%.1f build speed for %ds  (%d research)",
-                            cfg.mult, durationSecs(cfg), cfg.cost),
-    -- texture = "LuaRules/Images/buildboost.png",  -- optional; add an asset here
+    id       = CMD_BUILD_BOOST,
+    type     = CMDTYPE.ICON,
+    name     = "Boost",
+    action   = "buildboost",
+    hidden   = true,
+    queueing = false,
+    tooltip  = string.format("Production Boost: x%.1f build speed for %ds  (%d research)",
+                             cfg.mult, durationSecs(cfg), cfg.cost),
   })
 end
 
@@ -109,12 +125,11 @@ local function activateBoost(unitID, unitDefID, teamID)
   if not isDone(unitID) then return end           -- nothing to boost on a half-built builder
 
   if active[unitID] then
-    spSendMessageToTeam(teamID, "Build boost already active")
-    return
+    return    -- silently ignore: the panel already excludes boosted builders
   end
 
   if not (GG.Research and GG.Research.Spend(teamID, cfg.cost)) then
-    spSendMessageToTeam(teamID, "Need " .. cfg.cost .. " research points to boost")
+    teamMsg(teamID, "Not enough research points to boost production")
     return
   end
 
@@ -155,28 +170,31 @@ function gadget:Initialize()
     end
   end
 
-  -- Handle a mid-game luarules reload: re-add the button to existing builders.
+  -- Handle a mid-game luarules reload: re-register on existing builders.
   for _, unitID in ipairs(spGetAllUnits()) do
     local udid = spGetUnitDefID(unitID)
     if boostCfg[udid] then
-      builders[unitID] = udid
       addBoostCmd(unitID, udid)
+      if spGetUnitRulesParam(unitID, "buildboost_end") == nil then
+        spSetUnitRulesParam(unitID, "buildboost_end", 0)
+      end
     end
   end
 end
 
 function gadget:UnitCreated(unitID, unitDefID, teamID)
   if boostCfg[unitDefID] then
-    builders[unitID] = unitDefID
     addBoostCmd(unitID, unitDefID)
+    -- Publish a defined value straight away so the abilities panel can read
+    -- "not boosted" without special-casing nil.
+    spSetUnitRulesParam(unitID, "buildboost_end", 0)
   end
 end
 
 -- Covers ordinary death AND the reclaim that morphing performs, so a boosted
 -- builder that morphs is cleaned up here; the boost does not carry to the new unit.
 function gadget:UnitDestroyed(unitID)
-  builders[unitID] = nil
-  active[unitID]   = nil
+  active[unitID] = nil
 end
 
 -- Instant action command: apply and consume so it never enters the queue.
@@ -188,33 +206,15 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID)
   return true
 end
 
+-- Expire finished boosts. Button state lives entirely in the abilities panel
+-- now; it polls "buildboost_end" for the countdown, so there is nothing else
+-- to tick here.
 function gadget:GameFrame(n)
-  -- Expire finished boosts.
   if next(active) then
     for unitID, b in pairs(active) do
       if n >= b.endFrame then
         restoreBoost(unitID, b)
         active[unitID] = nil
-      end
-    end
-  end
-
-  -- Refresh button labels/state: live countdown while active, grey out while
-  -- active or unaffordable.
-  if n % REFRESH_INTERVAL == 0 then
-    for unitID, udid in pairs(builders) do
-      local idx = spFindUnitCmdDesc(unitID, CMD_BUILD_BOOST)
-      if idx then
-        local cfg = boostCfg[udid]
-        local b   = active[unitID]
-        if b then
-          local secs = max(0, ceil((b.endFrame - n) / GAME_SPEED))
-          spEditUnitCmdDesc(unitID, idx, { disabled = true, name = "Boost " .. secs .. "s" })
-        else
-          local teamID    = spGetUnitTeam(unitID)
-          local canAfford = (not GG.Research) or (teamID and GG.Research.CanAfford(teamID, cfg.cost))
-          spEditUnitCmdDesc(unitID, idx, { disabled = not canAfford, name = "Boost" })
-        end
       end
     end
   end
