@@ -25,7 +25,7 @@ SaveDefsToCustomParams = false
 local unitHealthModifier = 100
 if (Spring.GetModOptions) then
 	local modOptions = Spring.GetModOptions()
-	if modOptions.unithealthmodifier == nil then
+	if modOptions.unithealthmodifier ~= nil then
 		unitHealthModifier = tonumber(modOptions.unithealthmodifier)
 	end
 end
@@ -879,8 +879,31 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					if unitDef.customparams.unittype == "mobile" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
-					if unitDef.customparams.unittype == "air" then
+					--[[ Air hitpoints per metal go DOWN as tech level goes up. This is
+					     deliberate, and it is the opposite of how ground works.
+
+					     Ground uses a flat 2.5 at every tech level. If air did the same,
+					     a tech3 aircraft would end up with so many hitpoints that tech1
+					     and tech2 anti-air could never meaningfully hurt it, and the only
+					     answer to air would be same-tech anti-air. Flattening the ladder
+					     here is what keeps a Stinger a real threat to a Hawk.
+
+					     LOWER number = more fragile aircraft = anti-air matters more.
+					     Raise these if aircraft are dying too easily. ]]
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech0" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 3.125
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech1" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 3.125
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech2" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech3" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.2
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech4" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.2
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -896,8 +919,31 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					if unitDef.customparams.unittype == "mobile" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
-					if unitDef.customparams.unittype == "air" then
+					--[[ Air hitpoints per metal go DOWN as tech level goes up. This is
+					     deliberate, and it is the opposite of how ground works.
+
+					     Ground uses a flat 2.5 at every tech level. If air did the same,
+					     a tech3 aircraft would end up with so many hitpoints that tech1
+					     and tech2 anti-air could never meaningfully hurt it, and the only
+					     answer to air would be same-tech anti-air. Flattening the ladder
+					     here is what keeps a Stinger a real threat to a Hawk.
+
+					     LOWER number = more fragile aircraft = anti-air matters more.
+					     Raise these if aircraft are dying too easily. ]]
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech0" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 3.125
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech1" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 3.125
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech2" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech3" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.2
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech4" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.2
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -913,8 +959,31 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 					if unitDef.customparams.unittype == "mobile" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
 					end
-					if unitDef.customparams.unittype == "air" then
+					--[[ Air hitpoints per metal go DOWN as tech level goes up. This is
+					     deliberate, and it is the opposite of how ground works.
+
+					     Ground uses a flat 2.5 at every tech level. If air did the same,
+					     a tech3 aircraft would end up with so many hitpoints that tech1
+					     and tech2 anti-air could never meaningfully hurt it, and the only
+					     answer to air would be same-tech anti-air. Flattening the ladder
+					     here is what keeps a Stinger a real threat to a Hawk.
+
+					     LOWER number = more fragile aircraft = anti-air matters more.
+					     Raise these if aircraft are dying too easily. ]]
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech0" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 3.125
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech1" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 3.125
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech2" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 2.5
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech3" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.2
+					end
+					if unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech4" then
+						unitDef.maxdamage = unitDef.buildcostmetal * 2.2
 					end
 					if unitDef.customparams.unittype == "ship" then
 						unitDef.maxdamage = unitDef.buildcostmetal * 4
@@ -1005,25 +1074,25 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Assault Bomber" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.6
+				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
 			if unitDef.customparams.unitrole == "Strike Fighter" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.8
+				unitDef.maxdamage = unitDef.maxdamage * 1
 			end
 			if unitDef.customparams.unitrole == "Basic Transport" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.5
+				unitDef.maxdamage = unitDef.maxdamage * 0.6
 			end
 			if unitDef.customparams.unitrole == "Combat Transport" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.8
+				unitDef.maxdamage = unitDef.maxdamage * 0.9
 			end
 			if unitDef.customparams.unitrole == "Massive Transport" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.5
-			end
-			if unitDef.customparams.unitrole == "Heavy Bomber" then
 				unitDef.maxdamage = unitDef.maxdamage * 0.8
 			end
+			if unitDef.customparams.unitrole == "Heavy Bomber" then
+				unitDef.maxdamage = unitDef.maxdamage * 1
+			end
 			if unitDef.customparams.unitrole == "Strategic Bomber" then
-				unitDef.maxdamage = unitDef.maxdamage * 0.5
+				unitDef.maxdamage = unitDef.maxdamage * 0.7
 			end
 
 
@@ -1222,6 +1291,33 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 
 			if unitDef.customparams and unitDef.customparams.requiretech == "tech4" then
 				unitDef.buildtime = unitDef.buildtime * (1/96)
+			end
+
+			-- Air Buildtimes
+			--[[ Aircraft metal cost is set for COMBAT BALANCE, not for how long the
+			     unit takes to build. These multipliers are the separate dial for time
+			     on the pad.
+
+			     If a plane comes off the line too fast or too slow, change it HERE.
+			     Do NOT fix it by changing the unit's metal cost -- metal cost also
+			     drives hitpoints, mass and supply cost, so moving it to fix buildtime
+			     silently breaks three other things.
+
+			     HIGHER number = takes longer to build.
+			     These sit on top of the tier divisors just above, which is why tech2
+			     is above 1 and tech1 is below 1 -- the tier divisors themselves are
+			     uneven (1/2 then 1/8 is a much bigger jump than 1/8 then 1/48). ]]
+			if unitDef.customparams and unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech1" then
+				unitDef.buildtime = unitDef.buildtime * 0.7
+			end
+			if unitDef.customparams and unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech2" then
+				unitDef.buildtime = unitDef.buildtime * 2.0
+			end
+			if unitDef.customparams and unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech3" then
+				unitDef.buildtime = unitDef.buildtime * 1.0
+			end
+			if unitDef.customparams and unitDef.customparams.unittype == "air" and unitDef.customparams.requiretech == "tech4" then
+				unitDef.buildtime = unitDef.buildtime * 1.0
 			end
 
 			-- Set Supply Costs

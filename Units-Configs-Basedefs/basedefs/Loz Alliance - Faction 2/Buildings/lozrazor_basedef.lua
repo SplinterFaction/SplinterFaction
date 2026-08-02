@@ -112,7 +112,7 @@ weaponDefs = {
 		laserflaresize 	         = 8,
 		minintensity             = 1,
 		name                     = "High Intensity Laser Beam",
-		range                    = 700,
+		range                    = 900,
 		reloadtime               = 1,
 		WeaponType               = "LaserCannon",
 		rgbColor                 = "0.25 0 0.6",
@@ -162,7 +162,7 @@ weaponDefs = {
 
 		name			         = "Directed Lightning",
 		noSelfDamage             = true,
-		range                    = 700,
+		range                    = 900,
 		reloadtime               = 1,
 		WeaponType               = "LightningCannon",
 		rgbColor                 = "1 1 1",
@@ -182,7 +182,7 @@ weaponDefs = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 18,
+			default              = 22,
 		},
 	},
 }

@@ -3,7 +3,7 @@ unitDef                    = {
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 3780,
+	buildCostMetal               = 1900,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -164,7 +164,7 @@ weaponDefs                 = {
 		model                    = "neutralmissilex1.s3o",
 		name                     = "Rockets",
 		range                    = 720,
-		reloadtime               = 1,
+		reloadtime               = 0.4,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "scifi_sniper_rifle_A_single_08",
@@ -186,7 +186,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 120,
+			default              = 66,
 		},
 	},
 
@@ -206,7 +206,7 @@ weaponDefs                 = {
 		model                    = "neutralmissilex1.s3o",
 		name                     = "Rockets",
 		range                    = 720,
-		reloadtime               = 7,
+		reloadtime               = 3,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "scifi_sniper_rifle_A_single_08",
@@ -228,7 +228,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 245,
+			default              = 135,
 		},
 	},
 }

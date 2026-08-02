@@ -126,7 +126,7 @@ weaponDefs                 = {
 		interceptedByShieldType  = 4,
 		model                    = "neutralmissilex1.s3o",
 		name                     = "Rockets",
-		range                    = 650,
+		range                    = 800,
 		reloadtime               = 1,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
@@ -148,7 +148,7 @@ weaponDefs                 = {
 			weaponguide = [[A modest anti-air missile with underwhelming individual damage. In volleys, it turns contested airspace into a deadly gauntlet for any aircraft.]],
 		},     
 		damage                   = {
-			default              = 51,
+			default              = 160,
 		},
 	},
 }

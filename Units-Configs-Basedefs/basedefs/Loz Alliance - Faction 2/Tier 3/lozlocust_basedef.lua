@@ -3,7 +3,7 @@ unitDef                    = {
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 15250,
+	buildCostMetal               = 13000,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -56,7 +56,7 @@ unitDef                    = {
 	canLoopbackAttack            = false,
 	maxDamage                    = 670,
 	maxSlope                     = 90,
-	maxVelocity                  = 4,
+	maxVelocity                  = 6,
 	maxWaterDepth                = 0,
 	metalStorage                 = 0,
 	name                         = humanName,
@@ -224,7 +224,7 @@ weaponDefs                 = {
 			-- areadamage_reistance = ,
 		},
 		damage                   = {
-			default              = 3600,
+			default              = 3075,
 		},
 	},
 
@@ -270,7 +270,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                   = {
-			default              = 3.5,
+			default              = 2.5,
 		},
 	},
 }

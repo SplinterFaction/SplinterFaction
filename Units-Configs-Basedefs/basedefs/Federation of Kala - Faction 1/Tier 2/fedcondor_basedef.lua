@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 1890,
+	buildCostMetal               = 1400,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -253,7 +253,7 @@ weaponDefs                 = {
 			weaponguide = [[A ferocious fusion of particle beam and laser technology that carves through ground targets with ruthless efficiency. Few surface units are built to withstand the concentrated devastation it delivers.]],
 		},
 		damage                   = {
-			default              = 40,
+			default              = 43,
 		},
 	},
 }

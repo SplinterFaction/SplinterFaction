@@ -2,7 +2,7 @@ unitDef                    = {
 	acceleration                 = 0.8,
 	brakeRate                    = 0.8,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 28600,
+	buildCostMetal               = 25000,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -260,7 +260,7 @@ weaponDefs                 = {
 			expl_light_opacity  = 0.25, -- Use this sparingly
 		},
 		damage                    = {
-			default               = 21.6,
+			default               = 18,
 		},
 	},
 }

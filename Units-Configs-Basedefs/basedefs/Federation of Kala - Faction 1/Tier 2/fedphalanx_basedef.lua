@@ -151,7 +151,7 @@ weaponDefs                 = {
 			weaponguide = [[A dedicated anti-air machine gun that saturates the sky with a high volume of fire. The sheer density of rounds makes it exceptionally difficult for aircraft to pass through unscathed.]],
 		},
 		damage                   = {
-			default              = 10,
+			default              = 32,
 		},
 	},
 }

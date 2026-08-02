@@ -242,6 +242,7 @@ weaponDefs                 = {
 		noSelfDamage             = true,
 		range                    = 650,
 		reloadtime               = 7,
+		heightMod                = 3.0, -- artillery cannot elevate to cruise altitude; ground range unaffected
 		WeaponType               = "LightningCannon",
 		rgbColor                 = "1 0.25 0",
 		rgbColor2                = "1 1 1",

@@ -293,7 +293,7 @@ weaponDefs                 = {
 
 		cylinderTargeting        = 100,
 		projectiles              = 10,
-		edgeeffectiveness		 = 0.5,
+		edgeeffectiveness		 = 0.1,
 
 		explosionGenerator       = "custom:genericshellexplosion-bomb",
 		energypershot            = 0,

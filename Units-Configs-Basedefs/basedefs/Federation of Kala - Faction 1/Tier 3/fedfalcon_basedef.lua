@@ -3,7 +3,7 @@ unitDef                    = {
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 11450,
+	buildCostMetal               = 13000,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -14,7 +14,7 @@ unitDef                    = {
 -- Fix Spring's Awful Defaults for Planes
 -- Flight Characteristics Settings
 
-	maxVelocity        = 12,
+	maxVelocity        = 9,
 	acceleration       = 0.5,      -- Quick launch off the runway
 	maxAcc             = 0.8,      -- Limited heading correction; don't let it twitch
 

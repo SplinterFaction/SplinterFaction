@@ -113,7 +113,7 @@ weaponDefs = {
 		interceptedByShieldType  = 4,
 		model                  = "projectile/projectileorange.s3o",
 		name                   = "MachineGun",
-		range                  = 700,
+		range                  = 900,
 		reloadtime             = 1,
 		--projectiles			   = 5,
 		weaponType		       = "Cannon",
@@ -132,7 +132,7 @@ weaponDefs = {
 			weaponguide = [[Throws an absolute wall of bullets into the airspace with little regard for individual shot damage. The sheer density of the hail ensures that anything flying through it collects enough hits to matter.]],
 		},
 		damage                   = {
-			default              = 27,
+			default              = 22,
 		},
 	},
 }

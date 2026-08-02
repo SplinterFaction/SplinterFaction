@@ -3,7 +3,7 @@ unitDef                    = {
 	airStrafe                    = false,
 	brakeRate                    = 0.1,
 	buildCostEnergy              = 0,
-	buildCostMetal               = 3780,
+	buildCostMetal               = 1900,
 	builder                      = false,
 	buildTime                    = 2.5,
 	canAttack                    = true,
@@ -156,7 +156,7 @@ weaponDefs                 = {
 		model                    = "neutralmissilex1.s3o",
 		name                     = "Rockets",
 		range                    = 720,
-		reloadtime               = 0.25,
+		reloadtime               = 0.2,
 		weaponType		         = "MissileLauncher",
 		smokeTrail               = false,
 		soundStart               = "scifi_sniper_rifle_A_single_08",
@@ -178,7 +178,7 @@ weaponDefs                 = {
 			weaponguide = [[A guided missile capable of engaging both air and ground targets with reliable tracking and high maneuverability. Its flexibility makes it a consistent threat regardless of what it is pointed at.]],
 		},
 		damage                   = {
-			default              = 60,
+			default              = 33,
 		},
 	},
 }

@@ -126,7 +126,7 @@ weaponDefs = {
 			weaponguide = [[A very fast guided anti-air rocket that closes on aerial targets with little time for evasive action. The combination of high speed and reliable tracking makes it extremely difficult for aircraft to outrun or outmaneuver.]],
 		},
 		damage                   = {
-			default              = 270,
+			default              = 475,
 		},
 	},
 }
