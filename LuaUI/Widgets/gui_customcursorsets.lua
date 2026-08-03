@@ -1,16 +1,16 @@
 function widget:GetInfo()
-  return {
-    name      = "Custom Cursor Sets",
-    desc      = "v1.0 Choose different cursor sets.",
-    author    = "CarRepairer",
-    date      = "2012-01-11",
-    license   = "GNU GPL, v2 or later",
-    layer     = -100000,
-    handler   = true,
-    experimental = false,	
-    enabled   = true,
-	alwaysStart = true,
-  }
+	return {
+		name      = "Custom Cursor Sets",
+		desc      = "v1.1 Choose different cursor sets.",
+		author    = "CarRepairer, AF",
+		date      = "2012-01-11",
+		license   = "GNU GPL, v2 or later",
+		layer     = -100000,
+		handler   = true,
+		experimental = false,
+		enabled   = true,
+		alwaysStart = true,
+	}
 end
 
 --------------------------------------------------------------------------------
@@ -28,11 +28,11 @@ options = {
 	cursorsets = {
 		name = 'Cursor Sets',
 		type = 'list',
-		OnChange = function (self) 
+		OnChange = function (self)
 			if self.value == 'zk' then
 				RestoreCursor()
 			else
-				SetCursor( self.value ); 
+				SetCursor( self.value );
 			end
 		end,
 		items = {
@@ -82,15 +82,28 @@ local cursorNames = {
 }
 
 SetCursor = function(cursorSet)
-  for _, cursor in ipairs(cursorNames) do
-    local topLeft = (cursor == 'cursornormal' and cursorSet ~= 'k_haos_girl')
-    Spring.ReplaceMouseCursor(cursor, cursorSet.."/"..cursor, topLeft)
-  end
+	-- Spring.ReplaceMouseCursor returns false when the replacement loaded no
+	-- frames, and the engine installs it anyway, so an incomplete set leaves
+	-- cursors that draw nothing at all. Fall back to the shipped ones instead.
+	local missing = 0
+
+	for _, cursor in ipairs(cursorNames) do
+		local topLeft = (cursor == 'cursornormal' and cursorSet ~= 'k_haos_girl')
+		if not Spring.ReplaceMouseCursor(cursor, cursorSet.."/"..cursor, topLeft) then
+			missing = missing + 1
+		end
+	end
+
+	if missing > 0 then
+		echo("Cursor set '"..tostring(cursorSet).."' is missing "..missing.." of "
+		..#cursorNames.." cursors, falling back to the default set")
+		RestoreCursor()
+	end
 end
 
 RestoreCursor = function()
-  for _, cursor in ipairs(cursorNames) do
-    local topLeft = (cursor == 'cursornormal')
-    Spring.ReplaceMouseCursor(cursor, cursor, topLeft)
-  end
+	for _, cursor in ipairs(cursorNames) do
+		local topLeft = (cursor == 'cursornormal')
+		Spring.ReplaceMouseCursor(cursor, cursor, topLeft)
+	end
 end
