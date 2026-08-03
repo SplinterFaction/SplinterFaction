@@ -32,8 +32,12 @@ end
 local STARTING_POINTS      = 0      -- granted to every team at game start
 local PASSIVE_PER_SECOND   = 1      -- the anti-lockout floor; 0 disables
 local KILL_REWARD_FRACTION = 0.05   -- RP per kill = victim metalCost * this; 0 disables
+local KILL_REWARD_MAX      = 250    -- hard ceiling on RP from a single kill, applied after
+                                    -- the fraction; 0 (or nil) means uncapped. Keeps a lone
+                                    -- expensive kill from paying out a whole tech tier.
 local LOSS_REWARD_FRACTION = 0      -- "learn from your losses"; fraction of the kill reward
-                                    -- granted to the team that LOST the unit; 0 disables
+                                    -- granted to the team that LOST the unit; 0 disables.
+                                    -- Computed from the CAPPED reward, so it scales with it.
 
 local RULES_PARAM = "researchPoints"          -- read with Spring.GetTeamRulesParam
 local PARAM_OPTS  = { allied = true }         -- self + allies can read, enemies cannot
@@ -316,6 +320,9 @@ function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDef
     if not ud then return end
 
     local reward = floor((ud.metalCost or 0) * KILL_REWARD_FRACTION)
+    if KILL_REWARD_MAX and KILL_REWARD_MAX > 0 and reward > KILL_REWARD_MAX then
+      reward = KILL_REWARD_MAX
+    end
     if reward > 0 then
       GG.Research.Add(attackerTeamID, reward, "kill")
       if LOSS_REWARD_FRACTION ~= 0 then

@@ -18,7 +18,7 @@ end
 
 function script.Skyhateceg()
 	while isOn do
-		common.CustomEmitter(firepoint1, "powerplant-fireball-small-orange")
+		common.CustomEmitter(firepoint1, "powerplant-fireball-small-purple")
 		Sleep(500)
 	end
 end

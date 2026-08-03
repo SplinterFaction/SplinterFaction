@@ -92,10 +92,19 @@ local BUTTONS = {
 	},
 	{
 		label = "Log",
-		accent = {0.20, 0.75, 0.80, 1}, -- teal
+		accent = {0.95, 0.95, 0.18, 1}, -- yellow
 		onClick = function()
 			if WG.StaticChatLog and WG.StaticChatLog.Toggle then
 				WG.StaticChatLog.Toggle()
+			end
+		end
+	},
+	{
+		label = "Keys",
+		accent = {0.20, 0.75, 0.80, 1}, -- teal
+		onClick = function()
+			if WG.StaticKeybinds and WG.StaticKeybinds.Toggle then
+				WG.StaticKeybinds.Toggle()
 			end
 		end
 	},
