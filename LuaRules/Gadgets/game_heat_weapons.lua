@@ -18,6 +18,62 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- CUSTOM PARAMS REFERENCE
+--------------------------------------------------------------------------------
+-- All customParams values are strings in the defs, even numeric ones.
+-- Anything not listed here is ignored by this gadget.
+--
+-- WEAPON DEF customParams (weapondefs / alldefs_post)
+--
+--   heatweapon = "1"
+--       REQUIRED to make a weapon a heat weapon. Any value other than the
+--       exact string "1" means the weapon is treated as a normal weapon and
+--       this gadget never touches it.
+--       A heat weapon deals NO hit point damage -- 100% of its damage value
+--       is converted into heat energy instead.
+--
+--   heatmult = "<number>"          default: 1.0
+--       Heat energy generated per point of weapon damage.
+--       heatEnergy += damage * heatmult
+--       Use this to make a weapon "hot" without inflating its damage value
+--       (e.g. a low-damage flamer with heatmult = "3").
+--
+--
+-- UNIT DEF customParams (unitdefs / alldefs_post)
+--
+--   heat_capacity_mult = "<number>"   default: 1.0
+--       Multiplies the unit's heat capacity.
+--       capacity = metalCost * HEAT_CAPACITY_PER_METAL * heat_capacity_mult
+--       Higher = takes more heat energy to reach 100%, i.e. more heat resistant.
+--       Note capacity already scales with metal cost, so this is a per-unit
+--       tuning knob on top of that, not the primary scaling.
+--
+--   heat_cooling_mult = "<number>"    default: 1.0
+--       Multiplies the unit's cooling rate.
+--       coolingPower = COOLING_POWER_PER_SECOND * heat_cooling_mult
+--       "0" = never cools (heat is permanent until death).
+--       Because capacity scales with metal but cooling does not, expensive
+--       units cool slower in percentage terms unless given a bump here.
+--
+--   heat_immune = "1"                 default: absent (not immune)
+--       Unit is completely unaffected by heat weapons: it accumulates no heat,
+--       never gets the heat slow, never explodes from heat, and takes no hit
+--       point damage from heat weapons either (their damage value is calibrated
+--       as heat energy, not HP, so passing it through would be meaningless).
+--       Accepted truthy values: "1", "true", "yes".
+--       Evaluated once per unitDefID at gadget load -- this is a static
+--       property of the unit type, not a runtime toggle.
+--
+--
+-- UNIT RULES PARAMS PUBLISHED BY THIS GADGET (read by widgets / other gadgets)
+--
+--   "heat"           number 0..100, inlos    current heat percentage
+--   "killedByHeat"   1 when the unit died from reaching 100% heat
+--   "heatKiller"     unitID of the attacker credited with the heat kill
+--   "heatWeaponDef"  weaponDefID of the shot that pushed the unit to 100%
+--------------------------------------------------------------------------------
+
 local IN_LOS = { inlos = true }
 
 local IterableMap = VFS.Include("LuaRules/Gadgets/Include/IterableMap.lua")
@@ -238,6 +294,28 @@ do
 end
 
 --------------------------------------------------------------------------------
+-- Cache unit heat immunity
+--------------------------------------------------------------------------------
+-- Immunity is a static property of the unit type, so resolve it once at load
+-- rather than reading customParams on every damage event.
+
+local heatImmune = {}
+
+do
+	local function IsTruthy(v)
+		return v == "1" or v == 1 or v == "true" or v == "yes"
+	end
+
+	for unitDefID = 1, #UnitDefs do
+		local ud = UnitDefs[unitDefID]
+		local cp = ud and ud.customParams
+		if cp and IsTruthy(cp.heat_immune) then
+			heatImmune[unitDefID] = true
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
 -- Per-unit init
 --------------------------------------------------------------------------------
 
@@ -396,6 +474,15 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
 	local wh = weaponHeat[weaponDefID]
 	if not wh then
 		return damage
+	end
+
+	-- heat_immune = "1": no heat, no slow, no death, and no hit point damage.
+	-- Heat weapon damage values are calibrated as heat energy rather than HP,
+	-- so letting them through as normal damage would not be meaningful.
+	-- (If immune units should instead take the raw damage, change this to
+	--  "return damage".)
+	if heatImmune[unitDefID] then
+		return 0
 	end
 
 	if damage <= 0 then
