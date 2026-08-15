@@ -35,7 +35,7 @@ local fontfileScale = (0.5 + (vsx*vsy / 5700000))
 local fontfileSize = 25
 local fontfileOutlineSize = 6
 local fontfileOutlineStrength = 1.4
-local font = gl.LoadFont(fontfile, fontfileSize*fontfileScale, fontfileOutlineSize*fontfileScale, fontfileOutlineStrength)
+local font
 
 
 --------------------------------------------------------------------------------
@@ -85,15 +85,48 @@ local GL_LINE_LOOP           = GL.LINE_LOOP
 
 local glBlending             = gl.Blending
 local glBeginEnd             = gl.BeginEnd
-local glColor                = gl.Color
-local glRect                 = gl.Rect
-local glTexRect              = gl.TexRect
 local glText                 = gl.Text
-local glTexture              = gl.Texture
 local glTexCoord             = gl.TexCoord
 local glVertex               = gl.Vertex
 local glLineWidth            = gl.LineWidth
 
+-- Raw engine entry points. Only the legacy fallback further down calls these
+-- directly; everything else goes through the shim locals so that drawing is
+-- batched by the shapes module when it is available.
+local rawColor    = gl.Color
+local rawRect     = gl.Rect
+local rawTexture  = gl.Texture
+local rawTexRect  = gl.TexRect
+
+-- Drawing shim. Forward-declared here so every function below closes over the
+-- same upvalues; bound for real by BindDrawing() in widget:Initialize.
+local glColor, glRect, glTexture, glTexRect
+local RectRound, RoundedRect, RoundedOutline, AccentStrip, Flush
+local NewList, FreeList, Record, Replay
+local SetBlend, ResetBlend
+local usingShapes = false
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- on the wrong side of them. Wrapping the font handle makes font:Begin() and
+-- font:End() flush at the right moments, which keeps every existing
+-- font:Print call site correct without auditing draw order by hand.
+local function WrapFont(f)
+  local SG = WG.StaticGUI
+  if f and SG and SG.WrapFont then
+    return SG.WrapFont(f)
+  end
+  return f
+end
+
+local function ReleaseFont(f)
+  if not f then return end
+  local SG = WG.StaticGUI
+  if SG and SG.DeleteFont then
+    SG.DeleteFont(f)
+  else
+    gl.DeleteFont(f)
+  end
+end
 local spGetModKeyState       = Spring.GetModKeyState
 local spGetMouseState        = Spring.GetMouseState
 local spGetMyTeamID          = Spring.GetMyTeamID
@@ -185,9 +218,12 @@ local function RoundedRectVertices(x1, y1, x2, y2, r, segments)
   Arc(x2-rr, y1+rr, math_pi*1.5, math_pi*2)
 end
 
-local function DrawRoundedRect(x1, y1, x2, y2, r, color)
+-- Legacy fallback for the tessellated fill. 30 gl.Vertex calls and two Lua
+-- closures per rectangle; the shape module does the same thing as one instance
+-- with the corners solved analytically in the fragment shader.
+local function LegacyRoundedRect(x1, y1, x2, y2, r, color)
   local rr = math_min(r, (x2-x1)*0.5, (y2-y1)*0.5)
-  glColor(color)
+  rawColor(color)
   glBeginEnd(GL_TRIANGLE_FAN, function()
     local cx = (x1+x2)*0.5
     local cy = (y1+y2)*0.5
@@ -199,6 +235,15 @@ local function DrawRoundedRect(x1, y1, x2, y2, r, color)
       glVertex(x2, y2-rr)
     end
   end)
+end
+
+local function LegacyRoundedOutline(x1, y1, x2, y2, r, color, width)
+  rawColor(color)
+  glLineWidth(width or 1)
+  glBeginEnd(GL_LINE_LOOP, function()
+    RoundedRectVertices(x1, y1, x2, y2, r, 5)
+  end)
+  glLineWidth(1)
 end
 
 -- bgcorner-based RectRound kept for icon-cell backgrounds
@@ -235,10 +280,88 @@ local function DrawRectRound(px, py, sx, sy, cs)
   glTexCoord(1-o,o) glVertex(sx,    sy-cs, 0)
 end
 
-local function RectRound(px, py, sx, sy, cs)
-  glTexture(bgcorner)
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect and gl.TexRect, which are OpenGL
+-- 1.1 immediate mode: gl.Rect is glRectf and gl.TexRect is a raw
+-- glBegin(GL_QUADS). One RectRound cost 7 glBegin/glEnd pairs and 2 texture
+-- binds. None of that exists in OpenGL core profile, which is the only way
+-- past GL 2.1 on macOS, and it is the worst case for any driver translating
+-- GL to Metal or Vulkan.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into a single instanced draw call and rounds corners analytically in a
+-- fragment shader rather than blitting a corner texture.
+--
+-- If that module is unavailable - old driver, shader compile failure - these
+-- shims fall back to the original immediate-mode code. Slow, but not blank.
+--------------------------------------------------------------------------------
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+  rawTexture(accentImg)
+  rawTexRect(x1, y1, x2, y2)
+  rawTexture(false)
+end
+
+local function LegacyRectRound(px, py, sx, sy, cs)
+  rawTexture(bgcorner)
   gl.BeginEnd(GL_QUADS, DrawRectRound, px, py, sx, sy, cs)
-  glTexture(false)
+  rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+  local SG = WG.StaticGUI
+  if SG then
+    glColor     = SG.Color
+    glRect      = SG.Rect
+    glTexture   = SG.Texture
+    glTexRect   = SG.TexRect
+    RectRound      = SG.RectRound
+    RoundedRect    = SG.RoundedRect
+    RoundedOutline = SG.RoundedOutline
+    AccentStrip    = SG.AccentStrip
+    Flush          = SG.Flush
+    NewList       = function(existing) return existing or SG.NewList() end
+    FreeList      = function() end
+    Record        = SG.Record
+    Replay        = SG.Replay
+    SetBlend       = SG.SetBlend
+    ResetBlend     = SG.ResetBlend
+    usingShapes    = true
+  else
+    glColor     = rawColor
+    glRect      = rawRect
+    glTexture   = rawTexture
+    glTexRect   = rawTexRect
+    RectRound      = LegacyRectRound
+    RoundedRect    = LegacyRoundedRect
+    RoundedOutline = LegacyRoundedOutline
+    AccentStrip    = LegacyAccentStrip
+    Flush          = NoOp
+    -- No recorder without the shape module, so fall back to real display
+    -- lists: exactly what this widget did before the port.
+    NewList       = function(existing)
+      if existing then gl.DeleteList(existing) end
+      return nil
+    end
+    FreeList      = function(l) if l then gl.DeleteList(l) end end
+    Record        = function(_, fn) return gl.CreateList(fn) end
+    Replay        = gl.CallList
+    SetBlend       = glBlending
+    ResetBlend     = function() glBlending(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) end
+    usingShapes    = false
+  end
+end
+
+BindDrawing()
+
+local function ReloadFont()
+  ReleaseFont(font)
+  font = WrapFont(gl.LoadFont(fontfile, fontfileSize*fontfileScale,
+                              fontfileOutlineSize*fontfileScale, fontfileOutlineStrength))
 end
 
 -- Full panel chrome: outer shell + inner shell + accent bar on top edge
@@ -248,7 +371,7 @@ local function DrawPanelChrome(x1, y1, x2, y2)
   -- outer dark shell + inner fill only; accent is drawn separately after cell bgs
   glColor(PANEL_OUTER_COLOR)
   RectRound(x1, y1, x2, y2, PANEL_RADIUS)
-  DrawRoundedRect(x1+2, y1+2, x2-2, y2-(2+PANEL_ACCENT_HEIGHT), PANEL_RADIUS-1, PANEL_INNER_COLOR)
+  RoundedRect(x1+2, y1+2, x2-2, y2-(2+PANEL_ACCENT_HEIGHT), PANEL_RADIUS-1, PANEL_INNER_COLOR)
   glColor(1, 1, 1, 1)
 end
 
@@ -256,22 +379,16 @@ local function DrawPanelAccent(x1, y1, x2, y2, accentColor)
   -- drawn last, on top of everything including cell backgrounds
   local accent = accentColor or PANEL_ACCENT_COLOR
   glColor(accent)
-  glTexture(accentImg)
-  glTexRect(x1+2, y2-(2+PANEL_ACCENT_HEIGHT), x2-2, y2-2)
-  glTexture(false)
+  AccentStrip(x1+2, y2-(2+PANEL_ACCENT_HEIGHT), x2-2, y2-2)
   glColor(1, 1, 1, 1)
 end
 
 -- Per-icon cell background (matches DrawSectionBox style from tooltip panel)
 local function DrawCellBg(x1, y1, x2, y2)
   glColor(CELL_BG_COLOR)
-  DrawRoundedRect(x1, y1, x2, y2, 5, CELL_BG_COLOR)
+  RoundedRect(x1, y1, x2, y2, 5, CELL_BG_COLOR)
   -- subtle border
-  glColor(CELL_BORDER_COLOR)
-  glLineWidth(1)
-  glBeginEnd(GL_LINE_LOOP, function()
-    RoundedRectVertices(x1, y1, x2, y2, 5, 5)
-  end)
+  RoundedOutline(x1, y1, x2, y2, 5, CELL_BORDER_COLOR, 1)
   glColor(1, 1, 1, 1)
 end
 
@@ -290,8 +407,15 @@ local function updateGuishader()
           WG['guishader'].RemoveDlist('selectionbuttons')
           gl.DeleteList(dlistGuishader)
         end
+        -- Deliberately LegacyRectRound and not the shim: guishader's
+        -- InsertDlist takes a real display list handle, and a batched shape
+        -- call would record nothing into it. This is the one display list in
+        -- the suite that has to survive, because the API it feeds is not ours
+        -- to change. Note that it also keeps guishader itself on a GL 1.x
+        -- path, which is worth raising separately.
         dlistGuishader = gl.CreateList(function()
-          RectRound(backgroundDimentions[1], backgroundDimentions[2],
+          rawColor(1, 1, 1, 1)
+          LegacyRectRound(backgroundDimentions[1], backgroundDimentions[2],
                     backgroundDimentions[3], backgroundDimentions[4],
                     usedIconSizeX / 8)
           WG['guishader'].InsertDlist(dlistGuishader, 'selectionbuttons')
@@ -357,8 +481,7 @@ function widget:ViewResize(n_vsx, n_vsy)
   local newFontfileScale = (0.5 + (vsx*vsy / 5700000))
   if fontfileScale ~= newFontfileScale then
     fontfileScale = newFontfileScale
-    gl.DeleteFont(font)
-    font = gl.LoadFont(fontfile, fontfileSize*fontfileScale, fontfileOutlineSize*fontfileScale, fontfileOutlineStrength)
+    ReloadFont()
   end
 
   usedIconSizeX = math.floor((iconSizeX/2) + ((vsx*vsy) / 115000))
@@ -367,8 +490,7 @@ function widget:ViewResize(n_vsx, n_vsy)
   iconMargin = usedIconSizeX / 25
 
   if picList then
-    gl.DeleteList(picList)
-    picList = gl.CreateList(DrawPicList)
+    picList = Record(NewList(picList), DrawPicList)
   end
 end
 
@@ -408,12 +530,13 @@ function widget:DrawScreen()
   if picList then
     if spIsGUIHidden() then return end
 
+    -- Recorded list (see api_staticgui_shapes.lua), same invalidation as the
+    -- display list it replaces: rebuilt when the hovered icon changes.
     if mouseIcon ~= prevMouseIcon then
-      gl.DeleteList(picList)
-      picList = gl.CreateList(DrawPicList)
+      picList = Record(NewList(picList), DrawPicList)
       prevMouseIcon = mouseIcon
     end
-    gl.CallList(picList)
+    Replay(picList)
 
     -- draw highlights (immediate — mouse-state dependent, not baked)
     local x, y, lb, mb, rb = spGetMouseState()
@@ -456,6 +579,9 @@ function widget:DrawScreen()
       hoverClock = nil
     end
   end
+
+  -- Hand the accumulated shape instances to the GPU.
+  Flush()
 end
 
 function widget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDefID, attackerTeamID)
@@ -484,8 +610,7 @@ function widget:Update(dt)
     local newOpacity = Spring.GetConfigFloat("ui_opacity", 0.66) * ui_opacityMultiplier
     if ui_opacity ~= newOpacity then
       ui_opacity = newOpacity
-      gl.DeleteList(picList)
-      picList = gl.CreateList(DrawPicList)
+      picList = Record(NewList(picList), DrawPicList)
     end
   end
 
@@ -493,12 +618,10 @@ function widget:Update(dt)
   if selectionChanged and selChangedSec > 0.1 then
     selChangedSec  = 0
     selectionChanged = nil
-    if picList then
-      gl.DeleteList(picList)
-      picList = nil
-    end
+    FreeList(picList)
+    picList = nil
     if selectedUnitsCount > 0 then
-      picList = gl.CreateList(DrawPicList)
+      picList = Record(NewList(picList), DrawPicList)
     end
     updateGuishader()
   end
@@ -509,6 +632,10 @@ end
 -------------------------------------------------------------------------------
 
 function widget:Initialize()
+  -- Resolve the shapes module now that every widget has been constructed.
+  BindDrawing()
+  ReloadFont()
+
   WG['selunitbuttons'] = {}
   WG['selunitbuttons'].getOldUnitIcons = function() return oldUnitpics end
   WG['selunitbuttons'].setOldUnitIcons = function(value) oldUnitpics = value end
@@ -516,8 +643,8 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-  if picList then gl.DeleteList(picList) end
-  gl.DeleteFont(font)
+  FreeList(picList)
+  ReleaseFont(font)
   WG['selunitbuttons'] = nil
   enabled = false
   updateGuishader()
@@ -669,16 +796,16 @@ function DrawIconQuad(iconPos, color)
   local ymax = rectMaxY - yPad
   local cs   = (xmax - xmin) / 15
 
-  gl.Texture(highlightImg)
-  gl.Color(color)
+  glTexture(highlightImg)
+  glColor(color)
   glTexRect(xmin+iconMargin, ymin+iconMargin+iconMargin, xmax-iconMargin, ymax-iconMargin)
-  gl.Texture(false)
+  glTexture(false)
 
   RectRound(xmin+iconMargin, ymin+iconMargin+iconMargin, xmax-iconMargin, ymax-iconMargin, cs)
-  glBlending(GL_SRC_ALPHA, GL_ONE)
-  gl.Color(color[1], color[2], color[3], color[4] / 2)
+  SetBlend(GL_SRC_ALPHA, GL_ONE)
+  glColor(color[1], color[2], color[3], color[4] / 2)
   RectRound(xmin+iconMargin, ymin+iconMargin+iconMargin, xmax-iconMargin, ymax-iconMargin, cs)
-  glBlending(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+  ResetBlend()
 end
 
 -------------------------------------------------------------------------------

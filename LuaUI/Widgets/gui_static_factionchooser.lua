@@ -86,11 +86,41 @@ local FACTION_DATA = {
 -- GL / Spring locals
 --------------------------------------------------------------------------------
 
-local glColor        = gl.Color
-local glRect         = gl.Rect
-local glTexture      = gl.Texture
-local glTexRect      = gl.TexRect
+-- Raw engine entry points. Only the legacy fallback further down calls these
+-- directly; everything else goes through the shim locals so that drawing is
+-- batched by the shapes module when it is available.
+local rawColor    = gl.Color
+local rawRect     = gl.Rect
+local rawTexture  = gl.Texture
+local rawTexRect  = gl.TexRect
 
+-- Drawing shim. Forward-declared here so every function below closes over the
+-- same upvalues; bound for real by BindDrawing() in widget:Initialize.
+local glColor, glRect, glTexture, glTexRect
+local RectRound, AccentStrip, Flush
+local usingShapes = false
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- on the wrong side of them. Wrapping the font handle makes font:Begin() and
+-- font:End() flush at the right moments, which keeps every existing
+-- font:Print call site correct without auditing draw order by hand.
+local function WrapFont(f)
+	local SG = WG.StaticGUI
+	if f and SG and SG.WrapFont then
+		return SG.WrapFont(f)
+	end
+	return f
+end
+
+local function ReleaseFont(f)
+	if not f then return end
+	local SG = WG.StaticGUI
+	if SG and SG.DeleteFont then
+		SG.DeleteFont(f)
+	else
+		gl.DeleteFont(f)
+	end
+end
 local spGetViewGeometry  = Spring.GetViewGeometry
 local spGetMouseState    = Spring.GetMouseState
 local spPlaySoundFile    = Spring.PlaySoundFile
@@ -131,7 +161,7 @@ local font
 
 local function LoadWidgetFont()
 	local scale = 0.5 + (vsx * vsy / 5700000)
-	font = gl.LoadFont(fontfile, 25 * scale, 4.5 * scale, 1.8)
+	font = WrapFont(gl.LoadFont(fontfile, 25 * scale, 4.5 * scale, 1.8))
 end
 
 --------------------------------------------------------------------------------
@@ -145,18 +175,69 @@ local function PlayClickSound()   spPlaySoundFile("leftclick", 1.0, "ui") end
 -- Helpers — identical to gui_static_menu.lua
 --------------------------------------------------------------------------------
 
-local function RectRound(px, py, sx, sy, cs)
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect and gl.TexRect, which are OpenGL
+-- 1.1 immediate mode: gl.Rect is glRectf and gl.TexRect is a raw
+-- glBegin(GL_QUADS). One RectRound cost 7 glBegin/glEnd pairs and 2 texture
+-- binds. None of that exists in OpenGL core profile, which is the only way
+-- past GL 2.1 on macOS, and it is the worst case for any driver translating
+-- GL to Metal or Vulkan.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into a single instanced draw call and rounds corners analytically in a
+-- fragment shader rather than blitting a corner texture.
+--
+-- If that module is unavailable - old driver, shader compile failure - these
+-- shims fall back to the original immediate-mode code. Slow, but not blank.
+--------------------------------------------------------------------------------
+
+local function LegacyRectRound(px, py, sx, sy, cs)
 	px, py, sx, sy, cs = math.floor(px), math.floor(py), math.floor(sx), math.floor(sy), math.floor(cs)
-	glRect(px + cs, py, sx - cs, sy)
-	glRect(sx - cs, py + cs, sx, sy - cs)
-	glRect(px,      py + cs, px + cs, sy - cs)
-	glTexture(bgcorner)
-	glTexRect(px,      py + cs, px + cs, py)
-	glTexRect(sx,      py + cs, sx - cs, py)
-	glTexRect(px,      sy - cs, px + cs, sy)
-	glTexRect(sx,      sy - cs, sx - cs, sy)
-	glTexture(false)
+	rawRect(px + cs, py, sx - cs, sy)
+	rawRect(sx - cs, py + cs, sx, sy - cs)
+	rawRect(px,      py + cs, px + cs, sy - cs)
+	rawTexture(bgcorner)
+	rawTexRect(px,      py + cs, px + cs, py)
+	rawTexRect(sx,      py + cs, sx - cs, py)
+	rawTexRect(px,      sy - cs, px + cs, sy)
+	rawTexRect(sx,      sy - cs, sx - cs, sy)
+	rawTexture(false)
 end
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+	rawTexture(accentImg)
+	rawTexRect(x1, y1, x2, y2)
+	rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+	local SG = WG.StaticGUI
+	if SG then
+		glColor     = SG.Color
+		glRect      = SG.Rect
+		glTexture   = SG.Texture
+		glTexRect   = SG.TexRect
+		RectRound   = SG.RectRound
+		AccentStrip = SG.AccentStrip
+		Flush       = SG.Flush
+		usingShapes = true
+	else
+		glColor     = rawColor
+		glRect      = rawRect
+		glTexture   = rawTexture
+		glTexRect   = rawTexRect
+		RectRound   = LegacyRectRound
+		AccentStrip = LegacyAccentStrip
+		Flush       = NoOp
+		usingShapes = false
+	end
+end
+
+BindDrawing()
 
 local function IsOnRect(x, y, x1, y1, x2, y2)
 	return x >= x1 and x <= x2 and y >= y1 and y <= y2
@@ -233,9 +314,7 @@ local function DrawCard(card, hovered)
 
 	-- Accent strip at the very top of the inner panel
 	glColor(ac[1], ac[2], ac[3], ac[4])
-	glTexture(accentImg)
-	glTexRect(x1 + inset, y2 - inset - accentH, x2 - inset, y2 - inset - 0.06)
-	glTexture(false)
+	AccentStrip(x1 + inset, y2 - inset - accentH, x2 - inset, y2 - inset - 0.06)
 
 	-- Hover tint — also applied permanently to the chosen card
 	local isChosen = chosen and (fd.commName == chosenCommName)
@@ -416,18 +495,21 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	-- Resolve the shapes module now that every widget has been constructed.
+	BindDrawing()
+
 	isSpectator = Spring.GetSpectatingState()
 	LoadWidgetFont()
 	RecalculateGeometry()
 end
 
 function widget:Shutdown()
-	if font then gl.DeleteFont(font) ; font = nil end
+	if font then ReleaseFont(font) ; font = nil end
 end
 
 function widget:ViewResize()
 	vsx, vsy = spGetViewGeometry()
-	if font then gl.DeleteFont(font) end
+	if font then ReleaseFont(font) end
 	LoadWidgetFont()
 	RecalculateGeometry()
 end
@@ -551,8 +633,13 @@ function widget:DrawScreen()
 	DrawOverlay()
 	DrawTitle()
 
-	-- Spectators only see the overlay + title/countdown, no faction cards
-	if isSpectator then return end
+	-- Spectators only see the overlay + title/countdown, no faction cards.
+	-- Flush before returning: the overlay and title above are already recorded,
+	-- and the Flush() at the end of this function is not reached on this path.
+	if isSpectator then
+		Flush()
+		return
+	end
 
 	local mx, my = spGetMouseState()
 	local currentHovered = nil
@@ -572,4 +659,7 @@ function widget:DrawScreen()
 			lastHovered = currentHovered
 		end
 	end
+
+	-- Hand the accumulated shape instances to the GPU.
+	Flush()
 end

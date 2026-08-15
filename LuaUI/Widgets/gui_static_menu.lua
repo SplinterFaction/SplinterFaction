@@ -128,11 +128,42 @@ local BUTTONS = {
 -- Speedups
 --------------------------------------------------------------------------------
 
-local glColor           = gl.Color
-local glRect            = gl.Rect
-local glTexture         = gl.Texture
-local glTexRect         = gl.TexRect
+-- Raw engine entry points. Only the legacy fallback further down calls these
+-- directly; everything else goes through the shim locals so that drawing is
+-- batched by the shapes module when it is available.
+local rawColor    = gl.Color
+local rawRect     = gl.Rect
+local rawTexture  = gl.Texture
+local rawTexRect  = gl.TexRect
 
+-- Drawing shim. Forward-declared here so every function below closes over the
+-- same upvalues; bound for real by BindDrawing() in widget:Initialize.
+local glColor, glRect, glTexture, glTexRect
+local RectRound, AccentStrip, Flush
+local NewList, FreeList, Record, Replay
+local usingShapes = false
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- on the wrong side of them. Wrapping the font handle makes font:Begin() and
+-- font:End() flush at the right moments, which keeps every existing
+-- font:Print call site correct without auditing draw order by hand.
+local function WrapFont(f)
+	local SG = WG.StaticGUI
+	if f and SG and SG.WrapFont then
+		return SG.WrapFont(f)
+	end
+	return f
+end
+
+local function ReleaseFont(f)
+	if not f then return end
+	local SG = WG.StaticGUI
+	if SG and SG.DeleteFont then
+		SG.DeleteFont(f)
+	else
+		gl.DeleteFont(f)
+	end
+end
 local spGetMouseState   = Spring.GetMouseState
 local spGetViewGeometry = Spring.GetViewGeometry
 local spPlaySoundFile   = Spring.PlaySoundFile
@@ -163,34 +194,108 @@ local fontfileScale = (0.5 + (vsx * vsy / 5700000))
 local fontfileSize = 25
 local fontfileOutlineSize = 4.5
 local fontfileOutlineStrength = 1.8
-local font = gl.LoadFont(fontfile, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+local font
 
--- Display list cache
-local staticList    = nil   -- panel chrome + labels for all buttons (no hover state)
+local function ReloadFont()
+	ReleaseFont(font)
+	font = WrapFont(gl.LoadFont(fontfile, fontfileSize * fontfileScale,
+	                            fontfileOutlineSize * fontfileScale, fontfileOutlineStrength))
+end
+
+-- Recorded draw list (see api_staticgui_shapes.lua). Replaces the gl.CreateList
+-- display list and keeps the same invalidation: the list cached the button
+-- chrome AND all seven labels, so rebuilding it per frame meant re-running the
+-- whole layout and text pass every frame.
+local staticList    = nil
 local lastGuiShader = nil   -- track guishader to detect color-scheme changes
 
 local function FreeStaticList()
-	if staticList then gl.DeleteList(staticList) ; staticList = nil end
+	FreeList(staticList)
+	staticList = nil
 end
 
 --------------------------------------------------------------------------------
 -- Helpers
 --------------------------------------------------------------------------------
 
-local function RectRound(px, py, sx, sy, cs)
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect and gl.TexRect, which are OpenGL
+-- 1.1 immediate mode: gl.Rect is glRectf and gl.TexRect is a raw
+-- glBegin(GL_QUADS). One RectRound cost 7 glBegin/glEnd pairs and 2 texture
+-- binds. None of that exists in OpenGL core profile, which is the only way
+-- past GL 2.1 on macOS, and it is the worst case for any driver translating
+-- GL to Metal or Vulkan.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into a single instanced draw call and rounds corners analytically in a
+-- fragment shader rather than blitting a corner texture.
+--
+-- If that module is unavailable - old driver, shader compile failure - these
+-- shims fall back to the original immediate-mode code. Slow, but not blank.
+--------------------------------------------------------------------------------
+
+local function LegacyRectRound(px, py, sx, sy, cs)
 	px, py, sx, sy, cs = math.floor(px), math.floor(py), math.floor(sx), math.floor(sy), math.floor(cs)
 
-	glRect(px + cs, py, sx - cs, sy)
-	glRect(sx - cs, py + cs, sx, sy - cs)
-	glRect(px, py + cs, px + cs, sy - cs)
+	rawRect(px + cs, py, sx - cs, sy)
+	rawRect(sx - cs, py + cs, sx, sy - cs)
+	rawRect(px, py + cs, px + cs, sy - cs)
 
-	glTexture(bgcorner)
-	glTexRect(px, py + cs, px + cs, py)
-	glTexRect(sx, py + cs, sx - cs, py)
-	glTexRect(px, sy - cs, px + cs, sy)
-	glTexRect(sx, sy - cs, sx - cs, sy)
-	glTexture(false)
+	rawTexture(bgcorner)
+	rawTexRect(px, py + cs, px + cs, py)
+	rawTexRect(sx, py + cs, sx - cs, py)
+	rawTexRect(px, sy - cs, px + cs, sy)
+	rawTexRect(sx, sy - cs, sx - cs, sy)
+	rawTexture(false)
 end
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+	rawTexture(accentImg)
+	rawTexRect(x1, y1, x2, y2)
+	rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+	local SG = WG.StaticGUI
+	if SG then
+		glColor     = SG.Color
+		glRect      = SG.Rect
+		glTexture   = SG.Texture
+		glTexRect   = SG.TexRect
+		RectRound   = SG.RectRound
+		AccentStrip = SG.AccentStrip
+		Flush       = SG.Flush
+		NewList       = function(existing) return existing or SG.NewList() end
+		FreeList      = function() end
+		Record        = SG.Record
+		Replay        = SG.Replay
+		usingShapes = true
+	else
+		glColor     = rawColor
+		glRect      = rawRect
+		glTexture   = rawTexture
+		glTexRect   = rawTexRect
+		RectRound   = LegacyRectRound
+		AccentStrip = LegacyAccentStrip
+		Flush       = NoOp
+		-- No recorder without the shape module, so fall back to real display
+		-- lists: exactly what this widget did before the port.
+		NewList       = function(existing)
+			if existing then gl.DeleteList(existing) end
+			return nil
+		end
+		FreeList      = function(l) if l then gl.DeleteList(l) end end
+		Record        = function(_, fn) return gl.CreateList(fn) end
+		Replay        = gl.CallList
+		usingShapes = false
+	end
+end
+
+BindDrawing()
 
 local function IsOnRect(x, y, x1, y1, x2, y2)
 	return x >= x1 and x <= x2 and y >= y1 and y <= y2
@@ -266,9 +371,7 @@ local function DrawButtonStatic(button)
 	RectRound(x1 + inset, y1 + inset, x2 - inset, y2 - inset - 0.06, innerCorner)
 
 	glColor(button.accent[1], button.accent[2], button.accent[3], button.accent[4])
-	glTexture(accentImg)
-	glTexRect(x1 + inset, y2 - inset - accentH, x2 - inset, y2 - inset - 0.06)
-	glTexture(false)
+	AccentStrip(x1 + inset, y2 - inset - accentH, x2 - inset, y2 - inset - 0.06)
 
 	font:Begin()
 	font:Print(
@@ -290,8 +393,7 @@ local function DrawButtonHover(button)
 end
 
 local function BuildStaticList()
-	FreeStaticList()
-	staticList = gl.CreateList(function()
+	staticList = Record(NewList(staticList), function()
 		for i = 1, #buttons do
 			DrawButtonStatic(buttons[i])
 		end
@@ -304,12 +406,17 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	-- Resolve the shapes module now that every widget has been constructed.
+	BindDrawing()
+	ReloadFont()
+
 	RecalculateGeometry()
+	FreeStaticList()  -- geometry changed, rebuild next DrawScreen
 end
 
 function widget:Shutdown()
-	FreeStaticList()
-	if font then gl.DeleteFont(font) end
+	ReleaseFont(font)
+	font = nil
 end
 
 function widget:ViewResize()
@@ -318,8 +425,7 @@ function widget:ViewResize()
 	local newFontfileScale = (0.5 + (vsx * vsy / 5700000))
 	if fontfileScale ~= newFontfileScale then
 		fontfileScale = newFontfileScale
-		if font then gl.DeleteFont(font) end
-		font = gl.LoadFont(fontfile, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+		ReloadFont()
 	end
 
 	RecalculateGeometry()
@@ -363,9 +469,9 @@ function widget:DrawScreen()
 		BuildStaticList()
 	end
 
-	gl.CallList(staticList)
+	Replay(staticList)
 
-	-- Hover tint — cheap immediate-mode on top, no list needed
+	-- Hover tint, drawn on top of the button chrome
 	local mx, my = spGetMouseState()
 	local currentHoveredIndex = nil
 	for i = 1, #buttons do
@@ -381,4 +487,7 @@ function widget:DrawScreen()
 		end
 		lastHoveredIndex = currentHoveredIndex
 	end
+
+	-- Hand the accumulated shape instances to the GPU.
+	Flush()
 end

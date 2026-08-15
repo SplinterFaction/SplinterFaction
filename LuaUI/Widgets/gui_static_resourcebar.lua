@@ -30,7 +30,7 @@ local CORNER_SIZE      = 10
 local PANEL_ACCENT_HEIGHT = 5
 
 local TOP_MARGIN       = 8
-local SUPPLY_MIN_CAP   = 50       -- minimum visual supply scale
+local SUPPLY_MIN_CAP   = 10       -- minimum visual supply scale
 local SUPPLY_STEP      = 10       -- rounds display cap up to this
 local SUPPLY_SHRINK_DELAY = 90    -- frames before shrinking display cap
 
@@ -57,16 +57,48 @@ local spSetShareLevel      = Spring.SetShareLevel
 local spGetGameFrame       = Spring.GetGameFrame
 local spGetConfigFloat     = Spring.GetConfigFloat
 
-local glColor      = gl.Color
-local glTexture    = gl.Texture
-local glTexRect    = gl.TexRect
-local glPushMatrix = gl.PushMatrix
-local glPopMatrix  = gl.PopMatrix
-local glTranslate  = gl.Translate
-local glScale      = gl.Scale
-local glCallList   = gl.CallList
-local glRect       = gl.Rect
 
+-- Raw engine entry points. Only the legacy fallback further down calls these
+-- directly; everything else goes through the shim locals so that drawing is
+-- batched by the shapes module when it is available.
+local rawColor    = gl.Color
+local rawRect     = gl.Rect
+local rawTexture  = gl.Texture
+local rawTexRect  = gl.TexRect
+
+-- Drawing shim. Forward-declared here so every function below closes over the
+-- same upvalues; bound for real by BindDrawing() in widget:Initialize.
+local glColor, glRect, glTexture, glTexRect
+local RectRound, AccentStrip, Flush
+local NewList, FreeList, Record, Replay
+local SetTransform, ClearTransform
+
+-- Record-time transform for the legacy fallback, mirroring what the shape
+-- module does on the fast path.
+local legacyOffX, legacyOffY, legacyScale = 0, 0, 1
+local usingShapes = false
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- on the wrong side of them. Wrapping the font handle makes font:Begin() and
+-- font:End() flush at the right moments, which keeps every existing
+-- font:Print call site correct without auditing draw order by hand.
+local function WrapFont(f)
+	local SG = WG.StaticGUI
+	if f and SG and SG.WrapFont then
+		return SG.WrapFont(f)
+	end
+	return f
+end
+
+local function ReleaseFont(f)
+	if not f then return end
+	local SG = WG.StaticGUI
+	if SG and SG.DeleteFont then
+		SG.DeleteFont(f)
+	else
+		gl.DeleteFont(f)
+	end
+end
 local vsx, vsy = spGetViewGeometry()
 local widgetScale = 1
 local posx, posy = 0, 0
@@ -239,11 +271,97 @@ local function DrawRectRound(px, py, sx, sy, cs)
 	gl.TexCoord(1-o,o)     gl.Vertex(sx, sy-cs, 0)
 end
 
-local function RectRound(px, py, sx, sy, cs)
-	glTexture(bgcorner)
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect and gl.TexRect, which are OpenGL
+-- 1.1 immediate mode: gl.Rect is glRectf and gl.TexRect is a raw
+-- glBegin(GL_QUADS). One RectRound cost 7 glBegin/glEnd pairs and 2 texture
+-- binds. None of that exists in OpenGL core profile, which is the only way
+-- past GL 2.1 on macOS, and it is the worst case for any driver translating
+-- GL to Metal or Vulkan.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into a single instanced draw call and rounds corners analytically in a
+-- fragment shader rather than blitting a corner texture.
+--
+-- If that module is unavailable - old driver, shader compile failure - these
+-- shims fall back to the original immediate-mode code. Slow, but not blank.
+--------------------------------------------------------------------------------
+
+local function LegacyRectRound(px, py, sx, sy, cs)
+	px, py = px * legacyScale + legacyOffX, py * legacyScale + legacyOffY
+	sx, sy = sx * legacyScale + legacyOffX, sy * legacyScale + legacyOffY
+	cs = cs * legacyScale
+	rawTexture(bgcorner)
 	gl.BeginEnd(GL.QUADS, DrawRectRound, px, py, sx, sy, cs)
-	glTexture(false)
+	rawTexture(false)
 end
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+	rawTexture(accentImg)
+	rawTexRect(x1, y1, x2, y2)
+	rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+	local SG = WG.StaticGUI
+	if SG then
+		glColor     = SG.Color
+		glRect      = SG.Rect
+		glTexture   = SG.Texture
+		glTexRect   = SG.TexRect
+		RectRound      = SG.RectRound
+		AccentStrip    = SG.AccentStrip
+		SetTransform   = SG.SetTransform
+		ClearTransform = SG.ClearTransform
+		Flush          = SG.Flush
+		NewList       = function(existing) return existing or SG.NewList() end
+		FreeList      = function() end
+		Record        = SG.Record
+		Replay        = SG.Replay
+		usingShapes    = true
+	else
+		glColor     = rawColor
+		glRect      = rawRect
+		glTexture   = rawTexture
+		glTexRect   = rawTexRect
+		RectRound      = LegacyRectRound
+		AccentStrip    = LegacyAccentStrip
+		-- NOT the matrix stack. Text in this widget already applies the
+		-- transform itself through TX/TY/TS, so pushing a matrix as well
+		-- would transform it twice and throw it off screen. Store the values
+		-- and let LegacyRectRound apply them, matching the shape module.
+		SetTransform   = function(dx, dy, sc)
+			legacyOffX, legacyOffY, legacyScale = dx or 0, dy or 0, sc or 1
+		end
+		ClearTransform = function()
+			legacyOffX, legacyOffY, legacyScale = 0, 0, 1
+		end
+		Flush          = NoOp
+		-- No recorder without the shape module, so fall back to real display
+		-- lists: exactly what this widget did before the port.
+		NewList       = function(existing)
+			if existing then gl.DeleteList(existing) end
+			return nil
+		end
+		FreeList      = function(l) if l then gl.DeleteList(l) end end
+		Record        = function(_, fn) return gl.CreateList(fn) end
+		Replay        = gl.CallList
+		usingShapes    = false
+	end
+end
+
+BindDrawing()
+
+-- The panel used to be drawn inside gl.Translate(posx, posy) + gl.Scale(scale).
+-- Shapes now get that transform at record time from the shape module, but the
+-- engine's font renderer knows nothing about it, so text applies it explicitly.
+local function TX(x) return posx + x * widgetScale end
+local function TY(y) return posy + y * widgetScale end
+local function TS(v) return v * widgetScale end
 
 local function DrawPanel(x1, y1, x2, y2, accentR, accentG, accentB, accentA)
 	-- outer
@@ -256,9 +374,7 @@ local function DrawPanel(x1, y1, x2, y2, accentR, accentG, accentB, accentA)
 
 	-- subtle top accent
 	glColor(accentR, accentG, accentB, 1)
-	glTexture(accentImg)
-	gl.TexRect(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
-	glTexture(false)
+	AccentStrip(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
 end
 
 local function DrawFillBar(x1, y1, x2, y2, pct, r, g, b, glow)
@@ -405,14 +521,8 @@ end
 --------------------------------------------------------------------------------
 
 local function BuildBackgroundList()
-	if displayListBg then
-		gl.DeleteList(displayListBg)
-	end
-
-	displayListBg = gl.CreateList(function()
-		glPushMatrix()
-		glTranslate(posx, posy, 0)
-		glScale(widgetScale, widgetScale, 1)
+	displayListBg = Record(NewList(displayListBg), function()
+		SetTransform(posx, posy, widgetScale)
 
 		-- top row: metal (left), energy (right)
 		DrawPanel(0,      ROW_TOP_Y, BAR_WIDTH,          ROW_TOP_Y + BAR_HEIGHT, 0.45, 0.75, 1.00, 0.60) -- metal (sky blue)
@@ -422,19 +532,13 @@ local function BuildBackgroundList()
 		DrawPanel(0,      ROW_BOT_Y, BAR_WIDTH,          ROW_BOT_Y + BAR_HEIGHT, 0.30, 0.90, 0.35, 0.60) -- supply (green)
 		DrawPanel(COL2_X, ROW_BOT_Y, COL2_X + RP_WIDTH,  ROW_BOT_Y + BAR_HEIGHT, 0.745, 0.470, 1.0, 0.60) -- research (violet)
 
-		glPopMatrix()
+		ClearTransform()
 	end)
 end
 
 local function BuildStaticList()
-	if displayListStatic then
-		gl.DeleteList(displayListStatic)
-	end
-
-	displayListStatic = gl.CreateList(function()
-		glPushMatrix()
-		glTranslate(posx, posy, 0)
-		glScale(widgetScale, widgetScale, 1)
+	displayListStatic = Record(NewList(displayListStatic), function()
+		SetTransform(posx, posy, widgetScale)
 
 		local blocks = {
 			{ x = 0,      y = ROW_TOP_Y, icon = metalTexture,    label = "METAL",    color = {0.45, 0.75, 1.00, 1} }, -- sky blue
@@ -459,16 +563,16 @@ local function BuildStaticList()
 
 			font2:SetTextColor(b.color[1], b.color[2], b.color[3], b.color[4])
 			font2:Print(
-					b.label,
-					b.x + INNER_PADDING + ICON_SIZE + 8,
-					b.y + BAR_HEIGHT - 22,
-					16,
-					"o"
+				b.label,
+				TX(b.x + INNER_PADDING + ICON_SIZE + 8),
+				TY(b.y + BAR_HEIGHT - 22),
+				TS(16),
+				"o"
 			)
 		end
 		font2:End()
 
-		glPopMatrix()
+		ClearTransform()
 	end)
 end
 
@@ -488,7 +592,13 @@ local function BuildDynamicList()
 	UpdateSupplyDisplayCap(supplyMax)
 
 	local supplyFree = math.max(0, supplyMax - supplyUsed)
-	local supplyPct  = (supplyDisplayCap > 0) and (supplyFree / supplyDisplayCap) or 0
+	-- The bar shows USED supply as a fraction of the current maximum - the
+	-- convention every RTS player knows: it fills as you build, and gaining
+	-- supply (a bigger denominator) visibly drops the fill. The old design
+	-- filled with FREE supply against a smoothed display cap, which read
+	-- backwards to new players. supplyDisplayCap still drives the "scale"
+	-- text readout.
+	local supplyPct  = (supplyMax > 0) and (supplyUsed / supplyMax) or 0
 	local metalPct   = (ms > 0) and (mc / ms) or 0
 	local energyPct  = (es > 0) and (ec / es) or 0
 
@@ -523,13 +633,12 @@ local function BuildDynamicList()
 	lastDynamic.ec = ec ; lastDynamic.es = es
 	lastDynamic.ei = ei ; lastDynamic.ep = ep ; lastDynamic.energyPct = energyPct
 
-	if displayListDynamic then gl.DeleteList(displayListDynamic) end
-
+	-- Fullness ramp: green while comfortable, orange as the bar approaches
+	-- full, red when capped.
 	local supplyR, supplyG, supplyB = 0.30, 0.90, 0.35
-
-	if supplyFree <= 0 then
+	if supplyPct >= 1.0 then
 		supplyR, supplyG, supplyB = 1.0, 0.24, 0.24
-	elseif supplyFree <= math.max(5, supplyMax * 0.20) then
+	elseif supplyPct >= 0.80 then
 		supplyR, supplyG, supplyB = 1.0, 0.65, 0.18
 	end
 
@@ -557,10 +666,8 @@ local function BuildDynamicList()
 			green .. "scale " .. supplyDisplayCap ..
 			white .. ")"
 
-	displayListDynamic = gl.CreateList(function()
-		glPushMatrix()
-		glTranslate(posx, posy, 0)
-		glScale(widgetScale, widgetScale, 1)
+	displayListDynamic = Record(NewList(displayListDynamic), function()
+		SetTransform(posx, posy, widgetScale)
 
 		local barX1 = INNER_PADDING
 		local barX2 = BAR_WIDTH - INNER_PADDING
@@ -575,12 +682,12 @@ local function BuildDynamicList()
 		-- single font pass; each Begin/End pair flushes the font renderer
 		font2:Begin()
 		font2:SetTextColor(1, 1, 1, 1)
-		font2:Print(metalText,           BAR_WIDTH - INNER_PADDING, ROW_TOP_Y + 23, 16, "or")
-		font2:Print(energyText, COL2_X + BAR_WIDTH - INNER_PADDING, ROW_TOP_Y + 23, 16, "or")
-		font2:Print(supplyText,          BAR_WIDTH - INNER_PADDING, ROW_BOT_Y + 23, 16, "or")
+		font2:Print(metalText, TX(BAR_WIDTH - INNER_PADDING), TY(ROW_TOP_Y + 23), TS(16), "or")
+		font2:Print(energyText, TX(COL2_X + BAR_WIDTH - INNER_PADDING), TY(ROW_TOP_Y + 23), TS(16), "or")
+		font2:Print(supplyText, TX(BAR_WIDTH - INNER_PADDING), TY(ROW_BOT_Y + 23), TS(16), "or")
 		font2:End()
 
-		glPopMatrix()
+		ClearTransform()
 	end)
 end
 
@@ -589,11 +696,14 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	-- Resolve the shapes module now that every widget has been constructed.
+	BindDrawing()
+
 	spSendCommands({ "resbar 0" })
 
 	fontfileScale = (0.5 + ((vsx * vsy) / 5700000))
-	font = gl.LoadFont(FONT_FILE,  fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
-	font2 = gl.LoadFont(FONT_FILE2, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+	font = WrapFont(gl.LoadFont(FONT_FILE,  fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength))
+	font2 = WrapFont(gl.LoadFont(FONT_FILE2, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength))
 
 	self:ViewResize(vsx, vsy)
 
@@ -603,12 +713,12 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	if displayListBg then gl.DeleteList(displayListBg) end
-	if displayListStatic then gl.DeleteList(displayListStatic) end
-	if displayListDynamic then gl.DeleteList(displayListDynamic) end
+	FreeList(displayListBg)     ; displayListBg      = nil
+	FreeList(displayListStatic) ; displayListStatic  = nil
+	FreeList(displayListDynamic); displayListDynamic = nil
 
-	if font then gl.DeleteFont(font) end
-	if font2 then gl.DeleteFont(font2) end
+	if font then ReleaseFont(font) end
+	if font2 then ReleaseFont(font2) end
 end
 
 function widget:RecvLuaMsg(msg)
@@ -673,26 +783,24 @@ end
 local function DrawResearchPanel()
 	local rpX = COL2_X
 
-	glPushMatrix()
-	glTranslate(posx, posy, 0)
-	glScale(widgetScale, widgetScale, 1)
+	SetTransform(posx, posy, widgetScale)
 
 	font2:Begin()
 
 	font2:SetTextColor(1, 1, 1, 1)
-	font2:Print(rpValueStr, rpX + RP_WIDTH - INNER_PADDING, 10, 22, "or")
+	font2:Print(rpValueStr, TX(rpX + RP_WIDTH - INNER_PADDING), TY(10), TS(22), "or")
 
 	font2:SetTextColor(0, 1, 0, 1)
-	font2:Print(rpRateStr, rpX + INNER_PADDING, 12, 14, "o")
+	font2:Print(rpRateStr, TX(rpX + INNER_PADDING), TY(12), TS(14), "o")
 
 	if rpFlashTimer > 0 and rpFlashAmount > 0 then
 		local a = rpFlashTimer / RP_FLASH_DURATION
 		font2:SetTextColor(1, 0.15, 0.15, a)
-		font2:Print(rpFlashStr, rpX + RP_WIDTH - INNER_PADDING, 30, 16, "or")
+		font2:Print(rpFlashStr, TX(rpX + RP_WIDTH - INNER_PADDING), TY(30), TS(16), "or")
 	end
 
 	font2:End()
-	glPopMatrix()
+	ClearTransform()
 end
 
 local opacityCheckTimer = 0
@@ -765,9 +873,9 @@ function widget:DrawScreen()
 		BuildDynamicList()
 	end
 
-	glCallList(displayListBg)
-	glCallList(displayListStatic)
-	if displayListDynamic then glCallList(displayListDynamic) end
+	Replay(displayListBg)
+	Replay(displayListStatic)
+	if displayListDynamic then Replay(displayListDynamic) end
 
 	-- research panel content is immediate-mode: the number counts constantly,
 	-- so it must not live in the cached dynamic list.
@@ -776,6 +884,9 @@ function widget:DrawScreen()
 	-- Share level sliders — drawn immediate mode on top of everything
 	DrawShareSlider("metal",  metalShareLevel,  draggingMetal)
 	DrawShareSlider("energy", energyShareLevel, draggingEnergy)
+
+	-- Hand the accumulated shape instances to the GPU.
+	Flush()
 end
 
 function widget:ViewResize(newX, newY)
@@ -791,20 +902,18 @@ function widget:ViewResize(newX, newY)
 	local newFontfileScale = (0.5 + ((vsx * vsy) / 5700000))
 	if fontfileScale ~= newFontfileScale then
 		fontfileScale = newFontfileScale
-		if font then gl.DeleteFont(font) end
-		if font2 then gl.DeleteFont(font2) end
-		font = gl.LoadFont(FONT_FILE,  fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
-		font2 = gl.LoadFont(FONT_FILE2, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+		if font then ReleaseFont(font) end
+		if font2 then ReleaseFont(font2) end
+		font = WrapFont(gl.LoadFont(FONT_FILE,  fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength))
+		font2 = WrapFont(gl.LoadFont(FONT_FILE2, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength))
 	end
 
 	-- Force the dynamic list to rebuild on the next draw so the fill bars
 	-- reposition themselves to match the new scale/offset. Without this,
 	-- BuildDynamicList() skips the rebuild when resource values haven't
 	-- changed, leaving the bars detached from the panels at the new resolution.
-	if displayListDynamic then
-		gl.DeleteList(displayListDynamic)
-		displayListDynamic = nil
-	end
+	FreeList(displayListDynamic)
+	displayListDynamic = nil
 	lastDynamic = {}
 
 	BuildBackgroundList()

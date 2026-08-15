@@ -84,14 +84,17 @@ local TEXT_ACCENT   = "\255\120\180\255"
 -- Speedups
 --------------------------------------------------------------------------------
 
-local glColor     = gl.Color
-local glRect      = gl.Rect
-local glTexture   = gl.Texture
-local glTexRect   = gl.TexRect
-local glScissor   = gl.Scissor
-local glLineWidth = gl.LineWidth
-local glBeginEnd  = gl.BeginEnd
-local glVertex    = gl.Vertex
+-- Raw engine entry points. Only the legacy fallback path below uses these
+-- directly; everything else goes through the shim locals so that drawing is
+-- batched by the shapes module when it is available.
+local rawColor     = gl.Color
+local rawRect      = gl.Rect
+local rawTexture   = gl.Texture
+local rawTexRect   = gl.TexRect
+local rawScissor   = gl.Scissor
+local rawLineWidth = gl.LineWidth
+local rawBeginEnd  = gl.BeginEnd
+local rawVertex    = gl.Vertex
 local GL_LINE_STRIP = GL.LINE_STRIP
 
 local spGetViewGeometry      = Spring.GetViewGeometry
@@ -117,6 +120,108 @@ local function Clamp(v, lo, hi)
 end
 
 --------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect / gl.TexRect / gl.BeginEnd, which
+-- is OpenGL 1.1 immediate mode. That path does not exist in core profile,
+-- which is the only way to get past GL 2.1 on macOS, and it is what tanks
+-- frame rate on any driver that translates GL to Metal or Vulkan.
+--
+-- All of it now goes through WG.StaticGUI (api_staticgui_shapes.lua), which
+-- batches every shape into one instanced draw call and rounds corners in a
+-- fragment shader.
+--
+-- If that module failed to load - unsupported driver, shader compile error -
+-- these shims fall back to the original immediate-mode code so the widget
+-- still renders. It will be slow, but it will not be blank.
+--------------------------------------------------------------------------------
+
+-- Corner texture, used only by the legacy fallback. The shapes module rounds
+-- corners analytically and never binds it.
+local bgcornerLegacy = bgcorner
+
+local glColor, glRect, glTexture, glTexRect, glScissor
+local RectRound, LineStrip, AccentStrip, Flush
+local TexCache, DrawCache, FreeCache
+local usingShapes = false
+
+local function LegacyRectRound(px, py, sx, sy, cs)
+	px, py, sx, sy, cs = math_floor(px), math_floor(py), math_floor(sx), math_floor(sy), math_floor(cs)
+	rawRect(px+cs, py, sx-cs, sy)
+	rawRect(sx-cs, py+cs, sx, sy-cs)
+	rawRect(px, py+cs, px+cs, sy-cs)
+	rawTexture(bgcornerLegacy)
+	rawTexRect(px, py+cs, px+cs, py)
+	rawTexRect(sx, py+cs, sx-cs, py)
+	rawTexRect(px, sy-cs, px+cs, sy)
+	rawTexRect(sx, sy-cs, sx-cs, sy)
+	rawTexture(false)
+end
+
+local function LegacyLineStrip(points, width, color)
+	local n = #points
+	if n < 4 then return end
+	if color then rawColor(color[1], color[2], color[3], color[4] or 1) end
+	rawLineWidth(width or 1)
+	rawBeginEnd(GL_LINE_STRIP, function()
+		for i = 1, n - 1, 2 do
+			rawVertex(points[i], points[i + 1])
+		end
+	end)
+	rawLineWidth(1)
+end
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+	rawTexture(accentImg)
+	rawTexRect(x1, y1, x2, y2)
+	rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+	local SG = WG.StaticGUI
+	if SG then
+		glColor   = SG.Color
+		glRect    = SG.Rect
+		glTexture = SG.Texture
+		glTexRect = SG.TexRect
+		glScissor = SG.Scissor
+		RectRound = SG.RectRound
+		AccentStrip = SG.AccentStrip
+		LineStrip = SG.LineStrip
+		Flush     = SG.Flush
+		TexCache      = SG.TexCache
+		DrawCache     = SG.DrawCache
+		FreeCache     = SG.FreeCache
+		usingShapes = true
+	else
+		glColor   = rawColor
+		glRect    = rawRect
+		glTexture = rawTexture
+		glTexRect = rawTexRect
+		glScissor = rawScissor
+		RectRound = LegacyRectRound
+		AccentStrip = LegacyAccentStrip
+		LineStrip = LegacyLineStrip
+		Flush     = NoOp
+		-- No recorder without the shape module, so fall back to real display
+		-- lists: exactly what this widget did before the port.
+		-- No FBO textures without the shape module: a legacy cache handle is
+		-- a real display list id, exactly what this widget used originally.
+		TexCache      = function(cache, _, _, _, _, fn)
+			if cache then gl.DeleteList(cache) end
+			return gl.CreateList(fn)
+		end
+		DrawCache     = function(cache) if cache then gl.CallList(cache) end end
+		FreeCache     = function(cache) if cache then gl.DeleteList(cache) end end
+		usingShapes = false
+	end
+end
+
+BindDrawing()
+
+--------------------------------------------------------------------------------
 -- Font
 --------------------------------------------------------------------------------
 
@@ -125,6 +230,29 @@ local uiScale       = 1.0
 local fontfile      = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
 local fontfileScale = (0.5 + (vsx * vsy / 5700000))
 local font
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- underneath them. Wrapping the font makes font:Begin() flush the pending
+-- batch first, which keeps every existing font:Print call site correct without
+-- having to audit draw order by hand.
+local function ReloadFont()
+	local SG = WG.StaticGUI
+
+	if font then
+		if SG and SG.DeleteFont then
+			SG.DeleteFont(font)
+		else
+			gl.DeleteFont(font)
+		end
+		font = nil
+	end
+
+	local f = gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8)
+	if f and SG and SG.WrapFont then
+		f = SG.WrapFont(f)
+	end
+	font = f
+end
 
 --------------------------------------------------------------------------------
 -- State
@@ -146,9 +274,14 @@ local graphMax     = 0
 local gameTime     = 0
 local enoughData   = false
 
+-- Texture cache (see api_staticgui_shapes.lua) and its invalidation flag,
+-- replacing first the gl.CreateList display list and then an SG.Record list.
+-- The recorded list still replayed ~1500 line-segment ops in Lua every frame,
+-- which kept this the most expensive widget in the suite; the cache renders
+-- the whole graph into one texture on contentDirty and draws one quad.
 local contentList  = nil
 local contentDirty = true
-local lastGuiShader = nil
+
 local refreshTimer = 0
 
 local hoveredKey   = nil    -- dedup for hover sound across interactive elements
@@ -216,18 +349,9 @@ local function GetPanelBGColor()
 	return PANEL_BG_COLOR
 end
 
-local function RectRound(px, py, sx, sy, cs)
-	px, py, sx, sy, cs = math_floor(px), math_floor(py), math_floor(sx), math_floor(sy), math_floor(cs)
-	glRect(px+cs, py, sx-cs, sy)
-	glRect(sx-cs, py+cs, sx, sy-cs)
-	glRect(px, py+cs, px+cs, sy-cs)
-	glTexture(bgcorner)
-	glTexRect(px, py+cs, px+cs, py)
-	glTexRect(sx, py+cs, sx-cs, py)
-	glTexRect(px, sy-cs, px+cs, sy)
-	glTexRect(sx, sy-cs, sx-cs, sy)
-	glTexture(false)
-end
+-- RectRound now lives in the drawing shim above: either WG.StaticGUI.RectRound
+-- (one instance, corner rounded in the fragment shader) or LegacyRectRound
+-- (the original 3 quads + 4 corner blits) if the shapes module is unavailable.
 
 local function DrawPanelChrome(x1, y1, x2, y2, accent)
 	local bc  = GetBorderColor()
@@ -242,9 +366,7 @@ local function DrawPanelChrome(x1, y1, x2, y2, accent)
 	RectRound(x1+ins, y1+ins, x2-ins, y2-ins, ic)
 	if accent then
 		glColor(accent[1], accent[2], accent[3], 1)
-		glTexture(accentImg)
-		glTexRect(x1+ins, y2-ins-ah, x2-ins, y2-ins)
-		glTexture(false)
+		AccentStrip(x1+ins, y2-ins-ah, x2-ins, y2-ins)
 	end
 end
 
@@ -256,9 +378,7 @@ end
 local function DrawAccentStrip(x1, x2, y2, accent)
 	local ah = PANEL_ACCENT_HEIGHT * uiScale
 	glColor(accent[1], accent[2], accent[3], 1)
-	glTexture(accentImg)
-	glTexRect(x1, y2-ah, x2, y2)
-	glTexture(false)
+	AccentStrip(x1, y2-ah, x2, y2)
 end
 
 --------------------------------------------------------------------------------
@@ -657,27 +777,42 @@ local function BakeGrid()
 	font:End()
 end
 
+-- Reused across frames so plotting does not allocate a fresh point array for
+-- every team on every draw.
+local linePoints = {}
+
 local function BakeLines()
 	local p = geom.plot
-	glLineWidth(LINE_WIDTH * uiScale)
+	local w = LINE_WIDTH * uiScale
+
 	for t = 1, #team do
 		local tm = team[t]
 		if tm.show and tm.hasData and tm.array then
 			local arr = tm.array
 			local n   = #arr
 			if n >= 2 then
-				local c = tm.color
-				glColor(c[1], c[2], c[3], 1)
-				glBeginEnd(GL_LINE_STRIP, function()
-					for i = 1, n do
-						local px, py = PlotXY(p, i, n, arr[i])
-						glVertex(px, py)
-					end
-				end)
+				local k = 0
+				for i = 1, n do
+					local px, py = PlotXY(p, i, n, arr[i])
+					linePoints[k + 1] = px
+					linePoints[k + 2] = py
+					k = k + 2
+				end
+				-- Trim any leftovers from a longer previous team.
+				for i = #linePoints, k + 1, -1 do
+					linePoints[i] = nil
+				end
+
+				-- One capsule per segment rather than a GL_LINE_STRIP. Beyond
+				-- batching, this sidesteps glLineWidth: widths above 1.0 are
+				-- not required to be supported in OpenGL core profile and are
+				-- commonly clamped to 1.0 on macOS, so LINE_WIDTH was being
+				-- silently ignored there. Capsule ends also give round joins
+				-- for free, which line strips do not.
+				LineStrip(linePoints, w, tm.color)
 			end
 		end
 	end
-	glLineWidth(1)
 end
 
 local function BakeValueLabels()
@@ -719,24 +854,33 @@ local function BakeNoData()
 	font:End()
 end
 
+-- This used to be baked into a gl.CreateList display list. Display lists are
+-- GL 1.x, removed from core profile alongside immediate mode, and the engine's
+-- own font code has a documented workaround for glyph atlas uploads getting
+-- recorded into them. With the shape work batched into a single instanced draw
+-- and text already batched by the engine's font RenderBuffer, drawing straight
+-- through every frame is both simpler and cheaper than maintaining the list.
+--
+-- Note that the expensive part was never the drawing: RefreshData() computes
+-- graphMax, gameTime and visibleTeams on a 2 second timer from widget:Update,
+-- and that is untouched.
 local function BuildContentList()
-	if contentList then gl.DeleteList(contentList) ; contentList = nil end
-	contentList = gl.CreateList(function()
-		DrawPanelChrome(panelRect.x1, panelRect.y1, panelRect.x2, panelRect.y2, ACCENT_PANEL)
-		BakeTitle()
-		BakeStatButtons()
-		BakeLegend()
-		BakeDelta()
-		if enoughData then
-			BakeGrid()
-			BakeLines()
-			BakeValueLabels()
-		else
-			BakeNoData()
-		end
+	contentList = TexCache(contentList,
+		panelRect.x1, panelRect.y1, panelRect.x2, panelRect.y2, function()
+	DrawPanelChrome(panelRect.x1, panelRect.y1, panelRect.x2, panelRect.y2, ACCENT_PANEL)
+	BakeTitle()
+	BakeStatButtons()
+	BakeLegend()
+	BakeDelta()
+	if enoughData then
+		BakeGrid()
+		BakeLines()
+		BakeValueLabels()
+	else
+		BakeNoData()
+	end
 	end)
-	lastGuiShader = (WG.guishader ~= nil)
-	contentDirty  = false
+	contentDirty = false
 end
 
 --------------------------------------------------------------------------------
@@ -970,15 +1114,17 @@ function widget:DrawScreen()
 	if not isOpen then return end
 	if not font then return end
 
-	local guiShaderActive = (WG.guishader ~= nil)
-	if contentDirty or not contentList or guiShaderActive ~= lastGuiShader then
+	if contentDirty or not contentList then
 		BuildContentList()
 	end
-
-	gl.CallList(contentList)
+	DrawCache(contentList, panelRect.x1, panelRect.y1)
 
 	local mx, my = spGetMouseState()
 	DrawHoverAndTooltip(mx, my)
+
+	-- Hand the accumulated shape instances to the GPU. Without this the batch
+	-- carries into the next frame and the shapes module will complain.
+	Flush()
 end
 
 function widget:GameOver(winningAllyTeams)
@@ -991,7 +1137,10 @@ function widget:Initialize()
 	Spring.SendCommands("endgraph 0")   -- suppress the engine's built-in graph
 	vsx, vsy = spGetViewGeometry()
 	fontfileScale = (0.5 + (vsx * vsy / 5700000))
-	font = gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8)
+
+	-- Resolve the shapes module now that every widget has been constructed.
+	BindDrawing()
+	ReloadFont()
 
 	getTeamInfo()
 	BuildGeometry()
@@ -1006,8 +1155,13 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	if contentList then gl.DeleteList(contentList) ; contentList = nil end
-	if font then gl.DeleteFont(font) end
+	FreeCache(contentList)
+	contentList = nil
+	if font then
+		local SG = WG.StaticGUI
+		if SG and SG.DeleteFont then SG.DeleteFont(font) else gl.DeleteFont(font) end
+		font = nil
+	end
 	widgetHandler:DeregisterGlobal('ResearchSampleEvent')
 	WG.StaticEndGraph = nil
 	Spring.SendCommands("endgraph 1")   -- restore engine graph for other widgets
@@ -1018,8 +1172,7 @@ function widget:ViewResize(nx, ny)
 	local newScale = (0.5 + (vsx * vsy / 5700000))
 	if newScale ~= fontfileScale then
 		fontfileScale = newScale
-		if font then gl.DeleteFont(font) end
-		font = gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8)
+		ReloadFont()
 	end
 	BuildGeometry()
 	contentDirty = true

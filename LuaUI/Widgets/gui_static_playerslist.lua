@@ -102,11 +102,42 @@ local listTime              = 14   -- seconds to keep a broadcaster "recent"
 -- Speedups
 --------------------------------------------------------------------------------
 
-local glColor    = gl.Color
-local glRect     = gl.Rect
-local glTexture  = gl.Texture
-local glTexRect  = gl.TexRect
+-- Raw engine entry points. Only the legacy fallback further down calls these
+-- directly; everything else goes through the shim locals so that drawing is
+-- batched by the shapes module when it is available.
+local rawColor    = gl.Color
+local rawRect     = gl.Rect
+local rawTexture  = gl.Texture
+local rawTexRect  = gl.TexRect
 
+-- Drawing shim. Forward-declared here so every function below closes over the
+-- same upvalues; bound for real by BindDrawing() in widget:Initialize.
+local glColor, glRect, glTexture, glTexRect
+local RectRound, AccentStrip, Flush
+local NewList, FreeList, Record, Replay
+local usingShapes = false
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- on the wrong side of them. Wrapping the font handle makes font:Begin() and
+-- font:End() flush at the right moments, which keeps every existing
+-- font:Print call site correct without auditing draw order by hand.
+local function WrapFont(f)
+	local SG = WG.StaticGUI
+	if f and SG and SG.WrapFont then
+		return SG.WrapFont(f)
+	end
+	return f
+end
+
+local function ReleaseFont(f)
+	if not f then return end
+	local SG = WG.StaticGUI
+	if SG and SG.DeleteFont then
+		SG.DeleteFont(f)
+	else
+		gl.DeleteFont(f)
+	end
+end
 local spGetViewGeometry    = Spring.GetViewGeometry
 local spGetMouseState      = Spring.GetMouseState
 local spPlaySoundFile      = Spring.PlaySoundFile
@@ -192,7 +223,8 @@ local sceduledSpecFullView
 local desiredLosmode
 local desiredLosmodeChanged = 0
 
--- caching
+-- Recorded draw list (see api_staticgui_shapes.lua) and its invalidation flag,
+-- replacing the gl.CreateList display list with the same semantics.
 local contentList  = nil
 local contentDirty = true
 local lastGuiShader = nil
@@ -267,18 +299,82 @@ local function GetPanelBGColor()
 	return PANEL_BG_COLOR
 end
 
-local function RectRound(px, py, sx, sy, cs)
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect and gl.TexRect, which are OpenGL
+-- 1.1 immediate mode: gl.Rect is glRectf and gl.TexRect is a raw
+-- glBegin(GL_QUADS). One RectRound cost 7 glBegin/glEnd pairs and 2 texture
+-- binds. None of that exists in OpenGL core profile, which is the only way
+-- past GL 2.1 on macOS, and it is the worst case for any driver translating
+-- GL to Metal or Vulkan.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into a single instanced draw call and rounds corners analytically in a
+-- fragment shader rather than blitting a corner texture.
+--
+-- If that module is unavailable - old driver, shader compile failure - these
+-- shims fall back to the original immediate-mode code. Slow, but not blank.
+--------------------------------------------------------------------------------
+
+local function LegacyRectRound(px, py, sx, sy, cs)
 	px, py, sx, sy, cs = math_floor(px), math_floor(py), math_floor(sx), math_floor(sy), math_floor(cs)
-	glRect(px+cs, py, sx-cs, sy)
-	glRect(sx-cs, py+cs, sx, sy-cs)
-	glRect(px, py+cs, px+cs, sy-cs)
-	glTexture(bgcorner)
-	glTexRect(px, py+cs, px+cs, py)
-	glTexRect(sx, py+cs, sx-cs, py)
-	glTexRect(px, sy-cs, px+cs, sy)
-	glTexRect(sx, sy-cs, sx-cs, sy)
-	glTexture(false)
+	rawRect(px+cs, py, sx-cs, sy)
+	rawRect(sx-cs, py+cs, sx, sy-cs)
+	rawRect(px, py+cs, px+cs, sy-cs)
+	rawTexture(bgcorner)
+	rawTexRect(px, py+cs, px+cs, py)
+	rawTexRect(sx, py+cs, sx-cs, py)
+	rawTexRect(px, sy-cs, px+cs, sy)
+	rawTexRect(sx, sy-cs, sx-cs, sy)
+	rawTexture(false)
 end
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+	rawTexture(accentImg)
+	rawTexRect(x1, y1, x2, y2)
+	rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+	local SG = WG.StaticGUI
+	if SG then
+		glColor     = SG.Color
+		glRect      = SG.Rect
+		glTexture   = SG.Texture
+		glTexRect   = SG.TexRect
+		RectRound   = SG.RectRound
+		AccentStrip = SG.AccentStrip
+		Flush       = SG.Flush
+		NewList       = function(existing) return existing or SG.NewList() end
+		FreeList      = function() end
+		Record        = SG.Record
+		Replay        = SG.Replay
+		usingShapes = true
+	else
+		glColor     = rawColor
+		glRect      = rawRect
+		glTexture   = rawTexture
+		glTexRect   = rawTexRect
+		RectRound   = LegacyRectRound
+		AccentStrip = LegacyAccentStrip
+		Flush       = NoOp
+		-- No recorder without the shape module, so fall back to real display
+		-- lists: exactly what this widget did before the port.
+		NewList       = function(existing)
+			if existing then gl.DeleteList(existing) end
+			return nil
+		end
+		FreeList      = function(l) if l then gl.DeleteList(l) end end
+		Record        = function(_, fn) return gl.CreateList(fn) end
+		Replay        = gl.CallList
+		usingShapes = false
+	end
+end
+
+BindDrawing()
 
 local function DrawBox(x1, y1, x2, y2, col, cs)
 	glColor(col[1], col[2], col[3], col[4])
@@ -298,9 +394,7 @@ local function DrawPanelChrome(x1, y1, x2, y2, accent)
 	RectRound(x1+ins, y1+ins, x2-ins, y2-ins, ic)
 	if accent then
 		glColor(accent[1], accent[2], accent[3], 1)
-		glTexture(accentImg)
-		glTexRect(x1+ins, y2-ins-ah, x2-ins, y2-ins)
-		glTexture(false)
+		AccentStrip(x1+ins, y2-ins-ah, x2-ins, y2-ins)
 	end
 end
 
@@ -816,8 +910,7 @@ local function BakeSpecRow(r)
 end
 
 local function BuildContentList()
-	if contentList then gl.DeleteList(contentList) ; contentList = nil end
-	contentList = gl.CreateList(function()
+	contentList = Record(NewList(contentList), function()
 		DrawPanelChrome(panelRect.x1, panelRect.y1, panelRect.x2, panelRect.y2, ACCENT_PANEL)
 		-- group backgrounds first (behind rows)
 		for i = 1, #groupBgs do
@@ -883,9 +976,7 @@ local function DrawSystemPopup(r, mx, my)
 	glColor(0, 0, 0, 0.88)
 	RectRound(bx1, by1, bx2, by2, 4*uiScale)
 	glColor(ACCENT_PANEL[1], ACCENT_PANEL[2], ACCENT_PANEL[3], 1)
-	glTexture(accentImg)
-	glTexRect(bx1, by2-3*uiScale, bx2, by2)
-	glTexture(false)
+	AccentStrip(bx1, by2-3*uiScale, bx2, by2)
 
 	font:Begin()
 	for i = 1, #lines do
@@ -915,9 +1006,7 @@ local function DrawMiniTooltip(text, mx, my, accent)
 	RectRound(bx1, by1, bx2, by2, 4*uiScale)
 	if accent then
 		glColor(accent[1], accent[2], accent[3], 1)
-		glTexture(accentImg)
-		glTexRect(bx1, by2-3*uiScale, bx2, by2)
-		glTexture(false)
+		AccentStrip(bx1, by2-3*uiScale, bx2, by2)
 	end
 	font:Begin()
 	font:Print(TEXT_COLOR .. text, bx1 + 7*uiScale, by1 + boxH*0.5, fsize, "vo")
@@ -1057,6 +1146,9 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	-- Resolve the shapes module now that every widget has been constructed.
+	BindDrawing()
+
 	-- suppress engine fps/clock/speed (we show them in the top bar)
 	spSendCommands("fps 0")
 	spSendCommands("clock 0")
@@ -1064,7 +1156,7 @@ function widget:Initialize()
 
 	vsx, vsy = spGetViewGeometry()
 	fontfileScale = (0.5 + (vsx * vsy / 5700000))
-	font = gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8)
+	font = WrapFont(gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8))
 
 	widgetHandler:RegisterGlobal('FpsEvent', FpsEvent)
 	widgetHandler:RegisterGlobal('GpuMemEvent', GpuMemEvent)
@@ -1087,8 +1179,10 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	if contentList then gl.DeleteList(contentList) ; contentList = nil end
-	if font then gl.DeleteFont(font) end
+	FreeList(contentList)
+	contentList = nil
+	ReleaseFont(font)
+	font = nil
 
 	widgetHandler:DeregisterGlobal('FpsEvent')
 	widgetHandler:DeregisterGlobal('GpuMemEvent')
@@ -1109,8 +1203,8 @@ function widget:ViewResize(nx, ny)
 	local newScale = (0.5 + (vsx * vsy / 5700000))
 	if newScale ~= fontfileScale then
 		fontfileScale = newScale
-		if font then gl.DeleteFont(font) end
-		font = gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8)
+		if font then ReleaseFont(font) end
+		font = WrapFont(gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8))
 	end
 	RefreshPlayers()
 	BuildGeometry()
@@ -1186,8 +1280,11 @@ function widget:DrawScreen()
 		BuildContentList()
 	end
 
-	gl.CallList(contentList)
+	Replay(contentList)
 
 	local mx, my = spGetMouseState()
 	DrawHover(mx, my)
+
+	-- Hand the accumulated shape instances to the GPU.
+	Flush()
 end

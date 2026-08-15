@@ -1,7 +1,7 @@
 function widget:GetInfo()
 	return {
 		name    = "Static Tooltip Panel",
-		desc    = "Panel-style tooltip with optional additional info panel",
+		desc    = "Panel-style tooltip. Additional Info is its own widget (gui_static_additionalinfo.lua) built on WG.StaticTooltip.",
 		author  = "",
 		date    = "2026-03-22",
 		license = "GPL v2 or later",
@@ -23,8 +23,24 @@ local TOTAL_HEIGHT_FRAC     = 0.70
 local ORDER_HEIGHT_FRAC     = 0.28
 local GAP_BETWEEN_PANELS    = 10
 local PANEL_RADIUS          = 10
-local PANEL_OUTER_COLOR     = {0, 0, 0, 0.85}
-local PANEL_INNER_COLOR     = {0.15, 0.15, 0.15, 0.85}
+--------------------------------------------------------------------------------
+-- OPACITY CONTROLS
+--
+-- PANEL_OPACITY multiplies the alpha of the two panel layers below; 1.0 uses
+-- the alphas as written. Defaults are chosen to match the Abilities / Players
+-- List panels (a 0.90 border stacked under a ~0.9 background, roughly 0.99
+-- combined coverage). The original 0.85/0.85 layers were visibly lighter.
+--------------------------------------------------------------------------------
+local PANEL_OUTER_COLOR     = {0, 0, 0, 0.90}
+local PANEL_INNER_COLOR     = {0.07, 0.07, 0.08, 0.92}
+do
+	-- Inside this block on purpose: the file sits at Lua 5.1's 200-local
+	-- ceiling, and block-scoped locals free their slots at the closing end.
+	local PANEL_OPACITY = 1.0   -- <== fiddle here
+	local function ApplyOpacity(c) c[4] = math.min(1, c[4] * PANEL_OPACITY) end
+	ApplyOpacity(PANEL_OUTER_COLOR)
+	ApplyOpacity(PANEL_INNER_COLOR)
+end
 local TOOLTIP_ACCENT_COLOR    = {0.00, 0.50, 1.00, 1}
 local ADDITIONAL_ACCENT_COLOR = {0.00, 0.50, 1.00, 1}
 local PANEL_ACCENT_HEIGHT     = 5
@@ -160,14 +176,45 @@ local spSendCommands           = Spring.SendCommands
 local spSetDrawSelectionInfo   = Spring.SetDrawSelectionInfo
 local spPlaySoundFile          = Spring.PlaySoundFile
 
-local glColor                  = gl.Color
-local glRect                   = gl.Rect
 local glText                   = gl.Text
 local glBeginEnd               = gl.BeginEnd
 local glVertex                 = gl.Vertex
-local glScissor                = gl.Scissor
-local glTexture                = gl.Texture
 local glTexCoord               = gl.TexCoord
+
+-- Raw engine entry points and shim helpers, kept in one table rather than as
+-- separate locals: this file sits close to Lua 5.1's 200-locals-per-chunk
+-- limit. Only the legacy fallback calls the raw entries; everything else goes
+-- through the shim locals below so drawing is batched by the shapes module.
+local RAW = {}
+RAW.Color   = gl.Color
+RAW.Rect    = gl.Rect
+RAW.Texture = gl.Texture
+RAW.TexRect = gl.TexRect
+RAW.Scissor = gl.Scissor
+
+-- Drawing shim. Forward-declared so every function below closes over the same
+-- upvalues; bound for real by RAW.BindDrawing() in widget:Initialize.
+local glColor, glRect, glTexture, glTexRect, glScissor
+local RectRound, RoundedRect, Flush
+
+function RAW.WrapFont(f)
+	local SG = WG.StaticGUI
+	if f and SG and SG.WrapFont then
+		return SG.WrapFont(f)
+	end
+	return f
+end
+
+function RAW.ReleaseFont(f)
+	if not f then return end
+	local SG = WG.StaticGUI
+	if SG and SG.DeleteFont then
+		SG.DeleteFont(f)
+	else
+		gl.DeleteFont(f)
+	end
+end
+
 local GL_TRIANGLE_FAN          = GL.TRIANGLE_FAN
 local GL_QUADS                 = GL.QUADS
 
@@ -273,7 +320,10 @@ local orderPanel = {}
 local tooltipPanel = {}
 local additionalPanel = {}
 
-local additionalInfoEnabled = false
+-- The Additional Info panel is a separate widget now; dataVersion tells it
+-- when the underlying panel data changed (NOT bumped for scroll rebuilds).
+local dataVersion  = 0
+local addAvailable = false
 
 -- Scrollbar config
 local SCROLLBAR_W          = 6   -- will be scaled in UpdateRects
@@ -290,12 +340,6 @@ local tooltipDragging       = false
 local tooltipDragOffset     = 0
 
 -- Scroll state — additional panel
-local addScrollOffset       = 0
-local addContentH           = 0
-local addViewH              = 0
-local addScrollbarInfo      = nil
-local addDragging           = false
-local addDragOffset         = 0
 
 --------------------------------------------------------------------------------
 -- Display list cache
@@ -314,19 +358,39 @@ local addDragOffset         = 0
 -- It has no dynamic values.
 --------------------------------------------------------------------------------
 
-local staticList     = nil
-local dynamicList    = nil
+-- staticList is an SG.TexCache texture (the whole static layer as one texture,
+-- one quad per frame). dynamicList stays a recorded list - a handful of live
+-- values. staticCacheDirty defers cache rendering into DrawScreen, where
+-- gl.RenderToTexture is legal.
+local staticList       = nil
+local dynamicList      = nil
+local staticCacheDirty = true
+-- Declared HERE, before every function that writes it. It previously sat far
+-- below RebuildAllLists and the bake, so their writes went to a nil GLOBAL
+-- while DrawScreen read this local - the frozen-values bug. Same late-
+-- declaration class as the atlas bind and BakeDynamicList; scanner-found.
+local dynamicDirty = false
+
+-- /tooltipdebug: one infolog line per pipeline stage. Costs nothing when off.
+local TT_DEBUG = false
+local lastDbgReplayN = nil
+local function TTDbg(fmt, ...)
+	if TT_DEBUG then
+		Spring.Echo("[Tooltip] " .. string.format(fmt, ...))
+	end
+end
 
 local cachedPanelData   = nil
 local cachedIsOrder     = false
 local cachedResolvedKey = nil
 local cachedIsLiveUnit    = false
 local cachedIsLiveFeature = false
-local lastShowAdditional  = false  -- tracks what was baked into staticList
 
 local function FreeDisplayLists()
-	if staticList     then gl.DeleteList(staticList)     ; staticList     = nil end
-	if dynamicList    then gl.DeleteList(dynamicList)    ; dynamicList    = nil end
+	RAW.FreeCache(staticList)
+	staticList  = nil
+	staticCacheDirty = true
+	dynamicList = nil
 end
 
 -- Track the values that went into the last dynamic list compile.
@@ -423,7 +487,6 @@ local function UpdateRects()
 
 	-- Reset scroll on geometry change
 	tooltipScrollOffset = 0
-	addScrollOffset     = 0
 
 	local panelW = math_floor(vsx * PANEL_WIDTH_FRAC)
 	local totalH = math_floor(vsy * TOTAL_HEIGHT_FRAC)
@@ -477,7 +540,10 @@ local function RoundedRectVertices(x1, y1, x2, y2, r, segments)
 	Arc(x2 - rr, y1 + rr, math_pi * 1.5, math_pi * 2)
 end
 
-local function DrawRoundedRect(x1, y1, x2, y2, r, color)
+-- Legacy fallback for the tessellated fill: 30 gl.Vertex calls and two Lua
+-- closures per rectangle. The shape module does the same as a single instance
+-- with the corners solved in the fragment shader.
+function RAW.LegacyRoundedRect(x1, y1, x2, y2, r, color)
 	local rr = math_min(r, (x2 - x1) * 0.5, (y2 - y1) * 0.5)
 
 	glColor(color)
@@ -539,11 +605,84 @@ local function DrawRectRound(px, py, sx, sy, cs)
 	glTexCoord(1-o,o)     glVertex(sx, sy-cs, 0)
 end
 
-local function RectRound(px, py, sx, sy, cs)
-	glTexture(bgcorner)
-	gl.BeginEnd(GL_QUADS, DrawRectRound, px, py, sx, sy, cs)
-	glTexture(false)
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect and gl.TexRect, which are OpenGL
+-- 1.1 immediate mode: gl.Rect is glRectf and gl.TexRect is a raw
+-- glBegin(GL_QUADS). One RectRound cost 7 glBegin/glEnd pairs and 2 texture
+-- binds. None of that exists in OpenGL core profile, which is the only way
+-- past GL 2.1 on macOS, and it is the worst case for any driver translating
+-- GL to Metal or Vulkan.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into a single instanced draw call and rounds corners analytically in a
+-- fragment shader rather than blitting a corner texture.
+--
+-- If that module is unavailable - old driver, shader compile failure - these
+-- shims fall back to the original immediate-mode code. Slow, but not blank.
+--------------------------------------------------------------------------------
+
+function RAW.LegacyAccentStrip(x1, y1, x2, y2)
+	RAW.Texture(accentImg)
+	RAW.TexRect(x1, y1, x2, y2)
+	RAW.Texture(false)
 end
+
+function RAW.LegacyRectRound(px, py, sx, sy, cs)
+	RAW.Texture(bgcorner)
+	gl.BeginEnd(GL_QUADS, DrawRectRound, px, py, sx, sy, cs)
+	RAW.Texture(false)
+end
+
+function RAW.NoOp() end
+
+function RAW.BindDrawing()
+	local SG = WG.StaticGUI
+	if SG then
+		glColor     = SG.Color
+		glRect      = SG.Rect
+		glTexture   = SG.Texture
+		glTexRect   = SG.TexRect
+		glScissor   = SG.Scissor
+		RectRound      = SG.RectRound
+		RoundedRect    = SG.RoundedRect
+		RAW.AccentStrip = SG.AccentStrip
+		Flush          = SG.Flush
+		RAW.NewList    = function(existing) return existing or SG.NewList() end
+		RAW.Record     = SG.Record
+		RAW.Replay     = SG.Replay
+		RAW.TexCache   = SG.TexCache
+		RAW.DrawCache  = SG.DrawCache
+		RAW.FreeCache  = SG.FreeCache
+	else
+		glColor     = RAW.Color
+		glRect      = RAW.Rect
+		glTexture   = RAW.Texture
+		glTexRect   = RAW.TexRect
+		glScissor   = RAW.Scissor
+		RectRound      = RAW.LegacyRectRound
+		RoundedRect    = RAW.LegacyRoundedRect
+		RAW.AccentStrip = RAW.LegacyAccentStrip
+		Flush          = RAW.NoOp
+		RAW.NewList    = function(existing)
+			if existing then gl.DeleteList(existing) end
+			return nil
+		end
+		RAW.Record     = function(_, fn) return gl.CreateList(fn) end
+		RAW.Replay     = gl.CallList
+		-- No FBO textures without the shape module: a legacy cache handle is a
+		-- real display list id, built the way this widget always did.
+		RAW.TexCache   = function(cache, _, _, _, _, fn)
+			if cache then gl.DeleteList(cache) end
+			return gl.CreateList(fn)
+		end
+		RAW.DrawCache  = function(cache) if cache then gl.CallList(cache) end end
+		RAW.FreeCache  = function(cache) if cache then gl.DeleteList(cache) end end
+	end
+end
+
+RAW.BindDrawing()
 
 local function GetAccentForPanel(panelData, fallbackColor)
 	if panelData and panelData.tech and TECH_TEXT_COLORS[panelData.tech] then
@@ -563,9 +702,7 @@ local function DrawPanel(x1, y1, x2, y2, accentColor)
 
 	local accent = accentColor or TOOLTIP_ACCENT_COLOR
 	glColor(accent)
-	glTexture(accentImg)
-	gl.TexRect(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
-	glTexture(false)
+	RAW.AccentStrip(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
 	glColor(1,1,1,1)
 end
 
@@ -575,9 +712,7 @@ local function DrawSectionBox(x1, y1, x2, y2, accentColor)
 
 	local accent = accentColor or SECTION_ACCENT_COLOR
 	glColor(accent)
-	glTexture(accentImg)
-	gl.TexRect(x1 + 1, y2 - (1 + SECTION_ACCENT_HEIGHT), x2 - 1, y2 - 1)
-	glTexture(false)
+	RAW.AccentStrip(x1 + 1, y2 - (1 + SECTION_ACCENT_HEIGHT), x2 - 1, y2 - 1)
 	glColor(1,1,1,1)
 end
 
@@ -597,7 +732,7 @@ local function DrawHeroImage(unitName, x1, yTop, w)
 
 	glColor(1, 1, 1, 1)
 	glTexture(":l:" .. path)
-	gl.TexRect(x1 + pad, y1 + pad, x1 + w - pad, yTop - pad)
+	glTexRect(x1 + pad, y1 + pad, x1 + w - pad, yTop - pad)
 	glTexture(false)
 
 	return y1 - SECTION_GAP
@@ -631,7 +766,13 @@ local function DrawTextFitted(text, x, y, size, maxWidth, color, align)
 			text = (s == "") and TXT.ellipsis or (s .. TXT.ellipsis)
 		end
 	end
-	fnt:Print(text, x, y, drawSize, (align or "o"))
+	-- Snap position and size to whole pixels. Fitted text produces arbitrary
+	-- fractional sizes (size * maxWidth/approxW) and wrapped layout produces
+	-- fractional baselines; both magnify glyphs off the pixel grid, which is
+	-- why the small body text - weapon descriptions, the guide, the spacebar
+	-- hints - looked softer than the headers.
+	drawSize = math_floor(drawSize + 0.5)
+	fnt:Print(text, math_floor(x + 0.5), math_floor(y + 0.5), drawSize, (align or "o"))
 	return fnt:GetTextWidth(text) * drawSize
 end
 
@@ -639,7 +780,8 @@ local function DrawText(text, x, y, size, opts, color)
 	local fnt = TXT.SelectFont(size)
 	local c = color or HEADER_TEXT
 	fnt:SetTextColor(c[1], c[2], c[3], c[4] or 1)
-	fnt:Print(text, x, y, size, opts or "o")
+	-- Whole-pixel position and size: see DrawTextFitted.
+	fnt:Print(text, math_floor(x + 0.5), math_floor(y + 0.5), math_floor(size + 0.5), opts or "o")
 end
 
 -- All call sites measure BODY_SIZE text, so measure with the font that
@@ -919,7 +1061,7 @@ local function DrawHeaderTag(x, y, text, color)
 	local pad = math_floor(10 * uiScale)
 	local w = math_floor(TextWidthApprox(text, SMALL_SIZE) + pad)
 	local h = math_floor(16 * uiScale)
-	DrawRoundedRect(x, y - math_floor(3 * uiScale), x + w, y + h - math_floor(3 * uiScale), 5, CATEGORY_BG)
+	RoundedRect(x, y - math_floor(3 * uiScale), x + w, y + h - math_floor(3 * uiScale), 5, CATEGORY_BG)
 	DrawTextFitted(text, x + math_floor(5 * uiScale), y, SMALL_SIZE, w - math_floor(10 * uiScale), color or HEADER_TEXT, "o")
 	return w + math_floor(4 * uiScale)
 end
@@ -1238,7 +1380,7 @@ local function DrawWeaponCards(cards, x1, yTop, w, clipBottom)
 		local by1 = by2 - entry.cardH
 
 		if by2 >= clipBottom then
-			DrawRoundedRect(x1 + pad, by1, x1 + w - pad, by2, 6, CATEGORY_BG)
+			RoundedRect(x1 + pad, by1, x1 + w - pad, by2, 6, CATEGORY_BG)
 			glColor(CATEGORY_CARD_ACCENT_COLOR)
 			RectRound(x1 + pad, by2 - (1 + SECTION_ACCENT_HEIGHT), x1 + w - pad, by2 - 1, 3)
 			glColor(1,1,1,1)
@@ -1907,13 +2049,21 @@ local function BakePanel(panelData, isOrder, px1, py1, px2, py2, scrollOffset, a
 		local sbx2 = sbx1 + SCROLLBAR_W
 		local sby1 = py1 + CORNER_SAFE_BOTTOM
 		local sby2 = py2 - CORNER_SAFE_TOP
-		DrawRoundedRect(sbx1, sby1, sbx2, sby2, 3, SCROLLBAR_BG)
+		RoundedRect(sbx1, sby1, sbx2, sby2, 3, SCROLLBAR_BG)
 	end
 
 	return contentH, clampedOffset, viewH, needsScroll
 end
 
-local function BakeStaticList(panelData, isOrder, showAdditional)
+-- Forward declaration: BakeStaticList records the dynamic overlay atomically,
+-- and a Lua closure resolves names when it is created - without this line it
+-- silently captured a nil GLOBAL and every in-bake record errored into
+-- SG.Record's pcall, leaving the values list empty until a value tick
+-- re-recorded it from DrawScreen (which is compiled after the definition).
+-- Same bug class as the atlas bind failure; the infolog named it.
+local BakeDynamicList
+
+local function BakeStaticList(panelData, isOrder)
 	local x1, y1, x2, y2 = tooltipPanel.x1, tooltipPanel.y1, tooltipPanel.x2, tooltipPanel.y2
 	if x2 > vsx - 8 then return end
 
@@ -1939,45 +2089,62 @@ local function BakeStaticList(panelData, isOrder, showAdditional)
 		tooltipScrollbarInfo = nil
 	end
 
-	-- Additional panel
-	if showAdditional then
-		local ax1, ay1, ax2, ay2 = additionalPanel.x1, additionalPanel.y1, additionalPanel.x2, additionalPanel.y2
-		if ax2 <= vsx - 8 then
-			local extra = {
-				additionalOnly = true,
-				unitName    = panelData.unitName,
-				hintText    = ADDITIONAL_HINT_TEXT,
-				buildTime   = panelData.buildTimeText,
-				buildPower  = panelData.buildPowerText,
-				buildData   = panelData,
-				weaponCards = panelData.weaponCards,
-				unitGuide   = panelData.unitGuideText,
-			}
-			local addTitle = { title = "Additional Info", subtitle = panelData.title or "", tech = panelData.tech }
-			local aContentH, aOffset, aViewH, aNeedsScroll =
-			BakePanel(addTitle, false, ax1, ay1, ax2, ay2, addScrollOffset,
-			          GetAccentForPanel(panelData, ADDITIONAL_ACCENT_COLOR), extra)
-
-			addContentH = aContentH
-			addViewH    = aViewH
-			addScrollOffset = aOffset
-
-			if aNeedsScroll then
-				local CORNER_SAFE_SIDE   = PANEL_RADIUS + math_floor(3 * uiScale)
-				local CORNER_SAFE_TOP    = PANEL_RADIUS + math_floor(3 * uiScale)
-				local CORNER_SAFE_BOTTOM = INNER_PAD - math_floor(2 * uiScale)
-				local sbx1 = ax2 - CORNER_SAFE_SIDE - SCROLLBAR_W
-				local sbx2 = sbx1 + SCROLLBAR_W
-				local sby1 = ay1 + CORNER_SAFE_BOTTOM
-				local sby2 = ay2 - CORNER_SAFE_TOP
-				addScrollbarInfo = { x1=sbx1, y1=sby1, x2=sbx2, y2=sby2 }
-			else
-				addScrollbarInfo = nil
-			end
-		end
-	else
-		addScrollbarInfo = nil
+	-- Re-record the dynamic overlay HERE, atomically with the bake that just
+	-- computed dynamicStatsEconLayout. Any gap between the two is a chance
+	-- for the layout and the recorded positions to disagree - which showed up
+	-- as values detached from their labels while scrolling. Recording stores
+	-- absolute screen coordinates (the cache-local mapping applies at draw
+	-- time, not record time), so a list recorded inside this render replays
+	-- correctly on screen.
+	if panelData.isLiveUnit or panelData.isLiveFeature then
+		SaveDynamicValues(panelData)
+		dynamicList = RAW.NewList(dynamicList)
+		dynamicList = RAW.Record(dynamicList, function()
+			BakeDynamicList(panelData)
+		end)
+		dynamicDirty = false
+		TTDbg("bake: offset=%.1f layout=%s recorded=%d ops",
+			tooltipScrollOffset, tostring(dynamicStatsEconLayout ~= nil),
+			(type(dynamicList) == "table") and #dynamicList or -1)
 	end
+
+end
+
+-- Bakes the Additional Info panel at the additionalPanel rect. Called by the
+-- separate gui_static_additionalinfo.lua widget (inside ITS texture cache)
+-- through WG.StaticTooltip; all the shared section renderers live here.
+-- Returns contentH, clampedOffset, viewH, needsScroll, scrollbarInfo.
+local function BakeAdditionalPanel(scrollOffset)
+	local panelData = cachedPanelData
+	if not panelData then return 0, 0, 0, false, nil end
+	local ax1, ay1, ax2, ay2 = additionalPanel.x1, additionalPanel.y1, additionalPanel.x2, additionalPanel.y2
+	if ax2 > vsx - 8 then return 0, 0, 0, false, nil end
+
+	local extra = {
+		additionalOnly = true,
+		unitName    = panelData.unitName,
+		hintText    = ADDITIONAL_HINT_TEXT,
+		buildTime   = panelData.buildTimeText,
+		buildPower  = panelData.buildPowerText,
+		buildData   = panelData,
+		weaponCards = panelData.weaponCards,
+		unitGuide   = panelData.unitGuideText,
+	}
+	local addTitle = { title = "Additional Info", subtitle = panelData.title or "", tech = panelData.tech }
+	local aContentH, aOffset, aViewH, aNeedsScroll =
+	BakePanel(addTitle, false, ax1, ay1, ax2, ay2, scrollOffset,
+	          GetAccentForPanel(panelData, ADDITIONAL_ACCENT_COLOR), extra)
+
+	local sbInfo = nil
+	if aNeedsScroll then
+		local CORNER_SAFE_SIDE   = PANEL_RADIUS + math_floor(3 * uiScale)
+		local CORNER_SAFE_TOP    = PANEL_RADIUS + math_floor(3 * uiScale)
+		local CORNER_SAFE_BOTTOM = INNER_PAD - math_floor(2 * uiScale)
+		local sbx1 = ax2 - CORNER_SAFE_SIDE - SCROLLBAR_W
+		sbInfo = { x1 = sbx1, y1 = ay1 + CORNER_SAFE_BOTTOM,
+		           x2 = sbx1 + SCROLLBAR_W, y2 = ay2 - CORNER_SAFE_TOP }
+	end
+	return aContentH, aOffset, aViewH, aNeedsScroll, sbInfo
 end
 
 local function DrawScrollbarThumb(info, contentH, viewH, scrollOffset, mx, my)
@@ -1990,30 +2157,43 @@ local function DrawScrollbarThumb(info, contentH, viewH, scrollOffset, mx, my)
 	local ty2 = info.y2 - range * frac
 	local ty1 = ty2 - thumbH
 	local hovered = mx >= info.x1 and mx <= info.x2 and my >= ty1 and my <= ty2
-	DrawRoundedRect(info.x1, ty1, info.x2, ty2, 3,
+	RoundedRect(info.x1, ty1, info.x2, ty2, 3,
 	                hovered and SCROLLBAR_THUMB_HOVER or SCROLLBAR_THUMB)
 	return ty1, ty2
 end
 
-local function BakeDynamicList(panelData)
+function BakeDynamicList(panelData)
 	-- Only called for live units; draws just the changing value strings.
 	if dynamicStatsEconLayout then
 		DrawStatsEconDynamic(panelData, dynamicStatsEconLayout)
 	end
 end
 
-local function RebuildAllLists(panelData, isOrder, showAdditional)
-	FreeDisplayLists()
-	if not panelData then return end
+local function RebuildAllLists(panelData, isOrder)
+	if not panelData then
+		FreeDisplayLists()
+		return
+	end
 
-	staticList = gl.CreateList(function()
-		BakeStaticList(panelData, isOrder, showAdditional)
-	end)
+	-- Only flag rebuilds here. The static layer is an FBO texture cache and
+	-- gl.RenderToTexture is Draw-callin-only, while this runs from MouseWheel
+	-- and MousePress. The dynamic list MUST also wait: its value positions
+	-- (dynamicStatsEconLayout) are recomputed during the cache render, so
+	-- recording it here used the PREVIOUS scroll offset's layout - which is
+	-- exactly the values-detached-from-labels bug while scrolling. DrawScreen
+	-- re-records it right after the cache render. Not freeing the cache here
+	-- also lets a scroll step reuse the same-size texture instead of
+	-- recreating it.
+	staticCacheDirty = true
 
 	if panelData.isLiveUnit or panelData.isLiveFeature then
-		dynamicList = gl.CreateList(function()
-			BakeDynamicList(panelData)
-		end)
+		dynamicDirty = true
+	else
+		-- Switching to a target with no live values: drop any stale list so
+		-- old numbers cannot replay over the new panel.
+		dynamicList = RAW.NewList(dynamicList)
+		dynamicList = nil
+		dynamicDirty = false
 	end
 end
 
@@ -2022,8 +2202,11 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
-	TXT.fontMain  = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
-	TXT.fontSmall = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1)
+	-- Resolve the shapes module now that every widget has been constructed.
+	RAW.BindDrawing()
+
+	TXT.fontMain  = RAW.WrapFont(gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2))
+	TXT.fontSmall = RAW.WrapFont(gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1))
 	UpdateRects()
 	spSendCommands({"tooltip 0"})
 	spSetDrawSelectionInfo(false)
@@ -2033,12 +2216,32 @@ function widget:Initialize()
 		local shieldDefID = ud.shieldWeaponDef
 		ud.shieldPower = ((shieldDefID) and (WeaponDefs[shieldDefID].shieldPower)) or (-1)
 	end
+	-- Interface for gui_static_additionalinfo.lua. That widget owns the
+	-- Additional Info panel's visibility, scrolling and texture cache; all the
+	-- shared section renderers and the panel data stay here.
+	WG.StaticTooltip = {
+		-- Bumped when the underlying panel data changes (hover target, order
+		-- body, live refresh). NOT bumped for tooltip scroll rebuilds, so the
+		-- additional panel's cache survives them untouched.
+		GetDataVersion    = function() return dataVersion end,
+		HasAdditional     = function() return addAvailable and cachedPanelData ~= nil end,
+		-- x1, y1, x2, y2 of the additional panel, plus uiScale for input math.
+		GetAdditionalRect = function()
+			return additionalPanel.x1, additionalPanel.y1,
+			       additionalPanel.x2, additionalPanel.y2, uiScale
+		end,
+		-- Renders the panel at that rect; call from inside a texture cache.
+		BakeAdditional    = BakeAdditionalPanel,
+		DrawThumb         = DrawScrollbarThumb,
+	}
+
 end
 
 function widget:Shutdown()
+	WG.StaticTooltip = nil
 	FreeDisplayLists()
-	if TXT.fontMain  then gl.DeleteFont(TXT.fontMain)  end
-	if TXT.fontSmall then gl.DeleteFont(TXT.fontSmall) end
+	if TXT.fontMain  then RAW.ReleaseFont(TXT.fontMain)  end
+	if TXT.fontSmall then RAW.ReleaseFont(TXT.fontSmall) end
 	spSendCommands({"tooltip 1"})
 end
 
@@ -2049,7 +2252,6 @@ function widget:ViewResize()
 	FreeDisplayLists()
 end
 
-local dynamicDirty = false
 
 function widget:Update()
 	ui_opacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
@@ -2075,13 +2277,11 @@ function widget:Update()
 	end
 end
 
-function widget:KeyPress(key, mods, isRepeat)
-	if isRepeat then return false end
-	if key == KEYSYMS.SPACE then
-		additionalInfoEnabled = not additionalInfoEnabled
-		addScrollOffset = 0   -- reset additional panel scroll on toggle
-		PlayToggleSound()
-		-- DrawScreen will detect lastShowAdditional changed and rebuild safely
+function widget:TextCommand(command)
+	if command == "tooltipdebug" then
+		TT_DEBUG = not TT_DEBUG
+		lastDbgReplayN = nil
+		Spring.Echo("[Tooltip] debug " .. (TT_DEBUG and "on" or "off"))
 		return true
 	end
 	return false
@@ -2090,10 +2290,6 @@ end
 function widget:IsAbove(x, y)
 	if tooltipScrollbarInfo then
 		local i = tooltipScrollbarInfo
-		if x >= i.x1 and x <= i.x2 and y >= i.y1 and y <= i.y2 then return true end
-	end
-	if addScrollbarInfo then
-		local i = addScrollbarInfo
 		if x >= i.x1 and x <= i.x2 and y >= i.y1 and y <= i.y2 then return true end
 	end
 	return false
@@ -2117,27 +2313,12 @@ function widget:MousePress(x, y, button)
 		end
 	end
 
-	if addScrollbarInfo and addContentH > addViewH then
-		local info = addScrollbarInfo
-		if x >= info.x1 and x <= info.x2 and y >= info.y1 and y <= info.y2 then
-			addDragging = true
-			local trackH = info.y2 - info.y1
-			local thumbH = math_max(math_floor(20 * uiScale), trackH * (addViewH / math_max(addContentH, 1)))
-			local range  = trackH - thumbH
-			local frac   = Clamp(addScrollOffset / math_max(1, addContentH - addViewH), 0, 1)
-			local ty2    = info.y2 - range * frac
-			addDragOffset = ty2 - y
-			return true
-		end
-	end
-
 	return false
 end
 
 function widget:MouseRelease(x, y, button)
-	if tooltipDragging or addDragging then
+	if tooltipDragging then
 		tooltipDragging = false
-		addDragging     = false
 		return true
 	end
 	return false
@@ -2154,19 +2335,7 @@ function widget:MouseWheel(up, value)
 		local newOff = Clamp(tooltipScrollOffset + delta, 0, math_max(0, tooltipContentH - tooltipViewH))
 		if newOff ~= tooltipScrollOffset then
 			tooltipScrollOffset = newOff
-			RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
-		end
-		return true
-	end
-
-	-- Additional panel scroll
-	local ap = additionalPanel
-	if lastShowAdditional and mx >= ap.x1 and mx <= ap.x2 and my >= ap.y1 and my <= ap.y2 and addContentH > addViewH then
-		local delta = up and -step or step
-		local newOff = Clamp(addScrollOffset + delta, 0, math_max(0, addContentH - addViewH))
-		if newOff ~= addScrollOffset then
-			addScrollOffset = newOff
-			RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
+			RebuildAllLists(cachedPanelData, cachedIsOrder)
 		end
 		return true
 	end
@@ -2192,41 +2361,20 @@ function widget:DrawScreen()
 			local newOff = Clamp(frac * (tooltipContentH - tooltipViewH), 0, tooltipContentH - tooltipViewH)
 			if math_abs(newOff - tooltipScrollOffset) > 0.5 then
 				tooltipScrollOffset = newOff
-				RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
-			end
-		end
-	end
-
-	if addDragging and addScrollbarInfo and addContentH > addViewH then
-		local info    = addScrollbarInfo
-		local trackH  = info.y2 - info.y1
-		local thumbH  = math_max(math_floor(20 * uiScale), trackH * (addViewH / math_max(addContentH, 1)))
-		local range   = trackH - thumbH
-		if range > 0 then
-			local ty2    = Clamp(my + addDragOffset, info.y1 + thumbH, info.y2)
-			local frac   = (info.y2 - ty2) / range
-			local newOff = Clamp(frac * (addContentH - addViewH), 0, addContentH - addViewH)
-			if math_abs(newOff - addScrollOffset) > 0.5 then
-				addScrollOffset = newOff
-				RebuildAllLists(cachedPanelData, cachedIsOrder, lastShowAdditional)
+				RebuildAllLists(cachedPanelData, cachedIsOrder)
 			end
 		end
 	end
 
 	local resolved = ResolveTooltipData()
 	local key      = ResolvedKey(resolved)
-	local showAdditional = additionalInfoEnabled and resolved and CanShowAdditionalInfo(resolved)
-
-	-- If the additional panel was toggled, rebuild the static list with the same data
-	if showAdditional ~= lastShowAdditional and cachedPanelData then
-		lastShowAdditional = showAdditional
-		RebuildAllLists(cachedPanelData, cachedIsOrder, showAdditional)
-	end
+	-- Available to the Additional Info widget through WG.StaticTooltip.
+	addAvailable = (resolved and CanShowAdditionalInfo(resolved)) and true or false
 
 	if key ~= cachedResolvedKey then
 		-- Source changed — reset scroll and rebuild
 		tooltipScrollOffset = 0
-		addScrollOffset     = 0
+		dataVersion = dataVersion + 1
 		cachedResolvedKey = key
 		if resolved then
 			cachedPanelData, cachedIsOrder = BuildPanelDataFromResolved(resolved)
@@ -2244,14 +2392,14 @@ function widget:DrawScreen()
 			cachedIsLiveFeature = false
 		end
 		lastDynValues = {}
-		lastShowAdditional = showAdditional
-		RebuildAllLists(cachedPanelData, cachedIsOrder, showAdditional)
+		RebuildAllLists(cachedPanelData, cachedIsOrder)
 
 	elseif cachedIsOrder and cachedPanelData and resolved then
 		local newBody = resolved.body or ""
 		if cachedPanelData.body ~= newBody then
 			cachedPanelData.body = newBody
-			RebuildAllLists(cachedPanelData, cachedIsOrder, showAdditional)
+			dataVersion = dataVersion + 1
+			RebuildAllLists(cachedPanelData, cachedIsOrder)
 		end
 
 	elseif cachedIsLiveUnit and cachedPanelData then
@@ -2261,28 +2409,53 @@ function widget:DrawScreen()
 		-- live refresh handled in widget:Update
 	end
 
-	-- Rebuild dynamic list if Update flagged a value change
+	if not cachedPanelData then return end
+
+	-- Cache rect: this widget's cache covers only the tooltip panel; the
+	-- Additional Info widget keeps its own cache over its own rect, so
+	-- scrolling one no longer re-renders the other.
+	local cx1, cy1 = tooltipPanel.x1, tooltipPanel.y1
+	local cx2, cy2 = tooltipPanel.x2, tooltipPanel.y2
+
+	if staticCacheDirty then
+		staticList = RAW.TexCache(staticList, cx1, cy1, cx2, cy2, function()
+			BakeStaticList(cachedPanelData, cachedIsOrder)
+		end)
+		staticCacheDirty = false
+	end
+
+	-- Re-record the dynamic values AFTER the cache render: BakePanel just
+	-- recomputed dynamicStatsEconLayout for the current scroll offset, and
+	-- recording is GL-free so this is legal here.
 	if dynamicDirty and cachedPanelData then
 		dynamicDirty = false
 		SaveDynamicValues(cachedPanelData)
-		if dynamicList then gl.DeleteList(dynamicList) ; dynamicList = nil end
-		dynamicList = gl.CreateList(function()
+		dynamicList = RAW.NewList(dynamicList)
+		dynamicList = RAW.Record(dynamicList, function()
 			BakeDynamicList(cachedPanelData)
 		end)
+		TTDbg("tick-record: offset=%.1f layout=%s recorded=%d ops",
+			tooltipScrollOffset, tostring(dynamicStatsEconLayout ~= nil),
+			(type(dynamicList) == "table") and #dynamicList or -1)
 	end
 
-	if not staticList then return end
-
-	gl.CallList(staticList)
+	RAW.DrawCache(staticList, cx1, cy1)
 	if dynamicList then
-		gl.CallList(dynamicList)
+		if TT_DEBUG then
+			local n = (type(dynamicList) == "table") and #dynamicList or -1
+			if n ~= lastDbgReplayN then
+				lastDbgReplayN = n
+				TTDbg("replay: %d ops", n)
+			end
+		end
+		RAW.Replay(dynamicList)
 	end
 
 	-- Draw scrollbar thumbs on top (immediate mode, not baked)
 	if tooltipScrollbarInfo and tooltipContentH > tooltipViewH then
 		DrawScrollbarThumb(tooltipScrollbarInfo, tooltipContentH, tooltipViewH, tooltipScrollOffset, mx, my)
 	end
-	if addScrollbarInfo and addContentH > addViewH then
-		DrawScrollbarThumb(addScrollbarInfo, addContentH, addViewH, addScrollOffset, mx, my)
-	end
+
+	-- Hand the accumulated shape instances to the GPU.
+	Flush()
 end

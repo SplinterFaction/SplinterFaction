@@ -22,10 +22,34 @@ local TOTAL_HEIGHT_FRAC     = 0.70
 local ORDER_HEIGHT_FRAC     = 0.28
 local GAP_BETWEEN_PANELS    = 10
 local PANEL_RADIUS          = 10
-local PANEL_BG              = {0.08, 0.08, 0.09, 0.88}
+--------------------------------------------------------------------------------
+-- OPACITY CONTROLS
+--
+-- PANEL_OPACITY multiplies the alpha of the background layers below; 1.0 uses
+-- the alphas as written, 0.9 makes everything 10% more see-through, and so on.
+-- The default alphas are chosen to match the Abilities / Players List panels,
+-- which stack a 0.90-alpha border UNDER a ~0.9 background for roughly 0.99
+-- combined coverage - noticeably more solid than this panel's original single
+-- 0.88 layer.
+--------------------------------------------------------------------------------
+local PANEL_OPACITY         = 1.0
+-- The panel body is two stacked layers, using the SAME values as the tooltip
+-- and additional-info panels so all three match by construction: a near-black
+-- outer under a dark grey inner. (The old body hardcoded outer alpha from the
+-- ui_opacity engine config, 0.66 by default, and a 0.78 inner - which is why
+-- the build menu sat visibly lighter than the tooltip over bright terrain.)
+local PANEL_OUTER_COLOR     = {0, 0, 0, 0.90}
+local PANEL_INNER_COLOR     = {0.07, 0.07, 0.08, 0.92}
 local PANEL_BORDER          = {1.0, 1.0, 1.0, 0.12}
-local SECTION_BG            = {0.14, 0.14, 0.15, 0.90}
-local CATEGORY_BG           = {0.20, 0.20, 0.21, 0.55}
+local SECTION_BG            = {0.14, 0.14, 0.15, 0.92}
+local CATEGORY_BG           = {0.20, 0.20, 0.21, 0.60}
+do
+    local function ApplyOpacity(c) c[4] = math.min(1, c[4] * PANEL_OPACITY) end
+    ApplyOpacity(PANEL_OUTER_COLOR)
+    ApplyOpacity(PANEL_INNER_COLOR)
+    ApplyOpacity(SECTION_BG)
+    ApplyOpacity(CATEGORY_BG)
+end
 local HEADER_TEXT           = {1.0, 1.0, 1.0, 1.0}
 local DISABLED_OVERLAY      = {0.0, 0.0, 0.0, 0.60}
 local HOVER_OVERLAY         = {0.90, 0.90, 0.90, 0.10}
@@ -102,7 +126,6 @@ local TECH_TEXT_COLORS = {
 local METAL_TEXT_COLOR  = {0.53, 0.77, 0.89, 1.0}
 local ENERGY_TEXT_COLOR = {1.0, 1.0, 0.0, 1.0}
 
-local ui_opacity           = tonumber(Spring.GetConfigFloat("ui_opacity", 0.66) or 0.66)
 local bgcorner             = ":n:" .. LUAUI_DIRNAME .. "Images/bgcorner.png"
 local accentImg            = ":n:" .. LUAUI_DIRNAME .. "Images/staticgui_accent.png"
 local PANEL_ACCENT         = {1.00, 0.25, 0.25, 1}
@@ -127,14 +150,47 @@ local spGetModKeyState       = Spring.GetModKeyState
 local spGetConfigFloat       = Spring.GetConfigFloat
 local spPlaySoundFile        = Spring.PlaySoundFile
 
-local glColor                = gl.Color
-local glRect                 = gl.Rect
 local glText                 = gl.Text
-local glTexture              = gl.Texture
-local glTexRect              = gl.TexRect
-local glScissor              = gl.Scissor
 local glBeginEnd             = gl.BeginEnd
 local glVertex               = gl.Vertex
+
+-- Raw engine entry points. Only the legacy fallback further down calls these
+-- directly; everything else goes through the shim locals so that drawing is
+-- batched by the shapes module when it is available.
+local rawColor    = gl.Color
+local rawRect     = gl.Rect
+local rawTexture  = gl.Texture
+local rawTexRect  = gl.TexRect
+local rawScissor  = gl.Scissor
+
+-- Drawing shim. Forward-declared here so every function below closes over the
+-- same upvalues; bound for real by BindDrawing() in widget:Initialize.
+local glColor, glRect, glTexture, glTexRect, glScissor
+local RectRound, RoundedRect, RoundedOutline, AccentStrip, Icon, Flush
+local TexCache, DrawCache, FreeCache
+local usingShapes = false
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- on the wrong side of them. Wrapping the font handle makes font:Begin() and
+-- font:End() flush at the right moments, which keeps every existing
+-- font:Print call site correct without auditing draw order by hand.
+local function WrapFont(f)
+    local SG = WG.StaticGUI
+    if f and SG and SG.WrapFont then
+        return SG.WrapFont(f)
+    end
+    return f
+end
+
+local function ReleaseFont(f)
+    if not f then return end
+    local SG = WG.StaticGUI
+    if SG and SG.DeleteFont then
+        SG.DeleteFont(f)
+    else
+        gl.DeleteFont(f)
+    end
+end
 local GL_TRIANGLE_FAN        = GL.TRIANGLE_FAN
 local GL_LINE_LOOP           = GL.LINE_LOOP
 local GL_QUADS               = GL.QUADS
@@ -249,8 +305,10 @@ local hiddenCMDs = {
 -- each frame as immediate-mode quads on top.
 --------------------------------------------------------------------------------
 
-local buildList       = nil   -- display list for build panel static layer
-local orderList       = nil   -- display list for order panel static layer
+-- Recorded draw lists (see api_staticgui_shapes.lua). These replace the two
+-- gl.CreateList display lists and keep the same staticDirty invalidation.
+local buildList       = nil
+local orderList       = nil
 local staticDirty     = true
 local lastScrollOffset = -1
 
@@ -258,8 +316,8 @@ local cachedLayoutItems = {}
 local cachedOrderItems  = {}
 
 local function FreeDisplayLists()
-    if buildList then gl.DeleteList(buildList) ; buildList = nil end
-    if orderList then gl.DeleteList(orderList) ; orderList = nil end
+    FreeCache(buildList) ; buildList = nil
+    FreeCache(orderList) ; orderList = nil
 end
 
 --------------------------------------------------------------------------------
@@ -649,10 +707,14 @@ local function RoundedRectVertices(x1, y1, x2, y2, r, segments)
     Arc(x2 - rr, y1 + rr, math_pi * 1.5, math_pi * 2)
 end
 
-local function DrawRoundedRect(x1, y1, x2, y2, r, color)
+-- Legacy fallbacks for the tessellated family. 30 gl.Vertex calls and two Lua
+-- closures per filled rect; the shape module does the same as one instance with
+-- the corners solved in the fragment shader. The outline additionally sidesteps
+-- glLineWidth, which core profile is not required to support above 1.0.
+local function LegacyRoundedRect(x1, y1, x2, y2, r, color)
     local rr = math_min(r, (x2 - x1) * 0.5, (y2 - y1) * 0.5)
 
-    glColor(color)
+    rawColor(color)
     glBeginEnd(GL_TRIANGLE_FAN, function()
         local cx = (x1 + x2) * 0.5
         local cy = (y1 + y2) * 0.5
@@ -668,8 +730,8 @@ local function DrawRoundedRect(x1, y1, x2, y2, r, color)
     end)
 end
 
-local function DrawRoundedOutline(x1, y1, x2, y2, r, color)
-    glColor(color)
+local function LegacyRoundedOutline(x1, y1, x2, y2, r, color, width)
+    rawColor(color)
     glBeginEnd(GL_LINE_LOOP, function()
         RoundedRectVertices(x1, y1, x2, y2, r, 6)
     end)
@@ -715,23 +777,96 @@ local function DrawRectRound(px, py, sx, sy, cs)
     gl.TexCoord(1-o,o)     gl.Vertex(sx, sy-cs, 0)
 end
 
-local function RectRound(px, py, sx, sy, cs)
-    glTexture(bgcorner)
-    glBeginEnd(GL_QUADS, DrawRectRound, px, py, sx, sy, cs)
-    glTexture(false)
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect and gl.TexRect, which are OpenGL
+-- 1.1 immediate mode: gl.Rect is glRectf and gl.TexRect is a raw
+-- glBegin(GL_QUADS). One RectRound cost 7 glBegin/glEnd pairs and 2 texture
+-- binds. None of that exists in OpenGL core profile, which is the only way
+-- past GL 2.1 on macOS, and it is the worst case for any driver translating
+-- GL to Metal or Vulkan.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into a single instanced draw call and rounds corners analytically in a
+-- fragment shader rather than blitting a corner texture.
+--
+-- If that module is unavailable - old driver, shader compile failure - these
+-- shims fall back to the original immediate-mode code. Slow, but not blank.
+--------------------------------------------------------------------------------
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+    rawTexture(accentImg)
+    rawTexRect(x1, y1, x2, y2)
+    rawTexture(false)
 end
 
+local function LegacyRectRound(px, py, sx, sy, cs)
+    rawTexture(bgcorner)
+    glBeginEnd(GL_QUADS, DrawRectRound, px, py, sx, sy, cs)
+    rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+    local SG = WG.StaticGUI
+    if SG then
+        glColor     = SG.Color
+        glRect      = SG.Rect
+        glTexture   = SG.Texture
+        glTexRect   = SG.TexRect
+        glScissor   = SG.Scissor
+        RectRound      = SG.RectRound
+        RoundedRect    = SG.RoundedRect
+        RoundedOutline = SG.RoundedOutline
+        AccentStrip    = SG.AccentStrip
+        Icon           = SG.Icon
+        Flush          = SG.Flush
+        TexCache       = SG.TexCache
+        DrawCache      = SG.DrawCache
+        FreeCache      = SG.FreeCache
+        usingShapes    = true
+    else
+        glColor     = rawColor
+        glRect      = rawRect
+        glTexture   = rawTexture
+        glTexRect   = rawTexRect
+        glScissor   = rawScissor
+        RectRound      = LegacyRectRound
+        RoundedRect    = LegacyRoundedRect
+        RoundedOutline = LegacyRoundedOutline
+        AccentStrip    = LegacyAccentStrip
+        Icon           = function(x1, y1, x2, y2, tex)
+            rawTexture(tex)
+            rawTexRect(x1, y1, x2, y2)
+            rawTexture(false)
+        end
+        Flush          = NoOp
+        -- No FBO textures without the shape module: fall back to real display
+        -- lists, exactly what this widget did before the port. A legacy cache
+        -- handle is a list id rather than a table.
+        TexCache       = function(cache, _, _, _, _, fn)
+            if cache then gl.DeleteList(cache) end
+            return gl.CreateList(fn)
+        end
+        DrawCache      = function(cache) if cache then gl.CallList(cache) end end
+        FreeCache      = function(cache) if cache then gl.DeleteList(cache) end end
+        usingShapes    = false
+    end
+end
+
+BindDrawing()
+
 local function DrawPanel(x1, y1, x2, y2)
-    glColor(0, 0, 0, ui_opacity)
+    glColor(PANEL_OUTER_COLOR[1], PANEL_OUTER_COLOR[2], PANEL_OUTER_COLOR[3], PANEL_OUTER_COLOR[4])
     RectRound(x1, y1, x2, y2, PANEL_RADIUS)
 
-    glColor(0.12, 0.12, 0.12, 0.78)
+    glColor(PANEL_INNER_COLOR[1], PANEL_INNER_COLOR[2], PANEL_INNER_COLOR[3], PANEL_INNER_COLOR[4])
     RectRound(x1 + 2, y1 + 2, x2 - 2, y2 - 2, math_max(1, PANEL_RADIUS - 1))
 
     glColor(PANEL_ACCENT)
-    glTexture(accentImg)
-    gl.TexRect(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
-    glTexture(false)
+    AccentStrip(x1 + 2, y2 - (2 + PANEL_ACCENT_HEIGHT), x2 - 2, y2 - 2)
 end
 
 local ELLIPSIS = "…"   -- U+2026; present in Saira. Change to ".." if ever missing.
@@ -786,9 +921,7 @@ end
 
 local function DrawIcon(x1, y1, x2, y2, texture)
     glColor(1, 1, 1, 1)
-    glTexture(texture)
-    glTexRect(x1, y1, x2, y2)
-    glTexture(false)
+    Icon(x1, y1, x2, y2, texture)
 end
 
 local function ApplyCommand(cmdID, button)
@@ -898,11 +1031,11 @@ local function BuildButtonLayout_Bake(scrollOffset)
         if iy2 >= y1 and iy1 <= y2 then
 
             if item.kind == "section" then
-                DrawRoundedRect(item.x1, iy1, item.x2, iy2, 7, SECTION_BG)
+                RoundedRect(item.x1, iy1, item.x2, iy2, 7, SECTION_BG)
                 DrawTextFitted(item.text, item.x1 + math_floor(8 * uiScale), iy1 + math_floor(6 * uiScale), math_max(MIN_HEADER_TEXT_SIZE, math_floor(13 * uiScale)), "o", item.x2 - item.x1 - math_floor(16 * uiScale), HEADER_TEXT)
 
             elseif item.kind == "category" then
-                DrawRoundedRect(item.x1, iy1, item.x2, iy2, 6, CATEGORY_BG)
+                RoundedRect(item.x1, iy1, item.x2, iy2, 6, CATEGORY_BG)
                 DrawTextFitted(item.text, item.x1 + math_floor(12 * uiScale), iy1 + math_floor(4 * uiScale), math_max(MIN_LABEL_TEXT_SIZE, math_floor(11 * uiScale)), "o", item.x2 - item.x1 - math_floor(20 * uiScale), HEADER_TEXT)
 
             elseif item.kind == "buildbutton" then
@@ -913,8 +1046,8 @@ local function BuildButtonLayout_Bake(scrollOffset)
                 local infoY1   = iy1
                 local infoY2   = iy1 + BUILD_INFO_H - 2
 
-                DrawRoundedRect(item.x1, infoY1, item.x2, iconY2, 6, {0.12, 0.12, 0.13, 0.80})
-                DrawRoundedRect(item.x1 + 1, infoY1 + 1, item.x2 - 1, infoY2, 5, {0.08, 0.08, 0.09, 0.92})
+                RoundedRect(item.x1, infoY1, item.x2, iconY2, 6, {0.12, 0.12, 0.13, 0.80})
+                RoundedRect(item.x1 + 1, infoY1 + 1, item.x2 - 1, infoY2, 5, {0.08, 0.08, 0.09, 0.92})
                 glColor(1, 1, 1, 0.08)
                 glRect(item.x1 + 4, infoY2, item.x2 - 4, infoY2 + 1)
                 DrawIcon(item.x1 + 1, iconY1 + 1, item.x2 - 1, iconY2 - 1, '#' .. buildDefID)
@@ -930,8 +1063,8 @@ local function BuildButtonLayout_Bake(scrollOffset)
                     local panelH2 = math_floor(qSize + qPadY * 2)
                     local qx2, qy2 = item.x2 - math_floor(4 * uiScale), iconY2 - math_floor(4 * uiScale)
                     local qx1, qy1 = qx2 - panelW2, qy2 - panelH2
-                    DrawRoundedRect(qx1, qy1, qx2, qy2, 4, {0.08, 0.08, 0.09, 0.88})
-                    DrawRoundedOutline(qx1, qy1, qx2, qy2, 4, {1.0, 1.0, 1.0, 0.10})
+                    RoundedRect(qx1, qy1, qx2, qy2, 4, {0.08, 0.08, 0.09, 0.88})
+                    RoundedOutline(qx1, qy1, qx2, qy2, 4, {1.0, 1.0, 1.0, 0.10})
                     DrawTextFitted(queueText, qx2 - qPadX + math_floor(QUEUE_BADGE_TEXT_OFFSET_X * uiScale), qy1 + qPadY + math_floor(QUEUE_BADGE_TEXT_OFFSET_Y * uiScale), qSize, "or", nil, {1.0, 1.0, 1.0, 1.0})
                 end
 
@@ -1012,7 +1145,7 @@ local function BuildButtonLayout_Bake(scrollOffset)
     if buildContentHeight > buildViewHeight then
         local sbx1 = contentX2 + 6
         local sbx2 = x2
-        DrawRoundedRect(sbx1, y1, sbx2, y2, 5, SCROLLBAR_BG)
+        RoundedRect(sbx1, y1, sbx2, y2, 5, SCROLLBAR_BG)
     end
 end
 
@@ -1091,7 +1224,7 @@ local function DrawStateBars(cmd, x1, y1, x2, y2)
         else
             color = {0.9, 0.9, 0.9, 0.25}
         end
-        DrawRoundedRect(bx1, by1, bx2, by2, 2, color)
+        RoundedRect(bx1, by1, bx2, by2, 2, color)
     end
 end
 
@@ -1125,7 +1258,7 @@ local function DrawOrderButtons_Static()
         local entry = merged[i]
         local cmd   = entry.cmd
 
-        DrawRoundedRect(bx1, by1, bx2, by2, 6, {0.14, 0.14, 0.15, 0.85})
+        RoundedRect(bx1, by1, bx2, by2, 6, {0.14, 0.14, 0.15, 0.85})
 
         local caption = cmd.name == "Repair" and "Build" or cmd.name
         DrawTextFitted(caption, bx1 + math_floor(6 * uiScale), by1 + bh * 0.45, math_max(MIN_LABEL_TEXT_SIZE, math_floor(11 * uiScale)), "o", bw - math_floor(12 * uiScale), {1, 1, 1, 1})
@@ -1144,8 +1277,6 @@ local function DrawOrderButtons_Static()
 end
 
 local function DrawOrderButtons_Dynamic(mx, my, activeCmdID)
-    currentOrderHitboxes = {}
-
     for i = 1, #cachedOrderItems do
         local item = cachedOrderItems[i]
         local cmd = item.cmd
@@ -1155,21 +1286,16 @@ local function DrawOrderButtons_Dynamic(mx, my, activeCmdID)
         local disabled = cmd.disabled
 
         if not disabled and hovered then
-            DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, HOVER_OVERLAY)
+            RoundedRect(item.x1, item.y1, item.x2, item.y2, 6, HOVER_OVERLAY)
         end
         if active then
-            DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, ACTIVE_OVERLAY)
-            DrawRoundedOutline(item.x1, item.y1, item.x2, item.y2, 6, {1.0, 0.85, 0.2, 0.75})
+            RoundedRect(item.x1, item.y1, item.x2, item.y2, 6, ACTIVE_OVERLAY)
+            RoundedOutline(item.x1, item.y1, item.x2, item.y2, 6, {1.0, 0.85, 0.2, 0.75})
         end
         if disabled then
-            DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, DISABLED_OVERLAY)
+            RoundedRect(item.x1, item.y1, item.x2, item.y2, 6, DISABLED_OVERLAY)
         end
 
-        currentOrderHitboxes[#currentOrderHitboxes + 1] = item
-    end
-
-    for i = 1, #currentOrderHitboxes do
-        AddInteractiveItem(currentOrderHitboxes[i])
     end
 end
 
@@ -1214,18 +1340,31 @@ end
 local function BakeStaticLayer()
     FreeDisplayLists()
 
+    -- Interactive items are rebuilt HERE, once per invalidation, not per
+    -- frame: at 60 buttons the per-frame walk allocated a table per button
+    -- every frame and was a large share of this widget's 1.3 MB/s.
+    interactiveItems = {}
+
     if showBuildPanel and processedBuild then
-        buildList = gl.CreateList(function()
-            DrawPanel(buildPanel.x1, buildPanel.y1, buildPanel.x2, buildPanel.y2)
-            BuildButtonLayout_Bake(buildScrollOffset)
-        end)
+        buildList = TexCache(buildList,
+            buildPanel.x1, buildPanel.y1, buildPanel.x2, buildPanel.y2,
+            function()
+                DrawPanel(buildPanel.x1, buildPanel.y1, buildPanel.x2, buildPanel.y2)
+                BuildButtonLayout_Bake(buildScrollOffset)
+            end)
+        BuildButtonLayout_Hitboxes(buildScrollOffset)
     end
 
     if showOrderPanel then
-        orderList = gl.CreateList(function()
-            DrawPanel(orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2)
-            DrawOrderButtons_Static()
-        end)
+        orderList = TexCache(orderList,
+            orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2,
+            function()
+                DrawPanel(orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2)
+                DrawOrderButtons_Static()
+            end)
+        for i = 1, #cachedOrderItems do
+            AddInteractiveItem(cachedOrderItems[i])
+        end
     end
 
     staticDirty      = false
@@ -1237,16 +1376,19 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
-    fontMain  = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2)
-    fontSmall = gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1)
+    -- Resolve the shapes module now that every widget has been constructed.
+    BindDrawing()
+
+    fontMain  = WrapFont(gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2))
+    fontSmall = WrapFont(gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1))
     UpdatePanelRects()
     OverrideDefaultMenu()
 end
 
 function widget:Shutdown()
     FreeDisplayLists()
-    if fontMain  then gl.DeleteFont(fontMain)  end
-    if fontSmall then gl.DeleteFont(fontSmall) end
+    if fontMain  then ReleaseFont(fontMain)  end
+    if fontSmall then ReleaseFont(fontSmall) end
     widgetHandler:ConfigLayoutHandler(nil)
     spForceLayoutUpdate()
 end
@@ -1271,12 +1413,6 @@ function widget:UnitGiven()     commandsDirty = true end
 function widget:UnitTaken()     commandsDirty = true end
 
 function widget:Update()
-    local newOpacity = tonumber(spGetConfigFloat("ui_opacity", 0.66) or 0.66)
-    if newOpacity ~= ui_opacity then
-        ui_opacity  = newOpacity
-        staticDirty = true
-    end
-
     if commandsDirty then
         showHotkeys = spGetConfigInt(SHOW_HOTKEYS_CONFIG, 1) == 1
         showCost    = spGetConfigInt(SHOW_COST_CONFIG, 1) == 1
@@ -1319,7 +1455,6 @@ function widget:DrawScreen()
         BakeStaticLayer()
     end
 
-    interactiveItems = {}
     local mx, my = spGetMouseState()
     local _, activeCmdID = spGetActiveCommand()
 
@@ -1327,10 +1462,7 @@ function widget:DrawScreen()
     -- The textures already contain all expensive geometry — we just blit them.
 
     if showBuildPanel and buildList then
-        gl.CallList(buildList)
-
-        -- Rebuild hitboxes and scrollbar info from cached layout
-        BuildButtonLayout_Hitboxes(buildScrollOffset)
+        DrawCache(buildList, buildPanel.x1, buildPanel.y1)
 
         -- Draw hover/active overlays for build buttons, scissored to content area
         local _cx1 = buildPanel.x1 + INNER_PAD
@@ -1346,14 +1478,14 @@ function widget:DrawScreen()
             local disabled = cmd.disabled
 
             if not disabled and hovered then
-                DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, HOVER_OVERLAY)
+                RoundedRect(item.x1, item.y1, item.x2, item.y2, 6, HOVER_OVERLAY)
             end
             if active then
-                DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, ACTIVE_OVERLAY)
-                DrawRoundedOutline(item.x1, item.y1, item.x2, item.y2, 6, {1.0, 0.85, 0.2, 0.7})
+                RoundedRect(item.x1, item.y1, item.x2, item.y2, 6, ACTIVE_OVERLAY)
+                RoundedOutline(item.x1, item.y1, item.x2, item.y2, 6, {1.0, 0.85, 0.2, 0.7})
             end
             if disabled then
-                DrawRoundedRect(item.x1, item.y1, item.x2, item.y2, 6, DISABLED_OVERLAY)
+                RoundedRect(item.x1, item.y1, item.x2, item.y2, 6, DISABLED_OVERLAY)
             end
         end
         glScissor(false)
@@ -1365,18 +1497,21 @@ function widget:DrawScreen()
             local sbx1 = scrollbarInfo.tx1
             local sbx2 = scrollbarInfo.tx2
             local thumbHover = IsInside(mx, my, sbx1, thy1, sbx2, thy2)
-            DrawRoundedRect(sbx1 + 1, thy1, sbx2 - 1, thy2, 5, thumbHover and SCROLLBAR_THUMB_HOVER or SCROLLBAR_THUMB)
+            RoundedRect(sbx1 + 1, thy1, sbx2 - 1, thy2, 5, thumbHover and SCROLLBAR_THUMB_HOVER or SCROLLBAR_THUMB)
         end
     end
 
     if showOrderPanel and orderList then
-        gl.CallList(orderList)
+        DrawCache(orderList, orderPanel.x1, orderPanel.y1)
 
         -- Dynamic overlay: hover / active / disabled
         DrawOrderButtons_Dynamic(mx, my, activeCmdID)
     end
 
     UpdateHover(mx, my)
+
+    -- Hand the accumulated shape instances to the GPU.
+    Flush()
 end
 
 function widget:WorldTooltip()

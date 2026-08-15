@@ -67,13 +67,12 @@ local TYPE_FALLBACK = {0.80, 0.80, 0.80, 1}
 -- Speedups
 --------------------------------------------------------------------------------
 
-local glColor      = gl.Color
-local glRect       = gl.Rect
-local glTexture    = gl.Texture
-local glTexRect    = gl.TexRect
-local glPushMatrix = gl.PushMatrix
-local glPopMatrix  = gl.PopMatrix
-local glTranslate  = gl.Translate
+-- Raw engine entry points. Only the legacy fallback below touches these
+-- directly; everything else goes through the shim so drawing is batched.
+local rawColor    = gl.Color
+local rawRect     = gl.Rect
+local rawTexture  = gl.Texture
+local rawTexRect  = gl.TexRect
 
 local spGetViewGeometry   = Spring.GetViewGeometry
 local spGetGameRulesParam = Spring.GetGameRulesParam
@@ -106,34 +105,128 @@ local nextSurge     = false
 local beaconCount   = 0
 local rageCount     = 0
 
-local staticList    = nil
-local lastGuiShader = nil
-
 local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
 local fontfileScale = (0.5 + (vsx * vsy / 5700000))
 local fontfileSize = 25
 local fontfileOutlineSize = 4.5
 local fontfileOutlineStrength = 1.8
-local font = gl.LoadFont(fontfile, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+local font
+
+-- The shapes module batches, so text drawn between two shape calls would land
+-- underneath them. Wrapping the handle makes font:Begin() flush the pending
+-- batch first, which keeps every existing font:Print call site correct without
+-- auditing draw order by hand.
+local function ReloadFont()
+	local SG = WG.StaticGUI
+
+	if font then
+		if SG and SG.DeleteFont then SG.DeleteFont(font) else gl.DeleteFont(font) end
+		font = nil
+	end
+
+	local f = gl.LoadFont(fontfile, fontfileSize * fontfileScale,
+	                      fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+	if f and SG and SG.WrapFont then f = SG.WrapFont(f) end
+	font = f
+end
+
+--------------------------------------------------------------------------------
+-- Drawing shim
+--
+-- Panel chrome used to be drawn with gl.Rect / gl.TexRect, i.e. OpenGL 1.1
+-- immediate mode, inside a gl.PushMatrix / gl.Translate block. Neither the
+-- immediate-mode calls nor the fixed-function matrix stack exist in OpenGL
+-- core profile, which is the only way past GL 2.1 on macOS.
+--
+-- Shapes now go through WG.StaticGUI (api_staticgui_shapes.lua), which batches
+-- them into one instanced draw and rounds corners in a fragment shader. The
+-- panel translation is applied at record time via SetOffset instead of through
+-- the modelview, because a custom shader does not see the modelview at all.
+--
+-- If the shapes module is unavailable these shims fall back to the original
+-- immediate-mode drawing, applying the same offset by hand.
+--------------------------------------------------------------------------------
+
+local glColor, glRect, glTexture, glTexRect
+local RectRound, AccentStrip, SetOffset, ClearOffset, Flush
+local usingShapes = false
+
+-- Panel origin, applied to every shape and textured blit.
+local ofsX, ofsY = 0, 0
+
+local function LegacyRectRound(px, py, sx, sy, cs)
+	px, py = px + ofsX, py + ofsY
+	sx, sy = sx + ofsX, sy + ofsY
+	px, py, sx, sy, cs = floor(px), floor(py), floor(sx), floor(sy), floor(cs)
+
+	rawRect(px + cs, py, sx - cs, sy)
+	rawRect(sx - cs, py + cs, sx, sy - cs)
+	rawRect(px, py + cs, px + cs, sy - cs)
+
+	rawTexture(bgcorner)
+	rawTexRect(px, py + cs, px + cs, py)
+	rawTexRect(sx, py + cs, sx - cs, py)
+	rawTexRect(px, sy - cs, px + cs, sy)
+	rawTexRect(sx, sy - cs, sx - cs, sy)
+	rawTexture(false)
+end
+
+local function LegacyRect(x1, y1, x2, y2)
+	rawRect(x1 + ofsX, y1 + ofsY, x2 + ofsX, y2 + ofsY)
+end
+
+local function LegacyTexRect(x1, y1, x2, y2, ...)
+	rawTexRect(x1 + ofsX, y1 + ofsY, x2 + ofsX, y2 + ofsY, ...)
+end
+
+local function LegacyAccentStrip(x1, y1, x2, y2)
+	rawTexture(accentImg)
+	LegacyTexRect(x1, y1, x2, y2)
+	rawTexture(false)
+end
+
+local function NoOp() end
+
+local function BindDrawing()
+	local SG = WG.StaticGUI
+	if SG then
+		glColor     = SG.Color
+		glRect      = SG.Rect
+		glTexture   = SG.Texture
+		glTexRect   = SG.TexRect
+		RectRound   = SG.RectRound
+		AccentStrip = SG.AccentStrip
+		SetOffset   = SG.SetOffset
+		ClearOffset = SG.ClearOffset
+		Flush       = SG.Flush
+		usingShapes = true
+	else
+		glColor     = rawColor
+		glRect      = LegacyRect
+		glTexture   = rawTexture
+		glTexRect   = LegacyTexRect
+		RectRound   = LegacyRectRound
+		AccentStrip = LegacyAccentStrip
+		SetOffset   = function(x, y) ofsX, ofsY = x or 0, y or 0 end
+		ClearOffset = function() ofsX, ofsY = 0, 0 end
+		Flush       = NoOp
+		usingShapes = false
+	end
+end
+
+BindDrawing()
+
+-- Text is drawn by the engine's font renderer, which knows nothing about the
+-- shape module's record-time offset, so font:Print sites add the panel origin
+-- explicitly. Routing both through here keeps the two drawing paths in step.
+local function SetPanelOrigin(x, y)
+	ofsX, ofsY = x or 0, y or 0
+	SetOffset(ofsX, ofsY)
+end
 
 --------------------------------------------------------------------------------
 -- Helpers
 --------------------------------------------------------------------------------
-
-local function RectRound(px, py, sx, sy, cs)
-	px, py, sx, sy, cs = floor(px), floor(py), floor(sx), floor(sy), floor(cs)
-
-	glRect(px + cs, py, sx - cs, sy)
-	glRect(sx - cs, py + cs, sx, sy - cs)
-	glRect(px, py + cs, px + cs, sy - cs)
-
-	glTexture(bgcorner)
-	glTexRect(px, py + cs, px + cs, py)
-	glTexRect(sx, py + cs, sx - cs, py)
-	glTexRect(px, sy - cs, px + cs, sy)
-	glTexRect(sx, sy - cs, sx - cs, sy)
-	glTexture(false)
-end
 
 local function IsOnRect(x, y, x1, y1, x2, y2)
 	return x >= x1 and x <= x2 and y >= y1 and y <= y2
@@ -152,10 +245,6 @@ end
 local function FormatTime(secs)
 	secs = max(0, floor(secs))
 	return string.format("%d:%02d", floor(secs / 60), secs % 60)
-end
-
-local function FreeStaticList()
-	if staticList then gl.DeleteList(staticList) ; staticList = nil end
 end
 
 local function ClampPanel()
@@ -210,44 +299,49 @@ end
 -- Static chrome (panel-local coordinates)
 --------------------------------------------------------------------------------
 
-local function BuildStaticList()
-	FreeStaticList()
-	staticList = gl.CreateList(function()
-		local outerCorner = OUTER_CORNER * widgetScale
-		local innerCorner = INNER_CORNER * widgetScale
-		local inset       = INNER_INSET * widgetScale
-		local accentH     = PANEL_ACCENT_HEIGHT * widgetScale
+-- This used to be baked into a gl.CreateList display list in panel-local
+-- coordinates, replayed inside a gl.PushMatrix / gl.Translate block so that
+-- dragging never rebuilt the list. Display lists and the fixed-function matrix
+-- stack are both gone from OpenGL core profile, so the panel origin is now
+-- applied at record time by SetPanelOrigin and the chrome is drawn straight
+-- through. It is three shape instances and four strings - cheaper than the
+-- bookkeeping the list needed.
+--
+-- Shape coordinates stay panel-local (the offset is applied inside the shape
+-- module); text coordinates add the origin explicitly, because the engine's
+-- font renderer knows nothing about that offset.
+local function DrawStaticChrome(ox, oy)
+	local outerCorner = OUTER_CORNER * widgetScale
+	local innerCorner = INNER_CORNER * widgetScale
+	local inset       = INNER_INSET * widgetScale
+	local accentH     = PANEL_ACCENT_HEIGHT * widgetScale
 
-		local borderColor = GetBorderColor()
-		local panelColor  = GetPanelBGColor()
+	local borderColor = GetBorderColor()
+	local panelColor  = GetPanelBGColor()
 
-		glColor(borderColor[1], borderColor[2], borderColor[3], borderColor[4])
-		RectRound(0, 0, panelW, panelH, outerCorner)
+	glColor(borderColor[1], borderColor[2], borderColor[3], borderColor[4])
+	RectRound(0, 0, panelW, panelH, outerCorner)
 
-		glColor(panelColor[1], panelColor[2], panelColor[3], panelColor[4])
-		RectRound(inset, inset, panelW - inset, panelH - inset - 0.06, innerCorner)
+	glColor(panelColor[1], panelColor[2], panelColor[3], panelColor[4])
+	RectRound(inset, inset, panelW - inset, panelH - inset - 0.06, innerCorner)
 
-		glColor(PANEL_ACCENT[1], PANEL_ACCENT[2], PANEL_ACCENT[3], PANEL_ACCENT[4])
-		glTexture(accentImg)
-		glTexRect(inset, panelH - inset - accentH, panelW - inset, panelH - inset - 0.06)
-		glTexture(false)
+	glColor(PANEL_ACCENT[1], PANEL_ACCENT[2], PANEL_ACCENT[3], PANEL_ACCENT[4])
+	AccentStrip(inset, panelH - inset - accentH, panelW - inset, panelH - inset - 0.06)
 
-		-- Static labels
-		font:Begin()
-		font:SetTextColor(VALUE_COLOR[1], VALUE_COLOR[2], VALUE_COLOR[3], VALUE_COLOR[4])
-		font:Print("SURVIVAL THREAT", layout.textL, layout.titleY + 5 * widgetScale,
-			11 * widgetScale, "o")
+	-- Static labels
+	font:Begin()
+	font:SetTextColor(VALUE_COLOR[1], VALUE_COLOR[2], VALUE_COLOR[3], VALUE_COLOR[4])
+	font:Print("SURVIVAL THREAT", ox + layout.textL, oy + layout.titleY + 5 * widgetScale,
+		11 * widgetScale, "o")
 
-		font:SetTextColor(LABEL_COLOR[1], LABEL_COLOR[2], LABEL_COLOR[3], LABEL_COLOR[4])
-		font:Print("NEXT WAVE", layout.textL, layout.countY + 11 * widgetScale,
-			9 * widgetScale, "o")
-		font:Print("WAVE", layout.textL, layout.waveY + 4 * widgetScale,
-			9.5 * widgetScale, "o")
-		font:Print("BEACONS", layout.textL, layout.beaconY + 4 * widgetScale,
-			9.5 * widgetScale, "o")
-		font:End()
-	end)
-	lastGuiShader = (WG.guishader ~= nil)
+	font:SetTextColor(LABEL_COLOR[1], LABEL_COLOR[2], LABEL_COLOR[3], LABEL_COLOR[4])
+	font:Print("NEXT WAVE", ox + layout.textL, oy + layout.countY + 11 * widgetScale,
+		9 * widgetScale, "o")
+	font:Print("WAVE", ox + layout.textL, oy + layout.waveY + 4 * widgetScale,
+		9.5 * widgetScale, "o")
+	font:Print("BEACONS", ox + layout.textL, oy + layout.beaconY + 4 * widgetScale,
+		9.5 * widgetScale, "o")
+	font:End()
 end
 
 --------------------------------------------------------------------------------
@@ -255,6 +349,10 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
+	-- Resolve the shapes module now that every widget has been constructed.
+	BindDrawing()
+	ReloadFont()
+
 	RecalculateGeometry()
 
 	WG.StaticSurvivalPanel = {
@@ -265,8 +363,11 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	FreeStaticList()
-	if font then gl.DeleteFont(font) end
+	if font then
+		local SG = WG.StaticGUI
+		if SG and SG.DeleteFont then SG.DeleteFont(font) else gl.DeleteFont(font) end
+		font = nil
+	end
 	WG.StaticSurvivalPanel = nil
 end
 
@@ -276,8 +377,7 @@ function widget:ViewResize()
 	local newFontfileScale = (0.5 + (vsx * vsy / 5700000))
 	if fontfileScale ~= newFontfileScale then
 		fontfileScale = newFontfileScale
-		if font then gl.DeleteFont(font) end
-		font = gl.LoadFont(fontfile, fontfileSize * fontfileScale, fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+		ReloadFont()
 	end
 
 	-- Keep the panel at the same screen fraction across resizes
@@ -286,7 +386,6 @@ function widget:ViewResize()
 		panelX = nil
 	end
 	RecalculateGeometry()
-	FreeStaticList()
 end
 
 --------------------------------------------------------------------------------
@@ -371,18 +470,15 @@ end
 function widget:DrawScreen()
 	if not visible or not active or Spring.IsGUIHidden() then return end
 
-	local guiShaderActive = (WG.guishader ~= nil)
-	if not staticList or guiShaderActive ~= lastGuiShader then
-		BuildStaticList()
-	end
+	-- Shapes are recorded in panel-local coordinates and offset on the way into
+	-- the instance buffer; text adds ox/oy explicitly.
+	local ox, oy = panelX, panelY
+	SetPanelOrigin(ox, oy)
 
-	glPushMatrix()
-	glTranslate(panelX, panelY, 0)
-
-	gl.CallList(staticList)
+	DrawStaticChrome(ox, oy)
 
 	----------------------------------------------------------------------------
-	-- Dynamic values (panel-local coords)
+	-- Dynamic values
 	----------------------------------------------------------------------------
 	local pulse = 0.55 + 0.45 * sin(os.clock() * 5)
 
@@ -405,40 +501,42 @@ function widget:DrawScreen()
 		cr, cg, cb, ca = LABEL_COLOR[1], LABEL_COLOR[2], LABEL_COLOR[3], 1
 	end
 	font:SetTextColor(cr, cg, cb, ca)
-	font:Print(countText, layout.textR, layout.countY + 8 * widgetScale,
+	font:Print(countText, ox + layout.textR, oy + layout.countY + 8 * widgetScale,
 		19 * widgetScale, "ro")
 
 	-- Wave number + type
 	font:SetTextColor(VALUE_COLOR[1], VALUE_COLOR[2], VALUE_COLOR[3], VALUE_COLOR[4])
-	font:Print(tostring(waveNumber), layout.textL + 34 * widgetScale,
-		layout.waveY + 4 * widgetScale, 9.5 * widgetScale, "o")
+	font:Print(tostring(waveNumber), ox + layout.textL + 34 * widgetScale,
+		oy + layout.waveY + 4 * widgetScale, 9.5 * widgetScale, "o")
 	if waveType then
 		local tc = TYPE_COLORS[waveType] or TYPE_FALLBACK
 		font:SetTextColor(tc[1], tc[2], tc[3], tc[4])
-		font:Print(string.upper(waveType), layout.textR,
-			layout.waveY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+		font:Print(string.upper(waveType), ox + layout.textR,
+			oy + layout.waveY + 4 * widgetScale, 9.5 * widgetScale, "ro")
 	end
 
 	-- Beacons
 	font:SetTextColor(VALUE_COLOR[1], VALUE_COLOR[2], VALUE_COLOR[3], VALUE_COLOR[4])
-	font:Print(tostring(beaconCount), layout.textR,
-		layout.beaconY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+	font:Print(tostring(beaconCount), ox + layout.textR,
+		oy + layout.beaconY + 4 * widgetScale, 9.5 * widgetScale, "ro")
 
 	-- Status line: rage > surge > preparing
 	if rageCount > 0 then
 		font:SetTextColor(RAGE_COLOR[1], RAGE_COLOR[2], RAGE_COLOR[3], pulse)
-		font:Print("RAGE MODE", panelW * 0.5, layout.statusY + 5 * widgetScale,
+		font:Print("RAGE MODE", ox + panelW * 0.5, oy + layout.statusY + 5 * widgetScale,
 			11 * widgetScale, "co")
 	elseif nextSurge then
 		font:SetTextColor(SURGE_COLOR[1], SURGE_COLOR[2], SURGE_COLOR[3], pulse)
-		font:Print("SURGE INCOMING", panelW * 0.5, layout.statusY + 5 * widgetScale,
+		font:Print("SURGE INCOMING", ox + panelW * 0.5, oy + layout.statusY + 5 * widgetScale,
 			11 * widgetScale, "co")
 	elseif not nextWaveFrame then
 		font:SetTextColor(PREP_COLOR[1], PREP_COLOR[2], PREP_COLOR[3], 1)
-		font:Print("PREPARING", panelW * 0.5, layout.statusY + 5 * widgetScale,
+		font:Print("PREPARING", ox + panelW * 0.5, oy + layout.statusY + 5 * widgetScale,
 			11 * widgetScale, "co")
 	end
 
 	font:End()
-	glPopMatrix()
+
+	ClearOffset()
+	Flush()
 end
