@@ -697,6 +697,9 @@ function ModOptions_Post (UnitDefs, WeaponDefs)
 									else
 										unitDef.buildcostenergy = unitDef.buildcostmetal * 3
 									end
+								else
+									-- Every other tech1 building: resource, defense, support
+									unitDef.buildcostenergy = unitDef.buildcostmetal * 3
 								end
 							end
 						end
