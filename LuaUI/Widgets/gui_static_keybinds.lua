@@ -516,6 +516,20 @@ end
 -- Display list
 --------------------------------------------------------------------------------
 
+-- buildunit_kalfactory reads as noise in a list; show the unit's display name
+-- alongside it so hotbound build buttons are recognisable.
+local function PrettyLabel(line)
+	local unitName = line:match("^buildunit_(.+)$")
+	if unitName then
+		local ud = UnitDefNames and UnitDefNames[unitName]
+		local human = ud and (ud.translatedHumanName or ud.humanName)
+		if human and human ~= "" then
+			return human .. "   (" .. line .. ")"
+		end
+	end
+	return line
+end
+
 local function AddRow(line, label)
 	items[#items + 1] = {
 		kind  = "row",
@@ -536,6 +550,26 @@ local function BuildList()
 				AddRow(sec.actions[j])
 			end
 		end
+
+		-- Runtime hotbinds live in sf_uikeys.txt but have no section in
+		-- sf_keys.txt, so synthesize one for them. Walking the edit list is
+		-- cheap and only happens when the panel is open and the list is dirty.
+		local extra, seenExtra = {}, {}
+		for i = 1, #edits do
+			local e = edits[i]
+			if e.op == "bind" and not sfKnown[e.action] and not seenExtra[e.action] then
+				seenExtra[e.action] = true
+				extra[#extra + 1] = e.action
+			end
+		end
+		if #extra > 0 then
+			table.sort(extra)
+			items[#items + 1] = { kind = "header", label = "Hotbinds" }
+			for i = 1, #extra do
+				AddRow(extra[i], PrettyLabel(extra[i]))
+			end
+		end
+
 		if #items == 0 then
 			items[#items + 1] = { kind = "header", label = "no bindings found in sf_keys.txt" }
 		end
@@ -787,6 +821,42 @@ local function ResetAll()
 
 	listDirty = true
 	SetStatus("all rebinds cleared", COL.warn)
+end
+
+--------------------------------------------------------------------------------
+-- Public API  (exported as WG.StaticKeybinds in Initialize)
+--
+-- sf_uikeys.txt has exactly one writer: this widget. Anything that wants to
+-- change a binding at runtime -- the hotbind widget, for instance -- goes
+-- through here rather than opening the file itself, so that every change lands
+-- in the same in-memory edit list, gets the same conflict handling, shows up in
+-- the panel, and is cleared correctly by Reset All Rebinds.
+--------------------------------------------------------------------------------
+
+-- Binds action to keyset, taking the key away from whatever already holds it.
+-- Returns ok, displaced -- where displaced is an array of { boundWith, line }
+-- describing what was unbound to make room.
+local function API_Bind(action, keyset)
+	if type(action) ~= "string" or type(keyset) ~= "string" then return false end
+	action, keyset = Trim(action), Trim(keyset)
+	if action == "" or keyset == "" then return false end
+
+	local conflicts = GetConflicts(keyset, action)
+	ApplyRebind({ line = action, keys = HotKeysFor(action) }, keyset, conflicts)
+	return true, conflicts
+end
+
+-- Removes every key currently bound to action. Returns ok, removedKeysets.
+local function API_Unbind(action)
+	if type(action) ~= "string" then return false end
+	action = Trim(action)
+	if action == "" then return false end
+
+	local keys = HotKeysFor(action)
+	if #keys == 0 then return false end
+
+	ClearBinding({ line = action, keys = keys })
+	return true, keys
 end
 
 --------------------------------------------------------------------------------
@@ -1299,9 +1369,16 @@ function widget:Initialize()
 	BuildGeometry()
 
 	WG.StaticKeybinds = {
-		Toggle = Toggle,
-		Show   = Open,
-		Hide   = Close,
+		Toggle     = Toggle,
+		Show       = Open,
+		Hide       = Close,
+		IsOpen     = function() return isOpen end,
+
+		-- Runtime binding API. See the Public API section above.
+		Bind       = API_Bind,
+		Unbind     = API_Unbind,
+		GetHotKeys = HotKeysFor,
+		UserFile   = function() return USER_KEYS_FILE end,
 	}
 end
 

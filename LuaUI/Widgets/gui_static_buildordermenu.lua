@@ -1383,9 +1383,27 @@ function widget:Initialize()
     fontSmall = WrapFont(gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1))
     UpdatePanelRects()
     OverrideDefaultMenu()
+
+    -- Published hover state, read by the hotbind widget.
+    --
+    -- This is free per frame: hoveredItem is already maintained by UpdateHover
+    -- as part of the normal draw pass, and the accessor is only ever called on
+    -- the single frame where the user presses the hotbind key. Nothing here
+    -- runs on a timer, on Update, or on mouse move.
+    --
+    -- Returns the live command description table (the same one the engine's
+    -- layout handler produced, so cmd.action is the engine-side bind string)
+    -- plus whether that button is currently disabled.
+    WG.StaticBuildOrderMenu = WG.StaticBuildOrderMenu or {}
+    WG.StaticBuildOrderMenu.GetHovered = function()
+        local item = hoveredItem
+        if not item or not item.cmd then return nil end
+        return item.cmd, (item.disabled and true or false)
+    end
 end
 
 function widget:Shutdown()
+    WG.StaticBuildOrderMenu = nil
     FreeDisplayLists()
     if fontMain  then ReleaseFont(fontMain)  end
     if fontSmall then ReleaseFont(fontSmall) end
@@ -1446,9 +1464,19 @@ function widget:Update()
 end
 
 function widget:DrawScreen()
-    if spIsGUIHidden() then return end
-    if not lastCommands then return end
-    if not showBuildPanel and not showOrderPanel then return end
+    -- Every early-out here has to clear the hover state. hoveredItem is only
+    -- recomputed at the END of a completed draw pass, so bailing out with it
+    -- still set leaves a stale button answering both MousePress and the
+    -- WG.StaticBuildOrderMenu query below, after the panel it belongs to has
+    -- already stopped being drawn.
+    if spIsGUIHidden() or not lastCommands or (not showBuildPanel and not showOrderPanel) then
+        if hoveredItem then
+            hoveredItem     = nil
+            lastHoveredItem = nil
+            tooltipText     = nil
+        end
+        return
+    end
 
     -- Bake static layer here — gl calls are only valid inside Draw callins
     if staticDirty then
