@@ -56,10 +56,13 @@ out DataVS {
     float g_showIcon;
     float g_showText;
     float g_bartype;
+    float g_secondvalue; // SF split bars: right-hand half's value
+    float g_split;       // 1.0 when this instance is a split bar
 };
 
 #define UNITUNIFORMS uni[instData.y]
 #define UNIFORMLOC bartype_index_ssboloc.z
+#define UNIFORMLOC2 bartype_index_ssboloc.w
 #define BARTYPE bartype_index_ssboloc.x
 
 #define BITPERCENTAGE 4u
@@ -70,6 +73,7 @@ out DataVS {
 #define BITCOLORCORRECT 128u
 #define BITUSEOVERLAY 1u
 #define BITSHOWGLYPH 2u
+#define BITSPLITBAR 256u
 
 bool vertexClipped(vec4 clipspace, float tolerance) {
   return any(lessThan(clipspace.xyz, -clipspace.www * tolerance)) ||
@@ -94,6 +98,8 @@ void main()
         g_showIcon = 0.0;
         g_showText = 0.0;
         g_bartype = 0.0;
+        g_secondvalue = 0.0;
+        g_split = 0.0;
         return;
     }
 
@@ -119,6 +125,8 @@ void main()
             g_showIcon = 0.0;
             g_showText = 0.0;
             g_bartype = 0.0;
+            g_secondvalue = 0.0;
+            g_split = 0.0;
             return;
         }
     }
@@ -126,6 +134,14 @@ void main()
         value = ((timeInfo.x + timeInfo.w) - UNITUNIFORMS.userDefined[0].z) /
                 max(UNITUNIFORMS.userDefined[0].w - UNITUNIFORMS.userDefined[0].z, 0.001);
     }
+    // SF split bars: the right-hand half reads a second userDefined slot named in
+    // bartype_index_ssboloc.w (7 = overshield for Loz units).
+    bool isSplit = (BARTYPE & BITSPLITBAR) > 0u;
+    float secondvalue = 0.0;
+    if (isSplit) {
+        secondvalue = clamp(UNITUNIFORMS.userDefined[UNIFORMLOC2 >> 2u][UNIFORMLOC2 & 3u], 0.0, 1.0);
+    }
+
     float rawvalue = value;
     value = clamp(value, 0.0, 1.0);
 
@@ -139,7 +155,22 @@ void main()
     }
 
     #ifndef DEBUGSHOW
-        if (value < 0.00001) {
+        // Split bars carry two independent values, so a full hull with a spent
+        // shield (or the reverse) is still worth drawing. Only bail when neither
+        // half has anything to say.
+        bool shouldBail = false;
+        if (isSplit) {
+            shouldBail = (value > 0.999 && secondvalue > 0.999) ||
+                         (value < 0.00001 && secondvalue < 0.00001);
+        } else if (value < 0.00001) {
+            shouldBail = true;
+        } else if ((BARTYPE & BITPERCENTAGE) > 0u) {
+            shouldBail = (value > 0.999);
+        } else if ((BARTYPE & BITGETPROGRESS) > 0u) {
+            shouldBail = (value > 0.999);
+        }
+
+        if (shouldBail) {
             gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
             g_color = vec4(0.0);
             g_uv = vec2(0.0);
@@ -150,39 +181,9 @@ void main()
             g_showIcon = 0.0;
             g_showText = 0.0;
             g_bartype = 0.0;
+            g_secondvalue = 0.0;
+            g_split = 0.0;
             return;
-        }
-
-        if ((BARTYPE & BITPERCENTAGE) > 0u) {
-            if (value > 0.999) {
-                gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
-                g_color = vec4(0.0);
-                g_uv = vec2(0.0);
-                g_value = value;
-                g_rawvalue = rawvalue;
-                g_uvoffset = 0.0;
-                g_useOverlay = 0.0;
-                g_showIcon = 0.0;
-                g_showText = 0.0;
-                g_bartype = 0.0;
-                return;
-            }
-        } else {
-            if ((BARTYPE & BITGETPROGRESS) > 0u) {
-                if (value > 0.999) {
-                    gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
-                    g_color = vec4(0.0);
-                    g_uv = vec2(0.0);
-                    g_value = value;
-                    g_rawvalue = rawvalue;
-                    g_uvoffset = 0.0;
-                    g_useOverlay = 0.0;
-                    g_showIcon = 0.0;
-                    g_showText = 0.0;
-                    g_bartype = 0.0;
-                    return;
-                }
-            }
         }
     #endif
 
@@ -197,6 +198,8 @@ void main()
         g_showIcon = 0.0;
         g_showText = 0.0;
         g_bartype = 0.0;
+        g_secondvalue = 0.0;
+        g_split = 0.0;
         return;
     }
 
@@ -230,4 +233,6 @@ void main()
     g_showIcon = (((BARTYPE & BITSHOWGLYPH) > 0u) && (skipGlyphsNumbers < 0.5)) ? 1.0 : 0.0;
     g_showText = (skipGlyphsNumbers < 1.5) ? 1.0 : 0.0;
     g_bartype = float(BARTYPE);
+    g_secondvalue = secondvalue;
+    g_split = isSplit ? 1.0 : 0.0;
 }

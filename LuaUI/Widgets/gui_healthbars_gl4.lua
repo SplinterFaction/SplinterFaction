@@ -33,6 +33,11 @@ end
 --   8 = morph progress
 -- Slots 6, 11 and 12 are owned by cus_gl4 (selectedness, height, cloak). Do
 -- not write to them from here.
+--
+-- Split bars: a bar type may carry a second uniform index (uniformindex2), which
+-- rides in the previously unused .w of the type_index_ssboloc attribute. The
+-- shader then draws the left half of the bar from the first value and the right
+-- half from the second. Used for hull + personal overshield on Loz units.
 --------------------------------------------------------------------------------
 
 local mathMin = math.min
@@ -108,6 +113,7 @@ local bitIntegerNumber = 16
 local bitGetProgress   = 32
 local bitFlashBar      = 64
 local bitColorCorrect  = 128
+local bitSplitBar      = 256
 
 -- uniformindex is the userDefined float slot the shader reads. Values above 20
 -- mean "engine health / maxHealth", which needs no CPU updates at all.
@@ -132,6 +138,27 @@ local barTypeMap = {
 		bartype      = bitShowGlyph + bitUseOverlay + bitPercentage,
 		uniformindex = 7,
 		uvoffset     = 0.3125, -- same glyph as shield
+	},
+	health_overshield = {
+		-- SF split bar: hull on the left half, personal overshield on the right,
+		-- one row instead of two. This is what Loz units get in place of separate
+		-- health and overshield bars; the standalone pair above stays as the
+		-- fallback for cases where the hull half has to be suppressed.
+		--
+		-- mincolor/maxcolor are the hull ramp. The overshield ramp is compiled in
+		-- as SPLITMINCOLOR/SPLITMAXCOLOR because the vertex layout has no room
+		-- for a second colour pair.
+		--
+		-- bitUseOverlay is deliberately NOT set: the shader's split branch picks
+		-- the overlay per half, so the hull side stays a flat fill and the shield
+		-- side gets the atlas strip at uvoffset. uvoffset 0.3125 is the shield
+		-- row, which supplies both that strip and the shield glyph.
+		mincolor      = { 1.0, 0.0, 0.0, 1.0 },
+		maxcolor      = { 0.0, 1.0, 0.0, 1.0 },
+		bartype       = bitShowGlyph + bitPercentage + bitColorCorrect + bitSplitBar,
+		uniformindex  = 32, -- engine health / maxHealth, the left half
+		uniformindex2 = 7,  -- overshield, the right half
+		uvoffset      = 0.3125,
 	},
 	capture = {
 		mincolor     = { 0.5, 0.25, 0.0, 1.0 },
@@ -214,6 +241,7 @@ for barname, bt in pairs(barTypeMap) do
 	cache[5] = bt.bartype
 	-- cache[6] = bar stacking index, filled per unit
 	cache[7] = bt.uniformindex
+	cache[8] = bt.uniformindex2 or 0 -- split bars only: the right half's uniform slot
 	cache[9], cache[10], cache[11], cache[12] = bt.mincolor[1], bt.mincolor[2], bt.mincolor[3], bt.mincolor[4]
 	cache[13], cache[14], cache[15], cache[16] = bt.maxcolor[1], bt.maxcolor[2], bt.maxcolor[3], bt.maxcolor[4]
 	-- cache[17..20] = instData placeholder, filled by pushElementInstance
@@ -349,6 +377,12 @@ local shaderConfig = {
 	BARFADEEND             = 3800,
 	ATLASSTEP              = 0.0625,
 	MINALPHA               = 0.2,
+	-- SF split bars. The right-hand (overshield) half has no room left in the
+	-- vertex layout for its own colour pair, so its ramp is compiled in. Keep
+	-- these in sync with the standalone overshield bartype below.
+	SPLITMINCOLOR          = "vec4(0.25, 0.45, 0.9, 1.0)",
+	SPLITMAXCOLOR          = "vec4(0.5, 0.75, 1.0, 1.0)",
+	SPLITGAP               = 0.12, -- gutter between the two halves, in bar units
 }
 shaderConfig.BARCORNER     = 0.06 + (shaderConfig.BARHEIGHT / 9)
 shaderConfig.SMALLERCORNER = shaderConfig.BARCORNER * 0.6
@@ -548,17 +582,29 @@ local function addBarsForUnit(unitID, unitDefID, unitAllyTeam)
 
 	local health, maxHealth, paralyzeDamage, capture, build = spGetUnitHealth(unitID)
 
-	if fullview or (unitAllyTeam == myAllyTeamID) or (unitDefHideDamage[unitDefID] == nil) then
+	-- Units with a personal overshield get one split bar (hull on the left half,
+	-- overshield on the right) instead of two stacked bars. If the hull half has
+	-- to be suppressed there is nothing to split against, so those fall back to
+	-- the standalone overshield bar.
+	local showHealth  = fullview or (unitAllyTeam == myAllyTeamID) or (unitDefHideDamage[unitDefID] == nil)
+	local useSplitBar = (unitDefOvershieldMax[unitDefID] ~= nil) and showHealth
+
+	if useSplitBar then
+		addBarForUnit(unitID, unitDefID, "health_overshield")
+	elseif showHealth then
 		addBarForUnit(unitID, unitDefID, "health")
 	end
 
+	-- Projected shields keep their own row either way.
 	if unitDefhasShield[unitDefID] then
 		addBarForUnit(unitID, unitDefID, "shield")
 		unitShieldWatch[unitID] = -1.0
 	end
 
 	if unitDefOvershieldMax[unitDefID] then
-		addBarForUnit(unitID, unitDefID, "overshield")
+		if not useSplitBar then
+			addBarForUnit(unitID, unitDefID, "overshield")
+		end
 		unitOvershieldWatch[unitID] = -1.0
 		local overshield = spGetUnitRulesParam(unitID, "personalShield")
 		if overshield then

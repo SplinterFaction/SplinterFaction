@@ -19,6 +19,8 @@ in DataVS {
     float g_showIcon;
     float g_showText;
     float g_bartype;
+    float g_secondvalue; // SF split bars: right-hand half's value
+    float g_split;       // 1.0 when this instance is a split bar
 };
 
 uniform sampler2D healthbartexture;
@@ -72,6 +74,34 @@ void main(void)
     float inBar = step(uBarStart, g_uv.x);
     float barU = clamp((g_uv.x - uBarStart) / max(1.0 - uBarStart, 0.001), 0.0, 1.0);
 
+    // SF split bars: hull on the left, personal overshield on the right, with a
+    // gutter between them. Remap into whichever half this fragment lands in and
+    // let the rest of the shader run unchanged on the local coordinates. This is
+    // the no-geometry-shader fallback, so the seam is a flat gutter rather than
+    // the bevelled one the GS path draws.
+    float localU = barU;
+    float localValue = g_value;
+    vec3 localFillTop = g_color.rgb;
+    float localOverlay = g_useOverlay;
+    float gapMask = 1.0;
+
+    if (g_split > 0.5) {
+        float gapU = SPLITGAP / (2.0 * BARWIDTH);
+        float halfU = (1.0 - gapU) * 0.5;
+        if (barU < halfU) {
+            localU = barU / max(halfU, 0.001);
+            localValue = g_value;
+            localOverlay = 0.0; // hull half is a flat colour fill
+        } else if (barU > halfU + gapU) {
+            localU = (barU - halfU - gapU) / max(halfU, 0.001);
+            localValue = g_secondvalue;
+            localFillTop = mix(SPLITMINCOLOR, SPLITMAXCOLOR, g_secondvalue).rgb;
+            localOverlay = 1.0; // shield half keeps the atlas strip
+        } else {
+            gapMask = 0.0;
+        }
+    }
+
     // Outer rounded-ish bar silhouette (bar region only).
     float edgeY = min(g_uv.y, 1.0 - g_uv.y);
     float outerMask = smoothstep(0.0, 0.08, edgeY) * inBar;
@@ -80,8 +110,8 @@ void main(void)
     vec3 bgTop = BGTOPCOLOR.rgb;
     vec3 bgColor = mix(bgBottom, bgTop, g_uv.y);
 
-    vec3 fillTop = g_color.rgb;
-    vec3 fillBottom = g_color.rgb * BOTTOMDARKENFACTOR;
+    vec3 fillTop = localFillTop;
+    vec3 fillBottom = localFillTop * BOTTOMDARKENFACTOR;
     vec3 fillColor = mix(fillBottom, fillTop, g_uv.y);
 
     // Inset fill so the background remains visible as an outline.
@@ -89,15 +119,15 @@ void main(void)
     const float borderX = 0.03;
     float borderY = borderX * (BARWIDTH / BARHEIGHT) * 2.0;
     borderY = clamp(borderY, 0.14, 0.45);
-    float innerX = smoothstep(borderX, borderX + 0.01, barU) * (1.0 - smoothstep(1.0 - borderX - 0.01, 1.0 - borderX, barU));
+    float innerX = smoothstep(borderX, borderX + 0.01, localU) * (1.0 - smoothstep(1.0 - borderX - 0.01, 1.0 - borderX, localU));
     float innerY = smoothstep(borderY, borderY + 0.02, g_uv.y) * (1.0 - smoothstep(1.0 - borderY - 0.02, 1.0 - borderY, g_uv.y));
     float innerMask = innerX * innerY;
 
-    float fill = step(barU, g_value) * innerMask;
+    float fill = step(localU, localValue) * innerMask * gapMask;
 
     // Bar texture overlay (same atlas strip concept as GS path).
     vec2 innerUV = vec2(
-        clamp((barU - borderX) / max(1.0 - 2.0 * borderX, 0.001), 0.0, 1.0),
+        clamp((localU - borderX) / max(1.0 - 2.0 * borderX, 0.001), 0.0, 1.0),
         clamp((g_uv.y - borderY) / max(1.0 - 2.0 * borderY, 0.001), 0.0, 1.0)
     );
 
@@ -115,7 +145,7 @@ void main(void)
     vec4 barTexPos = texture(healthbartexture, barAtlasUVPos);
     vec4 barTex = max(barTexNeg, barTexPos);
     vec3 overlayFillColor = fillColor;
-    if (g_useOverlay > 0.5) {
+    if (localOverlay > 0.5) {
         // GS path effectively uses atlas texture color directly for overlay bars.
         // Keep a small tint bias so team-color readability isn't fully lost.
         vec3 texRgb = barTex.rgb;

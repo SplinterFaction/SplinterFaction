@@ -56,11 +56,16 @@ local AMBIENT_CEG = "lightning_stormbolt" -- crackle on units at stage >= 1
 -- Bigger units => more capacity => require more disruption damage to fill.
 local DISRUPTION_CAPACITY_PER_METAL = 10
 
--- Dissipation removes disruption energy per second (constant, the analog of
--- heat's radiator). Because capacity scales with metal, big units shed
--- disruption *slower in %* than small ones. Scaled per-unit by the
+-- Dissipation is capacity-relative (the analog of heat's radiator): a unit
+-- sheds its OWN full capacity over this many seconds, so time-to-clear is
+-- constant across the roster regardless of unit size. Scaled per-unit by the
 -- disruptionrecovery customparam.
-local DISSIPATION_POWER_PER_SECOND = 35
+--   dissipation/sec = (capacity / DISRUPTION_FULL_DISSIPATE_SECONDS) * disruptionrecovery
+-- Linear, not exponential, so partial disruption clears proportionally: a unit
+-- coming out of lockout at POST_TRIGGER_RESET clears in that fraction of the
+-- full time. This governs dissipation only -- the recent-hit pause, lockout
+-- and post-trigger reset rules below are unaffected.
+local DISRUPTION_FULL_DISSIPATE_SECONDS = 15
 
 -- Dissipation pauses briefly after a disruption hit
 -- (same mechanism as heat's COOLING_DELAY_FRAMES, tuned to 2s here)
@@ -82,7 +87,11 @@ local WEAPON_DEAD_RANGE = 1 -- elmos; weapon + acquisition range while weapons o
 --unitdefs
 --customParams = {
 --	disruptionresist = 1.0,       -- multiplier on incoming disruption
---	disruptionrecovery = 1.0,     -- multiplier on dissipation power (radiator)
+--	disruptionrecovery = 1.0,     -- dissipation speed multiplier (radiator).
+--	                              -- Dissipation is capacity-relative, so this is
+--	                              -- a straight time knob: clear time from full =
+--	                              -- DISRUPTION_FULL_DISSIPATE_SECONDS / this.
+--	                              -- 2.0 = clears twice as fast, 0 = never clears.
 --	disruptioncapacitymult = 1.0, -- multiplier on metal-based capacity
 --	disruptionimmune = 0,
 --}
@@ -756,13 +765,15 @@ function gadget:GameFrame(frame)
 			end
 
 			-- Dissipation (paused briefly after a recent hit, never during
-			-- lockout). Constant energy/sec, like heat's radiator: big units
-			-- shed disruption slower in % terms than small ones.
+			-- lockout). Capacity-relative, like heat's radiator: the rate is
+			-- derived from this unit's own capacity so a full bar always takes
+			-- DISRUPTION_FULL_DISSIPATE_SECONDS to clear, scout or titan.
 			if (not fullyDisrupted) and current > 0 then
 				local lastHit = lastDisruptionHit[unitID] or -999999
 				if frame - lastHit > RECENT_HIT_DELAY_FRAMES then
 					local recoveryMult = unitRecoveryMult[unitID] or 1
-					local dissipated = DISSIPATION_POWER_PER_SECOND * recoveryMult * dt
+					local dissipationRate = cap / math_max(0.01, DISRUPTION_FULL_DISSIPATE_SECONDS)
+					local dissipated = dissipationRate * recoveryMult * dt
 
 					current = math_max(0, current - dissipated)
 					disruption[unitID] = current

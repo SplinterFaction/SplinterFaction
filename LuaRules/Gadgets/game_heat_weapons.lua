@@ -51,10 +51,16 @@ end
 --
 --   heat_cooling_mult = "<number>"    default: 1.0
 --       Multiplies the unit's cooling rate.
---       coolingPower = COOLING_POWER_PER_SECOND * heat_cooling_mult
+--       coolingPower = (capacity / HEAT_FULL_COOL_SECONDS) * heat_cooling_mult
+--       Cooling is capacity-relative, so by default EVERY unit sheds a full
+--       heat bar in HEAT_FULL_COOL_SECONDS regardless of size. This param is
+--       therefore a straight time knob:
+--           time to cool from 100% = HEAT_FULL_COOL_SECONDS / heat_cooling_mult
+--           "2.0" = cools in half the time    "0.5" = takes twice as long
 --       "0" = never cools (heat is permanent until death).
---       Because capacity scales with metal but cooling does not, expensive
---       units cool slower in percentage terms unless given a bump here.
+--       Note heat_capacity_mult does NOT change cooling time -- it changes how
+--       much heat damage is needed to fill the bar. The two knobs are
+--       independent: capacity = toughness, cooling = recovery speed.
 --
 --   heat_immune = "1"                 default: absent (not immune)
 --       Unit is completely unaffected by heat weapons: it accumulates no heat,
@@ -115,9 +121,14 @@ local HEAT_RULES_UPDATE_THRESHOLD = 1  -- percent difference required to update
 -- Bigger units => more capacity => require more heat damage to reach 100%.
 local HEAT_CAPACITY_PER_METAL = 10
 
--- Cooling power removes heat energy per second (constant by default).
--- Because capacity scales with metal, this makes big units cool *slower in %*.
-local COOLING_POWER_PER_SECOND = 35
+-- Cooling is capacity-relative: a unit sheds its OWN full capacity over this
+-- many seconds, so time-to-cool is constant across the roster regardless of
+-- unit size. A 100-metal scout and a 5000-metal titan both go 100% -> 0% in
+-- HEAT_FULL_COOL_SECONDS.
+--   coolingPower = capacity / HEAT_FULL_COOL_SECONDS * heat_cooling_mult
+-- Cooling is linear (a flat energy/sec derived from capacity), not exponential,
+-- so partial heat clears proportionally: 50% heat clears in half this time.
+local HEAT_FULL_COOL_SECONDS = 15
 
 -- Optional: small delay (frames) after last heat hit before cooling starts.
 local COOLING_DELAY_FRAMES = 0
@@ -331,7 +342,12 @@ local function initHeatedUnit(unitID, unitDefID)
 	local coolingMult  = tonumber(ucp.heat_cooling_mult)  or 1.0
 
 	local capacity = math.max(1, metalCost * HEAT_CAPACITY_PER_METAL * capacityMult)
-	local coolingPower = math.max(0, COOLING_POWER_PER_SECOND * coolingMult)
+	-- Capacity-relative: shed a full tank in HEAT_FULL_COOL_SECONDS, whatever
+	-- the tank size. capacityMult is already baked into capacity, so a unit
+	-- with double capacity also cools twice as fast in absolute terms and
+	-- still takes the same wall-clock time to go from 100% to 0%.
+	local coolSeconds  = math.max(0.01, HEAT_FULL_COOL_SECONDS)
+	local coolingPower = math.max(0, (capacity / coolSeconds) * coolingMult)
 
 	local data = {
 		unitID          = unitID,

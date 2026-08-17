@@ -60,12 +60,26 @@ local GRID_DIVS     = 5     -- number of cells across/up (lines drawn at 1..GRID
 local LINE_WIDTH    = 2.5
 
 -- Colors -----------------------------------------------------------------------
-local BORDER_COLOR        = {0.15, 0.15, 0.15, 0.90}
-local BORDER_COLOR_GUI    = {0.15, 0.15, 0.15, 0.90}
-local PANEL_BG_COLOR      = {0.05, 0.05, 0.06, 0.92}
-local PANEL_BG_COLOR_GUI  = {0.00, 0.00, 0.00, 0.28}
-local SECTION_BG          = {0.12, 0.12, 0.13, 0.85}
-local CATEGORY_BG         = {0.20, 0.20, 0.21, 0.55}
+--------------------------------------------------------------------------------
+-- OPACITY CONTROLS
+--
+-- PANEL_OPACITY multiplies the alpha of the layers below; 1.0 uses them as
+-- written. Values match the tooltip / additional-info / build-menu recipe
+-- (near-black 0.90 under dark grey 0.92) so every cached panel reads the same.
+--------------------------------------------------------------------------------
+local PANEL_OPACITY       = 1.0
+local BORDER_COLOR        = {0, 0, 0, 0.90}
+local BORDER_COLOR_GUI    = {0, 0, 0, 0.90}
+local PANEL_BG_COLOR      = {0.07, 0.07, 0.08, 0.92}
+local PANEL_BG_COLOR_GUI  = {0.07, 0.07, 0.08, 0.92}
+local SECTION_BG          = {0.12, 0.12, 0.13, 0.92}
+local CATEGORY_BG         = {0.20, 0.20, 0.21, 0.60}
+do
+	local function ApplyOpacity(c) c[4] = math.min(1, c[4] * PANEL_OPACITY) end
+	ApplyOpacity(BORDER_COLOR)     ; ApplyOpacity(BORDER_COLOR_GUI)
+	ApplyOpacity(PANEL_BG_COLOR)   ; ApplyOpacity(PANEL_BG_COLOR_GUI)
+	ApplyOpacity(SECTION_BG)       ; ApplyOpacity(CATEGORY_BG)
+end
 local PLOT_BG             = {0.02, 0.02, 0.03, 0.55}
 local GRID_COLOR          = {1.0, 1.0, 1.0, 0.07}
 local HOVER_OVERLAY       = {0.90, 0.90, 0.90, 0.09}

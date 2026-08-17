@@ -53,6 +53,7 @@ out DataVS {
 	vec4 v_parameters;
 	vec2 v_sizemodifiers;
 	uvec4 v_bartype_index_ssboloc;
+	float v_secondvalue; // SF split bars: the right-hand half's value (0 for every other bar type)
 };
 
 bool vertexClipped(vec4 clipspace, float tolerance) {
@@ -61,6 +62,7 @@ bool vertexClipped(vec4 clipspace, float tolerance) {
 }
 #define UNITUNIFORMS uni[instData.y]
 #define UNIFORMLOC bartype_index_ssboloc.z
+#define UNIFORMLOC2 bartype_index_ssboloc.w
 #define BARTYPE bartype_index_ssboloc.x
 
 #define BITUSEOVERLAY 1u
@@ -71,6 +73,7 @@ bool vertexClipped(vec4 clipspace, float tolerance) {
 #define BITGETPROGRESS 32u
 #define BITFLASHBAR 64u
 #define BITCOLORCORRECT 128u
+#define BITSPLITBAR 256u
 
 void main()
 {
@@ -129,6 +132,14 @@ void main()
 		#ifndef DEBUGSHOW
 			if (abs(buildprogress - relativehealth )< 0.03) v_numvertices = 0u;
 		#endif
+	}
+
+	// SF split bars (health + overshield in one row): the left half's value is
+	// v_parameters.x as usual, the right half's comes from a second userDefined
+	// slot named in bartype_index_ssboloc.w (7 = overshield for Loz units).
+	v_secondvalue = 0.0;
+	if ((BARTYPE & BITSPLITBAR) > 0u) {
+		v_secondvalue = clamp(UNITUNIFORMS.userDefined[UNIFORMLOC2 >> 2u][UNIFORMLOC2 & 3u], 0.0, 1.0);
 	}
 
 	if ((BARTYPE & BITGETPROGRESS) > 0u) { // reload bar progress is calced from nowtime-shottime / (endtime - shottime)
