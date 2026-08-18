@@ -95,7 +95,12 @@ return function(ctx, lib, cfg)
 		local n      = tick.frame
 		local teamID = tick.teamID
 
-		if (n - (SimpleLastUpgrade[teamID] or 0)) < UPGRADE_COOLDOWN then return end
+		-- Adaptive cadence: low difficulty buys upgrades far more lazily
+		-- (mult up to 3.0), high difficulty slightly faster (0.7). nil knobs
+		-- (plain SimpleAI) -> stock cooldown.
+		local K  = tick.knobs
+		local cd = UPGRADE_COOLDOWN * (K and K.upgradeCdMult or 1)
+		if (n - (SimpleLastUpgrade[teamID] or 0)) < cd then return end
 
 		local tech    = TeamTechLevel[teamID] or 1
 		local reserve = (tech >= 4) and 0 or MORPH_RP_RESERVE

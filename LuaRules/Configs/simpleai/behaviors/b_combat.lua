@@ -94,6 +94,17 @@ return function(ctx, lib, cfg)
 		local teamID = tick.teamID
 		local units  = tick.units
 
+		-- Adaptive difficulty knobs (b_adaptive, order 5, stamps tick.knobs
+		-- before we run; nil for plain SimpleAI teams -> stock constants).
+		-- Every mid anchor over in b_adaptive equals the constant here, so
+		-- D = 0.5 is exactly stock behavior.
+		local K            = tick.knobs
+		local waveCooldown = K and K.waveCooldown     or WAVE_COOLDOWN
+		local musterSize   = K and K.musterSize       or WAVE_MUSTER_SIZE
+		local bigArmy      = K and K.bigArmy          or WAVE_BIG_ARMY
+		local retargetIv   = K and K.retargetInterval or ATTACK_RETARGET
+		local useWeak      = (K == nil) or K.weakTargeting
+
 		-- ---- Muster point: compute/refresh every ~40s or if unset ----
 		if not SimpleMusterPos[teamID] or n % 2400 == 0 then
 			SimpleMusterPos[teamID] = ComputeMusterPos(teamID)
@@ -138,13 +149,13 @@ return function(ctx, lib, cfg)
 		-- the base is under attack and we have at least a token force.
 		-- An active base intruder suppresses outward launches so the home
 		-- guard stays to deal with it instead of marching off.
-		local cooldownOk    = (n - SimpleLastLaunch[teamID]) >= WAVE_COOLDOWN
+		local cooldownOk    = (n - SimpleLastLaunch[teamID]) >= waveCooldown
 		local readyToLaunch = cooldownOk and not baseThreat
-				and (atMuster >= WAVE_MUSTER_SIZE or readyGround >= WAVE_BIG_ARMY)
+				and (atMuster >= musterSize or readyGround >= bigArmy)
 				and readyGround >= WAVE_MIN_ARMY
 		local forceAttack   = SimpleUnderAttack[teamID] and not baseThreat
 				and readyGround >= 3
-				and (n - SimpleLastLaunch[teamID] >= WAVE_COOLDOWN / 2)
+				and (n - SimpleLastLaunch[teamID] >= waveCooldown / 2)
 
 		if (readyToLaunch or forceAttack)
 				and SimpleSquadState[teamID] == "mustering" then
@@ -153,7 +164,9 @@ return function(ctx, lib, cfg)
 			SimpleLastTargetScan[teamID] = n
 			-- Aim at the WEAKEST-defended enemy structure, not the
 			-- centre of mass (which is usually the most fortified spot).
-			local target = FindWeakestEnemyTarget(teamID)
+			-- Low-difficulty adaptive teams skip the weak-point scan and
+			-- plow at the enemy centroid instead -- deliberately dumber.
+			local target = (useWeak and FindWeakestEnemyTarget(teamID) or nil)
 					or SimpleEnemyBasePos[teamID]
 					or {
 						x = mapsizeX / 2 + math.random(-500, 500),
@@ -179,8 +192,8 @@ return function(ctx, lib, cfg)
 
 		-- While pushing, periodically re-scan for the softest target so
 		-- the wave rolls onto fresh weak points as defences collapse.
-		if SimpleSquadState[teamID] == "attacking"
-				and (n - SimpleLastTargetScan[teamID]) >= ATTACK_RETARGET then
+		if useWeak and SimpleSquadState[teamID] == "attacking"
+				and (n - SimpleLastTargetScan[teamID]) >= retargetIv then
 			SimpleLastTargetScan[teamID] = n
 			local newTarget = FindWeakestEnemyTarget(teamID)
 			if newTarget then SimpleAttackWave[teamID] = newTarget end
@@ -203,6 +216,10 @@ return function(ctx, lib, cfg)
 		local muster     = tick.muster
 		local luaAI      = tick.luaAI
 		local allunits   = tick.allUnits
+		-- Adaptive retreat discipline: low difficulty fights nearly to the
+		-- death (enter threshold sinks toward 0.20); exit rules stay stock.
+		local K          = tick.knobs
+		local rEnter     = K and K.retreatEnter or RETREAT_ENTER
 
 		-- AIR: always independent, hunt nearest enemy
 		if IsAir[unitDefID] then
@@ -257,7 +274,7 @@ return function(ctx, lib, cfg)
 					SimpleRetreatState[unitID] = nil
 					retreatFrame = nil
 				end
-			elseif hpRatio < RETREAT_ENTER then
+			elseif hpRatio < rEnter then
 				-- Enter retreat: break off IMMEDIATELY
 				-- (replace the queue; a unit this hurt must
 				-- not finish walking a FIGHT queue first).

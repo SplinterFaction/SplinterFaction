@@ -1,5 +1,9 @@
 -- ============================================================
 -- SimpleAI Enhanced -- based on original by Damgam (2020)
+-- v4: AdaptiveAI luaai entry (real-time difficulty controller in
+--     b_adaptive.lua), NeverStall resource floor internalized (replaces
+--     the old lump-injection cheat), behavior hooks for kills/losses and
+--     finished units.
 -- v3: Tech-aware build lists, faction detection, economy teching
 --     goals, coordinated attack waves, commander survival,
 --     repair logic, mex expansion, threat response.
@@ -39,6 +43,18 @@ local ATTACK_DIST_W     = 0.10   -- how strongly distance-from-muster penalises 
 
 local FACTORY_OVERFLOW      = 0.62 -- metal & energy storage fraction that counts as "overflowing"
 
+-- Resource floor (the NeverStall mechanism, internalized). Every 30 frames a
+-- covered team's metal/energy stock is topped up to this fraction of storage,
+-- so the AI can never hard-stall. Coverage:
+--   * AdaptiveAI teams: ALWAYS. Stalling must not exist as a variable for the
+--     difficulty controller -- throughput is steered by build speed instead.
+--   * plain SimpleAI/Defender/Constructor teams: only when the ai_neverstall
+--     modoption is enabled (same gate the standalone gadget used).
+-- The standalone ai_neverstall.lua gadget now SKIPS all teams handled here and
+-- remains only as the backstop for other AI types (e.g. SurvivalAI games).
+local NEVERSTALL_FLOOR = 0.15
+local neverstallOn = (Spring.GetModOptions().ai_neverstall or "disabled") ~= "disabled"
+
 -- Factory unit names that are air or sea plants.
 -- Everything else that is a factory is treated as a land factory.
 local AIR_FACTORY_NAMES = {
@@ -71,7 +87,7 @@ local ctx = {
 	-- ---- identity ----
 	aiTeams      = {},   -- array of AI team IDs (count kept in a core local)
 	isAITeam     = {},   -- [teamID] = true; O(1) membership for per-event callins
-	cheaterTeams = {},   -- array of cheater-AI team IDs
+	adaptiveTeams = {},  -- [teamID] = true for AdaptiveAI teams (b_adaptive keys off this)
 
 	-- ---- unit classification (defID-keyed, immutable after load) ----
 	IsCommander = {}, IsFactory = {}, IsConstructor = {}, IsExtractor = {},
@@ -112,8 +128,7 @@ local ctx = {
 local SimpleAITeamIDs             = ctx.aiTeams
 local SimpleAITeamIDsCount        = 0
 local IsAITeamID                  = ctx.isAITeam
-local SimpleCheaterAITeamIDs      = ctx.cheaterTeams
-local SimpleCheaterAITeamIDsCount = 0
+local AdaptiveTeams               = ctx.adaptiveTeams
 
 -- classic counters (kept as globals for compatibility, now backed by ctx)
 SimpleFactoriesCount   = ctx.counters.factories
@@ -197,12 +212,18 @@ end
 for i = 1, #teams do
 	local teamID = teams[i]
 	local luaAI  = Spring.GetTeamLuaAI(teamID)
+	local isAdaptive = luaAI ~= nil and luaAI ~= ""
+			and string.sub(luaAI, 1, 10) == 'AdaptiveAI'
 	if luaAI and luaAI ~= "" and (
-			string.sub(luaAI, 1, 8)  == 'SimpleAI' or
+			isAdaptive or
+					string.sub(luaAI, 1, 8)  == 'SimpleAI' or
 					string.sub(luaAI, 1, 16) == 'SimpleDefenderAI' or
 					string.sub(luaAI, 1, 19) == 'SimpleConstructorAI'
 	) then
 		enabled = true
+		if isAdaptive then
+			AdaptiveTeams[teamID] = true
+		end
 		SimpleAITeamIDsCount = SimpleAITeamIDsCount + 1
 		SimpleAITeamIDs[SimpleAITeamIDsCount] = teamID
 		IsAITeamID[teamID] = true
@@ -241,9 +262,6 @@ for i = 1, #teams do
 				building    = {},
 			}
 		end
-
-		SimpleCheaterAITeamIDsCount = SimpleCheaterAITeamIDsCount + 1
-		SimpleCheaterAITeamIDs[SimpleCheaterAITeamIDsCount] = teamID
 	end
 end
 
@@ -253,7 +271,7 @@ end
 function gadget:GetInfo()
 	return {
 		name    = "SimpleAI",
-		desc    = "Tech-aware SimpleAI with faction build lists and economy teching goals",
+		desc    = "Tech-aware SimpleAI + AdaptiveAI (real-time difficulty) with faction build lists and economy teching goals",
 		author  = "Damgam / Enhanced v3",
 		date    = "2024",
 		layer   = -100,
@@ -396,10 +414,12 @@ local EstimateEnemyBase       = lib.EstimateEnemyBase
 -- `order` field. Adding a behavior = one new file + one entry here.
 -- ============================================================
 local BEHAVIOR_FILES = {
+	"luarules/configs/simpleai/behaviors/b_adaptive.lua",      -- order 5; difficulty controller, registers GetKnobs
 	"luarules/configs/simpleai/behaviors/b_defense.lua",       -- order 10 (intel first)
 	"luarules/configs/simpleai/behaviors/b_construction.lua",  -- order 40; registers services
 	"luarules/configs/simpleai/behaviors/b_commander.lua",     -- order 20; consumes services
 	"luarules/configs/simpleai/behaviors/b_economy.lua",       -- order 30
+	"luarules/configs/simpleai/behaviors/b_upgrades.lua",      -- order 35
 	"luarules/configs/simpleai/behaviors/b_combat.lua",        -- order 50
 }
 
@@ -541,17 +561,22 @@ if gadgetHandler:IsSyncedCode() then
 
 	function gadget:GameFrame(n)
 
-		-- Cheater resource boost every 30s
-		if n % 1800 == 0 then
-			for j = 1, SimpleCheaterAITeamIDsCount do
-				local teamID = SimpleCheaterAITeamIDs[j]
-				local mcurrent, mstorage = Spring.GetTeamResources(teamID, "metal")
-				local ecurrent, estorage = Spring.GetTeamResources(teamID, "energy")
-				if mcurrent < mstorage * 0.15 then
-					Spring.SetTeamResource(teamID, "m", mstorage * 0.40)
-				end
-				if ecurrent < estorage * 0.15 then
-					Spring.SetTeamResource(teamID, "e", estorage * 0.40)
+		-- Resource floor (NeverStall, internalized -- see NEVERSTALL_FLOOR
+		-- above for the coverage rules). Replaces the old 30s lump-injection
+		-- cheat: continuous, invisible, and identical to what the standalone
+		-- gadget did. Frame offset 27 keeps it off the %15==0 AI-tick frames.
+		if n % 30 == 27 then
+			for j = 1, SimpleAITeamIDsCount do
+				local teamID = SimpleAITeamIDs[j]
+				if AdaptiveTeams[teamID] or neverstallOn then
+					local mc, ms = Spring.GetTeamResources(teamID, "metal")
+					local ec, es = Spring.GetTeamResources(teamID, "energy")
+					if mc and mc < ms * NEVERSTALL_FLOOR then
+						Spring.SetTeamResource(teamID, "m", ms * NEVERSTALL_FLOOR)
+					end
+					if ec and ec < es * NEVERSTALL_FLOOR then
+						Spring.SetTeamResource(teamID, "e", es * NEVERSTALL_FLOOR)
+					end
 				end
 			end
 		end
@@ -711,6 +736,12 @@ if gadgetHandler:IsSyncedCode() then
 	-- ============================================================
 	function gadget:UnitFinished(unitID, unitDefID, unitTeam)
 		if not TeamBuildLists[unitTeam] then return end
+		-- Behavior hook: b_adaptive stamps its build-speed multiplier onto
+		-- freshly finished builders here.
+		for i = 1, #behaviors do
+			local b = behaviors[i]
+			if b.UnitFinished then b.UnitFinished(unitID, unitDefID, unitTeam) end
+		end
 		local cp = UnitDefs[unitDefID] and (UnitDefs[unitDefID].customParams or {})
 		if not cp then return end
 		if cp.unitrole == "Commander" then
@@ -776,6 +807,23 @@ if gadgetHandler:IsSyncedCode() then
 		SimpleRetreatState[unitID] = nil
 		if IsAITeamID[unitTeam] then
 			UnregisterUnit(unitID, unitDefID, unitTeam)
+			-- Behavior hook: one of an AI team's units was destroyed.
+			-- (b_adaptive accumulates the loss value for its exchange metric.)
+			for i = 1, #behaviors do
+				local b = behaviors[i]
+				if b.UnitLost then b.UnitLost(unitTeam, unitID, unitDefID) end
+			end
+		end
+		-- Behavior hook: an AI team destroyed an ENEMY unit. Same enemy
+		-- criteria as UnitDamaged: not self, not gaia, not allied.
+		if attackerTeam and IsAITeamID[attackerTeam]
+				and attackerTeam ~= unitTeam
+				and unitTeam ~= gaiaTeamID
+				and not Spring.AreTeamsAllied(attackerTeam, unitTeam) then
+			for i = 1, #behaviors do
+				local b = behaviors[i]
+				if b.UnitKilled then b.UnitKilled(attackerTeam, unitID, unitDefID) end
+			end
 		end
 	end
 
@@ -789,6 +837,13 @@ if gadgetHandler:IsSyncedCode() then
 		-- unitTeam is the NEW owner
 		if IsAITeamID[unitTeam] then
 			RegisterUnit(unitID, unitDefID, unitTeam)
+			-- Behavior hook: a GIVEN unit is a finished unit -- b_adaptive
+			-- stamps its build-speed multiplier so shared builders don't
+			-- escape the band.
+			for i = 1, #behaviors do
+				local b = behaviors[i]
+				if b.UnitFinished then b.UnitFinished(unitID, unitDefID, unitTeam) end
+			end
 		end
 	end
 

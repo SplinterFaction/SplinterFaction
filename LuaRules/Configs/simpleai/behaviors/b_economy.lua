@@ -56,6 +56,11 @@ return function(ctx, lib, cfg)
 		local teamID = tick.teamID
 		local units  = tick.units
 
+		-- Adaptive gate: low-difficulty adaptive teams (D < 0.40) never spend
+		-- RP on boosts. nil knobs (plain SimpleAI) -> stock, always allowed.
+		local K = tick.knobs
+		if K and not K.boostAllowed then return end
+
 		local boostReady = (n - (SimpleLastBoost[teamID] or 0)) >= BOOST_COOLDOWN
 		if boostReady and (tick.overflowing or SimpleUnderAttack[teamID]) then
 			local reserve = ((TeamTechLevel[teamID] or 1) >= 4)

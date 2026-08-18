@@ -17,12 +17,16 @@ return {
 		desc = 'EasyAI (Simple)',
 	},
 	{
+		name = 'AdaptiveAI',
+		desc = 'Adjusts its difficulty in real time to be a good match for you',
+	},
+	{
 		name = 'SimpleDefenderAI',
-		desc = 'EasyAI (Defender)',
+		desc = 'SimpleAI (Defender)',
 	},
 	{
 		name = 'SimpleConstructorAI',
-		desc = 'EasyAI (Constructor)',
+		desc = 'SimpleAI (Constructor)',
 	},
 	{
 		name = 'SurvivalAI',

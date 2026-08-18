@@ -147,10 +147,17 @@ return function(ctx, lib, cfg, services)
 		local success = false
 
 		local nowFrame   = Spring.GetGameFrame()
+		-- Adaptive difficulty pacing: >1 slows every constructor/factory start
+		-- window, <1 tightens them. Resolved via the services registry because
+		-- this selector is also called from b_commander without a tick in hand.
+		-- nil (plain SimpleAI teams, or b_adaptive absent) -> stock 1.0.
+		local knobsK     = services.GetKnobs and services.GetKnobs(unitTeam)
+		local pacingMult = knobsK and knobsK.pacingMult or 1
 		-- True only if enough frames have passed since this team last STARTED a
 		-- constructor. Shared by every factory/builder so the whole team starts at
 		-- most one constructor per CON_BUILD_SPACING, letting the count catch up.
-		local conSpacingOk = (nowFrame - (SimpleLastConStart[unitTeam] or 0)) >= CON_BUILD_SPACING
+		local conSpacingOk = (nowFrame - (SimpleLastConStart[unitTeam] or 0))
+				>= CON_BUILD_SPACING * pacingMult
 
 		local supplyUsed = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyUsed") or 0)
 		local supplyMax  = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyMax")  or 0)
@@ -167,7 +174,8 @@ return function(ctx, lib, cfg, services)
 		local overflowing  = mstorage > 0 and estorage > 0
 				and mcurrent > mstorage * FACTORY_OVERFLOW
 				and ecurrent > estorage * FACTORY_OVERFLOW
-		local facSpacing   = overflowing and FACTORY_SPACING_FLOOD or FACTORY_SPACING
+		local facSpacing   = (overflowing and FACTORY_SPACING_FLOOD or FACTORY_SPACING)
+				* pacingMult
 		local facSpacingOk = (nowFrame - (SimpleLastFacStart[unitTeam] or 0)) >= facSpacing
 
 		-- econPressure: 0 = at target, approaches 1 when far below next tech threshold
