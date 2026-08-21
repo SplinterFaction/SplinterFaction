@@ -18,6 +18,12 @@ if not VFS.FileExists(fontfile) then
 	Spring.SetConfigString('ui_font', defaultFont)
 	fontfile = 'luaui/fonts/'..defaultFont
 end
+-- Deferred G-buffer passes are required by gfx_deferred_rendering_gl4.lua
+-- (and gfx_bloom_shader_deferred.lua). The engine reads these at load, so
+-- LuaIntro is early enough to enforce them for fresh installs.
+Spring.SetConfigInt('AllowDeferredMapRendering', 1)
+Spring.SetConfigInt('AllowDeferredModelRendering', 1)
+
 local defaultFont2 = 'Saira_SemiCondensed-SemiBold.ttf'
 local fontfile2 = 'luaui/fonts/'..Spring.GetConfigString("ui_font2", defaultFont2)
 if not VFS.FileExists(fontfile2) then

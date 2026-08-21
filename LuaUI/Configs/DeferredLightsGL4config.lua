@@ -1,0 +1,267 @@
+-- DeferredLightsGL4config.lua (SplinterFaction)
+--
+-- Unit-attached and feature-attached lights for gfx_deferred_rendering_gl4.lua.
+--
+-- Returns:
+--   unitDefLights[unitDefID]   = { lightName = lightTable, ... }   static lights on living units
+--   unitEventLights            = { UnitScriptLights = {...}, <CallinName> = {...} }
+--   featureDefLights[featDefID]= { lightName = lightTable, ... }   lights on features
+--
+-- A lightTable:
+--   {
+--     lightType = "point" | "cone" | "beam",
+--     pieceName = "thruster",   -- nil = world space at unit base; unknown name = unit base
+--     aboveUnit = 20,           -- optional, elmos above unit top
+--     alwaysVisible = true,     -- optional, spawn even if off screen
+--     fraction = 3,             -- optional, only every Nth feature/projectile gets it
+--     lightConfig = {
+--       posx, posy, posz, radius,
+--       r, g, b, a,                           -- a is brightness; rgb may exceed 1
+--       color2r, color2g, color2b, colortime, -- point: second colour + cycle time (s)
+--       dirx, diry, dirz, theta,              -- cone: direction + half-angle (rad)
+--       pos2x, pos2y, pos2z,                  -- beam: end point
+--       modelfactor, specular, scattering, lensflare,
+--       lifetime, sustain, selfshadowing,
+--     },
+--   }
+--
+-- Original structure: Beherith, GNU GPL v2.
+--------------------------------------------------------------------------------
+
+local function copy(t)
+	local c = {}
+	for k, v in pairs(t) do
+		if type(v) == "table" then
+			c[k] = copy(v)
+		else
+			c[k] = v
+		end
+	end
+	return c
+end
+
+--------------------------------------------------------------------------------
+-- Unit lights
+--
+-- Keyed by unitdef name. Empty for now: a real pass needs per-model piece names
+-- and in-game tuning. Two commented examples show the shape.
+--------------------------------------------------------------------------------
+
+local unitLights = {
+	-- Example: thruster glow on an aircraft, attached to a piece
+	-- fedhornet = {
+	-- 	thruster = {
+	-- 		lightType = "point",
+	-- 		pieceName = "thruster",
+	-- 		lightConfig = {
+	-- 			posx = 0, posy = 0, posz = -6, radius = 60,
+	-- 			r = 0.4, g = 0.7, b = 1.0, a = 0.25,
+	-- 			color2r = 0.3, color2g = 0.5, color2b = 0.9, colortime = 0.15,
+	-- 			modelfactor = 0.6, specular = 0.4, scattering = 1.2, lensflare = 0.6,
+	-- 			lifetime = 0, sustain = 0, selfshadowing = 0,
+	-- 		},
+	-- 	},
+	-- },
+	-- Example: slow warm pulse at the base of a building, world space
+	-- lozreactor = {
+	-- 	corepulse = {
+	-- 		lightType = "point",
+	-- 		aboveUnit = 10,
+	-- 		lightConfig = {
+	-- 			posx = 0, posy = 0, posz = 0, radius = 220,
+	-- 			r = 1.0, g = 0.55, b = 0.15, a = 0.18,
+	-- 			color2r = 0.8, color2g = 0.3, color2b = 0.05, colortime = 3,
+	-- 			modelfactor = 0.4, specular = 0.5, scattering = 1.0, lensflare = 0,
+	-- 			lifetime = 0, sustain = 0, selfshadowing = 0,
+	-- 		},
+	-- 	},
+	-- },
+}
+
+--------------------------------------------------------------------------------
+-- Unit event lights
+--
+-- UnitScriptLights[unitDefName][index] = lightTable, triggered from a unit
+-- script via Spring.UnitScript... -> Script.LuaUI.UnitScriptLight(unitID,
+-- unitDefID, index, param).
+--
+-- Other keys are widget callin names (UnitIdle, UnitFinished, UnitFromFactory,
+-- UnitCreated, UnitDestroyed, UnitCloaked, UnitDecloaked, UnitMoveFailed,
+-- StockpileChanged, CrashingAircraft) mapping unitDefName -> lightTable; the
+-- light spawns once at the unit's position when the callin fires.
+--------------------------------------------------------------------------------
+
+local unitEventLightsNames = {
+	UnitScriptLights = {},
+	-- UnitDecloaked = {
+	-- 	fedshade = { lightType = "point", lightConfig = { posx = 0, posy = 20, posz = 0, radius = 120,
+	-- 		r = 0.5, g = 0.8, b = 1.0, a = 0.6, color2r = 0, color2g = 0, color2b = 0, colortime = 0.5,
+	-- 		modelfactor = 0.5, specular = 0.5, scattering = 1.0, lensflare = 0,
+	-- 		lifetime = 12, sustain = 3, selfshadowing = 0 } },
+	-- },
+}
+
+--------------------------------------------------------------------------------
+-- Resolve names -> defIDs
+--------------------------------------------------------------------------------
+
+local unitDefLights = {}
+for unitName, lights in pairs(unitLights) do
+	if UnitDefNames[unitName] then
+		unitDefLights[UnitDefNames[unitName].id] = lights
+	end
+end
+unitLights = nil
+
+local unitEventLights = {}
+for eventName, unitTable in pairs(unitEventLightsNames) do
+	unitEventLights[eventName] = {}
+	for unitName, lights in pairs(unitTable) do
+		if UnitDefNames[unitName] then
+			unitEventLights[eventName][UnitDefNames[unitName].id] = lights
+		end
+	end
+end
+unitEventLightsNames = nil
+
+--------------------------------------------------------------------------------
+-- Feature lights
+--------------------------------------------------------------------------------
+
+local featureDefLights = {}
+
+-- Wreck embers. Every "<unitname>_dead" feature (generated by
+-- Gamedata/featuredefs_post.lua) gets a decaying orange->red point light
+-- scaled by footprint. lifetime is in frames; sustain is an exponential
+-- fade coefficient.
+local WreckBaseLight = {
+	lightType = "point",
+	lightConfig = {
+		posx = 1,
+		posy = -2,
+		posz = 1,
+		radius = 9, -- overwritten per wreck
+		dirx = 0.003,
+		diry = 0.0035,
+		dirz = 0.003,
+		theta = 0.9,
+		r = 1.2,
+		g = 0.60,
+		b = 0,
+		a = 0.12,
+		color2r = 0.6,
+		color2g = 0.08,
+		color2b = -0.5,
+		colortime = 28,
+		modelfactor = 3.0,
+		specular = -0.25,
+		scattering = 4.6,
+		lensflare = 0,
+		lifetime = 300,
+		sustain = 1.1,
+		selfshadowing = 0,
+	},
+}
+
+for featureDefID, featureDef in pairs(FeatureDefs) do
+	local name = featureDef.name
+	if string.sub(name, -5) == "_dead" then
+		local wreckRng = math.random() * 2 - 1
+		local featureSize = math.sqrt((featureDef.xsize or 1) * (featureDef.zsize or 1)) / 2.1
+		local light = copy(WreckBaseLight)
+		local lc = light.lightConfig
+		lc.radius = featureSize * 19
+		lc.colortime = lc.colortime * featureSize * 1.5
+		lc.posx = lc.posx * (wreckRng * featureSize * 7)
+		lc.posz = lc.posz * (wreckRng * featureSize * 7)
+		if featureSize > 3 then
+			lc.posy = lc.posy * (featureSize * 4)
+		end
+		lc.dirx = lc.dirx * (wreckRng * (featureSize / 4) * 2)
+		lc.dirz = lc.dirz * (wreckRng * (featureSize / 4) * 2)
+		featureDefLights[featureDefID] = { FeatureCreated = light }
+	end
+end
+
+-- Steady glows on map features, matched by name pattern (plain find, case
+-- insensitive). First match wins. Add entries here for any glowing feature
+-- set a map ships with; radius/posy are scaled by the feature's model height
+-- when `scaleByModel` is set.
+local FeatureGlowBase = {
+	lightType = "point",
+	lightConfig = {
+		posx = 0,
+		posy = 12,
+		posz = 0,
+		radius = 72,
+		r = 1,
+		g = 1,
+		b = 1,
+		a = 0.3,
+		color2r = 0.6,
+		color2g = 0.6,
+		color2b = 0.6,
+		colortime = 0.01,
+		modelfactor = 1.1,
+		specular = 0.9,
+		scattering = 0.8,
+		lensflare = 0,
+		lifetime = 0,
+		sustain = 0,
+		selfshadowing = 0,
+	},
+}
+
+local featureGlowPatterns = {
+	-- pilha_crystal family (common Spring map feature pack); colour by suffix
+	{ pattern = "pilha_crystal_violet", rgba = { 0.8, 0.5, 0.95, 0.33 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_blue", rgba = { 0.1, 0.2, 0.9, 0.33 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_green", rgba = { 0.1, 0.8, 0.1, 0.15 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_lime", rgba = { 0.4, 1, 0.2, 0.15 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_obsidian", rgba = { 0.3, 0.2, 0.2, 0.33 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_quartz", rgba = { 0.3, 0.3, 0.5, 0.33 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_orange", rgba = { 1, 0.5, 0, 0.11 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_red", rgba = { 1, 0.2, 0.2, 0.067 }, scaleByModel = true },
+	{ pattern = "pilha_crystal_teal", rgba = { 0, 1, 1, 0.15 }, scaleByModel = true },
+	{ pattern = "pilha_crystal", rgba = { 0.78, 0.46, 0.94, 0.11 }, scaleByModel = true },
+	-- generic catch-alls; conservative brightness
+	{ pattern = "crystal", rgba = { 0.6, 0.7, 1.0, 0.12 }, scaleByModel = true },
+	{ pattern = "lava", rgba = { 1.0, 0.45, 0.1, 0.15 }, scaleByModel = true },
+	{ pattern = "ember", rgba = { 1.0, 0.4, 0.05, 0.12 }, scaleByModel = true },
+	{ pattern = "glow", rgba = { 0.8, 0.9, 1.0, 0.12 }, scaleByModel = true },
+	-- SF energy core (ammobox)
+	{ pattern = "ammobox", rgba = { 0.3, 0.9, 1.0, 0.2 }, radius = 90, posy = 14 },
+}
+
+for featureDefID, featureDef in pairs(FeatureDefs) do
+	if not featureDefLights[featureDefID] then
+		local lname = string.lower(featureDef.name)
+		for _, entry in ipairs(featureGlowPatterns) do
+			if string.find(lname, entry.pattern, nil, true) then
+				local light = copy(FeatureGlowBase)
+				local lc = light.lightConfig
+				lc.r, lc.g, lc.b, lc.a = entry.rgba[1], entry.rgba[2], entry.rgba[3], entry.rgba[4]
+				lc.color2r, lc.color2g, lc.color2b = lc.r * 0.6, lc.g * 0.6, lc.b * 0.6
+				if entry.radius then
+					lc.radius = entry.radius
+				end
+				if entry.posy then
+					lc.posy = entry.posy
+				end
+				if entry.scaleByModel and featureDef.model and featureDef.model.maxy then
+					local h = math.max(8, featureDef.model.maxy)
+					lc.posy = h * 0.6
+					lc.radius = math.max(lc.radius, h * 2.5)
+				end
+				featureDefLights[featureDefID] = { glow = light }
+				break
+			end
+		end
+	end
+end
+
+return {
+	unitEventLights = unitEventLights,
+	unitDefLights = unitDefLights,
+	featureDefLights = featureDefLights,
+}

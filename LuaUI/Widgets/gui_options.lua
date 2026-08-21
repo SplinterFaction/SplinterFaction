@@ -130,6 +130,7 @@ local presets = {
 		water = 1,
 		mapedgeextension = false,
 		lighteffects = false,
+		distortion = false,
 		lups = false,
 		snow = false,
 		xrayshader = false,
@@ -157,6 +158,7 @@ local presets = {
 		water = 4,
 		mapedgeextension = false,
 		lighteffects = false,
+		distortion = false,
 		lups = true,
 		snow = false,
 		xrayshader = false,
@@ -184,6 +186,7 @@ local presets = {
 		water = 4,
 		mapedgeextension = true,
 		lighteffects = true,
+		distortion = true,
 		lups = true,
 		snow = true,
 		xrayshader = false,
@@ -211,6 +214,7 @@ local presets = {
 		water = 4,
 		mapedgeextension = true,
 		lighteffects = true,
+		distortion = true,
 		lups = true,
 		snow = true,
 		xrayshader = false,
@@ -238,6 +242,7 @@ local presets = {
 		water = 4,
 		mapedgeextension = true,
 		lighteffects = true,
+		distortion = true,
 		lups = true,
 		snow = true,
 		xrayshader = false,
@@ -1265,10 +1270,6 @@ function applyOptionValue(i, skipRedrawWindow)
 			saveOptionValue('Highlight Selected Units', 'highlightselunits', 'setTeamcolor', {'useTeamcolor'}, options[i].value)
 		elseif id == 'fancyselectedunits_secondline' then
 			saveOptionValue('Fancy Selected Units', 'fancyselectedunits', 'setSecondLine', {'showSecondLine'}, options[i].value)
-		elseif id == 'lighteffects_heatdistortion' then
-			saveOptionValue('Light Effects', 'lighteffects', 'setHeatDistortion', {'enableHeatDistortion'}, options[i].value)
-		elseif id == 'lighteffects_deferred' then
-			saveOptionValue('Light Effects', 'lighteffects', 'setDeferred', {'enableDeferred'}, options[i].value)
 		elseif id == 'highlightselunits_shader' then
 			if widgetHandler.configData["Highlight Selected Units"] == nil then
 				widgetHandler.configData["Highlight Selected Units"] = {}
@@ -1283,15 +1284,15 @@ function applyOptionValue(i, skipRedrawWindow)
 			saveOptionValue('SmartSelect', 'smartselect', 'setIncludeBuilders', {'includeBuilders'}, options[i].value)
 		elseif id == 'lighteffects' then
 			if value ~= 0 then
-				if widgetHandler.orderList["Deferred rendering"] ~= nil then
-					widgetHandler:EnableWidget("Deferred rendering")
-				end
-				widgetHandler:EnableWidget("Light Effects")
+				widgetHandler:EnableWidget("Deferred rendering GL4")
 			else
-				if widgetHandler.orderList["Deferred rendering"] ~= nil then
-					widgetHandler:DisableWidget("Deferred rendering")
-				end
-				widgetHandler:DisableWidget("Light Effects")
+				widgetHandler:DisableWidget("Deferred rendering GL4")
+			end
+		elseif id == 'distortion' then
+			if value ~= 0 then
+				widgetHandler:EnableWidget("Distortion GL4")
+			else
+				widgetHandler:DisableWidget("Distortion GL4")
 			end
 		elseif id == 'autogroup_immediate' then
 			if widgetHandler.configData["Auto Group"] == nil then
@@ -1587,15 +1588,11 @@ function applyOptionValue(i, skipRedrawWindow)
 			Spring.SetConfigFloat("MinimapIconScale", value)
 			Spring.SendCommands("minimap unitsize "..value)		-- spring wont remember what you set with '/minimap iconssize #'
 		elseif id == 'lighteffects_brightness' then
-			saveOptionValue('Light Effects', 'lighteffects', 'setGlobalBrightness', {'globalLightMult'}, value)
+			saveOptionValue('Deferred rendering GL4', 'lightsgl4', 'IntensityMultiplier', {'intensityMultiplier'}, value)
 		elseif id == 'lighteffects_radius' then
-			saveOptionValue('Light Effects', 'lighteffects', 'setGlobalRadius', {'globalRadiusMult'}, value)
-		elseif id == 'lighteffects_laserbrightness' then
-			saveOptionValue('Light Effects', 'lighteffects', 'setLaserBrightness', {'globalLightMultLaser'}, value)
-		elseif id == 'lighteffects_laserradius' then
-			saveOptionValue('Light Effects', 'lighteffects', 'setLaserRadius', {'globalRadiusMultLaser'}, value)
-		elseif id == 'lighteffects_life' then
-			saveOptionValue('Light Effects', 'lighteffects', 'setLife', {'globalLifeMult'}, value)
+			saveOptionValue('Deferred rendering GL4', 'lightsgl4', 'RadiusMultiplier', {'radiusMultiplier'}, value)
+		elseif id == 'distortion_strength' then
+			saveOptionValue('Distortion GL4', 'distortionsgl4', 'IntensityMultiplier', {'intensityMultiplier'}, value)
 		elseif id == 'teamplatter_opacity' then
 			saveOptionValue('TeamPlatter', 'teamplatter', 'setOpacity', {'spotterOpacity'}, value)
 		elseif id == 'enemyspotter_opacity' then
@@ -1646,6 +1643,8 @@ function applyOptionValue(i, skipRedrawWindow)
 		elseif id == 'water' then
 			Spring.SendCommands("water "..(value-1))
 			Spring.SendCommands("water "..(value-1))
+		elseif id == 'lighteffects_shadows' then
+			saveOptionValue('Deferred rendering GL4', 'lightsgl4', 'ScreenSpaceShadows', {'screenSpaceShadows'}, value - 1)
 		elseif id == 'lupseffectlevel' then
 			if WG.Lups then
 				Spring.SetConfigInt("LupsPriority",value)
@@ -2149,13 +2148,13 @@ function loadAllWidgetData()
 	loadWidgetData("Defense Range", "defrange_enemyground", {'enabled','enemy','ground'})
 	loadWidgetData("Defense Range", "defrange_enemynuke", {'enabled','enemy','nuke'})
 
-	loadWidgetData("Light Effects", "lighteffects_brightness", {'globalLightMult'})
-	loadWidgetData("Light Effects", "lighteffects_radius", {'globalRadiusMult'})
-	loadWidgetData("Light Effects", "lighteffects_laserbrightness", {'globalLightMultLaser'})
-	loadWidgetData("Light Effects", "lighteffects_laserradius", {'globalRadiusMultLaser'})
-	loadWidgetData("Light Effects", "lighteffects_life", {'globalLifeMult'})
-	loadWidgetData("Light Effects", "lighteffects_heatdistortion", {'enableHeatDistortion'})
-	loadWidgetData("Light Effects", "lighteffects_deferred", {'enableDeferred'})
+	loadWidgetData("Deferred rendering GL4", "lighteffects_brightness", {'intensityMultiplier'})
+	loadWidgetData("Deferred rendering GL4", "lighteffects_radius", {'radiusMultiplier'})
+	loadWidgetData("Distortion GL4", "distortion_strength", {'intensityMultiplier'})
+	if loadWidgetData("Deferred rendering GL4", "lighteffects_shadows", {'screenSpaceShadows'}) then
+		-- stored 0..2, select options are 1-based
+		options[getOptionByID("lighteffects_shadows")].value = options[getOptionByID("lighteffects_shadows")].value + 1
+	end
 
 	loadWidgetData("Auto Group", "autogroup_immediate", {'config','immediate','value'})
 
@@ -2309,14 +2308,12 @@ function init()
 
 		{id="featuredrawdist", group="gfx", name="Feature draw distance", type="slider", min=2500, max=15000, step=500, value=tonumber(Spring.GetConfigInt("FeatureDrawDistance",15000) or 2500), description='Features (trees, stones, wreckage) stop being displayed at this distance'},
 
-		{id="lighteffects", group="gfx", name="Light effects", type="bool", value=GetWidgetToggleValue("Light Effects"), description='Adds lights to projectiles, lasers and explosions.\n\nRequires shaders.'},
-		--{id="lighteffects_deferred", group="gfx", name=widgetOptionColor.."   real map and model lights", type="bool", value=true, description='Otherwise simple ground flashes instead of actual map and model lighting.\n\nExpensive for the gpu when lots of (big) lights are there or when you zoom in on them.'},
-		--{id="lighteffects_heatdistortion", group="gfx", name=widgetOptionColor.."   apply heat distortion", type="bool", value=true, description='Enables a distortion on top of explosions to simulate heat'},
-		{id="lighteffects_life", group="gfx", name=widgetOptionColor.."   lifetime", min=0.25, max=1, step=0.05, type="slider", value=0.6, description='lifetime of explosion lights'},
-		{id="lighteffects_brightness", group="gfx", name=widgetOptionColor.."   brightness", min=1, max=5, step=0.1, type="slider", value=2.5, description='Set the brightness of the lights'},
-		{id="lighteffects_radius", group="gfx", name=widgetOptionColor.."   radius", min=1, max=2, step=0.1, type="slider", value=1.2, description='Set the radius of the lights\n\nWARNING: the bigger the radius the heavier on the GPU'},
-		{id="lighteffects_laserbrightness", group="gfx", name=widgetOptionColor.."   laser brightness", min=0.4, max=2, step=0.1, type="slider", value=1.2, description='laser lights brightness RELATIVE to global light brightness set above'},
-		{id="lighteffects_laserradius", group="gfx", name=widgetOptionColor.."   laser radius", min=0.4, max=2, step=0.1, type="slider", value=1, description='laser lights radius RELATIVE to global light radius set above\n\nWARNING: the bigger the radius the heavier on the GPU'},
+		{id="lighteffects", group="gfx", name="Light effects", type="bool", value=GetWidgetToggleValue("Deferred rendering GL4"), description='GL4 deferred lights on projectiles, explosions, wrecks, and map features.\n\nRequires deferred rendering.'},
+		{id="lighteffects_brightness", group="gfx", name=widgetOptionColor.."   brightness", min=0.25, max=3, step=0.05, type="slider", value=1, description='Global light intensity multiplier'},
+		{id="lighteffects_radius", group="gfx", name=widgetOptionColor.."   radius", min=0.5, max=2, step=0.05, type="slider", value=1, description='Global light radius multiplier\n\nWARNING: the bigger the radius the heavier on the GPU'},
+		{id="lighteffects_shadows", group="gfx", name=widgetOptionColor.."   screen space shadows", type="select", options={'off','low','high'}, value=3, description='Lights are occluded by nearby geometry.\n\nHigh is expensive with many lights on screen.'},
+		{id="distortion", group="gfx", name="Heat distortion", type="bool", value=GetWidgetToggleValue("Distortion GL4"), description='Screen-space heat shimmer and shockwaves on weapons, explosions, thrusters and wrecks.\n\nRequires deferred rendering.'},
+		{id="distortion_strength", group="gfx", name=widgetOptionColor.."   strength", min=0.25, max=2, step=0.05, type="slider", value=1, description='Global distortion strength multiplier'},
 
 		{id="lups", group="gfx", widget="LupsManager", name="Lups particle/shader effects", type="bool", value=GetWidgetToggleValue("LupsManager"), description='Toggle unit particle effects: jet beams, ground flashes, fusion energy balls'},
 
@@ -2767,14 +2764,15 @@ function init()
 		options[getOptionByID("underconstructiongfx_shader")] = nil
 	end
 
-	if widgetHandler.knownWidgets["Light Effects"] == nil or widgetHandler.knownWidgets["Deferred rendering"] == nil then
+	if widgetHandler.knownWidgets["Deferred rendering GL4"] == nil then
 		options[getOptionByID('lighteffects')] = nil
 		options[getOptionByID("lighteffects_brightness")] = nil
-		options[getOptionByID("lighteffects_laserbrightness")] = nil
 		options[getOptionByID("lighteffects_radius")] = nil
-		options[getOptionByID("lighteffects_laserradius")] = nil
-		--options[getOptionByID("lighteffects_heatdistortion")] = nil
-		--options[getOptionByID("lighteffects_deferred")] = nil
+		options[getOptionByID("lighteffects_shadows")] = nil
+	end
+	if widgetHandler.knownWidgets["Distortion GL4"] == nil then
+		options[getOptionByID('distortion')] = nil
+		options[getOptionByID("distortion_strength")] = nil
 	end
 
 	if widgetHandler.knownWidgets["TeamPlatter"] == nil then
