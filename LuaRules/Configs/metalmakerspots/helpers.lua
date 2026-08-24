@@ -84,7 +84,12 @@ function H.New(ctx)
 	function helpers.MarkSpot(sx, sz, maskValue)
 		maskValue = maskValue or 4
 
-		local radius = math.floor(cfg.FOOTPRINT / 2)
+		-- One square of margin past the footprint. The engine rounds a build
+		-- position to 16 units and adds half a square for an odd footprint, and
+		-- not every check it runs rounds the same way, so a block sized exactly
+		-- to the footprint can miss by 8 units and leave a row of the building
+		-- on unmasked ground. The margin absorbs that.
+		local radius = math.floor(cfg.FOOTPRINT / 2) + 1
 		for dx = -radius, radius do
 			for dz = -radius, radius do
 				local mx = sx + dx
