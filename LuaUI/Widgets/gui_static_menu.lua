@@ -83,7 +83,7 @@ local BUTTONS = {
 	},
 	{
 		label = "Economy",
-		accent = {0.35, 0.85, 0.45, 1}, -- green
+		accent = {0.0, 0.85, 0.0, 1}, -- green
 		onClick = function()
 			if WG.StaticEconGraph and WG.StaticEconGraph.Toggle then
 				WG.StaticEconGraph.Toggle()
@@ -110,7 +110,7 @@ local BUTTONS = {
 	},
 	{
 		label = "Keys",
-		accent = {0.20, 0.75, 0.80, 1}, -- teal
+		accent = {0, 0, 0.80, 1}, -- teal
 		onClick = function()
 			if WG.StaticKeybinds and WG.StaticKeybinds.Toggle then
 				WG.StaticKeybinds.Toggle()

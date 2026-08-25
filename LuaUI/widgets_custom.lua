@@ -162,6 +162,7 @@ local flexCallIns = {
   'DrawFeaturesPostDeferred',
   'DrawScreenEffects',
   'DrawInMiniMap',
+  'DrawBuildSquare',
   'SunChanged',
   'RecvSkirmishAIMessage',
 }
@@ -1349,6 +1350,17 @@ end
 function widgetHandler:DrawInMiniMap(xSize, ySize)
   for _,w in ripairs(self.DrawInMiniMapList) do
     w:DrawInMiniMap(xSize, ySize)
+  end
+  return
+end
+
+
+-- Engine callin fired once per pending build footprint from
+-- CUnitDrawerGLSL::ShowUnitBuildSquare (may also fire for the minimap pass).
+-- statuses: flat row-major table, 0 blocked / 1 occupied / 2 reclaimable / 3 open.
+function widgetHandler:DrawBuildSquare(unitDefID, x, z, facing, statuses)
+  for _,w in ripairs(self.DrawBuildSquareList) do
+    w:DrawBuildSquare(unitDefID, x, z, facing, statuses)
   end
   return
 end
