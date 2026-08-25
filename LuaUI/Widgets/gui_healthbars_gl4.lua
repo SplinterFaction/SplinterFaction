@@ -1107,6 +1107,19 @@ end
 -- Morph gadget globals (same interface the old widget registered)
 --------------------------------------------------------------------------------
 
+-- Only one widget can own a LuaUI global, and this one owns the morph set.
+-- Other widgets that need morph events (the tech upgrade button's progress
+-- ring, for instance) subscribe here instead of contending for the globals;
+-- every event is forwarded to each listener after the healthbar work is done.
+local morphListeners = {}   -- [id] = { MorphStart=fn, MorphStop=fn, MorphFinished=fn, MorphUpdate=fn }
+
+local function ForwardMorphEvent(event, ...)
+	for _, l in pairs(morphListeners) do
+		local fn = l[event]
+		if fn then fn(...) end
+	end
+end
+
 local function MorphUpdate(morphTable)
 	UnitMorphs = morphTable or {}
 	for unitID, morph in pairs(UnitMorphs) do
@@ -1116,17 +1129,20 @@ local function MorphUpdate(morphTable)
 			gl.SetUnitBufferUniforms(unitID, uniformcache, 8)
 		end
 	end
+	ForwardMorphEvent("MorphUpdate", UnitMorphs)
 end
 
 local function MorphStart(unitID, morphDef)
+	ForwardMorphEvent("MorphStart", unitID, morphDef)
 end
 
 local function MorphStop(unitID)
 	UnitMorphs[unitID] = nil
 	removeBarFromUnit(unitID, "morph")
+	ForwardMorphEvent("MorphStop", unitID)
 end
 
-local function MorphFinished(unitID)
+local function MorphFinished(unitID, newUnitID)
 	if notificationTimeout <= 0 then
 		if Spring.GetUnitTeam(unitID) == Spring.GetMyTeamID() then
 			if resourcePrompts == 1 and WG.AddNotification then
@@ -1137,6 +1153,7 @@ local function MorphFinished(unitID)
 	notificationTimeout = 10
 	UnitMorphs[unitID] = nil
 	removeBarFromUnit(unitID, "morph")
+	ForwardMorphEvent("MorphFinished", unitID, newUnitID)
 end
 
 --------------------------------------------------------------------------------
@@ -1231,6 +1248,43 @@ function widget:TextCommand(command)
 	end
 end
 
+--------------------------------------------------------------------------------
+-- Bar geometry export
+--
+-- Other world-anchored widgets (tech upgrade button, world labels) stack above
+-- the bars, so they need the screen position of the topmost bar's upper edge.
+-- This mirrors the shader exactly:
+--   center = drawPos + (HEIGHTOFFSET + unitDefHeight + additionalheightaboveunit * effScale) on world Y
+--   top    = center + cameraUp * (BARHEIGHT * BARSCALE * effScale)
+-- (the geometry shader builds the quad in camera-facing space, so the bar's
+-- vertical extent runs along the camera's up vector, not world up). Row 0 is
+-- the top row; further rows stack downward, so only row 0 matters here.
+--------------------------------------------------------------------------------
+
+local spGetCameraVectors    = Spring.GetCameraVectors
+local spWorldToScreenCoords = Spring.WorldToScreenCoords
+
+-- Returns sx, sy of the top edge of the unit's bar stack, or nil if the unit
+-- currently has no bars (or bars are hidden via F9).
+local function GetBarTopScreenPos(unitID)
+	if not drawEnabled then return nil end
+	local count = unitBars[unitID]
+	if not count or count <= 0 then return nil end
+	local unitDefID = trackedUnits[unitID] or spGetUnitDefID(unitID)
+	if not unitDefID then return nil end
+
+	local x, y, z = spGetUnitPosition(unitID)
+	if not x then return nil end
+
+	local effScale = ((variableBarSizes and unitDefSizeMultipliers[unitDefID]) or 1.0) * barScale
+	local centerY  = y + shaderConfig.HEIGHTOFFSET + (unitDefHeights[unitDefID] or 32) + additionalheightaboveunit * effScale
+	local extent   = shaderConfig.BARHEIGHT * shaderConfig.BARSCALE * effScale
+
+	local up = spGetCameraVectors().up
+	local sx, sy = spWorldToScreenCoords(x + up[1] * extent, centerY + up[2] * extent, z + up[3] * extent)
+	return sx, sy
+end
+
 function widget:Initialize()
 	if not gl.CreateShader or not gl.SetUnitBufferUniforms then
 		spEcho("Health Bars GL4: engine lacks required GL4 API (gl.SetUnitBufferUniforms), removing widget")
@@ -1278,6 +1332,19 @@ function widget:Initialize()
 	end
 	WG['healthbars'].setDrawWhenGuiHidden = function(value)
 		drawWhenGuiHidden = value
+	end
+	WG['healthbars'].getBarTopScreenPos = GetBarTopScreenPos
+	-- Morph event relay (see morphListeners above). `handlers` is a table of
+	-- MorphStart / MorphStop / MorphFinished / MorphUpdate functions, any of
+	-- which may be omitted. getMorphs returns the live progress table.
+	WG['healthbars'].addMorphListener = function(id, handlers)
+		morphListeners[id] = handlers
+	end
+	WG['healthbars'].removeMorphListener = function(id)
+		morphListeners[id] = nil
+	end
+	WG['healthbars'].getMorphs = function()
+		return UnitMorphs
 	end
 
 	if not initGL4() then

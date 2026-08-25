@@ -48,10 +48,18 @@ local PANEL_HOVER_COLOR_GUI = {0.02, 0.02, 0.02, 0.30}
 -- Text color
 local TEXT_COLOR = "\255\244\244\244"
 
+-- Menu button table for the Static GUI menu widget
+-- Accent scheme: grouped by function, cool -> hot top to bottom.
+--   Config   = blues     (Settings, Keybinds)
+--   Team     = greens    (Sharing, Economy)
+--   Readouts = violet/gold (Graph, Log)
+--   Exits    = amber/red (Resign, Quit)
+-- Lightness is normalized so every stripe reads equally on the dark button face.
+
 local BUTTONS = {
 	{
 		label = "Settings",
-		accent = {0.18, 0.52, 0.98, 1}, -- blue
+		accent = {0.30, 0.58, 0.98, 1}, -- blue (config)
 		onClick = function()
 			if WG.crude and WG.crude.OpenPath then
 				WG.crude.OpenPath("Settings")
@@ -73,8 +81,17 @@ local BUTTONS = {
 		end
 	},
 	{
+		label = "Keybinds",
+		accent = {0.25, 0.78, 0.92, 1}, -- cyan (config)
+		onClick = function()
+			if WG.StaticKeybinds and WG.StaticKeybinds.Toggle then
+				WG.StaticKeybinds.Toggle()
+			end
+		end
+	},
+	{
 		label = "Sharing",
-		accent = {0.22, 0.78, 0.35, 1}, -- green
+		accent = {0.20, 0.82, 0.62, 1}, -- teal-green (team)
 		onClick = function()
 			if WG.StaticShareMenu and WG.StaticShareMenu.Toggle then
 				WG.StaticShareMenu.Toggle()
@@ -83,7 +100,7 @@ local BUTTONS = {
 	},
 	{
 		label = "Economy",
-		accent = {0.0, 0.85, 0.0, 1}, -- green
+		accent = {0.45, 0.85, 0.30, 1}, -- green (team / resources)
 		onClick = function()
 			if WG.StaticEconGraph and WG.StaticEconGraph.Toggle then
 				WG.StaticEconGraph.Toggle()
@@ -92,7 +109,7 @@ local BUTTONS = {
 	},
 	{
 		label = "Graph",
-		accent = {0.55, 0.35, 0.95, 1}, -- purple
+		accent = {0.62, 0.45, 0.95, 1}, -- violet (readout)
 		onClick = function()
 			if WG.StaticEndGraph and WG.StaticEndGraph.Toggle then
 				WG.StaticEndGraph.Toggle()
@@ -101,7 +118,7 @@ local BUTTONS = {
 	},
 	{
 		label = "Log",
-		accent = {0.95, 0.95, 0.18, 1}, -- yellow
+		accent = {0.95, 0.82, 0.30, 1}, -- gold (readout)
 		onClick = function()
 			if WG.StaticChatLog and WG.StaticChatLog.Toggle then
 				WG.StaticChatLog.Toggle()
@@ -109,24 +126,15 @@ local BUTTONS = {
 		end
 	},
 	{
-		label = "Keys",
-		accent = {0, 0, 0.80, 1}, -- teal
-		onClick = function()
-			if WG.StaticKeybinds and WG.StaticKeybinds.Toggle then
-				WG.StaticKeybinds.Toggle()
-			end
-		end
-	},
-	{
 		label = "Resign",
-		accent = {0.95, 0.65, 0.18, 1}, -- amber
+		accent = {0.95, 0.60, 0.18, 1}, -- amber (exit, recoverable)
 		onClick = function()
 			Spring.SendCommands("spectator")
 		end
 	},
 	{
 		label = "Quit",
-		accent = {0.90, 0.22, 0.22, 1}, -- red
+		accent = {0.92, 0.25, 0.25, 1}, -- red (exit, irreversible)
 		onClick = function()
 			Spring.SendCommands("quitforce")
 		end

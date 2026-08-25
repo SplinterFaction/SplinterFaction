@@ -52,6 +52,7 @@ local RP_RULES_PARAM  = "researchPoints"   -- game_researchpoints_ledger.lua
 local RESCAN_FRAMES   = 15       -- how often the visible-mex set and RP are refreshed
 local MAX_CAM_HEIGHT  = 2600     -- hide all buttons when the camera is higher than this above ground
 local ANCHOR_LIFT     = 22       -- elmos above the unit's top to place the button
+local BAR_STACK_GAP   = 3        -- px between the healthbar's top edge and the button's bottom
 
 local BTN_W, BTN_H    = 96, 34   -- button size in pixels (tall enough for the ring)
 local ICON_SIZE       = 24       -- unit picture inside the button
@@ -465,19 +466,8 @@ local function DrawLabels()
 	font:End()
 end
 
-local firstDrawLogged = false
 function widget:DrawScreen()
-	if not BindSG() then
-		if not firstDrawLogged then
-			firstDrawLogged = true
-			spEcho("[TechBtn] DrawScreen: WG.StaticGUI unavailable, nothing drawn")
-		end
-		return
-	end
-	if not firstDrawLogged then
-		firstDrawLogged = true
-		spEcho("[TechBtn] DrawScreen running; SG bound")
-	end
+	if not BindSG() then return end
 	if isSpec or camTooHigh or #mexList == 0 or ModalOpen() then
 		for i = #rectList, 1, -1 do rectList[i] = nil end
 		for k in pairs(rects) do rects[k] = nil end
@@ -494,6 +484,17 @@ function widget:DrawScreen()
 			local ux, uy, uz = spGetUnitPosition(unitID)
 			if ux then
 				local sx, sy, sz = spWorldToScreenCoords(ux, uy + e.lift, uz)
+				-- Stack above the healthbar rows when the unit has any: the bar
+				-- is world-sized and the button is pixel-sized, so neither a
+				-- fixed world nor a fixed pixel lift keeps them apart at every
+				-- zoom. Taking the higher of the two anchors does.
+				local hb = WG.healthbars
+				if hb and hb.getBarTopScreenPos then
+					local _, barTop = hb.getBarTopScreenPos(unitID)
+					if barTop and barTop + BAR_STACK_GAP > sy then
+						sy = barTop + BAR_STACK_GAP
+					end
+				end
 				-- sz > 1 means the point is behind the camera plane.
 				if sz and sz <= 1 and sx > -BTN_W and sx < vsx + BTN_W
 				   and sy > -BTN_H and sy < vsy + BTN_H then
@@ -547,9 +548,8 @@ end
 -- Lifecycle
 --------------------------------------------------------------------------------
 
--- Dumps every gate a mex passes through on its way to the screen.
--- Bound to the /techbtn action, and fired automatically once, shortly after
--- load, so the infolog has a dump without anyone typing anything.
+-- /techbtn: dumps every gate a unit passes through on its way to the screen.
+-- Kept as a permanent diagnostic.
 local function DebugDump()
 	local cx, cy, cz = spGetCameraPosition()
 	local ground = spGetGroundHeight(cx, cz) or 0
@@ -595,7 +595,6 @@ local function DebugDump()
 	return true
 end
 
-local autoDumpAt = nil   -- game frame at which the automatic dump fires
 
 local function RefreshTeam()
 	myTeamID = spGetMyTeamID()
@@ -603,17 +602,6 @@ local function RefreshTeam()
 	lastRescan = -1
 end
 
-function widget:Update()
-	local frame = spGetGameFrame()
-	if frame - lastRescan >= RESCAN_FRAMES or lastRescan < 0 then
-		lastRescan = frame
-		Rescan()
-	end
-	if autoDumpAt and frame >= autoDumpAt then
-		autoDumpAt = nil
-		DebugDump()
-	end
-end
 
 function widget:PlayerChanged(playerID)
 	RefreshTeam()
@@ -670,18 +658,79 @@ local function OnMorphUpdate(morphTable)
 	end
 end
 
+-- The morph gadget only calls a LuaUI global if it exists, and only one
+-- widget can own each name. gui_healthbars_gl4 owns them (it draws morph
+-- progress in the bar) and relays every event through
+-- WG.healthbars.addMorphListener. Subscribe there when it exists; fall back
+-- to owning the globals ourselves if it doesn't (healthbars disabled).
+local morphSource = nil          -- "relay" | "globals" | nil
+local SubscribeMorphEvents
+
+local MORPH_HANDLERS = {
+	MorphStart    = function(...) return OnMorphStart(...) end,
+	MorphStop     = function(...) return OnMorphStop(...) end,
+	MorphFinished = function(...) return OnMorphFinished(...) end,
+	MorphUpdate   = function(...) return OnMorphUpdate(...) end,
+}
+
+SubscribeMorphEvents = function()
+	if morphSource then return true end
+	local hb = WG.healthbars
+	if hb and hb.addMorphListener then
+		hb.addMorphListener("TechUpgradeButton", MORPH_HANDLERS)
+		morphSource = "relay"
+		return true
+	end
+	local ok = widgetHandler:RegisterGlobal("MorphUpdate", MORPH_HANDLERS.MorphUpdate)
+	if ok then
+		widgetHandler:RegisterGlobal("MorphStart",    MORPH_HANDLERS.MorphStart)
+		widgetHandler:RegisterGlobal("MorphStop",     MORPH_HANDLERS.MorphStop)
+		widgetHandler:RegisterGlobal("MorphFinished", MORPH_HANDLERS.MorphFinished)
+		morphSource = "globals"
+		return true
+	end
+	return false   -- globals taken and relay not up yet: retry from Update
+end
+
+local function UnsubscribeMorphEvents()
+	if morphSource == "relay" then
+		local hb = WG.healthbars
+		if hb and hb.removeMorphListener then hb.removeMorphListener("TechUpgradeButton") end
+	elseif morphSource == "globals" then
+		widgetHandler:DeregisterGlobal("MorphStart")
+		widgetHandler:DeregisterGlobal("MorphStop")
+		widgetHandler:DeregisterGlobal("MorphFinished")
+		widgetHandler:DeregisterGlobal("MorphUpdate")
+	end
+	morphSource = nil
+end
+
+function widget:Update()
+	local frame = spGetGameFrame()
+	if not morphSource and frame % 30 == 0 then
+		SubscribeMorphEvents()
+	end
+	if frame - lastRescan >= RESCAN_FRAMES or lastRescan < 0 then
+		lastRescan = frame
+		Rescan()
+	end
+end
+
 function widget:Initialize()
 	vsx, vsy = spGetViewGeometry()
 	RefreshTeam()
-	widgetHandler:RegisterGlobal("MorphStart",    OnMorphStart)
-	widgetHandler:RegisterGlobal("MorphStop",     OnMorphStop)
-	widgetHandler:RegisterGlobal("MorphFinished", OnMorphFinished)
-	widgetHandler:RegisterGlobal("MorphUpdate",   OnMorphUpdate)
+	SubscribeMorphEvents()
 	if widgetHandler.AddAction then
 		widgetHandler:AddAction("techbtn", function() DebugDump() return true end, nil, "t")
 	end
-	autoDumpAt = spGetGameFrame() + 150   -- ~5 seconds after load
-	spEcho("[TechBtn] initialised; automatic state dump in 5s, or /techbtn")
+
+	-- Lets other world-anchored widgets (gui_world_labels.lua) stack above the
+	-- button instead of colliding with it. Rects are rebuilt every DrawScreen;
+	-- a reader running earlier in the frame sees last frame's rect, which is
+	-- indistinguishable on screen.
+	WG.TechUpgradeButton = {
+		getRect = function(unitID) return rects[unitID] end,   -- {x1,y1,x2,y2,affordable} or nil
+	}
 end
 
 function widget:ViewResize(nx, ny)
@@ -693,13 +742,11 @@ function widget:Shutdown()
 	if widgetHandler.RemoveAction then
 		widgetHandler:RemoveAction("techbtn")
 	end
-	widgetHandler:DeregisterGlobal("MorphStart")
-	widgetHandler:DeregisterGlobal("MorphStop")
-	widgetHandler:DeregisterGlobal("MorphFinished")
-	widgetHandler:DeregisterGlobal("MorphUpdate")
+	UnsubscribeMorphEvents()
 	if font and SG then
 		SG.DeleteFont(font)
 	end
+	WG.TechUpgradeButton = nil
 end
 
 --------------------------------------------------------------------------------

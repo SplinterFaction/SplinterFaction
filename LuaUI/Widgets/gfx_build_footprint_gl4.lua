@@ -5,11 +5,11 @@
 -- fixed-function facing arrow) with a GL4 instanced, terrain-conforming
 -- footprint display:
 --
---   * one instance per footprint cell, coloured by the engine's per-square
---     buildability status, with an animated scan sweep in the facing direction
---     and moving hatch stripes on blocked / occupied cells
---   * one "frame" instance per footprint: outline, corner brackets, soft outer
---     glow, spawn shock-ring, and a pulsing chevron on the facing side
+--   * footprint squares merged into blockSize x blockSize blocks (one instance
+--     per block); a block takes the worst status of the squares inside it.
+--     Open = soft green, reclaimable = yellow, occupied/blocked = red; blocked
+--     blocks are slightly larger and breathe harder.
+--   * one "frame" instance per footprint: thin outline + facing chevron
 --   * ease-in when placement starts, fade-out when it ends
 --
 -- Engine hooks (verified against Recoil master, rts/Rendering/Units/UnitDrawer.cpp):
@@ -46,23 +46,26 @@ end
 --------------------------------------------------------------------------------
 
 local CFG = {
-	accent        = { 0.45, 0.92, 0.55 }, -- soft green: "can build" (open cells, frame, chevron)
-	reclaimable   = { 1.00, 0.78, 0.22 },
-	occupied      = { 1.00, 0.48, 0.16 },
-	blocked       = { 1.00, 0.16, 0.22 },
+	accent        = { 0.22, 1.00, 0.38 }, -- saturated green: "can build" (open cells, frame, chevron)
+	reclaimable   = { 1.00, 0.85, 0.20 }, -- yellow: feature in the way (reclaimable)
+	blocked       = { 1.00, 0.18, 0.22 }, -- red: occupied or terrain-blocked
 
-	cellBase      = 0.62,  -- filled square size as fraction of the 8-elmo cell (buildable)
-	cellBreathe   = 0.05,  -- breathing amplitude (buildable)
-	cellFreq      = 2.4,   -- breathing rate, rad/s (buildable)
-	badBase       = 0.80,  -- blocked cells: larger ...
-	badBreathe    = 0.11,  -- ... and breathe harder ...
-	badFreq       = 6.5,   -- ... and faster
+	blockSize     = 2,     -- footprint squares per block edge (2 = one block per 4 squares)
+
+	okInset       = 2.5,   -- elmos of gap around each buildable block
+	okBreathe     = 0.5,   -- breathing amplitude, elmos (buildable)
+	okFreq        = 2.2,   -- breathing rate, rad/s (buildable)
+	badInset      = 0.8,   -- blocked blocks: smaller gap (bigger block) ...
+	badBreathe    = 1.6,   -- ... and breathe harder ...
+	badFreq       = 6.0,   -- ... and faster
+	outlineWidth  = 1.2,   -- elmos
 	frameMargin   = 56,    -- elmos of extra quad around the footprint for glow + chevron
 	frameSubdiv   = 16,    -- terrain-conforming subdivision of the frame quad
+	cellSubdiv    = 2,     -- subdivision of block quads (blocks can span several squares)
 	groundLift    = 1.5,   -- elmos above heightmap
 	fadeInTime    = 0.18,  -- seconds
 	fadeOutTime   = 0.22,  -- seconds
-	maxInstances  = 4096,  -- cells across all pending footprints (shift-drag lines)
+	maxInstances  = 4096,  -- blocks across all pending footprints (shift-drag lines)
 	maxFrames     = 256,
 }
 
@@ -99,7 +102,7 @@ local GL_ONE_MINUS_SRC_ALPHA  = GL.ONE_MINUS_SRC_ALPHA
 
 -- GPU state
 local shader
-local uNowLoc, uAccentLoc, uReclaimLoc, uOccupiedLoc, uBlockedLoc, uLiftLoc, uCellOKLoc, uCellBadLoc
+local uNowLoc, uAccentLoc, uReclaimLoc, uBlockedLoc, uLiftLoc, uCellOKLoc, uCellBadLoc, uOutlineLoc
 local cellVAO, cellInstVBO, cellIdxCount
 local frameVAO, frameInstVBO, frameIdxCount
 
@@ -123,7 +126,7 @@ local S = {
 --   attr1: rectCenterX, rectCenterZ, rectSizeX, rectSizeZ   (elmos)
 --   attr2: mode (0 cell / 1 frame), status, facing, spawnTime
 --   attr3: cell -> cellU, cellV, alpha, unused
---          frame -> halfX, halfZ, alpha, unused
+--          frame -> halfX, halfZ, alpha, dying(0/1)
 local INSTANCE_FLOATS = 12
 
 --------------------------------------------------------------------------------
@@ -179,10 +182,10 @@ local fsSrc = [[
 uniform float uNow;
 uniform vec3 uAccent;
 uniform vec3 uReclaim;
-uniform vec3 uOccupied;
 uniform vec3 uBlocked;
-uniform vec4 uCellOK;    // base, breathe, freq, -
+uniform vec4 uCellOK;    // inset(elmo), breathe(elmo), freq(rad/s), -
 uniform vec4 uCellBad;
+uniform float uOutline;
 
 in vec2 vUV;
 in vec2 vLocal;
@@ -195,8 +198,13 @@ out vec4 fragColor;
 vec3 statusColor(float s) {
 	if (s > 2.5) return uAccent;
 	if (s > 1.5) return uReclaim;
-	if (s > 0.5) return uOccupied;
 	return uBlocked;
+}
+
+// signed distance to a rounded box, half extents b, radius r
+float roundBox(vec2 p, vec2 b, float r) {
+	vec2 d = abs(p) - b + vec2(r);
+	return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0) - r;
 }
 
 // forward direction for engine build facing: 0 south(+z) 1 east(+x) 2 north(-z) 3 west(-x)
@@ -224,55 +232,47 @@ void main() {
 	float a   = 0.0;
 
 	if (mode < 0.5) {
-		// ---------------------------------------------------------------- cell
-		// position of this cell along the facing axis, 0 (back) .. 1 (front)
-		vec2  cuv   = vAux.xy;
+		// --------------------------------------------------------------- block
+		vec2  cuv   = vAux.xy;                        // block centre, 0..1 within footprint
 		float along = dot(cuv - vec2(0.5), fwd) + 0.5;
 		bool  bad   = status < 1.5;
 		vec4  cp    = bad ? uCellBad : uCellOK;
 
-		// staggered spawn: cells grow from their centre, back to front
+		// staggered spawn, back to front
 		float k = clamp((age - along * 0.12) * 7.0, 0.0, 1.0);
 		if (k <= 0.001) discard;
 
-		// breathing: size ripples through the footprint in the facing direction
-		float breath = sin(uNow * cp.z - along * 2.2 + cuv.x * 0.7);
-		float size   = (cp.x + cp.y * breath) * k;          // fraction of cell
-		float hs     = size * 0.5;
+		float breath = sin(uNow * cp.z - along * 2.0 + cuv.x * 0.6);
+		vec2  inner  = (vRect.zw * 0.5 - vec2(cp.x) + vec2(cp.y * breath)) * k;
+		float sd     = roundBox(vLocal, max(inner, vec2(0.5)), 2.0);
+		float mask   = 1.0 - smoothstep(-0.8, 0.4, sd);
+		if (mask <= 0.002) discard;
 
-		// rounded filled square (SDF in cell-uv space, 1 uv = 8 elmo)
-		vec2  d  = abs(vUV - vec2(0.5)) - vec2(hs - 0.07);
-		float sd = length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0) - 0.07;
-		float fillMask = 1.0 - smoothstep(-0.05, 0.02, sd);
-		if (fillMask <= 0.002) discard;
-
-		// gentle scan sweep travelling in the facing direction
-		float p     = fract(along * 0.9 - uNow * 0.55);
-		float sweep = smoothstep(0.0, 0.18, p) * (1.0 - smoothstep(0.18, 0.55, p));
-
-		vec3  base  = statusColor(status);
-		float glowB = 0.5 + 0.5 * breath;                    // brighter at full inhale
-		float lum   = 0.55 + 0.25 * glowB + 0.35 * sweep + (bad ? 0.35 * glowB : 0.0);
-		col = base * lum + vec3(0.12) * sweep;
-		a   = fillMask * (0.42 + 0.18 * glowB + 0.2 * sweep + (bad ? 0.2 : 0.0));
+		float b = 0.5 + 0.5 * breath;
+		col = statusColor(status) * (0.7 + 0.2 * b + (bad ? 0.3 * b : 0.0));
+		a   = mask * (bad ? 0.55 + 0.15 * b : 0.38 + 0.08 * b);
 	} else {
 		// --------------------------------------------------------------- frame
-		vec2  hs   = vAux.xy;                                      // footprint half extents
-		vec2  q    = abs(vLocal) - hs;
-		float dOut = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0); // signed dist to rect
-
-		vec3  base = statusColor(status);
+		vec2  hs    = vAux.xy;                        // footprint half extents
+		float dying = vAux.w;
 		float spawn = clamp(age * 5.0, 0.0, 1.0);
+		vec3  base  = statusColor(status);
 
-		// outline + heavier corner brackets
-		float outline = band(dOut, 1.4);
-		float bl      = max(min(hs.x, hs.y) * 0.45, 10.0);
-		float corner  = max(step(hs.x - bl, abs(vLocal.x)), step(hs.y - bl, abs(vLocal.y)));
-		float bracket = band(dOut, 3.0) * corner;
+		// brackets slide in from outside on spawn and back out on fade-out
+		float slide  = (1.0 - spawn) + dying * (1.0 - alpha);
+		slide = 1.0 - pow(1.0 - clamp(slide, 0.0, 1.0), 2.0);   // ease
+		vec2  bhs    = hs + vec2(28.0 * slide);
+		float dB     = roundBox(vLocal, bhs, 0.0);
+		float bl     = max(min(hs.x, hs.y) * 0.45, 10.0);
+		float corner = max(step(bhs.x - bl, abs(vLocal.x)), step(bhs.y - bl, abs(vLocal.y)));
+		float bracket = band(dB, 3.0) * corner;
 
-		// soft glow outside the rect, breathing slowly
+		float dOut    = roundBox(vLocal, hs, 0.0);
+		float outline = band(dOut, uOutline) * spawn;
+
+		// breathing outer glow
 		float breathe = 0.85 + 0.15 * sin(uNow * 2.2);
-		float glow    = (dOut > 0.0) ? exp(-dOut / 12.0) * 0.32 * breathe : 0.0;
+		float glow    = (dOut > 0.0) ? exp(-dOut / 12.0) * 0.34 * breathe * spawn : 0.0;
 
 		// spawn shock ring expanding outward
 		float ring = 0.0;
@@ -281,24 +281,28 @@ void main() {
 			ring = band(dOut - r, 5.0) * (1.0 - age / 0.55) * 0.9;
 		}
 
-		// facing chevrons in front of the footprint
-		float frontEdge = (mod(facing, 2.0) < 0.5) ? hs.y : hs.x;   // extent along the facing axis
+		// chevrons streaming forward in the facing direction
+		float frontEdge = (mod(facing, 2.0) < 0.5) ? hs.y : hs.x;
 		float along  = dot(vLocal, fwd);
 		float across = dot(vLocal, vec2(-fwd.y, fwd.x));
 		float chevW  = clamp(min(hs.x, hs.y) * 0.7, 10.0, 40.0);
+		float period = 13.0;
+		float flow   = fract(uNow * 1.4) * period;             // position offset, cycles forward
 		float chev   = 0.0;
-		for (int i = 0; i < 2; i++) {
-			float c   = frontEdge + 16.0 + float(i) * 13.0;
-			float v   = (along - c) + abs(across) * 0.75;           // V pointing forward
-			float lim = step(abs(across), chevW) * step(along, c + 1.0);
-			chev += band(v, 2.6) * lim;
+		for (int i = 0; i < 3; i++) {
+			float c    = frontEdge + 10.0 + float(i) * period + flow;
+			float v    = (along - c) + abs(across) * 0.75;
+			float lim  = step(abs(across), chevW) * step(along, c + 1.0);
+			// fade in at the back, fade out at the front of the stream
+			float life = (c - frontEdge - 10.0) / (3.0 * period);
+			float fade = smoothstep(0.0, 0.25, life) * (1.0 - smoothstep(0.7, 1.0, life));
+			chev += band(v, 2.4) * lim * fade;
 		}
-		float travel = 0.55 + 0.45 * sin(uNow * 7.0 - along * 0.35);
-		chev = clamp(chev, 0.0, 1.0) * travel * spawn;
+		chev = clamp(chev, 0.0, 1.0) * spawn;
 
-		float lum = outline * 0.95 + bracket * 1.2 + glow + ring + chev * 1.15;
+		float lum = outline * 0.9 + bracket * 1.2 + glow + ring + chev * 1.15;
 		col = base * lum + vec3(0.3) * (bracket * 0.4 + ring * 0.5 + chev * 0.35);
-		a   = clamp(outline * 0.85 + bracket + glow + ring + chev, 0.0, 1.0) * spawn;
+		a   = clamp(outline * 0.8 + bracket + glow + ring + chev, 0.0, 1.0);
 	}
 
 	a *= alpha;
@@ -372,14 +376,14 @@ local function initGL()
 	uNowLoc      = glGetUniformLocation(shader, "uNow")
 	uAccentLoc   = glGetUniformLocation(shader, "uAccent")
 	uReclaimLoc  = glGetUniformLocation(shader, "uReclaim")
-	uOccupiedLoc = glGetUniformLocation(shader, "uOccupied")
 	uBlockedLoc  = glGetUniformLocation(shader, "uBlocked")
 	uLiftLoc     = glGetUniformLocation(shader, "uLift")
 	uCellOKLoc   = glGetUniformLocation(shader, "uCellOK")
 	uCellBadLoc  = glGetUniformLocation(shader, "uCellBad")
+	uOutlineLoc  = glGetUniformLocation(shader, "uOutline")
 
 	local cellMesh, cellIbo
-	cellMesh, cellIbo, cellIdxCount = makeGridMesh(1)
+	cellMesh, cellIbo, cellIdxCount = makeGridMesh(CFG.cellSubdiv)
 	cellInstVBO = makeInstanceVBO(CFG.maxInstances)
 	cellVAO = glGetVAO()
 	cellVAO:AttachVertexBuffer(cellMesh)
@@ -440,7 +444,8 @@ function widget:DrawBuildSquare(unitDefID, x, z, facing, statuses)
 end
 
 -- Fill the flat instance arrays from a footprint set. Pure; used by the smoke test.
-local function buildInstances(footprints, alpha, spawnT, cellOut, frameOut)
+local function buildInstances(footprints, alpha, spawnT, cellOut, frameOut, dying)
+	local dyingF = dying and 1 or 0
 	local ci, fi = 0, 0
 	local nCells, nFrames = 0, 0
 	for _, fp in pairs(footprints) do
@@ -450,23 +455,42 @@ local function buildInstances(footprints, alpha, spawnT, cellOut, frameOut)
 		local sz1 = floor(fp.z / SQUARE_SIZE) - floor(nz / 2)
 		local allOK = 1
 		local st = fp.statuses
-		local forceBlocked = (fp.overall == 0)
-		for zi = 0, nz - 1 do
-			for xi = 0, nx - 1 do
-				local status = st[zi * nx + xi + 1]
+		-- Whole-footprint failure with every square individually fine = a rule the
+		-- squares can't see (geovent etc.): paint everything red. If any square is
+		-- already blocked, the per-square data explains it; leave it alone.
+		local forceBlocked = false
+		if fp.overall == 0 then
+			forceBlocked = true
+			for i = 1, nx * nz do
+				if st[i] < 2 then forceBlocked = false; break end
+			end
+		end
+		local B = CFG.blockSize
+		for bz = 0, nz - 1, B do
+			local h = math.min(B, nz - bz)
+			for bx = 0, nx - 1, B do
+				local w = math.min(B, nx - bx)
+				-- worst status among the squares inside this block
+				local status = 3
+				for zi = bz, bz + h - 1 do
+					for xi = bx, bx + w - 1 do
+						local sq = st[zi * nx + xi + 1]
+						if sq < status then status = sq end
+					end
+				end
 				if forceBlocked then status = 0 end
 				if status < 2 then allOK = 0 end
 				if nCells < CFG.maxInstances then
-					cellOut[ci + 1]  = (sx1 + xi) * SQUARE_SIZE + SQUARE_SIZE * 0.5
-					cellOut[ci + 2]  = (sz1 + zi) * SQUARE_SIZE + SQUARE_SIZE * 0.5
-					cellOut[ci + 3]  = SQUARE_SIZE
-					cellOut[ci + 4]  = SQUARE_SIZE
-					cellOut[ci + 5]  = 0            -- mode: cell
+					cellOut[ci + 1]  = (sx1 + bx) * SQUARE_SIZE + w * SQUARE_SIZE * 0.5
+					cellOut[ci + 2]  = (sz1 + bz) * SQUARE_SIZE + h * SQUARE_SIZE * 0.5
+					cellOut[ci + 3]  = w * SQUARE_SIZE
+					cellOut[ci + 4]  = h * SQUARE_SIZE
+					cellOut[ci + 5]  = 0            -- mode: block
 					cellOut[ci + 6]  = status
 					cellOut[ci + 7]  = fp.facing
 					cellOut[ci + 8]  = spawnT
-					cellOut[ci + 9]  = (xi + 0.5) / nx
-					cellOut[ci + 10] = (zi + 0.5) / nz
+					cellOut[ci + 9]  = (bx + w * 0.5) / nx
+					cellOut[ci + 10] = (bz + h * 0.5) / nz
 					cellOut[ci + 11] = alpha
 					cellOut[ci + 12] = 0
 					ci = ci + INSTANCE_FLOATS
@@ -490,7 +514,7 @@ local function buildInstances(footprints, alpha, spawnT, cellOut, frameOut)
 			frameOut[fi + 9]  = hx
 			frameOut[fi + 10] = hz
 			frameOut[fi + 11] = alpha
-			frameOut[fi + 12] = 0
+			frameOut[fi + 12] = dyingF
 			fi = fi + INSTANCE_FLOATS
 			nFrames = nFrames + 1
 		end
@@ -558,7 +582,7 @@ function widget:DrawWorldPreUnit()
 	if not footprints then return end
 
 	local cellData, frameData = S.cellData, S.frameData
-	local nCells, nFrames = buildInstances(footprints, alpha, S.sessionStart, cellData, frameData)
+	local nCells, nFrames = buildInstances(footprints, alpha, S.sessionStart, cellData, frameData, S.dying)
 	if nCells == 0 then return end
 
 	cellInstVBO:Upload(cellData, -1, 0, 1, nCells * INSTANCE_FLOATS)
@@ -575,10 +599,10 @@ function widget:DrawWorldPreUnit()
 	glUniform(uLiftLoc, CFG.groundLift)
 	glUniform(uAccentLoc,   CFG.accent[1],      CFG.accent[2],      CFG.accent[3])
 	glUniform(uReclaimLoc,  CFG.reclaimable[1], CFG.reclaimable[2], CFG.reclaimable[3])
-	glUniform(uOccupiedLoc, CFG.occupied[1],    CFG.occupied[2],    CFG.occupied[3])
 	glUniform(uBlockedLoc,  CFG.blocked[1],     CFG.blocked[2],     CFG.blocked[3])
-	glUniform(uCellOKLoc,  CFG.cellBase, CFG.cellBreathe, CFG.cellFreq, 0)
-	glUniform(uCellBadLoc, CFG.badBase,  CFG.badBreathe,  CFG.badFreq,  0)
+	glUniform(uCellOKLoc,  CFG.okInset,  CFG.okBreathe,  CFG.okFreq,  0)
+	glUniform(uCellBadLoc, CFG.badInset, CFG.badBreathe, CFG.badFreq, 0)
+	glUniform(uOutlineLoc, CFG.outlineWidth)
 
 	-- frame first (glow underneath), cells on top
 	frameVAO:DrawElements(GL_TRIANGLES, frameIdxCount, 0, nFrames, 0)
