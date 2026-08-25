@@ -105,8 +105,7 @@ local spGetUnitTeam       = Spring.GetUnitTeam
 local spGetUnitDefID      = Spring.GetUnitDefID
 local spGetUnitIsActive   = Spring.GetUnitIsActive
 local spGetUnitIsStunned  = Spring.GetUnitIsStunned
-local spGetTeamResources  = Spring.GetTeamResources
-local spUseTeamResource   = Spring.UseTeamResource
+local spUseUnitResource   = Spring.UseUnitResource
 local spGetUnitHealth     = Spring.GetUnitHealth
 local spGetAllUnits       = Spring.GetAllUnits
 local floor               = math.floor
@@ -234,9 +233,14 @@ local function chargeAndGetTeam(unitID, energyCost)
   if not teamID then return nil end
 
   if energyCost > 0 then
-    local cur = spGetTeamResources(teamID, "energy")
-    if not cur or cur < energyCost then return nil end   -- dry: no RP this tick
-    spUseTeamResource(teamID, { e = energyCost })        -- pay the upkeep ourselves
+    -- Charged THROUGH the generator unit rather than the team so the spend is
+    -- booked on the unit (CUnit::UseResources -> resourcesUse), where
+    -- Spring.GetUnitResources and the economy graph can see it. Same semantics
+    -- as the old team-level check: returns false, charging nothing, when the
+    -- bank cannot cover the cost this tick.
+    if not spUseUnitResource(unitID, "e", energyCost) then
+      return nil                                         -- dry: no RP this tick
+    end
   end
 
   return teamID

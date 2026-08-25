@@ -82,6 +82,15 @@ local BUTTONS = {
 		end
 	},
 	{
+		label = "Economy",
+		accent = {0.35, 0.85, 0.45, 1}, -- green
+		onClick = function()
+			if WG.StaticEconGraph and WG.StaticEconGraph.Toggle then
+				WG.StaticEconGraph.Toggle()
+			end
+		end
+	},
+	{
 		label = "Graph",
 		accent = {0.55, 0.35, 0.95, 1}, -- purple
 		onClick = function()

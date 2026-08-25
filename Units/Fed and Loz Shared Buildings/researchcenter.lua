@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 
 local unitName                    = "researchcenter"
-
+local rp_income                   = "4"
 --------------------------------------------------------------------------------
 
 local storage					  = 0
@@ -18,7 +18,7 @@ local unitDef                     = {
 	canAttack			          = false,
 	category                      = "BUILDING",
 
-	description                   = [[Generates +1/s Research Points]],
+	description                   = "Generates +".. rp_income .."/s Research Points",
 	energyStorage                 = storage,
 	metalStorage                  = storage,
 	energyUse                     = 250,
@@ -76,7 +76,7 @@ local unitDef                     = {
 		death_sounds              = "generic",
 		armortype                 = "building",
 		RequireTech				  = [[tech2]],
-		rp_income                 = "4",    -- research points per second
+		rp_income                 = rp_income,    -- research points per second
 		--rp_energy_cost            = "500",   -- energy per second; the gadget charges this
 		noenergycost			  = false,
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 

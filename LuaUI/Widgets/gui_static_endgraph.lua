@@ -1165,6 +1165,9 @@ function widget:Initialize()
 		Toggle = Toggle,
 		Show   = Open,
 		Hide   = Close,
+		-- Overlay widgets (world-anchored buttons, labels, etc.) poll this and
+		-- stop drawing while the graph covers the screen.
+		IsOpen = function() return isOpen end,
 	}
 end
 

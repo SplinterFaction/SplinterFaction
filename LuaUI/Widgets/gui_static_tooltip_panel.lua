@@ -1017,14 +1017,42 @@ local function ResolveOrderFromTooltip(currentTooltip)
 	}
 end
 
+-- True when the cursor is over some widget's UI (a panel, a button, a
+-- world-anchored control). The engine resolves this the same way: when any
+-- widget's IsAbove returns true, Spring.GetCurrentTooltip() carries that
+-- widget's tooltip and the unit under the cursor is never consulted. Without
+-- this check the world trace below wins over every UI element that happens to
+-- overlap a unit (build menu cards, order buttons, the mex upgrade button).
+local function CursorOverWidgetUI(mx, my, currentTooltip)
+	if widgetHandler and widgetHandler.IsAbove then
+		return widgetHandler:IsAbove(mx, my) and true or false
+	end
+	-- Fallback for handlers that don't expose IsAbove: a non-empty tooltip that
+	-- is not one of the engine's own (unit stats, terrain position) can only
+	-- have come from a widget.
+	if currentTooltip == "" then return false end
+	if currentTooltip:find("\nHealth ") or currentTooltip:find("\nExperience ") then return false end
+	if currentTooltip:find("^Pos ") or currentTooltip:find("^Position") or
+			currentTooltip:find("^Elevation") or currentTooltip:find("^Height") or
+			currentTooltip:find("^%(") then
+		return false
+	end
+	return true
+end
+
 local function ResolveTooltipData()
 	local currentTooltip = spGetCurrentTooltip() or ""
+	local mx, my = spGetMouseState()
 
-	local worldType, worldID = ResolveHoveredWorldObject()
-	if worldType == "unit" and worldID then
-		return { type = "unit", id = worldID }
-	elseif worldType == "feature" and worldID then
-		return { type = "feature", id = worldID }
+	-- UI takes precedence over the world: only trace for a hovered unit or
+	-- feature when no widget claims the cursor position.
+	if not CursorOverWidgetUI(mx, my, currentTooltip) then
+		local worldType, worldID = ResolveHoveredWorldObject()
+		if worldType == "unit" and worldID then
+			return { type = "unit", id = worldID }
+		elseif worldType == "feature" and worldID then
+			return { type = "feature", id = worldID }
+		end
 	end
 
 	-- Check build buttons before selection — hovering a build button while units

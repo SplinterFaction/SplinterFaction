@@ -43,8 +43,21 @@ local spGetUnitDefDimensions  = Spring.GetUnitDefDimensions
 local WorldToScreenCoords     = Spring.WorldToScreenCoords
 local spGetCameraVectors      = Spring.GetCameraVectors
 
+-- Shapes go through WG.StaticGUI (api_staticgui_shapes.lua): one instanced
+-- draw call for every bar on screen. If the module is absent (shader failed
+-- to compile) the immediate-mode fallback below draws exactly what it used to.
+local SG = nil                 -- resolved on first draw
 local glColor = gl.Color
 local glRect  = gl.Rect
+
+local function BindSG()
+	if SG then return true end
+	SG = WG.StaticGUI
+	if not SG then return false end
+	glColor = SG.Color
+	glRect  = SG.Rect
+	return true
+end
 
 local cachedHeat = {}  -- [unitID] = heat 0..100
 local lastUpdateFrame = -1
@@ -71,17 +84,23 @@ local function HeatColor(t)
 	end
 end
 
+local OUTLINE_COLOR = { 0, 0, 0, 0.85 }
+
 local function DrawOutline(x1, y1, x2, y2)
 	if not OUTLINE then return end
+	if SG then
+		-- One instance: a square-cornered outline drawn inward from the
+		-- expanded rect, so the visible ring occupies the same pixels as the
+		-- four legacy rects.
+		SG.RoundedOutline(x1 - OUTLINE_PX, y1 - OUTLINE_PX, x2 + OUTLINE_PX, y2 + OUTLINE_PX,
+		                  0, OUTLINE_COLOR, OUTLINE_PX)
+		return
+	end
 	glColor(0, 0, 0, 0.85)
-	-- left
-	glRect(x1 - OUTLINE_PX, y1 - OUTLINE_PX, x1, y2 + OUTLINE_PX)
-	-- right
-	glRect(x2, y1 - OUTLINE_PX, x2 + OUTLINE_PX, y2 + OUTLINE_PX)
-	-- bottom
-	glRect(x1 - OUTLINE_PX, y1 - OUTLINE_PX, x2 + OUTLINE_PX, y1)
-	-- top
-	glRect(x1 - OUTLINE_PX, y2, x2 + OUTLINE_PX, y2 + OUTLINE_PX)
+	glRect(x1 - OUTLINE_PX, y1 - OUTLINE_PX, x1, y2 + OUTLINE_PX)   -- left
+	glRect(x2, y1 - OUTLINE_PX, x2 + OUTLINE_PX, y2 + OUTLINE_PX)   -- right
+	glRect(x1 - OUTLINE_PX, y1 - OUTLINE_PX, x2 + OUTLINE_PX, y1)   -- bottom
+	glRect(x1 - OUTLINE_PX, y2, x2 + OUTLINE_PX, y2 + OUTLINE_PX)   -- top
 end
 
 local function UpdateCache(frame)
@@ -189,7 +208,16 @@ local function ProjectStableHeatBarScreen(unitID, udid)
 	return sx_left, bottomY, topY
 end
 
+-- The end-game graph is a full-screen modal; screen-space bars must not
+-- draw over it (this widget's layer paints after the graph's).
+local function ModalOpen()
+	local eg = WG.StaticEndGraph
+	return eg ~= nil and eg.IsOpen ~= nil and eg.IsOpen() == true
+end
+
 function widget:DrawScreen()
+	if ModalOpen() then return end
+	BindSG()
 	local frame = spGetGameFrame()
 	if frame % UPDATE_FRAMES == 0 then
 		UpdateCache(frame)
@@ -235,6 +263,7 @@ function widget:DrawScreen()
 	end
 
 	glColor(1, 1, 1, 1)
+	if SG then SG.Flush() end
 end
 
 function widget:Shutdown()
