@@ -59,7 +59,10 @@ local ICON_SIZE       = 24       -- unit picture inside the button
 local PAD             = 5
 local RADIUS          = 5
 local BORDER          = 1.5
-local FONT_SIZE       = 14
+local FONT_SIZE       = 14       -- atlas size; the two label lines are drawn smaller
+local CAPTION_SIZE    = 9        -- "UPGRADE" / "UPGRADING" caption
+local COST_SIZE       = 13       -- "100 RP" / "63%" line
+local LINE_GAP        = 1        -- pixels between the two lines
 
 local FONT_FILE       = "fonts/Saira_SemiCondensed-SemiBold.ttf"
 
@@ -73,6 +76,8 @@ local COL_ICON        = { 1, 1, 1, 1 }
 local COL_ICON_GREY   = { 0.5, 0.5, 0.5, 0.6 }
 local COL_RP          = { 190/255, 120/255, 1, 1 }   -- violet, matches ResearchStr in unit_morph.lua
 local COL_RP_GREY     = { 190/255, 120/255, 1, 0.45 }
+local COL_CAPTION     = { 0.78, 0.80, 0.84, 0.95 }
+local COL_CAPTION_GREY= { 0.78, 0.80, 0.84, 0.45 }
 local COL_RING_BG     = { 0.30, 0.32, 0.36, 0.80 }
 local COL_RING        = { 190/255, 120/255, 1, 1 }
 local RING_WIDTH      = 2.5
@@ -450,16 +455,28 @@ local function DrawLabels()
 		local r = rects[unitID]
 		local e = mexes[unitID]
 		if r and e then
-			local c = r[5] and COL_RP or COL_RP_GREY
-			-- font:Print ignores gl.Color; the text colour must be set per call.
-			font:SetTextColor(c[1], c[2], c[3], c[4])
+			local active = r[5] or e.morphing
 			local tx = r[1] + PAD + ICON_SIZE + PAD * 2
-			local ty = r[2] + BTN_H * 0.5
+			-- Two lines stacked and centred on the button's mid-height:
+			-- caption on top, cost / progress below.
+			local cy = r[2] + BTN_H * 0.5
+			local total = CAPTION_SIZE + LINE_GAP + COST_SIZE
+			local capY  = cy + total * 0.5 - CAPTION_SIZE * 0.5
+			local costY = cy - total * 0.5 + COST_SIZE * 0.5
+
+			-- font:Print ignores gl.Color; the text colour must be set per call.
+			local cc = active and COL_CAPTION or COL_CAPTION_GREY
+			font:SetTextColor(cc[1], cc[2], cc[3], cc[4])
+			font:Print(e.morphing and "UPGRADING" or "UPGRADE", tx, capY, CAPTION_SIZE, "vo")
+
+			local c = active and COL_RP or COL_RP_GREY
+			font:SetTextColor(c[1], c[2], c[3], c[4])
 			if e.morphing then
-				font:SetTextColor(COL_RP[1], COL_RP[2], COL_RP[3], COL_RP[4])
-				font:Print(strFormat("%d%%", mathFloor((morphing[unitID] or 0) * 100 + 0.5)), tx, ty, FONT_SIZE, "vo")
+				font:Print(strFormat("%d%%", mathFloor((morphing[unitID] or 0) * 100 + 0.5)), tx, costY, COST_SIZE, "vo")
+			elseif e.rp > 0 then
+				font:Print(strFormat("%d RP", e.rp), tx, costY, COST_SIZE, "vo")
 			else
-				font:Print(e.rp > 0 and strFormat("%d RP", e.rp) or "Upgrade", tx, ty, FONT_SIZE, "vo")
+				font:Print("free", tx, costY, COST_SIZE, "vo")
 			end
 		end
 	end
