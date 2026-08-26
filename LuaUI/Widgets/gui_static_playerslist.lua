@@ -640,6 +640,20 @@ end
 -- Geometry
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "playerslist"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 local function BuildGeometry()
 	uiScale = vsy / BASE_RESOLUTION
 
@@ -664,10 +678,12 @@ local function BuildGeometry()
 	if specsExpanded then totalH = totalH + #specs * specRowH end
 	totalH = totalH + pad
 
-	local x2 = math_floor(vsx - MARGIN_X * uiScale)
-	local x1 = math_floor(x2 - pw)
+	local pwI, phI = math_floor(pw), math_floor(totalH)
+	local x1 = math_floor(vsx - MARGIN_X * uiScale) - pwI
 	local y1 = math_floor(MARGIN_Y * uiScale)
-	local y2 = math_floor(y1 + totalH)
+	x1, y1 = LayoutPlace(x1, y1, pwI, phI)
+	local x2 = x1 + pwI
+	local y2 = y1 + phI
 	panelRect = {x1=x1, y1=y1, x2=x2, y2=y2}
 
 	local cx1 = x1 + pad
@@ -1176,9 +1192,17 @@ function widget:Initialize()
 	BuildGeometry()
 	PublishApi()
 	contentDirty = true
+
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "Players List",
+			onMove = function() widget:ViewResize(vsx, vsy) end,
+		})
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	FreeList(contentList)
 	contentList = nil
 	ReleaseFont(font)

@@ -378,6 +378,21 @@ local function NormalizeProducerRole(unitRole)
     return nil
 end
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The two panels are independent entities
+-- in tweak mode: each has its own default (build stacked above order) and its
+-- own stored position. When the module is absent the defaults are used.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID_ORDER = "buildorder_order"
+local LAYOUT_ID_BUILD = "buildorder_build"
+
+local function LayoutPlace(id, x1, y1, w, h)
+    local L = WG.StaticLayout
+    if L then return L.Place(id, x1, y1, w, h) end
+    return x1, y1
+end
+
 local function UpdatePanelRects()
     vsx, vsy = spGetViewGeometry()
 
@@ -404,15 +419,20 @@ local function UpdatePanelRects()
     local orderH = math_floor(totalH * ORDER_HEIGHT_FRAC)
     local buildH = totalH - orderH - GAP_BETWEEN_PANELS
 
-    orderPanel.x1 = PANEL_MARGIN_X
-    orderPanel.y1 = PANEL_MARGIN_Y
+    -- Defaults: order at the bottom-left, build stacked above it. The build
+    -- default is derived from the order *default*, not its moved position,
+    -- so moving one never drags the other along.
+    local ox1, oy1 = LayoutPlace(LAYOUT_ID_ORDER, PANEL_MARGIN_X, PANEL_MARGIN_Y, panelW, orderH)
+    orderPanel.x1 = ox1
+    orderPanel.y1 = oy1
     orderPanel.x2 = orderPanel.x1 + panelW
     orderPanel.y2 = orderPanel.y1 + orderH
     orderPanel.w = panelW
     orderPanel.h = orderH
 
-    buildPanel.x1 = PANEL_MARGIN_X
-    buildPanel.y1 = orderPanel.y2 + GAP_BETWEEN_PANELS
+    local bx1, by1 = LayoutPlace(LAYOUT_ID_BUILD, PANEL_MARGIN_X, PANEL_MARGIN_Y + orderH + GAP_BETWEEN_PANELS, panelW, buildH)
+    buildPanel.x1 = bx1
+    buildPanel.y1 = by1
     buildPanel.x2 = buildPanel.x1 + panelW
     buildPanel.y2 = buildPanel.y1 + buildH
     buildPanel.w = panelW
@@ -1375,6 +1395,14 @@ end
 -- Widget callins
 --------------------------------------------------------------------------------
 
+-- The tooltip panel's default position hangs off the order panel's live rect,
+-- and ViewResize order across widgets is not guaranteed, so poke it whenever
+-- our rects change (resize, tweak-mode drop).
+local function NotifyTooltip()
+    local ST = WG.StaticTooltip
+    if ST and ST.Relayout then ST.Relayout() end
+end
+
 function widget:Initialize()
     -- Resolve the shapes module now that every widget has been constructed.
     BindDrawing()
@@ -1382,6 +1410,7 @@ function widget:Initialize()
     fontMain  = WrapFont(gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 24, 2, 2))
     fontSmall = WrapFont(gl.LoadFont("fonts/Saira_SemiCondensed-SemiBold.ttf", 14, 1, 1))
     UpdatePanelRects()
+    NotifyTooltip()
     OverrideDefaultMenu()
 
     -- Published hover state, read by the hotbind widget.
@@ -1400,9 +1429,26 @@ function widget:Initialize()
         if not item or not item.cmd then return nil end
         return item.cmd, (item.disabled and true or false)
     end
+
+    -- Published live geometry: the tooltip panel sits beside the order panel
+    -- by default, so it follows the order panel until dragged on its own.
+    WG.StaticBuildOrderMenu.GetOrderRect = function()
+        return orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2
+    end
+
+    if WG.StaticLayout then
+        local L = WG.StaticLayout
+        local function Rebuild() widget:ViewResize() end
+        L.Register(LAYOUT_ID_ORDER, { label = "Order Menu", onMove = Rebuild })
+        L.Register(LAYOUT_ID_BUILD, { label = "Build Menu", onMove = Rebuild })
+    end
 end
 
 function widget:Shutdown()
+    if WG.StaticLayout then
+        WG.StaticLayout.Unregister(LAYOUT_ID_ORDER)
+        WG.StaticLayout.Unregister(LAYOUT_ID_BUILD)
+    end
     WG.StaticBuildOrderMenu = nil
     FreeDisplayLists()
     if fontMain  then ReleaseFont(fontMain)  end
@@ -1415,6 +1461,7 @@ function widget:ViewResize()
     UpdatePanelRects()
     commandsDirty = true
     staticDirty   = true
+    NotifyTooltip()
 end
 
 function widget:CommandsChanged()
@@ -1595,4 +1642,4 @@ function widget:MouseWheel(up, value)
         return true
     end
     return false
-end
+end

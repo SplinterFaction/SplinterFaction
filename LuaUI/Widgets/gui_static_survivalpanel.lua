@@ -89,7 +89,6 @@ local widgetScale = 1
 
 local panelX, panelY = nil, nil    -- absolute bottom-left; nil until placed
 local panelW, panelH = 0, 0
-local pendingConfig  = nil         -- restored position fractions, applied on layout
 local layout         = {}          -- panel-local row coordinates
 
 local visible  = true
@@ -247,6 +246,20 @@ local function FormatTime(secs)
 	return string.format("%d:%02d", floor(secs / 60), secs % 60)
 end
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "survivalpanel"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 local function ClampPanel()
 	if not panelX then return end
 	panelX = max(0, min(panelX, vsx - panelW))
@@ -283,15 +296,9 @@ local function RecalculateGeometry()
 	layout.textL    = pad + 2 * widgetScale
 	layout.textR    = panelW - pad - 2 * widgetScale
 
-	-- First placement / restored position
-	if pendingConfig then
-		panelX = pendingConfig.relX * vsx
-		panelY = pendingConfig.relY * vsy
-		pendingConfig = nil
-	elseif not panelX then
-		panelX = vsx - panelW - 12 * widgetScale
-		panelY = vsy * 0.55
-	end
+	-- Default placement; the layout module substitutes the user's stored
+	-- position (from tweak-mode or in-game drag) when there is one.
+	panelX, panelY = LayoutPlace(vsx - panelW - 12 * widgetScale, vsy * 0.55, panelW, panelH)
 	ClampPanel()
 end
 
@@ -360,9 +367,17 @@ function widget:Initialize()
 			visible = not visible
 		end,
 	}
+
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "Survival Panel",
+			onMove = function() RecalculateGeometry() end,
+		})
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	if font then
 		local SG = WG.StaticGUI
 		if SG and SG.DeleteFont then SG.DeleteFont(font) else gl.DeleteFont(font) end
@@ -380,11 +395,6 @@ function widget:ViewResize()
 		ReloadFont()
 	end
 
-	-- Keep the panel at the same screen fraction across resizes
-	if panelX then
-		pendingConfig = { relX = panelX / vsx, relY = panelY / vsy }
-		panelX = nil
-	end
 	RecalculateGeometry()
 end
 
@@ -392,16 +402,12 @@ end
 -- Position persistence
 --------------------------------------------------------------------------------
 
+-- Position lives in api_staticgui_layout.lua now; only visibility is kept here.
 function widget:GetConfigData()
-	if panelX and vsx > 0 and vsy > 0 then
-		return { relX = panelX / vsx, relY = panelY / vsy, visible = visible }
-	end
+	return { visible = visible }
 end
 
 function widget:SetConfigData(data)
-	if data and data.relX and data.relY then
-		pendingConfig = { relX = data.relX, relY = data.relY }
-	end
 	if data and data.visible ~= nil then
 		visible = data.visible
 	end
@@ -458,6 +464,11 @@ end
 function widget:MouseRelease(x, y, button)
 	if dragging then
 		dragging = false
+		-- Hand the final position to the layout module so it persists and
+		-- resolves per-resolution alongside every other panel.
+		if WG.StaticLayout and panelX then
+			WG.StaticLayout.Set(LAYOUT_ID, panelX, panelY)
+		end
 		return true
 	end
 	return false

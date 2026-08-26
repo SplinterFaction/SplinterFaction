@@ -180,6 +180,14 @@ local rectMaxX       = 0
 local rectMinY       = 0
 local rectMaxY       = 0
 
+-- Strip anchor: the strip is centred on stripMidX with its bottom at stripY1.
+-- Defaults to bottom-centre of the screen; the layout module overrides both
+-- once the user drags it. The rect the layout module tracks is the full-width
+-- strip (iconsPerRow slots), so the grab target is stable regardless of how
+-- many unit types happen to be selected.
+local stripMidX      = 0
+local stripY1        = 0
+
 local backgroundDimentions = {}
 local iconMargin = usedIconSizeX / 25
 local fontSize   = iconSizeY * 0.28
@@ -475,6 +483,20 @@ end
 -------------------------------------------------------------------------------
 
 local vsx2, vsy2 = widgetHandler:GetViewSizes()
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "selectedunits"
+
+local function LayoutPlace(x1, y1, w, h)
+  local L = WG.StaticLayout
+  if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+  return x1, y1
+end
+
 function widget:ViewResize(n_vsx, n_vsy)
   vsx, vsy = Spring.GetViewGeometry()
   iconsPerRow = math.floor(8 * (vsx / vsy))
@@ -488,6 +510,11 @@ function widget:ViewResize(n_vsx, n_vsy)
   usedIconSizeY = math.floor((iconSizeY/2) + ((vsx*vsy) / 115000))
   fontSize   = usedIconSizeY * 0.28
   iconMargin = usedIconSizeX / 25
+
+  local fullW = usedIconSizeX * iconsPerRow
+  local x1, y1 = LayoutPlace(vsx * 0.5 - fullW * 0.5, 0, fullW, usedIconSizeY)
+  stripMidX = x1 + fullW * 0.5
+  stripY1   = y1
 
   if picList then
     picList = Record(NewList(picList), DrawPicList)
@@ -640,9 +667,17 @@ function widget:Initialize()
   WG['selunitbuttons'].getOldUnitIcons = function() return oldUnitpics end
   WG['selunitbuttons'].setOldUnitIcons = function(value) oldUnitpics = value end
   widget:ViewResize(vsx, vsy)
+
+  if WG.StaticLayout then
+    WG.StaticLayout.Register(LAYOUT_ID, {
+      label  = "Selected Units",
+      onMove = function() widget:ViewResize(vsx, vsy) end,
+    })
+  end
 end
 
 function widget:Shutdown()
+  if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
   FreeList(picList)
   ReleaseFont(font)
   WG['selunitbuttons'] = nil
@@ -672,11 +707,11 @@ function DrawPicList()
     return
   end
 
-  local xmid  = vsx * 0.5
+  local xmid  = stripMidX
   local width = math_floor(usedIconSizeX * displayedUnitTypes)
   rectMinX = math_floor(xmid - 0.5 * width)
   rectMaxX = math_floor(xmid + 0.5 * width)
-  rectMinY = 0
+  rectMinY = stripY1
   rectMaxY = math_floor(rectMinY + usedIconSizeY)
 
   local xmin = math_floor(rectMinX)
@@ -929,4 +964,4 @@ function widget:SetConfigData(data)
 end
 
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+-------------------------------------------------------------------------------

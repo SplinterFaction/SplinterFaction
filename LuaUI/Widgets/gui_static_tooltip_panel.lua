@@ -466,6 +466,25 @@ local function FormatNbr(x, digits)
 	return ret
 end
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). Tooltip and Additional Info are separate
+-- draggable entities. The tooltip's default sits beside the order panel's live
+-- rect (published by the build/order menu), so it follows that panel until it
+-- is dragged on its own; the additional panel's default stacks above the
+-- tooltip's live rect in the same way.
+--------------------------------------------------------------------------------
+
+-- One table, not three locals: this file sits at Lua 5.1's 200-local limit.
+local LAYOUT = {
+	TOOLTIP    = "tooltip",
+	ADDITIONAL = "additionalinfo",
+	Place = function(id, x1, y1, w, h)
+		local L = WG.StaticLayout
+		if L then return L.Place(id, x1, y1, w, h) end
+		return x1, y1
+	end,
+}
+
 local function UpdateRects()
 	vsx, vsy = spGetViewGeometry()
 
@@ -493,24 +512,37 @@ local function UpdateRects()
 	local orderH = math_floor(totalH * ORDER_HEIGHT_FRAC)
 	local buildH = math_max(math_floor(120 * uiScale), totalH - orderH - GAP_BETWEEN_PANELS)
 
+	-- Order panel: mirror of the build/order menu's default; replaced by its
+	-- live rect when that widget is present (so a moved order menu carries
+	-- the tooltip's default along with it).
 	orderPanel.x1 = PANEL_MARGIN_X
 	orderPanel.y1 = PANEL_MARGIN_Y
 	orderPanel.x2 = orderPanel.x1 + panelW
 	orderPanel.y2 = orderPanel.y1 + orderH
 	orderPanel.w = panelW
 	orderPanel.h = orderH
+	local BOM = WG.StaticBuildOrderMenu
+	if BOM and BOM.GetOrderRect then
+		local ox1, oy1, ox2, oy2 = BOM.GetOrderRect()
+		if ox1 and ox2 and ox2 > ox1 then
+			orderPanel.x1, orderPanel.y1, orderPanel.x2, orderPanel.y2 = ox1, oy1, ox2, oy2
+			orderPanel.w, orderPanel.h = ox2 - ox1, oy2 - oy1
+		end
+	end
 
 	local tooltipW = math_floor(panelW * TOOLTIP_WIDTH_MULT)
 
-	tooltipPanel.x1 = orderPanel.x2 + TOOLTIP_GAP_X
-	tooltipPanel.y1 = orderPanel.y1
+	local tx1, ty1 = LAYOUT.Place(LAYOUT.TOOLTIP, orderPanel.x2 + TOOLTIP_GAP_X, orderPanel.y1, tooltipW, orderH)
+	tooltipPanel.x1 = tx1
+	tooltipPanel.y1 = ty1
 	tooltipPanel.x2 = tooltipPanel.x1 + tooltipW
-	tooltipPanel.y2 = orderPanel.y2
+	tooltipPanel.y2 = tooltipPanel.y1 + orderH
 	tooltipPanel.w = tooltipW
 	tooltipPanel.h = orderH
 
-	additionalPanel.x1 = tooltipPanel.x1
-	additionalPanel.y1 = tooltipPanel.y2 + GAP_BETWEEN_PANELS
+	local ax1, ay1 = LAYOUT.Place(LAYOUT.ADDITIONAL, tooltipPanel.x1, tooltipPanel.y2 + GAP_BETWEEN_PANELS, panelW, buildH)
+	additionalPanel.x1 = ax1
+	additionalPanel.y1 = ay1
 	additionalPanel.x2 = additionalPanel.x1 + panelW
 	additionalPanel.y2 = additionalPanel.y1 + buildH
 	additionalPanel.w = panelW
@@ -2261,11 +2293,23 @@ function widget:Initialize()
 		-- Renders the panel at that rect; call from inside a texture cache.
 		BakeAdditional    = BakeAdditionalPanel,
 		DrawThumb         = DrawScrollbarThumb,
+		-- Re-place both panels (layout module drop, order menu moved).
+		Relayout          = function() widget:ViewResize() end,
 	}
 
+	if WG.StaticLayout then
+		local L = WG.StaticLayout
+		local function Rebuild() widget:ViewResize() end
+		L.Register(LAYOUT.TOOLTIP,    { label = "Tooltip",         onMove = Rebuild })
+		L.Register(LAYOUT.ADDITIONAL, { label = "Additional Info", onMove = Rebuild })
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then
+		WG.StaticLayout.Unregister(LAYOUT.TOOLTIP)
+		WG.StaticLayout.Unregister(LAYOUT.ADDITIONAL)
+	end
 	WG.StaticTooltip = nil
 	FreeDisplayLists()
 	if TXT.fontMain  then RAW.ReleaseFont(TXT.fontMain)  end
@@ -2486,4 +2530,4 @@ function widget:DrawScreen()
 
 	-- Hand the accumulated shape instances to the GPU.
 	Flush()
-end
+end

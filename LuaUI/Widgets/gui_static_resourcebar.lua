@@ -695,6 +695,20 @@ end
 -- widget api
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "resourcebar"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 function widget:Initialize()
 	-- Resolve the shapes module now that every widget has been constructed.
 	BindDrawing()
@@ -710,9 +724,17 @@ function widget:Initialize()
 	-- Set initial share levels
 	ApplyShareLevel("metal",  metalShareLevel)
 	ApplyShareLevel("energy", energyShareLevel)
+
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "Resource Bar",
+			onMove = function() widget:ViewResize(vsx, vsy) end,
+		})
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	FreeList(displayListBg)     ; displayListBg      = nil
 	FreeList(displayListStatic) ; displayListStatic  = nil
 	FreeList(displayListDynamic); displayListDynamic = nil
@@ -898,6 +920,7 @@ function widget:ViewResize(newX, newY)
 
 	posx = math.floor((vsx - (width * widgetScale)) * 0.5)
 	posy = math.floor(vsy - (height * widgetScale) - TOP_MARGIN)
+	posx, posy = LayoutPlace(posx, posy, width * widgetScale, height * widgetScale)
 
 	local newFontfileScale = (0.5 + ((vsx * vsy) / 5700000))
 	if fontfileScale ~= newFontfileScale then
@@ -918,4 +941,4 @@ function widget:ViewResize(newX, newY)
 
 	BuildBackgroundList()
 	BuildStaticList()
-end
+end

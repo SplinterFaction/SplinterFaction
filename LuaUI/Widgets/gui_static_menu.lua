@@ -339,6 +339,20 @@ local function GetPanelBGColor(hovered)
 	return PANEL_BG_COLOR
 end
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "menu"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 local function RecalculateGeometry()
 	vsx, vsy = spGetViewGeometry()
 	widgetScale = (0.60 + (vsx * vsy / 5000000))
@@ -349,9 +363,12 @@ local function RecalculateGeometry()
 	local gap         = BUTTON_GAP * widgetScale
 	local height      = BUTTON_HEIGHT * widgetScale
 
-	local x2 = vsx - marginRight
-	local x1 = x2 - width
-	local y2 = vsy - marginTop
+	local totalH = #BUTTONS * height + (#BUTTONS - 1) * gap
+	local x1 = vsx - marginRight - width
+	local y1 = vsy - marginTop - totalH
+	x1, y1 = LayoutPlace(x1, y1, width, totalH)
+	local x2 = x1 + width
+	local y2 = y1 + totalH
 
 	buttons = {}
 
@@ -429,9 +446,17 @@ function widget:Initialize()
 
 	RecalculateGeometry()
 	FreeStaticList()  -- geometry changed, rebuild next DrawScreen
+
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "Menu",
+			onMove = function() RecalculateGeometry(); FreeStaticList() end,
+		})
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	ReleaseFont(font)
 	font = nil
 end
@@ -507,4 +532,4 @@ function widget:DrawScreen()
 
 	-- Hand the accumulated shape instances to the GPU.
 	Flush()
-end
+end

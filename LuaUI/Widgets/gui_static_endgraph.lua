@@ -547,6 +547,20 @@ end
 -- Geometry
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "endgraph"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 local function BuildGeometry()
 	uiScale = vsy / BASE_RESOLUTION
 
@@ -557,6 +571,7 @@ local function BuildGeometry()
 
 	local x1 = math_floor(vsx * 0.5 - pw * 0.5)
 	local y1 = math_floor(vsy * 0.5 - ph * 0.5)
+	x1, y1 = LayoutPlace(x1, y1, math_floor(pw), math_floor(ph))
 	local x2 = x1 + math_floor(pw)
 	local y2 = y1 + math_floor(ph)
 	panelRect = {x1=x1, y1=y1, x2=x2, y2=y2}
@@ -1169,9 +1184,18 @@ function widget:Initialize()
 		-- stop drawing while the graph covers the screen.
 		IsOpen = function() return isOpen end,
 	}
+
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "End Graph",
+			onMove = function() widget:ViewResize(vsx, vsy) end,
+			isVisible = function() return isOpen end,
+		})
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	FreeCache(contentList)
 	contentList = nil
 	if font then

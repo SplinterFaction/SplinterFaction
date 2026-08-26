@@ -289,6 +289,20 @@ end
 -- Geometry
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "placement"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 local function RecalculateGeometry()
 	vsx, vsy    = spGetViewGeometry()
 	widgetScale  = 0.60 + (vsx * vsy / 5000000)
@@ -299,6 +313,7 @@ local function RecalculateGeometry()
 
 	panelX1 = math.floor((vsx - pw) / 2)
 	panelY1 = pb
+	panelX1, panelY1 = LayoutPlace(panelX1, panelY1, pw, ph)
 	panelX2 = panelX1 + pw
 	panelY2 = panelY1 + ph
 
@@ -614,9 +629,18 @@ function widget:Initialize()
 	myAllyTeamID  = Spring.GetMyAllyTeamID()
 	LoadWidgetFont()
 	RecalculateGeometry()
+
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "Placement Panel",
+			onMove = function() RecalculateGeometry() end,
+			isVisible = function() return active end,
+		})
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	if font then ReleaseFont(font); font = nil end
 end
 

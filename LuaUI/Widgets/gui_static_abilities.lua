@@ -559,6 +559,20 @@ local function AbilityReady(i)
 end
 
 -- Anchor: right edge and top of the players list panel (or fallback corner).
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "abilities"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 local function GetAnchor()
 	if WG.StaticPlayersList and WG.StaticPlayersList.GetRect then
 		local _, _, px2, py2 = WG.StaticPlayersList.GetRect()
@@ -590,10 +604,13 @@ local function RecalculateGeometry()
 	local ax2, ay1 = GetAnchor()
 	lastAnchorX2, lastAnchorY1 = ax2, ay1
 
-	panelRect.x2 = ax2
-	panelRect.x1 = ax2 - pw
-	panelRect.y1 = ay1
-	panelRect.y2 = ay1 + ph
+	-- Default: hang off the players list. Once dragged, the layout module
+	-- returns the stored origin and the anchor only matters for the default.
+	local x1, y1 = LayoutPlace(ax2 - pw, ay1, pw, ph)
+	panelRect.x1 = x1
+	panelRect.x2 = x1 + pw
+	panelRect.y1 = y1
+	panelRect.y2 = y1 + ph
 
 	-- Buttons stack top-down under the header (accent strip is at the panel's
 	-- top edge, suite convention; header sits just below it).
@@ -948,11 +965,19 @@ function widget:Initialize()
 
 	RecalculateGeometry()
 
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "Abilities",
+			onMove = function() RecalculateGeometry(); FreeStaticList() end,
+		})
+	end
+
 	-- Re-sync cooldown after a LuaUI/widget reload.
 	spSendLuaRulesMsg("scanner_query")
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	widgetHandler:DeregisterGlobal("ScannerCooldownEvent")
 	widgetHandler:DeregisterGlobal("ScannerDenyEvent")
 	widgetHandler:DeregisterGlobal("UpgradeDenyEvent")

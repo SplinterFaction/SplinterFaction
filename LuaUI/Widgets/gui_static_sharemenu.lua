@@ -363,6 +363,20 @@ end
 -- Geometry
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- Layout (api_staticgui_layout.lua). The layout module owns this panel's origin
+-- once the user has dragged it in tweak mode (Ctrl+F11); until then, and when
+-- the module is absent, the default computed below is used unchanged.
+--------------------------------------------------------------------------------
+
+local LAYOUT_ID = "sharemenu"
+
+local function LayoutPlace(x1, y1, w, h)
+	local L = WG.StaticLayout
+	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	return x1, y1
+end
+
 local function BuildGeometry()
 	uiScale = vsy / BASE_RESOLUTION
 
@@ -420,6 +434,10 @@ local function BuildGeometry()
 		y2 = math_floor(vsy - PANEL_MARGIN_X * uiScale)
 		y1 = y2 - math_floor(contentH)
 	end
+
+	x1, y1 = LayoutPlace(x1, y1, x2 - x1, y2 - y1)
+	x2 = x1 + math_floor(pw)
+	y2 = y1 + math_floor(contentH)
 
 	panelRect = {x1=x1, y1=y1, x2=x2, y2=y2}
 
@@ -849,9 +867,18 @@ function widget:Initialize()
 	font = WrapFont(gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8))
 	BuildGeometry()
 	WG.StaticShareMenu = { Toggle = Toggle, Show = Open, Hide = Close }
+
+	if WG.StaticLayout then
+		WG.StaticLayout.Register(LAYOUT_ID, {
+			label  = "Share Menu",
+			onMove = function() widget:ViewResize(vsx, vsy) end,
+			isVisible = function() return isOpen end,
+		})
+	end
 end
 
 function widget:Shutdown()
+	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	if font then ReleaseFont(font) end
 	Spring.SendCommands("bind h sharedialog")
 	WG.StaticShareMenu = nil
@@ -865,7 +892,9 @@ function widget:ViewResize(nx, ny)
 		if font then ReleaseFont(font) end
 		font = WrapFont(gl.LoadFont(fontfile, 23*fontfileScale, 5*fontfileScale, 1.8))
 	end
-	if isOpen then BuildGeometry() end
+	-- Always rebuild (not just when open) so the layout module knows this
+	-- panel's rect in tweak mode even while the menu is closed.
+	BuildGeometry()
 end
 
 function widget:KeyPress(key, mods, isRepeat)
@@ -1113,4 +1142,4 @@ function widget:DrawScreen()
 
 	-- Hand the accumulated shape instances to the GPU.
 	Flush()
-end
+end
