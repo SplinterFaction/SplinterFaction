@@ -111,6 +111,20 @@ local ROW_BOT_Y = 0                      -- y-origin of the bottom row (supply/r
 local width = (BAR_WIDTH * 2) + BAR_GAP
 local height = (BAR_HEIGHT * 2) + ROW_GAP
 
+-- Per-panel origins in panel-local units (under the shared posx/posy
+-- transform). These start at the 2x2 grid slots above and are overridden per
+-- panel by the layout module, so each of the four can be dragged on its own
+-- in tweak mode while every draw site keeps using local coordinates.
+local PANEL_DEF = {
+	metal    = { x = 0,      y = ROW_TOP_Y, w = BAR_WIDTH, label = "Metal" },
+	energy   = { x = COL2_X, y = ROW_TOP_Y, w = BAR_WIDTH, label = "Energy" },
+	supply   = { x = 0,      y = ROW_BOT_Y, w = BAR_WIDTH, label = "Supply" },
+	research = { x = COL2_X, y = ROW_BOT_Y, w = RP_WIDTH,  label = "Research" },
+}
+local PANEL_ORDER = { "metal", "energy", "supply", "research" }
+local PX = { metal = 0, energy = COL2_X, supply = 0, research = COL2_X }
+local PY = { metal = ROW_TOP_Y, energy = ROW_TOP_Y, supply = ROW_BOT_Y, research = ROW_BOT_Y }
+
 local fontfileScale = 1
 local fontfileSize = 23
 local fontfileOutlineSize = 6
@@ -468,10 +482,10 @@ end
 local function GetBarWorldRect(resource)
 	local barX1 = INNER_PADDING
 	local barX2 = BAR_WIDTH - INNER_PADDING
-	local barY1 = ROW_TOP_Y + 8
+	local barY1 = PY[resource] + 8
 	local barY2 = barY1 + FILL_HEIGHT
 
-	local localX = (resource == "metal") and 0 or COL2_X
+	local localX = PX[resource]
 
 	local wx1 = posx + (localX + barX1) * widgetScale
 	local wx2 = posx + (localX + barX2) * widgetScale
@@ -525,12 +539,12 @@ local function BuildBackgroundList()
 		SetTransform(posx, posy, widgetScale)
 
 		-- top row: metal (left), energy (right)
-		DrawPanel(0,      ROW_TOP_Y, BAR_WIDTH,          ROW_TOP_Y + BAR_HEIGHT, 0.45, 0.75, 1.00, 0.60) -- metal (sky blue)
-		DrawPanel(COL2_X, ROW_TOP_Y, COL2_X + BAR_WIDTH, ROW_TOP_Y + BAR_HEIGHT, 0.95, 0.85, 0.25, 0.60) -- energy (yellow)
+		DrawPanel(PX.metal,    PY.metal,    PX.metal + BAR_WIDTH,      PY.metal + BAR_HEIGHT,    0.45, 0.75, 1.00, 0.60) -- metal (sky blue)
+		DrawPanel(PX.energy,   PY.energy,   PX.energy + BAR_WIDTH,     PY.energy + BAR_HEIGHT,   0.95, 0.85, 0.25, 0.60) -- energy (yellow)
 
 		-- bottom row: supply (under metal), research (under energy, narrower, left-aligned)
-		DrawPanel(0,      ROW_BOT_Y, BAR_WIDTH,          ROW_BOT_Y + BAR_HEIGHT, 0.30, 0.90, 0.35, 0.60) -- supply (green)
-		DrawPanel(COL2_X, ROW_BOT_Y, COL2_X + RP_WIDTH,  ROW_BOT_Y + BAR_HEIGHT, 0.745, 0.470, 1.0, 0.60) -- research (violet)
+		DrawPanel(PX.supply,   PY.supply,   PX.supply + BAR_WIDTH,     PY.supply + BAR_HEIGHT,   0.30, 0.90, 0.35, 0.60) -- supply (green)
+		DrawPanel(PX.research, PY.research, PX.research + RP_WIDTH,    PY.research + BAR_HEIGHT, 0.745, 0.470, 1.0, 0.60) -- research (violet)
 
 		ClearTransform()
 	end)
@@ -541,10 +555,10 @@ local function BuildStaticList()
 		SetTransform(posx, posy, widgetScale)
 
 		local blocks = {
-			{ x = 0,      y = ROW_TOP_Y, icon = metalTexture,    label = "METAL",    color = {0.45, 0.75, 1.00, 1} }, -- sky blue
-			{ x = COL2_X, y = ROW_TOP_Y, icon = energyTexture,   label = "ENERGY",   color = {0.95, 0.85, 0.25, 1} }, -- yellow
-			{ x = 0,      y = ROW_BOT_Y, icon = supplyTexture,   label = "SUPPLY",   color = {0.30, 0.90, 0.35, 1} }, -- green
-			{ x = COL2_X, y = ROW_BOT_Y, icon = researchTexture, label = "RESEARCH", color = {0.745, 0.470, 1.0, 1} }, -- violet
+			{ x = PX.metal,    y = PY.metal,    icon = metalTexture,    label = "METAL",    color = {0.45, 0.75, 1.00, 1} }, -- sky blue
+			{ x = PX.energy,   y = PY.energy,   icon = energyTexture,   label = "ENERGY",   color = {0.95, 0.85, 0.25, 1} }, -- yellow
+			{ x = PX.supply,   y = PY.supply,   icon = supplyTexture,   label = "SUPPLY",   color = {0.30, 0.90, 0.35, 1} }, -- green
+			{ x = PX.research, y = PY.research, icon = researchTexture, label = "RESEARCH", color = {0.745, 0.470, 1.0, 1} }, -- violet
 		}
 
 		font2:Begin()
@@ -675,16 +689,16 @@ local function BuildDynamicList()
 		local barY2 = barY1 + FILL_HEIGHT
 
 		-- metal (top-left), energy (top-right), supply (bottom-left)
-		DrawFillBar(barX1,          ROW_TOP_Y + barY1, barX2,          ROW_TOP_Y + barY2, metalPct,  metalR,  metalG,  metalB,  true)
-		DrawFillBar(COL2_X + barX1, ROW_TOP_Y + barY1, COL2_X + barX2, ROW_TOP_Y + barY2, energyPct, energyR, energyG, energyB, true)
-		DrawFillBar(barX1,          ROW_BOT_Y + barY1, barX2,          ROW_BOT_Y + barY2, supplyPct, supplyR, supplyG, supplyB, true)
+		DrawFillBar(PX.metal  + barX1, PY.metal  + barY1, PX.metal  + barX2, PY.metal  + barY2, metalPct,  metalR,  metalG,  metalB,  true)
+		DrawFillBar(PX.energy + barX1, PY.energy + barY1, PX.energy + barX2, PY.energy + barY2, energyPct, energyR, energyG, energyB, true)
+		DrawFillBar(PX.supply + barX1, PY.supply + barY1, PX.supply + barX2, PY.supply + barY2, supplyPct, supplyR, supplyG, supplyB, true)
 
 		-- single font pass; each Begin/End pair flushes the font renderer
 		font2:Begin()
 		font2:SetTextColor(1, 1, 1, 1)
-		font2:Print(metalText, TX(BAR_WIDTH - INNER_PADDING), TY(ROW_TOP_Y + 23), TS(16), "or")
-		font2:Print(energyText, TX(COL2_X + BAR_WIDTH - INNER_PADDING), TY(ROW_TOP_Y + 23), TS(16), "or")
-		font2:Print(supplyText, TX(BAR_WIDTH - INNER_PADDING), TY(ROW_BOT_Y + 23), TS(16), "or")
+		font2:Print(metalText,  TX(PX.metal  + BAR_WIDTH - INNER_PADDING), TY(PY.metal  + 23), TS(16), "or")
+		font2:Print(energyText, TX(PX.energy + BAR_WIDTH - INNER_PADDING), TY(PY.energy + 23), TS(16), "or")
+		font2:Print(supplyText, TX(PX.supply + BAR_WIDTH - INNER_PADDING), TY(PY.supply + 23), TS(16), "or")
 		font2:End()
 
 		ClearTransform()
@@ -701,12 +715,27 @@ end
 -- the module is absent, the default computed below is used unchanged.
 --------------------------------------------------------------------------------
 
-local LAYOUT_ID = "resourcebar"
+local LAYOUT_PREFIX = "resourcebar_"
 
-local function LayoutPlace(x1, y1, w, h)
+local function LayoutPlace(id, x1, y1, w, h)
 	local L = WG.StaticLayout
-	if L then return L.Place(LAYOUT_ID, x1, y1, w, h) end
+	if L then return L.Place(LAYOUT_PREFIX .. id, x1, y1, w, h) end
 	return x1, y1
+end
+
+-- Resolve each panel's local origin: default grid slot -> world rect ->
+-- layout module -> back to local units under the shared transform. posx/posy
+-- stay the *default* group origin so a moved panel never shifts the others.
+local function PlacePanels()
+	for i = 1, #PANEL_ORDER do
+		local name = PANEL_ORDER[i]
+		local d = PANEL_DEF[name]
+		local wx = posx + d.x * widgetScale
+		local wy = posy + d.y * widgetScale
+		wx, wy = LayoutPlace(name, wx, wy, d.w * widgetScale, BAR_HEIGHT * widgetScale)
+		PX[name] = (wx - posx) / widgetScale
+		PY[name] = (wy - posy) / widgetScale
+	end
 end
 
 function widget:Initialize()
@@ -726,15 +755,23 @@ function widget:Initialize()
 	ApplyShareLevel("energy", energyShareLevel)
 
 	if WG.StaticLayout then
-		WG.StaticLayout.Register(LAYOUT_ID, {
-			label  = "Resource Bar",
-			onMove = function() widget:ViewResize(vsx, vsy) end,
-		})
+		local function Rebuild() widget:ViewResize(vsx, vsy) end
+		for i = 1, #PANEL_ORDER do
+			local name = PANEL_ORDER[i]
+			WG.StaticLayout.Register(LAYOUT_PREFIX .. name, {
+				label  = PANEL_DEF[name].label,
+				onMove = Rebuild,
+			})
+		end
 	end
 end
 
 function widget:Shutdown()
-	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
+	if WG.StaticLayout then
+		for i = 1, #PANEL_ORDER do
+			WG.StaticLayout.Unregister(LAYOUT_PREFIX .. PANEL_ORDER[i])
+		end
+	end
 	FreeList(displayListBg)     ; displayListBg      = nil
 	FreeList(displayListStatic) ; displayListStatic  = nil
 	FreeList(displayListDynamic); displayListDynamic = nil
@@ -803,22 +840,22 @@ end
 -- (bottom-left), and the fading spend flash (top-right). No fill bar.
 -- Lives in the bottom-right column, left-aligned under the energy panel.
 local function DrawResearchPanel()
-	local rpX = COL2_X
+	local rpX, rpY = PX.research, PY.research
 
 	SetTransform(posx, posy, widgetScale)
 
 	font2:Begin()
 
 	font2:SetTextColor(1, 1, 1, 1)
-	font2:Print(rpValueStr, TX(rpX + RP_WIDTH - INNER_PADDING), TY(10), TS(22), "or")
+	font2:Print(rpValueStr, TX(rpX + RP_WIDTH - INNER_PADDING), TY(rpY + 10), TS(22), "or")
 
 	font2:SetTextColor(0, 1, 0, 1)
-	font2:Print(rpRateStr, TX(rpX + INNER_PADDING), TY(12), TS(14), "o")
+	font2:Print(rpRateStr, TX(rpX + INNER_PADDING), TY(rpY + 12), TS(14), "o")
 
 	if rpFlashTimer > 0 and rpFlashAmount > 0 then
 		local a = rpFlashTimer / RP_FLASH_DURATION
 		font2:SetTextColor(1, 0.15, 0.15, a)
-		font2:Print(rpFlashStr, TX(rpX + RP_WIDTH - INNER_PADDING), TY(30), TS(16), "or")
+		font2:Print(rpFlashStr, TX(rpX + RP_WIDTH - INNER_PADDING), TY(rpY + 30), TS(16), "or")
 	end
 
 	font2:End()
@@ -920,7 +957,7 @@ function widget:ViewResize(newX, newY)
 
 	posx = math.floor((vsx - (width * widgetScale)) * 0.5)
 	posy = math.floor(vsy - (height * widgetScale) - TOP_MARGIN)
-	posx, posy = LayoutPlace(posx, posy, width * widgetScale, height * widgetScale)
+	PlacePanels()
 
 	local newFontfileScale = (0.5 + ((vsx * vsy) / 5700000))
 	if fontfileScale ~= newFontfileScale then

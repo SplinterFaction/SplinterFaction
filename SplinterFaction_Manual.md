@@ -578,7 +578,9 @@ Most new players move armies as a blob and wonder why they lose fights to equal 
 
 Units that can be upgraded show their options in the orders menu as **Tech 1 Upgrade**, **Tech 2 Upgrade**, and so on — not as "morph." Mouse over any button in the orders menu and the tooltip explains what it does.
 
-Alongside the upgrade buttons you'll find **add to upgrade queue**, **pause upgrade** and **cancel upgrade**. Queued upgrades process one at a time as Research Points become available (§18), so you can queue up your intentions and let the RP economy work through them.
+**You don't have to select the unit at all.** Upgradeable units display a small **clickable upgrade button floating above them** in the world. Click it and the upgrade starts — no selection, no menu, no interruption to whatever else you were doing. This is by far the fastest way to keep your army current, and it's easy to miss because it looks like a status indicator rather than a control.
+
+Alongside the upgrade buttons in the orders menu you'll find **add to upgrade queue**, **pause upgrade** and **cancel upgrade**. Queued upgrades process one at a time as Research Points become available (§18), so you can queue up your intentions and let the RP economy work through them.
 
 Upgrades currently complete in about **three seconds**, so the pause and cancel controls rarely come up in practice — but they're there. Full detail in §32.
 
@@ -636,6 +638,7 @@ SplinterFaction's interface is a custom "Static GUI" suite — all panels share 
 ### Panels available from the top-right menu
 
 - **Sharing menu** — send resources or units to an ally (§37).
+- **Economy graph** — a live, real-time picture of what your economy is actually doing: income against expenditure as it happens, rather than the single snapshot the resources display gives you. **This is the fastest way to understand your own macro.** The resources display tells you that you're floating metal right now; the graph shows you that you've been floating it for four minutes and the gap is widening. Open it occasionally even when nothing feels wrong — patterns show up in a line that are invisible in a number.
 - **Statistics graphs** — income, army value and more over the course of the match. Genuinely worth reading afterwards: if you lost, the graphs usually show you exactly where and when.
 - **Chat log** — messages from allies and the system.
 
@@ -664,9 +667,23 @@ This is a communication tool and, in team games, it's a better one than chat. Ty
 
 Erase your own clutter occasionally. A map covered in ten minutes of accumulated scribble stops communicating anything.
 
+### Rearranging the interface — tweak mode
+
+The interface isn't fixed in place. **Tweak mode** lets you pick up GUI elements and put them where you want them.
+
+Enter tweak mode (`Ctrl + F11` by default), and the panels become draggable: click and drag any element to reposition it. Leave tweak mode and everything stays where you put it, including between sessions.
+
+This is worth ten minutes on your first evening, because the default arrangement is a compromise designed for everyone, and you are not everyone:
+
+- **Move what you check constantly to where your eyes already are.** If you spend the game watching your army on the left of the screen, having the resources display in the far top-right corner means a full eye movement every time you check it. Move it closer.
+- **Move what you never use out of the way**, or turn it off entirely in the widget selector.
+- **Account for your monitor.** On an ultrawide, default positions can put critical readouts uncomfortably far apart. On a small screen, they can crowd. Neither is something you should just endure.
+
+A layout that suits you reduces the number of things you have to consciously remember to look at — which, given how much of this manual is "check your supply, check your income, check your factory," is worth real games.
+
 ### Two menus you should visit early
 
-- **Keybind menu** — you can rebind any default key. If a hotkey feels wrong to your hand, change it rather than fighting it for a hundred games.
+- **Keybind menu** — you can rebind any default key. If a hotkey feels wrong to your hand, change it rather than fighting it for a hundred games (Appendix B).
 - **Widget selector** — turn any interface element on or off to taste.
 
 ---
@@ -1430,7 +1447,7 @@ That's the intended shape of the recovery. It is **not efficient** — you'll sp
 
 ### Upgrades in the orders menu
 
-Upgradeable units show **Tech 1 Upgrade / Tech 2 Upgrade / etc.** buttons in the orders menu, with tooltips explaining each. Alongside them: **add to upgrade queue**, **pause upgrade**, **cancel upgrade**. Queued upgrades process one at a time as RP becomes available.
+Upgradeable units show **Tech 1 Upgrade / Tech 2 Upgrade / etc.** buttons in the orders menu, with tooltips explaining each — and a **clickable upgrade button floating above the unit itself**, which is quicker still (§11). Alongside them: **add to upgrade queue**, **pause upgrade**, **cancel upgrade**. Queued upgrades process one at a time as RP becomes available.
 
 Upgrades currently complete in about **three seconds**, so there's little vulnerability window in practice.
 
@@ -1809,7 +1826,7 @@ Three postures. Each beats one and loses to another.
 
 | # | Mistake | Fix |
 |---|---|---|
-| 1 | Floating unspent metal | Check the resources display every 30 seconds. Spend it. |
+| 1 | Floating unspent metal | Check the resources display every 30 seconds. The economy graph (§12) shows the pattern. |
 | 2 | Unspent Research Points | Check RP every few minutes. Upgrade something. |
 | 3 | Supply blocked, factories frozen | Build depots *before* you cap. Listen to the advisor. |
 | 4 | Overextending your economy | Do fewer things at once. Finish them. |
@@ -2130,6 +2147,7 @@ Set through the orders menu. Move states: Hold Position, Maneuver, Roam. Fire st
 | `F11` | Screenshot |
 | `` ` `` or `\` | Draw on map |
 | `+` / `-` | Speed up / slow down *(vs AI only)* |
+| `Ctrl + F11` | Tweak mode — drag GUI elements to reposition them (§12) |
 | `Ctrl + Insert` | Hotbind — see below |
 | `Ctrl + Delete` | Remove hotbind |
 

@@ -7,36 +7,29 @@
 <meta name="description" content="The complete SplinterFaction field manual: how to play, how real-time strategy works, and a full unit reference.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;600;700&family=Spectral:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;600;700&amp;family=Spectral:ital,wght@0,400;0,600;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#E9E9E3; --paper-2:#DFDFD8; --rule:#C4C5BD;
   --ink:#16171A; --ink-2:#4A4C52; --ink-3:#74767D;
-  --panel:#0C0D10; --panel-2:#15171C; --panel-ink:#F2F2F2; --panel-dim:#9EA3AB;
+  --panel:#0C0D10; --panel-ink:#F2F2F2; --panel-dim:#9EA3AB;
   --blue:#2E85FA; --teal:#33BFCC; --amber:#F2A62E; --green:#38C759; --red:#E63838;
-  --yellow:#F2D940;
-  --p1:#2E85FA; --p2:#33BFCC; --p3:#7A8AA8; --p4:#38C759; --p5:#8E7CC3;
+  --p0:#F2A62E; --p1:#2E85FA; --p2:#33BFCC; --p3:#7A8AA8; --p4:#38C759; --p5:#8E7CC3;
   --p6:#E63838; --p7:#F2A62E; --p8:#C77DBB; --p9:#4FB3A4; --p10:#D2762E;
-  --p0:#74767D;
   --accent:var(--blue);
-  --disp:"Saira Semi Condensed","Saira Condensed","Oswald",sans-serif;
+  --disp:"Saira Semi Condensed","Saira Condensed",sans-serif;
   --body:"Spectral",Georgia,serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   --maxw:74ch;
 }
-[data-theme="dark"]{
-  --paper:#0E0F12; --paper-2:#15171C; --rule:#2A2D34;
-  --ink:#E8E9EC; --ink-2:#A9ACB4; --ink-3:#7E828B;
-  --panel:#05060A; --panel-2:#101218;
-}
+[data-theme="dark"]{--paper:#0E0F12;--paper-2:#15171C;--rule:#2A2D34;
+  --ink:#E8E9EC;--ink-2:#A9ACB4;--ink-3:#7E828B;--panel:#05060A;}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
   font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
-
-/* ---------- shell ---------- */
-.wrap{display:grid;grid-template-columns:288px minmax(0,1fr);gap:0;max-width:1320px;margin:0 auto}
+.wrap{display:grid;grid-template-columns:288px minmax(0,1fr);max-width:1320px;margin:0 auto}
 .side{position:sticky;top:0;height:100vh;overflow:hidden;border-right:1px solid var(--rule);
   display:flex;flex-direction:column;background:var(--paper)}
 .side-head{padding:22px 20px 14px;border-bottom:1px solid var(--rule)}
@@ -61,76 +54,59 @@ nav a{display:block;text-decoration:none;font-family:var(--disp);color:var(--ink
   color:var(--ink);font-weight:600}
 .n-part em{display:block;font-style:normal;font-size:9.5px;letter-spacing:.2em;
   color:var(--pc,var(--ink-3));margin-bottom:2px}
-.n-sec{padding:3.5px 20px 3.5px 20px;font-size:13.5px;letter-spacing:.015em;display:flex;gap:9px;
-  border-left:2px solid transparent}
+.n-sec{padding:3.5px 20px;font-size:13.5px;display:flex;gap:9px;border-left:2px solid transparent}
 .n-sec i{font-style:normal;color:var(--ink-3);min-width:17px;text-align:right;font-size:11.5px;
   font-variant-numeric:tabular-nums;padding-top:1px}
 .n-sec:hover{color:var(--ink);background:color-mix(in srgb,var(--pc,var(--blue)) 9%,transparent)}
 .n-sec.cur{color:var(--ink);border-left-color:var(--pc,var(--blue));font-weight:600}
 .n-sec.cur i{color:var(--pc,var(--blue))}
 nav a.hide{display:none}
-
-/* ---------- main ---------- */
 main{padding:0 46px 140px;min-width:0}
 .bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:50;transition:width .1s linear}
-
-/* cover */
 .cover{padding:88px 0 40px;border-bottom:3px solid var(--ink);margin-bottom:8px}
 .cover-h1{font-family:var(--disp);font-weight:700;font-size:clamp(46px,8.5vw,92px);line-height:.86;
   letter-spacing:-.012em;text-transform:uppercase;margin:0}
 .cover-h1 .k{color:var(--blue)}
-.cover h2,.cover-sub{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.26em;
+.cover-sub{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.26em;
   text-transform:uppercase;color:var(--ink-2);margin:18px 0 0}
 .cover-meta{font-family:var(--disp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--ink-3);margin-top:30px;display:flex;gap:26px;flex-wrap:wrap}
-
-/* headings */
-h1.part{margin:82px 0 30px;padding-top:24px;border-top:1px solid var(--rule);display:block}
+h1.part{margin:82px 0 30px;padding-top:24px;border-top:1px solid var(--rule)}
 h1.part .part-num{display:block;font-family:var(--disp);font-size:11px;letter-spacing:.26em;
   text-transform:uppercase;color:var(--pc);margin-bottom:9px}
-h1.part .part-name{display:block;font-family:var(--disp);font-weight:700;font-size:clamp(30px,4.6vw,46px);
-  line-height:1;letter-spacing:-.005em;text-transform:uppercase}
+h1.part .part-name{display:block;font-family:var(--disp);font-weight:700;
+  font-size:clamp(30px,4.6vw,46px);line-height:1;text-transform:uppercase}
 h2.sec{margin:56px 0 20px;display:flex;gap:16px;align-items:baseline;scroll-margin-top:20px}
-h2.sec .sec-num{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.06em;
-  color:#fff;background:var(--pc);padding:4px 8px;border-radius:2px;line-height:1;
-  font-variant-numeric:tabular-nums;flex:none;position:relative;top:-2px}
+h2.sec .sec-num{font-family:var(--disp);font-weight:700;font-size:12px;color:#fff;background:var(--pc);
+  padding:4px 8px;border-radius:2px;line-height:1;font-variant-numeric:tabular-nums;flex:none;top:-2px;position:relative}
 h2.sec .sec-name{font-family:var(--disp);font-weight:600;font-size:clamp(21px,2.7vw,28px);
-  line-height:1.1;letter-spacing:.005em;text-transform:uppercase}
+  line-height:1.1;text-transform:uppercase}
 h3{font-family:var(--disp);font-weight:600;font-size:17.5px;letter-spacing:.05em;text-transform:uppercase;
-  margin:34px 0 12px;color:var(--ink);max-width:var(--maxw)}
+  margin:34px 0 12px;max-width:var(--maxw)}
 h3::before{content:"";display:inline-block;width:14px;height:2px;background:var(--pc);
   vertical-align:middle;margin-right:9px;position:relative;top:-2px}
-
-/* text */
+h4{font-family:var(--disp);margin:0}
 p,ul,ol{max-width:var(--maxw)}
 p{margin:0 0 1.05em}
 strong{font-weight:600;color:var(--ink)}
 [data-theme="dark"] strong{color:#fff}
-em{font-style:italic}
 ul,ol{padding-left:1.25em;margin:0 0 1.15em}
 li{margin:.34em 0}
 li::marker{color:var(--pc)}
 a.xref{color:var(--pc);text-decoration:none;border-bottom:1px dotted currentColor;
   font-variant-numeric:tabular-nums;white-space:nowrap}
 a.xref:hover{background:color-mix(in srgb,var(--pc) 16%,transparent)}
-
-/* keycaps */
 kbd{font-family:var(--mono);font-size:.79em;background:var(--paper-2);color:var(--ink);
   border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:1.5px 6px;
   white-space:nowrap;font-weight:500}
 code{font-family:var(--mono);font-size:.85em;background:var(--paper-2);padding:1px 5px;border-radius:3px}
-
-/* tables */
-table{width:100%;max-width:100%;border-collapse:collapse;margin:20px 0 26px;font-size:14.6px;
-  font-family:var(--disp);letter-spacing:.008em}
+table{width:100%;border-collapse:collapse;margin:20px 0 26px;font-size:14.6px;font-family:var(--disp)}
 th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
   color:var(--ink-3);padding:0 14px 8px 0;border-bottom:1.5px solid var(--pc);vertical-align:bottom}
 td{padding:9px 14px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
 tr:last-child td{border-bottom:none}
 td:first-child{font-weight:600}
 table kbd{font-size:12.5px}
-
-/* callouts = in-game Static GUI panels */
 .cal{margin:26px 0;max-width:var(--maxw);background:var(--panel);color:var(--panel-ink);
   border-radius:9px;padding:20px 22px 18px;position:relative;overflow:hidden;
   border:1px solid rgba(255,255,255,.07);font-size:15.4px}
@@ -147,106 +123,73 @@ table kbd{font-size:12.5px}
 .cal table{margin:14px 0 4px;font-size:13.8px}
 .cal th{color:var(--panel-dim);border-bottom-color:var(--cc)}
 .cal td{border-bottom-color:rgba(255,255,255,.09);color:#DCDDE1}
-.cal-warn{--cc:var(--amber)}
-.cal-tip{--cc:var(--green)}
-.cal-note{--cc:var(--blue)}
-.cal-dev{--cc:var(--teal)}
+.cal-warn{--cc:var(--amber)} .cal-tip{--cc:var(--green)}
+.cal-note{--cc:var(--blue)} .cal-dev{--cc:var(--teal)}
 .cal-dev::after{content:"From the developer";position:absolute;top:14px;right:20px;
   font-family:var(--disp);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal)}
 .cal-dev em{color:#fff;font-style:italic}
-
-/* prologue — narrative typography */
 .prologue{--pc:var(--amber)}
-h1.prologue{margin-top:56px}
-#prologue ~ h3{margin-top:40px}
-.lore-lead{font-family:var(--body);font-style:italic;font-size:19px;line-height:1.55;
-  color:var(--ink-2);max-width:62ch;margin:0 0 30px}
-.prologue-body p{font-size:17.4px;line-height:1.72;max-width:66ch}
-
-/* glossary definition list */
 dl{max-width:var(--maxw);margin:22px 0;display:grid;grid-template-columns:minmax(120px,26%) 1fr;
-  gap:0;border-top:1px solid var(--rule)}
-dt{font-family:var(--disp);font-weight:600;font-size:14.5px;letter-spacing:.03em;
-  padding:11px 16px 11px 0;border-bottom:1px solid var(--rule);color:var(--ink)}
-dd{margin:0;padding:11px 0 11px 0;border-bottom:1px solid var(--rule);font-size:15px;
+  border-top:1px solid var(--rule)}
+dt{font-family:var(--disp);font-weight:600;font-size:14.5px;padding:11px 16px 11px 0;
+  border-bottom:1px solid var(--rule);color:var(--ink)}
+dd{margin:0;padding:11px 0;border-bottom:1px solid var(--rule);font-size:15px;
   color:var(--ink-2);line-height:1.5}
 dd strong{color:var(--ink)}
-@media(max-width:620px){
-  dl{grid-template-columns:1fr;border-top:none}
-  dt{padding-bottom:2px;border-bottom:none;color:var(--pc)}
-  dd{padding-top:0;padding-bottom:12px}
-}
-
-/* loop diagram */
-.loop{max-width:var(--maxw);margin:26px 0;display:grid;
-  grid-template-columns:repeat(4,1fr);gap:0 8px;align-items:stretch;position:relative}
-.loop-step{border-top:3px solid var(--pc);padding:12px 12px 14px 0;position:relative}
+.loop{max-width:var(--maxw);margin:26px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:0 8px}
+.loop-step{border-top:3px solid var(--pc);padding:12px 12px 14px 0}
 .loop-step b{display:block;font-family:var(--disp);font-size:10px;letter-spacing:.2em;
   color:var(--pc);margin-bottom:5px;font-weight:700}
 .loop-step h4{font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:.07em;
   text-transform:uppercase;margin:0 0 5px}
 .loop-step p{font-size:13.4px;line-height:1.4;color:var(--ink-2);margin:0;max-width:none;
-  font-family:var(--disp);letter-spacing:.01em}
-.loop-arrow{display:none}
+  font-family:var(--disp)}
 .loop-back{grid-column:1/-1;margin-top:14px;border-left:2px solid var(--pc);
   border-bottom:2px solid var(--pc);border-right:2px solid var(--pc);height:26px;
   border-radius:0 0 8px 8px;position:relative}
 .loop-back span{position:absolute;left:50%;top:100%;transform:translate(-50%,-50%);
   background:var(--paper);padding:0 12px;font-family:var(--disp);font-size:10.5px;
   letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
-@media(max-width:620px){
-  .loop{grid-template-columns:1fr;gap:0}
-  .loop-step{border-top:none;border-left:3px solid var(--pc);padding:10px 0 14px 14px}
-  .loop-back{display:none}
-}
-
-/* rush / boom / turtle */
 .rps{max-width:430px;margin:26px 0;position:relative;height:250px;color:var(--pc)}
 .rps-svg{position:absolute;inset:0;width:100%;height:210px;fill:none;stroke:currentColor;stroke-width:1.6}
 .rps-node{position:absolute;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.14em;
   text-transform:uppercase;padding:8px 14px;border:1.5px solid var(--pc);border-radius:4px;
   background:var(--paper);color:var(--ink)}
-.n-rush{top:8px;left:14px}
-.n-boom{top:8px;right:14px}
+.n-rush{top:8px;left:14px} .n-boom{top:8px;right:14px}
 .n-turtle{bottom:40px;left:50%;transform:translateX(-50%)}
 .rps-cap{position:absolute;bottom:0;left:0;font-family:var(--disp);font-size:12px;
-  letter-spacing:.05em;color:var(--ink-3);margin:0;max-width:none}
-
-/* code fallback */
+  color:var(--ink-3);margin:0;max-width:none}
 pre{max-width:var(--maxw);overflow-x:auto;background:var(--paper-2);padding:14px 16px;
   border-radius:6px;border-left:3px solid var(--pc);font-size:13px}
 pre code{background:none;padding:0}
-
-/* image slots */
 .imgslot{margin:28px 0;max-width:var(--maxw);border:1.5px dashed var(--rule);border-radius:7px;
   padding:26px 22px;text-align:center;background:color-mix(in srgb,var(--pc) 4%,transparent)}
 .imgslot-tag{font-family:var(--disp);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--pc);margin-bottom:9px;font-weight:600}
 .imgslot figcaption{font-family:var(--disp);font-size:13.5px;color:var(--ink-2);line-height:1.5;
   max-width:52ch;margin:0 auto}
-
-/* unit reference entries */
-h2.app+p+p strong:first-child{}
-.wrap main>p>strong:first-child:last-child{}
-
 @media(max-width:1080px){
   .wrap{grid-template-columns:1fr}
   .side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}
-  nav{max-height:none;padding-bottom:18px}
-  .n-sec{padding-top:5px;padding-bottom:5px}
   main{padding:0 22px 90px}
   .cover{padding-top:44px}
+}
+@media(max-width:620px){
+  .loop{grid-template-columns:1fr}
+  .loop-step{border-top:none;border-left:3px solid var(--pc);padding:10px 0 14px 14px}
+  .loop-back{display:none}
+  dl{grid-template-columns:1fr;border-top:none}
+  dt{padding-bottom:2px;border-bottom:none;color:var(--pc)}
+  dd{padding-top:0;padding-bottom:12px}
 }
 @media print{
   .side,.bar{display:none}
   body{background:#fff;color:#000;font-size:10.5pt}
-  .wrap{display:block;max-width:none}
-  main{padding:0}
+  .wrap{display:block;max-width:none} main{padding:0}
   h1.part{break-before:page}
   h2.sec,.cal,table,.imgslot{break-inside:avoid}
   .cal{background:#f2f2f2;color:#000;border:1px solid #999}
-  .cal p,.cal td,.cal ul{color:#000}
-  .cal strong{color:#000}
+  .cal p,.cal td,.cal ul,.cal strong{color:#000}
   a.xref{color:#000;border:none}
 }
 </style>
@@ -329,7 +272,7 @@ h2.app+p+p strong:first-child{}
     <p class="cover-sub">Field Manual and Commander's Handbook</p>
     <div class="cover-meta">
       <span>Built on the Recoil Engine</span>
-      <span>Federation of Kala · Loz Alliance</span>
+      <span>Federation of Kala / Loz Alliance</span>
     </div>
   </header>
 <blockquote class="cal cal-note">
@@ -470,11 +413,8 @@ h2.app+p+p strong:first-child{}
 <p>Everything in this game reduces to four steps, running continuously and simultaneously:</p>
 <div class="loop">
  <div class="loop-step"><b>1</b><h4>Produce</h4><p>turn power into metal</p></div>
- <div class="loop-arrow" aria-hidden="true"></div>
  <div class="loop-step"><b>2</b><h4>Build</h4><p>production and army</p></div>
- <div class="loop-arrow" aria-hidden="true"></div>
  <div class="loop-step"><b>3</b><h4>Expand</h4><p>take more resource locations</p></div>
- <div class="loop-arrow" aria-hidden="true"></div>
  <div class="loop-step"><b>4</b><h4>Fight</h4><p>convert army into map control</p></div>
  <div class="loop-back"><span>and the map control funds the next cycle</span></div>
 </div>
@@ -782,7 +722,8 @@ Loz units carry <strong>personal shields</strong> that absorb damage before the 
 <p>Most new players move armies as a blob and wonder why they lose fights to equal numbers. This is why.</p>
 <h3>Tech upgrades in the orders menu</h3>
 <p>Units that can be upgraded show their options in the orders menu as <strong>Tech 1 Upgrade</strong>, <strong>Tech 2 Upgrade</strong>, and so on — not as "morph." Mouse over any button in the orders menu and the tooltip explains what it does.</p>
-<p>Alongside the upgrade buttons you'll find <strong>add to upgrade queue</strong>, <strong>pause upgrade</strong> and <strong>cancel upgrade</strong>. Queued upgrades process one at a time as Research Points become available (<a class="xref" href="#s18">§18</a>), so you can queue up your intentions and let the RP economy work through them.</p>
+<p><strong>You don't have to select the unit at all.</strong> Upgradeable units display a small <strong>clickable upgrade button floating above them</strong> in the world. Click it and the upgrade starts — no selection, no menu, no interruption to whatever else you were doing. This is by far the fastest way to keep your army current, and it's easy to miss because it looks like a status indicator rather than a control.</p>
+<p>Alongside the upgrade buttons in the orders menu you'll find <strong>add to upgrade queue</strong>, <strong>pause upgrade</strong> and <strong>cancel upgrade</strong>. Queued upgrades process one at a time as Research Points become available (<a class="xref" href="#s18">§18</a>), so you can queue up your intentions and let the RP economy work through them.</p>
 <p>Upgrades currently complete in about <strong>three seconds</strong>, so the pause and cancel controls rarely come up in practice — but they're there. Full detail in <a class="xref" href="#s32">§32</a>.</p>
 <h3>Your units fight on their own</h3>
 <p><strong>Unless set to Hold Fire, every unit automatically shoots anything valid that comes into range.</strong> You do not need to order each shot.</p>
@@ -826,6 +767,7 @@ Loz units carry <strong>personal shields</strong> that absorb damage before the 
 <h3>Panels available from the top-right menu</h3>
 <ul>
 <li><strong>Sharing menu</strong> — send resources or units to an ally (<a class="xref" href="#s37">§37</a>).</li>
+<li><strong>Economy graph</strong> — a live, real-time picture of what your economy is actually doing: income against expenditure as it happens, rather than the single snapshot the resources display gives you. <strong>This is the fastest way to understand your own macro.</strong> The resources display tells you that you're floating metal right now; the graph shows you that you've been floating it for four minutes and the gap is widening. Open it occasionally even when nothing feels wrong — patterns show up in a line that are invisible in a number.</li>
 <li><strong>Statistics graphs</strong> — income, army value and more over the course of the match. Genuinely worth reading afterwards: if you lost, the graphs usually show you exactly where and when.</li>
 <li><strong>Chat log</strong> — messages from allies and the system.</li>
 </ul>
@@ -866,9 +808,19 @@ Loz units carry <strong>personal shields</strong> that absorb damage before the 
 - <strong>Circling threats.</strong> Ring the thing you want dealt with.</p>
 <p><strong>It's also useful alone.</strong> Marking the resource locations and geothermal vents you've scouted but haven't claimed yet turns the map into your own to-do list — and given there's no radar to remind you (<a class="xref" href="#s34">§34</a>), writing things down where you'll see them is worth more here than in most games.</p>
 <p>Erase your own clutter occasionally. A map covered in ten minutes of accumulated scribble stops communicating anything.</p>
+<h3>Rearranging the interface — tweak mode</h3>
+<p>The interface isn't fixed in place. <strong>Tweak mode</strong> lets you pick up GUI elements and put them where you want them.</p>
+<p>Enter tweak mode (<kbd>Ctrl + F11</kbd> by default), and the panels become draggable: click and drag any element to reposition it. Leave tweak mode and everything stays where you put it, including between sessions.</p>
+<p>This is worth ten minutes on your first evening, because the default arrangement is a compromise designed for everyone, and you are not everyone:</p>
+<ul>
+<li><strong>Move what you check constantly to where your eyes already are.</strong> If you spend the game watching your army on the left of the screen, having the resources display in the far top-right corner means a full eye movement every time you check it. Move it closer.</li>
+<li><strong>Move what you never use out of the way</strong>, or turn it off entirely in the widget selector.</li>
+<li><strong>Account for your monitor.</strong> On an ultrawide, default positions can put critical readouts uncomfortably far apart. On a small screen, they can crowd. Neither is something you should just endure.</li>
+</ul>
+<p>A layout that suits you reduces the number of things you have to consciously remember to look at — which, given how much of this manual is "check your supply, check your income, check your factory," is worth real games.</p>
 <h3>Two menus you should visit early</h3>
 <ul>
-<li><strong>Keybind menu</strong> — you can rebind any default key. If a hotkey feels wrong to your hand, change it rather than fighting it for a hundred games.</li>
+<li><strong>Keybind menu</strong> — you can rebind any default key. If a hotkey feels wrong to your hand, change it rather than fighting it for a hundred games (Appendix B).</li>
 <li><strong>Widget selector</strong> — turn any interface element on or off to taste.</li>
 </ul>
 <h2>---</h2>
@@ -1475,7 +1427,7 @@ Loz units carry <strong>personal shields</strong> that absorb damage before the 
 </blockquote>
 <p>That's the intended shape of the recovery. It is <strong>not efficient</strong> — you'll spend more to kill less — but it keeps you contributing, and in a team game contributing is the whole job. If this happens to you: stop mourning the tech tree, dump everything into weapons and armor, and become the player who grinds down what your allies are too busy to handle.</p>
 <h3>Upgrades in the orders menu</h3>
-<p>Upgradeable units show <strong>Tech 1 Upgrade / Tech 2 Upgrade / etc.</strong> buttons in the orders menu, with tooltips explaining each. Alongside them: <strong>add to upgrade queue</strong>, <strong>pause upgrade</strong>, <strong>cancel upgrade</strong>. Queued upgrades process one at a time as RP becomes available.</p>
+<p>Upgradeable units show <strong>Tech 1 Upgrade / Tech 2 Upgrade / etc.</strong> buttons in the orders menu, with tooltips explaining each — and a <strong>clickable upgrade button floating above the unit itself</strong>, which is quicker still (<a class="xref" href="#s11">§11</a>). Alongside them: <strong>add to upgrade queue</strong>, <strong>pause upgrade</strong>, <strong>cancel upgrade</strong>. Queued upgrades process one at a time as RP becomes available.</p>
 <p>Upgrades currently complete in about <strong>three seconds</strong>, so there's little vulnerability window in practice.</p>
 <p><strong>What's upgradeable:</strong> your Commander (four tiers, gating all tech), <strong>EM Converters</strong> (four tiers, multiplying output — Tier 1 doubles base, Tier 2 triples, Tier 3 more than five times, Tier 4 more than ten), and army-wide <strong>weapons and armor</strong> tracks.</p>
 <p><strong>Guidance:</strong> converter upgrades and Commander tech both raise your ceiling and should come early. Weapons and armor scale with the size of your army, so they're worth more the bigger your force gets — and they're the entire fallback plan if your Commander dies.</p>
@@ -1748,10 +1700,10 @@ Loz units carry <strong>personal shields</strong> that absorb damage before the 
  <div class="rps-node n-boom">Boom</div>
  <div class="rps-node n-turtle">Turtle</div>
  <svg class="rps-svg" viewBox="0 0 300 210" aria-hidden="true">
-  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
-  <path d="M108 26 L192 26" marker-end="url(#ah)"/>
-  <path d="M212 52 L172 158" marker-end="url(#ah)"/>
-  <path d="M128 170 L88 60" marker-end="url(#ah)"/>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" stroke="none"/></marker></defs>
+  <path d="M108 26 L188 26" marker-end="url(#ah)"/>
+  <path d="M214 54 L176 152" marker-end="url(#ah)"/>
+  <path d="M126 166 L90 62" marker-end="url(#ah)"/>
  </svg>
  <p class="rps-cap">Each beats one and loses to another. None is stronger.</p>
 </div>
@@ -1794,7 +1746,7 @@ Loz units carry <strong>personal shields</strong> that absorb damage before the 
 <tr>
 <td>1</td>
 <td>Floating unspent metal</td>
-<td>Check the resources display every 30 seconds. Spend it.</td>
+<td>Check the resources display every 30 seconds. The economy graph (<a class="xref" href="#s12">§12</a>) shows the pattern.</td>
 </tr>
 <tr>
 <td>2</td>
@@ -2410,6 +2362,10 @@ Loz units carry <strong>personal shields</strong> that absorb damage before the 
 <td>Speed up / slow down <em>(vs AI only)</em></td>
 </tr>
 <tr>
+<td><kbd>Ctrl + F11</kbd></td>
+<td>Tweak mode — drag GUI elements to reposition them (<a class="xref" href="#s12">§12</a>)</td>
+</tr>
+<tr>
 <td><kbd>Ctrl + Insert</kbd></td>
 <td>Hotbind — see below</td>
 </tr>
@@ -2734,47 +2690,31 @@ The spawn beacon is very tough to kill, but doing so will push back the invasion
 </main>
 </div>
 <script>
-const parts=document.querySelectorAll('[data-p]');
-parts.forEach(el=>{const p=el.dataset.p;el.style.setProperty('--pc','var(--p'+p+')');});
-// propagate part color to following content
-let cur='var(--p1)';
+document.querySelectorAll('[data-p]').forEach(el=>{
+  el.style.setProperty('--pc','var(--p'+el.dataset.p+')');});
+let cur='var(--p0)';
 document.querySelectorAll('main > *').forEach(el=>{
   if(el.dataset && el.dataset.p) cur='var(--p'+el.dataset.p+')';
-  el.style.setProperty('--pc',cur);
-});
-// progress bar
+  el.style.setProperty('--pc',cur);});
 const bar=document.getElementById('bar');
-const onScroll=()=>{
-  const h=document.documentElement;
-  const pct=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
-  bar.style.width=pct+'%';
-};
+const onScroll=()=>{const h=document.documentElement;
+  bar.style.width=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100+'%';};
 addEventListener('scroll',onScroll,{passive:true});onScroll();
-// current section highlight
 const links=[...document.querySelectorAll('nav .n-sec')];
 const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
-const heads=[...document.querySelectorAll('h2.sec')];
-const io=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(!e.isIntersecting)return;
-    links.forEach(a=>a.classList.remove('cur'));
-    const a=map.get(e.target.id);
-    if(a){a.classList.add('cur');
-      const n=a.closest('nav');
-      const r=a.getBoundingClientRect(),nr=n.getBoundingClientRect();
-      if(r.top<nr.top+40||r.bottom>nr.bottom-40)a.scrollIntoView({block:'center'});}
-  });
-},{rootMargin:'0px 0px -72% 0px'});
-heads.forEach(h=>io.observe(h));
-// filter
+const io=new IntersectionObserver(es=>{es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  links.forEach(a=>a.classList.remove('cur'));
+  const a=map.get(e.target.id);
+  if(a){a.classList.add('cur');
+    const n=a.closest('nav'),r=a.getBoundingClientRect(),nr=n.getBoundingClientRect();
+    if(r.top<nr.top+40||r.bottom>nr.bottom-40)a.scrollIntoView({block:'center'});}
+});},{rootMargin:'0px 0px -72% 0px'});
+document.querySelectorAll('h2.sec').forEach(h=>io.observe(h));
 const f=document.getElementById('filter');
-f.addEventListener('input',()=>{
-  const q=f.value.trim().toLowerCase();
+f.addEventListener('input',()=>{const q=f.value.trim().toLowerCase();
   document.querySelectorAll('nav a').forEach(a=>{
-    a.classList.toggle('hide', q!=='' && !a.textContent.toLowerCase().includes(q));
-  });
-});
-// theme
+    a.classList.toggle('hide', q!=='' && !a.textContent.toLowerCase().includes(q));});});
 const tb=document.getElementById('theme');
 const set=t=>{document.documentElement.dataset.theme=t;tb.textContent=t==='dark'?'Light':'Dark';};
 set(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
