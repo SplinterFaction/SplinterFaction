@@ -105,7 +105,7 @@ local claimedSpots  = {}   -- spotIdx → set of teamIDs
 local selectedSpots = {}   -- teamID → spotIdx (this team's one tentative selection)
 local confirmedSpots = {}  -- teamID → spotIdx (this team's one confirmed selection)
 
-local mapSpots     = {}    -- spotIdx (1-based) → {x, z, allyteam}
+local mapSpots     = {}    -- spotIdx (1-based) → {x, z, allyteam}  (from GG.StartSpots)
 local usePlacement = false -- true when mapSpots has valid data
 local isFFA        = false
 
@@ -169,267 +169,6 @@ end
 local function IsSurvivalTeam(teamID)
 	local luaAI = Spring.GetTeamLuaAI(teamID)
 	return (luaAI ~= nil) and (luaAI ~= "") and (string.sub(luaAI, 1, 10) == "SurvivalAI")
-end
-
---------------------------------------------------------------------------------
--- Map spot loading and partition
---------------------------------------------------------------------------------
-
-local function LoadMapSpots()
-	local ok, mi = pcall(VFS.Include, "mapinfo.lua", nil, VFS.MAP)
-	if not ok or type(mi) ~= "table" or type(mi.teams) ~= "table" then
-		Spring.Echo("[Game Spawn] mapinfo.lua unavailable or has no teams table — skipping placement phase")
-		return
-	end
-
-	-- Collect spots (mapinfo is 0-indexed; field is `startpos`, lowercase p)
-	local idx = 1
-	for i = 0, 999 do
-		local t = mi.teams[i]
-		if not t then break end
-		local sp = t.startpos
-		if type(sp) == "table" and sp.x and sp.z then
-			mapSpots[idx] = { x = sp.x, z = sp.z, allyteam = -1 }
-			idx = idx + 1
-		end
-	end
-
-	if idx == 1 then
-		Spring.Echo("[Game Spawn] No usable start positions in mapinfo — skipping placement phase")
-		return
-	end
-
-	local spotTotal = idx - 1
-	Spring.Echo("[Game Spawn] Loaded " .. spotTotal .. " map spots from mapinfo")
-
-	-- FFA detection: more than 2 allyteams where every allyteam has exactly 1 team.
-	-- A 1v1 duel (2 allyteams × 1 player each) is NOT considered FFA.
-	local gaiaTeamID = Spring.GetGaiaTeamID()
-	local allyteamList = Spring.GetAllyTeamList()
-	local atTeamCounts = {}
-	for _, atID in ipairs(allyteamList) do
-		local count = 0
-		for _, tID in ipairs(Spring.GetTeamList(atID)) do
-			if tID ~= gaiaTeamID then count = count + 1 end
-		end
-		if count > 0 then atTeamCounts[atID] = count end
-	end
-
-	local totalAT, multiAT = 0, 0
-	for _, count in pairs(atTeamCounts) do
-		totalAT = totalAT + 1
-		if count > 1 then multiAT = multiAT + 1 end
-	end
-	isFFA = (totalAT > 2 and multiAT == 0)
-
-	if isFFA then
-		Spring.Echo("[Game Spawn] FFA detected — all spots open to all players")
-		-- all spots remain with allyteam = -1
-	else
-		-- Balanced, spatially-coherent spot partition.
-		--
-		-- Goals:
-		--   1. Each team's spots should form a contiguous cluster — no teammate
-		--      stranded in the middle of the enemy side.
-		--   2. The split should be balanced (equal spot counts where possible).
-		--
-		-- For the common 2-team case we project every spot onto the axis that
-		-- separates the two sides (the line between the engine-assigned team
-		-- centroids), sort along it, and cut at the quota boundary.  This yields
-		-- a clean half-space split (left/right, top/bottom, or whatever diagonal
-		-- the map intends) that is both contiguous and balanced.
-		--
-		-- For 3+ allyteams (rare in sided play) we fall back to a balanced greedy
-		-- auction by centroid distance.
-
-		-- Centroid per allyteam from engine-assigned start positions
-		local centroids = {}
-		for atID in pairs(atTeamCounts) do
-			local cx, cz, n = 0, 0, 0
-			for _, tID in ipairs(Spring.GetTeamList(atID)) do
-				if tID ~= gaiaTeamID then
-					local tx, _, tz = Spring.GetTeamStartPosition(tID)
-					if tx and tx ~= 0 then
-						cx = cx + tx; cz = cz + tz; n = n + 1
-					end
-				end
-			end
-			if n > 0 then
-				centroids[atID] = { x = cx / n, z = cz / n }
-			end
-		end
-
-		-- Deterministic ordered list of participating allyteams
-		local allyteamIDs = {}
-		for atID in pairs(centroids) do
-			allyteamIDs[#allyteamIDs + 1] = atID
-		end
-		table.sort(allyteamIDs)
-
-		local numAT  = #allyteamIDs
-		local base   = math.floor(spotTotal / numAT)
-		local extras = spotTotal - base * numAT   -- first `extras` teams get base+1
-
-		local quota = {}
-		for i, atID in ipairs(allyteamIDs) do
-			quota[atID] = base + (i <= extras and 1 or 0)
-		end
-
-		Spring.Echo(string.format("[Game Spawn] Partition: %d spots across %d allyteams (quota ~%d each)",
-		                          spotTotal, numAT, base))
-
-		if numAT == 2 then
-			-- ── Gap-search split (contiguous + balanced + barrier-aware) ──────
-			--
-			-- A straight cut perpendicular to the centroid axis works only when
-			-- the two team start positions happen to line up with the map's
-			-- intended divide.  When the engine drops the 1v1 starts diagonally,
-			-- that cut slices a corner off the wrong side — stranding teammates
-			-- across a river in team games.
-			--
-			-- Instead we search many candidate cut directions and pick the one
-			-- whose *balanced* cut falls in the largest natural gap in the spot
-			-- distribution (a river, chokepoint, or empty band).  The centroid
-			-- axis is used as the default and is only overridden when another
-			-- direction separates the two halves markedly more cleanly.  The
-			-- team centroids then decide which half belongs to which team.
-
-			local at1, at2 = allyteamIDs[1], allyteamIDs[2]
-			local c1, c2   = centroids[at1], centroids[at2]
-
-			-- Flat spot list for repeated projection
-			local spotList = {}
-			for spotIdx, spot in pairs(mapSpots) do
-				spotList[#spotList + 1] = { s = spotIdx, x = spot.x, z = spot.z }
-			end
-
-			-- Cut rank for the balance point (mid split; exact per-team quota is
-			-- applied at assignment time below).
-			local kCut = math.floor(spotTotal / 2)
-
-			-- Score a direction: normalised gap between the two balanced halves.
-			-- Larger = the halves are separated by more empty space along dir.
-			local function ScoreDir(dx, dz)
-				local proj = {}
-				for i = 1, #spotList do
-					proj[i] = spotList[i].x * dx + spotList[i].z * dz
-				end
-				table.sort(proj)
-				local span = proj[#proj] - proj[1]
-				if span < 1 then return -1 end
-				return (proj[kCut + 1] - proj[kCut]) / span
-			end
-
-			-- Default direction: the centroid axis (engine intent).
-			local cax, caz = c2.x - c1.x, c2.z - c1.z
-			local clen = math.sqrt(cax * cax + caz * caz)
-			if clen < 1 then
-				-- Degenerate centroids: seed with the map's horizontal axis; the
-				-- search below will still find the best separating direction.
-				cax, caz, clen = 1, 0, 1
-			end
-			cax, caz = cax / clen, caz / clen
-
-			local bestDx, bestDz = cax, caz
-			local bestScore      = ScoreDir(cax, caz)
-			local centroidScore  = bestScore
-
-			-- Sample directions across a half-circle (a line is undirected, so
-			-- 0..π covers every distinct cut orientation).  Override the default
-			-- only when a direction is clearly better, so uniform maps with no
-			-- real barrier keep the sensible engine-intended axis.
-			local STEPS  = 36     -- 5° resolution
-			local MARGIN = 0.03   -- required improvement over the centroid axis
-			for step = 0, STEPS - 1 do
-				local theta  = math.pi * step / STEPS
-				local dx, dz = math.cos(theta), math.sin(theta)
-				local sc     = ScoreDir(dx, dz)
-				if sc > bestScore + MARGIN then
-					bestScore = sc
-					bestDx, bestDz = dx, dz
-				end
-			end
-
-			-- Project all spots along the chosen direction and sort ascending.
-			local ordered = {}
-			for i = 1, #spotList do
-				ordered[i] = {
-					s = spotList[i].s,
-					p = spotList[i].x * bestDx + spotList[i].z * bestDz,
-				}
-			end
-			table.sort(ordered, function(a, b) return a.p < b.p end)
-
-			-- Which team owns the low-projection half?  The one whose centroid
-			-- projects lower along the cut direction.
-			local c1p = c1.x * bestDx + c1.z * bestDz
-			local c2p = c2.x * bestDx + c2.z * bestDz
-			local lowTeam, highTeam
-			if c1p <= c2p then
-				lowTeam, highTeam = at1, at2
-			else
-				lowTeam, highTeam = at2, at1
-			end
-
-			-- Assign: first quota[lowTeam] spots to the low side, rest to the high.
-			local lowQuota = quota[lowTeam]
-			for rank, item in ipairs(ordered) do
-				mapSpots[item.s].allyteam = (rank <= lowQuota) and lowTeam or highTeam
-			end
-
-			Spring.Echo(string.format(
-				"[Game Spawn] Gap split: dir=(%.2f, %.2f)  centroidScore=%.3f  bestScore=%.3f  lowTeam=%d gets %d",
-				bestDx, bestDz, centroidScore, bestScore, lowTeam, lowQuota))
-		else
-			-- ── Balanced greedy auction (3+ allyteams) ────────────────────────
-			local candidates = {}
-			for spotIdx, spot in pairs(mapSpots) do
-				for _, atID in ipairs(allyteamIDs) do
-					local c  = centroids[atID]
-					local dx = spot.x - c.x
-					local dz = spot.z - c.z
-					candidates[#candidates + 1] = { s = spotIdx, a = atID, d = dx*dx + dz*dz }
-				end
-			end
-			table.sort(candidates, function(a, b) return a.d < b.d end)
-
-			local assigned   = {}
-			local teamCounts = {}
-			for _, atID in ipairs(allyteamIDs) do teamCounts[atID] = 0 end
-
-			for _, cand in ipairs(candidates) do
-				if not assigned[cand.s] and teamCounts[cand.a] < quota[cand.a] then
-					mapSpots[cand.s].allyteam = cand.a
-					assigned[cand.s]          = true
-					teamCounts[cand.a]        = teamCounts[cand.a] + 1
-				end
-			end
-
-			for spotIdx in pairs(mapSpots) do
-				if not assigned[spotIdx] then
-					mapSpots[spotIdx].allyteam = allyteamIDs[1]
-				end
-			end
-		end
-
-		for i, spot in pairs(mapSpots) do
-			Spring.Echo(string.format("[Game Spawn]   spot[%d] (%.0f, %.0f) → allyteam %d",
-			                          i, spot.x, spot.z, spot.allyteam))
-		end
-	end
-
-	-- Broadcast spot positions and side assignments for widget display.
-	-- Claim state is NOT broadcast globally — each team tracks its own via
-	-- team rules params with allied-only visibility (see AssignSpot).
-	Spring.SetGameRulesParam("spotCount", spotTotal)
-	Spring.SetGameRulesParam("isFFA", isFFA and 1 or 0)
-	for i, spot in pairs(mapSpots) do
-		Spring.SetGameRulesParam("spot_" .. i .. "_x",  spot.x)
-		Spring.SetGameRulesParam("spot_" .. i .. "_z",  spot.z)
-		Spring.SetGameRulesParam("spot_" .. i .. "_at", spot.allyteam)
-	end
-
-	usePlacement = true
 end
 
 --------------------------------------------------------------------------------
@@ -695,9 +434,19 @@ function gadget:GameStart()
 		end
 	end
 
-	-- Load and partition map spots before broadcasting phase so the game rules
-	-- params are ready when widgets first read them.
-	LoadMapSpots()
+	-- Fetch the (already loaded, validated and partitioned) start spots from
+	-- game_start_spots.lua before broadcasting phase, so the game rules params
+	-- are ready when widgets first read them.
+	if GG.StartSpots then
+		local spots, ffa = GG.StartSpots.Get()
+		if spots and #spots > 0 then
+			mapSpots     = spots
+			isFFA        = ffa
+			usePlacement = true
+		end
+	else
+		Spring.Echo("[Game Spawn] GG.StartSpots missing (game_start_spots.lua not loaded?) — skipping placement phase")
+	end
 
 	-- Broadcast initial phase state
 	factionDeadline = CHOICE_TIMEOUT_FRAMES
