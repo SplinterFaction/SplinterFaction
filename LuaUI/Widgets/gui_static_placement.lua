@@ -2,6 +2,9 @@
 --  file:    gui_static_placement.lua
 --  brief:   Start position selection widget.  Activates after faction choice,
 --           shows map spots as on-screen markers, handles selection + confirm.
+--           Also mirrors the spots onto the minimap (hover + clickable there
+--           too) and hides the rest of the widget UI for the duration of the
+--           pregame flow (faction phase included).
 --
 --  Phase protocol (via game rules params written by game_spawn.lua):
 --    "phase"                  "faction" | "placement" | "done"
@@ -65,8 +68,45 @@ local MARKER_SIZE    = 28    -- half-size of the square spot marker in base px
 local LABEL_SIZE     = 14    -- spot index font size in base px
 local TIMER_BAR_H    = 5
 
+local MMARK_SIZE     = 8     -- half-size of the minimap spot marker in base px
+local MMARK_PICK_PAD = 1.75  -- click/hover pick radius multiplier on the minimap
+
 local COUNTDOWN_BEEP_AT  = 10
 local PLACEMENT_SECONDS  = 30   -- nominal total for progress bar reference
+
+--------------------------------------------------------------------------------
+-- Pregame UI hiding
+--
+-- While the pregame flow runs (phase "faction" or "placement") every other
+-- widget's draw + mouse callins are stashed and stripped, leaving only the
+-- faction chooser, this widget, the api/service widgets and the engine
+-- minimap on screen.  Everything is restored the moment the phase ends, and
+-- again from Shutdown as a safety net.
+--
+-- Callin-stripping is used instead of widgetHandler:DisableWidget on purpose:
+-- Disable/Enable persists to the widget order config, so a crash mid-pregame
+-- would leave the whole UI disabled on the next launch.  Stripped callins
+-- live only in this widget's memory and reset with any luaui reload.
+--------------------------------------------------------------------------------
+
+local HIDE_REST_OF_UI  = true
+local KEEP_LAYER_ABOVE = 1800   -- keeps the faction chooser (2000) and this (1900)
+
+-- Widgets whose name matches any of these Lua patterns are never hidden.
+local KEEP_NAME_PATTERNS = {
+	"^API", "^api",                -- api_* service widgets (shapes, layout, trackers)
+	"GUI Shader", "[Gg]uishader",  -- panel blur must keep running
+	"[Cc]hat", "[Cc]onsole",       -- pregame chat still matters in multiplayer
+	"[Ff]action",                  -- faction chooser, whatever its exact name
+}
+
+-- Callins removed from hidden widgets.  The draw set makes them invisible;
+-- the mouse/IsAbove/GetTooltip set stops invisible panels from eating clicks.
+local STRIP_CALLINS = {
+	"DrawScreen", "DrawScreenEffects", "DrawScreenPost",
+	"DrawWorld", "DrawWorldPreUnit", "DrawInMiniMap", "DrawInMiniMapBackground",
+	"MousePress", "MouseMove", "MouseWheel", "IsAbove", "GetTooltip",
+}
 
 --------------------------------------------------------------------------------
 -- Theme (matches faction chooser / Static GUI suite)
@@ -145,6 +185,12 @@ local spGetTeamRulesParam = Spring.GetTeamRulesParam
 local spWorldToScreenCoords = Spring.WorldToScreenCoords
 local spGetGroundHeight   = Spring.GetGroundHeight
 local spTraceScreenRay    = Spring.TraceScreenRay
+local spIsAboveMiniMap     = Spring.IsAboveMiniMap
+local spGetMiniMapGeometry = Spring.GetMiniMapGeometry
+local spGetMiniMapRotation = Spring.GetMiniMapRotation   -- nil on older engines
+
+local mapSizeX = Game.mapSizeX
+local mapSizeZ = Game.mapSizeZ
 
 --------------------------------------------------------------------------------
 -- State
@@ -407,6 +453,142 @@ local function UpdateServerState()
 end
 
 --------------------------------------------------------------------------------
+-- Selection helpers (shared by the world-view and minimap click paths)
+--------------------------------------------------------------------------------
+
+local function SpotOnMySide(i)
+	local spot = spots[i]
+	return spot ~= nil and (isFFA or spot.allyteam == myAllyTeamID)
+end
+
+local function SpotSelectable(i)
+	if not SpotOnMySide(i) then return false end
+	-- Selectable when: unclaimed, already mine, or (share mode) any same-side
+	-- spot even if a teammate holds it.
+	local occupied = (claimCount[i] or 0) > 0
+	return (not occupied) or claimMine[i] or shareMode
+end
+
+local function TrySelectSpot(i)
+	if SpotSelectable(i) then
+		PlayClickSound()
+		localPending = i
+		spSendLuaRulesMsg(SELECT_BYTE .. i)
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Minimap mapping
+--------------------------------------------------------------------------------
+
+-- World (x,z) -> minimap pixel coords (origin bottom-left) for use inside
+-- DrawInMiniMap, whose default transform is minimap pixels.  Handles engine
+-- minimap rotation when the query API exists: exact for 0 and 180 degrees;
+-- 90/270 use the same rotate-around-center math and are best-effort until
+-- verified in-game (clicks are unaffected either way, see MinimapPickSpot).
+local function WorldToMinimapPx(wx, wz, sx, sy)
+	local u = wx / mapSizeX
+	local v = wz / mapSizeZ
+	local rot = spGetMiniMapRotation and spGetMiniMapRotation() or 0
+	if rot ~= 0 then
+		local cu, cv = u - 0.5, v - 0.5
+		local c, s   = math.cos(rot), math.sin(rot)
+		u = 0.5 + c * cu - s * cv
+		v = 0.5 + s * cu + c * cv
+	end
+	return math.floor(u * sx), math.floor(sy - v * sy)
+end
+
+-- Screen (x,y) -> nearest spot index when the mouse is over the minimap and
+-- within pick range of a spot, else nil.  TraceScreenRay(useMinimap=true)
+-- lets the engine do the minimap->world mapping, so rotation and dual-screen
+-- minimap layouts are handled by the engine for the click path.
+local function MinimapPickSpot(x, y)
+	if not (spIsAboveMiniMap and spIsAboveMiniMap(x, y)) then return nil end
+	local _, coords = spTraceScreenRay(x, y, true, true)
+	if type(coords) ~= "table" then return nil end
+	local wx, wz = coords[1], coords[3]
+
+	-- Pick radius: the marker's on-minimap pixel size converted to world units.
+	local _, _, mmW, mmH = spGetMiniMapGeometry()
+	if not mmW or mmW <= 0 or not mmH or mmH <= 0 then return nil end
+	local worldPerPx = math.max(mapSizeX / mmW, mapSizeZ / mmH)
+	local radius     = math.floor(MMARK_SIZE * widgetScale) * MMARK_PICK_PAD * worldPerPx
+
+	local best, bestD2 = nil, radius * radius
+	for i, spot in pairs(spots) do
+		local dx, dz = spot.x - wx, spot.z - wz
+		local d2 = dx * dx + dz * dz
+		if d2 <= bestD2 then best, bestD2 = i, d2 end
+	end
+	return best
+end
+
+--------------------------------------------------------------------------------
+-- Pregame UI hiding
+--------------------------------------------------------------------------------
+
+local uiHidden       = false
+local stashedCallins = {}   -- widget object -> { callinName -> fn }
+
+local function ShouldKeepWidget(w)
+	if w == widget then return true end
+	local info  = w.whInfo or {}
+	local name  = info.name or ""
+	local layer = info.layer or 0
+	if layer >= KEEP_LAYER_ABOVE then return true end
+	for _, pat in ipairs(KEEP_NAME_PATTERNS) do
+		if name:find(pat) then return true end
+	end
+	return false
+end
+
+local function SetUIHidden(hide)
+	if not HIDE_REST_OF_UI or hide == uiHidden then return end
+	if not (widgetHandler.UpdateWidgetCallIn and widgetHandler.widgets) then
+		-- Handler variant without per-callin control; leave the UI alone rather
+		-- than touching persistent widget enabled state.
+		return
+	end
+	uiHidden = hide
+
+	if hide then
+		for _, w in ipairs(widgetHandler.widgets) do
+			if not ShouldKeepWidget(w) then
+				local stash = nil
+				for _, cname in ipairs(STRIP_CALLINS) do
+					if w[cname] then
+						stash = stash or {}
+						stash[cname] = w[cname]
+						w[cname] = nil
+						widgetHandler:UpdateWidgetCallIn(cname, w)
+					end
+				end
+				if stash then stashedCallins[w] = stash end
+			end
+		end
+	else
+		-- Only re-register callins for widgets that still exist; re-adding a
+		-- callin for a widget that was removed while hidden would leave a
+		-- zombie entry in the handler's callin lists.
+		local present = {}
+		for _, w in ipairs(widgetHandler.widgets) do present[w] = true end
+		for w, stash in pairs(stashedCallins) do
+			for cname, fn in pairs(stash) do
+				-- Skip if the widget reassigned this callin itself meanwhile.
+				if w[cname] == nil then
+					w[cname] = fn
+					if present[w] then
+						widgetHandler:UpdateWidgetCallIn(cname, w)
+					end
+				end
+			end
+		end
+		stashedCallins = {}
+	end
+end
+
+--------------------------------------------------------------------------------
 -- Drawing — spot markers
 --------------------------------------------------------------------------------
 
@@ -640,6 +822,9 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
+	-- Safety net: whatever path removes this widget (phase end, deadline,
+	-- luaui reload, manual disable), the rest of the UI must come back.
+	SetUIHidden(false)
 	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
 	if font then ReleaseFont(font); font = nil end
 end
@@ -670,6 +855,11 @@ function widget:Update()
 	-- Poll phase
 	local newPhase = spGetGameRulesParam("phase")
 	if newPhase == nil then return end  -- gadget not initialised yet
+
+	-- Keep the rest of the UI hidden for the whole pregame flow (faction pick
+	-- included) and bring it back the moment the flow is over.  This runs
+	-- before the early-outs below so the "faction" phase is covered too.
+	SetUIHidden(newPhase == "faction" or newPhase == "placement")
 
 	if newPhase ~= "placement" then
 		-- Once the placement phase has ended, remove this widget
@@ -718,6 +908,11 @@ function widget:Update()
 			end
 		end
 	end
+	-- Minimap hover: highlights the spot on both the minimap and world markers
+	if not hoveredSpot then
+		hoveredSpot = MinimapPickSpot(mx, my)
+	end
+
 	if hoveredSpot ~= lastHoveredSpot then
 		if hoveredSpot then PlayHoverSound() end
 		lastHoveredSpot = hoveredSpot
@@ -750,11 +945,18 @@ function widget:MousePress(x, y, button)
 		local ms = math.floor(MARKER_SIZE * widgetScale)
 		for i, sc in pairs(spotScreen) do
 			if sc.visible and math.abs(x - sc.sx) <= ms and math.abs(y - sc.sy) <= ms then
-				local spot = spots[i]
-				if spot and (isFFA or spot.allyteam == myAllyTeamID) then
+				if SpotOnMySide(i) then
 					return true
 				end
 			end
+		end
+
+		-- Consume clicks on minimap spot markers (so the minimap doesn't also
+		-- treat the click as a camera move).  Clicks elsewhere on the minimap
+		-- fall through and pan the camera as usual.
+		local mmSpot = MinimapPickSpot(x, y)
+		if mmSpot and SpotOnMySide(mmSpot) then
+			return true
 		end
 	end
 
@@ -776,25 +978,23 @@ function widget:MouseRelease(x, y, button)
 		return true
 	end
 
-	-- Spot marker click
+	-- Spot marker click (world view)
 	if not confirmed then
 		local ms = math.floor(MARKER_SIZE * widgetScale)
 		for i, sc in pairs(spotScreen) do
 			if sc.visible and math.abs(x - sc.sx) <= ms and math.abs(y - sc.sy) <= ms then
-				local spot = spots[i]
-				if spot and (isFFA or spot.allyteam == myAllyTeamID) then
-					-- Selectable when: unclaimed, already mine, or (share mode)
-					-- any same-side spot even if a teammate holds it.
-					local occupied = (claimCount[i] or 0) > 0
-					local selectable = not occupied or claimMine[i] or shareMode
-					if selectable then
-						PlayClickSound()
-						localPending = i
-						spSendLuaRulesMsg(SELECT_BYTE .. i)
-					end
+				if SpotOnMySide(i) then
+					TrySelectSpot(i)
 					return true
 				end
 			end
+		end
+
+		-- Spot marker click (minimap)
+		local mmSpot = MinimapPickSpot(x, y)
+		if mmSpot and SpotOnMySide(mmSpot) then
+			TrySelectSpot(mmSpot)
+			return true
 		end
 	end
 
@@ -804,6 +1004,70 @@ end
 --------------------------------------------------------------------------------
 -- Draw
 --------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- Minimap markers
+--
+-- Raw immediate-mode gl on purpose: the shapes module batches into a
+-- screen-space pass, and instances queued while the minimap transform is
+-- active would flush in the wrong coordinate space.  A dozen quads is
+-- nothing, so the legacy path is the correct one here.
+--------------------------------------------------------------------------------
+
+function widget:DrawInMiniMap(sx, sy)
+	if not active or not gameStarted then return end
+
+	local ms = math.max(4, math.floor(MMARK_SIZE * widgetScale))
+
+	for i, spot in pairs(spots) do
+		local px, py = WorldToMinimapPx(spot.x, spot.z, sx, sy)
+		local mine   = claimMine[i]
+		local count  = claimCount[i] or 0
+		local mySide = isFFA or spot.allyteam == myAllyTeamID
+
+		-- Same state logic as the world markers in DrawSpots()
+		local col
+		if myConfirmed and myConfirmed == i then
+			col = COL_CONFIRMED
+			-- Outer ring, same treatment as the world marker
+			local r = ms + math.max(2, math.floor(ms * 0.35))
+			rawColor(COL_CONFIRMED[1], COL_CONFIRMED[2], COL_CONFIRMED[3], 0.55)
+			rawRect(px - r, py - r, px + r, py + r)
+		elseif mine then
+			col = COL_SELECTED
+		elseif count > 0 then
+			if mySide and shareMode and hoveredSpot == i then
+				col = COL_AVAILABLE_H
+			else
+				col = COL_TEAMMATE
+			end
+		elseif mySide then
+			col = (hoveredSpot == i) and COL_AVAILABLE_H or COL_AVAILABLE
+		else
+			col = COL_ENEMY
+		end
+
+		rawColor(col[1], col[2], col[3], col[4])
+		rawRect(px - ms, py - ms, px + ms, py + ms)
+
+		local inr = math.max(1, math.floor(ms * 0.3))
+		rawColor(COL_INNER[1], COL_INNER[2], COL_INNER[3], COL_INNER[4])
+		rawRect(px - ms + inr, py - ms + inr, px + ms - inr, py + ms - inr)
+	end
+
+	-- Index labels, so "Spot 3 selected" in the panel maps onto the minimap
+	-- too.  Safe with the wrapped font: nothing is batched at this point in
+	-- the frame, so the Begin/End flushes are no-ops.
+	if font and ms >= 7 then
+		local lsz = math.floor(ms * 1.15)
+		font:Begin()
+		for i, spot in pairs(spots) do
+			local px, py = WorldToMinimapPx(spot.x, spot.z, sx, sy)
+			font:Print(TEXT_COLOR .. i, px, py - math.floor(lsz * 0.35), lsz, "con")
+		end
+		font:End()
+	end
+end
 
 function widget:DrawScreen()
 	if not active or not gameStarted then return end

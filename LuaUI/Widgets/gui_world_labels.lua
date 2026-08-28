@@ -122,6 +122,13 @@ local sqrt  = math.sqrt
 local vsx, vsy = spGetViewGeometry()
 local gaiaTeamID = spGetGaiaTeamID()
 
+-- Own-team tag suppression: you know which commander is yours, and the tag
+-- just adds clutter under your own unit. Spectators keep tags on everyone.
+-- Refreshed in PlayerChanged (covers /take, team switch, becoming a spec).
+local SHOW_OWN_COMMANDER_TAG = false
+local myTeamID    = Spring.GetMyTeamID()
+local isSpectator = Spring.GetSpectatingState()
+
 local font = nil
 local scanTimer = 0
 
@@ -207,6 +214,12 @@ end
 local function CommanderLabel(unitID, unitDefID)
 	local teamID = spGetUnitTeam(unitID)
 	if teamID == nil or teamID == gaiaTeamID then return nil end
+
+	-- No tag on my own commander (unless spectating, where "my team" is just
+	-- the one being viewed and every tag is wanted).
+	if not SHOW_OWN_COMMANDER_TAG and not isSpectator and teamID == myTeamID then
+		return nil
+	end
 
 	local label = teamLabels[teamID]
 	if not label then
@@ -465,6 +478,10 @@ end
 -- Anything that can change a team's displayed name or color wipes the
 -- per-team cache; the next rescan rebuilds only what is on screen.
 function widget:PlayerChanged(playerID)
+	-- Our own team/spectator state can change here too (/spectator, /take,
+	-- team switch); the forced rescan below re-applies the own-tag skip.
+	myTeamID    = Spring.GetMyTeamID()
+	isSpectator = Spring.GetSpectatingState()
 	InvalidateTeamLabels()
 end
 
