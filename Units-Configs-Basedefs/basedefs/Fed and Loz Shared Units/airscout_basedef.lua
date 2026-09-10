@@ -134,10 +134,11 @@ unitDef                    = {
 		RequireTech              = tech,
 		nofriendlyfire	         = "1",
 		supply_cost              = 1,
+		trail_pieces             = "wingtiplr,wingtiprr,canardlf:0.5,canardrf:0.5",
+		trail_width              = "3.5",  -- optional
 		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
 		buckettex                = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	             = "Neutral",
-		
 	},
 }
 
