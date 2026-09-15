@@ -1,9 +1,9 @@
 function widget:GetInfo()
 	return {
 		name      = "Aircraft Trails GL4",
-		desc      = "Wingtip vortex ribbons for aircraft. Per-unitdef emitter pieces via customparams.trail_pieces, GL4 instanced ribbon renderer.",
+		desc      = "Wingtip vortex ribbons for aircraft. Append-only GPU ring with shader-side expiry, heap-scheduled sampling with LOD, per-unitdef emitter pieces via customparams.trail_pieces.",
 		author    = "SplinterFaction",
-		date      = "2026-09-09",
+		date      = "2026-09-15",
 		license   = "GNU GPL, v2 or later",
 		layer     = 5,
 		enabled   = true,
@@ -22,11 +22,23 @@ end
 -- At most cfg.maxPieces entries are used; extras are dropped with a warning.
 -- Strafing aircraft with no trail_pieces get two emitters at the model radius.
 -- Anything else gets nothing.
+--
+-- Architecture
+--   * GPU instance buffer = [live-head region][append-only segment ring].
+--     Ring segments are written once and expire in the vertex shader from a
+--     gameTime uniform; nothing is rebuilt per frame. The live region holds one
+--     segment per emitter (last stored point -> current wingtip) so the ribbon
+--     stays glued to the wing between samples; it is small and re-uploaded
+--     each Update.
+--   * A min-heap schedules per-unit samples. Interval scales with camera
+--     distance and total active count, and is capped per Update.
+--   * Far / off-screen units go dormant and are polled with scalar calls only.
+--   * Speed and turn rate come from sample-to-sample motion of the emitter
+--     centroid; no GetUnitVelocity in the hot path.
 --------------------------------------------------------------------------------
 
 local cfg = {
-	lifetime          = 0.9,    -- seconds a stored point stays visible
-	points            = 24,     -- ring buffer size per emitter
+	lifetime          = 0.9,    -- seconds a segment stays visible
 	maxPieces         = 8,      -- hard cap on emitters per unit
 	minSpeedFrac      = 0.35,   -- fraction of unitdef max speed where trails begin
 	fullSpeedFrac     = 0.85,   -- fraction of max speed for full speed factor
@@ -35,27 +47,47 @@ local cfg = {
 	baseIntensity     = 0.25,   -- intensity while flying straight (times speed factor)
 	minIntensity      = 0.06,   -- below this the emitter goes quiet and the run breaks
 	minAltitude       = 25,     -- elmos above ground before trails appear
-	minSpacing        = 1.5,    -- elmos between stored points
+	minSpacing        = 6.0,    -- elmos between stored ring points (segment length)
 	baseWidth         = 3.0,    -- ribbon half-width at birth
 	widthGrow         = 1.2,    -- extra width fraction at end of life
 	color             = { 1.0, 1.0, 1.0, 0.55 },
 	fallbackTipFrac   = 0.8,    -- fallback tip offset = radius * this
-	maxInstances      = 4096,   -- hard cap on ribbon segments per frame
-	sweepFrames       = 30,     -- GameFrame interval for stale unit sweep
+
+	-- scheduling
+	sampleInterval    = 1 / 30, -- base seconds between samples (near camera)
+	lodMidDist        = 1400,   -- beyond this: interval * lodMidMul
+	lodFarDist        = 2300,   -- beyond this: interval * lodFarMul
+	cullDist          = 2900,   -- beyond this: dormant, no trail
+	lodMidMul         = 1.6,
+	lodFarMul         = 2.4,
+	dormantPoll       = 0.25,   -- seconds between polls of far / off-screen units
+	maxSamplesPerUpdate = 256,  -- catch-up cap after a hitch
+	massLod           = {       -- { activeUnits, intervalMul } ascending
+		{ 125, 1.25 }, { 225, 1.5 }, { 300, 2.0 },
+	},
+	liveHeadRefresh   = true,   -- refresh live heads every Update for near units
+
+	-- GPU
+	ringSegments      = 8192,   -- append-only ring capacity
+	maxLive           = 512,    -- live-head slots (one per active emitter)
 }
 
 --------------------------------------------------------------------------------
 
 local spGetUnitPiecePosDir  = Spring.GetUnitPiecePosDir
 local spGetUnitPieceMap     = Spring.GetUnitPieceMap
-local spGetUnitVelocity     = Spring.GetUnitVelocity
 local spGetUnitViewPosition = Spring.GetUnitViewPosition
+local spGetUnitBasePosition = Spring.GetUnitBasePosition or Spring.GetUnitPosition
 local spGetUnitVectors      = Spring.GetUnitVectors
 local spGetGroundHeight     = Spring.GetGroundHeight
-local spIsUnitInView        = Spring.IsUnitInView
-local spValidUnitID         = Spring.ValidUnitID
+local spIsSphereInView      = Spring.IsSphereInView
+local spGetCameraPosition   = Spring.GetCameraPosition
 local spGetUnitDefID        = Spring.GetUnitDefID
+local spGetUnitAllyTeam     = Spring.GetUnitAllyTeam
+local spGetMyAllyTeamID     = Spring.GetMyAllyTeamID
+local spGetSpectatingState  = Spring.GetSpectatingState
 local spGetAllUnits         = Spring.GetAllUnits
+local spGetGameSeconds      = Spring.GetGameSecondsInterpolated or Spring.GetGameSeconds
 local spEcho                = Spring.Echo
 
 local sqrt  = math.sqrt
@@ -64,25 +96,54 @@ local min   = math.min
 local max   = math.max
 local floor = math.floor
 
-local POINTS      = cfg.points
-local TURN_FULL   = math.rad(cfg.turnFullDegPerSec)
+local TURN_FULL = math.rad(cfg.turnFullDegPerSec)
 local FLOATS_PER_INSTANCE = 12
+local LOD_MID_SQ  = cfg.lodMidDist * cfg.lodMidDist
+local LOD_FAR_SQ  = cfg.lodFarDist * cfg.lodFarDist
+local CULL_SQ     = cfg.cullDist * cfg.cullDist
+local RING        = cfg.ringSegments
+local MAX_LIVE    = cfg.maxLive
+local EXPIRED_T   = -1e9
 
 local defCache    = {}   -- unitDefID -> def info table, or false
-local units       = {}   -- unitID -> unit state
-local emitterPool = {}   -- recycled emitter tables
-local warned      = {}   -- one-shot warning keys
-local now         = 0    -- widget-local clock in seconds
+local units       = {}   -- unitID -> unit state (tracked, may be inactive)
+local emitterPool = {}
+local warned      = {}
 
-local instanceData  = {} -- flat float table, reused
-local instanceCount = 0
+local myAllyTeamID = nil
+local fullView     = false
+local now          = 0
+
+-- scheduler heap
+local heapUnits = {}
+local heapTimes = {}
+local heapCount = 0
+
+-- mass LOD
+local activeCount = 0
+local massMul     = 1.0
+
+-- GPU ring state
+local ringCursor  = 0   -- 0-based next write slot within the ring
+local ringWritten = 0   -- total segments ever appended
+local ringScratch = {}  -- batched appends this Update
+local ringBatch   = 0   -- segments in scratch
+local ringFloats  = 0
+
+-- live-head region state
+local liveScratch = {}
+local liveCount   = 0
+local livePrev    = 0
 
 local shader, vao, vertVBO, indexVBO, instVBO
 local LuaShader
-local glReady = false   -- GL objects are created lazily in the first draw callin
+local glReady = false
+
+-- debug counters
+local statSamples, statSegments, statUploads, statDormantPolls = 0, 0, 0, 0
 
 --------------------------------------------------------------------------------
--- Small helpers
+-- Helpers
 --------------------------------------------------------------------------------
 
 local function clamp(v, lo, hi)
@@ -158,21 +219,21 @@ local function GetDefInfo(unitDefID)
 
 	if info then
 		info.name = ud.name
-		local maxSpeed = (ud.speed or 0) / 30 -- unitdef speed is elmo/sec, velocity is elmo/frame
+		local maxSpeed = ud.speed or 0 -- elmo/sec, same unit as our derived speed
 		info.minSpeed  = maxSpeed * cfg.minSpeedFrac
 		info.fullSpeed = maxSpeed * cfg.fullSpeedFrac
 		if info.fullSpeed <= info.minSpeed then
-			info.fullSpeed = info.minSpeed + 0.01
+			info.fullSpeed = info.minSpeed + 0.1
 		end
-		info.width = tonumber(cp.trail_width) or cfg.baseWidth
-		info.resolved = nil -- piece indices, filled on first sampled unit
+		info.width      = tonumber(cp.trail_width) or cfg.baseWidth
+		info.viewRadius = max((ud.radius or 20) * 1.35, 24)
+		info.resolved   = nil
 	end
 
 	defCache[unitDefID] = info
 	return info
 end
 
--- Piece names -> piece indices. Needs a live unitID for the piece map.
 local function ResolvePieces(info, unitID)
 	if info.resolved then
 		return info.resolved
@@ -188,7 +249,7 @@ local function ResolvePieces(info, unitID)
 			res[#res + 1] = { piece = idx, weight = p.weight }
 		else
 			WarnOnce("piece:" .. info.name .. ":" .. p.name,
-			         info.name .. " has no piece named '" .. p.name .. "' (trail_pieces)")
+				info.name .. " has no piece named '" .. p.name .. "' (trail_pieces)")
 		end
 	end
 	info.resolved = res
@@ -200,31 +261,80 @@ end
 --------------------------------------------------------------------------------
 
 local function NewEmitter(piece, weight, offset, seed)
-	local e = table.remove(emitterPool)
-	if not e then
-		e = { px = {}, py = {}, pz = {}, bt = {}, it = {}, brk = {} }
+	local e = emitterPool[#emitterPool]
+	if e then
+		emitterPool[#emitterPool] = nil
+	else
+		e = {}
 	end
 	e.piece   = piece
 	e.weight  = weight
 	e.offset  = offset
 	e.seed    = seed
-	e.head    = 0
-	e.count   = 0
-	e.brkNext = true
-	e.hasLive = false
+	e.hasPrev = false   -- have a stored ring point to chain from
+	e.hasLive = false   -- current tip is emitting
+	e.px, e.py, e.pz, e.pt, e.pi = 0, 0, 0, 0, 0
 	e.lx, e.ly, e.lz, e.li = 0, 0, 0, 0
+	e.runIdx  = 0
 	return e
 end
 
 local function ReleaseEmitter(e)
-	e.count = 0
+	e.hasPrev = false
 	e.hasLive = false
 	emitterPool[#emitterPool + 1] = e
 end
 
 local function Quiet(e)
 	e.hasLive = false
-	e.brkNext = true
+	e.hasPrev = false
+end
+
+--------------------------------------------------------------------------------
+-- GPU ring append / upload
+--------------------------------------------------------------------------------
+
+local function WriteInstance(d, n, x0, y0, z0, t0, x1, y1, z1, t1, i0, i1, seed, runIdx)
+	d[n + 1]  = x0
+	d[n + 2]  = y0
+	d[n + 3]  = z0
+	d[n + 4]  = t0
+	d[n + 5]  = x1
+	d[n + 6]  = y1
+	d[n + 7]  = z1
+	d[n + 8]  = t1
+	d[n + 9]  = i0
+	d[n + 10] = i1
+	d[n + 11] = seed
+	d[n + 12] = runIdx
+	return n + FLOATS_PER_INSTANCE
+end
+
+local function FlushRing()
+	if ringBatch <= 0 then return end
+	if instVBO then
+		instVBO:Upload(ringScratch, -1, MAX_LIVE + ringCursor, 1, ringFloats)
+		statUploads = statUploads + 1
+	end
+	ringCursor = ringCursor + ringBatch
+	if ringCursor >= RING then
+		ringCursor = ringCursor - RING
+	end
+	ringWritten = ringWritten + ringBatch
+	ringBatch  = 0
+	ringFloats = 0
+end
+
+local function AppendSegment(e, x, y, z)
+	-- never let one contiguous upload cross the ring end
+	if ringBatch >= RING - ringCursor then
+		FlushRing()
+	end
+	ringFloats = WriteInstance(ringScratch, ringFloats,
+		e.px, e.py, e.pz, e.pt, x, y, z, now, e.pi, e.li, e.seed, e.runIdx)
+	ringBatch = ringBatch + 1
+	statSegments = statSegments + 1
+	e.runIdx = e.runIdx + 1
 end
 
 local function Feed(e, x, y, z, inten)
@@ -236,77 +346,104 @@ local function Feed(e, x, y, z, inten)
 	e.hasLive = true
 	e.lx, e.ly, e.lz, e.li = x, y, z, inten
 
-	if e.count > 0 and not e.brkNext then
-		local h = e.head
-		local dx, dy, dz = x - e.px[h], y - e.py[h], z - e.pz[h]
+	if e.hasPrev then
+		local dx, dy, dz = x - e.px, y - e.py, z - e.pz
 		if dx * dx + dy * dy + dz * dz < cfg.minSpacing * cfg.minSpacing then
 			return
 		end
+		AppendSegment(e, x, y, z)
 	end
 
-	local h = (e.head % POINTS) + 1
-	e.px[h], e.py[h], e.pz[h] = x, y, z
-	e.bt[h]  = now
-	e.it[h]  = inten
-	e.brk[h] = e.brkNext
-	e.brkNext = false
-	e.head  = h
-	e.count = min(e.count + 1, POINTS)
+	e.hasPrev = true
+	e.px, e.py, e.pz, e.pt, e.pi = x, y, z, now, inten
 end
 
-local function Prune(e)
-	local lifetime = cfg.lifetime
-	while e.count > 0 do
-		local oldest = ((e.head - e.count) % POINTS) + 1
-		if now - e.bt[oldest] > lifetime then
-			e.count = e.count - 1
-		else
-			break
-		end
+--------------------------------------------------------------------------------
+-- Scheduler (binary min-heap keyed on next sample time)
+--------------------------------------------------------------------------------
+
+local function HeapSwap(a, b)
+	local ua, ub = heapUnits[a], heapUnits[b]
+	heapUnits[a], heapUnits[b] = ub, ua
+	heapTimes[a], heapTimes[b] = heapTimes[b], heapTimes[a]
+	local da, db = units[ua], units[ub]
+	if da then da.heapIndex = b end
+	if db then db.heapIndex = a end
+end
+
+local function HeapSiftUp(i)
+	while i > 1 do
+		local p = floor(i * 0.5)
+		if heapTimes[p] <= heapTimes[i] then break end
+		HeapSwap(i, p)
+		i = p
+	end
+end
+
+local function HeapSiftDown(i)
+	while true do
+		local l = i * 2
+		if l > heapCount then break end
+		local r = l + 1
+		local s = l
+		if r <= heapCount and heapTimes[r] < heapTimes[l] then s = r end
+		if heapTimes[i] <= heapTimes[s] then break end
+		HeapSwap(i, s)
+		i = s
+	end
+end
+
+local function HeapInsert(unitID, when)
+	local u = units[unitID]
+	if not u then return end
+	if u.heapIndex then
+		local i = u.heapIndex
+		local old = heapTimes[i]
+		heapTimes[i] = when
+		if when < old then HeapSiftUp(i) else HeapSiftDown(i) end
+		return
+	end
+	heapCount = heapCount + 1
+	heapUnits[heapCount] = unitID
+	heapTimes[heapCount] = when
+	u.heapIndex = heapCount
+	HeapSiftUp(heapCount)
+end
+
+local function HeapRemoveAt(i)
+	if not i or i < 1 or i > heapCount then return end
+	local removed = units[heapUnits[i]]
+	local lastUnit, lastTime = heapUnits[heapCount], heapTimes[heapCount]
+	heapUnits[heapCount] = nil
+	heapTimes[heapCount] = nil
+	heapCount = heapCount - 1
+	if removed then removed.heapIndex = nil end
+	if i <= heapCount then
+		heapUnits[i], heapTimes[i] = lastUnit, lastTime
+		local lu = units[lastUnit]
+		if lu then lu.heapIndex = i end
+		local p = floor(i * 0.5)
+		if i > 1 and heapTimes[i] < heapTimes[p] then HeapSiftUp(i) else HeapSiftDown(i) end
 	end
 end
 
 --------------------------------------------------------------------------------
--- Unit tracking and sampling
+-- Unit tracking
 --------------------------------------------------------------------------------
 
-local function RegisterUnit(unitID, unitDefID)
-	if units[unitID] then
-		return
+local function UpdateMassLod()
+	massMul = 1.0
+	for i = 1, #cfg.massLod do
+		local step = cfg.massLod[i]
+		if activeCount > step[1] then massMul = step[2] end
 	end
-	local info = GetDefInfo(unitDefID)
-	if not info then
-		return
-	end
-	units[unitID] = {
-		info     = info,
-		emitters = nil,
-		alive    = true,
-		turn     = 0,
-		pdx = nil, pdy = nil, pdz = nil,
-	}
 end
 
-local function EnsureEmitters(unitID, u)
-	if u.emitters then
-		return u.emitters
-	end
-	local info = u.info
-	local list = {}
-	if info.fallback then
-		list[1] = NewEmitter(nil, 1.0, -info.tipOffset, (unitID % 89) * 0.011)
-		list[2] = NewEmitter(nil, 1.0,  info.tipOffset, (unitID % 89) * 0.011 + 0.5)
-	else
-		local res = ResolvePieces(info, unitID)
-		if not res then
-			return nil
-		end
-		for i, r in ipairs(res) do
-			list[i] = NewEmitter(r.piece, r.weight, 0, (unitID % 89) * 0.011 + i * 0.137)
-		end
-	end
-	u.emitters = list
-	return list
+local function SetRelevant(u, rel)
+	if u.relevant == rel then return end
+	u.relevant = rel
+	activeCount = rel and (activeCount + 1) or max(0, activeCount - 1)
+	UpdateMassLod()
 end
 
 local function QuietAll(u)
@@ -314,159 +451,292 @@ local function QuietAll(u)
 	for i = 1, #u.emitters do
 		Quiet(u.emitters[i])
 	end
+	u.hasKin = false
+	u.near = false
 end
 
-local function SampleUnit(unitID, u, dt)
+local function RegisterUnit(unitID, unitDefID)
+	if units[unitID] then
+		return units[unitID]
+	end
+	local info = GetDefInfo(unitDefID)
+	if not info then
+		return nil
+	end
+	local u = {
+		info      = info,
+		emitters  = nil,
+		active    = false,
+		relevant  = false,
+		dormant   = false,
+		near      = false,
+		heapIndex = nil,
+		hasKin    = false,
+		kx = 0, ky = 0, kz = 0, kt = 0,
+		hasDir    = false,
+		dx = 0, dy = 0, dz = 0,
+		turn      = 0,
+	}
+	units[unitID] = u
+	return u
+end
+
+local function ActivateUnit(unitID, u)
+	if u.active then return end
+	u.active  = true
+	u.dormant = false
+	u.turn    = 0
+	QuietAll(u)
+	local phase = (unitID * 0.61803398875) % 1.0
+	HeapInsert(unitID, now + phase * cfg.sampleInterval)
+end
+
+local function DeactivateUnit(u)
+	if not u.active then return end
+	SetRelevant(u, false)
+	if u.heapIndex then HeapRemoveAt(u.heapIndex) end
+	u.active  = false
+	u.dormant = false
+	QuietAll(u)
+end
+
+local function RemoveUnit(unitID)
+	local u = units[unitID]
+	if not u then return end
+	DeactivateUnit(u)
+	if u.emitters then
+		for i = 1, #u.emitters do ReleaseEmitter(u.emitters[i]) end
+		u.emitters = nil
+	end
+	units[unitID] = nil
+end
+
+local function IsOwnSide(unitID)
+	if fullView then return true end
+	local at = spGetUnitAllyTeam(unitID)
+	return at ~= nil and at == myAllyTeamID
+end
+
+local function EnsureEmitters(unitID, u)
+	if u.emitters then return u.emitters end
+	local info = u.info
+	local list = {}
+	local base = (unitID % 89) * 0.011
+	if info.fallback then
+		list[1] = NewEmitter(nil, 1.0, -info.tipOffset, base)
+		list[2] = NewEmitter(nil, 1.0,  info.tipOffset, base + 0.5)
+	else
+		local res = ResolvePieces(info, unitID)
+		if not res then return nil end
+		for i, r in ipairs(res) do
+			list[i] = NewEmitter(r.piece, r.weight, 0, base + i * 0.137)
+		end
+	end
+	u.emitters = list
+	return list
+end
+
+local function SeedUnits()
+	for _, unitID in ipairs(spGetAllUnits()) do
+		local udid = spGetUnitDefID(unitID)
+		if udid then
+			local u = RegisterUnit(unitID, udid)
+			-- GetAllUnits only returns units this player can see, so activating
+			-- everything it lists is safe; enemies out of LOS come via UnitEnteredLos.
+			if u then ActivateUnit(unitID, u) end
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Sampling
+--------------------------------------------------------------------------------
+
+-- Reusable scratch for emitter positions within one sample
+local sx, sy, sz = {}, {}, {}
+
+-- Fills sx/sy/sz for every emitter; returns emitter count, or nil if unreadable.
+local function QueryEmitterPositions(unitID, u, emitters)
+	local n = #emitters
+	if u.info.fallback then
+		local mx, my, mz = spGetUnitViewPosition(unitID, true)
+		if not mx then return nil end
+		local _, _, right = spGetUnitVectors(unitID)
+		if not right then return nil end
+		for i = 1, n do
+			local o = emitters[i].offset
+			sx[i], sy[i], sz[i] = mx + right[1] * o, my + right[2] * o, mz + right[3] * o
+		end
+	else
+		for i = 1, n do
+			local x, y, z = spGetUnitPiecePosDir(unitID, emitters[i].piece)
+			if not x then return nil end
+			sx[i], sy[i], sz[i] = x, y, z
+		end
+	end
+	return n
+end
+
+local function GoDormant(u)
+	u.dormant = true
+	SetRelevant(u, false)
+	QuietAll(u)
+	return now + cfg.dormantPoll
+end
+
+local function SampleUnit(unitID, u, camX, camY, camZ)
 	local info = u.info
 
-	local vx, vy, vz = spGetUnitVelocity(unitID)
-	if not vx then
-		QuietAll(u)
-		return
-	end
-
-	local speed = sqrt(vx * vx + vy * vy + vz * vz)
-
-	-- turn factor from heading change, smoothed
-	local turnTarget = 0
-	if speed > 1e-3 then
-		local dx, dy, dz = vx / speed, vy / speed, vz / speed
-		if u.pdx and dt > 0 then
-			local dot = clamp(dx * u.pdx + dy * u.pdy + dz * u.pdz, -1, 1)
-			local rate = acos(dot) / dt
-			turnTarget = clamp(rate / TURN_FULL, 0, 1)
-		end
-		u.pdx, u.pdy, u.pdz = dx, dy, dz
-	else
-		u.pdx = nil
-	end
-	local k = min(1, dt * cfg.turnSmoothing)
-	u.turn = u.turn + (turnTarget - u.turn) * k
-
-	local speedFactor = clamp((speed - info.minSpeed) / (info.fullSpeed - info.minSpeed), 0, 1)
-	local intensity = speedFactor * (cfg.baseIntensity + (1 - cfg.baseIntensity) * u.turn)
-
-	-- GetUnitViewPosition returns a single position; true selects the mid position
-	local mx, my, mz = spGetUnitViewPosition(unitID, true)
-	if not mx then
-		QuietAll(u)
-		return
-	end
-	if my - spGetGroundHeight(mx, mz) < cfg.minAltitude then
-		intensity = 0
+	if u.dormant then
+		statDormantPolls = statDormantPolls + 1
+		local x, y, z = spGetUnitBasePosition(unitID)
+		if not x then return now + cfg.dormantPoll end
+		local dx, dy, dz = x - camX, y - camY, z - camZ
+		if dx * dx + dy * dy + dz * dz > CULL_SQ then return now + cfg.dormantPoll end
+		if not spIsSphereInView(x, y, z, info.viewRadius) then return now + cfg.dormantPoll end
+		u.dormant = false
 	end
 
 	local emitters = EnsureEmitters(unitID, u)
 	if not emitters then
-		return
+		return now + cfg.dormantPoll
 	end
 
-	if info.fallback then
-		local _, _, right = spGetUnitVectors(unitID)
-		if not right then
-			QuietAll(u)
-			return
-		end
-		for i = 1, #emitters do
-			local e = emitters[i]
-			local o = e.offset
-			Feed(e, mx + right[1] * o, my + right[2] * o, mz + right[3] * o, intensity * e.weight)
-		end
-	else
-		for i = 1, #emitters do
-			local e = emitters[i]
-			local x, y, z = spGetUnitPiecePosDir(unitID, e.piece)
-			if x then
-				Feed(e, x, y, z, intensity * e.weight)
-			else
-				Quiet(e)
+	local n = QueryEmitterPositions(unitID, u, emitters)
+	if not n then
+		QuietAll(u)
+		SetRelevant(u, false)
+		return now + cfg.dormantPoll
+	end
+
+	-- centroid
+	local cx, cy, cz = 0, 0, 0
+	for i = 1, n do cx, cy, cz = cx + sx[i], cy + sy[i], cz + sz[i] end
+	cx, cy, cz = cx / n, cy / n, cz / n
+
+	local ddx, ddy, ddz = cx - camX, cy - camY, cz - camZ
+	local distSq = ddx * ddx + ddy * ddy + ddz * ddz
+	if distSq > CULL_SQ then return GoDormant(u) end
+	if not spIsSphereInView(cx, cy, cz, info.viewRadius) then return GoDormant(u) end
+
+	SetRelevant(u, true)
+
+	local lodMul = 1.0
+	if distSq > LOD_FAR_SQ then
+		lodMul = cfg.lodFarMul
+	elseif distSq > LOD_MID_SQ then
+		lodMul = cfg.lodMidMul
+	end
+	u.near = (lodMul == 1.0)
+	local nextTime = now + cfg.sampleInterval * lodMul * massMul
+
+	-- kinematics from centroid motion
+	local speed, turnTarget = nil, 0
+	if u.hasKin then
+		local dt = now - u.kt
+		if dt > 1e-4 then
+			local mx, my, mz = cx - u.kx, cy - u.ky, cz - u.kz
+			local dist = sqrt(mx * mx + my * my + mz * mz)
+			speed = dist / dt
+			if dist > 1e-3 then
+				local ndx, ndy, ndz = mx / dist, my / dist, mz / dist
+				if u.hasDir then
+					local dot = clamp(ndx * u.dx + ndy * u.dy + ndz * u.dz, -1, 1)
+					turnTarget = clamp((acos(dot) / dt) / TURN_FULL, 0, 1)
+				end
+				u.dx, u.dy, u.dz = ndx, ndy, ndz
+				u.hasDir = true
 			end
+			local k = min(1, dt * cfg.turnSmoothing)
+			u.turn = u.turn + (turnTarget - u.turn) * k
+		else
+			speed = nil
+		end
+	end
+	u.hasKin = true
+	u.kx, u.ky, u.kz, u.kt = cx, cy, cz, now
+
+	if not speed then
+		-- first sample after (re)activation: nothing to chain from yet
+		for i = 1, n do Quiet(emitters[i]) end
+		return nextTime
+	end
+
+	local speedFactor = clamp((speed - info.minSpeed) / (info.fullSpeed - info.minSpeed), 0, 1)
+	local intensity = speedFactor * (cfg.baseIntensity + (1 - cfg.baseIntensity) * u.turn)
+	if intensity > 0 and cy - spGetGroundHeight(cx, cz) < cfg.minAltitude then
+		intensity = 0
+	end
+
+	for i = 1, n do
+		local e = emitters[i]
+		Feed(e, sx[i], sy[i], sz[i], intensity * e.weight)
+	end
+	return nextTime
+end
+
+local function SampleDue()
+	if heapCount <= 0 or heapTimes[1] > now then return end
+	local camX, camY, camZ = spGetCameraPosition()
+	if not camX then return end
+
+	local processed = 0
+	while heapCount > 0 and heapTimes[1] <= now and processed < cfg.maxSamplesPerUpdate do
+		local unitID = heapUnits[1]
+		local u = units[unitID]
+		if not u or not u.active or u.heapIndex ~= 1 then
+			HeapRemoveAt(1)
+		else
+			local nextTime = SampleUnit(unitID, u, camX, camY, camZ)
+			statSamples = statSamples + 1
+			processed = processed + 1
+			heapTimes[1] = nextTime
+			HeapSiftDown(1)
 		end
 	end
 end
 
-local function SampleAll(dt)
-	for unitID, u in pairs(units) do
-		if u.alive then
-			if spIsUnitInView(unitID) then
-				SampleUnit(unitID, u, dt)
-			else
-				QuietAll(u)
-				u.pdx = nil
-			end
-		end
-	end
-end
-
---------------------------------------------------------------------------------
--- Instance building
---------------------------------------------------------------------------------
-
-local function PushSegment(d, n, e, i, j, x1, y1, z1, age1, i1, runIdx)
-	d[n + 1]  = e.px[i]
-	d[n + 2]  = e.py[i]
-	d[n + 3]  = e.pz[i]
-	d[n + 4]  = now - e.bt[i]
-	d[n + 5]  = x1
-	d[n + 6]  = y1
-	d[n + 7]  = z1
-	d[n + 8]  = age1
-	d[n + 9]  = e.it[i]
-	d[n + 10] = i1
-	d[n + 11] = e.seed
-	d[n + 12] = runIdx
-	return n + FLOATS_PER_INSTANCE
-end
-
-local function BuildInstances()
-	local d = instanceData
-	local n = 0
+-- Live heads: keep the ribbon attached to the wing between samples.
+local function RefreshLiveHeads()
+	local d = liveScratch
+	local nfl = 0
 	local count = 0
-	local cap = cfg.maxInstances
+	local refresh = cfg.liveHeadRefresh
 
 	for unitID, u in pairs(units) do
 		local emitters = u.emitters
-		local live = 0
-		if emitters then
-			for ei = 1, #emitters do
-				local e = emitters[ei]
-				Prune(e)
-				local c = e.count
-				if c > 0 then
-					live = live + c
-					local runIdx = 0
-					for k = 0, c - 2 do
-						if count >= cap then break end
-						local i = ((e.head - c + k) % POINTS) + 1
-						local j = (i % POINTS) + 1
-						if not e.brk[j] then
-							n = PushSegment(d, n, e, i, j,
-							                e.px[j], e.py[j], e.pz[j], now - e.bt[j], e.it[j], runIdx)
-							count = count + 1
-						end
-						runIdx = runIdx + 1
+		if u.active and u.relevant and emitters then
+			local refreshed = false
+			if refresh and u.near then
+				refreshed = QueryEmitterPositions(unitID, u, emitters) ~= nil
+			end
+			for i = 1, #emitters do
+				local e = emitters[i]
+				if e.hasLive and e.hasPrev then
+					if count >= MAX_LIVE then break end
+					if refreshed then
+						e.lx, e.ly, e.lz = sx[i], sy[i], sz[i]
 					end
-					if e.hasLive and u.alive and count < cap then
-						n = PushSegment(d, n, e, e.head, 0,
-						                e.lx, e.ly, e.lz, 0, e.li, runIdx)
-						count = count + 1
-					end
+					nfl = WriteInstance(d, nfl,
+						e.px, e.py, e.pz, e.pt, e.lx, e.ly, e.lz, now, e.pi, e.li, e.seed, e.runIdx)
+					count = count + 1
 				end
 			end
-		end
-
-		if not u.alive and live == 0 then
-			if emitters then
-				for ei = 1, #emitters do
-					ReleaseEmitter(emitters[ei])
-				end
-			end
-			units[unitID] = nil
 		end
 	end
 
-	instanceCount = count
-	return count, n
+	-- expire slots that were live last frame but not this one
+	for _ = count + 1, livePrev do
+		nfl = WriteInstance(d, nfl, 0, 0, 0, EXPIRED_T, 0, 0, 0, EXPIRED_T, 0, 0, 0, 0)
+	end
+	local total = max(count, livePrev)
+	livePrev  = count
+	liveCount = count
+
+	if total > 0 and instVBO then
+		instVBO:Upload(d, -1, 0, 1, nfl)
+		statUploads = statUploads + 1
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -480,10 +750,11 @@ local vsSrc = [[
 #line 10000
 
 layout (location = 0) in vec2 uv;      // x: 0..1 along segment, y: -1..1 across
-layout (location = 1) in vec4 p0age0;  // xyz: segment start, w: age in seconds
-layout (location = 2) in vec4 p1age1;  // xyz: segment end,   w: age in seconds
+layout (location = 1) in vec4 p0t0;    // xyz: segment start, w: birth time (game seconds)
+layout (location = 2) in vec4 p1t1;    // xyz: segment end,   w: birth time
 layout (location = 3) in vec4 misc;    // x: intensity0, y: intensity1, z: seed, w: run index
 
+uniform float gameTime;
 uniform float lifetime;
 uniform float baseWidth;
 uniform float widthGrow;
@@ -499,9 +770,16 @@ out DataVS {
 } vs;
 
 void main() {
-	vec3 p0 = p0age0.xyz;
-	vec3 p1 = p1age1.xyz;
-	float age = mix(p0age0.w, p1age1.w, uv.x);
+	// newest end expired, or nothing to show: collapse the quad off-screen
+	if (gameTime - p1t1.w >= lifetime || max(misc.x, misc.y) <= 0.0) {
+		gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+		vs.across = 0.0; vs.along = 0.0; vs.alpha = 0.0; vs.seed = 0.0; vs.fog = 0.0;
+		return;
+	}
+
+	vec3 p0 = p0t0.xyz;
+	vec3 p1 = p1t1.xyz;
+	float age  = gameTime - mix(p0t0.w, p1t1.w, uv.x);
 	float life = clamp(age / lifetime, 0.0, 1.0);
 	float intensity = mix(misc.x, misc.y, uv.x);
 
@@ -566,8 +844,21 @@ local function GetShaderSources(engineDefs)
 end
 
 --------------------------------------------------------------------------------
--- GL setup
+-- GL setup (only legal inside draw callins)
 --------------------------------------------------------------------------------
+
+local function ZeroInstanceBuffer()
+	local CHUNK = 1024
+	local zeros = {}
+	for i = 1, CHUNK * FLOATS_PER_INSTANCE do zeros[i] = 0 end
+	local total = MAX_LIVE + RING
+	local off = 0
+	while off < total do
+		local n = min(CHUNK, total - off)
+		instVBO:Upload(zeros, -1, off, 1, n * FLOATS_PER_INSTANCE)
+		off = off + n
+	end
+end
 
 local function InitGL()
 	local ok, lib = pcall(VFS.Include, "LuaUI/Widgets/Include/LuaShader.lua")
@@ -579,15 +870,16 @@ local function InitGL()
 
 	local vs, fs = GetShaderSources(LuaShader.GetEngineUniformBufferDefs())
 	shader = LuaShader({
-		                   vertex   = vs,
-		                   fragment = fs,
-		                   uniformFloat = {
-			                   lifetime   = cfg.lifetime,
-			                   baseWidth  = cfg.baseWidth,
-			                   widthGrow  = cfg.widthGrow,
-			                   trailColor = cfg.color,
-		                   },
-	                   }, "AircraftTrailsGL4")
+		vertex   = vs,
+		fragment = fs,
+		uniformFloat = {
+			gameTime   = 0,
+			lifetime   = cfg.lifetime,
+			baseWidth  = cfg.baseWidth,
+			widthGrow  = cfg.widthGrow,
+			trailColor = cfg.color,
+		},
+	}, "AircraftTrailsGL4")
 	if not shader:Initialize() then
 		spEcho("[AircraftTrails] shader failed to compile, widget disabled")
 		return false
@@ -602,11 +894,12 @@ local function InitGL()
 	indexVBO:Upload({ 0, 1, 2,  0, 2, 3 })
 
 	instVBO = gl.GetVBO(GL.ARRAY_BUFFER, true)
-	instVBO:Define(cfg.maxInstances, {
-		{ id = 1, name = "p0age0", size = 4 },
-		{ id = 2, name = "p1age1", size = 4 },
-		{ id = 3, name = "misc",   size = 4 },
+	instVBO:Define(MAX_LIVE + RING, {
+		{ id = 1, name = "p0t0", size = 4 },
+		{ id = 2, name = "p1t1", size = 4 },
+		{ id = 3, name = "misc", size = 4 },
 	})
+	ZeroInstanceBuffer()
 
 	vao = gl.GetVAO()
 	vao:AttachVertexBuffer(vertVBO)
@@ -636,91 +929,110 @@ end
 -- Callins
 --------------------------------------------------------------------------------
 
+local function RefreshViewState()
+	myAllyTeamID = spGetMyAllyTeamID()
+	local spec, fv = spGetSpectatingState()
+	fullView = (spec and fv) or false
+end
+
 function widget:Initialize()
 	if not gl.GetVBO or not gl.GetVAO then
 		spEcho("[AircraftTrails] GL4 VBO/VAO support missing, widget disabled")
 		widgetHandler:RemoveWidget(self)
 		return
 	end
-	-- Shader compile and UseShader are only legal inside draw callins,
-	-- so GL setup happens on the first DrawWorldPreUnit instead.
-	for _, unitID in ipairs(spGetAllUnits()) do
-		local udid = spGetUnitDefID(unitID)
-		if udid then
-			RegisterUnit(unitID, udid)
-		end
-	end
+	RefreshViewState()
+	now = spGetGameSeconds() or 0
+	SeedUnits()
 end
 
 function widget:Shutdown()
 	ShutdownGL()
 end
 
-function widget:UnitCreated(unitID, unitDefID)
-	RegisterUnit(unitID, unitDefID)
+function widget:PlayerChanged()
+	RefreshViewState()
+	for unitID, u in pairs(units) do
+		if not IsOwnSide(unitID) then DeactivateUnit(u) end
+	end
+	SeedUnits()
+end
+
+function widget:UnitCreated(unitID, unitDefID, unitTeam)
+	if not IsOwnSide(unitID) then return end
+	local u = RegisterUnit(unitID, unitDefID)
+	if u then ActivateUnit(unitID, u) end
 end
 
 function widget:UnitEnteredLos(unitID, unitTeam, allyTeam, unitDefID)
-	RegisterUnit(unitID, unitDefID or spGetUnitDefID(unitID))
+	local u = RegisterUnit(unitID, unitDefID or spGetUnitDefID(unitID))
+	if u then ActivateUnit(unitID, u) end
+end
+
+function widget:UnitLeftLos(unitID, unitTeam, allyTeam)
+	local u = units[unitID]
+	if u and not IsOwnSide(unitID) then DeactivateUnit(u) end
 end
 
 function widget:UnitDestroyed(unitID)
-	local u = units[unitID]
-	if u then
-		u.alive = false
-		QuietAll(u)
+	RemoveUnit(unitID)
+end
+
+function widget:UnitTaken(unitID, unitDefID)
+	RemoveUnit(unitID)
+end
+
+function widget:UnitGiven(unitID, unitDefID)
+	RemoveUnit(unitID)
+	if IsOwnSide(unitID) then
+		local u = RegisterUnit(unitID, unitDefID)
+		if u then ActivateUnit(unitID, u) end
 	end
 end
 
-function widget:PlayerChanged()
-	for _, unitID in ipairs(spGetAllUnits()) do
-		local udid = spGetUnitDefID(unitID)
-		if udid then
-			RegisterUnit(unitID, udid)
-		end
-	end
-end
-
-function widget:GameFrame(f)
-	if f % cfg.sweepFrames ~= 0 then return end
-	for unitID, u in pairs(units) do
-		if u.alive and not spValidUnitID(unitID) then
-			u.alive = false
-			QuietAll(u)
-		end
-	end
-end
-
-function widget:Update(dt)
-	now = now + dt
-	SampleAll(dt)
+function widget:Update()
+	if not glReady then return end
+	now = spGetGameSeconds() or now
+	SampleDue()
+	FlushRing()
+	RefreshLiveHeads()
 end
 
 function widget:DrawWorldPreUnit()
-	if not glReady then
-		if not InitGL() then
-			widgetHandler:RemoveWidget(self)
-			return
-		end
-		glReady = true
+	if glReady then return end
+	if not InitGL() then
+		widgetHandler:RemoveWidget(self)
+		return
 	end
-	local count, n = BuildInstances()
-	if count > 0 then
-		instVBO:Upload(instanceData, -1, 0, 1, n)
-	end
+	glReady = true
 end
 
 function widget:DrawWorld()
-	if not glReady or instanceCount == 0 then return end
+	if not glReady then return end
+	local ringUsed = min(ringWritten, RING)
+	local total = MAX_LIVE + ringUsed
+	if liveCount == 0 and ringUsed == 0 then return end
+
 	gl.Blending(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA)
 	gl.DepthTest(true)
 	gl.DepthMask(false)
 	gl.Culling(false)
 	shader:Activate()
-	vao:DrawElements(GL.TRIANGLES, 6, 0, instanceCount, 0)
+	shader:SetUniformFloat("gameTime", now)
+	vao:DrawElements(GL.TRIANGLES, 6, 0, total, 0)
 	shader:Deactivate()
 	gl.DepthMask(true)
 	gl.DepthTest(false)
+end
+
+function widget:TextCommand(command)
+	if command == "airtrails_debug" then
+		spEcho(string.format(
+			"[AircraftTrails] active=%d heap=%d massMul=%.2f ring=%d/%d live=%d samples=%d segments=%d uploads=%d dormantPolls=%d",
+			activeCount, heapCount, massMul, min(ringWritten, RING), RING, liveCount,
+			statSamples, statSegments, statUploads, statDormantPolls))
+		return true
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -733,11 +1045,13 @@ widget.__trailsTest = {
 	defCache         = defCache,
 	GetDefInfo       = GetDefInfo,
 	RegisterUnit     = RegisterUnit,
-	SampleAll        = SampleAll,
-	BuildInstances   = BuildInstances,
+	ActivateUnit     = ActivateUnit,
 	GetShaderSources = GetShaderSources,
-	GetInstanceData  = function() return instanceData, instanceCount end,
-	SetNow           = function(t) now = t end,
-	GetNow           = function() return now end,
+	SetGLReady       = function(v) glReady = v end,
+	GetRingState     = function() return ringCursor, ringWritten end,
+	GetLiveState     = function() return liveCount, liveScratch end,
+	GetHeapCount     = function() return heapCount end,
+	GetActiveCount   = function() return activeCount, massMul end,
+	GetStats         = function() return statSamples, statSegments, statUploads, statDormantPolls end,
 	PoolSize         = function() return #emitterPool end,
 }
