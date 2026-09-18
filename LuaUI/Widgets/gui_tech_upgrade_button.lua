@@ -52,17 +52,28 @@ local RP_RULES_PARAM  = "researchPoints"   -- game_researchpoints_ledger.lua
 local RESCAN_FRAMES   = 15       -- how often the visible-mex set and RP are refreshed
 local MAX_CAM_HEIGHT  = 2600     -- hide all buttons when the camera is higher than this above ground
 local ANCHOR_LIFT     = 22       -- elmos above the unit's top to place the button
-local BAR_STACK_GAP   = 3        -- px between the healthbar's top edge and the button's bottom
 
-local BTN_W, BTN_H    = 96, 34   -- button size in pixels (tall enough for the ring)
-local ICON_SIZE       = 24       -- unit picture inside the button
-local PAD             = 5
-local RADIUS          = 5
-local BORDER          = 1.5
-local FONT_SIZE       = 14       -- atlas size; the two label lines are drawn smaller
-local CAPTION_SIZE    = 9        -- "UPGRADE" / "UPGRADING" caption
-local COST_SIZE       = 13       -- "100 RP" / "63%" line
-local LINE_GAP        = 1        -- pixels between the two lines
+-- Pixel sizes, authored for a 1080-pixel-tall view. ApplyScale derives the
+-- working values below from these, so the button keeps the same share of
+-- the screen at any resolution (about twice the pixels on a 4K display).
+local BASE = {
+	BAR_STACK_GAP = 3,    -- px between the healthbar's top edge and the button's bottom
+	BTN_W         = 96,   -- button size (tall enough for the ring)
+	BTN_H         = 34,
+	ICON_SIZE     = 24,   -- unit picture inside the button
+	PAD           = 5,
+	RADIUS        = 5,
+	BORDER        = 1.5,
+	FONT_SIZE     = 14,   -- atlas size; the two label lines are drawn smaller
+	CAPTION_SIZE  = 9,    -- "UPGRADE" / "UPGRADING" caption
+	COST_SIZE     = 13,   -- "100 RP" / "63%" line
+	LINE_GAP      = 1,    -- px between the two lines
+	RING_WIDTH    = 2.5,
+	RING_PAD      = 3,    -- gap between icon edge and ring
+}
+local SCALE_REF_VSY   = 1080     -- view height the BASE sizes were authored at
+local SCALE_MIN       = 0.75     -- below this the caption stops being legible
+local SCALE_MAX       = 4.0
 
 local FONT_FILE       = "fonts/Saira_SemiCondensed-SemiBold.ttf"
 
@@ -80,8 +91,6 @@ local COL_CAPTION     = { 0.78, 0.80, 0.84, 0.95 }
 local COL_CAPTION_GREY= { 0.78, 0.80, 0.84, 0.45 }
 local COL_RING_BG     = { 0.30, 0.32, 0.36, 0.80 }
 local COL_RING        = { 190/255, 120/255, 1, 1 }
-local RING_WIDTH      = 2.5
-local RING_PAD        = 3        -- gap between icon edge and ring
 local RING_SEGMENTS   = 32       -- segments for a full circle
 
 --------------------------------------------------------------------------------
@@ -104,6 +113,7 @@ local spGetGroundHeight       = Spring.GetGroundHeight
 local spGetGameFrame          = Spring.GetGameFrame
 local spGetModKeyState        = Spring.GetModKeyState
 local spGetViewGeometry       = Spring.GetViewGeometry
+local spGetConfigFloat        = Spring.GetConfigFloat
 local spEcho                  = Spring.Echo
 
 local glLoadFont              = gl.LoadFont
@@ -126,6 +136,44 @@ local strFormat               = string.format
 local SG            = nil            -- WG.StaticGUI, resolved lazily
 local font          = nil            -- SG-wrapped font
 local vsx, vsy      = 1, 1
+
+-- Working pixel sizes, derived from BASE by ApplyScale. The draw code reads
+-- these directly, so it never has to know about scaling.
+local uiScale       = 1
+local BAR_STACK_GAP, BTN_W, BTN_H, ICON_SIZE, PAD, RADIUS, BORDER
+local FONT_SIZE, CAPTION_SIZE, COST_SIZE, LINE_GAP, RING_WIDTH, RING_PAD
+
+-- View height relative to 1080p, times the player's ui_scale setting
+-- (defaults to 1 when unset), clamped.
+local function ComputeScale(viewY)
+	local user = spGetConfigFloat and spGetConfigFloat("ui_scale", 1) or 1
+	local s = ((viewY or SCALE_REF_VSY) / SCALE_REF_VSY) * (user or 1)
+	if s < SCALE_MIN then s = SCALE_MIN end
+	if s > SCALE_MAX then s = SCALE_MAX end
+	return s
+end
+
+-- Integer sizes are rounded so rect edges stay on pixel boundaries; the
+-- stroke widths and text sizes stay fractional. FONT_SIZE is the atlas
+-- size, and BindSG rebuilds the font whenever it changes.
+local function ApplyScale(s)
+	uiScale = s
+	local function px(v) return mathMax(1, mathFloor(v * s + 0.5)) end
+	BAR_STACK_GAP = px(BASE.BAR_STACK_GAP)
+	BTN_W         = px(BASE.BTN_W)
+	BTN_H         = px(BASE.BTN_H)
+	ICON_SIZE     = px(BASE.ICON_SIZE)
+	PAD           = px(BASE.PAD)
+	RADIUS        = px(BASE.RADIUS)
+	LINE_GAP      = px(BASE.LINE_GAP)
+	RING_PAD      = px(BASE.RING_PAD)
+	FONT_SIZE     = px(BASE.FONT_SIZE)
+	BORDER        = BASE.BORDER * s
+	RING_WIDTH    = BASE.RING_WIDTH * s
+	CAPTION_SIZE  = BASE.CAPTION_SIZE * s
+	COST_SIZE     = BASE.COST_SIZE * s
+end
+ApplyScale(1)
 
 local myTeamID      = 0
 local isSpec        = false
@@ -383,16 +431,25 @@ local function ModalOpen()
 	return eg ~= nil and eg.IsOpen ~= nil and eg.IsOpen() == true
 end
 
+-- Atlas size the current font was built at. A resize that changes
+-- FONT_SIZE triggers a rebuild here (in a draw callin, where GL is allowed),
+-- so text is rasterized at its drawn size instead of stretched.
+local fontAtlas = 0
+
 local function BindSG()
-	if SG then return true end
-	SG = WG.StaticGUI
-	if not SG then return false end
-	local raw = glLoadFont(FONT_FILE, FONT_SIZE, 1, 1.0)
-	if not raw then
-		spEcho("[TechUpgradeButton] failed to load " .. FONT_FILE)
-		SG = nil
-		return false
+	if not SG then
+		SG = WG.StaticGUI
+		if not SG then return false end
 	end
+	if fontAtlas == FONT_SIZE then return font ~= nil end
+	fontAtlas = FONT_SIZE   -- set first: a failed load is not retried every frame
+	local outline = mathMax(1, mathFloor(uiScale + 0.5))
+	local raw = glLoadFont(FONT_FILE, FONT_SIZE, outline, 1.0)
+	if not raw then
+		spEcho("[TechUpgradeButton] failed to load " .. FONT_FILE .. " at size " .. FONT_SIZE)
+		return font ~= nil      -- keep drawing with the previous atlas if there is one
+	end
+	if font then SG.DeleteFont(font) end
 	font = SG.WrapFont(raw)
 	return true
 end
@@ -735,6 +792,7 @@ end
 
 function widget:Initialize()
 	vsx, vsy = spGetViewGeometry()
+	ApplyScale(ComputeScale(vsy))
 	RefreshTeam()
 	SubscribeMorphEvents()
 	if widgetHandler.AddAction then
@@ -752,6 +810,7 @@ end
 
 function widget:ViewResize(nx, ny)
 	vsx, vsy = nx, ny
+	ApplyScale(ComputeScale(vsy))
 end
 
 
@@ -785,6 +844,15 @@ if not widgetHandler then
 		OnMorphFinished = OnMorphFinished,
 		OnMorphUpdate   = OnMorphUpdate,
 		DrawRing        = DrawRing,
+		ComputeScale    = ComputeScale,
+		ApplyScale      = ApplyScale,
+		BindSG          = BindSG,
+		sizes = function()
+			return { BTN_W = BTN_W, BTN_H = BTN_H, ICON_SIZE = ICON_SIZE, PAD = PAD,
+			         FONT_SIZE = FONT_SIZE, CAPTION_SIZE = CAPTION_SIZE, COST_SIZE = COST_SIZE,
+			         BORDER = BORDER, RING_WIDTH = RING_WIDTH, BAR_STACK_GAP = BAR_STACK_GAP,
+			         uiScale = uiScale, fontAtlas = fontAtlas, font = font }
+		end,
 		state = function()
 			return { mexes = mexes, mexList = mexList, rects = rects, rectList = rectList,
 			         rpBalance = rpBalance, camTooHigh = camTooHigh, morphing = morphing }

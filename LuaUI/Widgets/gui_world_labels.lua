@@ -31,11 +31,23 @@ end
 
 local bgcorner = "LuaUI/Images/bgcorner.png"
 
-local CHIP_PAD_X     = 6
-local CHIP_PAD_Y     = 4
-local CHIP_CORNER    = 3
-local FONT_SIZE      = 12    -- small-text atlas convention, sized down slightly for chips
-local FONT_OUTLINE   = 1
+-- Pixel sizes, authored for a 1080-pixel-tall view. ApplyScale derives the
+-- working values (same names, declared in State) from these, so chips keep
+-- the same share of the screen at any resolution. Matches the scaling in
+-- gui_tech_upgrade_button.lua so the two stay proportional when stacked.
+local BASE = {
+	CHIP_PAD_X          = 6,
+	CHIP_PAD_Y          = 4,
+	CHIP_CORNER         = 3,
+	FONT_SIZE           = 12,    -- small-text atlas convention, sized down slightly for chips
+	FONT_OUTLINE        = 1,
+	OFFSCREEN_MARGIN    = 200,   -- see the off-screen guard note below
+	COMMANDER_BELOW_GAP = 4,     -- px between the footprint edge and the chip's top
+	STACK_GAP           = 4,     -- px above the tech button / healthbar top
+}
+local SCALE_REF_VSY = 1080
+local SCALE_MIN     = 0.75
+local SCALE_MAX     = 4.0
 
 -- Seconds between rescans of GetVisibleUnits. Positions are still projected
 -- every frame from the cache; only "which units are on screen" is throttled.
@@ -47,10 +59,10 @@ local SCAN_INTERVAL = 0.5
 -- Survival gadget announces itself; stop polling for it after this frame.
 local SURVIVAL_GIVEUP_FRAME = 450
 
--- Off-screen guard: GetVisibleUnits should already frustum-cull, but the
--- cache can lag one scan period behind a fast camera cut, so skip anything
--- projected wildly outside the viewport rather than trust it blindly.
-local OFFSCREEN_MARGIN = 200
+-- Off-screen guard (BASE.OFFSCREEN_MARGIN): GetVisibleUnits should already
+-- frustum-cull, but the cache can lag one scan period behind a fast camera
+-- cut, so skip anything projected wildly outside the viewport rather than
+-- trust it blindly.
 
 -- Beacon labels
 local BEACON_Y_OFFSET = 70
@@ -72,15 +84,13 @@ local KIND_LABEL = {
 -- footprint as seen from the camera: unit position, stepped `radius` elmos
 -- along the ground away from the camera's facing, then projected. This
 -- keeps the chip just under the silhouette at any camera tilt.
-local COMMANDER_BELOW_GAP = 4      -- px between the footprint edge and the chip's top
 local COMMANDER_RADIUS_MULT = 1.0  -- >1 pushes the chip further out from the model
 
 -- When gui_tech_upgrade_button.lua is showing a button on the same unit, the
--- chip stacks this many pixels above the button's top edge (or above the
--- healthbar's top edge when there is no button) instead of using the world
--- anchor. The button is screen-space and fixed-size, so a pure
--- world offset collides with it at most zoom levels.
-local STACK_GAP = 4
+-- chip stacks BASE.STACK_GAP (scaled) pixels above the button's top edge (or
+-- above the healthbar's top edge when there is no button) instead of using
+-- the world anchor. The button is screen-space sized, so a pure world
+-- offset collides with it at most zoom levels.
 
 --------------------------------------------------------------------------------
 -- Speedups
@@ -111,6 +121,7 @@ local spGetPlayerInfo       = Spring.GetPlayerInfo
 local spGetGaiaTeamID       = Spring.GetGaiaTeamID
 local spGetCameraVectors    = Spring.GetCameraVectors
 local spGetGroundHeight     = Spring.GetGroundHeight
+local spGetConfigFloat      = Spring.GetConfigFloat
 
 local floor = math.floor
 local sqrt  = math.sqrt
@@ -122,6 +133,36 @@ local sqrt  = math.sqrt
 local vsx, vsy = spGetViewGeometry()
 local gaiaTeamID = spGetGaiaTeamID()
 
+-- Working pixel sizes, derived from BASE. The draw code reads these directly.
+local uiScale = 1
+local CHIP_PAD_X, CHIP_PAD_Y, CHIP_CORNER, FONT_SIZE, FONT_OUTLINE
+local OFFSCREEN_MARGIN, COMMANDER_BELOW_GAP, STACK_GAP
+
+-- View height relative to 1080p, times the ui_scale setting (1 when unset).
+local function ComputeScale(viewY)
+	local user = spGetConfigFloat and spGetConfigFloat("ui_scale", 1) or 1
+	local s = ((viewY or SCALE_REF_VSY) / SCALE_REF_VSY) * (user or 1)
+	if s < SCALE_MIN then s = SCALE_MIN end
+	if s > SCALE_MAX then s = SCALE_MAX end
+	return s
+end
+
+-- Rounded to whole pixels so chip edges stay crisp. FONT_SIZE doubles as the
+-- atlas size; EnsureFont rebuilds the font whenever it changes.
+local function ApplyScale(s)
+	uiScale = s
+	local function px(v) return math.max(1, floor(v * s + 0.5)) end
+	CHIP_PAD_X          = px(BASE.CHIP_PAD_X)
+	CHIP_PAD_Y          = px(BASE.CHIP_PAD_Y)
+	CHIP_CORNER         = px(BASE.CHIP_CORNER)
+	FONT_SIZE           = px(BASE.FONT_SIZE)
+	FONT_OUTLINE        = px(BASE.FONT_OUTLINE)
+	OFFSCREEN_MARGIN    = px(BASE.OFFSCREEN_MARGIN)
+	COMMANDER_BELOW_GAP = px(BASE.COMMANDER_BELOW_GAP)
+	STACK_GAP           = px(BASE.STACK_GAP)
+end
+ApplyScale(ComputeScale(vsy))
+
 -- Own-team tag suppression: you know which commander is yours, and the tag
 -- just adds clutter under your own unit. Spectators keep tags on everyone.
 -- Refreshed in PlayerChanged (covers /take, team switch, becoming a spec).
@@ -130,6 +171,8 @@ local myTeamID    = Spring.GetMyTeamID()
 local isSpectator = Spring.GetSpectatingState()
 
 local font = nil
+local fontFile = nil
+local fontAtlas = 0     -- FONT_SIZE the current font was built at
 local scanTimer = 0
 
 -- Persisted settings
@@ -404,9 +447,26 @@ local function ChipAnchor(unitID, label)
 	return sx, sy
 end
 
+-- Builds (or rebuilds after a resize) the font at the current scaled size.
+-- Lives in a draw callin because GL calls are not allowed everywhere. A
+-- failed load is not retried each frame; the previous atlas stays in use.
+local function EnsureFont()
+	if fontAtlas == FONT_SIZE then return font ~= nil end
+	fontAtlas = FONT_SIZE
+	local newFont = fontFile and gl.LoadFont(fontFile, FONT_SIZE, FONT_OUTLINE, 1.4)
+	if not newFont then
+		Spring.Echo("[WorldLabels] failed to load " .. tostring(fontFile) .. " at size " .. FONT_SIZE)
+		return font ~= nil
+	end
+	if font then gl.DeleteFont(font) end
+	font = newFont
+	return true
+end
+
 function widget:DrawScreen()
-	if spIsGUIHidden() or not font then return end
+	if spIsGUIHidden() then return end
 	if next(labelCache) == nil then return end
+	if not EnsureFont() then return end
 
 	font:Begin()
 	for unitID, label in pairs(labelCache) do
@@ -426,8 +486,9 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
-	local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
-	font = gl.LoadFont(fontfile, FONT_SIZE, FONT_OUTLINE, 1.4)
+	fontFile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
+	vsx, vsy = spGetViewGeometry()
+	ApplyScale(ComputeScale(vsy))
 
 	BuildComDefs()
 
@@ -450,11 +511,13 @@ end
 
 function widget:Shutdown()
 	if font then gl.DeleteFont(font); font = nil end
+	fontAtlas = 0
 	WG.WorldLabels = nil
 end
 
 function widget:ViewResize()
 	vsx, vsy = spGetViewGeometry()
+	ApplyScale(ComputeScale(vsy))
 end
 
 function widget:Update(dt)
