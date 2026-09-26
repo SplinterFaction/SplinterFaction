@@ -1,10 +1,10 @@
 function widget:GetInfo()
 	return {
 		name      = "Weather",
-		desc      = "Day/night cycle, war-weariness tinting, rain fog, and lightning flashes on large explosions",
+		desc      = "Day/night cycle, war-weariness tinting, rain fog, heat waves, and lightning flashes on large explosions",
 		author    = "Doo (rewritten 2026)",
 		date      = "2026-08-02",
-		version   = "2.1",
+		version   = "2.2",
 		license   = "GNU GPL, v2 or later",
 		layer     = -4,
 		enabled   = true,
@@ -24,11 +24,21 @@ local DAMAGE_CAP      = 1500    -- per-event damage cap fed into the war accumul
 local RAIN_PERIOD     = 50      -- seconds; primary storm oscillator (full cycle ~= 2*pi*this)
 local RAIN_THRESHOLD  = 0.15    -- -1..1; lower = rains more often (0.15 ~= raining ~40% of the time)
 
+-- Scorching heat: the dry half of the same storm oscillator. When the raw storm
+-- sum drops below -HEAT_THRESHOLD (deep dry spell) and it is daytime and the
+-- ground is dry, the scene bleaches out into a heat wave. Heat and rain are
+-- mutually exclusive by construction, and heat is deterministic from the shared
+-- seed, so (unlike war) it is identical on every client and safe in fog.
+local HEAT_THRESHOLD  = 0.35    -- 0..1; lower = heat waves more often (0.35 ~= ~25% of daytime)
+local HEAT_FOG_MAX    = 0.25    -- fogStart reduction at full heat: a thin low dust haze
+local HEAT_SPEC_EXP   = 4       -- specular exponent at full heat (low = broad harsh glare)
+local HEAT_DRY_TIME   = 20      -- ground dries this fast at full heat (DRY_TIME at no heat)
+
 -- Wet ground: rain soaks in and the ground keeps a wet sheen that dries slowly
 local WET_SPEC_RGB    = { 1, 1, 1 } -- ground/unit specular color at full wetness
 local WET_EXPONENT    = 256   -- specular exponent at full wetness (higher = tighter, glossier highlights)
 local SOAK_TIME       = 8    -- seconds of rain to reach full wet sheen
-local DRY_TIME        = 90   -- seconds for the ground to dry out after rain stops
+local DRY_TIME        = 90   -- seconds for the ground to dry out after rain stops (see HEAT_DRY_TIME)
 local FLASH_DURATION  = 5       -- seconds for a lightning flash to fully fade (150 frames @30fps originally)
 local FLASH_SCALE     = 160     -- larger => weaker flashes (divides the death explosion AoE)
 local MIN_FLASH       = 0.025   -- flashes dimmer than this are culled
@@ -38,17 +48,17 @@ local FOG_END         = 15      -- pushed far out so fogStart alone controls den
 local SEED_PARAM      = "weather_seed" -- published once per match by LuaRules/Gadgets/weather_seed.lua
 local DEBUG           = false   -- echo the seed once it arrives
 
--- Blend targets: what each channel is pulled toward at full night / full war / full rain.
+-- Blend targets: what each channel is pulled toward at full night / full war / full rain / full heat.
 -- NOTE: fog has no 'war' entry on purpose. War intensity is accumulated from
 -- LOS-limited widget callins, so it differs per player; keeping it out of the
 -- fog channel is what lets fog stay identical for everyone.
 local TARGETS = {
-	diffuse  = { night = {0.035, 0.035, 0.07}, war = {0.23, 0.07, 0.035}, rain = {0.5, 0.5, 0.5} },
-	specular = { night = {0.12,  0.12,  0.20}, war = {0,    0,    0    } }, -- rain handled by wetness below
-	fog      = { night = {0.03,  0.06,  0.20},                             rain = {0.5, 0.5, 0.5} },
-	sun      = { night = {0.60,  0.95,  0.10}, war = {1,    0.95, 0.60 }, rain = {0.5, 0.5, 0.5} },
-	sky      = { night = {0.03,  0.06,  0.20}, war = {0.20, 0.06, 0.03 }, rain = {0.5, 0.5, 0.5} },
-	cloud    = { night = {0,     0,     0   }, war = {0,    0,    0    }, rain = {0.5, 0.5, 0.5} },
+	diffuse  = { night = {0.035, 0.035, 0.07}, war = {0.23, 0.07, 0.035}, rain = {0.5, 0.5, 0.5}, heat = {1.00, 0.95, 0.80} },
+	specular = { night = {0.12,  0.12,  0.20}, war = {0,    0,    0    },                          heat = {0.90, 0.85, 0.70} }, -- rain handled by wetness below
+	fog      = { night = {0.03,  0.06,  0.20},                             rain = {0.5, 0.5, 0.5}, heat = {0.75, 0.65, 0.50} },
+	sun      = { night = {0.60,  0.95,  0.10}, war = {1,    0.95, 0.60 }, rain = {0.5, 0.5, 0.5}, heat = {1.00, 0.98, 0.85} },
+	sky      = { night = {0.03,  0.06,  0.20}, war = {0.20, 0.06, 0.03 }, rain = {0.5, 0.5, 0.5}, heat = {0.85, 0.80, 0.65} },
+	cloud    = { night = {0,     0,     0   }, war = {0,    0,    0    }, rain = {0.5, 0.5, 0.5}, heat = {1.00, 0.95, 0.85} },
 }
 
 --------------------------------------------------------------------------------
@@ -97,9 +107,9 @@ local flashAge   = nil   -- nil = no active flash
 local flashPeak  = 0
 
 -- Per-frame blend weights, shared with blend() below (avoids per-frame closures)
-local kBase, kNight, kWar, kRain = 1, 0, 0, 0
+local kBase, kNight, kWar, kRain, kHeat = 1, 0, 0, 0, 0
 -- Separate war-free weights for the fog channel (see TARGETS note above)
-local fBase, fNight, fRain = 1, 0, 0
+local fBase, fNight, fRain, fHeat = 1, 0, 0, 0
 
 -- Reused parameter tables: the original allocated ~12 tables per draw frame
 local sunLighting = {
@@ -181,6 +191,7 @@ local function blend(baseC, targets, i)
 			+ targets.night[i] * kNight
 			+ targets.war[i]   * kWar
 			+ targets.rain[i]  * kRain
+			+ targets.heat[i]  * kHeat
 end
 
 -- War-free variant, used only for fog so that fog density and color are
@@ -189,6 +200,7 @@ local function blendFog(baseC, targets, i)
 	return baseC[i] * fBase
 			+ targets.night[i] * fNight
 			+ targets.rain[i]  * fRain
+			+ targets.heat[i]  * fHeat
 end
 
 --------------------------------------------------------------------------------
@@ -311,16 +323,29 @@ function widget:Update(dt)
 	-- its peak for moments once per ~314s cycle.
 	local s1 = mathSin(elapsed / RAIN_PERIOD)
 	local s2 = mathSin(elapsed / (RAIN_PERIOD * 0.373) + 1.7)
-	local rain = (0.6 * s1 + 0.4 * s2 - RAIN_THRESHOLD) / (1 - RAIN_THRESHOLD)
+	local raw  = 0.6 * s1 + 0.4 * s2
+	local rain = (raw - RAIN_THRESHOLD) / (1 - RAIN_THRESHOLD)
 	if rain < 0 then rain = 0 elseif rain > 1 then rain = 1 end
 
+	-- Heat wave: the dry trough of the same oscillator, gated to daytime. The
+	-- (1-p)^2 term fades it in through the morning and out toward evening.
+	-- Wet-ground gating is applied after the wetness update below.
+	local heatRaw = (-raw - HEAT_THRESHOLD) / (1 - HEAT_THRESHOLD)
+	if heatRaw < 0 then heatRaw = 0 elseif heatRaw > 1 then heatRaw = 1 end
+	heatRaw = heatRaw * (1 - p) * (1 - p)
+
 	-- Ground wetness: soaks toward the current rain level while raining, then
-	-- dries out slowly, so the ground keeps its wet sheen after a storm passes
+	-- dries out slowly, so the ground keeps its wet sheen after a storm passes.
+	-- A heat wave bakes it dry faster.
 	if rain > wetness then
 		wetness = wetness + (rain - wetness) * mathMin(1, dts / SOAK_TIME)
 	else
-		wetness = mathMax(rain, wetness - dts / DRY_TIME)
+		local dryTime = DRY_TIME + (HEAT_DRY_TIME - DRY_TIME) * heatRaw
+		wetness = mathMax(rain, wetness - dts / dryTime)
 	end
+
+	-- Final heat: no heat haze off freshly soaked ground
+	local heat = heatRaw * (1 - wetness)
 
 	-- Lightning flash (real time, so it still fades while paused; also
 	-- client-local, since it is triggered from LOS-limited UnitDestroyed) -----
@@ -337,18 +362,23 @@ function widget:Update(dt)
 	end
 
 	-- Blend weights -----------------------------------------------------------
-	kBase  = (1 - p) * (1 - w) * (1 - rain)
-	kNight = p    * (1 - w) * (1 - rain)
-	kWar   = w    * (1 - p) * (1 - rain)
-	kRain  = rain * (1 - p) * (1 - w)
+	-- heat already carries its own daytime factor and cannot coexist with rain,
+	-- so it only needs the war split; everything else yields to it by (1-heat)
+	local cool = 1 - heat
+	kBase  = (1 - p) * (1 - w) * (1 - rain) * cool
+	kNight = p    * (1 - w) * (1 - rain) * cool
+	kWar   = w    * (1 - p) * (1 - rain) * cool
+	kRain  = rain * (1 - p) * (1 - w) * cool
+	kHeat  = heat * (1 - w)
 
 	-- Fog weights omit war entirely, so fog depends only on the shared
 	-- night/rain cycle. Dropping the war term from the weights (not just from
 	-- the targets) matters: leaving it in would still shrink the base and night
 	-- contributions per player.
-	fBase  = (1 - p) * (1 - rain)
-	fNight = p * (1 - rain)
-	fRain  = rain * (1 - p)
+	fBase  = (1 - p) * (1 - rain) * cool
+	fNight = p * (1 - rain) * cool
+	fRain  = rain * (1 - p) * cool
+	fHeat  = heat
 
 	local dr = blend(base.diffuse, TARGETS.diffuse, 1)
 	local dg = blend(base.diffuse, TARGETS.diffuse, 2)
@@ -372,12 +402,17 @@ function widget:Update(dt)
 	local sr = base.specular[1] * kNW + ts.night[1] * p * (1 - w) + ts.war[1] * w * (1 - p)
 	local sg = base.specular[2] * kNW + ts.night[2] * p * (1 - w) + ts.war[2] * w * (1 - p)
 	local sb = base.specular[3] * kNW + ts.night[3] * p * (1 - w) + ts.war[3] * w * (1 - p)
+	-- heat glare: bright, broad specular (wetness is ~0 whenever heat is up)
+	sr = sr + (ts.heat[1] - sr) * heat
+	sg = sg + (ts.heat[2] - sg) * heat
+	sb = sb + (ts.heat[3] - sb) * heat
 	sr = sr + (WET_SPEC_RGB[1] - sr) * wetness
 	sg = sg + (WET_SPEC_RGB[2] - sg) * wetness
 	sb = sb + (WET_SPEC_RGB[3] - sb) * wetness
 
 	if specExpSupported then
 		local specExp = baseSpecExp + (WET_EXPONENT - baseSpecExp) * wetness
+		specExp = specExp + (HEAT_SPEC_EXP - specExp) * heat -- wide harsh glare in a heat wave
 		sunLighting.groundSpecularExponent = specExp
 		sunLighting.modelSpecularExponent  = specExp
 	end
@@ -396,10 +431,11 @@ function widget:Update(dt)
 	spSetSunLighting(sl)
 
 	local at = atmosphere
-	-- Fog density is now rain-only (was max(rain, war)), so it matches for
-	-- every player. Lightning still brightens the fog color briefly, which is
-	-- a five-second client-local transient by design.
-	at.fogStart      = 1 - rain
+	-- Fog density is rain plus a thin heat haze (was max(rain, war)); both are
+	-- seed-derived so it matches for every player. Lightning still brightens
+	-- the fog color briefly, which is a five-second client-local transient by
+	-- design.
+	at.fogStart      = 1 - rain - HEAT_FOG_MAX * heat
 	at.fogColor[1]   = blendFog(base.fog, TARGETS.fog, 1) + flash
 	at.fogColor[2]   = blendFog(base.fog, TARGETS.fog, 2) + flash
 	at.fogColor[3]   = blendFog(base.fog, TARGETS.fog, 3) + flash
@@ -422,6 +458,7 @@ function widget:Update(dt)
 		wg.night    = p
 		wg.war      = w
 		wg.rain     = rain
+		wg.heat     = heat
 		wg.wetness  = wetness
 		wg.flash    = flash
 		wg.fogStart = at.fogStart
