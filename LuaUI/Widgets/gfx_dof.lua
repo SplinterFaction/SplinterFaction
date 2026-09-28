@@ -44,6 +44,10 @@ local GL_DEPTH_COMPONENT16 = 0x81A5
 local GL_DEPTH_COMPONENT24 = 0x81A6
 local GL_DEPTH_COMPONENT32 = 0x81A7
 
+-- GL_RGBA16F_ARB is NOT exported to Lua by the engine; referencing it yields nil
+-- and every blur texture silently fell back to RGBA8.
+local GL_RGBA16F = GL.RGBA16F or 0x881A
+
 local GL_COLOR_ATTACHMENT0_EXT = 0x8CE0
 local GL_COLOR_ATTACHMENT1_EXT = 0x8CE1
 local GL_COLOR_ATTACHMENT2_EXT = 0x8CE2
@@ -141,34 +145,34 @@ function InitTextures()
 
 	baseBlurTex = glCreateTexture(blurTexSizeX, blurTexSizeY, {
 		min_filter = GL.LINEAR, mag_filter = GL.LINEAR,
-		format = GL_RGBA16F_ARB, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
+		format = GL_RGBA16F, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
 	})
 	if highQuality then
 		baseNearBlurTex = glCreateTexture(blurTexSizeX, blurTexSizeY, {
 			min_filter = GL.LINEAR, mag_filter = GL.LINEAR,
-			format = GL_RGBA16F_ARB, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
+			format = GL_RGBA16F, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
 		})
 	end
 
 	intermediateBlurTex0 = glCreateTexture(blurTexSizeX, blurTexSizeY, {
 		min_filter = GL.LINEAR, mag_filter = GL.LINEAR,
-		format = GL_RGBA16F_ARB, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
+		format = GL_RGBA16F, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
 	})
 
 	intermediateBlurTex1 = glCreateTexture(blurTexSizeX, blurTexSizeY, {
 		 min_filter = GL.LINEAR, mag_filter = GL.LINEAR,
-		format = GL_RGBA16F_ARB, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
+		format = GL_RGBA16F, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
 	})
 
 	intermediateBlurTex2 = glCreateTexture(blurTexSizeX, blurTexSizeY, {
 		 min_filter = GL.LINEAR, mag_filter = GL.LINEAR,
-		format = GL_RGBA16F_ARB, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
+		format = GL_RGBA16F, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
 	})
 
 	if highQuality then
 		intermediateBlurTex3 = glCreateTexture(blurTexSizeX, blurTexSizeY, {
 			 min_filter = GL.LINEAR, mag_filter = GL.LINEAR,
-			format = GL_RGBA16F_ARB, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
+			format = GL_RGBA16F, wrap_s = GL.CLAMP_TO_EDGE, wrap_t = GL.CLAMP_TO_EDGE,
 		})
 	end
 
@@ -415,6 +419,8 @@ local function Composition()
 	glTexture(2, false)
 end
 
+local chobbyInterface = false
+
 function widget:RecvLuaMsg(msg, playerID)
 	if msg:sub(1,18) == 'LobbyOverlayActive' then
 		chobbyInterface = (msg:sub(1,19) == 'LobbyOverlayActive1')
@@ -434,7 +440,11 @@ function widget:DrawScreenEffects()
 	local mx, my = Spring.GetMouseState()
 
 	glUseShader(dofShader)
-		glUniform(distanceLimitsLoc, gl.GetViewRange())
+		-- gl.GetViewRange() returns FOUR values (near, far, minViewRange, maxViewRange).
+		-- Passing all four made gl.Uniform call glUniform4f on a vec2, which GL rejects,
+		-- so distanceLimits stayed (0,0), depth linearization blew up and everything blurred.
+		local nearDist, farDist = gl.GetViewRange()
+		glUniform(distanceLimitsLoc, nearDist, farDist)
 
 		glUniformInt(autofocusLoc, autofocus and 1 or 0)
 		glUniformInt(mousefocusLoc, mousefocus and 1 or 0)
