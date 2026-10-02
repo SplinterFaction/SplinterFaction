@@ -376,6 +376,12 @@ local function SpawnStartUnit(teamID, spawnX, spawnZ)
 		end
 	end
 
+	-- Voidwater maps: never spawn in empty space.  Engine-assigned fallback
+	-- positions and shared-spot ring offsets are not validated anywhere else.
+	if GG.StartSpots and GG.StartSpots.SafeSpawnPos then
+		x, z = GG.StartSpots.SafeSpawnPos(x, z)
+	end
+
 	-- Snap to 16×16 grid
 	x = 16 * math.floor((x + 8) / 16)
 	z = 16 * math.floor((z + 8) / 16)
@@ -673,4 +679,4 @@ function gadget:GameFrame(n)
 			Spring.SetGameRulesParam("phase", "done")
 		end
 	end
-end
+end

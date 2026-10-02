@@ -269,10 +269,10 @@ local options= {
 		def="normal",
 		section="survivalaioptions",
 		items={
-			{key="easy", name="Easy", desc="Half budget, gentler growth curve, and waves arrive 25% slower."},
-			{key="normal", name="Normal", desc="Baseline budget, growth, and wave cadence."},
-			{key="hard", name="Hard", desc="Double budget, steeper growth, and waves arrive 10% faster."},
-			{key="impossibru", name="Impossibru", desc="Triple budget, explosive growth, waves 25% faster. I'm sure someone out there can beat it, but that person isn't you."},
+			{key="easy", name="Easy", desc="Lower plateau, a later ramp, no late creep, and waves arrive 25% slower."},
+			{key="normal", name="Normal", desc="Baseline curve and cadence. A good player out-produces the plateau and clears the network."},
+			{key="hard", name="Hard", desc="Higher plateau, an earlier ramp, a real late creep, and waves arrive 10% faster."},
+			{key="impossibru", name="Impossibru", desc="Far higher plateau, a much earlier ramp, a relentless late creep, waves 25% faster. I'm sure someone out there can beat it, but that person isn't you."},
 		}
 	},
 
@@ -328,43 +328,79 @@ local options= {
 		section = "survivalaioptions",
 	},
 
+	{
+		key     = "survivalai_t4minutes",
+		name    = "Tech 4 Unlock (minutes)",
+		desc    = "Minutes on the wave clock before Tech 4 units join the waves. They are rationed: never more than one alive per two opposing players (rounded up).",
+		type    = "number",
+		def     = 30,
+		min     = 0,
+		max     = 120,
+		step    = 1,
+		section = "survivalaioptions",
+	},
+
 	--------------------------------------------------------------------------------
-	-- Budget curve (the difficulty preset multiplies on top of these)
+	-- Budget curve (the difficulty preset scales on top of these)
 	--------------------------------------------------------------------------------
 
 	{
 		key     = "survivalai_basebudget",
 		name    = "Base Wave Budget (metal)",
-		desc    = "Metal value of wave 1, before the difficulty multiplier.",
+		desc    = "Metal value of the first wave with the full beacon network standing, before the difficulty multiplier.",
 		type    = "number",
-		def     = 400,
+		def     = 1500,
 		min     = 100,
-		max     = 5000,
+		max     = 10000,
 		step    = 50,
 		section = "survivalaioptions",
 	},
 
 	{
-		key     = "survivalai_lineargrowth",
-		name    = "Linear Budget Growth",
-		desc    = "Fraction of the base budget added per wave (0.30 = +30% of base each wave).",
+		key     = "survivalai_peakbudget",
+		name    = "Peak Wave Budget (metal)",
+		desc    = "The plateau the wave budget levels off at, before the difficulty multiplier. This is the main difficulty dial for the mid and late game.",
 		type    = "number",
-		def     = 0.30,
-		min     = 0,
-		max     = 2,
-		step    = 0.05,
+		def     = 10000,
+		min     = 1000,
+		max     = 100000,
+		step    = 500,
 		section = "survivalaioptions",
 	},
 
 	{
-		key     = "survivalai_compoundgrowth",
-		name    = "Compound Budget Growth",
-		desc    = "Per-wave compounding multiplier (1.06 = +6% compounding). This is what makes the late game a problem.",
+		key     = "survivalai_rampminutes",
+		name    = "Budget Ramp Midpoint (minutes)",
+		desc    = "Minute on the wave clock at which the budget is halfway from base to peak. Lower = the pressure arrives sooner.",
 		type    = "number",
-		def     = 1.06,
-		min     = 1.0,
-		max     = 1.25,
-		step    = 0.01,
+		def     = 12,
+		min     = 3,
+		max     = 60,
+		step    = 1,
+		section = "survivalaioptions",
+	},
+
+	{
+		key     = "survivalai_latecreep",
+		name    = "Late Budget Creep (metal per minute)",
+		desc    = "Metal added to the budget every minute once the plateau is reached, before the difficulty multiplier. 0 = a true plateau.",
+		type    = "number",
+		def     = 100,
+		min     = 0,
+		max     = 5000,
+		step    = 25,
+		section = "survivalaioptions",
+	},
+
+	{
+		key     = "survivalai_fieldcap",
+		name    = "Field Cap (wave budgets)",
+		desc    = "How many wave budgets' worth of metal the Survival AI may have alive at once. Each wave only tops the field up to this cap, so uncleared units make the next wave smaller.",
+		type    = "number",
+		def     = 2.0,
+		min     = 1,
+		max     = 6,
+		step    = 0.25,
 		section = "survivalaioptions",
 	},
 
@@ -385,33 +421,33 @@ local options= {
 	--------------------------------------------------------------------------------
 
 	{
-		key     = "survivalai_beaconwaves",
-		name    = "Beacon Creep Interval (waves)",
-		desc    = "A new beacon spawns after every Nth wave.",
+		key     = "survivalai_networksize",
+		name    = "Beacon Network Size",
+		desc    = "Beacons the Survival AI starts with (fewer if the map is too tight). The network never grows past this.",
 		type    = "number",
-		def     = 3,
+		def     = 8,
 		min     = 1,
-		max     = 10,
+		max     = 16,
 		step    = 1,
 		section = "survivalaioptions",
 	},
 
 	{
-		key     = "survivalai_beaconbonus",
-		name    = "Beacon Budget Bonus",
-		desc    = "Extra wave budget per live beacon beyond the first (0.15 = +15% each). The cost of ignoring the creep.",
+		key     = "survivalai_respawnminutes",
+		name    = "Beacon Regrowth Timer (minutes)",
+		desc    = "When the network is below full strength, a new beacon appears this long after the countdown starts. The countdown restarts after each new beacon. 0 disables regrowth.",
 		type    = "number",
-		def     = 0.15,
+		def     = 10,
 		min     = 0,
-		max     = 1,
-		step    = 0.05,
+		max     = 60,
+		step    = 1,
 		section = "survivalaioptions",
 	},
 
 	{
 		key     = "survivalai_beaconrp",
 		name    = "Beacon Kill Reward (RP)",
-		desc    = "Research points awarded to the team that destroys a beacon.",
+		desc    = "Research points awarded to the team that destroys a beacon. Pays 40% at the start of the game, rising to the full amount by minute 15.",
 		type    = "number",
 		def     = 250,
 		min     = 0,
@@ -423,7 +459,7 @@ local options= {
 	{
 		key     = "survivalai_retaliationdelay",
 		name    = "Retaliation Delay (seconds)",
-		desc    = "A destroyed beacon pulls the next wave to this many seconds away. Set at or above the wave interval to effectively disable retaliation.",
+		desc    = "Seconds after a beacon dies before its nearest neighbors launch a half-strength counterattack at the killer.",
 		type    = "number",
 		def     = 5,
 		min     = 0,
@@ -434,8 +470,8 @@ local options= {
 
 	{
 		key     = "survivalai_creepmin",
-		name    = "Beacon Creep Min Distance",
-		desc    = "Minimum distance (elmos) a new beacon spawns from its source beacon.",
+		name    = "Beacon Regrowth Min Distance",
+		desc    = "Minimum distance (elmos) a regrown beacon spawns from its source beacon.",
 		type    = "number",
 		def     = 900,
 		min     = 200,
@@ -446,8 +482,8 @@ local options= {
 
 	{
 		key     = "survivalai_creepmax",
-		name    = "Beacon Creep Max Distance",
-		desc    = "Maximum distance (elmos) a new beacon spawns from its source beacon -- the leash.",
+		name    = "Beacon Regrowth Max Distance",
+		desc    = "Maximum distance (elmos) a regrown beacon spawns from its source beacon -- the leash.",
 		type    = "number",
 		def     = 3000,
 		min     = 400,
@@ -479,7 +515,7 @@ local options= {
 	{
 		key     = "survivalai_specialchance",
 		name    = "Special Beacon Chance",
-		desc    = "Chance a newly crept beacon is specialized (shield / jammer / accelerator / forge) instead of standard.",
+		desc    = "Share of beacons (other than the master) that are specialized (shield / jammer / accelerator / forge) instead of standard.",
 		type    = "number",
 		def     = 0.6,
 		min     = 0,
@@ -489,21 +525,33 @@ local options= {
 	},
 
 	{
-		key     = "survivalai_agingminutes",
-		name    = "Beacon Dig-In Time (minutes)",
-		desc    = "Beacons that survive this long fortify with garrison turrets. 0 disables aging.",
+		key     = "survivalai_garrison",
+		name    = "Garrison Turrets Per Beacon",
+		desc    = "Defense turrets around every beacon. Tech 1 turrets from the start, replaced by Tech 2 turrets when Tech 2 unlocks. 0 disables garrisons.",
 		type    = "number",
-		def     = 4,
+		def     = 3,
 		min     = 0,
-		max     = 30,
+		max     = 8,
 		step    = 1,
+		section = "survivalaioptions",
+	},
+
+	{
+		key     = "survivalai_garrisonshield",
+		name    = "Garrison Shield Generator Chance",
+		desc    = "Chance a beacon's garrison includes a shield generator (0 = never, 1 = always).",
+		type    = "number",
+		def     = 0.35,
+		min     = 0,
+		max     = 1,
+		step    = 0.05,
 		section = "survivalaioptions",
 	},
 
 	{
 		key     = "survivalai_surgewaves",
 		name    = "Surge Wave Interval",
-		desc    = "Every Nth wave is a surge: double budget and a dramatic archetype, announced one wave in advance. 0 disables surges.",
+		desc    = "Every Nth wave is a surge: double budget, a dramatic archetype, launched from every beacon at once, announced one wave in advance. 0 disables surges.",
 		type    = "number",
 		def     = 10,
 		min     = 0,

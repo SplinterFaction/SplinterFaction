@@ -5,7 +5,7 @@ function widget:GetInfo()
 		author    = "Scary le Poo",
 		date      = "2026-08-24",
 		license   = "GNU GPL, v2 or later",
-		layer     = 1003,
+		layer     = -500,
 		enabled   = true,
 	}
 end

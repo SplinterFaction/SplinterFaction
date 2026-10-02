@@ -23,6 +23,7 @@ local TITLE_HEIGHT        = 20
 local COUNTDOWN_HEIGHT    = 34
 local LINE_HEIGHT         = 18
 local STATUS_HEIGHT       = 20
+local BAR_HEIGHT          = 5     -- pressure bar, inside its own LINE_HEIGHT row
 
 local OUTER_CORNER        = 5
 local INNER_CORNER        = 4.3
@@ -52,6 +53,10 @@ local URGENT_COLOR = {0.95, 0.65, 0.18, 1}         -- countdown under 10s
 local SURGE_COLOR  = {0.90, 0.22, 0.22, 1}
 local RAGE_COLOR   = {0.95, 0.25, 0.45, 1}
 local PREP_COLOR   = {0.45, 0.75, 0.45, 1}
+local REGROW_COLOR = {0.95, 0.65, 0.18, 1}         -- network regrowth countdown
+local BAR_BG_COLOR = {1.00, 1.00, 1.00, 0.10}
+local BAR_LOW      = {0.45, 0.75, 0.45}            -- pressure bar: empty field
+local BAR_HIGH     = {0.90, 0.22, 0.22}            -- pressure bar: field at its cap
 
 local TYPE_COLORS = {
 	assault = {0.95, 0.45, 0.18, 1},
@@ -102,7 +107,11 @@ local waveType      = nil
 local nextWaveFrame = nil
 local nextSurge     = false
 local beaconCount   = 0
+local beaconMax     = 0
 local rageCount     = 0
+local nextType      = nil     -- archetype of the wave the countdown is for
+local respawnFrame  = 0       -- 0 = network at full strength (no regrowth pending)
+local pressure      = 0       -- 0..100, live wave metal against the field cap
 
 local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
 local fontfileScale = (0.5 + (vsx * vsy / 5700000))
@@ -110,21 +119,34 @@ local fontfileSize = 25
 local fontfileOutlineSize = 4.5
 local fontfileOutlineStrength = 1.8
 local font
+local rawFont   -- the engine handle under the wrapper; see DeleteFontSafe
 
 -- The shapes module batches, so text drawn between two shape calls would land
 -- underneath them. Wrapping the handle makes font:Begin() flush the pending
 -- batch first, which keeps every existing font:Print call site correct without
 -- auditing draw order by hand.
+-- SG.WrapFont returns a table, which gl.DeleteFont rejects. At shutdown the
+-- shapes module is often already gone (WG.StaticGUI == nil), so the fallback
+-- must delete the engine handle that was wrapped, not the wrapper.
+local function DeleteFontSafe()
+	if not font then return end
+	local SG = WG.StaticGUI
+	if SG and SG.DeleteFont then
+		SG.DeleteFont(font)
+	elseif rawFont then
+		gl.DeleteFont(rawFont)
+	end
+	font, rawFont = nil, nil
+end
+
 local function ReloadFont()
 	local SG = WG.StaticGUI
 
-	if font then
-		if SG and SG.DeleteFont then SG.DeleteFont(font) else gl.DeleteFont(font) end
-		font = nil
-	end
+	DeleteFontSafe()
 
 	local f = gl.LoadFont(fontfile, fontfileSize * fontfileScale,
 	                      fontfileOutlineSize * fontfileScale, fontfileOutlineStrength)
+	rawFont = f
 	if f and SG and SG.WrapFont then f = SG.WrapFont(f) end
 	font = f
 end
@@ -283,7 +305,7 @@ local function RecalculateGeometry()
 	local line      = LINE_HEIGHT * widgetScale
 	local status    = STATUS_HEIGHT * widgetScale
 
-	panelH = pad + title + countdown + line + line + status + pad
+	panelH = pad + title + countdown + line * 5 + status + pad
 
 	-- Rows, top-down, in panel-local coords (0,0 = bottom-left)
 	local y = panelH - pad
@@ -291,7 +313,10 @@ local function RecalculateGeometry()
 	layout.titleY   = y - title      ; y = y - title
 	layout.countY   = y - countdown  ; y = y - countdown
 	layout.waveY    = y - line       ; y = y - line
+	layout.nextY    = y - line       ; y = y - line
 	layout.beaconY  = y - line       ; y = y - line
+	layout.regrowY  = y - line       ; y = y - line
+	layout.pressY   = y - line       ; y = y - line
 	layout.statusY  = y - status
 	layout.textL    = pad + 2 * widgetScale
 	layout.textR    = panelW - pad - 2 * widgetScale
@@ -311,7 +336,7 @@ end
 -- dragging never rebuilt the list. Display lists and the fixed-function matrix
 -- stack are both gone from OpenGL core profile, so the panel origin is now
 -- applied at record time by SetPanelOrigin and the chrome is drawn straight
--- through. It is three shape instances and four strings - cheaper than the
+-- through. It is three shape instances and seven strings - cheaper than the
 -- bookkeeping the list needed.
 --
 -- Shape coordinates stay panel-local (the offset is applied inside the shape
@@ -346,7 +371,13 @@ local function DrawStaticChrome(ox, oy)
 		9 * widgetScale, "o")
 	font:Print("WAVE", ox + layout.textL, oy + layout.waveY + 4 * widgetScale,
 		9.5 * widgetScale, "o")
+	font:Print("NEXT", ox + layout.textL, oy + layout.nextY + 4 * widgetScale,
+		9.5 * widgetScale, "o")
 	font:Print("BEACONS", ox + layout.textL, oy + layout.beaconY + 4 * widgetScale,
+		9.5 * widgetScale, "o")
+	font:Print("REGROWTH", ox + layout.textL, oy + layout.regrowY + 4 * widgetScale,
+		9.5 * widgetScale, "o")
+	font:Print("PRESSURE", ox + layout.textL, oy + layout.pressY + 4 * widgetScale,
 		9.5 * widgetScale, "o")
 	font:End()
 end
@@ -378,11 +409,7 @@ end
 
 function widget:Shutdown()
 	if WG.StaticLayout then WG.StaticLayout.Unregister(LAYOUT_ID) end
-	if font then
-		local SG = WG.StaticGUI
-		if SG and SG.DeleteFont then SG.DeleteFont(font) else gl.DeleteFont(font) end
-		font = nil
-	end
+	DeleteFontSafe()
 	WG.StaticSurvivalPanel = nil
 end
 
@@ -434,7 +461,11 @@ function widget:GameFrame(n)
 	nextWaveFrame = (spGetGameRulesParam("survival_nextWaveFrame"))
 	nextSurge     = (spGetGameRulesParam("survival_nextWaveSurge")) == 1
 	beaconCount   = (spGetGameRulesParam("survival_beacons")) or 0
+	beaconMax     = (spGetGameRulesParam("survival_beaconsMax")) or 0
 	rageCount     = (spGetGameRulesParam("survival_rage")) or 0
+	nextType      = (spGetGameRulesParam("survival_nextWaveType"))
+	respawnFrame  = (spGetGameRulesParam("survival_respawnFrame")) or 0
+	pressure      = (spGetGameRulesParam("survival_pressure")) or 0
 end
 
 --------------------------------------------------------------------------------
@@ -488,6 +519,25 @@ function widget:DrawScreen()
 
 	DrawStaticChrome(ox, oy)
 
+	-- Pressure bar: how full the field is against its cap. Shapes go before
+	-- the text block; the shim takes panel-local coordinates.
+	do
+		local barL = layout.textL + 62 * widgetScale
+		local barR = layout.textR
+		local barH = BAR_HEIGHT * widgetScale
+		local barY = layout.pressY + 5.5 * widgetScale
+		local frac = max(0, min(1, pressure / 100))
+
+		glColor(BAR_BG_COLOR[1], BAR_BG_COLOR[2], BAR_BG_COLOR[3], BAR_BG_COLOR[4])
+		RectRound(barL, barY, barR, barY + barH, barH * 0.5)
+		if frac > 0.02 then
+			glColor(BAR_LOW[1] + (BAR_HIGH[1] - BAR_LOW[1]) * frac,
+			        BAR_LOW[2] + (BAR_HIGH[2] - BAR_LOW[2]) * frac,
+			        BAR_LOW[3] + (BAR_HIGH[3] - BAR_LOW[3]) * frac, 1)
+			RectRound(barL, barY, barL + (barR - barL) * frac, barY + barH, barH * 0.5)
+		end
+	end
+
 	----------------------------------------------------------------------------
 	-- Dynamic values
 	----------------------------------------------------------------------------
@@ -526,10 +576,31 @@ function widget:DrawScreen()
 			oy + layout.waveY + 4 * widgetScale, 9.5 * widgetScale, "ro")
 	end
 
-	-- Beacons
+	-- Next wave type (surges pulse)
+	if nextType then
+		local tc = TYPE_COLORS[nextType] or TYPE_FALLBACK
+		font:SetTextColor(tc[1], tc[2], tc[3], nextSurge and pulse or tc[4])
+		font:Print(string.upper(nextType), ox + layout.textR,
+			oy + layout.nextY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+	end
+
+	-- Beacons: live / full network
 	font:SetTextColor(VALUE_COLOR[1], VALUE_COLOR[2], VALUE_COLOR[3], VALUE_COLOR[4])
-	font:Print(tostring(beaconCount), ox + layout.textR,
+	local beaconText = tostring(beaconCount)
+	if beaconMax > 0 then beaconText = beaconCount .. " / " .. beaconMax end
+	font:Print(beaconText, ox + layout.textR,
 		oy + layout.beaconY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+
+	-- Regrowth countdown (only while the network is below full strength)
+	if respawnFrame > 0 then
+		font:SetTextColor(REGROW_COLOR[1], REGROW_COLOR[2], REGROW_COLOR[3], 1)
+		font:Print(FormatTime((respawnFrame - spGetGameFrame()) / 30), ox + layout.textR,
+			oy + layout.regrowY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+	else
+		font:SetTextColor(LABEL_COLOR[1], LABEL_COLOR[2], LABEL_COLOR[3], 1)
+		font:Print("--", ox + layout.textR,
+			oy + layout.regrowY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+	end
 
 	-- Status line: rage > surge > preparing
 	if rageCount > 0 then

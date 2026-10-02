@@ -44,7 +44,9 @@ local function loadGeoventsFromRulesParams()
 end
 
 
-local allowgeosinwater = (Spring.GetModOptions and Spring.GetModOptions().allowgeosinwater) or "disabled"
+-- The modoption is a list ("enabled" / "disabled"), so compare the string; any
+-- non-empty string is truthy in Lua.
+local allowgeosinwater = ((Spring.GetModOptions and Spring.GetModOptions().allowgeosinwater) or "disabled") == "enabled"
 local maxGeos = 8
 local geoFeatureDef = FeatureDefNames["geovent"]
 local mapX = Game.mapSizeX
@@ -62,6 +64,23 @@ local function biasedGeoCount()
 	if r < 0.88 then return 4 end
 	if r < 0.97 then return 6 end
 	return 8
+end
+
+-- Voidwater maps: the void is landmass that does not exist.  Vents are rolled
+-- as if it were ordinary land, then any vent that lands in the void is dropped
+-- rather than re-rolled, so the land that does exist gets no more vents than
+-- it would have had on a full map.
+local MetalHelpers = VFS.Include("luarules/configs/metalmakerspots/helpers.lua")
+local voidWater    = MetalHelpers.MapHasVoidWater()
+local VOID_CHECK_RADIUS = 48  -- elmos around the vent that must be solid ground
+
+local function isInVoid(x, z)
+	for dx = -VOID_CHECK_RADIUS, VOID_CHECK_RADIUS, VOID_CHECK_RADIUS do
+		for dz = -VOID_CHECK_RADIUS, VOID_CHECK_RADIUS, VOID_CHECK_RADIUS do
+			if Spring.GetGroundHeight(x + dx, z + dz) <= 0 then return true end
+		end
+	end
+	return false
 end
 
 local function isInWater(x, z)
@@ -121,27 +140,31 @@ function gadget:Initialize()
 		if isFlatEnough(x, z, 32) and isFlatEnough(sx, sz, 32)
 				and not tooCloseToMetalSpot(x, z)
 				and not tooCloseToMetalSpot(sx, sz)
-				and (not allowgeosinwater or (not isInWater(x, z) and not isInWater(sx, sz))) then
+				and (voidWater or allowgeosinwater or (not isInWater(x, z) and not isInWater(sx, sz))) then
 			table.insert(geoPairs, {x = x, z = z})
 		end
 
 		attempts = attempts + 1
 	end
 
-	for _, pos in ipairs(geoPairs) do
-		local x, z = pos.x, pos.z
-		local y1 = Spring.GetGroundHeight(x, z)
-		local sx, sz = getSymmetricPos(x, z)
-		local y2 = Spring.GetGroundHeight(sx, sz)
-
-		local featureID1 = Spring.CreateFeature("geovent", x, y1, z)
-		Spring.SetFeatureRulesParam(featureID1, "customGeovent", 1, { public = true })
-
-		local featureID2 = Spring.CreateFeature("geovent", sx, y2, sz)
-		Spring.SetFeatureRulesParam(featureID2, "customGeovent", 1, { public = true })
-
+	local voidDropped = 0
+	local function placeVent(x, z)
+		if voidWater and isInVoid(x, z) then
+			voidDropped = voidDropped + 1
+			return
+		end
+		local featureID = Spring.CreateFeature("geovent", x, Spring.GetGroundHeight(x, z), z)
+		Spring.SetFeatureRulesParam(featureID, "customGeovent", 1, { public = true })
 		table.insert(geoSpots, {x = x, z = z})
-		table.insert(geoSpots, {x = sx, z = sz})
+	end
+
+	for _, pos in ipairs(geoPairs) do
+		placeVent(pos.x, pos.z)
+		placeVent(getSymmetricPos(pos.x, pos.z))
+	end
+
+	if voidWater then
+		Spring.Echo("[Geovent Spot Generator] Voidwater map: dropped " .. voidDropped .. " geovent(s) in the void, " .. #geoSpots .. " placed.")
 	end
 
 	-- After all spots are determined:
@@ -152,4 +175,4 @@ function gadget:Initialize()
 		Spring.SetGameRulesParam("customGeovent_" .. i .. "_z", spot.z)
 	end
 	Spring.SetGameRulesParam("customGeovent_count", #geoSpots)
-end
+end

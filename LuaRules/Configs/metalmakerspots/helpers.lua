@@ -11,6 +11,29 @@ local function shuffle(t)
 	end
 end
 
+-- Does the map set voidwater?  On such maps (asteroids, floating islands) the
+-- engine draws nothing where the ground is at or below the waterline, so that
+-- area is landmass that does not exist.  The engine exposes the flag to
+-- unsynced code only, so synced reads it from mapinfo.lua.  The engine's own
+-- parser is case-insensitive; the raw table from VFS.Include is not, so every
+-- spelling of the key is accepted.  Cached after the first call.
+local voidWaterCached = nil
+function H.MapHasVoidWater()
+	if voidWaterCached == nil then
+		voidWaterCached = false
+		local ok, mi = pcall(VFS.Include, "mapinfo.lua", nil, VFS.MAP)
+		if ok and type(mi) == "table" then
+			for k, v in pairs(mi) do
+				if type(k) == "string" and string.lower(k) == "voidwater" then
+					voidWaterCached = (v == true or v == 1 or v == "1" or v == "true")
+					break
+				end
+			end
+		end
+	end
+	return voidWaterCached
+end
+
 function H.New(ctx)
 	-- Expect ctx to provide:
 	-- Spring, Game
@@ -30,7 +53,15 @@ function H.New(ctx)
 	local cfg = ctx.cfg
 	local allowWaterSpots = ctx.allowWaterSpots
 
+	-- Voidwater maps: algorithms place spots as if the void were ordinary
+	-- land (so the water modoption is ignored here), and the spots that end
+	-- up in the void are removed afterwards by helpers.DropVoidSpots().  The
+	-- land that does exist keeps the density it would have had on a full map.
+	local voidWater = H.MapHasVoidWater()
+
 	local helpers = {}
+
+	helpers.voidWater = voidWater
 
 	helpers.shuffle = shuffle
 
@@ -57,7 +88,7 @@ function H.New(ctx)
 				local wz = (sz + dz) * 16
 				local wy = GetGroundHeight(wx, wz)
 
-				if not allowWaterSpots and wy < 0 then
+				if not allowWaterSpots and not voidWater and wy < 0 then
 					return false
 				end
 
@@ -106,6 +137,60 @@ function H.New(ctx)
 
 		placed[#placed + 1] = { x = wx, y = wy, z = wz }
 		return placed[#placed]
+	end
+
+	-- Does any part of the spot's footprint (plus the same one-square margin
+	-- MarkSpot masks) sit at or below the waterline?
+	function helpers.IsSpotInVoid(sx, sz)
+		local radius = math.floor(cfg.FOOTPRINT / 2) + 1
+		for dx = -radius, radius do
+			for dz = -radius, radius do
+				if GetGroundHeight((sx + dx) * 16, (sz + dz) * 16) <= 0 then
+					return true
+				end
+			end
+		end
+		return false
+	end
+
+	-- Voidwater maps only: remove every placed spot that sits in the void and
+	-- hand its squares back to the default building mask.  Edits ctx.spots in
+	-- place and returns the number removed.  A no-op on ordinary maps.
+	function helpers.DropVoidSpots()
+		if not voidWater then return 0 end
+		local radius = math.floor(cfg.FOOTPRINT / 2) + 1
+
+		local function Mask(spot, value)
+			local sx, sz = math.floor(spot.x / 16 + 0.5), math.floor(spot.z / 16 + 0.5)
+			for dx = -radius, radius do
+				for dz = -radius, radius do
+					local mx, mz = sx + dx, sz + dz
+					if mx >= 0 and mx < slopeMapX and mz >= 0 and mz < slopeMapZ then
+						SetSquareBuildingMask(mx, mz, value)
+					end
+				end
+			end
+		end
+
+		local keptCount, dropped = 0, 0
+		local total = #placed
+		for i = 1, total do
+			local spot = placed[i]
+			if helpers.IsSpotInVoid(math.floor(spot.x / 16 + 0.5), math.floor(spot.z / 16 + 0.5)) then
+				Mask(spot, 1)   -- 1 = the engine's default "normal tile" mask
+				dropped = dropped + 1
+			else
+				keptCount = keptCount + 1
+				placed[keptCount] = spot
+			end
+		end
+		for i = keptCount + 1, total do placed[i] = nil end
+
+		-- A dropped spot's block can overlap a surviving neighbor's; restore.
+		if dropped > 0 then
+			for i = 1, keptCount do Mask(placed[i], 4) end
+		end
+		return dropped
 	end
 
 	function helpers.IsSpotValid(sx, sz)
@@ -205,4 +290,4 @@ function H.New(ctx)
 	return helpers
 end
 
-return H
+return H

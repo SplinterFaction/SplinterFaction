@@ -78,6 +78,10 @@ local KIND_LABEL = {
 	accelerator = "ACCEL",
 	forge       = "FORGE",
 }
+-- Beacons due to launch the next wave get this appended (or, for standard
+-- beacons, shown on its own in STAGING_COLOR).
+local STAGING_TEXT  = "STAGING"
+local STAGING_COLOR = {0.90, 0.22, 0.22, 1}   -- survival red
 
 -- Commander tags sit *below* the model (the space above is taken by health
 -- bars and the tech button). The anchor is the front edge of the unit's
@@ -187,9 +191,13 @@ local labelCache = {}
 local beaconDefID    = nil
 local survivalActive = false
 local beaconLabels   = {}   -- [kind] = prebuilt label table (immutable, shared)
+local stagingLabels  = {}   -- [kind] = the same, for a beacon staging the next wave
 for kind, color in pairs(KIND_COLOR) do
-	beaconLabels[kind] = { text = KIND_LABEL[kind], color = color, yOffset = BEACON_Y_OFFSET }
+	beaconLabels[kind]  = { text = KIND_LABEL[kind], color = color, yOffset = BEACON_Y_OFFSET }
+	stagingLabels[kind] = { text = KIND_LABEL[kind] .. " - " .. STAGING_TEXT, color = color,
+	                        yOffset = BEACON_Y_OFFSET }
 end
+local stagingStandard = { text = STAGING_TEXT, color = STAGING_COLOR, yOffset = BEACON_Y_OFFSET }
 
 -- Commander source state
 local comDefs    = {}   -- [unitDefID] = true
@@ -299,9 +307,13 @@ local function BeaconLabel(unitID)
 	-- nil for beacons outside our LOS-granted access -- the same {inlos=true}
 	-- restriction the gadget set the param with, so an enemy's specialization
 	-- stays hidden without any extra logic here. Standard/master beacons have
-	-- a kind without a color entry and get no chip at all.
+	-- a kind without a color entry and get no chip at all, unless they are
+	-- staging the next wave (survival_staging, same LOS restriction).
 	local kind = spGetUnitRulesParam(unitID, "survival_beacon_kind")
 	if kind then
+		if spGetUnitRulesParam(unitID, "survival_staging") == 1 then
+			return stagingLabels[kind] or stagingStandard
+		end
 		return beaconLabels[kind]
 	end
 	return nil

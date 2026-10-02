@@ -232,6 +232,10 @@ function gadget:Initialize()
 	-- -------------------------
 	-- Optional: recompute spotValue based on actual placed count (algo policy)
 	-- -------------------------
+	-- Counted BEFORE void spots are dropped: a spot lost to the void still
+	-- counts against the income budget.  The landmass it sat on does not
+	-- exist, so the map's total income shrinks with it and the spots on real
+	-- land keep the value they would have had on a full map.
 	local placedCount = #metalSpots
 	local policy = algo.policy or algo.POLICY or {}  -- allow either style
 
@@ -241,13 +245,14 @@ function gadget:Initialize()
 
 	if recalc and placedCount > 0 and placedCount ~= spotsTarget then
 		local newSpotValue = (ctx.incomePerPlayer * playerCount) / placedCount
-		ctx.spotValue = newSpotValue
 
-		--Specify a minimum spot value and get rid of fractions
-		newSpotValue = math.floor(spotValue * 2 + 0.5) / 2
+		-- Round to the nearest 0.5 and enforce the minimum, same as the
+		-- initial value above.
+		newSpotValue = math.floor(newSpotValue * 2 + 0.5) / 2
 		if newSpotValue < minimumSpotValue then
 			newSpotValue = minimumSpotValue
 		end
+		ctx.spotValue = newSpotValue
 
 		Spring.SetGameRulesParam("metalSpot_value", newSpotValue)
 		Spring.SetGameRulesParam("metalSpot_target_effective", placedCount)
@@ -255,6 +260,18 @@ function gadget:Initialize()
 		Echo(string.format(
 				"[MetalSpotGen] Policy: recalculated spotValue using placedCount=%d (requested=%d) => %.3f",
 				placedCount, spotsTarget, newSpotValue
+		))
+	end
+
+	-- -------------------------
+	-- Voidwater maps: drop every spot that landed in the void
+	-- -------------------------
+	local voidDropped = helpers.DropVoidSpots()
+	Spring.SetGameRulesParam("metalSpot_voidDropped", voidDropped)
+	if helpers.voidWater then
+		Echo(string.format(
+				"[MetalSpotGen] Voidwater map: dropped %d of %d spots in the void (still counted in the income budget)",
+				voidDropped, placedCount
 		))
 	end
 
@@ -281,4 +298,4 @@ function gadget:Initialize()
 			Game.mapSizeX, Game.mapSizeZ, Game.mapX, Game.mapY,
 			Game.mapSizeX/512, Game.mapSizeZ/512, commonSize
 	))
-end
+end

@@ -4,10 +4,11 @@
 --  file:    game_start_spots.lua
 --  brief:   builds the list of start spots used by the placement phase
 --
---  Reads start positions from the map's mapinfo.lua, throws them away if they
---  overlap (a sure sign they're placeholder data), synthesises spots from
---  resource clusters when the map is short, and partitions the result between
---  allyteams.  Publishes the result through GG.StartSpots and game rules params.
+--  Reads start positions from the map's mapinfo.lua, moves any that sit in the
+--  void on voidwater maps onto nearby land, throws the set away if spots overlap (a sure sign
+--  they're placeholder data), synthesises spots from resource clusters when
+--  the map is short, and partitions the result between allyteams.  Publishes
+--  the result through GG.StartSpots and game rules params.
 --
 --  Consumer: game_spawn.lua calls GG.StartSpots.Get() in GameStart.
 --
@@ -39,6 +40,7 @@ end
 local mapSpots = {}     -- spotIdx (1-based) → {x, z, allyteam, synthetic}
 local isFFA    = false
 local built    = false  -- Build() has run (result may still be empty)
+local voidWater = nil   -- map has voidwater (nil = not checked yet)
 
 local function CountNonGaiaTeams()
 	local gaia = Spring.GetGaiaTeamID()
@@ -70,6 +72,127 @@ local IDEAL_CLUSTER     = 3     -- clusters this big or bigger score full marks
 local MIN_SEPARATION    = 512   -- elmos; never invent a spot closer than this to another
 local EDGE_MARGIN       = 256   -- elmos; keep invented spots off the map edge
 local GRID_CANDIDATES   = 8     -- N×N geometric fallback grid across the map
+
+-- Voidwater maps (asteroids, floating islands): the engine draws nothing where
+-- the ground is at or below the waterline, so that area is empty space and a
+-- commander must never start there.
+local VOID_CLEARANCE_REAL  = 48    -- elmos of solid ground a mapinfo spot needs around it (commander footprint)
+local VOID_CLEARANCE_SYNTH = 160   -- elmos of solid ground an invented spot needs (shared-spot ring + first buildings)
+local VOID_CLEARANCE_NUDGE = 96    -- elmos of solid ground a void spot is given when it is moved onto land
+local VOID_NUDGE_RADIUS    = 512   -- elmos; a void spot farther than this from land is parked junk and is dropped
+local VOID_NUDGE_MIN_GAP   = 256   -- elmos; a moved spot landing closer than this to another spot is dropped
+local NUDGE_STEP           = 32    -- elmos; ring spacing when searching for nearby usable ground
+local SPAWN_RESCUE_RADIUS  = 1024  -- elmos; how far SafeSpawnPos searches for solid ground
+
+-- Unit circle sample directions shared by the clearance test and nudge search.
+local RING_DIRS = {}
+for i = 1, 16 do
+	local a = (i - 1) / 16 * 2 * math.pi
+	RING_DIRS[i] = { math.cos(a), math.sin(a) }
+end
+
+-- Does the map set voidwater?  The engine exposes this to unsynced code only
+-- (gl.GetMapRendering), so synced reads it from mapinfo.lua.  The engine's own
+-- parser is case-insensitive; the raw table from VFS.Include is not, so every
+-- spelling of the key is accepted.
+local function MapHasVoidWater(mi)
+	if type(mi) ~= "table" then return false end
+	for k, v in pairs(mi) do
+		if type(k) == "string" and string.lower(k) == "voidwater" then
+			return v == true or v == 1 or v == "1" or v == "true"
+		end
+	end
+	return false
+end
+
+-- True when (x, z) and everything within `clearance` elmos of it is above the
+-- waterline.  Samples two rings (full and half radius) of 8 points each.
+local function HasSolidGround(x, z, clearance)
+	if x < 0 or z < 0 or x > Game.mapSizeX or z > Game.mapSizeZ then return false end
+	if Spring.GetGroundHeight(x, z) <= 0 then return false end
+	if clearance and clearance > 0 then
+		for i = 1, 16, 2 do
+			local d = RING_DIRS[i]
+			if Spring.GetGroundHeight(x + d[1] * clearance,       z + d[2] * clearance)       <= 0
+			or Spring.GetGroundHeight(x + d[1] * clearance * 0.5, z + d[2] * clearance * 0.5) <= 0 then
+				return false
+			end
+		end
+	end
+	return true
+end
+
+-- Walk outward from (x, z) in rings and return the first position that passes
+-- `test(px, pz)`, or nil if nothing within maxRadius does.  Deterministic.
+local function FindNear(x, z, maxRadius, test)
+	for r = NUDGE_STEP, maxRadius, NUDGE_STEP do
+		for i = 1, 16 do
+			local d = RING_DIRS[i]
+			local px, pz = x + d[1] * r, z + d[2] * r
+			if test(px, pz) then return px, pz end
+		end
+	end
+	return nil
+end
+
+-- Voidwater maps only: repair mapinfo spots that sit in (or hang over) the
+-- void.  A spot with land within VOID_NUDGE_RADIUS is moved onto it (the mapper
+-- meant that ledge and missed).  A spot with no land in reach is an unused slot
+-- parked off the playable area and is dropped.  A moved spot that would land on
+-- top of another spot is dropped too, so the overlap test that follows only
+-- ever judges the map's own data, never a collision this repair created.
+-- Spot order is preserved and indices are re-packed to stay contiguous 1..N.
+-- Returns moved, dropped.
+local function FixVoidSpots()
+	local function Solid(px, pz) return HasSolidGround(px, pz, VOID_CLEARANCE_NUDGE) end
+	local gap2 = VOID_NUDGE_MIN_GAP * VOID_NUDGE_MIN_GAP
+
+	-- Pass 1: spots already on solid ground are fixed points.
+	local anchors = {}
+	local inVoid  = {}
+	for i = 1, #mapSpots do
+		local s = mapSpots[i]
+		if HasSolidGround(s.x, s.z, VOID_CLEARANCE_REAL) then
+			anchors[#anchors + 1] = s
+		else
+			inVoid[i] = true
+		end
+	end
+
+	-- Pass 2: move or drop the rest, in map order.
+	local kept = {}
+	local moved, dropped = 0, 0
+	for i = 1, #mapSpots do
+		local s = mapSpots[i]
+		if not inVoid[i] then
+			kept[#kept + 1] = s
+		else
+			local nx, nz = FindNear(s.x, s.z, VOID_NUDGE_RADIUS, Solid)
+			local crowded = false
+			if nx then
+				for _, a in ipairs(anchors) do
+					local dx, dz = nx - a.x, nz - a.z
+					if dx * dx + dz * dz < gap2 then crowded = true; break end
+				end
+			end
+			if nx and not crowded then
+				Spring.Echo(string.format("[Start Spots]   start position (%.0f, %.0f) is in the void, moved to (%.0f, %.0f)",
+				                          s.x, s.z, nx, nz))
+				s.x, s.z = nx, nz
+				s.nudged = true
+				kept[#kept + 1] = s
+				anchors[#anchors + 1] = s
+				moved = moved + 1
+			else
+				Spring.Echo(string.format("[Start Spots]   dropping start position in the void (%.0f, %.0f): %s",
+				                          s.x, s.z, nx and "no room next to an existing spot" or "no land in reach"))
+				dropped = dropped + 1
+			end
+		end
+	end
+	mapSpots = kept
+	return moved, dropped
+end
 
 -- Collapse near-duplicate spots in mapSpots (keeps the first of each group and
 -- re-packs indices so they stay contiguous 1..N).  Returns the number removed.
@@ -178,11 +301,15 @@ local function CollectResourcePoints()
 	return pts, source
 end
 
--- Is this a sane place to put a commander?  Dry land, inside the margin.
+-- Is this a sane place to put a commander?  Dry land, inside the margin, and
+-- on voidwater maps comfortably clear of the void (rim, craters, holes).
 local function IsUsableGround(x, z)
 	if x < EDGE_MARGIN or z < EDGE_MARGIN
 	or x > Game.mapSizeX - EDGE_MARGIN or z > Game.mapSizeZ - EDGE_MARGIN then
 		return false
+	end
+	if voidWater then
+		return HasSolidGround(x, z, VOID_CLEARANCE_SYNTH)
 	end
 	return Spring.GetGroundHeight(x, z) > 0
 end
@@ -206,7 +333,13 @@ local function BuildSpotCandidates()
 			end
 		end
 		cx, cz = cx / n, cz / n
-		if IsUsableGround(cx, cz) then
+		if not IsUsableGround(cx, cz) then
+			-- The centroid can land in a crater, a pond, or off the rim even
+			-- though the resources around it are fine.  Slide it to the nearest
+			-- usable ground inside the cluster rather than losing the cluster.
+			cx, cz = FindNear(cx, cz, CLUSTER_RADIUS, IsUsableGround)
+		end
+		if cx then
 			-- Quality: 1 point = weak, 2 = acceptable, IDEAL_CLUSTER+ = full marks
 			local q = math.min(n, IDEAL_CLUSTER) / IDEAL_CLUSTER
 			cands[#cands + 1] = { x = cx, z = cz, q = q, n = n }
@@ -229,7 +362,8 @@ local function BuildSpotCandidates()
 	end
 	AddGrid(true)
 	if #cands == 0 then
-		-- Every grid point is underwater (or the map is tiny): take them anyway.
+		-- Every grid point is underwater or in the void (or the map is tiny):
+		-- take them anyway.  SafeSpawnPos still rescues the actual spawn.
 		AddGrid(false)
 	end
 
@@ -325,7 +459,18 @@ local function Build()
 		Spring.Echo("[Start Spots] mapinfo.lua unavailable or has no teams table — will synthesise start positions")
 	end
 
-	local loaded  = #mapSpots
+	local loaded = #mapSpots
+
+	-- Voidwater maps: spots in the void are repaired first, before the overlap
+	-- test, so a pile of unused slots parked off the playable area doesn't
+	-- condemn the real spots along with it.
+	voidWater = MapHasVoidWater(ok and mi or nil)
+	if voidWater then
+		local moved, dropped = FixVoidSpots()
+		Spring.Echo(string.format("[Start Spots] Voidwater map: %d start position(s) moved out of the void, %d dropped",
+		                          moved, dropped))
+	end
+
 	local removed = DedupeMapSpots()
 	Spring.Echo("[Start Spots] Loaded " .. loaded .. " map spots from mapinfo (" .. removed .. " duplicate(s) dropped)")
 
@@ -597,6 +742,27 @@ GG.StartSpots = {
 	Get = function()
 		if not built then Build() end
 		return mapSpots, isFFA
+	end,
+
+	-- Last line of defense for anything about to be spawned.  On voidwater
+	-- maps, returns the nearest position with solid ground under it when
+	-- (x, z) is in the void; otherwise returns (x, z) untouched.  Covers
+	-- engine-assigned fallback positions and shared-spot ring offsets,
+	-- neither of which goes through spot validation.
+	SafeSpawnPos = function(x, z)
+		if voidWater == nil then
+			local ok, mi = pcall(VFS.Include, "mapinfo.lua", nil, VFS.MAP)
+			voidWater = MapHasVoidWater(ok and mi or nil)
+		end
+		if not voidWater or not x or not z then return x, z end
+		local function Solid(px, pz) return HasSolidGround(px, pz, VOID_CLEARANCE_REAL) end
+		if Solid(x, z) then return x, z end
+		local nx, nz = FindNear(x, z, SPAWN_RESCUE_RADIUS, Solid)
+		if nx then
+			Spring.Echo(string.format("[Start Spots] Spawn position (%.0f, %.0f) is in the void, moved to (%.0f, %.0f)", x, z, nx, nz))
+			return nx, nz
+		end
+		return x, z
 	end,
 }
 

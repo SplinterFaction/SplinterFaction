@@ -22,20 +22,25 @@ local M = {}
 -- flavors (no bomber waves before the players can have AA), and `weights` maps
 -- role classes to pick weights (nil = uniform over everything: the horde).
 -- Classes absent from a table are never picked for that archetype.
+--
+-- `stage` is how many beacons launch the wave: a number takes the beacons
+-- nearest the target, "all" uses the whole network. `split` gives every
+-- staging group its own target (multi-direction harassment) instead of
+-- converging the wave on one.
 --------------------------------------------------------------------------------
 
 M.Archetypes = {
-	{ name = "assault", w = 4, minWave = 1,
+	{ name = "assault", w = 4, minWave = 1, stage = 3,
 	  weights = { mbt = 6, heat = 2, support = 1, aa = 1 } },
-	{ name = "raid",    w = 3, minWave = 1,
+	{ name = "raid",    w = 3, minWave = 1, stage = "all", split = true,
 	  weights = { scout = 5, heat = 3, mbt = 2, gunship = 2 } },
-	{ name = "siege",   w = 3, minWave = 3,
+	{ name = "siege",   w = 3, minWave = 3, stage = 1,
 	  weights = { artillery = 5, mbt = 3, aa = 1, support = 1 } },
-	{ name = "air",     w = 2, minWave = 5,
+	{ name = "air",     w = 2, minWave = 5, stage = 2,
 	  weights = { bomber = 5, fighter = 3, gunship = 3 } },
-	{ name = "drop",    w = 2, minWave = 6, drop = true,
+	{ name = "drop",    w = 2, minWave = 6, stage = 1, drop = true,
 	  weights = { mbt = 4, heat = 2, scout = 2, support = 1 } },
-	{ name = "horde",   w = 2, minWave = 1,
+	{ name = "horde",   w = 2, minWave = 1, stage = 3,
 	  weights = nil },
 }
 
@@ -104,6 +109,9 @@ end
 --   weights  = { class = weight, ... } or nil (nil = uniform)
 --   faction  = faction-name filter or nil     (falls back to mixed if empty)
 --   random   = rng                            (default math.random)
+--   tierLimit = { [tier] = max units of that tier in this wave } or nil
+--   tierUsed  = { [tier] = count } running tally, shared across calls that
+--               belong to one wave (ComposeDrop's riders and carriers)
 -- }
 --
 -- Guarantees at least one unit (the cheapest eligible) even if the budget is
@@ -132,12 +140,21 @@ local function BuildEligible(pools, maxTier, weights, faction, portableOnly)
 	return byClass, classes, cheapest
 end
 
+-- Is there room left under the per-wave limit for this tier?
+function M.TierOpen(tierLimit, tierUsed, tier)
+	local cap = tierLimit and tierLimit[tier]
+	if not cap then return true end
+	return (tierUsed[tier] or 0) < cap
+end
+
 function M.Compose(pools, budget, opts)
 	opts = opts or {}
 	local maxTier  = opts.maxTier  or math.huge
 	local maxUnits = opts.maxUnits or 40
 	local weights  = opts.weights
 	local random   = opts.random   or math.random
+	local tierLimit = opts.tierLimit
+	local tierUsed  = opts.tierUsed or {}
 
 	local byClass, classes, cheapest =
 		BuildEligible(pools, maxTier, weights, opts.faction, opts.portableOnly)
@@ -167,8 +184,9 @@ function M.Compose(pools, budget, opts)
 			local members = byClass[class]
 			local afford  = {}
 			for i = 1, #members do
-				if members[i].cost <= remaining then
-					afford[#afford + 1] = members[i]
+				local m = members[i]
+				if m.cost <= remaining and M.TierOpen(tierLimit, tierUsed, m.tier) then
+					afford[#afford + 1] = m
 				end
 			end
 			if #afford > 0 then
@@ -189,12 +207,15 @@ function M.Compose(pools, budget, opts)
 		list[#list + 1] = pick
 		spent     = spent + pick.cost
 		remaining = remaining - pick.cost
+		tierUsed[pick.tier] = (tierUsed[pick.tier] or 0) + 1
 	end
 
-	-- Never send an empty wave
-	if #list == 0 then
+	-- Never send an empty wave, unless the only thing on offer is a unit from
+	-- a tier that is at its limit.
+	if #list == 0 and M.TierOpen(tierLimit, tierUsed, cheapest.tier) then
 		list[1] = cheapest
 		spent   = cheapest.cost
+		tierUsed[cheapest.tier] = (tierUsed[cheapest.tier] or 0) + 1
 	end
 
 	return list, spent
@@ -223,9 +244,13 @@ function M.ComposeDrop(pools, budget, opts)
 	opts = opts or {}
 	local maxTier = opts.maxTier or math.huge
 	local random  = opts.random  or math.random
+	local tierLimit = opts.tierLimit
+	local tierUsed  = opts.tierUsed or {}
 
 	-- Riders
 	local groundOpts = {
+		tierLimit    = tierLimit,
+		tierUsed     = tierUsed,
 		maxTier      = maxTier,
 		maxUnits     = opts.maxUnits or 40,
 		weights      = opts.weights,
@@ -259,12 +284,16 @@ function M.ComposeDrop(pools, budget, opts)
 	while #unassigned > 0 and #carriers > 0 do
 		local afford = {}
 		for i = 1, #carriers do
-			if carriers[i].cost <= remaining then afford[#afford + 1] = carriers[i] end
+			if carriers[i].cost <= remaining
+				and M.TierOpen(tierLimit, tierUsed, carriers[i].tier) then
+				afford[#afford + 1] = carriers[i]
+			end
 		end
 		if #afford == 0 then break end
 
 		local c = afford[random(1, #afford)]
 		remaining = remaining - c.cost
+		tierUsed[c.tier] = (tierUsed[c.tier] or 0) + 1
 		local row = { entry = c, passengers = {} }
 
 		-- Fill this carrier: capacity slots, mass limit; too-heavy riders are
@@ -286,6 +315,7 @@ function M.ComposeDrop(pools, budget, opts)
 			-- Bought a carrier nothing fits into (all riders too heavy):
 			-- refund and stop trying, the rest walk.
 			remaining = remaining + c.cost
+			tierUsed[c.tier] = tierUsed[c.tier] - 1
 			break
 		end
 	end
@@ -296,15 +326,54 @@ function M.ComposeDrop(pools, budget, opts)
 end
 
 --------------------------------------------------------------------------------
--- M.Budget(waveNumber, base, linear, compound, mult) -> metal budget
+-- M.Budget(minutes, curve, mult) -> metal budget for a wave launched now
 --
--- budget = base * (1 + linear*(n-1)) * compound^(n-1) * difficultyMult
--- Linear keeps early waves readable; compound makes the late game a problem.
+-- curve = {
+--   base     = budget at the first wave
+--   peak     = plateau the ramp levels off at
+--   start    = minute of the first wave (the grace period); the ramp is zero here
+--   mid      = minute at which the ramp is halfway from base to peak
+--   steep    = logistic steepness per minute
+--   creep    = metal added per minute once past `plateau` (the slow squeeze)
+--   plateau  = minute the late creep starts
+-- }
+--
+-- An S-curve on the wave clock: slow start, a ramp through the mid game, then
+-- a plateau, with a linear creep on top so the game still tightens with time.
+-- Time-driven rather than wave-count-driven, so anything that launches extra
+-- waves (accelerator beacons, rage) adds pressure without also dragging the
+-- whole game up the curve.
 --------------------------------------------------------------------------------
 
-function M.Budget(waveNumber, base, linear, compound, mult)
-	local n = waveNumber
-	return math.floor(base * (1 + linear * (n - 1)) * (compound ^ (n - 1)) * (mult or 1))
+local function Logistic(m, steep, mid)
+	return 1 / (1 + math.exp(-steep * (m - mid)))
+end
+
+function M.Budget(minutes, curve, mult)
+	local m  = math.max(minutes, curve.start)
+	local l0 = Logistic(curve.start, curve.steep, curve.mid)
+	local s  = (Logistic(m, curve.steep, curve.mid) - l0) / (1 - l0)
+	local b  = curve.base + (curve.peak - curve.base) * s
+	         + curve.creep * math.max(0, m - curve.plateau)
+	return math.floor(b * (mult or 1))
+end
+
+--------------------------------------------------------------------------------
+-- M.FieldClamp(budget, fieldValue, capMult, minFraction) -> spawnBudget
+--
+-- The budget is a target for pressure, not a spawn order: what is already
+-- alive on the field counts against it. The field may hold capMult budgets'
+-- worth of metal; a wave tops it up to that cap, never spawning more than one
+-- full budget and never less than minFraction of one (pressure never stops).
+-- Unspent budget is dropped, not banked.
+--------------------------------------------------------------------------------
+
+function M.FieldClamp(budget, fieldValue, capMult, minFraction)
+	local room = budget * capMult - fieldValue
+	local low  = budget * minFraction
+	if room > budget then room = budget end
+	if room < low    then room = low end
+	return math.floor(room)
 end
 
 return M
