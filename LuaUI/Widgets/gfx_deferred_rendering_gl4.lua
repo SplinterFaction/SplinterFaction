@@ -1654,6 +1654,16 @@ local function GetLightVBO(vboName)
 	if vboName == "cursorPointLightVBO" then
 		return cursorPointLightVBO
 	end
+	-- Unit-attached VBOs, so other widgets (gfx_unit_headlights) can AddLight/RemoveLight on units
+	if vboName == "unitConeLightVBO" then
+		return unitConeLightVBO
+	end
+	if vboName == "unitPointLightVBO" then
+		return unitPointLightVBO
+	end
+	if vboName == "unitBeamLightVBO" then
+		return unitBeamLightVBO
+	end
 	return nil
 end
 
