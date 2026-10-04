@@ -21,6 +21,11 @@
 --           plateau, see s_wavecomposer M.Budget) and it is field-aware: metal
 --           already alive on the map counts against each new wave.
 --
+--           The survival team earns Research Points like any other team (the
+--           ledger's passive income and kill rewards) and spends them on the
+--           team Weapons / Armor upgrades: from a set minute on, it tries to
+--           buy one level at a fixed interval, if it can afford it.
+--
 --  author:  SF
 --  license: GNU GPL, v2 or later
 --
@@ -198,6 +203,15 @@ local GARRISON_MAX_TIER      = 2
 local GARRISON_SHIELD_CHANCE = NumOpt("survivalai_garrisonshield", 0.35)
 local GARRISON_SHIELDS       = { [1] = "smallshieldgenerator", [2] = "smallshieldgenerator" }
 
+-- Team upgrades (game_team_upgrades.lua): from UPGRADE_START_MINUTES on the
+-- wave clock, each survival team tries to buy one Weapons or Armor level every
+-- UPGRADE_EVERY_MINUTES, paid from its own Research Points. No stipend: what
+-- it can afford is what the ledger gave it (passive income + kills), so an
+-- attempt it cannot pay for is simply skipped and the RP keeps accumulating.
+local UPGRADE_START_MINUTES = NumOpt("survivalai_upgradestart",    10)
+local UPGRADE_EVERY_MINUTES = NumOpt("survivalai_upgradeinterval",  5)   -- 0 disables
+local UPGRADE_TRACKS        = { "weapons", "armor" }
+
 -- Last-beacon rage
 local RAGE_BUDGET_MULT   = 1.5
 local RAGE_INTERVAL_MULT = 0.5
@@ -299,6 +313,9 @@ local unitCost     = {}     -- [unitID] = metal cost of a live wave unit
 local fieldValue   = {}     -- [teamID] = live wave metal on the field
 local limitedUnits = {}     -- [unitID] = true for live LIMITED_TIER wave units
 local limitedLive  = 0      -- how many of those are alive, all survival teams
+local forgeUnits   = {}     -- [unitID] = true for live wave units carrying the forge HP bonus
+local PublishTeams          -- forward declaration (defined with the team upgrades)
+local nextUpgradeFrame = nil   -- next team-upgrade attempt (nil = not scheduled / disabled)
 
 -- Engine bridge handed to the spawner (stubbed in smoke tests)
 local env = {
@@ -407,6 +424,7 @@ local function UntrackWaveUnit(unitID)
 		limitedUnits[unitID] = nil
 		limitedLive = math.max(0, limitedLive - 1)
 	end
+	forgeUnits[unitID] = nil
 end
 
 -- Live opposing teams (the "players" the top-tier ration is counted against)
@@ -528,11 +546,130 @@ local function ApplyBeaconEffect(kind, unitIDs)
 			if hp and maxHp then
 				spSetUnitMaxHealth(uid, maxHp * FORGE_HP_MULT)
 				spSetUnitHealth(uid, hp * FORGE_HP_MULT)
+				forgeUnits[uid] = true
 			end
 			spSetUnitRulesParam(uid, FORGE_RULES_PARAM, FORGE_DMG_MULT, INLOS)
 		end
 	end
 	-- accelerator: no per-unit effect; it bends the wave clock in RunWave
+end
+
+--------------------------------------------------------------------------------
+-- Per-team readout for the survival panel. Slot i is the i-th survival team in
+-- teamID order (teamOrder, fixed at Initialize):
+--   survival_teamCount
+--   survival_team<i>ID / Beacons / BeaconsMax / Weapons / Armor
+--   survival_team<i>State   0 = fighting, 1 = raging, 2 = defeated
+--------------------------------------------------------------------------------
+
+local teamOrder = {}
+
+PublishTeams = function()
+	local Upgrades = GG.TeamUpgrades
+	spSetGameRulesParam("survival_teamCount", #teamOrder)
+	for i = 1, #teamOrder do
+		local teamID = teamOrder[i]
+		local state  = survivalTeams[teamID]
+		local live   = Beacons.Count(teamID)
+		local key    = "survival_team" .. i
+		local w, a   = 0, 0
+		if Upgrades and Upgrades.GetLevel then
+			w = Upgrades.GetLevel(teamID, "weapons") or 0
+			a = Upgrades.GetLevel(teamID, "armor") or 0
+		end
+		spSetGameRulesParam(key .. "ID",         teamID)
+		spSetGameRulesParam(key .. "Beacons",    live)
+		spSetGameRulesParam(key .. "BeaconsMax", math.max(state.networkSize or 0, live))
+		spSetGameRulesParam(key .. "Weapons",    w)
+		spSetGameRulesParam(key .. "Armor",      a)
+		spSetGameRulesParam(key .. "State",      (state.defeated and 2) or (state.rage and 1) or 0)
+	end
+end
+
+--------------------------------------------------------------------------------
+-- Team upgrades
+--------------------------------------------------------------------------------
+
+-- Upgrade levels are allied-only team rules params, so players cannot read the
+-- survival team's. Publish them as game rules params for the survival panel:
+-- the highest level of each track across survival teams, plus one set of
+-- params per team (see PublishTeams) for the panel's per-team rows.
+local function PublishUpgrades()
+	local Upgrades = GG.TeamUpgrades
+	local w, a = 0, 0
+	if Upgrades and Upgrades.GetLevel then
+		for teamID in pairs(survivalTeams) do
+			w = math.max(w, Upgrades.GetLevel(teamID, "weapons") or 0)
+			a = math.max(a, Upgrades.GetLevel(teamID, "armor") or 0)
+		end
+	end
+	spSetGameRulesParam("survival_weaponsLevel", w)
+	spSetGameRulesParam("survival_armorLevel",   a)
+	PublishTeams()
+end
+
+-- An armor purchase re-bases every unit's max health onto unitdef x level,
+-- which drops the forge beacon's bonus from units already on the field. Put it
+-- back (the health fraction is preserved, as the upgrade gadget does).
+local function ReapplyForge(teamID)
+	for unitID in pairs(forgeUnits) do
+		if waveUnits[unitID] == teamID then
+			local hp, maxHp = spGetUnitHealth(unitID)
+			if hp and maxHp then
+				spSetUnitMaxHealth(unitID, maxHp * FORGE_HP_MULT)
+				spSetUnitHealth(unitID, hp * FORGE_HP_MULT)
+			end
+		end
+	end
+end
+
+-- One attempt for one team: buy the next level of whichever track is behind
+-- (a coin flip when they are level), if the team's RP covers it.
+local function TryUpgrade(teamID, state)
+	local Upgrades = GG.TeamUpgrades
+	if not (Upgrades and Upgrades.Purchase) then return end
+	if state.defeated or TeamIsDead(teamID) then return end
+
+	local w = Upgrades.GetLevel(teamID, "weapons") or 0
+	local a = Upgrades.GetLevel(teamID, "armor") or 0
+	local track
+	if w < a then
+		track = "weapons"
+	elseif a < w then
+		track = "armor"
+	else
+		track = UPGRADE_TRACKS[math.random(1, #UPGRADE_TRACKS)]
+	end
+
+	-- The other track is never cheaper (it is at the same level or higher), so
+	-- there is no point falling back to it when this one is out of reach.
+	local cost = Upgrades.GetNextCost(teamID, track)
+	if not cost then
+		-- This track is maxed; the other may still have a level left
+		track = (track == "weapons") and "armor" or "weapons"
+		cost  = Upgrades.GetNextCost(teamID, track)
+		if not cost then return end   -- both maxed
+	end
+
+	local ok, reason = Upgrades.Purchase(teamID, track)
+	if ok then
+		if track == "armor" then ReapplyForge(teamID) end
+		spEcho(string.format("[Survival] Team %d bought %s level %d for %d RP",
+			teamID, track, Upgrades.GetLevel(teamID, track), cost))
+		PublishUpgrades()
+	else
+		local have = (GG.Research and GG.Research.Get and GG.Research.Get(teamID)) or 0
+		spEcho(string.format("[Survival] Team %d could not buy %s (%s): has %d RP, needs %d",
+			teamID, track, tostring(reason), have, cost))
+	end
+end
+
+local function TickUpgrades(frame)
+	if not nextUpgradeFrame or frame < nextUpgradeFrame then return end
+	nextUpgradeFrame = nextUpgradeFrame + math.floor(UPGRADE_EVERY_MINUTES * 60 * 30)
+	for teamID, state in pairs(survivalTeams) do
+		TryUpgrade(teamID, state)
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -900,6 +1037,7 @@ local function PublishNetwork()
 	spSetGameRulesParam("survival_beacons",      live)
 	spSetGameRulesParam("survival_beaconsMax",   math.max(size, live))
 	spSetGameRulesParam("survival_respawnFrame", respawn)
+	PublishTeams()
 end
 
 -- Plant the starting network around the master beacon and garrison all of it.
@@ -1200,6 +1338,7 @@ function gadget:Initialize()
 			local luaAI = spGetTeamLuaAI(teamID)
 			if luaAI and luaAI ~= "" and DIFFICULTIES[luaAI] then
 				survivalTeams[teamID] = { diff = DIFFICULTIES[luaAI] }
+				teamOrder[#teamOrder + 1] = teamID
 				anySurvival = true
 				spEcho("[Survival] Team " .. teamID .. " is " .. luaAI)
 			end
@@ -1209,6 +1348,7 @@ function gadget:Initialize()
 	if not anySurvival then
 		return   -- dormant this game
 	end
+	table.sort(teamOrder)
 
 	pools = Pools.Build(UnitDefs, UnitDefNames)
 	Pools.Describe(pools, spEcho)
@@ -1316,6 +1456,7 @@ function gadget:Initialize()
 	spSetGameRulesParam("survival_rage", 0)
 	spSetGameRulesParam("survival_pressure", 0)
 	PublishNetwork()
+	PublishUpgrades()   -- levels survive a luarules reload as team rules params
 
 	GG.Survival = {
 		IsSurvivalTeam = function(teamID) return survivalTeams[teamID] ~= nil end,
@@ -1355,6 +1496,10 @@ function gadget:GameFrame(frame)
 			end
 			PublishNetwork()
 			PlanNextWave(frame)   -- telegraph wave 1 through the grace period
+
+			if UPGRADE_EVERY_MINUTES > 0 then
+				nextUpgradeFrame = frame + math.floor(UPGRADE_START_MINUTES * 60 * 30)
+			end
 		end
 		return
 	end
@@ -1375,6 +1520,7 @@ function gadget:GameFrame(frame)
 	end
 
 	TickRetaliations(frame)
+	TickUpgrades(frame)
 
 	if #dropGroups > 0 then
 		TickDropGroups(frame)

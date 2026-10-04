@@ -20,7 +20,7 @@ local bgcorner  = "LuaUI/Images/bgcorner.png"
 local accentImg = ":n:LuaUI/Images/staticgui_accent.png"
 
 local BASE_RESOLUTION     = 1080
-local PANEL_WIDTH         = 340
+local PANEL_WIDTH         = 640
 local PANEL_MARGIN_X      = 20
 local PANEL_MARGIN_Y      = 60
 local OUTER_CORNER        = 10
@@ -30,7 +30,7 @@ local PANEL_ACCENT_HEIGHT = 5
 
 local SECTION_HEADER_H    = 22
 local PLAYER_ROW_H        = 28
-local PLAYERS_MAX_VISIBLE = 4
+local ENEMY_ROWS_VISIBLE  = 3    -- allies get the rest of the left column
 local UNIT_LIST_H         = 84
 local SLIDER_SECTION_H    = 52
 local CHECKBOX_H          = 28
@@ -393,31 +393,24 @@ local function BuildGeometry()
 	local sliderH     = SLIDER_SECTION_H* uiScale
 	local checkH      = CHECKBOX_H      * uiScale
 	local btnH        = BUTTON_H        * uiScale
-	local playersVisH = playerRowH * PLAYERS_MAX_VISIBLE
+	local enemyVisH   = playerRowH * ENEMY_ROWS_VISIBLE
+	local groupGap    = sg * 1.5   -- space between stacked sections in a column
 
-	-- Dry-run: simulate the cursor walk to get the exact total height needed.
-	-- This runs the same logic as the real layout below, just counting pixels.
-	local function measureLayout()
-		local c = 0  -- cursor offset from y2, accumulates downward
+	-- Two columns over a full-width footer:
+	--   left  = who  : Allies, Enemies
+	--   right = what : Selected Units + share checkbox, Metal, Energy
+	-- The right column has a fixed height; the ally list absorbs whatever is
+	-- left over on the left so both columns end on the same line.
+	local rightH = sectionHdrH + sg + unitListH + sg + checkH   -- units + checkbox
+	             + groupGap + sectionHdrH + sg + sliderH         -- metal
+	             + groupGap + sectionHdrH + sg + sliderH         -- energy
+	local allyVisH = rightH - (sectionHdrH + sg) - groupGap - (sectionHdrH + sg + enemyVisH)
+	allyVisH = math_max(allyVisH, playerRowH * 2)
+	local leftH  = (sectionHdrH + sg + allyVisH) + groupGap + (sectionHdrH + sg + enemyVisH)
+	local colH   = math_max(leftH, rightH)
 
-		local function row(h)  c = c + h + sg  end
-		local function gap(g)  c = c + g        end
-
-		c = c + pad + accentExtra  -- top margin
-
-		row(sectionHdrH) ; row(playersVisH) ; gap(sg * 0.5)   -- ally
-		row(sectionHdrH) ; row(playersVisH) ; gap(sg * 0.5)   -- enemy
-		row(sectionHdrH) ; row(unitListH)   ; gap(sg * 0.5)   -- units
-		row(sectionHdrH) ; row(sliderH)     ; gap(sg * 0.5)   -- metal
-		row(sectionHdrH) ; row(sliderH)     ; gap(sg * 0.5)   -- energy
-		row(checkH)      ; gap(sg * 3)                         -- checkbox + extra gap
-		row(btnH)                                               -- buttons
-		c = c + pad                                             -- bottom margin
-
-		return c
-	end
-
-	local contentH = measureLayout()
+	local footerGap = sg * 2.5
+	local contentH  = pad + accentExtra + colH + footerGap + btnH + pad
 
 	local cx = math_floor(vsx * 0.5)
 	local cy = math_floor(vsy * 0.5 + PANEL_MARGIN_Y * uiScale)
@@ -446,68 +439,70 @@ local function BuildGeometry()
 	local innerW = cx2 - cx1
 	local btnW   = math_floor((innerW - pad) * 0.5)
 
-	-- Real layout: cursor walks downward from y2 (top of panel in Spring coords).
-	local cursor = y2 - pad - accentExtra
+	-- Column extents. Same split as the footer buttons, so Cancel sits under
+	-- the left column and Apply under the right.
+	local lx1, lx2 = cx1, cx1 + btnW
+	local rx1, rx2 = cx2 - btnW, cx2
 
-	local function NextRow(h)
+	-- Each column walks its own cursor downward from the top of the content
+	-- area (y2 is the top of the panel in Spring coords).
+	local top = y2 - pad - accentExtra
+	local cursor
+
+	local function NextRow(h, gapAfter)
 		local ry2 = cursor
 		local ry1 = cursor - h
-		cursor = ry1 - sg
+		cursor = ry1 - (gapAfter or sg)
 		return ry1, ry2
 	end
 
+	-- Left column
+	cursor = top
 	local allyHdrY1,   allyHdrY2   = NextRow(sectionHdrH)
-	local allyListY1,  allyListY2  = NextRow(playersVisH)
-	cursor = cursor - sg * 0.5
-
+	local allyListY1,  allyListY2  = NextRow(allyVisH, groupGap)
 	local enemyHdrY1,  enemyHdrY2  = NextRow(sectionHdrH)
-	local enemyListY1, enemyListY2 = NextRow(playersVisH)
-	cursor = cursor - sg * 0.5
+	local enemyListY1, enemyListY2 = NextRow(enemyVisH)
 
+	-- Right column
+	cursor = top
 	local unitHdrY1,   unitHdrY2   = NextRow(sectionHdrH)
 	local unitListY1,  unitListY2  = NextRow(unitListH)
-	cursor = cursor - sg * 0.5
-
+	local checkY1,     checkY2     = NextRow(checkH, groupGap)
 	local metalHdrY1,    metalHdrY2    = NextRow(sectionHdrH)
-	local metalSliderY1, metalSliderY2 = NextRow(sliderH)
-	cursor = cursor - sg * 0.5
-
+	local metalSliderY1, metalSliderY2 = NextRow(sliderH, groupGap)
 	local energyHdrY1,    energyHdrY2    = NextRow(sectionHdrH)
 	local energySliderY1, energySliderY2 = NextRow(sliderH)
-	cursor = cursor - sg * 0.5
 
-	local checkY1, checkY2 = NextRow(checkH)
-	cursor = cursor - sg * 3   -- extra gap before buttons
-
-	local btnY1, btnY2 = NextRow(btnH)
-	-- remaining space = pad (bottom margin), matches measureLayout
+	-- Footer, full width
+	local btnY2 = top - colH - footerGap
+	local btnY1 = btnY2 - btnH
 
 	geom = {
 		pad = pad, sw = sw, cx1 = cx1, cx2 = cx2, innerW = innerW,
 		playerRowH = playerRowH, sectionHdrH = sectionHdrH,
 
-		allyHdr  = {x1=cx1, y1=allyHdrY1,  x2=cx2,       y2=allyHdrY2},
-		allyList = {x1=cx1, y1=allyListY1, x2=cx2-sw-2,  y2=allyListY2},
-		allyBar  = {x1=cx2-sw, y1=allyListY1, x2=cx2,    y2=allyListY2},
+		allyHdr  = {x1=lx1, y1=allyHdrY1,  x2=lx2,       y2=allyHdrY2},
+		allyList = {x1=lx1, y1=allyListY1, x2=lx2-sw-2,  y2=allyListY2},
+		allyBar  = {x1=lx2-sw, y1=allyListY1, x2=lx2,    y2=allyListY2},
 
-		enemyHdr  = {x1=cx1, y1=enemyHdrY1,  x2=cx2,      y2=enemyHdrY2},
-		enemyList = {x1=cx1, y1=enemyListY1, x2=cx2-sw-2, y2=enemyListY2},
-		enemyBar  = {x1=cx2-sw, y1=enemyListY1, x2=cx2,   y2=enemyListY2},
+		enemyHdr  = {x1=lx1, y1=enemyHdrY1,  x2=lx2,      y2=enemyHdrY2},
+		enemyList = {x1=lx1, y1=enemyListY1, x2=lx2-sw-2, y2=enemyListY2},
+		enemyBar  = {x1=lx2-sw, y1=enemyListY1, x2=lx2,   y2=enemyListY2},
 
-		unitHdr  = {x1=cx1, y1=unitHdrY1,  x2=cx2,      y2=unitHdrY2},
-		unitList = {x1=cx1, y1=unitListY1, x2=cx2-sw-2, y2=unitListY2},
-		unitBar  = {x1=cx2-sw, y1=unitListY1, x2=cx2,   y2=unitListY2},
+		unitHdr  = {x1=rx1, y1=unitHdrY1,  x2=rx2,      y2=unitHdrY2},
+		unitList = {x1=rx1, y1=unitListY1, x2=rx2-sw-2, y2=unitListY2},
+		unitBar  = {x1=rx2-sw, y1=unitListY1, x2=rx2,   y2=unitListY2},
 
-		metalHdr    = {x1=cx1, y1=metalHdrY1,    x2=cx2, y2=metalHdrY2},
-		metalSlider = {x1=cx1, y1=metalSliderY1, x2=cx2, y2=metalSliderY2},
+		checkRow  = {x1=rx1, y1=checkY1, x2=rx2, y2=checkY2},
 
-		energyHdr    = {x1=cx1, y1=energyHdrY1,    x2=cx2, y2=energyHdrY2},
-		energySlider = {x1=cx1, y1=energySliderY1, x2=cx2, y2=energySliderY2},
+		metalHdr    = {x1=rx1, y1=metalHdrY1,    x2=rx2, y2=metalHdrY2},
+		metalSlider = {x1=rx1, y1=metalSliderY1, x2=rx2, y2=metalSliderY2},
 
-		checkRow  = {x1=cx1, y1=checkY1, x2=cx2, y2=checkY2},
+		energyHdr    = {x1=rx1, y1=energyHdrY1,    x2=rx2, y2=energyHdrY2},
+		energySlider = {x1=rx1, y1=energySliderY1, x2=rx2, y2=energySliderY2},
 
-		cancelBtn = {x1=cx1,      y1=btnY1, x2=cx1+btnW, y2=btnY2, label="Cancel", accent=ACCENT_CANCEL},
-		applyBtn  = {x1=cx2-btnW, y1=btnY1, x2=cx2,      y2=btnY2, label="Apply",  accent=ACCENT_APPLY},
+		cancelBtn = {x1=lx1, y1=btnY1, x2=lx2, y2=btnY2, label="Cancel", accent=ACCENT_CANCEL},
+		applyBtn  = {x1=rx1, y1=btnY1, x2=rx2, y2=btnY2, label="Apply",  accent=ACCENT_APPLY},
 	}
 end
 
@@ -538,10 +533,11 @@ local function RefreshPlayerLists()
 	enemyPlayers = {}
 	local myTeam     = spGetMyTeamID()
 	local myAllyTeam = spGetMyAllyTeamID()
+	local gaiaTeam   = Spring.GetGaiaTeamID()
 	for _, teamID in ipairs(spGetTeamList() or {}) do
 		if teamID ~= myTeam then
 			local _, _, isDead, _, side, allyTeamID = Spring.GetTeamInfo(teamID, false)
-			local isGaia = (teamID == 0) or (side and side:lower() == "gaia")
+			local isGaia = (teamID == gaiaTeam)
 			if not isDead and not isGaia then
 				local name = GetTeamDisplayName(teamID)
 				local r, g, b = Spring.GetTeamColor(teamID)
@@ -1142,4 +1138,4 @@ function widget:DrawScreen()
 
 	-- Hand the accumulated shape instances to the GPU.
 	Flush()
-end
+end

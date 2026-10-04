@@ -82,6 +82,7 @@ local rawTexRect  = gl.TexRect
 local spGetViewGeometry   = Spring.GetViewGeometry
 local spGetGameRulesParam = Spring.GetGameRulesParam
 local spGetGameFrame      = Spring.GetGameFrame
+local spGetTeamColor      = Spring.GetTeamColor
 
 local floor, max, min, sin = math.floor, math.max, math.min, math.sin
 
@@ -112,6 +113,14 @@ local rageCount     = 0
 local nextType      = nil     -- archetype of the wave the countdown is for
 local respawnFrame  = 0       -- 0 = network at full strength (no regrowth pending)
 local pressure      = 0       -- 0..100, live wave metal against the field cap
+local weaponsLevel  = 0       -- survival team upgrade levels (highest across
+local armorLevel    = 0       -- survival teams when there are several)
+
+-- With two or more survival teams the single UPGRADES row becomes one row per
+-- team: team color tag, its beacons, its upgrade levels.
+local teamCount = 0
+local teams     = {}          -- [slot] = { id, beacons, beaconsMax, weapons, armor, state, r, g, b }
+local DEFEATED_COLOR = {0.50, 0.50, 0.50, 1}
 
 local fontfile = LUAUI_DIRNAME .. "fonts/" .. Spring.GetConfigString("ui_font", "Saira_SemiCondensed-SemiBold.ttf")
 local fontfileScale = (0.5 + (vsx * vsy / 5700000))
@@ -305,7 +314,8 @@ local function RecalculateGeometry()
 	local line      = LINE_HEIGHT * widgetScale
 	local status    = STATUS_HEIGHT * widgetScale
 
-	panelH = pad + title + countdown + line * 5 + status + pad
+	local teamRows = (teamCount >= 2) and teamCount or 1
+	panelH = pad + title + countdown + line * (5 + teamRows) + status + pad
 
 	-- Rows, top-down, in panel-local coords (0,0 = bottom-left)
 	local y = panelH - pad
@@ -316,6 +326,11 @@ local function RecalculateGeometry()
 	layout.nextY    = y - line       ; y = y - line
 	layout.beaconY  = y - line       ; y = y - line
 	layout.regrowY  = y - line       ; y = y - line
+	layout.upgradeY = y - line       -- first (or only) upgrades row
+	layout.teamY    = {}
+	for i = 1, teamRows do
+		layout.teamY[i] = y - line   ; y = y - line
+	end
 	layout.pressY   = y - line       ; y = y - line
 	layout.statusY  = y - status
 	layout.textL    = pad + 2 * widgetScale
@@ -336,7 +351,7 @@ end
 -- dragging never rebuilt the list. Display lists and the fixed-function matrix
 -- stack are both gone from OpenGL core profile, so the panel origin is now
 -- applied at record time by SetPanelOrigin and the chrome is drawn straight
--- through. It is three shape instances and seven strings - cheaper than the
+-- through. It is three shape instances and eight strings - cheaper than the
 -- bookkeeping the list needed.
 --
 -- Shape coordinates stay panel-local (the offset is applied inside the shape
@@ -377,6 +392,10 @@ local function DrawStaticChrome(ox, oy)
 		9.5 * widgetScale, "o")
 	font:Print("REGROWTH", ox + layout.textL, oy + layout.regrowY + 4 * widgetScale,
 		9.5 * widgetScale, "o")
+	if teamCount < 2 then
+		font:Print("UPGRADES", ox + layout.textL, oy + layout.upgradeY + 4 * widgetScale,
+			9.5 * widgetScale, "o")
+	end
 	font:Print("PRESSURE", ox + layout.textL, oy + layout.pressY + 4 * widgetScale,
 		9.5 * widgetScale, "o")
 	font:End()
@@ -466,6 +485,33 @@ function widget:GameFrame(n)
 	nextType      = (spGetGameRulesParam("survival_nextWaveType"))
 	respawnFrame  = (spGetGameRulesParam("survival_respawnFrame")) or 0
 	pressure      = (spGetGameRulesParam("survival_pressure")) or 0
+	weaponsLevel  = (spGetGameRulesParam("survival_weaponsLevel")) or 0
+	armorLevel    = (spGetGameRulesParam("survival_armorLevel")) or 0
+
+	local count = (spGetGameRulesParam("survival_teamCount")) or 0
+	for i = 1, count do
+		local t = teams[i]
+		if not t then t = {} ; teams[i] = t end
+		local key = "survival_team" .. i
+		local id  = (spGetGameRulesParam(key .. "ID"))
+		if id ~= t.id then
+			t.id = id
+			t.r, t.g, t.b = 1, 1, 1
+			if id then
+				local r, g, b = spGetTeamColor(id)
+				if r then t.r, t.g, t.b = r, g, b end
+			end
+		end
+		t.beacons    = (spGetGameRulesParam(key .. "Beacons")) or 0
+		t.beaconsMax = (spGetGameRulesParam(key .. "BeaconsMax")) or 0
+		t.weapons    = (spGetGameRulesParam(key .. "Weapons")) or 0
+		t.armor      = (spGetGameRulesParam(key .. "Armor")) or 0
+		t.state      = (spGetGameRulesParam(key .. "State")) or 0
+	end
+	if count ~= teamCount then
+		teamCount = count
+		RecalculateGeometry()   -- the panel grows by one row per extra team
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -600,6 +646,41 @@ function widget:DrawScreen()
 		font:SetTextColor(LABEL_COLOR[1], LABEL_COLOR[2], LABEL_COLOR[3], 1)
 		font:Print("--", ox + layout.textR,
 			oy + layout.regrowY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+	end
+
+	-- Survival team upgrade levels, same W<n> / A<n> badges as the players list
+	if teamCount < 2 then
+		if weaponsLevel > 0 or armorLevel > 0 then
+			font:SetTextColor(VALUE_COLOR[1], VALUE_COLOR[2], VALUE_COLOR[3], VALUE_COLOR[4])
+		else
+			font:SetTextColor(LABEL_COLOR[1], LABEL_COLOR[2], LABEL_COLOR[3], 1)
+		end
+		font:Print("W" .. weaponsLevel .. "  A" .. armorLevel, ox + layout.textR,
+			oy + layout.upgradeY + 4 * widgetScale, 9.5 * widgetScale, "ro")
+	else
+		-- One row per survival team: "TEAM 3" in its team color, then its
+		-- beacons and upgrade levels. Raging teams pulse; defeated ones grey out.
+		for i = 1, teamCount do
+			local t, ty = teams[i], layout.teamY[i]
+			if t and ty then
+				local rowY = oy + ty + 4 * widgetScale
+				if t.state == 2 then
+					font:SetTextColor(DEFEATED_COLOR[1], DEFEATED_COLOR[2], DEFEATED_COLOR[3], 1)
+					font:Print("TEAM " .. tostring(t.id), ox + layout.textL, rowY, 9.5 * widgetScale, "o")
+					font:Print("DEFEATED", ox + layout.textR, rowY, 9.5 * widgetScale, "ro")
+				else
+					font:SetTextColor(t.r, t.g, t.b, 1)
+					font:Print("TEAM " .. tostring(t.id), ox + layout.textL, rowY, 9.5 * widgetScale, "o")
+					if t.state == 1 then
+						font:SetTextColor(RAGE_COLOR[1], RAGE_COLOR[2], RAGE_COLOR[3], pulse)
+					else
+						font:SetTextColor(VALUE_COLOR[1], VALUE_COLOR[2], VALUE_COLOR[3], VALUE_COLOR[4])
+					end
+					font:Print(t.beacons .. "/" .. t.beaconsMax .. "   W" .. t.weapons .. "  A" .. t.armor,
+						ox + layout.textR, rowY, 9.5 * widgetScale, "ro")
+				end
+			end
+		end
 	end
 
 	-- Status line: rage > surge > preparing

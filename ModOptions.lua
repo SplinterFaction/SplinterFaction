@@ -549,6 +549,30 @@ local options= {
 	},
 
 	{
+		key     = "survivalai_upgradestart",
+		name    = "Upgrades Start (minutes)",
+		desc    = "Minute on the wave clock at which the Survival AI first tries to buy a Weapons or Armor upgrade. It pays with its own Research Points, earned like any other team.",
+		type    = "number",
+		def     = 10,
+		min     = 0,
+		max     = 120,
+		step    = 1,
+		section = "survivalaioptions",
+	},
+
+	{
+		key     = "survivalai_upgradeinterval",
+		name    = "Upgrade Attempt Interval (minutes)",
+		desc    = "After the first attempt, the Survival AI tries to buy one more Weapons or Armor level this often, if it can afford it. 0 = the Survival AI never buys upgrades.",
+		type    = "number",
+		def     = 5,
+		min     = 0,
+		max     = 60,
+		step    = 1,
+		section = "survivalaioptions",
+	},
+
+	{
 		key     = "survivalai_surgewaves",
 		name    = "Surge Wave Interval",
 		desc    = "Every Nth wave is a surge: double budget, a dramatic archetype, launched from every beacon at once, announced one wave in advance. 0 disables surges.",
