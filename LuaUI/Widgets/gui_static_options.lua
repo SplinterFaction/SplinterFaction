@@ -1401,31 +1401,15 @@ end
 
 function widget:MouseWheel(up, value)
 	if not isOpen then return false end
-	local a, c, m, s = spGetModKeyState()
-	if a or m then return false end
 	local mx, my = spGetMouseState()
-
-	-- wheel over a slider nudges it by one step
-	local row = RowAt(mx, my)
-	if row and row.opt.type == "slider" and not dropOpt then
-		local opt = row.opt
-		local cur = Get(opt)
-		local nv
-		if opt.steps then
-			local idx = 1
-			for i = 1, #opt.steps do if opt.steps[i] == cur then idx = i end end
-			idx = Clamp(idx + (up and 1 or -1), 1, #opt.steps)
-			nv = opt.steps[idx]
-		else
-			nv = Clamp(cur + (up and 1 or -1) * (opt.step or 1) * (s and 5 or 1), opt.min, opt.max)
-		end
-		if nv ~= cur then Set(opt, nv) end
-		return true
-	end
-
-	if not InRect(mx, my, geom.view) and not InRect(mx, my, geom.bar) then return false end
+	-- while the panel is open, the wheel only ever scrolls the list. It never
+	-- changes a value, and over the panel it is swallowed so the camera does
+	-- not zoom underneath.
+	if not IsOnPanel(mx, my) then return false end
+	if not InRect(mx, my, geom.view) and not InRect(mx, my, geom.bar) then return true end
 	local viewH = geom.view.y2 - geom.view.y1
 	if contentH <= viewH then return true end
+	local _, c, _, s = spGetModKeyState()
 	local step = (s and 4 or (c and 1 or 2)) * ROW_H * uiScale
 	scroll = Clamp(scroll + (up and -step or step), 0, contentH - viewH)
 	return true
