@@ -67,6 +67,16 @@ return {
 		  api = {"selunitbuttons", "getOldUnitIcons", "setOldUnitIcons"}, default = false },
 
 		{ type = "separator", name = "Units" },
+		{ id = "autoteamcolors", name = "Auto team colors", type = "bool", config = "AutoTeamColors", default = false,
+		  desc = "Replace lobby colors with a generated palette, with teammates in related shades. Reloads the interface.",
+		  children = {
+			  { id = "autoteamcolorspalette", name = "Palette", type = "select",
+			    options = { "Purple vs Orange", "Red vs Blue", "Green vs Brown", "Teal vs Pink", "Gold vs Blue", "Green vs Magenta" },
+			    get = function() return Spring.GetConfigInt("AutoTeamColorsPalette", 1) end,
+			    set = function(idx) Spring.SetConfigInt("AutoTeamColorsPalette", idx) end,
+			    desc = "Main colors for the first two teams. Other teams and teammates are generated around them. Reloads the interface." },
+		  } },
+
 		{ id = "healthbars", name = "Health bars", type = "bool", widget = "Health Bars GL4", requires = "Health Bars GL4",
 		  children = {
 			{ id = "healthbarscale", name = "Scale", type = "slider", min = 0.7, max = 1.5, step = 0.05, api = {"healthbars", "getScale", "setScale"}, configVar = {"Health Bars GL4", "barScale"}, default = 1 },

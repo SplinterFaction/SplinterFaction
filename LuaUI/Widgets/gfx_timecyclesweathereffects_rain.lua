@@ -1,10 +1,10 @@
 function widget:GetInfo()
 	return {
 		name      = "GFX Rain",
-		desc      = "GL4 rain streaks and war-driven falling ash, driven by the Weather widget",
+		desc      = "GL4 rain streaks, ground splashes and war-driven falling ash, driven by the Weather widget",
 		author    = "trepan, Argh, The_Yak, Doo (GL4 rewrite 2026)",
 		date      = "2026-07-26",
-		version   = "3.0",
+		version   = "3.2",
 		license   = "GNU GPL, v2 or later",
 		layer     = -24,
 		enabled   = true,
@@ -34,6 +34,17 @@ local RAIN_BASE_RGB    = { 0.50, 0.60, 0.80 }
 local RAIN_ALPHA       = 0.65   -- streak alpha at full density
 local DENSITY_DIMMING  = 0.35   -- 0..1: per-drop brightness reduction at full density (0 = none; higher = storms darker per streak)
 
+-- Rain: ground impacts (land splashes, rings on water). These are not tied to
+-- individual streaks; they are an independent layer that tracks rain density
+local MAX_SPLASHES     = 6000   -- impacts alive at full density
+local SPLASH_AREA      = 3200   -- diameter (elmos) of the impact field around the camera's ground focus; smaller = denser
+local SPLASH_LIFE      = 0.6    -- seconds per impact cycle (water rings use all of it, land splashes the first 60%)
+local SPLASH_SIZE      = { 12, 30 }  -- world diameter in elmos: land splash, water ring
+local SPLASH_RGBA      = { 0.80, 0.88, 1.00, 0.20 }
+local SPLASH_ADDITIVE  = false  -- false = alpha blend (reads on bright terrain), true = additive like the streaks
+local SPLASH_FADE      = { 3000, 5000 }  -- camera-to-ground distance where impacts start fading / are skipped entirely
+local SPLASH_LIFT      = 6      -- elmos each impact is pulled toward the camera so terrain does not z-fight it
+
 -- War-driven ash
 local MAX_ASH_MOTES    = 6000
 local ASH_VOLUME       = { 3500, 2500, 3500 }
@@ -53,6 +64,8 @@ local glGetShaderLog       = gl.GetShaderLog
 local glGetUniformLocation = gl.GetUniformLocation
 local glUseShader          = gl.UseShader
 local glUniform            = gl.Uniform
+local glUniformInt         = gl.UniformInt
+local glTexture            = gl.Texture
 local glBlending           = gl.Blending
 local glDepthTest          = gl.DepthTest
 local glDepthMask          = gl.DepthMask
@@ -61,10 +74,16 @@ local glPointSize          = gl.PointSize
 local glLineWidth          = gl.LineWidth
 local glGetAtmosphere      = gl.GetAtmosphere
 local spGetCameraPosition  = Spring.GetCameraPosition
+local spGetCameraDirection = Spring.GetCameraDirection
+local spTraceScreenRay     = Spring.TraceScreenRay
 local spGetTimer           = Spring.GetTimer
 local spDiffTimers         = Spring.DiffTimers
 local spEcho               = Spring.Echo
 local mathFloor            = math.floor
+local mathSqrt             = math.sqrt
+local mathAbs              = math.abs
+local mathMax              = math.max
+local mathMin              = math.min
 
 local GL_LINES     = GL.LINES
 local GL_POINTS    = GL.POINTS
@@ -77,8 +96,12 @@ local GL_ONE_MINUS_SRC_ALPHA = GL.ONE_MINUS_SRC_ALPHA
 -- State
 --------------------------------------------------------------------------------
 
-local rainShader, ashShader
+local rainShader, ashShader, splashShader
 local rainVAO, rainVBO
+local splashVAO, splashVBO
+local splashU = {}
+local vsx, vsy = 1920, 1080
+local voidWater -- resolved on first draw (nil = unknown yet)
 local ashVAO, ashVBO
 local rainU = {} -- uniform locations
 local ashU  = {}
@@ -242,6 +265,154 @@ void main()
 }
 ]]
 
+-- Ground impacts. Each point picks a fresh hashed XZ spot every life cycle,
+-- reads the terrain height from $heightmap, and plays a short expand + fade.
+-- Below sea level it sits on the water plane and draws a ring instead.
+local splashVertSrc = [[
+#version 420 compatibility
+
+uniform sampler2D heightTex;
+uniform float time;
+uniform vec3  camPos;
+uniform vec2  center;     // world xz the field wraps around (camera ground focus)
+uniform float density;
+uniform float maxCount;
+uniform float area;       // field diameter
+uniform vec2  mapSize;
+uniform float life;       // seconds per impact cycle
+uniform vec2  size;       // world diameter: land, water
+uniform float viewHeight; // viewport height in pixels
+uniform float lift;
+uniform float waterRings; // 1 = rings on water, 0 = nothing below sea level (voidwater)
+uniform vec4  color;
+
+out vec4  vColor;
+out float vPhase;
+out float vWater;
+
+// Integer hash (PCG). The float hash used for rain degrades once its input
+// grows, and the cycle counter here grows for the whole match
+uint pcg(uint v)
+{
+	uint state = v * 747796405u + 2891336453u;
+	uint word  = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+	return (word >> 22u) ^ word;
+}
+
+float unit(uint h)
+{
+	return float(h >> 8u) * (1.0 / 16777216.0);
+}
+
+void cull()
+{
+	vColor = vec4(0.0);
+	vPhase = 0.0;
+	vWater = 0.0;
+	gl_PointSize = 1.0;
+	gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+}
+
+void main()
+{
+	if (float(gl_VertexID) >= density * maxCount) {
+		cull();
+		return;
+	}
+
+	// stable per-point randoms: cycle rate variation and phase offset
+	uint  id   = uint(gl_VertexID);
+	uint  h0   = pcg(id);
+	float rnd  = unit(h0);
+	float offs = unit(pcg(h0));
+
+	float cyc   = time / life * (0.8 + 0.4 * rnd) + offs;
+	float phase = fract(cyc);
+
+	// new position every cycle
+	uint  h  = pcg(id ^ pcg(uint(cyc) + 0x9E3779B9u));
+	float rx = unit(h);
+	h = pcg(h);
+	float rz = unit(h);
+
+	vec2 xz = vec2(rx, rz) * area;
+	xz = mod(xz - center, area) - 0.5 * area + center;
+
+	if (any(lessThan(xz, vec2(0.0))) || any(greaterThan(xz, mapSize))) {
+		cull();
+		return;
+	}
+
+	// heightmap texel i sits at world coordinate 8 * i
+	vec2  uv     = (xz / 8.0 + 0.5) / vec2(textureSize(heightTex, 0));
+	float ground = textureLod(heightTex, uv, 0.0).r;
+	bool  water  = ground < 0.0;
+
+	// land splashes are quicker than water rings
+	float p = water ? phase : phase / 0.6;
+	if (p >= 1.0 || (water && waterRings < 0.5)) {
+		cull();
+		return;
+	}
+
+	vec3  pos   = vec3(xz.x, max(ground, 0.0), xz.y);
+	vec3  toCam = camPos - pos;
+	float dist  = max(length(toCam), 1.0);
+	pos += toCam / dist * lift;
+
+	// true world-space size in pixels
+	float world = (water ? size.y : size.x) * (0.7 + 0.6 * rnd);
+	float px    = world * gl_ProjectionMatrix[1][1] * viewHeight * 0.5 / dist;
+	gl_PointSize = clamp(px, 1.0, 64.0);
+
+	float fade = 1.0 - p;
+	// circular field with a soft rim, so the wrap boundary is never a visible line
+	float rim  = 1.0 - smoothstep(0.8, 1.0, length(xz - center) / (0.5 * area));
+
+	vColor = color;
+	vColor.a *= fade * (water ? 1.0 : fade) * rim * smoothstep(0.75, 2.5, px);
+	vPhase = p;
+	vWater = water ? 1.0 : 0.0;
+
+	gl_Position = gl_ModelViewProjectionMatrix * vec4(pos, 1.0);
+}
+]]
+
+-- Point sprites face the screen, so the shape is squashed vertically by the
+-- camera pitch to make it read as lying flat on the ground
+local splashFragSrc = [[
+#version 420 compatibility
+
+uniform float squash; // |camera forward y|: 1 looking straight down, smaller at grazing angles
+
+in vec4  vColor;
+in float vPhase;
+in float vWater;
+
+void main()
+{
+	vec2 d = gl_PointCoord - vec2(0.5);
+	d.y /= squash;
+	float r = length(d) * 2.0; // 0 at center, 1 at sprite edge
+
+	float a;
+	if (vWater > 0.5) {
+		// thin ring expanding outward
+		float radius = mix(0.15, 0.88, vPhase);
+		float width  = mix(0.16, 0.08, vPhase);
+		a = 1.0 - smoothstep(0.0, width, abs(r - radius));
+	} else {
+		// soft burst expanding outward, with a brighter core early on
+		float radius = mix(0.35, 1.0, vPhase);
+		a = 1.0 - smoothstep(radius * 0.3, radius, r);
+		a += (1.0 - vPhase) * (1.0 - smoothstep(0.0, 0.25, r));
+		a = min(a, 1.0);
+	}
+
+	gl_FragColor = vec4(vColor.rgb, vColor.a * a);
+}
+]]
+
 --------------------------------------------------------------------------------
 -- Helpers
 --------------------------------------------------------------------------------
@@ -249,7 +420,7 @@ void main()
 local function CompileShader(name, vert, frag)
 	local shader = glCreateShader({ vertex = vert, fragment = frag })
 	if not shader then
-		spEcho("[GFX Rain] " .. name .. " shader compilation failed, removing")
+		spEcho("[GFX Rain] " .. name .. " shader compilation failed")
 		spEcho(glGetShaderLog())
 		return nil
 	end
@@ -267,6 +438,30 @@ local function CacheUniforms(shader, t)
 	t.color    = glGetUniformLocation(shader, "color")
 end
 
+local function CacheSplashUniforms(shader, t)
+	local names = {
+		"heightTex", "time", "camPos", "center", "density", "maxCount", "area", "mapSize",
+		"life", "size", "viewHeight", "lift", "waterRings", "color", "squash",
+	}
+	for i = 1, #names do
+		t[names[i]] = glGetUniformLocation(shader, names[i])
+	end
+end
+
+-- Where the camera is looking on the ground: the impact field wraps around
+-- this point, since an RTS camera sits far above the terrain it is viewing
+local function GetGroundFocus(cx, cy, cz, dx, dy, dz)
+	local _, hit = spTraceScreenRay(vsx * 0.5, vsy * 0.5, true, false, false, false)
+	if hit then
+		return hit[1], hit[2], hit[3]
+	end
+	if dy < -0.01 and cy > 0 then
+		local k = cy / -dy -- screen center misses the map: intersect the y = 0 plane instead
+		return cx + dx * k, 0, cz + dz * k
+	end
+	return nil
+end
+
 local function SetCommonUniforms(u, t, cx, cy, cz, density, maxCount, volume, fall)
 	glUniform(u.time, t)
 	glUniform(u.camPos, cx, cy, cz)
@@ -274,6 +469,57 @@ local function SetCommonUniforms(u, t, cx, cy, cz, density, maxCount, volume, fa
 	glUniform(u.maxCount, maxCount)
 	glUniform(u.volume, volume[1], volume[2], volume[3])
 	glUniform(u.fall, fall[1], fall[2], fall[3])
+end
+
+-- Kept out of DrawWorld: Lua 5.1 caps a function at 60 upvalues
+local function DrawSplashes(t, cx, cy, cz, visDensity, splashCount)
+	local dx, dy, dz = spGetCameraDirection()
+	local fx, fy, fz = GetGroundFocus(cx, cy, cz, dx, dy, dz)
+	if fx then
+		local ox, oy, oz = fx - cx, fy - cy, fz - cz
+		local camDist = mathSqrt(ox * ox + oy * oy + oz * oz)
+		-- zoom fade: impacts are sub-pixel shimmer from far away, so skip the pass
+		local fade = (SPLASH_FADE[2] - camDist) / (SPLASH_FADE[2] - SPLASH_FADE[1])
+		fade = mathMax(0, mathMin(1, fade))
+
+		if fade > 0 and glTexture(0, "$heightmap") then
+			if voidWater == nil then
+				-- voidWater is a gl.GetMapRendering key (engine: LuaOpenGL::GetMapRendering).
+				-- pcall so an unknown key on some other engine build cannot take the widget down
+				local ok, isVoid = pcall(gl.GetMapRendering, "voidWater")
+				voidWater = (ok and isVoid) and true or false
+			end
+
+			if SPLASH_ADDITIVE then
+				glBlending(GL_SRC_ALPHA, GL_ONE)
+			else
+				glBlending(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			end
+			glPointSprite(true, true)
+
+			local u = splashU
+			glUseShader(splashShader)
+			glUniformInt(u.heightTex, 0)
+			glUniform(u.time, t)
+			glUniform(u.camPos, cx, cy, cz)
+			glUniform(u.center, fx, fz)
+			glUniform(u.density, visDensity)
+			glUniform(u.maxCount, MAX_SPLASHES)
+			glUniform(u.area, SPLASH_AREA)
+			glUniform(u.mapSize, Game.mapSizeX, Game.mapSizeZ)
+			glUniform(u.life, SPLASH_LIFE)
+			glUniform(u.size, SPLASH_SIZE[1], SPLASH_SIZE[2])
+			glUniform(u.viewHeight, vsy)
+			glUniform(u.lift, SPLASH_LIFT)
+			glUniform(u.waterRings, voidWater and 0 or 1)
+			glUniform(u.squash, mathMax(0.2, mathAbs(dy)))
+			glUniform(u.color, SPLASH_RGBA[1], SPLASH_RGBA[2], SPLASH_RGBA[3], SPLASH_RGBA[4] * fade)
+			splashVAO:DrawArrays(GL_POINTS, splashCount)
+
+			glPointSprite(false, false)
+			glTexture(0, false)
+		end
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -295,11 +541,27 @@ function widget:Initialize()
 	rainShader = CompileShader("rain", rainVertSrc, rainFragSrc)
 	ashShader  = CompileShader("ash", ashVertSrc, ashFragSrc)
 	if not (rainShader and ashShader) then
+		spEcho("[GFX Rain] removing")
 		widgetHandler:RemoveWidget()
 		return
 	end
 	CacheUniforms(rainShader, rainU)
 	CacheUniforms(ashShader, ashU)
+
+	-- Ground impacts are optional: if anything fails, rain and ash still run
+	splashShader = CompileShader("splash", splashVertSrc, splashFragSrc)
+	if splashShader then
+		CacheSplashUniforms(splashShader, splashU)
+		splashVAO, splashVBO = MakeVAO(MAX_SPLASHES, 1) -- 1 vert per impact (point)
+		if not splashVAO then
+			glDeleteShader(splashShader)
+			splashShader = nil
+		end
+	end
+	if not splashShader then
+		spEcho("[GFX Rain] ground splashes disabled")
+	end
+	vsx, vsy = Spring.GetViewGeometry()
 
 	rainVAO, rainVBO = MakeVAO(MAX_RAIN_DROPS, 2) -- 2 verts per drop (line)
 	ashVAO,  ashVBO  = MakeVAO(MAX_ASH_MOTES, 1)  -- 1 vert per mote (point)
@@ -312,7 +574,13 @@ function widget:Initialize()
 	startTimer = spGetTimer()
 end
 
+function widget:ViewResize(newX, newY)
+	vsx, vsy = newX, newY
+end
+
 function widget:Shutdown()
+	if splashVAO then splashVAO:Delete() end
+	if splashVBO then splashVBO:Delete() end
 	if rainVAO then rainVAO:Delete() end
 	if rainVBO then rainVBO:Delete() end
 	if ashVAO then ashVAO:Delete() end
@@ -320,6 +588,7 @@ function widget:Shutdown()
 	if glDeleteShader then
 		if rainShader then glDeleteShader(rainShader) end
 		if ashShader then glDeleteShader(ashShader) end
+		if splashShader then glDeleteShader(splashShader) end
 	end
 end
 
@@ -352,20 +621,27 @@ function widget:DrawWorld()
 	local visDensity = rainAmount ^ RAIN_DENSITY_EXP
 	local dropCount = mathFloor(visDensity * MAX_RAIN_DROPS)
 	local moteCount = mathFloor(warAmount * MAX_ASH_MOTES)
+	local splashCount = splashShader and mathFloor(visDensity * MAX_SPLASHES) or 0
 
 	if DEBUG then
 		local now = os.clock()
 		if now - debugLast > 1 then
 			debugLast = now
 			spEcho(string.format(
-					"[GFX Rain] src=%s  rain=%.3f  war=%.3f  visDensity=%.3f  drops=%d  motes=%d  t=%.1f",
+					"[GFX Rain] src=%s  rain=%.3f  war=%.3f  visDensity=%.3f  drops=%d  splashes=%d  motes=%d  t=%.1f",
 					(wg and wg.rain) and "WG.weather" or "atmo-fallback",
-					rainAmount, warAmount, visDensity, dropCount, moteCount, t))
+					rainAmount, warAmount, visDensity, dropCount, splashCount, moteCount, t))
 		end
 	end
 
 	glDepthTest(GL_LEQUAL) -- terrain still occludes particles behind hills
 	glDepthMask(false)
+
+	-- Ground impacts (drawn first so the streaks layer over them) -------------
+	if splashCount > 0 then
+		DrawSplashes(t, cx, cy, cz, visDensity, splashCount)
+	end
+
 	glBlending(GL_SRC_ALPHA, GL_ONE)
 
 	-- Rain streaks --------------------------------------------------------
