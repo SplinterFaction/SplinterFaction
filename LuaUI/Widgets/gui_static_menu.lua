@@ -177,9 +177,12 @@ local function ReleaseFont(f)
 	local SG = WG.StaticGUI
 	if SG and SG.DeleteFont then
 		SG.DeleteFont(f)
-	else
-		gl.DeleteFont(f)
+		return
 	end
+	-- The shapes API is gone (it shuts down first at game exit) but f may still
+	-- be one of its proxies. gl.DeleteFont only accepts the raw handle.
+	if type(f) == "table" then f = rawget(f, "__rawfont") end
+	if f then gl.DeleteFont(f) end
 end
 local spGetMouseState   = Spring.GetMouseState
 local spGetViewGeometry = Spring.GetViewGeometry

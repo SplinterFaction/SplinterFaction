@@ -1117,9 +1117,34 @@ function SG.WrapFont(font)
 end
 
 -- gl.DeleteFont needs the real handle, not the proxy.
+local function RawFont(font)
+	if type(font) == "table" then return rawget(font, "__rawfont") end
+	return font
+end
+
+-- The engine's own gl.DeleteFont, captured once. Stashed on the gl table so a
+-- reload of this widget does not capture its own shim.
+local glDeleteFontRaw = gl.__sgRawDeleteFont or gl.DeleteFont
+
 function SG.DeleteFont(font)
-	if not font then return end
-	gl.DeleteFont(font.__rawfont or font)
+	local raw = RawFont(font)
+	if raw then glDeleteFontRaw(raw) end
+end
+
+-- Consumer widgets fall back to gl.DeleteFont(font) when WG.StaticGUI is gone.
+-- At game exit this widget shuts down before they do, so that fallback used to
+-- receive a proxy and error ("Font expected, got table") once per widget.
+-- Proxies outlive this widget, so gl.DeleteFont is taught to unwrap them, and
+-- the shim is deliberately left in place on Shutdown. Raw fonts pass straight
+-- through. Relies on widgets sharing one gl table (the handler copies it by
+-- reference into each widget environment).
+local function InstallDeleteFontShim()
+	if gl.__sgRawDeleteFont then return end
+	gl.__sgRawDeleteFont = glDeleteFontRaw
+	gl.DeleteFont = function(font)
+		local raw = RawFont(font)
+		if raw then return glDeleteFontRaw(raw) end
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -1435,6 +1460,7 @@ function widget:Initialize()
 	end
 
 	vsx, vsy = spGetViewGeometry()
+	InstallDeleteFontShim()
 	WG.StaticGUI = SG
 end
 

@@ -101,10 +101,45 @@ return function(ctx, cfg)
 	-- (skirmishers high, support/scout/utility lower). Used to skew which combat
 	-- units the factories produce without ever fully excluding a role.
 	-- ============================================================
+	-- "heat" if every weapon on the def is a heat weapon, "disrupt" if every
+	-- one is a disruption weapon, false otherwise (any direct-damage weapon,
+	-- or a mix, makes it an ordinary combat unit). Cached per def.
+	local nonDirect = {}
+	local function NonDirectClass(defID)
+		local c = nonDirect[defID]
+		if c ~= nil then return c end
+		c = false
+		local ud = UnitDefs[defID]
+		local weapons = ud and ud.weapons
+		if weapons and #weapons > 0 then
+			local heat, disrupt = 0, 0
+			for i = 1, #weapons do
+				local wd  = WeaponDefs[weapons[i].weaponDef]
+				local wcp = wd and (wd.customParams or wd.customparams)
+				local h   = wcp and wcp.heatweapon
+				local d   = wcp and wcp.disruptionweapon
+				if h and h ~= "0" and h ~= "false" then heat = heat + 1
+				elseif d and d ~= "0" and d ~= "false" then disrupt = disrupt + 1 end
+			end
+			if heat == #weapons then c = "heat"
+			elseif disrupt == #weapons then c = "disrupt" end
+		end
+		nonDirect[defID] = c
+		return c
+	end
+	L.NonDirectClass = NonDirectClass
+
 	function L.CombatRoleWeight(defID)
 		local ud  = UnitDefs[defID]
 		local cat = ud and ud.customParams and ud.customParams.buildmenucategory
-		return COMBAT_ROLE_WEIGHT[cat] or COMBAT_ROLE_WEIGHT.default
+		local w   = COMBAT_ROLE_WEIGHT[cat] or COMBAT_ROLE_WEIGHT.default
+		-- No direct damage: capped, whatever the build menu calls it (see
+		-- COMBAT_ROLE_WEIGHT.HeatOnly / DisruptOnly in the core).
+		local class = NonDirectClass(defID)
+		local cap = (class == "heat" and COMBAT_ROLE_WEIGHT.HeatOnly)
+				or (class == "disrupt" and COMBAT_ROLE_WEIGHT.DisruptOnly)
+		if cap and w > cap then w = cap end
+		return w
 	end
 
 	-- ============================================================
@@ -338,9 +373,86 @@ return function(ctx, cfg)
 		return nil
 	end
 
+	-- Why the most recent BuildOrder call did or did not find a site. Reset on
+	-- every call; read by the construction behavior for its diagnostics.
+	--   sites    = candidate positions tested
+	--   blocked  = engine said blocked (terrain, slope, a building, map edge)
+	--   occupied = a mobile unit was standing on the site
+	--   crowded  = site was buildable but too close to another structure
+	--              (would close a lane or a factory's surroundings)
+	--   noAnchor = search rings that held no friendly unit to build next to
+	L.placeStats = { sites = 0, blocked = 0, occupied = 0, crowded = 0, noAnchor = 0 }
+
+	-- Base layout rules. The AI used to drop each building right beside
+	-- another with a small random gap and only checked a little box around
+	-- the new building's CENTER, so big buildings ended up touching and whole
+	-- armies were walled in behind rows of supply depots. Now every site must
+	-- leave a real lane to every other structure, measured edge to edge, and
+	-- a wider apron around factories so their output can get out.
+	local LANE          = 112   -- min gap between any two structures (elmos)
+	local FACTORY_APRON = 256   -- min gap between a factory and anything else
+	local GAP_JITTER    = 96    -- extra random gap so bases do not form a perfect grid
+	local QUERY_PAD     = 420   -- how far past a site to look for neighbors (largest half-footprint + apron)
+	local PENDING_FOR   = 1800  -- frames an ordered-but-unstarted site keeps its claim (~60s)
+	local PENDING_MAX   = 32
+
+	-- Sites ordered recently that may not have a nanoframe yet. Without this,
+	-- two builders choosing in the same few seconds can pick neighboring spots.
+	local pending, pendingNext = {}, 1
+
+	local function IsStructure(ud)
+		return ud and (ud.isBuilding or ud.isImmobile) and true or false
+	end
+
+	-- Half extents (elmos) of a def's footprint for a build facing.
+	local function HalfSize(ud, facing)
+		local hx, hz = (ud.xsize or 2) * 4, (ud.zsize or 2) * 4
+		if facing == 1 or facing == 3 then hx, hz = hz, hx end
+		return hx, hz
+	end
+
+	-- True if a structure of half-size hx,hz at bx,bz keeps the required gap
+	-- to every structure already there or on order.
+	local function SiteHasLanes(bx, bz, hx, hz, isFactory, ignoreID)
+		local nearby = Spring.GetUnitsInRectangle(bx - hx - QUERY_PAD, bz - hz - QUERY_PAD,
+		                                          bx + hx + QUERY_PAD, bz + hz + QUERY_PAD)
+		for i = 1, #nearby do
+			local other = nearby[i]
+			if other ~= ignoreID then
+				local ud = UnitDefs[Spring.GetUnitDefID(other) or 0]
+				if IsStructure(ud) then
+					local ox, _, oz = Spring.GetUnitPosition(other)
+					-- the neighbor's facing is not known cheaply: use its longer side both ways
+					local oh  = math.max(ud.xsize or 2, ud.zsize or 2) * 4
+					local gap = (isFactory or ud.isFactory) and FACTORY_APRON or LANE
+					if math.abs(ox - bx) < hx + oh + gap and math.abs(oz - bz) < hz + oh + gap then
+						return false
+					end
+				end
+			end
+		end
+		local now = Spring.GetGameFrame()
+		for i = 1, #pending do
+			local p = pending[i]
+			if p.untilFrame > now then
+				local gap = (isFactory or p.isFactory) and FACTORY_APRON or LANE
+				if math.abs(p.x - bx) < hx + p.hx + gap and math.abs(p.z - bz) < hz + p.hz + gap then
+					return false
+				end
+			end
+		end
+		return true
+	end
+	L.SiteHasLanes = SiteHasLanes
+
 	function L.BuildOrder(cUnitID, building)
+		local ps = L.placeStats
+		ps.sites, ps.blocked, ps.occupied, ps.crowded, ps.noAnchor = 0, 0, 0, 0, 0
 		local team = Spring.GetUnitTeam(cUnitID)
 		local cx, _, cz = Spring.GetUnitPosition(cUnitID)
+		local newDef = UnitDefs[building]
+		if not newDef or not cx then return false end
+		local newIsFactory = newDef.isFactory and true or false
 
 		-- Compute a "safe interior" direction: push away from whichever map edge
 		-- is closest so buildings never pile up against a wall.
@@ -382,17 +494,22 @@ return function(ctx, cfg)
 						end
 					end
 				end
-				if not buildnear then break end
+				if not buildnear then ps.noAnchor = ps.noAnchor + 1; break end
 
 				local refDefID = Spring.GetUnitDefID(buildnear)
-				if not refDefID then break end
+				if not refDefID then ps.noAnchor = ps.noAnchor + 1; break end
+				local refDef = UnitDefs[refDefID]
 				local refx, _, refz = Spring.GetUnitPosition(buildnear)
-				local reffootx = UnitDefs[refDefID].xsize * 8
-				local reffootz = UnitDefs[refDefID].zsize * 8
+				local refIsStructure = IsStructure(refDef)
+				local refHalf = refIsStructure and math.max(refDef.xsize or 2, refDef.zsize or 2) * 4 or 0
 
-				-- Use a larger minimum spacing to stop units being walled in.
-				-- If near the map edge, also add the edge push to the offset.
-				local spacing = math.random(96, 256)
+				-- Gap to the anchor, edge to edge: a lane (an apron if either
+				-- side is a factory) plus a little jitter. Next to a mobile
+				-- anchor there is nothing to keep clear of.
+				local gap = math.random(0, GAP_JITTER)
+				if refIsStructure then
+					gap = gap + ((newIsFactory or refDef.isFactory) and FACTORY_APRON or LANE)
+				end
 
 				-- Build a direction priority list: prefer directions that move
 				-- away from map edges, shuffle the rest.
@@ -413,32 +530,38 @@ return function(ctx, cfg)
 				end
 
 				for _, r in ipairs(dirs) do
+					local hx, hz = HalfSize(newDef, r)
 					local bposx, bposz
-					if     r == 0 then bposx = refx;                    bposz = refz + reffootz + spacing
-					elseif r == 1 then bposx = refx + reffootx + spacing; bposz = refz
-					elseif r == 2 then bposx = refx;                    bposz = refz - reffootz - spacing
-					else              bposx = refx - reffootx - spacing; bposz = refz
+					if     r == 0 then bposx = refx;                        bposz = refz + refHalf + hz + gap
+					elseif r == 1 then bposx = refx + refHalf + hx + gap;   bposz = refz
+					elseif r == 2 then bposx = refx;                        bposz = refz - refHalf - hz - gap
+					else               bposx = refx - refHalf - hx - gap;   bposz = refz
 					end
 
-					-- Apply edge push as an additional offset nudge
-					bposx = bposx + edgePushX * spacing * 0.5
-					bposz = bposz + edgePushZ * spacing * 0.5
-
-					-- Keep well inside map bounds (larger margin than before)
+					-- Keep well inside map bounds
 					bposx = math.max(256, math.min(mapsizeX - 256, bposx))
 					bposz = math.max(256, math.min(mapsizeZ - 256, bposz))
 
 					local bposy   = Spring.GetGroundHeight(bposx, bposz)
 					local testpos = Spring.TestBuildOrder(building, bposx, bposy, bposz, r)
-					-- Use spacing as clearance check radius — avoids packing too tight
-					local nearby  = Spring.GetUnitsInRectangle(
-							bposx - spacing * 0.5, bposz - spacing * 0.5,
-							bposx + spacing * 0.5, bposz + spacing * 0.5)
-					if testpos == 2 and #nearby <= 0 then
-						Spring.GiveOrderToUnit(cUnitID, -building, { bposx, bposy, bposz, r }, { "shift" })
-						return true
-					end
+					ps.sites = ps.sites + 1
+					if testpos == 2 then
+						if SiteHasLanes(bposx, bposz, hx, hz, newIsFactory, cUnitID) then
+							Spring.GiveOrderToUnit(cUnitID, -building, { bposx, bposy, bposz, r }, { "shift" })
+							local p = pending[pendingNext]
+							if not p then p = {}; pending[pendingNext] = p end
+							p.x, p.z, p.hx, p.hz = bposx, bposz, hx, hz
+							p.isFactory  = newIsFactory
+							p.untilFrame = Spring.GetGameFrame() + PENDING_FOR
+							pendingNext = (pendingNext % PENDING_MAX) + 1
+							return true
+						end
+						ps.crowded = ps.crowded + 1
+					elseif testpos == 0 then ps.blocked = ps.blocked + 1
+					else ps.occupied = ps.occupied + 1 end
 				end
+			else
+				ps.noAnchor = ps.noAnchor + 1
 			end
 		end
 		return false

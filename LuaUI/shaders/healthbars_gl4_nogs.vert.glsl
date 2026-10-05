@@ -58,6 +58,8 @@ out DataVS {
     float g_bartype;
     float g_secondvalue; // SF split bars: right-hand half's value
     float g_split;       // 1.0 when this instance is a split bar
+    float g_vertical;    // 1.0 for SF vertical side bars (heat, disruption)
+    float g_flash;       // 0..1 background brightening for a fully disrupted unit's bar
 };
 
 #define UNITUNIFORMS uni[instData.y]
@@ -74,6 +76,8 @@ out DataVS {
 #define BITUSEOVERLAY 1u
 #define BITSHOWGLYPH 2u
 #define BITSPLITBAR 256u
+#define BITVERTICAL 512u
+#define BITVERTICALRIGHT 1024u
 
 bool vertexClipped(vec4 clipspace, float tolerance) {
   return any(lessThan(clipspace.xyz, -clipspace.www * tolerance)) ||
@@ -100,6 +104,8 @@ void main()
         g_bartype = 0.0;
         g_secondvalue = 0.0;
         g_split = 0.0;
+        g_vertical = 0.0;
+        g_flash = 0.0;
         return;
     }
 
@@ -127,6 +133,8 @@ void main()
             g_bartype = 0.0;
             g_secondvalue = 0.0;
             g_split = 0.0;
+            g_vertical = 0.0;
+            g_flash = 0.0;
             return;
         }
     }
@@ -140,6 +148,15 @@ void main()
     float secondvalue = 0.0;
     if (isSplit) {
         secondvalue = clamp(UNITUNIFORMS.userDefined[UNIFORMLOC2 >> 2u][UNIFORMLOC2 & 3u], 0.0, 1.0);
+    }
+
+    // SF vertical side bars: a value of 2.0 or more means "fully disrupted".
+    // Strip the flag off before the clamp below and turn it into a pulse.
+    bool isVertical = (BARTYPE & BITVERTICAL) > 0u;
+    float pulse = 0.0;
+    if (isVertical && value >= 2.0) {
+        value -= 2.0;
+        pulse = 0.5 + 0.5 * sin((timeInfo.x + timeInfo.w) * 0.18);
     }
 
     float rawvalue = value;
@@ -183,6 +200,8 @@ void main()
             g_bartype = 0.0;
             g_secondvalue = 0.0;
             g_split = 0.0;
+            g_vertical = 0.0;
+            g_flash = 0.0;
             return;
         }
     #endif
@@ -200,6 +219,8 @@ void main()
         g_bartype = 0.0;
         g_secondvalue = 0.0;
         g_split = 0.0;
+        g_vertical = 0.0;
+        g_flash = 0.0;
         return;
     }
 
@@ -211,6 +232,8 @@ void main()
         }
     }
 
+    fillColor.rgb *= (1.0 - 0.4 * pulse);
+
     float zoffset = 1.15 * BARHEIGHT * float(bartype_index_ssboloc.y);
 
     // Expand the fallback quad with a left glyph lane (icon + text), matching GS layout better.
@@ -218,6 +241,16 @@ void main()
     float glyphPad = BARHEIGHT * GLYPH_PAD_TILES;
     float primitiveX = mix(-BARWIDTH - glyphPad, BARWIDTH, quadPos.x);
     vec3 primitiveCoords = vec3(primitiveX, 0.0, quadPos.y * BARHEIGHT - zoffset) * BARSCALE * height_timers.y;
+
+    if (isVertical) {
+        // Stand beside the unit instead of stacking above it: no glyph lane, the
+        // quad's long axis (quadPos.x, the fill direction) runs along camera-up
+        // from the bar's foot, and height_timers.z is the sideways distance in
+        // elmos. Same quarter turn as the geometry shader path.
+        float side = ((BARTYPE & BITVERTICALRIGHT) > 0u) ? 1.0 : -1.0;
+        centerpos.xyz += cameraViewInv[0].xyz * (side * height_timers.z);
+        primitiveCoords = vec3((0.5 - quadPos.y) * BARHEIGHT, 0.0, quadPos.x * VBARLENGTH) * BARSCALE * height_timers.y;
+    }
 
     mat3 rotY = mat3(cameraViewInv[0].xyz, cameraViewInv[2].xyz, cameraViewInv[1].xyz);
     vec4 worldPos = vec4(centerpos.xyz + rotY * primitiveCoords, 1.0);
@@ -235,4 +268,6 @@ void main()
     g_bartype = float(BARTYPE);
     g_secondvalue = secondvalue;
     g_split = isSplit ? 1.0 : 0.0;
+    g_vertical = isVertical ? 1.0 : 0.0;
+    g_flash = 0.45 * pulse;
 }

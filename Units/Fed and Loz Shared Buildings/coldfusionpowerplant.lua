@@ -72,6 +72,7 @@ local unitDef                     = {
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",
 		simpleaiunittype          = "energygenerator",
+		buildcostenergyoverride   = 24000,
 		iseco                     = 1,
 		needed_cover              = 5,
 		death_sounds              = "generic",

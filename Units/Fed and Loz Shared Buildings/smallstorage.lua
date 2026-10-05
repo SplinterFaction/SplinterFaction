@@ -1,14 +1,14 @@
 --------------------------------------------------------------------------------
 
-local unitName                    = "blackholepowerplant"
+local unitName                    = "smallstorage"
 
 --------------------------------------------------------------------------------
 
 local armortype					 = [[building]]
-local energyproduced			 = [[4000]]
-local techrequired				 = [[tech4]]
+local energyproduced			 = [[0]]
+local storage                    = [[200]]
 
-local buildCostMetal 			  = 54000
+local buildCostMetal 			  = 50
 local maxDamage					  = buildCostMetal * 12.5
 
 local unitDef                     = {
@@ -18,33 +18,34 @@ local unitDef                     = {
 	buildCostMetal                = buildCostMetal,
 	builder                       = false,
 	buildTime                     = 5,
+	buildpic					  = "emediumgen.png",
 	canAttack			          = false,
 	category                      = "BUILDING",
-	description                   = [[Produces +]] .. energyproduced .. [[ Energy]],
-	energyStorage                 = 0,
+	description                   = [[Provides +]] .. storage .. [[ Metal/Energy Storage]],
+	energyStorage                 = storage,
 	energyMake                    = energyproduced,
-	explodeAs                     = "hugeBuildingExplosionGenericBlueEMP",
-	footprintX                    = 16,
-	footprintZ                    = 16,
-	icontype                      = "structureenergygeneratort4",
+	explodeAs                     = "smallBuildingExplosionGenericPurpleEMP",
+	footprintX                    = 3,
+	footprintZ                    = 3,
+	icontype                      = "structurestoraget1",
 	idleAutoHeal                  = .5,
 	idleTime                      = 2200,
 	maxDamage                     = maxDamage,
 	maxSlope                      = 60,
 	maxWaterDepth                 = 0,
-	metalStorage                  = 0,
-	name                          = [[Black Hole Power Facility]],
-	objectName                    = "powerplant16x16.s3o",
-	script						  = "blackholepowerplant.cob",
+	metalStorage                  = storage,
+	name                          = "Small Resource Storage Facility",
+	objectName                    = "smallstorage.s3o",
+	script						  = "smallstorage_lus.lua",
 	onoffable                     = false,
 	radarDistance                 = 0,
 	repairable		              = false,
-	selfDestructAs                = "hugeBuildingExplosionGenericBlueEMP",
+	selfDestructAs                = "smallBuildingExplosionGenericPurpleEMP",
 	side                          = "CORE",
 	sightDistance                 = 367,
 	smoothAnim                    = true,
 	unitname                      = unitName,
-	yardMap                       = "oooooooooooooooo",
+	yardMap                       = "ooo ooo ooo",
 
 	sfxtypes                      = {
 		pieceExplosionGenerators  = {
@@ -55,7 +56,7 @@ local unitDef                     = {
 		explosiongenerators       = {
 			"custom:blacksmoke",
 			"custom:empty",
-			"custom:skyhatelasert3",
+			"custom:skyhatelasert1",
 		},
 	},
 
@@ -68,34 +69,20 @@ local unitDef                     = {
 	weapons                       = {
 	},
 	customParams                  = {
-		unitguide = [[The Black Hole Power Facility is the apex energy generator available to both factions, harnessing singularity-based power conversion to produce 4000 energy — more than any other structure in the game. Its enormous footprint, extreme cost, and Tier 4 requirement make it a late-game commitment, but a single facility can sustain an energy economy that nothing else can match at comparable size. Protect it accordingly.]],
+		unitguide = [[The Small Resource Storage Facility provides 200 units each of metal and energy storage in a small footprint at Tier 1. Its primary value is extending the resource buffer available during early-game expansion — preventing income spikes from going to waste and smoothing out the energy fluctuations that come with running multiple production facilities simultaneously.]],
 		unittype				  = "building",
 		unitrole				  = "Economy",
 		buildmenucategory		  = "Economy",
-		simpleaiunittype          = "energygenerator",
-		buildcostenergyoverride   = 162000,
+		simpleaiunittype          = "storage",
 		iseco                     = 1,
 		needed_cover              = 2,
 		death_sounds              = "generic",
---		ProvideTech               = powerprovided,
---		ProvideTechRange          = powerradius,
-		RequireTech				 = techrequired,
-		armortype                 = armortype,
+		armortype                 = "building",
+		RequireTech				  = [[tech1]],
 		noenergycost			  = false,
---		supply_granted            = supplygranted,
-		normaltex                = "unittextures/lego2skin_explorernormal.dds", 
+		normaltex                = "unittextures/lego2skin_explorernormal.dds",
 		buckettex                 = "unittextures/lego2skin_explorerbucket.dds",
 		factionname	              = "Neutral",
-		
-		--		groundtexselectimg        = ":nc:bitmaps/power/power.png",
---		groundtexselectimg1       = ":nc:bitmaps/power/power1.png",
---		groundtexselectimg2       = ":nc:bitmaps/power/power2.png",
---		groundtexselectimg3       = ":nc:bitmaps/power/power3.png",
---		groundtexselectimg4       = ":nc:bitmaps/power/power4.png",
---		groundtexselectimg5       = ":nc:bitmaps/power/power5.png",
---		groundtexselectimg6       = ":nc:bitmaps/power/power6.png",
---		groundtexselectxsize      = 400, -- optional
---		groundtexselectzsize      = 400, -- optional
 		helptext                  = [[]],
 	},
 	useGroundDecal                = true,

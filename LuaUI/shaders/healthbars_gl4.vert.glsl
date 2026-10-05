@@ -74,6 +74,8 @@ bool vertexClipped(vec4 clipspace, float tolerance) {
 #define BITFLASHBAR 64u
 #define BITCOLORCORRECT 128u
 #define BITSPLITBAR 256u
+#define BITVERTICAL 512u
+#define BITVERTICALRIGHT 1024u
 
 void main()
 {
@@ -125,7 +127,8 @@ void main()
 	{
 		// generic userDefined access: slot N lives at userDefined[N/4][N%4]
 		// slots used by SF: 0 building (cus_gl4), 2 shield/reloadstart/stockpile, 3 reloadend,
-		// 4 emp, 5 capture, 7 overshield, 8 morph progress (6, 11, 12 are owned by cus_gl4)
+		// 4 emp, 5 capture, 7 overshield, 8 morph progress, 9 heat, 10 disruption
+		// (6, 11, 12 are owned by cus_gl4)
 		v_parameters.x = UNITUNIFORMS.userDefined[UNIFORMLOC >> 2u][UNIFORMLOC & 3u];
 	}else{ // this is a health bar, dont draw it while the unit is being built and health just tracks build progress
 		float buildprogress = UNITUNIFORMS.userDefined[0].x; // -1.0 for fully built units, maintained by cus_gl4

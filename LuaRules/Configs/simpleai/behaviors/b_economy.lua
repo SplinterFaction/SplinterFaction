@@ -9,7 +9,7 @@
 --           order (threat scan -> boost -> squad transitions).
 --
 --           Owns ctx state: ctx.pacing.lastBoost.
---           Reads: ctx.intel.underAttack, ctx.techLevel, ctx.BoostCost,
+--           Reads: ctx.intel.underAttack, ctx.techLevel, ctx.BoostCost, ctx.comm.lost,
 --                  ctx.IsFactory, tick.overflowing.
 --
 --  license: GNU GPL, v2 or later
@@ -60,6 +60,14 @@ return function(ctx, lib, cfg)
 		-- RP on boosts. nil knobs (plain SimpleAI) -> stock, always allowed.
 		local K = tick.knobs
 		if K and not K.boostAllowed then return end
+
+		-- Commander lost: Research Points go to weapons and armor first (see
+		-- b_upgrades). Boosts resume once both tracks are maxed.
+		if ctx.comm and ctx.comm.lost and ctx.comm.lost[teamID] and GG.TeamUpgrades
+				and (GG.TeamUpgrades.GetNextCost(teamID, "weapons")
+					or GG.TeamUpgrades.GetNextCost(teamID, "armor")) then
+			return
+		end
 
 		local boostReady = (n - (SimpleLastBoost[teamID] or 0)) >= BOOST_COOLDOWN
 		if boostReady and (tick.overflowing or SimpleUnderAttack[teamID]) then

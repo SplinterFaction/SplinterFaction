@@ -608,12 +608,22 @@ local function AddRangeInstance(unitID, className, radius, x, z, vaoBucket, alph
 	return instanceID
 end
 
+-- The instance table's zombie sweep can pop an instance behind our back, so
+-- only pop what is actually still in the VBO.
+local function PopIfPresent(vboTable, instanceID)
+	if not vboTable then return end
+	local present = vboTable.instanceIDtoIndex
+	if (not present) or present[instanceID] then
+		popElementInstance(vboTable, instanceID)
+	end
+end
+
 local function RemoveUnitFromCollection(unitID, collection)
 	local entry = collection[unitID]
 	if not entry then return end
 
 	for className, instanceID in pairs(entry.instances) do
-		popElementInstance(rangeVAOs[entry.vaoBucket][className], instanceID)
+		PopIfPresent(rangeVAOs[entry.vaoBucket][className], instanceID)
 	end
 
 	-- #4: Return the instances table to the pool for reuse.
@@ -628,6 +638,11 @@ local function AddUnitToCollection(unitID, collection, mode)
 
 	local unitDefID = spGetUnitDefID(unitID)
 	if not unitDefID then return end
+
+	-- A unit in its death animation is still visible and still has a defID, but
+	-- UnitDestroyed has already fired for it. Adding rings now would leave them
+	-- in the VBO with nothing left to remove them.
+	if spGetUnitIsDead(unitID) then return end
 
 	local x, y, z
 	-- #2: For static units, use the cached position if available; otherwise
@@ -762,7 +777,7 @@ local function RefreshSelectedBuildRingsOnly()
 		local shouldHave = IsRingClassEnabled("build") and ShouldShowBuildRange(unitDefID) and (unitBuildDistance[unitDefID] or 0) > 0
 
 		if hasBuild and not shouldHave then
-			popElementInstance(rangeVAOs[entry.vaoBucket].build, entry.instances.build)
+			PopIfPresent(rangeVAOs[entry.vaoBucket].build, entry.instances.build)
 			entry.instances.build = nil
 		elseif shouldHave and not hasBuild then
 			local x, y, z = spGetUnitPosition(unitID, true, true)

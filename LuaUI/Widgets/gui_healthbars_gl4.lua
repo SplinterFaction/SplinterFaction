@@ -31,6 +31,9 @@ end
 --   5 = capture progress
 --   7 = overshield (personalShield rules param, normalized)
 --   8 = morph progress
+--   9 = heat (rules param "heat", 0..1)
+--  10 = disruption (rules param "disruption", 0..1; +2.0 while the unit is
+--       fully disrupted, which the shader strips off and turns into a pulse)
 -- Slots 6, 11 and 12 are owned by cus_gl4 (selectedness, height, cloak). Do
 -- not write to them from here.
 --
@@ -38,6 +41,12 @@ end
 -- rides in the previously unused .w of the type_index_ssboloc attribute. The
 -- shader then draws the left half of the bar from the first value and the right
 -- half from the second. Used for hull + personal overshield on Loz units.
+--
+-- Vertical bars: bar types flagged bitVertical are not part of the overhead
+-- stack. They stand upright beside the unit (heat on the camera-left side,
+-- disruption on the camera-right side), fill bottom-up, carry no glyphs or
+-- numbers, and are only instanced while their value is non-zero. They replace
+-- the old gui_unit_heatbars.lua and gui_unit_disruptionbars.lua widgets.
 --------------------------------------------------------------------------------
 
 local mathMin = math.min
@@ -98,6 +107,14 @@ local barScale         = 2
 local variableBarSizes = true
 local barHeight        = 0.9
 
+-- Vertical side bars (heat, disruption)
+local verticalBarLength      = 3.6  -- in bar units; the health bar is 5.12 wide
+local verticalBarBaseHeight  = 4    -- elmos above the unit's base where the bar's foot sits
+local verticalBarRadiusMult  = 1.0  -- how far out to stand, as a multiple of unit radius
+local verticalBarPadding     = 2    -- extra elmos beyond that
+local heatMinDraw            = 0.5  -- rules param values at or below this draw nothing (0..100)
+local disruptionMinDraw      = 0.5
+
 local debugmode = false
 
 --------------------------------------------------------------------------------
@@ -114,6 +131,8 @@ local bitGetProgress   = 32
 local bitFlashBar      = 64
 local bitColorCorrect  = 128
 local bitSplitBar      = 256
+local bitVertical      = 512  -- upright side bar, see the header comment
+local bitVerticalRight = 1024 -- camera-right side of the unit instead of camera-left
 
 -- uniformindex is the userDefined float slot the shader reads. Values above 20
 -- mean "engine health / maxHealth", which needs no CPU updates at all.
@@ -209,6 +228,22 @@ local barTypeMap = {
 		uniformindex = 4,
 		uvoffset     = 0.8125,
 	},
+	heat = { -- SF heat rules param: upright bar on the unit's left, green -> yellow -> red
+		mincolor     = { 0.0, 1.0, 0.0, 1.0 },
+		maxcolor     = { 1.0, 0.0, 0.0, 1.0 },
+		bartype      = bitVertical + bitColorCorrect,
+		uniformindex = 9,
+		uvoffset     = 0.0,
+		vertical     = true,
+	},
+	disruption = { -- SF disruption rules param: upright bar on the unit's right, white -> electric cyan
+		mincolor     = { 1.0, 1.0, 1.0, 1.0 },
+		maxcolor     = { 0.45, 0.8, 1.0, 1.0 },
+		bartype      = bitVertical + bitVerticalRight,
+		uniformindex = 10,
+		uvoffset     = 0.0,
+		vertical     = true,
+	},
 	featurehealth = {
 		mincolor     = { 0.25, 0.25, 0.25, 1.0 },
 		maxcolor     = { 0.65, 0.65, 0.65, 1.0 },
@@ -267,6 +302,9 @@ local unitDefHideDamage      = {}
 local unitDefPrimaryWeapon   = {} -- weapon index for slow-reload weapons
 local unitDefReloadFrames    = {} -- reload time in frames for that weapon
 local unitDefSizeMultipliers = {}
+local unitDefRadius          = {}
+local unitDefHeatImmune       = {} -- customParams.heat_immune, same truthy values as game_heat_weapons.lua
+local unitDefDisruptionImmune = {} -- customParams.disruptionimmune == 1, as in game_disruption_weapons.lua
 
 -- per unitID live state
 local trackedUnits       = {} -- unitID -> unitDefID, the currently visible set
@@ -278,6 +316,8 @@ local unitEmpDamagedWatch = {}
 local unitParalyzedWatch = {}
 local unitStockPileWatch = {}
 local unitReloadWatch    = {} -- unitID -> last uploaded reloadFrame
+local unitHeatWatch       = {} -- unitID -> last uploaded heat, only while the bar exists
+local unitDisruptionWatch = {} -- unitID -> last uploaded packed disruption, only while the bar exists
 
 local UnitMorphs = {} -- unitID -> morph table, fed by the morph gadget globals
 
@@ -309,6 +349,16 @@ for udefID, unitDef in pairs(UnitDefs) do
 		unitDefhasShield[udefID] = shieldPower
 	end
 
+	if cp then
+		local hi = cp.heat_immune
+		if hi == "1" or hi == "true" or hi == "yes" then
+			unitDefHeatImmune[udefID] = true
+		end
+		if tonumber(cp.disruptionimmune) == 1 then
+			unitDefDisruptionImmune[udefID] = true
+		end
+	end
+
 	if cp and cp.isshieldedunit == "1" then
 		unitDefOvershieldMax[udefID] = tonumber(cp.shield_max_strength) or 100
 	end
@@ -329,6 +379,7 @@ for udefID, unitDef in pairs(UnitDefs) do
 	end
 
 	unitDefHeights[udefID] = unitDef.height or 32
+	unitDefRadius[udefID]  = unitDef.radius or 20
 
 	local dims   = Spring.GetUnitDefDimensions(udefID)
 	local radius = (dims and dims.radius) or 50
@@ -383,6 +434,7 @@ local shaderConfig = {
 	SPLITMINCOLOR          = "vec4(0.25, 0.45, 0.9, 1.0)",
 	SPLITMAXCOLOR          = "vec4(0.5, 0.75, 1.0, 1.0)",
 	SPLITGAP               = 0.12, -- gutter between the two halves, in bar units
+	VBARLENGTH             = verticalBarLength, -- length of the upright side bars, in bar units
 }
 shaderConfig.BARCORNER     = 0.06 + (shaderConfig.BARHEIGHT / 9)
 shaderConfig.SMALLERCORNER = shaderConfig.BARCORNER * 0.6
@@ -549,9 +601,89 @@ end
 local function removeBarFromUnit(unitID, barname)
 	local instanceKey = unitID .. "_" .. barname
 	if healthBarVBO.instanceIDtoIndex[instanceKey] then
-		unitBars[unitID] = (unitBars[unitID] or 1) - 1
+		if not barTypeMap[barname].vertical then -- side bars never joined the stack count
+			unitBars[unitID] = (unitBars[unitID] or 1) - 1
+		end
 		popElementInstance(healthBarVBO, instanceKey)
 	end
+end
+
+-- Upright side bars. These sit outside the overhead stack: they do not touch
+-- unitBars (so stacking rows and getBarTopScreenPos are unaffected), and they
+-- reuse two instance fields differently from ordinary bars:
+--   height_timers.x = height of the bar's foot above the unit's base
+--   height_timers.z = sideways distance from the unit's centre, in elmos
+local function addVerticalBarForUnit(unitID, unitDefID, barname)
+	if unitDefID == nil or unitDefIgnore[unitDefID] then
+		return nil
+	end
+	local instanceID = unitID .. '_' .. barname
+	if healthBarVBO.instanceIDtoIndex[instanceID] then
+		return nil
+	end
+	if spValidUnitID(unitID) == false or spGetUnitIsDead(unitID) == true then
+		return nil
+	end
+
+	local effectiveScale = ((variableBarSizes and unitDefSizeMultipliers[unitDefID]) or 1.0) * barScale
+	local halfThickness  = 0.5 * shaderConfig.BARHEIGHT * shaderConfig.BARSCALE * effectiveScale
+
+	local cache = barTypeMap[barname].cache
+	cache[1] = verticalBarBaseHeight
+	cache[2] = effectiveScale
+	cache[3] = (unitDefRadius[unitDefID] or 20) * verticalBarRadiusMult + verticalBarPadding + halfThickness
+	cache[6] = 0
+
+	return pushElementInstance(healthBarVBO, cache, instanceID, true, nil, unitID)
+end
+
+-- Reads the heat rules param for one tracked unit, adds or removes the bar as
+-- the value crosses the draw threshold, and uploads on change.
+local function updateHeatBar(unitID, unitDefID)
+	if unitDefHeatImmune[unitDefID] then return end
+	local heat = spGetUnitRulesParam(unitID, "heat") or 0
+	if heat <= heatMinDraw then heat = 0 end
+	local last = unitHeatWatch[unitID]
+	if heat == (last or 0) then return end
+	if heat == 0 then
+		unitHeatWatch[unitID] = nil
+		removeBarFromUnit(unitID, "heat")
+		return
+	end
+	if last == nil and not addVerticalBarForUnit(unitID, unitDefID, "heat") then
+		return
+	end
+	unitHeatWatch[unitID] = heat
+	uniformcache[1] = mathMin(heat * 0.01, 1.0)
+	gl.SetUnitBufferUniforms(unitID, uniformcache, 9)
+end
+
+-- Same for disruption. The fully-disrupted flag rides in the same float as
+-- +2.0, so one slot carries both the fill level and the pulse state.
+local function updateDisruptionBar(unitID, unitDefID)
+	if unitDefDisruptionImmune[unitDefID] then return end
+	local disruption = spGetUnitRulesParam(unitID, "disruption") or 0
+	if disruption <= disruptionMinDraw then disruption = 0 end
+	local packed = 0
+	if disruption > 0 then
+		packed = mathMin(disruption * 0.01, 1.0)
+		if spGetUnitRulesParam(unitID, "disruption_disrupted") == 1 then
+			packed = packed + 2.0
+		end
+	end
+	local last = unitDisruptionWatch[unitID]
+	if packed == (last or 0) then return end
+	if packed == 0 then
+		unitDisruptionWatch[unitID] = nil
+		removeBarFromUnit(unitID, "disruption")
+		return
+	end
+	if last == nil and not addVerticalBarForUnit(unitID, unitDefID, "disruption") then
+		return
+	end
+	unitDisruptionWatch[unitID] = packed
+	uniformcache[1] = packed
+	gl.SetUnitBufferUniforms(unitID, uniformcache, 10)
 end
 
 local function updateReloadBar(unitID, unitDefID)
@@ -662,6 +794,11 @@ local function addBarsForUnit(unitID, unitDefID, unitAllyTeam)
 		uniformcache[1] = UnitMorphs[unitID].progress or 0
 		gl.SetUnitBufferUniforms(unitID, uniformcache, 8)
 	end
+
+	-- upright side bars, so a hot or disrupted unit scrolling into view has
+	-- them straight away instead of waiting for the next watch tick
+	updateHeatBar(unitID, unitDefID)
+	updateDisruptionBar(unitID, unitDefID)
 end
 
 local function removeBarsFromUnit(unitID)
@@ -675,6 +812,8 @@ local function removeBarsFromUnit(unitID)
 	unitParalyzedWatch[unitID]  = nil
 	unitStockPileWatch[unitID]  = nil
 	unitReloadWatch[unitID]     = nil
+	unitHeatWatch[unitID]       = nil
+	unitDisruptionWatch[unitID] = nil
 	unitBars[unitID]            = nil
 end
 
@@ -805,6 +944,8 @@ local function clearAllUnitState()
 	unitParalyzedWatch  = {}
 	unitStockPileWatch  = {}
 	unitReloadWatch     = {}
+	unitHeatWatch       = {}
+	unitDisruptionWatch = {}
 end
 
 local function refreshVisibleUnits()
@@ -1086,6 +1227,19 @@ function widget:GameFrame(n)
 			if udid and unitDefPrimaryWeapon[udid] then
 				updateReloadBar(unitID, udid)
 			end
+		end
+	end
+
+	-- heat and disruption (upright side bars). Both are applied to the victim
+	-- by enemy weapons, so any non-immune unit can pick them up and the sweep
+	-- has to cover the visible set; it runs on alternating ticks.
+	if n % 4 == 1 then
+		for unitID, unitDefID in pairs(trackedUnits) do
+			updateHeatBar(unitID, unitDefID)
+		end
+	elseif n % 4 == 3 then
+		for unitID, unitDefID in pairs(trackedUnits) do
+			updateDisruptionBar(unitID, unitDefID)
 		end
 	end
 

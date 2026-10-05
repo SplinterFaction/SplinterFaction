@@ -60,6 +60,7 @@ local spGetUnitDefID   = Spring.GetUnitDefID
 local spGetFeatureDefID = Spring.GetFeatureDefID
 local spValidUnitID    = Spring.ValidUnitID
 local spValidFeatureID = Spring.ValidFeatureID
+local spGetUnitIsDead  = Spring.GetUnitIsDead
 
 local glTexture   = gl.Texture
 local glCulling   = gl.Culling
@@ -373,8 +374,17 @@ local instanceLayout = {
 	{ id = 3, name = "instData",    size = 4, type = GL.UNSIGNED_INT },
 }
 
+local function KeyValid(key)
+	if key > 0 then return spValidUnitID(key) end
+	return spValidFeatureID(-key)
+end
+
 local function UploadInstance(slot)
 	local key = instKeys[slot]
+	-- InstanceDataFrom*IDs raises a Lua error on an ID the engine no longer has,
+	-- which takes the whole widget down. Leave a stale slot alone instead; the
+	-- next ValidateInstances sweep drops it.
+	if not KeyValid(key) then return end
 	instanceVBO:Upload(instData[slot], nil, slot - 1, 1, INSTSTEP)
 	if key > 0 then
 		instanceVBO:InstanceDataFromUnitIDs(key, 3, slot - 1)
@@ -463,23 +473,35 @@ end
 local function RemoveInstance(key)
 	local slot = indexOf[key]
 	if not slot then return end
-	local last = numInstances
-	if slot ~= last then
-		local lastKey = instKeys[last]
-		instKeys[slot] = lastKey
-		instData[slot] = instData[last]
-		indexOf[lastKey] = slot
-		if resourcesReady then UploadInstance(slot) end
-	end
-	instKeys[last] = nil
-	instData[last] = nil
 	indexOf[key] = nil
-	numInstances = last - 1
+	-- Fill the hole from the tail. Tail entries whose object is already gone are
+	-- discarded on the way rather than moved, so a dead ID is never re-uploaded.
+	while true do
+		local last = numInstances
+		local lastKey = instKeys[last]
+		local lastData = instData[last]
+		instKeys[last] = nil
+		instData[last] = nil
+		numInstances = last - 1
+		if last == slot then return end -- the hole was the tail, nothing to move
+		if KeyValid(lastKey) then
+			instKeys[slot] = lastKey
+			instData[slot] = lastData
+			indexOf[lastKey] = slot
+			if resourcesReady then UploadInstance(slot) end
+			return
+		end
+		indexOf[lastKey] = nil
+	end
 end
 
 local function AddUnit(unitID, unitDefID)
 	unitDefID = unitDefID or spGetUnitDefID(unitID)
 	if not unitDefID then return end
+	-- A unit in its death animation is still a valid ID and still shows up in
+	-- GetAllUnits / UnitEnteredLos, but UnitDestroyed has already fired for it,
+	-- so adding it now would leave a plate nothing ever removes.
+	if spGetUnitIsDead(unitID) then return end
 	local plate = unitPlate[unitDefID]
 	if plate then AddInstance(unitID, plate) end
 end

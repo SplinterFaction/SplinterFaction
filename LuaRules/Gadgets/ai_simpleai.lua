@@ -4,6 +4,16 @@
 --     b_adaptive.lua), NeverStall resource floor internalized (replaces
 --     the old lump-injection cheat), behavior hooks for kills/losses and
 --     finished units.
+-- v5: Storage growth (b_construction raises storage toward 100k over the
+--     game) plus the "signal pool": every stock/storage ratio the AI reads
+--     (overflow test, construction thresholds) is now measured against
+--     SignalPool() instead of raw storage, so a large bank does not turn
+--     "62% full" into "62,000 banked". (The NeverStall floor is a fixed
+--     amount; see NEVERSTALL_BASE.)
+-- v6: Stall signal (demand vs income, ctx.stall) and demand throttling:
+--     b_throttle pauses factories and cancels barely-started expensive
+--     builds while a team is stalling; b_construction picks cheaper units
+--     and stops adding factories/constructors.
 -- v3: Tech-aware build lists, faction detection, economy teching
 --     goals, coordinated attack waves, commander survival,
 --     repair logic, mex expansion, threat response.
@@ -35,17 +45,103 @@ local COMBAT_ROLE_WEIGHT = {
 	Utility  = 0.35,
 	Unsorted = 0.60,   -- uncategorised armed units
 	default  = 0.60,   -- anything with no/unknown buildmenucategory
+
+	-- Ceilings for units that deal no direct damage, whatever their build
+	-- menu category says. They are force multipliers, not the force:
+	--   heat only (Flashpoint, Cauterizer): can kill units, but cannot fire
+	--     at buildings at all, so an army of them cannot take a base
+	--   disruption only (Equalizer, Dominator): disables, never kills
+	-- Detected from the weapon customparams heatweapon / disruptionweapon.
+	HeatOnly    = 0.40,
+	DisruptOnly = 0.25,
 }
 
 -- Weak-point attack targeting
 local ATTACK_SCAN_R     = 650    -- radius around an enemy building used to tally its defenders
 local ATTACK_DIST_W     = 0.10   -- how strongly distance-from-muster penalises a candidate target
 
-local FACTORY_OVERFLOW      = 0.62 -- metal & energy storage fraction that counts as "overflowing"
+local FACTORY_OVERFLOW      = 0.62 -- metal & energy signal-pool fraction that counts as "overflowing"
+
+-- Signal pool. The AI's economy signals are all "stock as a fraction of X".
+-- X used to be raw storage, which only worked because storage never left the
+-- stock 1k: late game that 1k pool filled and drained within a single AI tick
+-- and every threshold flapped. Now that the AI builds real storage (see
+-- b_construction), raw storage would be wrong in the other direction: with
+-- 100k storage, "50% full" would mean hoarding 50,000 before expanding.
+-- So thresholds are measured against the SIGNAL POOL instead:
+--     pool = SIGNAL_POOL_SECONDS of current income,
+--            never below SIGNAL_POOL_MIN (the stock pool, so early game is
+--            exactly what it always was), never above real storage.
+-- Until storage is built, pool == storage and nothing changes. Afterward the
+-- thresholds scale with throughput while the real bank absorbs the swings.
+local SIGNAL_POOL_MIN     = 1000
+
+-- Stall signal. "Is the bank low?" is a poor question: it says nothing about
+-- WHY, and it flaps whenever storage is small next to income. The engine also
+-- reports how much a team is TRYING to spend each second (pull). A team is
+-- stalling on a resource when it wants more than it earns AND has no bank
+-- left to cover the difference:
+--     raw stall = 1 - income / pull      (0 = fine, 0.5 = wants double its income)
+-- smoothed over a few AI ticks. Published per team in ctx.stall and the tick:
+--     e = energy stall, m = metal stall,
+--     v = the combined figure factory pausing runs on: max(e, m * STALL_METAL_WEIGHT)
+-- Metal is discounted on purpose. Wanting more metal than you earn is the
+-- normal state of an AI that spends everything; it only means builds run
+-- slower, and total output is the same either way. Energy is different: its
+-- cost climbs steeply with tech, so an energy stall can actually be fixed by
+-- building cheaper. Hence: cheaper-unit bias and cancelling key off ENERGY
+-- stall alone; pausing factories keys off v. See b_throttle.lua and
+-- b_construction.lua.
+local STALL_STOCK_SECONDS = 3      -- "no bank left" = stock below this many seconds of demand
+local STALL_SMOOTH        = 0.35   -- blend factor per AI tick
+local STALL_ON            = 0.20   -- stalling: start shedding demand
+local STALL_OFF           = 0.08   -- recovered: start restoring it
+local STALL_HARD          = 0.45   -- badly stalling: cancel barely-started expensive builds
+local STALL_METAL_WEIGHT  = 0.5    -- metal stall counts half toward v (0.2 = wants ~1.7x its metal income)
+local function StallStep(prev, current, pull, income)
+	local raw = 0
+	if pull and pull > 0 and pull > income and current < pull * STALL_STOCK_SECONDS then
+		raw = 1 - income / pull
+	end
+	return prev + (raw - prev) * STALL_SMOOTH
+end
+
+-- Commander lost. Teching up IS the commander morphing, so a team whose
+-- commander is dead is locked at its tech level for good. ctx.comm.lost flags
+-- that (after a grace period, since a morph swaps the commander unit and a
+-- replacement can be built); b_upgrades and b_economy then pour Research
+-- Points into weapons and armor instead of saving them for a morph.
+local COMM_LOST_GRACE     = 300    -- frames without a commander before the team counts as having lost it (~10s)
+local commSeen            = {}     -- [teamID] = true once the team has had a commander
+local commGoneAt          = {}     -- [teamID] = frame the commander was first found missing
+
+-- Decision trace. Every TRACE_INTERVAL frames each AI team publishes one
+-- string to the team rules param "simpleai_trace": its tech level, the
+-- signals the construction chain keys off, and how many times each priority
+-- rung took a builder since the last publish. The game recorder widget
+-- (LuaUI/Widgets/dbg_game_recorder.lua) reads it when spectating or watching
+-- a replay, which is how a recorded game shows WHY a team did what it did.
+-- It is one string per team per 10s and changes nothing the AI does.
+local TRACE_INTERVAL      = 300
+local traceLast           = {}    -- [teamID] = frame of the last publish
+local traceAttacked       = {}    -- [teamID] = AI ticks spent under attack since then
+local traceTicks          = {}    -- [teamID] = AI ticks since then
+local traceKeys           = {}    -- scratch
+local SIGNAL_POOL_SECONDS = 20
+local function SignalPool(storage, income)
+	local pool = (income or 0) * SIGNAL_POOL_SECONDS
+	if pool < SIGNAL_POOL_MIN then pool = SIGNAL_POOL_MIN end
+	if pool > storage then pool = storage end
+	return pool
+end
 
 -- Resource floor (the NeverStall mechanism, internalized). Every 30 frames a
--- covered team's metal/energy stock is topped up to this fraction of storage,
--- so the AI can never hard-stall. Coverage:
+-- covered team's metal/energy stock is topped up to NEVERSTALL_FLOOR of a
+-- FIXED base (NEVERSTALL_BASE, the stock 1k pool), i.e. to 150, exactly what
+-- it was before the AI built storage. It must not scale with storage OR with
+-- the signal pool: a recorded game showed the pool-scaled version handing a
+-- 7,000 E/s team an 18,000 E floor every second, so it spent 2.5x the energy
+-- it produced. Coverage:
 --   * AdaptiveAI teams: ALWAYS. Stalling must not exist as a variable for the
 --     difficulty controller -- throughput is steered by build speed instead.
 --   * plain SimpleAI/Defender/Constructor teams: only when the ai_neverstall
@@ -53,6 +149,7 @@ local FACTORY_OVERFLOW      = 0.62 -- metal & energy storage fraction that count
 -- The standalone ai_neverstall.lua gadget now SKIPS all teams handled here and
 -- remains only as the backstop for other AI types (e.g. SurvivalAI games).
 local NEVERSTALL_FLOOR = 0.15
+local NEVERSTALL_BASE  = 1000   -- floor = FLOOR * min(storage, BASE); raise BASE to make the AI cheat harder
 local neverstallOn = (Spring.GetModOptions().ai_neverstall or "disabled") ~= "disabled"
 
 -- Factory unit names that are air or sea plants.
@@ -98,6 +195,15 @@ local ctx = {
 	commanderDefs = {}, factoryDefs = {}, constructorDefs = {},
 	extractorDefs = {}, undefinedDefs = {},
 
+	-- ---- decision trace (see TRACE_INTERVAL) ----
+	trace = {},          -- [teamID] = { [rungKey] = count } since the last publish
+
+	-- ---- stall signal (see StallStep; all keyed by teamID, 0..1) ----
+	stall = { m = {}, e = {}, v = {}, paused = {} },   -- paused = factories on WAIT (b_throttle)
+
+	-- ---- reclaim field (b_construction) ----
+	reclaim = { near = {} },   -- [teamID] = reclaimable metal within reach of home
+
 	-- ---- per-team persistent state (all keyed by teamID) ----
 	counters = {
 		factories = {}, factoriesByDef = {}, mexes = {}, constructors = {},
@@ -111,7 +217,8 @@ local ctx = {
 	},
 	squad   = { muster = {}, state = {}, attackWave = {}, attackTimer = {} },
 	intel   = { underAttack = {}, enemyBase = {}, baseThreat = {}, airThreat = {} },
-	comm    = { retreating = {}, retreatPos = {}, id = {} },
+	comm    = { retreating = {}, retreatPos = {}, id = {},
+	            lost = {} },   -- lost[teamID] = true once the team has had no commander for COMM_LOST_GRACE
 	techLevel  = {},   -- 0-4 per team
 	faction    = {},   -- "fed" | "loz" | "neutral" per team
 	buildLists = {},   -- [teamID][techLevel][category] = {defID, ...}
@@ -242,6 +349,9 @@ for i = 1, #teams do
 		SimpleLandFacCount[teamID]     = 0
 		SimpleAirThreat[teamID]        = nil
 		TeamTechLevel[teamID]          = 1   -- game starts at tech1
+		ctx.trace[teamID]              = {}
+		ctx.stall.m[teamID], ctx.stall.e[teamID] = 0, 0
+		ctx.stall.v[teamID], ctx.stall.paused[teamID] = 0, 0
 		TeamFaction[teamID]            = nil
 		TeamCommID[teamID]             = nil
 		-- Behavior-owned per-team state (squad, pacing seeds, comm retreat,
@@ -341,7 +451,11 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 	elseif cp.energyconv_capacity and cp.energyconv_efficiency then
 		IsConverter[unitDefID] = true
 
-	elseif unitDef.isBuilding and unitDef.weapons and #unitDef.weapons > 0 then
+	elseif unitDef.isBuilding and unitDef.weapons and #unitDef.weapons > 0
+			and cp.unitrole ~= "Support Building" then
+		-- (a "Support Building" with a weapon entry is a shield generator or
+		-- similar: its weapon is the shield. It is not a turret and must not
+		-- be built, counted or placed forward as one.)
 		IsTurret[unitDefID] = true
 		if HasAAOnlyWeapon(unitDef) then
 			IsAATurret[unitDefID] = true
@@ -390,6 +504,10 @@ local sharedCfg = {
 	ATTACK_DIST_W      = ATTACK_DIST_W,
 	COMBAT_ROLE_WEIGHT = COMBAT_ROLE_WEIGHT,
 	FACTORY_OVERFLOW   = FACTORY_OVERFLOW,
+	SignalPool         = SignalPool,
+	STALL_ON           = STALL_ON,
+	STALL_OFF          = STALL_OFF,
+	STALL_HARD         = STALL_HARD,
 	AIR_FACTORY_NAMES  = AIR_FACTORY_NAMES,
 	SEA_FACTORY_NAMES  = SEA_FACTORY_NAMES,
 }
@@ -419,6 +537,7 @@ local BEHAVIOR_FILES = {
 	"luarules/configs/simpleai/behaviors/b_construction.lua",  -- order 40; registers services
 	"luarules/configs/simpleai/behaviors/b_commander.lua",     -- order 20; consumes services
 	"luarules/configs/simpleai/behaviors/b_economy.lua",       -- order 30
+	"luarules/configs/simpleai/behaviors/b_throttle.lua",      -- order 32; pauses/cancels factory work while stalling
 	"luarules/configs/simpleai/behaviors/b_upgrades.lua",      -- order 35
 	"luarules/configs/simpleai/behaviors/b_combat.lua",        -- order 50
 }
@@ -529,10 +648,13 @@ local function PopulateBuildLists(teamID, faction)
 					and #unitDef.buildOptions > 0 and not unitDef.isFactory) then
 				cat = "constructor"
 
-			elseif unitDef.isBuilding and unitDef.weapons and #unitDef.weapons > 0 then
+			elseif unitDef.isBuilding and unitDef.weapons and #unitDef.weapons > 0
+					and cp.unitrole ~= "Support Building" then
 				cat = "turret"
 
-			elseif unitDef.isBuilding and not (unitDef.weapons and #unitDef.weapons > 0) then
+			elseif unitDef.isBuilding then
+				-- everything else that stands still, armed "Support Building"s
+				-- (shield generators) included
 				cat = "building"
 
 			elseif unitDef.canMove and not unitDef.isBuilder
@@ -571,11 +693,17 @@ if gadgetHandler:IsSyncedCode() then
 				if AdaptiveTeams[teamID] or neverstallOn then
 					local mc, ms = Spring.GetTeamResources(teamID, "metal")
 					local ec, es = Spring.GetTeamResources(teamID, "energy")
-					if mc and mc < ms * NEVERSTALL_FLOOR then
-						Spring.SetTeamResource(teamID, "m", ms * NEVERSTALL_FLOOR)
+					if mc then
+						local mFloor = math.min(ms, NEVERSTALL_BASE) * NEVERSTALL_FLOOR
+						if mc < mFloor then
+							Spring.SetTeamResource(teamID, "m", mFloor)
+						end
 					end
-					if ec and ec < es * NEVERSTALL_FLOOR then
-						Spring.SetTeamResource(teamID, "e", es * NEVERSTALL_FLOOR)
+					if ec then
+						local eFloor = math.min(es, NEVERSTALL_BASE) * NEVERSTALL_FLOOR
+						if ec < eFloor then
+							Spring.SetTeamResource(teamID, "e", eFloor)
+						end
 					end
 				end
 			end
@@ -596,8 +724,8 @@ if gadgetHandler:IsSyncedCode() then
 
 					local teamID = SimpleAITeamIDs[i]
 					local _, _, isDead, _, _, allyTeamID = Spring.GetTeamInfo(teamID)
-					local mcurrent, mstorage, _, mincome = Spring.GetTeamResources(teamID, "metal")
-					local ecurrent, estorage, _, eincome = Spring.GetTeamResources(teamID, "energy")
+					local mcurrent, mstorage, mpull, mincome = Spring.GetTeamResources(teamID, "metal")
+					local ecurrent, estorage, epull, eincome = Spring.GetTeamResources(teamID, "energy")
 					local units    = Spring.GetTeamUnits(teamID)
 					local allunits = Spring.GetAllUnits()
 					local luaAI    = Spring.GetTeamLuaAI(teamID)
@@ -615,10 +743,36 @@ if gadgetHandler:IsSyncedCode() then
 					tick.allUnits  = allunits
 					tick.mCur, tick.mStor, tick.mInc = mcurrent, mstorage, mincome
 					tick.eCur, tick.eStor, tick.eInc = ecurrent, estorage, eincome
+					-- Signal pools (see SignalPool above): the denominators for
+					-- every stock-ratio test. Equal to raw storage until the AI
+					-- has built storage beyond the stock pool.
+					local mpool = SignalPool(mstorage, mincome)
+					local epool = SignalPool(estorage, eincome)
+					tick.mPool, tick.ePool = mpool, epool
 					tick.overflowing = mstorage > 0 and estorage > 0
-							and mcurrent > mstorage * FACTORY_OVERFLOW
-							and ecurrent > estorage * FACTORY_OVERFLOW
+							and mcurrent > mpool * FACTORY_OVERFLOW
+							and ecurrent > epool * FACTORY_OVERFLOW
 					tick.luaAI = luaAI
+
+					-- Commander lost? (see COMM_LOST_GRACE)
+					if TeamCommID[teamID] then
+						commSeen[teamID], commGoneAt[teamID] = true, nil
+						ctx.comm.lost[teamID] = false
+					elseif commSeen[teamID] then
+						commGoneAt[teamID] = commGoneAt[teamID] or n
+						if n - commGoneAt[teamID] >= COMM_LOST_GRACE then
+							ctx.comm.lost[teamID] = true
+						end
+					end
+
+					-- Stall signal (see StallStep above).
+					local stall  = ctx.stall
+					local mStall = StallStep(stall.m[teamID] or 0, mcurrent, mpull, mincome)
+					local eStall = StallStep(stall.e[teamID] or 0, ecurrent, epull, eincome)
+					stall.m[teamID], stall.e[teamID] = mStall, eStall
+					local mWeighted = mStall * STALL_METAL_WEIGHT
+					stall.v[teamID] = (mWeighted > eStall) and mWeighted or eStall
+					tick.mStall, tick.eStall, tick.stall = mStall, eStall, stall.v[teamID]
 
 					-- ---- Behavior TeamTicks ----
 					-- Core intel (baseThreat, resources) is in tick; behaviors
@@ -660,6 +814,36 @@ if gadgetHandler:IsSyncedCode() then
 						end -- if unitDefID and unitHealth
 					end -- for each unit
 
+					-- ---- Decision trace publish (see TRACE_INTERVAL) ----
+					traceTicks[teamID] = (traceTicks[teamID] or 0) + 1
+					if SimpleUnderAttack[teamID] then
+						traceAttacked[teamID] = (traceAttacked[teamID] or 0) + 1
+					end
+					if n - (traceLast[teamID] or 0) >= TRACE_INTERVAL then
+						local tally = ctx.trace[teamID]
+						local nk = 0
+						for key in pairs(tally) do nk = nk + 1; traceKeys[nk] = key end
+						for k = nk + 1, #traceKeys do traceKeys[k] = nil end
+						table.sort(traceKeys)
+						for k = 1, nk do
+							local key = traceKeys[k]
+							traceKeys[k] = key .. ":" .. tally[key]
+							tally[key] = nil
+						end
+						Spring.SetTeamRulesParam(teamID, "simpleai_trace", string.format(
+							"f=%d;ai=%s;tech=%d;mpool=%d;epool=%d;ms=%.2f;es=%.2f;paused=%d;rec=%d;nocomm=%d;ua=%d/%d;fac=%d;con=%d;mex=%d;tur=%d;army=%d;r=%s",
+							n, luaAI or "?", TeamTechLevel[teamID] or 1, mpool, epool,
+							mStall, eStall, ctx.stall.paused[teamID] or 0,
+							ctx.reclaim.near[teamID] or 0,
+							ctx.comm.lost[teamID] and 1 or 0,
+							traceAttacked[teamID] or 0, traceTicks[teamID] or 0,
+							SimpleFactoriesCount[teamID] or 0, SimpleConstructorCount[teamID] or 0,
+							SimpleT1Mexes[teamID] or 0, SimpleTurretCount[teamID] or 0,
+							SimpleArmyCount[teamID] or 0,
+							table.concat(traceKeys, ",")), { private = true })
+						traceLast[teamID], traceAttacked[teamID], traceTicks[teamID] = n, 0, 0
+					end
+
 					SimpleUnderAttack[teamID] = false
 
 				end
@@ -674,6 +858,7 @@ if gadgetHandler:IsSyncedCode() then
 	-- or the caps (constructors, factories, turrets, converters, ...) drift
 	-- permanently the first time a unit is shared to or from an AI team.
 	-- ============================================================
+	local commUnits = {}   -- [teamID] = { [unitID] = true } every commander the team holds
 	local function RegisterUnit(unitID, unitDefID, unitTeam)
 		-- Faction detection also runs here so an AI team that RECEIVES its
 		-- first commander (rather than starting with one) gets build lists.
@@ -688,6 +873,15 @@ if gadgetHandler:IsSyncedCode() then
 				TeamFaction[unitTeam] = "neutral"
 			end
 			PopulateBuildLists(unitTeam, TeamFaction[unitTeam])
+		end
+		-- Track EVERY commander the team holds, not just its first. A morph
+		-- replaces the commander with a new unit; the ID used to be recorded
+		-- only for the first one, so after the first morph the team looked
+		-- commander-less forever.
+		if IsCommander[unitDefID] then
+			local set = commUnits[unitTeam]
+			if not set then set = {}; commUnits[unitTeam] = set end
+			set[unitID] = true
 			TeamCommID[unitTeam] = unitID
 		end
 
@@ -789,11 +983,23 @@ if gadgetHandler:IsSyncedCode() then
 				math.max(0, (SimpleAATurretCount[unitTeam] or 1) - 1)
 			end
 		end
-		if IsCommander[unitDefID] and TeamCommID[unitTeam] == unitID then
-			-- Commander gone (died OR shared away); allow re-detection later
-			TeamCommID[unitTeam] = nil
-			SimpleCommRetreating[unitTeam] = false
-			SimpleCommRetreatPos[unitTeam] = nil
+		if IsCommander[unitDefID] then
+			local set = commUnits[unitTeam]
+			if set then set[unitID] = nil end
+			if TeamCommID[unitTeam] == unitID then
+				-- This commander is gone (died, morphed away, or shared away).
+				-- Fall back to another one the team still holds, if any
+				-- (lowest ID, so the choice never depends on table order).
+				local other
+				if set then
+					for id in pairs(set) do
+						if not other or id < other then other = id end
+					end
+				end
+				TeamCommID[unitTeam] = other
+				SimpleCommRetreating[unitTeam] = false
+				SimpleCommRetreatPos[unitTeam] = nil
+			end
 		end
 	end
 

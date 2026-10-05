@@ -16,6 +16,7 @@ layout(points) in;
 // MAXVERTICES of 64. Overrunning max_vertices truncates output silently rather
 // than erroring, so if split bars vanish while glyphs are on, look here first:
 // dropping to a single full-width trough buys back 8.
+// SF vertical side bars: 8 + 8 + 8 = 24, no glyphs.
 layout(triangle_strip, max_vertices = MAXVERTICES) out;
 #line 20000
 
@@ -45,6 +46,22 @@ vec4 uvoffsets;
 float zoffset;
 float depthbuffermod;
 float sizemultiplier = dataIn[0].v_sizemodifiers.x;
+
+// SF vertical side bars (heat, disruption). The whole bar is built by the same
+// emit functions as a horizontal one, in the same bar space (x along the bar's
+// length, y across its thickness); barToPrim() then turns that space a quarter
+// turn so the length runs along camera-up and the fill grows bottom to top.
+// It is a rotation, not a mirror, so triangle winding is unchanged.
+bool vertical = false;
+float barhalfwidth = BARWIDTH; // half the bar's length in bar units
+float pulse = 0.0;             // 0..1, nonzero only on a fully disrupted unit's bar
+
+vec3 barToPrim(in vec2 pos){
+	if (vertical) {
+		return vec3(0.5 * BARHEIGHT - pos.y, 0.0, pos.x + barhalfwidth) * BARSCALE * sizemultiplier;
+	}
+	return vec3(pos.x, 0.0, pos.y - zoffset) * BARSCALE * sizemultiplier;
+}
 #define HALFPIXEL 0.0019765625
 
 #define BARTYPE dataIn[0].v_bartype_index_ssboloc.x
@@ -63,6 +80,8 @@ float sizemultiplier = dataIn[0].v_sizemodifiers.x;
 #define BITFLASHBAR 64u
 #define BITCOLORCORRECT 128u
 #define BITSPLITBAR 256u
+#define BITVERTICAL 512u
+#define BITVERTICALRIGHT 1024u
 
 // Inner span of the bar, i.e. the region the fill quads and troughs live in.
 #define BARINNERLEFT  (-BARWIDTH + BARCORNER)
@@ -70,11 +89,11 @@ float sizemultiplier = dataIn[0].v_sizemodifiers.x;
 
 void emitVertexBG(in vec2 pos){
 	g_uv.xy = vec2(0.0,0.0);
-	vec3 primitiveCoords = vec3(pos.x,0.0,pos.y - zoffset) * BARSCALE *sizemultiplier;
+	vec3 primitiveCoords = barToPrim(pos);
 	gl_Position = cameraViewProj * vec4(centerpos.xyz + rotY * ( primitiveCoords ), 1.0);
 	gl_Position.z += depthbuffermod;
 	g_uv.z = 0.0; // this tells us to use color
-	float extracolor = 0.0;
+	float extracolor = 0.45 * pulse; // disrupted side bars breathe, see main()
 	if (((BARTYPE & BITFLASHBAR) > 0u) && (mod(timeInfo.x, 10.0) > 4.0)){
 		extracolor = 0.5;
 	}
@@ -94,7 +113,7 @@ void emitVertexBarBG(in vec2 pos, in vec4 botcolor, in float bartextureoffset, i
 	g_uv.xy = g_uv.xy * vec2(ATLASSTEP * 9, ATLASSTEP) + vec2(3 * ATLASSTEP, bartextureoffset); // map uvs to the bar texture
 	g_uv.y = -1.0 * g_uv.y;
 	//vec3 primitiveCoords = vec3( (pos.x - sign(pos.x) * BARCORNER),0.0, (pos.y - sign(pos.y - 0.5) * BARCORNER - zoffset)) * BARSCALE;
-	vec3 primitiveCoords = vec3( pos.x,0.0, pos.y - zoffset) * BARSCALE *sizemultiplier;
+	vec3 primitiveCoords = barToPrim(pos);
 	gl_Position = cameraViewProj * vec4(centerpos.xyz + rotY * ( primitiveCoords ), 1.0);
 	gl_Position.z += depthbuffermod;
 	g_uv.z = clamp(10000 * bartextureoffset, 0, 1); // this tells us to use color if we are using bartextureoffset
@@ -183,6 +202,23 @@ void main(){
 	float health = dataIn[0].v_parameters.x;
 	if (BARALPHA < MINALPHA) return; // Dont draw below 50% transparency
 
+	// SF vertical side bars: stand beside the unit instead of stacking above it.
+	// v_sizemodifiers.y is the sideways distance in elmos, the per-instance
+	// height is the foot of the bar, and a value of 2.0 or more means "fully
+	// disrupted": strip the flag off and pulse.
+	vertical = (BARTYPE & BITVERTICAL) > 0u;
+	if (vertical) {
+		barhalfwidth = 0.5 * VBARLENGTH;
+		zoffset = 0.0;
+		float side = ((BARTYPE & BITVERTICALRIGHT) > 0u) ? 1.0 : -1.0;
+		centerpos.xyz += cameraViewInv[0].xyz * (side * dataIn[0].v_sizemodifiers.y);
+		if (health >= 2.0) {
+			health -= 2.0;
+			pulse = 0.5 + 0.5 * sin((timeInfo.x + timeInfo.w) * 0.18);
+		}
+		health = clamp(health, 0.0, 1.0);
+	}
+
 	// All the early bail conditions to not draw full/empty bars
 	#ifndef DEBUGSHOW
 	if ((BARTYPE & BITSPLITBAR) > 0u) {
@@ -229,14 +265,14 @@ void main(){
 	//start in bottom leftmost of this shit.
 
 		depthbuffermod = 0.001;
-		emitVertexBG(vec2(-BARWIDTH            , BARCORNER            )); //1
-		emitVertexBG(vec2(-BARWIDTH            , BARHEIGHT - BARCORNER)); //2
-		emitVertexBG(vec2(-BARWIDTH + BARCORNER, 0                    )); //3
-		emitVertexBG(vec2(-BARWIDTH + BARCORNER, BARHEIGHT            )); //4
-		emitVertexBG(vec2( BARWIDTH - BARCORNER, 0                    )); //5
-		emitVertexBG(vec2( BARWIDTH - BARCORNER, BARHEIGHT            )); //6
-		emitVertexBG(vec2( BARWIDTH            , BARCORNER            )); //7
-		emitVertexBG(vec2( BARWIDTH            , BARHEIGHT - BARCORNER)); //8
+		emitVertexBG(vec2(-barhalfwidth            , BARCORNER            )); //1
+		emitVertexBG(vec2(-barhalfwidth            , BARHEIGHT - BARCORNER)); //2
+		emitVertexBG(vec2(-barhalfwidth + BARCORNER, 0                    )); //3
+		emitVertexBG(vec2(-barhalfwidth + BARCORNER, BARHEIGHT            )); //4
+		emitVertexBG(vec2( barhalfwidth - BARCORNER, 0                    )); //5
+		emitVertexBG(vec2( barhalfwidth - BARCORNER, BARHEIGHT            )); //6
+		emitVertexBG(vec2( barhalfwidth            , BARCORNER            )); //7
+		emitVertexBG(vec2( barhalfwidth            , BARHEIGHT - BARCORNER)); //8
 		EndPrimitive();
 
 	// EMIT THE COLORED BACKGROUND
@@ -248,6 +284,10 @@ void main(){
 		vec4 troughcolor = mix(dataIn[0].v_mincolor, dataIn[0].v_maxcolor, health);
 		vec4 fillcolor   = troughcolor;
 		if ((BARTYPE & BITCOLORCORRECT) > 0u) { fillcolor.rgb = fillcolor.rgb / max(max(fillcolor.r, fillcolor.g), 0.0001); } // color correction for health
+
+		// A fully disrupted unit's side bar dims and recovers in step with the
+		// background flash, so the pulse reads even when the bar is full.
+		fillcolor.rgb *= (1.0 - 0.4 * pulse);
 
 		float fillvalue = health;
 		if ((BARTYPE & BITTIMELEFT) > 0u) fillvalue = 1.0; // full bar for timer based shit
@@ -275,12 +315,18 @@ void main(){
 			emitFillQuad(leftstart,  halfspan, fillvalue,   fillcolor, 0.0);
 			emitFillQuad(rightstart, halfspan, SECONDVALUE, osTrough,  UVOFFSET);
 		} else {
+			// same as BARINNERLEFT / BARINNERSPAN for ordinary bars, shorter for vertical ones
+			float innerleft = -barhalfwidth + BARCORNER;
+			float innerspan = 2.0 * (barhalfwidth - BARCORNER);
+
 			depthbuffermod = 0.000;
-			emitTrough(BARINNERLEFT, BARINNERSPAN, troughcolor);
+			emitTrough(innerleft, innerspan, troughcolor);
 
 			depthbuffermod = -0.001;
-			emitFillQuad(BARINNERLEFT, BARINNERSPAN, fillvalue, fillcolor, bartextureoffset);
+			emitFillQuad(innerleft, innerspan, fillvalue, fillcolor, bartextureoffset);
 		}
+
+	if (vertical) return; // side bars carry no glyphs or numbers
 
 	// try to emit text?
 

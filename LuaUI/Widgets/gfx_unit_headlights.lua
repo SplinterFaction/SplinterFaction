@@ -75,6 +75,7 @@ local MAX_PIECES = 4
 
 local spEcho               = Spring.Echo
 local spValidUnitID        = Spring.ValidUnitID
+local spGetUnitIsDead      = Spring.GetUnitIsDead
 local spGetUnitIsCloaked   = Spring.GetUnitIsCloaked
 local spGetUnitIsBeingBuilt = Spring.GetUnitIsBeingBuilt
 local spGetUnitPieceMap    = Spring.GetUnitPieceMap
@@ -196,6 +197,9 @@ end
 local function TurnOn(unitID, unitDefID)
 	local def = defCache[unitDefID]
 	if not def or not spValidUnitID(unitID) then return end
+	-- A unit that is playing its death animation is still a valid ID, but nothing
+	-- will tell us when it is finally deleted, so never attach lights to one.
+	if spGetUnitIsDead(unitID) then return end
 	local lamps = def.lamps
 	for i = 1, #lamps do
 		local lamp = lamps[i]
@@ -204,11 +208,18 @@ local function TurnOn(unitID, unitDefID)
 	unitLit[unitID] = true
 end
 
+-- Removes this unit's lamps from the cone VBO. Only pops instances that are
+-- actually in the VBO, so it is safe when the lights widget (or the VBO's own
+-- zombie sweep) already dropped them.
 local function TurnOff(unitID, unitDefID)
 	local def = defCache[unitDefID]
-	if def and api then
+	if def and api and api.RemoveLight then
+		local present = coneVBO and coneVBO.instanceIDtoIndex
 		for i = 1, #def.lamps do
-			api.RemoveLight("cone", "hl" .. unitID .. "_" .. i, unitID)
+			local instanceID = "hl" .. unitID .. "_" .. i
+			if (not present) or present[instanceID] then
+				api.RemoveLight("cone", instanceID, unitID)
+			end
 		end
 	end
 	unitLit[unitID] = nil
@@ -224,6 +235,9 @@ local function Track(unitID, unitDefID)
 end
 
 local function Forget(unitID)
+	-- We own these lights, so we remove them. Relying on the lights widget to
+	-- drop them left dead units' lamps behind in the VBO as zombies.
+	if unitLit[unitID] then TurnOff(unitID, tracked[unitID]) end
 	tracked[unitID] = nil
 	unitLit[unitID] = nil
 	unitBlocked[unitID] = nil
@@ -321,15 +335,17 @@ function widget:VisibleUnitAdded(unitID, unitDefID, unitTeam)
 end
 
 function widget:VisibleUnitRemoved(unitID)
-	-- The deferred lights widget drops every light attached to this unit on the
-	-- same callin, so only our bookkeeping needs clearing.
+	-- The unit is still a valid ID during this callin, so its lamps pop cleanly.
 	Forget(unitID)
 end
 
 function widget:VisibleUnitsChanged(extVisibleUnits, extNumVisibleUnits)
-	-- The deferred lights widget wipes its unit VBOs on this callin. Rebuild our
-	-- list unlit and let the next Update re-add, which is safe whichever listener
-	-- the tracker dispatches to first.
+	-- Remove whatever we still have in the VBO ourselves (a no-op for anything the
+	-- lights widget already wiped), then rebuild our list unlit and let the next
+	-- Update re-add. Safe whichever listener the tracker dispatches to first.
+	for unitID in pairs(unitLit) do
+		TurnOff(unitID, tracked[unitID])
+	end
 	tracked, unitLit, unitBlocked, unitOnPoint = {}, {}, {}, {}
 	for unitID, unitDefID in pairs(extVisibleUnits) do
 		Track(unitID, unitDefID)
@@ -359,7 +375,7 @@ function widget:UnitDecloaked(unitID, unitDefID, unitTeam)
 end
 
 function widget:CrashingAircraft(unitID, unitDefID, unitTeam)
-	-- The deferred lights widget strips all lights from a crashing aircraft.
+	-- Lights go out on a crashing aircraft; Forget removes them from the VBO.
 	Forget(unitID)
 end
 

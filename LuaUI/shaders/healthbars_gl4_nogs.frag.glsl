@@ -21,6 +21,8 @@ in DataVS {
     float g_bartype;
     float g_secondvalue; // SF split bars: right-hand half's value
     float g_split;       // 1.0 when this instance is a split bar
+    float g_vertical;    // 1.0 for SF vertical side bars (heat, disruption)
+    float g_flash;       // 0..1 background brightening for a fully disrupted unit's bar
 };
 
 uniform sampler2D healthbartexture;
@@ -70,6 +72,13 @@ void main(void)
     const float GLYPH_PAD_TILES = 4.5;
     float glyphPad = BARHEIGHT * GLYPH_PAD_TILES;
     float uBarStart = glyphPad / (2.0 * BARWIDTH + glyphPad);
+    // SF vertical side bars have no glyph lane: the whole quad is bar, and
+    // g_uv.x runs bottom to top along its length.
+    float barHalfLength = BARWIDTH;
+    if (g_vertical > 0.5) {
+        uBarStart = 0.0;
+        barHalfLength = 0.5 * VBARLENGTH;
+    }
 
     float inBar = step(uBarStart, g_uv.x);
     float barU = clamp((g_uv.x - uBarStart) / max(1.0 - uBarStart, 0.001), 0.0, 1.0);
@@ -108,7 +117,7 @@ void main(void)
 
     vec3 bgBottom = BGBOTTOMCOLOR.rgb;
     vec3 bgTop = BGTOPCOLOR.rgb;
-    vec3 bgColor = mix(bgBottom, bgTop, g_uv.y);
+    vec3 bgColor = mix(bgBottom, bgTop, g_uv.y) + g_flash;
 
     vec3 fillTop = localFillTop;
     vec3 fillBottom = localFillTop * BOTTOMDARKENFACTOR;
@@ -117,7 +126,7 @@ void main(void)
     // Inset fill so the background remains visible as an outline.
     // Bias Y inset upward for wide bars so top/bottom border stays readable.
     const float borderX = 0.03;
-    float borderY = borderX * (BARWIDTH / BARHEIGHT) * 2.0;
+    float borderY = borderX * (barHalfLength / BARHEIGHT) * 2.0;
     borderY = clamp(borderY, 0.14, 0.45);
     float innerX = smoothstep(borderX, borderX + 0.01, localU) * (1.0 - smoothstep(1.0 - borderX - 0.01, 1.0 - borderX, localU));
     float innerY = smoothstep(borderY, borderY + 0.02, g_uv.y) * (1.0 - smoothstep(1.0 - borderY - 0.02, 1.0 - borderY, g_uv.y));
