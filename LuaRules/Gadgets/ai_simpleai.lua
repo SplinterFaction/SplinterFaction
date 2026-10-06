@@ -201,6 +201,12 @@ local ctx = {
 	-- ---- stall signal (see StallStep; all keyed by teamID, 0..1) ----
 	stall = { m = {}, e = {}, v = {}, paused = {} },   -- paused = factories on WAIT (b_throttle)
 
+	-- ---- where each team's base is (set when its first commander appears) ----
+	home = {},     -- [teamID] = { x =, z = }
+
+	-- ---- build category per unit def (filled by PopulateBuildLists) ----
+	defCat = {},   -- [unitDefID] = "generator" | "storage" | "supply" | "factory" | "turret" | ...
+
 	-- ---- reclaim field (b_construction) ----
 	reclaim = { near = {} },   -- [teamID] = reclaimable metal within reach of home
 
@@ -540,6 +546,7 @@ local BEHAVIOR_FILES = {
 	"luarules/configs/simpleai/behaviors/b_throttle.lua",      -- order 32; pauses/cancels factory work while stalling
 	"luarules/configs/simpleai/behaviors/b_upgrades.lua",      -- order 35
 	"luarules/configs/simpleai/behaviors/b_combat.lua",        -- order 50
+	"luarules/configs/simpleai/behaviors/b_surrender.lua",     -- order 90; gg and self-destruct when the game is obviously lost
 }
 
 local services  = {}
@@ -663,6 +670,7 @@ local function PopulateBuildLists(teamID, faction)
 			end
 
 			if cat then
+				ctx.defCat[unitDefID] = cat   -- what kind of thing this def is (same for every team)
 				local bucket = lists[reqTech][cat]
 				if bucket then
 					bucket[#bucket + 1] = unitDefID
@@ -830,7 +838,7 @@ if gadgetHandler:IsSyncedCode() then
 							traceKeys[k] = key .. ":" .. tally[key]
 							tally[key] = nil
 						end
-						Spring.SetTeamRulesParam(teamID, "simpleai_trace", string.format(
+						local traceLine = string.format(
 							"f=%d;ai=%s;tech=%d;mpool=%d;epool=%d;ms=%.2f;es=%.2f;paused=%d;rec=%d;nocomm=%d;ua=%d/%d;fac=%d;con=%d;mex=%d;tur=%d;army=%d;r=%s",
 							n, luaAI or "?", TeamTechLevel[teamID] or 1, mpool, epool,
 							mStall, eStall, ctx.stall.paused[teamID] or 0,
@@ -840,7 +848,14 @@ if gadgetHandler:IsSyncedCode() then
 							SimpleFactoriesCount[teamID] or 0, SimpleConstructorCount[teamID] or 0,
 							SimpleT1Mexes[teamID] or 0, SimpleTurretCount[teamID] or 0,
 							SimpleArmyCount[teamID] or 0,
-							table.concat(traceKeys, ",")), { private = true })
+							table.concat(traceKeys, ","))
+						-- Two routes to the recorder: the shared logging hook when the
+						-- recorder feed gadget is loaded, and a team rules param the
+						-- recorder widget can read on its own when it is not.
+						if GG.Recorder and GG.Recorder.Log then
+							GG.Recorder.Log(teamID, "simpleai", traceLine)
+						end
+						Spring.SetTeamRulesParam(teamID, "simpleai_trace", traceLine, { private = true })
 						traceLast[teamID], traceAttacked[teamID], traceTicks[teamID] = n, 0, 0
 					end
 
@@ -883,6 +898,14 @@ if gadgetHandler:IsSyncedCode() then
 			if not set then set = {}; commUnits[unitTeam] = set end
 			set[unitID] = true
 			TeamCommID[unitTeam] = unitID
+			-- HOME is where the team's first commander appeared. It is NOT
+			-- Spring.GetTeamStartPosition: in SF the spawn gadget places
+			-- commanders itself, and a recorded game had every commander
+			-- spawn 2,000 to 11,000 elmos from the engine's start position.
+			if not ctx.home[unitTeam] then
+				local hx, _, hz = Spring.GetUnitPosition(unitID)
+				if hx then ctx.home[unitTeam] = { x = hx, z = hz } end
+			end
 		end
 
 		if IsFactory[unitDefID] then

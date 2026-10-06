@@ -21,41 +21,75 @@
 --   To keep a log small you can also restrict recording to some teams with
 --   ONLY_TEAMS below (deaths still name the killer's team either way).
 --
--- LINE FORMAT (space separated; first token is the record type)
---   #SFREC 1                                   format version
---   H <key> <value...>                         header facts (map, sizes, view...);
---                                              H geovents <n> <x,z> ... lists the vents
+-- THE FEED
+--   The gadget LuaRules/Gadgets/dbg_game_recorder_feed.lua sees what a widget
+--   cannot (killers, damage, orders, other gadgets' state) and hands it to
+--   this widget, which writes it into the same file (records K V O Y M L).
+--   Without the gadget the recorder still works; those records are absent.
+--
+-- LINE FORMAT, version 2 (space separated; first token is the record type)
+--   The file describes itself: every record type's columns are listed in a
+--   "@" line in the header, and every unit type in a "U" line, so a reader
+--   needs nothing but the file.
+--   #SFREC 2                                   format version
+--   H <key> <value...>                         header facts (map, sizes, view, vents...)
+--   @ <type> <column names...>                 the columns of a record type
+--   U <def> <metal> <energy> <footX> <footZ> <speed> <flags> <weapons> <role> <energyMake>
+--     <metalStorage> <energyStorage>
+--                                              one per unit type. flags: b building,
+--                                              f factory, c mobile builder, a army, - none.
+--                                              weapons: direct | heat | disrupt | shield | none
 --   T <team> <ally> <kind> <ai> <side> <name>  team roster; kind = human|luaai|ai|gaia
 --   C <f> <uid> <team> <def> <x> <z> <builder> unit created (nanoframe); builder uid or -
 --   B <f> <uid> <team> <def> <x> <z> <fin>     baseline unit (alive when recording began)
 --   F <f> <uid> <team>                         unit finished
 --   D <f> <uid> <team> <def> <x> <z> <fin> <killerTeam> <killerDef>
---                                              unit destroyed; fin 0 = died as nanoframe;
---                                              killer fields are - when unknown
+--                                              unit gone; fin 0 = died as nanoframe. The
+--                                              killer fields here are only what the engine
+--                                              tells widgets (usually -); see K.
+--   K <f> <uid> <team> <def> <fin> <killerUid> <killerTeam> <killerDef>
+--                                              (feed) the same death with its killer;
+--                                              - when there was none (self-destruct, morph,
+--                                              reclaim)
+--   M <f> <oldUid> <newUid> <team> <oldDef> <newDef>
+--                                              (feed) a morph: oldUid's D line is an upgrade,
+--                                              not a loss
 --   G <f> <uid> <oldTeam> <newTeam>            unit changed teams
---   S <f> <team> <mCur> <mStor> <mInc> <mExp> <eCur> <eStor> <eInc> <eExp>
---       <supUsed> <supMax> <units> <buildings> <army> <armyMetal> <lostMetal> <killedMetal>
---       <reclaimM> <reclaimE> <reclaimers>
---                                              team snapshot, every SNAPSHOT_FRAMES.
---                                              reclaimM/E = metal and energy per second the
---                                              team's mobile builders are bringing in right
---                                              now (what a builder "makes" beyond its own
---                                              def's output is reclaim); reclaimers = how
---                                              many of them have a reclaim order
---   P <f> <team> <cell>:<metal> ...            where the team's army is: metal value of
---                                              mobile armed units per grid cell,
---                                              cell = gx + gz * gridX (see H grid)
---   A <f> <team> <trace>                       SimpleAI decision trace for the interval
---                                              (tech, signals, rung:count list)
+--   S <f> <team> ...                           team snapshot every SNAPSHOT_FRAMES; columns in
+--                                              "@ S". reclaimM/E = metal and energy per second
+--                                              the team's mobile builders are bringing in
+--                                              (what a builder makes beyond its def's own
+--                                              output is reclaim)
+--   Y <f> <team> <rp> <weapons> <armor> <tech> (feed) research points, upgrade levels, tech
+--   V <f> <attackerTeam> <victimTeam> <damage> <paralyze> <aDef>><vDef>:<dmg> ...
+--                                              (feed) damage dealt in the last interval, with
+--                                              the unit-type pairs that did most of it
+--   O <f> <team> <CMD>:<count> ...             (feed) orders given in the last interval
+--   L <f> <team> <tag> <text...>               (feed) a line logged by a gadget through
+--                                              GG.Recorder.Log; tag "simpleai" is the AI
+--                                              decision trace
+--   Q <f> <team> <uid>:<x>,<z> ...             where every mobile unit of the team is,
+--                                              every POSITION_FRAMES (buildings never move:
+--                                              their place is on their C or B line)
+--   W <f> <cell>:<metal>:<energy> ...          the reclaim field every WRECK_FRAMES: metal and
+--                                              energy lying in each grid cell,
+--                                              cell = gx + gz * nx (see H wreckgrid)
+--   E <row> <height> ...                       header: ground height grid, one line per row
+--                                              from north to south (see H heightgrid);
+--                                              H metalspots and H start give the rest of the map
+--   A <f> <team> <trace>                       SimpleAI decision trace read directly from the
+--                                              AI (only written when the feed is absent)
 --   X <f> <what> <...>                         teamdied <team> | gameover <winning allyteams>
+--                                              | feed (first record received from the gadget)
+--                                              | stopped (recording ended after game over)
 --   Z <team> <key>=<value> ...                 engine end-of-game team statistics
---   f is the game frame (30 per second).
+--   f is the game frame (30 per second). Team -1 means "no team".
 --------------------------------------------------------------------------------
 
 function widget:GetInfo()
 	return {
 		name    = "Game Recorder",
-		desc    = "Records a compact log of the whole game (units, economy, army positions, AI decisions) for after-action analysis",
+		desc    = "Records the whole game to a text file (units, kills, damage, orders, economy, army positions, AI decisions) for after-action analysis",
 		author  = "SplinterFaction",
 		date    = "2026",
 		license = "GNU GPL, v2 or later",
@@ -69,9 +103,14 @@ end
 --------------------------------------------------------------------------------
 
 local SNAPSHOT_FRAMES = 300    -- team economy snapshot every 10s
-local GRID_FRAMES     = 450    -- army position grid every 15s
-local GRID_LONG_SIDE  = 24     -- grid cells along the map's longer side
+local POSITION_FRAMES = 300    -- every mobile unit's position every 10s
+local WRECK_FRAMES    = 900    -- reclaim field snapshot every 30s
+local HEIGHT_CELL     = 128    -- map height grid resolution (elmos)
+local WRECK_CELL      = 512    -- reclaim field grid resolution (elmos)
+local WRECK_MIN       = 20     -- ignore cells holding less than this much metal + energy
 local OUTPUT_DIR      = "SFRecordings"
+local STOP_AT_GAME_OVER = true   -- close the file shortly after the game ends
+local STOP_GRACE      = 60     -- frames to keep recording after game over (lets final tallies arrive)
 
 -- nil = record every team. To record only some teams, list them:
 --   local ONLY_TEAMS = { [2] = true, [5] = true }
@@ -93,7 +132,7 @@ local file
 local filePath
 local teamList   = {}
 local gaiaTeam   = Spring.GetGaiaTeamID()
-local gridX, gridZ, cellSize = 1, 1, 1
+local wreckNX = 1
 
 -- defID-keyed, filled once
 local defName, defMetal, defIsBuilding, defIsArmy = {}, {}, {}, {}
@@ -106,9 +145,14 @@ local unitTeamOf, unitDefOf, unitFinished = {}, {}, {}
 local nUnits, nBuildings, nArmy = {}, {}, {}
 local armyMetal, lostMetal, killedMetal = {}, {}, {}
 local lastTrace = {}
+local stopAtFrame           -- set at game over: the frame recording ends
+local feedSeen = false      -- has the gadget feed delivered anything yet?
+local feedTrace = {}        -- [teamID] = true once the AI trace for that team arrives through the feed
+local morphedAway = {}      -- [unitID] = true: this unit's coming death is a morph, not a loss
 local builders = {}   -- [teamID] = { [unitID] = unitDefID } mobile builders alive
+local mobiles  = {}   -- [teamID] = { [unitID] = true } every mobile unit alive
+local reclaimable = {} -- [featureDefID] = true/false (cached)
 
-local cellScratch, cellKeys = {}, {}
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -120,6 +164,14 @@ end
 
 local function Write(line)
 	if file then file:write(line, "\n") end
+end
+
+local function CloseFile()
+	if file then
+		file:close()
+		file = nil
+		Spring.Echo("[Game Recorder] saved " .. tostring(filePath))
+	end
 end
 
 local function Clean(s)
@@ -146,6 +198,7 @@ local function AddUnit(unitID, unitDefID, teamID, finished)
 	unitTeamOf[unitID], unitDefOf[unitID], unitFinished[unitID] = teamID, unitDefID, finished
 	if nUnits[teamID] == nil then return end
 	if defBuilderM[unitDefID] then builders[teamID][unitID] = unitDefID end
+	if not defIsBuilding[unitDefID] then mobiles[teamID][unitID] = true end
 	nUnits[teamID] = nUnits[teamID] + 1
 	if defIsBuilding[unitDefID] then nBuildings[teamID] = nBuildings[teamID] + 1 end
 	if defIsArmy[unitDefID] then
@@ -159,6 +212,7 @@ local function RemoveUnit(unitID)
 	unitTeamOf[unitID], unitDefOf[unitID], unitFinished[unitID] = nil, nil, nil
 	if not teamID or nUnits[teamID] == nil then return end
 	builders[teamID][unitID] = nil
+	mobiles[teamID][unitID] = nil
 	nUnits[teamID] = nUnits[teamID] - 1
 	if defIsBuilding[unitDefID] then nBuildings[teamID] = nBuildings[teamID] - 1 end
 	if defIsArmy[unitDefID] then
@@ -192,20 +246,35 @@ local function TeamLabel(teamID)
 	return table.concat(names, "+")
 end
 
+local startWritten = {}   -- [teamID] = true once its start position is in the file
+local function WriteStarts()
+	for i = 1, #teamList do
+		local teamID = teamList[i]
+		if not startWritten[teamID] then
+			local sx, _, sz = Spring.GetTeamStartPosition(teamID)
+			if sx and (sx > 0 or (sz or 0) > 0) then
+				startWritten[teamID] = true
+				Write(("H start %d %d %d"):format(teamID, floor(sx + 0.5), floor(sz + 0.5)))
+			end
+		end
+	end
+end
+
 local function WriteHeader()
 	local spec, fullView = Spring.GetSpectatingState()
 	local view = (Spring.IsReplay() and "replay") or (spec and fullView and "spectator")
 			or (spec and "spectator-limited") or "player"
-	Write("#SFREC 1")
+	Write("#SFREC 2")
 	Write("H game " .. Clean(Game.gameName) .. " " .. Clean(Game.gameVersion))
 	Write("H engine " .. Clean(Engine and Engine.version or Game.version))
 	Write("H map " .. Clean(Game.mapName))
 	Write("H mapsize " .. Game.mapSizeX .. " " .. Game.mapSizeZ)
-	Write("H grid " .. gridX .. " " .. gridZ .. " " .. cellSize)
 	Write("H view " .. view)
 	Write("H startframe " .. spGetGameFrame())
 	Write("H date " .. os.date("%Y-%m-%d_%H:%M:%S"))
-	Write("H snapshot " .. SNAPSHOT_FRAMES .. " " .. GRID_FRAMES)
+	Write("H snapshot " .. SNAPSHOT_FRAMES)
+	Write("H positions " .. POSITION_FRAMES)
+	Write("H wreckgrid " .. WRECK_FRAMES .. " " .. wreckNX .. " " .. WRECK_CELL)
 	-- Geothermal vents placed by game_geovent_spot_generator (random per game).
 	local vents = {}
 	for i = 1, (Spring.GetGameRulesParam("customGeovent_count") or 0) do
@@ -214,6 +283,85 @@ local function WriteHeader()
 		if x and z then vents[#vents + 1] = floor(x + 0.5) .. "," .. floor(z + 0.5) end
 	end
 	Write("H geovents " .. #vents .. ((#vents > 0) and (" " .. table.concat(vents, " ")) or ""))
+	-- Metal spots, as published by game_metal_maker_spot_generator.
+	local spots = {}
+	for i = 1, (Spring.GetGameRulesParam("metalSpot_count") or 0) do
+		local x = Spring.GetGameRulesParam("metalSpot_" .. i .. "_x")
+		local z = Spring.GetGameRulesParam("metalSpot_" .. i .. "_z")
+		if x and z then spots[#spots + 1] = floor(x + 0.5) .. "," .. floor(z + 0.5) end
+	end
+	Write("H metalspots " .. #spots .. ((#spots > 0) and (" " .. table.concat(spots, " ")) or ""))
+	-- Start positions (again at game start: before that they are not chosen
+	-- yet and the engine reports 0,0).
+	WriteStarts()
+	-- Terrain: ground height at the center of every HEIGHT_CELL square, one
+	-- "E" line per row (north to south), so slopes, plateaus and chokes can be
+	-- worked out from the file alone.
+	local nx = math.max(1, math.ceil(Game.mapSizeX / HEIGHT_CELL))
+	local nz = math.max(1, math.ceil(Game.mapSizeZ / HEIGHT_CELL))
+	Write(("H heightgrid %d %d %d"):format(nx, nz, HEIGHT_CELL))
+	local row = {}
+	for gz = 0, nz - 1 do
+		for gx = 0, nx - 1 do
+			row[gx + 1] = floor(Spring.GetGroundHeight((gx + 0.5) * HEIGHT_CELL, (gz + 0.5) * HEIGHT_CELL) + 0.5)
+		end
+		Write("E " .. gz .. " " .. table.concat(row, " ", 1, nx))
+	end
+	-- Schema: the columns of every record type.
+	Write("@ T team ally kind ai side name")
+	Write("@ U def metal energy footX footZ speed flags weapons role energyMake metalStorage energyStorage")
+	Write("@ C f uid team def x z builder")
+	Write("@ B f uid team def x z fin")
+	Write("@ F f uid team")
+	Write("@ D f uid team def x z fin killerTeam killerDef")
+	Write("@ K f uid team def fin killerUid killerTeam killerDef")
+	Write("@ M f oldUid newUid team oldDef newDef")
+	Write("@ G f uid oldTeam newTeam")
+	Write("@ S f team mCur mStor mInc mExp eCur eStor eInc eExp supUsed supMax units buildings army armyMetal lostMetal killedMetal reclaimM reclaimE reclaimers")
+	Write("@ Y f team rp weapons armor tech")
+	Write("@ V f attackerTeam victimTeam damage paralyze pairs...")
+	Write("@ O f team orders...")
+	Write("@ L f team tag text...")
+	Write("@ Q f team uid:x,z...")
+	Write("@ W f cell:metal:energy...")
+	Write("@ E row heights...")
+	Write("@ A f team trace")
+	Write("@ X f what args...")
+	Write("@ Z team stats...")
+
+	-- Unit table: what every unit type is, so the file can be read alone.
+	local defIDs = {}
+	for unitDefID in pairs(UnitDefs) do defIDs[#defIDs + 1] = unitDefID end
+	table.sort(defIDs)
+	for i = 1, #defIDs do
+		local unitDefID = defIDs[i]
+		local ud = UnitDefs[unitDefID]
+		local flags = (defIsBuilding[unitDefID] and "b" or "") .. (ud.isFactory and "f" or "")
+				.. (defBuilderM[unitDefID] and "c" or "") .. (defIsArmy[unitDefID] and "a" or "")
+		if flags == "" then flags = "-" end
+		-- weapon class: what its weapons do (every weapon heat -> heat, and so on)
+		local class = "none"
+		local weapons = ud.weapons
+		if weapons and #weapons > 0 then
+			local heat, disrupt, shield = 0, 0, 0
+			for k = 1, #weapons do
+				local wd  = WeaponDefs[weapons[k].weaponDef]
+				local wcp = wd and (wd.customParams or wd.customparams)
+				if wd and (wd.type == "Shield" or wd.isShield) then shield = shield + 1
+				elseif wcp and wcp.heatweapon and wcp.heatweapon ~= "0" then heat = heat + 1
+				elseif wcp and wcp.disruptionweapon and wcp.disruptionweapon ~= "0" then disrupt = disrupt + 1 end
+			end
+			if shield == #weapons then class = "shield"
+			elseif heat == #weapons then class = "heat"
+			elseif disrupt == #weapons then class = "disrupt"
+			else class = "direct" end
+		end
+		local cp = ud.customParams or {}
+		Write(("U %s %d %d %d %d %d %s %s %s %d %d %d"):format(ud.name or "?", ud.metalCost or 0, ud.energyCost or 0,
+			(ud.xsize or 0) / 2, (ud.zsize or 0) / 2, ud.speed or 0, flags, class, Clean(cp.unitrole),
+			ud.energyMake or 0, ud.metalStorage or 0, ud.energyStorage or 0))
+	end
+
 	for i = 1, #teamList do
 		local teamID = teamList[i]
 		local _, _, _, _, side, allyTeam = Spring.GetTeamInfo(teamID, false)
@@ -234,7 +382,7 @@ local function Snapshot(n)
 	lastSnapshot = n
 	for i = 1, #teamList do
 		local teamID = teamList[i]
-		if Recording(teamID) then
+		if Recording(teamID) and (teamID ~= gaiaTeam or nUnits[teamID] > 0) then
 			local mCur, mStor, _, mInc, mExp = spGetTeamResources(teamID, "metal")
 			local eCur, eStor, _, eInc, eExp = spGetTeamResources(teamID, "energy")
 			-- Reclaim income: the engine credits reclaimed resources to the
@@ -264,7 +412,7 @@ local function Snapshot(n)
 			end
 			-- SimpleAI decision trace: one string per interval, published by
 			-- ai_simpleai.lua. Logged once per new value.
-			local trace = TeamParam(teamID, "simpleai_trace")
+			local trace = (not feedTrace[teamID]) and TeamParam(teamID, "simpleai_trace")
 			if trace and trace ~= lastTrace[teamID] then
 				lastTrace[teamID] = trace
 				Write(("A %d %d %s"):format(n, teamID, trace))
@@ -274,41 +422,132 @@ local function Snapshot(n)
 	if file then file:flush() end
 end
 
-local function ArmyGrid(n)
+-- Where every mobile unit is. Buildings never move; their place is on their
+-- C or B line.
+local posParts = {}
+local function Positions(n)
 	for i = 1, #teamList do
 		local teamID = teamList[i]
-		if Recording(teamID) and nArmy[teamID] > 0 then
-			local units = spGetTeamUnits(teamID)
-			local nk = 0
-			for u = 1, #units do
-				local unitID    = units[u]
-				local unitDefID = spGetUnitDefID(unitID)
-				if unitDefID and defIsArmy[unitDefID] then
-					local x, _, z = spGetUnitPosition(unitID)
-					if x then
-						local gx = floor(x / cellSize); if gx < 0 then gx = 0 elseif gx >= gridX then gx = gridX - 1 end
-						local gz = floor(z / cellSize); if gz < 0 then gz = 0 elseif gz >= gridZ then gz = gridZ - 1 end
-						local cell = gx + gz * gridX
-						if not cellScratch[cell] then
-							nk = nk + 1
-							cellKeys[nk] = cell
-							cellScratch[cell] = 0
-						end
-						cellScratch[cell] = cellScratch[cell] + defMetal[unitDefID]
+		if Recording(teamID) then
+			local count = 0
+			for unitID in pairs(mobiles[teamID]) do
+				local x, _, z = spGetUnitPosition(unitID)
+				if x then
+					count = count + 1
+					posParts[count] = unitID .. ":" .. floor(x + 0.5) .. "," .. floor(z + 0.5)
+				end
+			end
+			if count > 0 then
+				Write(("Q %d %d %s"):format(n, teamID, table.concat(posParts, " ", 1, count)))
+			end
+		end
+	end
+end
+
+-- The reclaim field: metal and energy lying on the map, per WRECK_CELL square.
+local wreckM, wreckE, wreckKeys = {}, {}, {}
+local function Wrecks(n)
+	local features = Spring.GetAllFeatures()
+	local nk = 0
+	for i = 1, #features do
+		local fid    = features[i]
+		local fDefID = Spring.GetFeatureDefID(fid)
+		local ok = reclaimable[fDefID]
+		if ok == nil then
+			local fDef = FeatureDefs[fDefID]
+			ok = (fDef and fDef.reclaimable and not fDef.geoThermal) and true or false
+			reclaimable[fDefID] = ok
+		end
+		if ok then
+			local metal, _, energy = Spring.GetFeatureResources(fid)
+			metal, energy = metal or 0, energy or 0
+			if metal + energy > 0 then
+				local x, _, z = Spring.GetFeaturePosition(fid)
+				if x then
+					local cell = floor(x / WRECK_CELL) + floor(z / WRECK_CELL) * wreckNX
+					if not wreckM[cell] then
+						nk = nk + 1
+						wreckKeys[nk] = cell
+						wreckM[cell], wreckE[cell] = 0, 0
 					end
+					wreckM[cell] = wreckM[cell] + metal
+					wreckE[cell] = wreckE[cell] + energy
 				end
 			end
-			if nk > 0 then
-				for k = nk + 1, #cellKeys do cellKeys[k] = nil end
-				table.sort(cellKeys)
-				local parts = {}
-				for k = 1, nk do
-					local cell = cellKeys[k]
-					parts[k] = cell .. ":" .. floor(cellScratch[cell] + 0.5)
-					cellScratch[cell] = nil
-				end
-				Write(("P %d %d %s"):format(n, teamID, table.concat(parts, " ")))
-			end
+		end
+	end
+	for k = nk + 1, #wreckKeys do wreckKeys[k] = nil end
+	table.sort(wreckKeys)
+	local parts, np = {}, 0
+	for k = 1, nk do
+		local cell = wreckKeys[k]
+		if wreckM[cell] + wreckE[cell] >= WRECK_MIN then
+			np = np + 1
+			parts[np] = cell .. ":" .. floor(wreckM[cell] + 0.5) .. ":" .. floor(wreckE[cell] + 0.5)
+		end
+		wreckM[cell], wreckE[cell] = nil, nil
+	end
+	Write(("W %d %s"):format(n, table.concat(parts, " ")))
+end
+
+--------------------------------------------------------------------------------
+-- Feed from the gadget (dbg_game_recorder_feed.lua)
+--------------------------------------------------------------------------------
+
+local function Name(unitDefID)
+	return (unitDefID and unitDefID >= 0 and defName[unitDefID]) or "-"
+end
+
+local function Feed(kind, f, a, b, c, d, e, g, h)
+	if not file then return end
+	if not feedSeen then
+		feedSeen = true
+		Write(("X %d feed"):format(f or 0))
+	end
+
+	if kind == "kill" then
+		-- f, uid, team, defID, fin, killerUid, killerTeam, killerDefID
+		local uid, team, defID, fin, kUid, kTeam, kDef = a, b, c, d, e, g, h
+		if fin == 1 and kTeam and kTeam >= 0 and kTeam ~= team and killedMetal[kTeam]
+				and not morphedAway[uid] then
+			killedMetal[kTeam] = killedMetal[kTeam] + (defMetal[defID] or 0)
+		end
+		if Recording(team) or Recording(kTeam) then
+			Write(("K %d %d %d %s %d %s %s %s"):format(f, uid, team, Name(defID), fin,
+				(kUid and kUid >= 0) and tostring(kUid) or "-",
+				(kTeam and kTeam >= 0) and tostring(kTeam) or "-", Name(kDef)))
+		end
+
+	elseif kind == "morph" then
+		-- f, oldUid, newUid
+		local oldUid, newUid = a, b
+		morphedAway[oldUid] = true
+		local team = unitTeamOf[newUid] or unitTeamOf[oldUid] or Spring.GetUnitTeam(newUid) or -1
+		if team == -1 or Recording(team) then
+			Write(("M %d %d %d %d %s %s"):format(f, oldUid, newUid, team,
+				Name(unitDefOf[oldUid] or spGetUnitDefID(oldUid)),
+				Name(unitDefOf[newUid] or spGetUnitDefID(newUid))))
+		end
+
+	elseif kind == "dmg" then
+		-- f, attackerTeam, victimTeam, damage, paralyze, pairs
+		if Recording(a) or Recording(b) then
+			Write(("V %d %d %d %d %d %s"):format(f, a, b, c, d, e or ""))
+		end
+
+	elseif kind == "ord" then
+		-- f, team, orders
+		if Recording(a) then Write(("O %d %d %s"):format(f, a, b or "")) end
+
+	elseif kind == "sys" then
+		-- f, team, rp, weapons, armor, tech
+		if Recording(a) then Write(("Y %d %d %d %d %d %d"):format(f, a, b, c, d, e)) end
+
+	elseif kind == "log" then
+		-- f, team, tag, text
+		if a == -1 or Recording(a) then
+			if b == "simpleai" then feedTrace[a] = true end
+			Write(("L %d %d %s %s"):format(f, a, Clean(b), tostring(c or "")))
 		end
 	end
 end
@@ -330,10 +569,7 @@ function widget:Initialize()
 		end
 	end
 
-	local long = math.max(Game.mapSizeX, Game.mapSizeZ)
-	cellSize = math.ceil(long / GRID_LONG_SIDE)
-	gridX    = math.max(1, math.ceil(Game.mapSizeX / cellSize))
-	gridZ    = math.max(1, math.ceil(Game.mapSizeZ / cellSize))
+	wreckNX = math.max(1, math.ceil(Game.mapSizeX / WRECK_CELL))
 
 	teamList = Spring.GetTeamList()
 	for i = 1, #teamList do
@@ -341,6 +577,7 @@ function widget:Initialize()
 		if not ONLY_TEAMS or ONLY_TEAMS[teamID] then
 			nUnits[teamID], nBuildings[teamID], nArmy[teamID] = 0, 0, 0
 			builders[teamID] = {}
+			mobiles[teamID] = {}
 			armyMetal[teamID], lostMetal[teamID], killedMetal[teamID] = 0, 0, 0
 		end
 	end
@@ -355,6 +592,7 @@ function widget:Initialize()
 		return
 	end
 	WriteHeader()
+	widgetHandler:RegisterGlobal("SFRecFeed", Feed)
 
 	-- Baseline: units already alive (recorder enabled mid-game).
 	local n = spGetGameFrame()
@@ -379,16 +617,26 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	if file then
-		file:close()
-		file = nil
-		Spring.Echo("[Game Recorder] saved " .. tostring(filePath))
-	end
+	widgetHandler:DeregisterGlobal("SFRecFeed")
+	CloseFile()
 end
 
 function widget:GameFrame(n)
+	if not file then return end
+	-- The game is over: stop a moment later (so the gadget's last tallies
+	-- land) instead of logging hours of an abandoned game.
+	if stopAtFrame and n >= stopAtFrame then
+		Write(("X %d stopped"):format(n))
+		CloseFile()
+		return
+	end
 	if n % SNAPSHOT_FRAMES == 0 then Snapshot(n) end
-	if n % GRID_FRAMES == 0 then ArmyGrid(n) end
+	if n % POSITION_FRAMES == 0 then Positions(n) end
+	if n % WRECK_FRAMES == 0 then Wrecks(n) end
+end
+
+function widget:GameStart()
+	if file then WriteStarts() end
 end
 
 function widget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
@@ -415,11 +663,15 @@ function widget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerD
 	local finished = unitFinished[unitID]
 	local known    = unitTeamOf[unitID] ~= nil
 	RemoveUnit(unitID)
-	local cost = defMetal[unitDefID] or 0
-	if finished and lostMetal[unitTeam] then
+	local cost    = defMetal[unitDefID] or 0
+	local morphed = morphedAway[unitID]
+	morphedAway[unitID] = nil
+	if finished and not morphed and lostMetal[unitTeam] then
 		lostMetal[unitTeam] = lostMetal[unitTeam] + cost
 	end
-	if finished and attackerTeam and attackerTeam ~= unitTeam and killedMetal[attackerTeam] then
+	-- Kill credit comes from the feed (K) when it is running; this is the
+	-- fallback for engines that pass the attacker to widgets and no feed.
+	if finished and not feedSeen and attackerTeam and attackerTeam ~= unitTeam and killedMetal[attackerTeam] then
 		killedMetal[attackerTeam] = killedMetal[attackerTeam] + cost
 	end
 	if known and Recording(unitTeam) then
@@ -477,4 +729,5 @@ function widget:GameOver(winningAllyTeams)
 		end
 	end
 	if file then file:flush() end
+	if STOP_AT_GAME_OVER then stopAtFrame = n + STOP_GRACE end
 end

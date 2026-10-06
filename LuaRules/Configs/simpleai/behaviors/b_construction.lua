@@ -30,6 +30,23 @@
 --           toward energy-cheap units and no constructors are queued.
 --           (Pausing and cancelling factory work is b_throttle's job.)
 --
+--           Power plant sizing (GeneratorPick): the plant that best fits
+--           the energy shortfall, counting plants already on order.
+--           Factory count (facRoom): tied to metal income, and none added
+--           while the throttle has recently had to pause one.
+--
+--           Reachability (lib.Reachable): building sites, bricks, factory
+--           sites, metal spots, vents, forward turret sites and reclaim
+--           fields are all checked with the engine's pathfinder, so nothing
+--           is ordered somewhere it cannot be walked to from home.
+--
+--           Commander leash (BASE.CommLeash): a commander only builds,
+--           takes metal spots and uses vents within its leash of home.
+--
+--           Base layout (BASE): economy buildings go into bricks behind
+--           home (lib.BrickOrder), factories and support buildings are
+--           sited around home, and only builders near home do base work.
+--
 --           Builder safety (SAFE / Hostile): every rung that sends a
 --           builder away from the base (far mex spots, reclaim, forward
 --           turrets) first checks the destination and the walk to it for
@@ -143,6 +160,21 @@ return function(ctx, lib, cfg, services)
 		stallE = ctx.stall and ctx.stall.e or {},   -- [teamID] = energy stall 0..1
 		STALL_ON = cfg.STALL_ON or 0.20,            -- stalling threshold (core-owned)
 		STALL_QUEUE = 2,                            -- factory queue depth while stalling (normally 10)
+		-- Power plant sizing (see GeneratorPick): build the plant that fits the shortfall.
+		GEN_HEADROOM  = 1.25,                       -- cover the shortfall with this much to spare
+		GEN_OVERSHOOT = 1.5,                        -- a plant may exceed the need by this factor, no more
+		GEN_MAX_STEP  = 2.0,                        -- believe a shortfall of at most this many times current income...
+		GEN_STEP_FLOOR = 500,                       -- ...plus this (E/s), per decision
+		GEN_GROWTH    = 0.15,                       -- with no measurable shortfall, grow income by this share
+		GEN_MIN       = 20,                         -- ...and never plan for less than this (E/s)
+		GEN_COST_SECS = 150,                        -- a plant may cost this many seconds of metal income, plus what is banked
+		-- Factory count (see facRoom): production capacity the economy can actually feed.
+		FAC_BASE         = 2,                       -- factories every team may have
+		FAC_INCOME_EACH  = 50,                      -- one more per this much metal income (M/s)
+		FAC_PAUSE_MEMORY = 3600,                    -- no new factory within this many frames of one being paused (~2 min)
+		lastPaused       = {},                      -- [teamID] = last frame the throttle had a factory on WAIT
+		reachLogged = {},                           -- [teamID] = frame the reachability totals were last logged
+		stallPaused = ctx.stall and ctx.stall.paused or {},   -- [teamID] = factories on WAIT now (b_throttle)
 		SUPPORT_BASE = 1, SUPPORT_PER_FAC = 3, SUPPORT_MAX = 4,   -- per-type cap on support buildings: 1 + one per 3 factories, at most 4
 		support = {},                               -- [defID] = true for customparams.unitrole == "Support Building"
 		STALL_CON_FLOOR = 4,                        -- an energy stall never holds the team below this many constructors
@@ -275,7 +307,7 @@ return function(ctx, lib, cfg, services)
 		need  = {},       -- [defID] = true for needGeo defs
 		spots = nil,      -- cached vent positions { {x=,y=,z=}, ... }; built on first use
 		claim = {},       -- [spotIndex] = frame the reservation expires
-		why   = "none",   -- why the last search found nothing: none (no vents on the map) | far | taken | unsafe
+		why   = "none",   -- why the last search found nothing: none (no vents on the map) | far | taken | unsafe | unreach
 	}
 	for defID, ud in pairs(UnitDefs) do
 		if ud.needGeo then GEO.need[defID] = true end
@@ -332,11 +364,7 @@ return function(ctx, lib, cfg, services)
 		end
 		-- ...and the vent itself must be within GEO.HOME_RANGE of home, so a
 		-- builder already far forward does not chain on to the enemy's side.
-		local home = STOR.FWD and STOR.FWD.home[teamID]
-		if not home and STOR.FWD then
-			local hx, _, hz = Spring.GetTeamStartPosition(teamID)
-			if hx and hx >= 0 then home = { x = hx, z = hz }; STOR.FWD.home[teamID] = home end
-		end
+		local home  = STOR.HomeOf and STOR.HomeOf(teamID)
 		local home2 = GEO.HOME_RANGE * GEO.HOME_RANGE
 
 		local bestI, bestD = nil, reach * reach
@@ -347,7 +375,12 @@ return function(ctx, lib, cfg, services)
 			local nearHome = true
 			if home then
 				local hdx, hdz = s.x - home.x, s.z - home.z
-				nearHome = (hdx * hdx + hdz * hdz) <= home2
+				local d2 = hdx * hdx + hdz * hdz
+				nearHome = d2 <= home2
+				if isCommander then
+					local leash = STOR.BASE.CommLeash(teamID, unitID) or GEO.NEAR
+					nearHome = nearHome and d2 <= leash * leash
+				end
 			end
 			if d < bestD and nearHome then
 				if now < (GEO.claim[i] or 0)
@@ -355,6 +388,8 @@ return function(ctx, lib, cfg, services)
 					GEO.why = "taken"    -- a vent in reach, but reserved, built on or blocked
 				elseif STOR.Hostile and STOR.Hostile(teamID, ux, uz, s.x, s.z) then
 					GEO.why = "unsafe"   -- armed enemies at the vent or on the way
+				elseif lib.Reachable and not lib.Reachable(teamID, Spring.GetUnitDefID(unitID), s.x, s.z) then
+					GEO.why = "unreach"  -- no way to walk there from home
 				else
 					bestI, bestD = i, d
 				end
@@ -363,6 +398,29 @@ return function(ctx, lib, cfg, services)
 		if bestI then return bestI, GEO.spots[bestI] end
 		return nil
 	end
+
+	-- Base layout. A recorded game ended with three allied bases smeared over
+	-- three quarters of the map: every building was placed next to wherever
+	-- its builder happened to be standing, and builders wander. Now the base
+	-- is laid out the way a player does it (see the brick planner in lib.lua):
+	-- economy in tight bricks behind home, factories around home, and base
+	-- work is done by builders who are near home.
+	local BASE = {
+		brickCat = { generator = true, converter = true, storage = true, supply = true },
+		homeCat  = { factory = true },
+		RANGE    = 3500,   -- a builder farther than this from home leaves base work to others
+		COMM_LEASH = 1800, -- default commander leash if the commander behavior has not set one
+	}
+	-- How far from home this unit may build: a number for a commander, nil
+	-- (no limit) for anything else.
+	function BASE.CommLeash(teamID, unitID)
+		local defID = Spring.GetUnitDefID(unitID)
+		if not (defID and ctx.IsCommander and ctx.IsCommander[defID]) then return nil end
+		local set = ctx.comm and ctx.comm.leash
+		return (set and set[teamID]) or BASE.COMM_LEASH
+	end
+	STOR.BASE  = BASE
+	STOR.brick = {}       -- brick planner outcomes since the last project selection (for the trace)
 
 	-- Every placement goes through here: vent buildings to a vent, everything
 	-- else to the normal search. It also counts hits and misses so the
@@ -381,7 +439,41 @@ return function(ctx, lib, cfg, services)
 			STOR.geoWhy  = GEO.why
 			return false
 		end
-		if lib.BuildOrder(unitID, project) then
+		-- Base layout. Where a building goes depends on what it is:
+		--   economy (power, converters, storage, supply) -> a slot in one of
+		--     the team's bricks behind the base (lib.BrickOrder)
+		--   factories and support buildings -> the lane-keeping search, but
+		--     outward from HOME, not from wherever the builder is standing
+		--   everything else (turrets) -> the lane-keeping search around the
+		--     builder, as before
+		local teamID = Spring.GetUnitTeam(unitID)
+		local home   = teamID and STOR.HomeOf(teamID)
+		local cat    = ctx.defCat and ctx.defCat[project]
+		-- The commander builds only within its leash of home (set by the
+		-- commander behavior; see BASE.CommLeash). Everything farther out
+		-- is engineers' work.
+		local leash  = home and BASE.CommLeash(teamID, unitID)
+		if home and BASE.brickCat[cat] then
+			local enemy = SimpleEnemyBasePos[teamID]
+			local ok = lib.BrickOrder(unitID, project, teamID, home.x, home.z, enemy and enemy.x, enemy and enemy.z, leash)
+			STOR.brick[lib.brickResult] = (STOR.brick[lib.brickResult] or 0) + 1
+			if ok then
+				STOR.boOk = STOR.boOk + 1
+				return true
+			end
+			-- No brick could be planned anywhere in range (very cramped
+			-- start): fall back to the old search around home so the team
+			-- is not left without power or storage.
+			if lib.brickResult ~= "exhausted" then
+				STOR.boFail = STOR.boFail + 1
+				return false
+			end
+		end
+		local ox, oz
+		if home and (leash or BASE.homeCat[cat] or BASE.brickCat[cat] or STOR.support[project]) then
+			ox, oz = home.x, home.z
+		end
+		if lib.BuildOrder(unitID, project, ox, oz, leash) then
 			STOR.boOk = STOR.boOk + 1
 			return true
 		end
@@ -406,6 +498,9 @@ return function(ctx, lib, cfg, services)
 		ALERT  = 800,   -- a builder reacts to enemies within this range of itself
 		FLEE_REISSUE = 150,   -- frames between flee orders for one builder (~5s)
 		fleeAt = {},    -- [unitID] = frame the next flee order may be given
+		STUCK      = 900,   -- frames a builder may hold a build order without moving or building (~30s)
+		STUCK_MOVE = 64,    -- moving less than this in that time counts as not moving
+		watch  = {},    -- [unitID] = { x=, z=, since= } stuck-builder watchdog
 	}
 	local function ArmedEnemyNear(teamID, x, z)
 		local nearby = Spring.GetUnitsInCylinder(x, z, SAFE.RADIUS)
@@ -453,8 +548,15 @@ return function(ctx, lib, cfg, services)
 		CLAIM    = 2700,   -- a site ordered but not yet started counts as covered this long (~90s)
 		last     = {},     -- [teamID] = frame of the last forward order
 		claim    = {},     -- [teamID] = { x=, z=, untilFrame= } site a builder is walking to
-		home     = {},     -- [teamID] = { x=, z= } start position (cached)
 	}
+	-- A team's home: where its first commander appeared (owned by the core,
+	-- ctx.home). Deliberately not Spring.GetTeamStartPosition, which in SF
+	-- can be thousands of elmos from where the team actually starts.
+	-- nil until the commander exists.
+	local teamHome = ctx.home or {}
+	function STOR.HomeOf(teamID)
+		return teamHome[teamID]
+	end
 	local IsExtractorDef = ctx.IsExtractor or {}
 	local IsTurretDef    = ctx.IsTurret or {}
 	local fwdSites, fwdTurX, fwdTurZ = {}, {}, {}   -- scratch
@@ -466,13 +568,8 @@ return function(ctx, lib, cfg, services)
 		local enemy = SimpleEnemyBasePos[teamID]
 		if not enemy or #turretDefs == 0 then return false end
 
-		local home = FWD.home[teamID]
-		if not home then
-			local hx, _, hz = Spring.GetTeamStartPosition(teamID)
-			if not hx or hx < 0 then return false end
-			home = { x = hx, z = hz }
-			FWD.home[teamID] = home
-		end
+		local home = STOR.HomeOf(teamID)
+		if not home then return false end
 		local hdx, hdz = enemy.x - home.x, enemy.z - home.z
 		local homeDist = math.sqrt(hdx * hdx + hdz * hdz)
 		if homeDist < 1 then return false end
@@ -537,6 +634,8 @@ return function(ctx, lib, cfg, services)
 		-- not if the walk there, or the site itself, is under enemy guns
 		local ux, _, uz = Spring.GetUnitPosition(unitID)
 		if not ux or Hostile(teamID, ux, uz, pick.x, pick.z) then return false end
+		-- ...and not if the builder cannot walk there at all
+		if lib.Reachable and not lib.Reachable(teamID, Spring.GetUnitDefID(unitID), pick.x, pick.z) then return false end
 
 		-- Place it on the enemy-facing side of the site: straight toward the
 		-- enemy first, then fanning out to either side, then further away.
@@ -659,13 +758,8 @@ return function(ctx, lib, cfg, services)
 	-- Per team, once per scan: how much metal lies within reach of home, and
 	-- how many builders that is worth.
 	local function ReclaimTeamUpdate(teamID, constructorCount)
-		local home = FWD.home[teamID]
-		if not home then
-			local hx, _, hz = Spring.GetTeamStartPosition(teamID)
-			if not hx or hx < 0 then REC.near[teamID], REC.slots[teamID] = 0, 0; return end
-			home = { x = hx, z = hz }
-			FWD.home[teamID] = home
-		end
+		local home = STOR.HomeOf(teamID)
+		if not home then REC.near[teamID], REC.slots[teamID] = 0, 0; return end
 		local range2, total = REC.RANGE * REC.RANGE, 0
 		for idx, cell in pairs(REC.cells) do
 			if cell.w >= REC.MIN_CELL then
@@ -718,6 +812,10 @@ return function(ctx, lib, cfg, services)
 			local hostile = Hostile(teamID, ux, uz, bestCell.x, bestCell.z)
 			if hostile then
 				avoid[bestIdx] = now + REC.AVOID
+			elseif lib.Reachable and not lib.Reachable(teamID, Spring.GetUnitDefID(unitID), bestCell.x, bestCell.z) then
+				-- wreckage the builder cannot walk to (a mesa top, across a
+				-- chasm): leave it alone for a long while
+				avoid[bestIdx] = now + REC.AVOID * 20
 			else
 				local y = Spring.GetGroundHeight(bestCell.x, bestCell.z)
 				Spring.GiveOrderToUnit(unitID, CMD.RECLAIM, { bestCell.x, y, bestCell.z, REC.RADIUS }, 0)
@@ -763,7 +861,7 @@ return function(ctx, lib, cfg, services)
 	function B.TeamInit(teamID)
 		STOR.lastStart[teamID] = -STOR.SPACING
 		JOB.of[teamID]     = {}
-		JOB.active[teamID] = { gen = 0, tur = 0, rec = 0 }
+		JOB.active[teamID] = { gen = 0, tur = 0, rec = 0, genOut = 0 }
 		SimpleFactoryDelay[teamID]     = 0
 		SimpleConstructorDelay[teamID] = 0
 		-- Negative seeds so the very first constructor/factory are not gated
@@ -799,7 +897,7 @@ return function(ctx, lib, cfg, services)
 		local supplyUsed = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyUsed") or 0)
 		local supplyMax  = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyMax")  or 0)
 		local mcurrent, mstorage, _, mincome = Spring.GetTeamResources(unitTeam, "metal")
-		local ecurrent, estorage, _, eincome = Spring.GetTeamResources(unitTeam, "energy")
+		local ecurrent, estorage, epull, eincome = Spring.GetTeamResources(unitTeam, "energy")
 		-- Signal pools: the denominators for every stock-ratio threshold
 		-- below. Equal to raw storage until storage has been built.
 		local mpool = SignalPool(mstorage, mincome)
@@ -818,6 +916,18 @@ return function(ctx, lib, cfg, services)
 		local facSpacing   = (overflowing and FACTORY_SPACING_FLOOD or FACTORY_SPACING)
 				* pacingMult
 		local facSpacingOk = (nowFrame - (SimpleLastFacStart[unitTeam] or 0)) >= facSpacing
+
+		-- Factory room. Factories used to be added whenever the bank looked
+		-- healthy, up to twelve. A recorded team ended up with eight, six or
+		-- seven of them paused for 25 minutes because its metal could feed
+		-- only one or two. Two limits now apply to every factory after the
+		-- first: the count is tied to metal income, and none is added while
+		-- the throttle has had to pause one in the last couple of minutes
+		-- (a paused factory is spare capacity already).
+		if (STOR.stallPaused[unitTeam] or 0) > 0 then STOR.lastPaused[unitTeam] = nowFrame end
+		local facAllowed = math.min(FACTORY_MAX, STOR.FAC_BASE + math.floor(mincome / STOR.FAC_INCOME_EACH))
+		local facRoom = SimpleFactoriesCount[unitTeam] < facAllowed
+				and (nowFrame - (STOR.lastPaused[unitTeam] or -99999)) >= STOR.FAC_PAUSE_MEMORY
 
 		-- econPressure: 0 = at target, approaches 1 when far below next tech threshold
 		local goal = TECH_INCOME_GOALS[techLevel]
@@ -945,9 +1055,18 @@ return function(ctx, lib, cfg, services)
 
 		-- Dynamic mex search range: cast a wide net once we have factories running
 		local mexRange  = (SimpleFactoriesCount[unitTeam] >= 2) and MEX_RANGE_MID or MEX_RANGE_EARLY
-		local mexspot   = SimpleGetClosestMexSpot(unitposx, unitposz, mexRange)
+		local myDefID   = Spring.GetUnitDefID(unitID)
+		local commLeash = (buildType == "Commander") and STOR.BASE.CommLeash(unitTeam, unitID) or nil
+		local commHome  = commLeash and STOR.HomeOf(unitTeam)
+		local mexspot
+		if commHome then
+			-- the commander only takes metal spots inside its leash of home
+			mexspot = SimpleGetClosestMexSpot(commHome.x, commHome.z, commLeash, unitTeam, myDefID)
+		else
+			mexspot = SimpleGetClosestMexSpot(unitposx, unitposz, mexRange, unitTeam, myDefID)
+		end
 		-- Also look globally for any unclaimed mex (no range limit) for roaming decisions
-		local mexAny    = SimpleGetClosestMexSpot(unitposx, unitposz, nil)
+		local mexAny    = (not commHome) and SimpleGetClosestMexSpot(unitposx, unitposz, nil, unitTeam, myDefID) or nil
 
 		-- Fetch current tech-appropriate lists
 		local extractors   = GetBuildable(unitTeam, "extractor")
@@ -1016,6 +1135,16 @@ return function(ctx, lib, cfg, services)
 			jobs[unitID] = nil
 		end
 		local genRoom = (not active) or active.gen < JOB.MAX.gen
+		-- Base work is for builders near home (see BASE). A builder out in the
+		-- field takes field work; with none left it walks home (rung "home").
+		local nearHome = true
+		if buildType == "Builder" then
+			local home = STOR.HomeOf(unitTeam)
+			if home then
+				local hdx, hdz = unitposx - home.x, unitposz - home.z
+				nearHome = (hdx * hdx + hdz * hdz) <= STOR.BASE.RANGE * STOR.BASE.RANGE
+			end
+		end
 		local turretRoom = (not active) or active.tur < JOB.MAX.tur
 		if not turretRoom then
 			underDefended, needAA = false, false
@@ -1053,6 +1182,59 @@ return function(ctx, lib, cfg, services)
 			end
 			return false
 		end
+
+		-- Power plant sizing. The energy rungs used to pick any plant the
+		-- builder could make, favoring the highest tier. A recorded team
+		-- answered a shortfall of a few thousand E/s with two black hole
+		-- plants (40,000 E/s) and threw away 63% of its energy for half the
+		-- game. Now the plant is chosen to fit the need:
+		--   need = what the team is trying to spend beyond what it earns,
+		--          with some headroom; at least the gap to the next tech
+		--          goal; at least a modest growth step;
+		--          MINUS the output of plants builders are already on.
+		--   pick = the biggest affordable plant that does not overshoot the
+		--          need by more than half; if even the smallest would, the
+		--          smallest. (The first version took "the smallest plant
+		--          that covers the need", and the tiers are so far apart,
+		--          2,700 then 20,000, that any need above 2,700 bought a
+		--          black hole. It also trusted the engine's "pull" figure,
+		--          which during a stall is everything the team WISHES it
+		--          could spend; the shortfall is now capped at twice the
+		--          current income, so capacity grows in steps.)
+		-- No need left once pending plants are counted = no plant (nil).
+		local function GeneratorPick()
+			local short = (epull or 0) - eincome
+			if short < 0 then short = 0 end
+			local step = eincome * STOR.GEN_MAX_STEP + STOR.GEN_STEP_FLOOR
+			if short > step then short = step end
+			local need = short * STOR.GEN_HEADROOM
+			if goal and eincome < goal.e then need = math.max(need, goal.e - eincome) end
+			need = math.max(need, eincome * STOR.GEN_GROWTH, STOR.GEN_MIN)
+			need = need - ((active and active.genOut) or 0)
+			if need <= 0 then return nil end
+			local budget  = mincome * STOR.GEN_COST_SECS + mcurrent
+			local ceiling = need * STOR.GEN_OVERSHOOT
+			local fit, fitOut, smallest, smallestOut, cheapest, cheapestCost, anyMake
+			for _, id in ipairs(generators) do
+				if CanMake(id) and (not STOR.geo[id] or STOR.GeoSpotFor(unitID, id)) then
+					local ud   = UnitDefs[id]
+					local out  = ud.energyMake or 0
+					local cost = ud.metalCost or 0
+					anyMake = anyMake or id
+					if out > 0 then
+						if not cheapest or cost < cheapestCost then cheapest, cheapestCost = id, cost end
+						if cost <= budget then
+							if out <= ceiling and (not fit or out > fitOut) then fit, fitOut = id, out end
+							if not smallest or out < smallestOut then smallest, smallestOut = id, out end
+						end
+					end
+				end
+			end
+			-- (anyMake: plants that do not declare an output, e.g. wind or
+			-- tidal style generators, are still buildable as a last resort)
+			return fit or smallest or cheapest or anyMake
+		end
+		local genPick = (genRoom and nearHome) and GeneratorPick() or nil
 
 		-- Supply demand, counting depots already on order (see SUP above).
 		local supplyOrdered = SUP.ordered[unitTeam] or 0
@@ -1160,7 +1342,7 @@ return function(ctx, lib, cfg, services)
 				-- storage included, which is the one thing that would fix the
 				-- reading. storagePick already carries the pacing (one project
 				-- at a time, spaced out), so this costs one builder briefly.
-			elseif storagePick then
+			elseif storagePick and nearHome then
 				rung = "5s"
 				if SimpleBuildOrder(unitID, storagePick) then
 					STOR.lastStart[unitTeam] = nowFrame
@@ -1171,7 +1353,9 @@ return function(ctx, lib, cfg, services)
 							unitTeam, techLevel, UnitDefs[storagePick].name, haveStorage, wantStorage))
 					end
 				else
-					STOR.retryAt[unitTeam] = nowFrame + STOR.RETRY
+					-- (no back-off while the brick planner is mid-search: its
+					-- scan resumes on the next call)
+					STOR.retryAt[unitTeam] = nowFrame + ((lib.brickResult == "searching") and 0 or STOR.RETRY)
 					-- Why not: tally the placement search's own reasons into
 					-- the trace (5s.blocked / 5s.occupied / 5s.crowded /
 					-- 5s.noanchor are candidate-site counts).
@@ -1194,7 +1378,7 @@ return function(ctx, lib, cfg, services)
 				end
 
 				-- PRIORITY 2: energy - urgent if low or econ pressure is high
-			elseif energyWanted and genRoom then
+			elseif energyWanted and genRoom and nearHome and genPick then
 				rung = "P2"
 				if mcurrent > mpool * 0.60 and SimpleConverterCount[unitTeam] < CONVERTER_MAX then
 					if TryBuild(converters, function(p) SimpleBuildOrder(unitID, p) end) then
@@ -1203,7 +1387,7 @@ return function(ctx, lib, cfg, services)
 					end
 				end
 				if not success then
-					success = TryBuild(generators, function(p) SimpleBuildOrder(unitID, p) end)
+					success = SimpleBuildOrder(unitID, genPick)   -- sized to the shortfall (GeneratorPick)
 				end
 
 				-- PRIORITY 3: metal income low and econ pressure high — grab more mexes
@@ -1220,7 +1404,7 @@ return function(ctx, lib, cfg, services)
 				-- A recorded 78-minute game ended with 100 to 500 medium
 				-- depots per team; this is the fix. If the first choice finds
 				-- no site, the next one down is tried in the same breath.
-			elseif needSupply then
+			elseif needSupply and nearHome then
 				rung = "P4"
 				local budget = mincome * SUP.COST_SECS
 				local tried  = {}
@@ -1246,6 +1430,10 @@ return function(ctx, lib, cfg, services)
 						success = true
 						break
 					end
+					-- the brick planner is still looking for a site for this
+					-- one: let it carry on next tick instead of settling for
+					-- the next choice down
+					if lib.brickResult == "searching" then break end
 				end
 
 				-- PRIORITY 5: build first factory
@@ -1303,8 +1491,8 @@ return function(ctx, lib, cfg, services)
 				-- single best thing to do is add a factory. This jumps ahead of mex
 				-- expansion / generators / constructors / roaming so a surplus turns
 				-- into production capacity fast instead of sitting in storage.
-			elseif overflowing and not stalling and SimpleFactoriesCount[unitTeam] > 0
-					and SimpleFactoriesCount[unitTeam] < FACTORY_MAX
+			elseif overflowing and nearHome and not stalling and SimpleFactoriesCount[unitTeam] > 0
+					and facRoom
 					and facSpacingOk then
 				rung = "5c"
 				if TryBuild(factories, function(p) SimpleBuildOrder(unitID, p) end) then
@@ -1329,9 +1517,9 @@ return function(ctx, lib, cfg, services)
 				success = TryBuild(turrets, function(p) SimpleBuildOrder(unitID, p) end)
 
 				-- PRIORITY 7: econ-biased generator building (to hit tech income target)
-			elseif genRoom and econPressure > 0.3 and goal and eincome < goal.e then
+			elseif genRoom and nearHome and genPick and econPressure > 0.3 and goal and eincome < goal.e then
 				rung = "P7"
-				success = TryBuild(generators, function(p) SimpleBuildOrder(unitID, p) end)
+				success = SimpleBuildOrder(unitID, genPick)
 
 				-- PRIORITY 8: expand constructors
 			elseif not stalling and ecurrent > epool * 0.50 and mcurrent > mpool * 0.45
@@ -1354,8 +1542,8 @@ return function(ctx, lib, cfg, services)
 				end
 
 				-- PRIORITY 9: more factories (steady expansion when resources allow)
-			elseif not stalling and ecurrent > epool * 0.50 and mcurrent > mpool * 0.50
-					and SimpleFactoriesCount[unitTeam] < FACTORY_MAX
+			elseif not stalling and nearHome and ecurrent > epool * 0.50 and mcurrent > mpool * 0.50
+					and facRoom
 					and facSpacingOk then
 				rung = "P9"
 				if TryBuild(factories, function(p) SimpleBuildOrder(unitID, p) end) then
@@ -1394,7 +1582,7 @@ return function(ctx, lib, cfg, services)
 				-- FALLBACK: misc buildings only — no extra turret roll here
 			else
 				rung = "FB"
-				if #buildings > 0 and math.random(0, 1) == 0 then
+				if nearHome and #buildings > 0 and math.random(0, 1) == 0 then
 					-- Support buildings (cloaking towers, heal stations, shield
 					-- generators) are worth having and worthless in bulk: one
 					-- recorded base had 43 cloaking towers and 29 heal stations.
@@ -1419,6 +1607,18 @@ return function(ctx, lib, cfg, services)
 				if not success and mexAny
 						and not STOR.Hostile(unitTeam, unitposx, unitposz, mexAny.x, mexAny.z) then
 					success = TryBuild(extractors, function(p) AtMex(p, mexAny) end)
+				end
+				-- Out in the field with nothing left to do there: come home,
+				-- where the base work is.
+				if not success and not nearHome then
+					local home = STOR.HomeOf(unitTeam)
+					if home then
+						rung = "home"
+						local hx = home.x + math.random(-200, 200)
+						local hz = home.z + math.random(-200, 200)
+						Spring.GiveOrderToUnit(unitID, CMD.MOVE, { hx, Spring.GetGroundHeight(hx, hz), hz }, 0)
+						success = true
+					end
 				end
 			end
 
@@ -1523,6 +1723,10 @@ return function(ctx, lib, cfg, services)
 		if need and jobs then
 			jobs[unitID] = need
 			active[need] = active[need] + 1
+			if need == "gen" and genPick then
+				-- so a second builder deciding in this same tick sees it
+				active.genOut = (active.genOut or 0) + (UnitDefs[genPick].energyMake or 0)
+			end
 		end
 
 		local tally = STOR.trace[unitTeam]
@@ -1530,6 +1734,11 @@ return function(ctx, lib, cfg, services)
 			-- "P2.cap": energy was wanted but enough builders were already on it
 			if energyWanted and not genRoom and buildType ~= "Factory" then
 				tally["P2.cap"] = (tally["P2.cap"] or 0) + 1
+			end
+			-- "fac.cap": the bank said "add a factory" and the factory limits said no
+			if overflowing and nearHome and not stalling and facSpacingOk and not facRoom
+					and buildType ~= "Factory" and SimpleFactoriesCount[unitTeam] > 0 then
+				tally["fac.cap"] = (tally["fac.cap"] or 0) + 1
 			end
 			local key = rung
 			if buildType == "Commander" then key = "C." .. key end
@@ -1544,6 +1753,22 @@ return function(ctx, lib, cfg, services)
 			end
 		end
 		STOR.boOk, STOR.boFail, STOR.geoOk, STOR.geoFail = 0, 0, 0, 0
+		-- "unreach": sites turned down because they cannot be walked to from home
+		if tally and lib.REACH then
+			local st = lib.REACH.stats
+			if st.no > (STOR.reachSeen or 0) then
+				tally["unreach"] = (tally["unreach"] or 0) + (st.no - (STOR.reachSeen or 0))
+			end
+			STOR.reachSeen = st.no
+		end
+		-- brick planner: brick.slot (filled a slot), brick.new (planned a brick),
+		-- brick.searching (still looking), brick.exhausted (no room in range)
+		for result, count in pairs(STOR.brick) do
+			if tally and count > 0 then
+				tally["brick." .. result] = (tally["brick." .. result] or 0) + count
+			end
+			STOR.brick[result] = nil
+		end
 
 		return success
 	end
@@ -1574,6 +1799,7 @@ return function(ctx, lib, cfg, services)
 		local jobs, active = JOB.of[teamID], JOB.active[teamID]
 		if not jobs then return end
 		active.gen, active.tur, active.rec = 0, 0, 0
+		active.genOut = 0   -- E/s of the plants builders are on their way to or building
 		for unitID, need in pairs(jobs) do
 			local queue = Spring.GetCommandQueue(unitID, 1)
 			local head  = queue and queue[1]
@@ -1584,6 +1810,10 @@ return function(ctx, lib, cfg, services)
 			else busy = head and head.id < 0 end
 			if busy then
 				active[need] = active[need] + 1
+				if need == "gen" then
+					local ud = UnitDefs[-head.id]
+					active.genOut = active.genOut + ((ud and ud.energyMake) or 0)
+				end
 			else
 				jobs[unitID] = nil
 			end
@@ -1595,6 +1825,27 @@ return function(ctx, lib, cfg, services)
 			ReclaimScan(tick.frame)
 		end
 		ReclaimTeamUpdate(teamID, SimpleConstructorCount[teamID])
+
+		if lib.ReachTick then lib.ReachTick(teamID) end   -- fresh path-request budget for this tick
+
+		-- Reachability totals for the recording (GG.Recorder), every two
+		-- minutes: how many questions were asked and how many refused.
+		if GG.Recorder and GG.Recorder.Log and lib.REACH then
+			local frame = tick.frame or 0
+			if frame - (STOR.reachLogged[teamID] or 0) >= 3600 then
+				STOR.reachLogged[teamID] = frame
+				local st = lib.REACH.stats
+				GG.Recorder.Log(teamID, "reach", ("asked=%d;no=%d;enabled=%s"):format(st.asked, st.no, lib.REACH.ENABLED and "1" or "0"))
+			end
+		end
+
+		-- Brick planner: carry on any site search a builder is waiting for
+		-- (see lib.BrickService), so builders rarely have to wait for one.
+		local home = STOR.HomeOf(teamID)
+		if home and lib.BrickService then
+			local enemy = SimpleEnemyBasePos[teamID]
+			lib.BrickService(teamID, home.x, home.z, enemy and enemy.x, enemy and enemy.z)
+		end
 	end
 
 	function B.UnitFinished(unitID, unitDefID, unitTeam)
@@ -1604,6 +1855,7 @@ return function(ctx, lib, cfg, services)
 
 	function B.UnitLost(unitTeam, unitID, unitDefID)
 		SAFE.fleeAt[unitID] = nil
+		SAFE.watch[unitID]  = nil
 		if STOR.cap[unitDefID] then STOR.pending[unitTeam] = nil end
 		SupplySettled(unitTeam, unitDefID)
 	end
@@ -1627,6 +1879,33 @@ return function(ctx, lib, cfg, services)
 		-- ======== CONSTRUCTORS ========
 		if IsConstructor[unitDefID] then
 
+			-- Stuck-builder watchdog. A builder holding a build order that
+			-- has neither moved nor started building for SAFE.STUCK frames
+			-- is waiting on something that is not going to happen (a site
+			-- that stays blocked, a spot it cannot reach). A recorded team
+			-- ended its game with its last two builders frozen like that
+			-- for eight minutes, at the supply cap, with 96,000 metal
+			-- banked. The order is dropped so the builder decides again.
+			do
+				local w = SAFE.watch[unitID]
+				local now = tick.frame or 0
+				if not w then w = { x = ux, z = uz, since = now }; SAFE.watch[unitID] = w end
+				local queue = (unitCmds > 0) and Spring.GetCommandQueue(unitID, 1)
+				local head  = queue and queue[1]
+				local dx, dz = ux - w.x, uz - w.z
+				if not (head and head.id < 0)                         -- not holding a build order
+						or (dx * dx + dz * dz) > SAFE.STUCK_MOVE * SAFE.STUCK_MOVE   -- it is getting somewhere
+						or Spring.GetUnitIsBuilding(unitID) then      -- it is building
+					w.x, w.z, w.since = ux, uz, now
+				elseif (now - w.since) >= SAFE.STUCK then
+					Spring.GiveOrderToUnit(unitID, CMD.STOP, {}, 0)
+					w.x, w.z, w.since = ux, uz, now
+					unitCmds = 0                                      -- it is idle as of now
+					local tally = STOR.trace[teamID]
+					if tally then tally["stuck"] = (tally["stuck"] or 0) + 1 end
+				end
+			end
+
 			-- Enemy contact. A healthy builder used to answer ANY enemy within
 			-- 600 elmos by walking up to reclaim it, armed or not, which is
 			-- how most builders died (recordings: nearly every engineer built
@@ -1648,11 +1927,7 @@ return function(ctx, lib, cfg, services)
 				local now = tick.frame or 0
 				if now >= (SAFE.fleeAt[unitID] or 0) then
 					SAFE.fleeAt[unitID] = now + SAFE.FLEE_REISSUE
-					local home = FWD.home[teamID]
-					if not home then
-						local hx, _, hz = Spring.GetTeamStartPosition(teamID)
-						if hx and hx >= 0 then home = { x = hx, z = hz }; FWD.home[teamID] = home end
-					end
+					local home = STOR.HomeOf(teamID)
 					local tx, tz
 					if home and ((home.x - ux) ^ 2 + (home.z - uz) ^ 2) > 600 * 600 then
 						tx, tz = home.x, home.z
