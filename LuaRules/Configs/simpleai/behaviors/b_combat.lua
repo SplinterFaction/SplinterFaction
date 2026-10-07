@@ -65,8 +65,13 @@ return function(ctx, lib, cfg)
 		SIZE_MAX       = 10,
 		ARMY_SHARE     = 0.15,   -- a raid takes at most this share of the team's ready army value
 		SPEED_SHARE    = 0.75,   -- raiders are at least this fast, relative to the fastest unit gathered
-		FLEE_RATIO     = 0.8,   -- enemy strength near the party above this x its own value: run
-		DANGER_R       = 900,   -- ...measured within this of the party
+		-- (1.5 within 550, loosened from 0.8 within 900: a recording showed raids turning for
+		-- home a median 33 seconds after setting out, one after 3 seconds. A party worth a
+		-- few hundred metal was "outnumbered" by any two units it passed within 900 elmos
+		-- of on the way. Now only something clearly stronger and actually close counts.)
+		FLEE_RATIO     = 1.5,   -- enemy strength near the party above this x its own value: break off
+		DANGER_R       = 550,   -- ...measured within this of the party
+		MAX_DIVERTS    = 2,     -- times a party driven off one target may try another before going home
 		BODY_R         = 600,   -- raiders within this of each other count as the party
 		MAX_TIME       = 7200,   -- frames (~4 min) a raid stays out at most
 		HOME_WAIT      = 1800,   -- frames a returning raid is given to get home before it is stood down anyway
@@ -343,8 +348,9 @@ return function(ctx, lib, cfg)
 		--          soft enough for them.
 		--   HIT    the extractor (an ATTACK order on it, so the party goes
 		--          past whatever it meets on the way), then the next one.
-		--   RUN    the moment enemy strength near the party is close to its
-		--          own: it goes home and rejoins the army.
+		--   RUN    when something clearly stronger than the party is close to
+		--          it: it breaks off and tries another extractor, and after
+		--          a couple of those goes home and rejoins the army.
 		local function RaidHome(why)
 			raid.state  = "home"
 			raid.homeAt = n
@@ -386,13 +392,25 @@ return function(ctx, lib, cfg)
 					local t = raid.target
 					local alive = t and Spring.ValidUnitID(t.uid) and not Spring.GetUnitIsDead(t.uid)
 					if against > raidValue * RAID.FLEE_RATIO then
-						RaidHome("defenders")
+						-- Driven off. A raid's job is to keep the enemy busy, so
+						-- it tries somewhere else before it gives up (its old
+						-- target stays off the list for a while: FindRaidTarget
+						-- remembers what has been aimed at).
+						local other = (raid.diverts < RAID.MAX_DIVERTS) and lib.FindRaidTarget
+								and lib.FindRaidTarget(teamID, raidValue, raid.repDef, cx, cz)
+						if other then
+							raid.diverts = raid.diverts + 1
+							RaidTarget(other)
+							Log(teamID, ("raiddivert;units=%d;value=%d;defense=%d"):format(raidCount, raidValue, other.defense or 0))
+						else
+							RaidHome("defenders")
+						end
 					elseif (n - raid.began) > RAID.MAX_TIME then
 						RaidHome("time")
 					elseif not alive then
 						if t then raid.hits = raid.hits + 1 end
 						local nextTarget = (raidValue >= raid.start * 0.5) and lib.FindRaidTarget
-								and lib.FindRaidTarget(teamID, raidValue, raid.repDef)
+								and lib.FindRaidTarget(teamID, raidValue, raid.repDef, cx, cz)
 						if nextTarget then
 							RaidTarget(nextTarget)
 							Log(teamID, ("raidnext;units=%d;value=%d;defense=%d"):format(raidCount, raidValue, nextTarget.defense or 0))
@@ -450,9 +468,10 @@ return function(ctx, lib, cfg)
 				picked[#picked + 1] = c
 				pickedValue = pickedValue + c.value
 			end
-			local target = (#picked >= RAID.MIN_SIZE) and lib.FindRaidTarget(teamID, pickedValue, picked[1].def)
+			local target = (#picked >= RAID.MIN_SIZE)
+					and lib.FindRaidTarget(teamID, pickedValue, picked[1].def, muster and muster.x, muster and muster.z)
 			if target then
-				raid = { members = {}, start = pickedValue, state = "out", began = n, hits = 0, repDef = picked[1].def }
+				raid = { members = {}, start = pickedValue, state = "out", began = n, hits = 0, diverts = 0, repDef = picked[1].def }
 				RAID.active[teamID] = raid
 				local taken = {}
 				for i = 1, #picked do

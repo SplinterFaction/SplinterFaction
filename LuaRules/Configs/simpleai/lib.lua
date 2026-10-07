@@ -451,15 +451,23 @@ return function(ctx, cfg)
 	--     walk there;
 	--   * extractors another allied raid was sent at in the last
 	--     RAID_CLAIM frames are skipped, so raids spread out;
-	--   * among what is left: least guarded first, then nearest to the
-	--     team's staging point.
+	--   * the straight line there (from fromX, fromZ if given, else the
+	--     staging point) must not run through enemy strength the party
+	--     cannot survive: at every RAID_PATH_STEP along it, enemy weight
+	--     within RAID_PATH_R must be at most the raid's own value. A
+	--     recording showed 7 of 17 raids wiped out, four of them before
+	--     reaching anything: the target was undefended, the road was not.
+	--   * among what is left: least guarded first, then nearest.
 	-- ============================================================
 	local RAID_SCAN_R = 800
 	local RAID_EDGE   = 0.5
 	local RAID_CLAIM  = 3600
 	local RAID_SPREAD = 600
+	local RAID_PATH_STEP = 450
+	local RAID_PATH_R    = 650
+	local RAID_PATH_TRIES = 8     -- best candidates whose route is checked before giving up
 	local raidClaims  = {}     -- { x =, z =, untilFrame =, ally = }
-	function L.FindRaidTarget(teamID, raidValue, repDefID)
+	function L.FindRaidTarget(teamID, raidValue, repDefID, fromX, fromZ)
 		local isMex = ctx.IsExtractor
 		if not isMex or not raidValue or raidValue <= 0 then return nil end
 		local now = Spring.GetGameFrame()
@@ -486,7 +494,8 @@ return function(ctx, cfg)
 		local origin = SimpleMusterPos[teamID]
 		local scan2, spread2 = RAID_SCAN_R * RAID_SCAN_R, RAID_SPREAD * RAID_SPREAD
 		local limit = raidValue * RAID_EDGE
-		local best, bestScore
+		if not fromX and origin then fromX, fromZ = origin.x, origin.z end
+		local cands = {}
 		for i = 1, #mexes do
 			local m = mexes[i]
 			local claimed = false
@@ -509,16 +518,47 @@ return function(ctx, cfg)
 				end
 				if defense <= limit then
 					local score = defense * 4
-					if origin then
-						local dx, dz = m.x - origin.x, m.z - origin.z
+					if fromX then
+						local dx, dz = m.x - fromX, m.z - fromZ
 						score = score + math.sqrt(dx * dx + dz * dz) * ATTACK_DIST_W
 					end
-					if (not bestScore or score < bestScore or (score == bestScore and m.uid < best.uid))
-							and (not repDefID or L.Reachable(teamID, repDefID, m.x, m.z, 300)) then
-						bestScore = score
-						best = { x = m.x, z = m.z, uid = m.uid, defense = defense }
+					cands[#cands + 1] = { x = m.x, z = m.z, uid = m.uid, defense = defense, score = score }
+				end
+			end
+		end
+		table.sort(cands, function(a, b)
+			if a.score ~= b.score then return a.score < b.score end
+			return a.uid < b.uid
+		end)
+		-- Is the straight road from the party to (tx, tz) survivable?
+		local path2 = RAID_PATH_R * RAID_PATH_R
+		local function RoadClear(tx, tz)
+			if not fromX then return true end
+			local dx, dz = tx - fromX, tz - fromZ
+			local dist = math.sqrt(dx * dx + dz * dz)
+			local steps = math.floor(dist / RAID_PATH_STEP)
+			for s = 1, steps - 1 do                -- (the end point itself was judged above, more strictly)
+				local px, pz = fromX + dx * s / steps, fromZ + dz * s / steps
+				local weight = 0
+				for t = 1, #threats do
+					local th = threats[t]
+					local ex, ez = th.x - px, th.z - pz
+					if ex * ex + ez * ez < path2 then
+						weight = weight + th.w
+						if weight > raidValue then return false end
 					end
 				end
+			end
+			return true
+		end
+		local best
+		local tries = 0
+		for i = 1, #cands do
+			local c = cands[i]
+			if not repDefID or L.Reachable(teamID, repDefID, c.x, c.z, 300) then
+				tries = tries + 1
+				if RoadClear(c.x, c.z) then best = c; break end
+				if tries >= RAID_PATH_TRIES then break end
 			end
 		end
 		if not best then return nil end
