@@ -77,6 +77,26 @@
 --   E <row> <height> ...                       header: ground height grid, one line per row
 --                                              from north to south (see H heightgrid);
 --                                              H metalspots and H start give the rest of the map
+--   J <f> <team> <units> <metal> <energy> <hash>
+--                                              sync fingerprint of a team every SYNC_FRAMES:
+--                                              unit count, exact metal and energy, and one
+--                                              hash over all its units. Two runs of the same
+--                                              game must produce identical J lines; the first
+--                                              one that differs is where they diverged
+--                                              (sfrec_report.py --sync a.txt b.txt)
+--   I <f> <team> <uid>:<motion>:<health> ... -<uid> ...
+--                                              the units behind that J line, as CHANGES since
+--                                              the team's previous I line: a unit is listed
+--                                              when its motion hash (exact position, velocity,
+--                                              heading) or health hash (health, paralysis,
+--                                              build progress) changed, and as -uid when it
+--                                              is gone. A unit not listed is unchanged. The
+--                                              first I line of a team lists every unit.
+--                                              Hashes use every bit of the values, so a
+--                                              difference far below one elmo shows. Written
+--                                              only for teams this viewer sees in full (all
+--                                              teams in a replay or as a spectator; your own
+--                                              allies as a player)
 --   A <f> <team> <trace>                       SimpleAI decision trace read directly from the
 --                                              AI (only written when the feed is absent)
 --   X <f> <what> <...>                         teamdied <team> | gameover <winning allyteams>
@@ -105,6 +125,7 @@ end
 local SNAPSHOT_FRAMES = 300    -- team economy snapshot every 10s
 local POSITION_FRAMES = 300    -- every mobile unit's position every 10s
 local WRECK_FRAMES    = 900    -- reclaim field snapshot every 30s
+local SYNC_FRAMES     = 30     -- sync fingerprint every second; 0 turns it off
 local HEIGHT_CELL     = 128    -- map height grid resolution (elmos)
 local WRECK_CELL      = 512    -- reclaim field grid resolution (elmos)
 local WRECK_MIN       = 20     -- ignore cells holding less than this much metal + energy
@@ -275,6 +296,7 @@ local function WriteHeader()
 	Write("H snapshot " .. SNAPSHOT_FRAMES)
 	Write("H positions " .. POSITION_FRAMES)
 	Write("H wreckgrid " .. WRECK_FRAMES .. " " .. wreckNX .. " " .. WRECK_CELL)
+	Write("H fingerprint " .. SYNC_FRAMES)
 	-- Geothermal vents placed by game_geovent_spot_generator (random per game).
 	local vents = {}
 	for i = 1, (Spring.GetGameRulesParam("customGeovent_count") or 0) do
@@ -325,6 +347,8 @@ local function WriteHeader()
 	Write("@ Q f team uid:x,z...")
 	Write("@ W f cell:metal:energy...")
 	Write("@ E row heights...")
+	Write("@ J f team units metal energy hash")
+	Write("@ I f team uid:motionHash:healthHash... -goneUid...  (changes since the team's previous I line)")
 	Write("@ A f team trace")
 	Write("@ X f what args...")
 	Write("@ Z team stats...")
@@ -491,6 +515,121 @@ local function Wrecks(n)
 end
 
 --------------------------------------------------------------------------------
+-- Sync fingerprint
+--
+-- A hash of the exact simulation state, so two runs of one game (the live game
+-- and a replay, or two replays) can be compared to the second. Read-only.
+--------------------------------------------------------------------------------
+
+local HASH_MOD = 65521   -- keeps every intermediate value far below 2^24, so
+                         -- the arithmetic is exact in single-precision Lua
+local frexp, huge = math.frexp, math.huge
+local spGetUnitVelocity = Spring.GetUnitVelocity
+local spGetUnitHeading  = Spring.GetUnitHeading
+local spGetUnitHealth   = Spring.GetUnitHealth
+
+local function Mix(a, b, v)
+	a = (a + (v % HASH_MOD) + 1) % HASH_MOD
+	b = (b + a) % HASH_MOD
+	return a, b
+end
+
+-- Folds every bit of a single-precision float into the hash.
+local function MixFloat(a, b, x)
+	if x == nil then return Mix(a, b, 3) end
+	if x ~= x then return Mix(a, b, 5) end
+	if x == huge then return Mix(a, b, 7) end
+	if x == -huge then return Mix(a, b, 11) end
+	local m, e = frexp(x)
+	local neg = 0
+	if m < 0 then m = -m; neg = 1 end
+	local mant = floor(m * 16777216)
+	a, b = Mix(a, b, floor(mant / 4096))
+	a, b = Mix(a, b, mant % 4096)
+	return Mix(a, b, e + 200 + neg * 1000)
+end
+
+local syncParts = {}
+local syncSig  = {}   -- [teamID] = { [unitID] = "motion:health" as last written }
+local syncSeen = {}   -- [teamID] = { [unitID] = frame last sampled }
+local function Fingerprint(n)
+	local _, fullView = Spring.GetSpectatingState()
+	local seeAll = fullView or Spring.IsReplay()
+	local myTeam = Spring.GetMyTeamID()
+	for i = 1, #teamList do
+		local teamID = teamList[i]
+		-- Only teams whose state this viewer reads in full; a partly visible
+		-- enemy would hash differently from the same team seen whole.
+		if Recording(teamID) and (seeAll or Spring.AreTeamsAllied(myTeam, teamID)) then
+			local units = spGetTeamUnits(teamID) or {}
+			table.sort(units)
+			local sigs, seen = syncSig[teamID], syncSeen[teamID]
+			if not sigs then
+				sigs, seen = {}, {}
+				syncSig[teamID], syncSeen[teamID] = sigs, seen
+			end
+			local ta, tb = 1, 0
+			local count, parts = 0, 0
+			for k = 1, #units do
+				local unitID = units[k]
+				local x, y, z = spGetUnitPosition(unitID)
+				if x then
+					local vx, vy, vz = spGetUnitVelocity(unitID)
+					local ma, mb = 1, 0
+					ma, mb = MixFloat(ma, mb, x)
+					ma, mb = MixFloat(ma, mb, y)
+					ma, mb = MixFloat(ma, mb, z)
+					ma, mb = MixFloat(ma, mb, vx)
+					ma, mb = MixFloat(ma, mb, vy)
+					ma, mb = MixFloat(ma, mb, vz)
+					ma, mb = Mix(ma, mb, (spGetUnitHeading(unitID) or 0) + 40000)
+
+					local hp, _, para, _, build = spGetUnitHealth(unitID)
+					local ha, hb = 1, 0
+					ha, hb = MixFloat(ha, hb, hp)
+					ha, hb = MixFloat(ha, hb, para)
+					ha, hb = MixFloat(ha, hb, build)
+
+					ta, tb = Mix(ta, tb, unitID)
+					ta, tb = Mix(ta, tb, ma)
+					ta, tb = Mix(ta, tb, mb)
+					ta, tb = Mix(ta, tb, ha)
+					ta, tb = Mix(ta, tb, hb)
+
+					count = count + 1
+					seen[unitID] = n
+					-- The team hash above carries every bit; these short per-unit
+					-- hashes only have to name which unit differs.
+					local sig = ("%04x:%03x"):format(mb, hb % 4096)
+					if sigs[unitID] ~= sig then
+						sigs[unitID] = sig
+						parts = parts + 1
+						syncParts[parts] = unitID .. ":" .. sig
+					end
+				end
+			end
+			for unitID, last in pairs(seen) do
+				if last ~= n then
+					seen[unitID], sigs[unitID] = nil, nil
+					parts = parts + 1
+					syncParts[parts] = "-" .. unitID
+				end
+			end
+			if count > 0 or teamID ~= gaiaTeam then
+				local metal  = spGetTeamResources(teamID, "metal")
+				local energy = spGetTeamResources(teamID, "energy")
+				ta, tb = MixFloat(ta, tb, metal)
+				ta, tb = MixFloat(ta, tb, energy)
+				Write(("J %d %d %d %.9g %.9g %04x%04x"):format(n, teamID, count, metal or -1, energy or -1, ta, tb))
+				if parts > 0 then
+					Write(("I %d %d %s"):format(n, teamID, table.concat(syncParts, " ", 1, parts)))
+				end
+			end
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
 -- Feed from the gadget (dbg_game_recorder_feed.lua)
 --------------------------------------------------------------------------------
 
@@ -633,6 +772,7 @@ function widget:GameFrame(n)
 	if n % SNAPSHOT_FRAMES == 0 then Snapshot(n) end
 	if n % POSITION_FRAMES == 0 then Positions(n) end
 	if n % WRECK_FRAMES == 0 then Wrecks(n) end
+	if SYNC_FRAMES > 0 and n % SYNC_FRAMES == 0 then Fingerprint(n) end
 end
 
 function widget:GameStart()
