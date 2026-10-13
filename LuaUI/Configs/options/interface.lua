@@ -49,7 +49,7 @@ return {
 		  get = function() return FontIndex("ui_font2") end,
 		  set = function(idx) Spring.SetConfigString("ui_font2", fontFiles[idx]) end,
 		  desc = "Font for names, buttons and titles. Reloads the interface." },
-		{ id = "tooltips", name = "Tooltips", type = "bool", widget = "Static Tooltip Panel", requires = "Static Tooltip Panel" },
+		{ id = "tooltips", name = "Tooltips", type = "bool", widget = "Tooltip Panel", requires = "Tooltip Panel" },
 		{ id = "resourceprompts", name = "Resource warnings", type = "bool", config = "evo_resourceprompts",
 		  desc = "Chat messages and audio cues when metal or energy needs attention." },
 		{ id = "pausescreen", name = "Pause overlay", type = "bool", widget = "Pause Screen", requires = "Pause Screen" },

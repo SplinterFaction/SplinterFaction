@@ -1,0 +1,223 @@
+<rml>
+<head>
+	<title>SplinterFaction tooltip</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The tooltip, beside the order menu, and Additional Info above it.
+		   Their positions are set from Lua (hud.PlacePanel), and their sizes
+		   here must match PANEL_WIDTH, TOOLTIP_HEIGHT and ADDITIONAL_HEIGHT in
+		   gui_rml_tooltip.lua. */
+		#tooltip, #additional {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 320dp;
+			box-sizing: border-box;
+			padding: 9dp 6dp 9dp 11dp;
+			/* so the wheel can scroll them */
+			pointer-events: auto;
+		}
+		#tooltip { height: 212dp; }
+		#additional { height: 534dp; }
+		.scroll {
+			height: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		/* ---- what it is ---------------------------------------------------- */
+		.head {
+			display: flex;
+			flex-direction: row;
+			align-items: flex-start;
+			padding-bottom: 6dp;
+			border-bottom: 1dp #232d38;
+		}
+		.names {
+			flex: 1;
+		}
+		.name {
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 17dp;
+			line-height: 19dp;
+			color: #f0f4f8;
+		}
+		.desc {
+			font-size: 12dp;
+			line-height: 14dp;
+			color: #8593a1;
+		}
+		.tech {
+			margin: 1dp 4dp 0dp 8dp;
+			padding: 0dp 6dp;
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 13dp;
+			line-height: 17dp;
+			border: 1dp #35434f;
+		}
+		/* tech tiers keep the colors the game already uses for them */
+		.t0 { color: #00cccc; }
+		.t1 { color: #ff8000; }
+		.t2 { color: #ff40ff; }
+		.t3 { color: #33e633; }
+		.t4 { color: #ff4040; }
+
+		/* ---- sections ------------------------------------------------------ */
+		.sec {
+			margin: 8dp 0dp 3dp 0dp;
+		}
+		.cols {
+			display: flex;
+			flex-direction: row;
+		}
+		.col {
+			flex: 1;
+		}
+		.col.second {
+			padding-left: 8dp;
+			border-left: 1dp #232d38;
+		}
+		.row {
+			display: flex;
+			flex-direction: row;
+			height: 15dp;
+			font-size: 12dp;
+			line-height: 15dp;
+		}
+		.k {
+			width: 56dp;
+			color: #8593a1;
+		}
+		.wide .k {
+			width: 84dp;
+		}
+		.v {
+			flex: 1;
+			color: #f0f4f8;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.pair {
+			display: flex;
+			flex-direction: row;
+		}
+		.unit {
+			margin-right: 3dp;
+			color: #8593a1;
+		}
+		.gap {
+			margin-left: 7dp;
+		}
+		.metal { color: #a9c9ea; }
+		.energy { color: #f2d64b; }
+		.supply { color: #ff9b21; }
+		.shield { color: #9eb8ff; }
+		.overshield { color: #d1d1ff; }
+		.paralyze { color: #8cffff; }
+		.disrupt { color: #cc8cff; }
+		.heat { color: #ff8c33; }
+
+		.hint {
+			margin-top: 8dp;
+			font-size: 11dp;
+			color: #5c6875;
+		}
+		.text {
+			font-size: 12dp;
+			line-height: 15dp;
+			color: #c2ccd6;
+		}
+
+		/* ---- the selection ------------------------------------------------- */
+		.srow {
+			display: flex;
+			flex-direction: row;
+			height: 15dp;
+			font-size: 12dp;
+			line-height: 15dp;
+		}
+		.stech {
+			width: 24dp;
+			font-size: 11dp;
+		}
+		.sname {
+			flex: 1;
+			color: #f0f4f8;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.scount {
+			margin-right: 4dp;
+			color: #8593a1;
+		}
+		.totals {
+			display: flex;
+			flex-direction: row;
+			margin-top: 5dp;
+			padding-top: 4dp;
+			border-top: 1dp #232d38;
+			font-size: 12dp;
+		}
+
+		/* ---- additional info ------------------------------------------------ */
+		/* the pictures are 16:9 */
+		.hero {
+			display: block;
+			width: 288dp;
+			height: 162dp;
+			margin-top: 8dp;
+			background-color: #131920;
+		}
+		.weapon {
+			margin-bottom: 5dp;
+			padding: 5dp 8dp 6dp 8dp;
+			background-color: #1a222b;
+			border-left: 2dp #35434f;
+		}
+		.wname {
+			font-size: 13dp;
+			color: #f0f4f8;
+		}
+		.wstats {
+			display: flex;
+			flex-direction: row;
+			margin-top: 1dp;
+			font-size: 12dp;
+		}
+		.wstats .v {
+			flex: none;
+			margin-right: 10dp;
+		}
+		.tags {
+			display: flex;
+			flex-direction: row;
+			font-size: 11dp;
+		}
+		.tag {
+			margin: 2dp 8dp 0dp 0dp;
+			letter-spacing: 1dp;
+		}
+		.guide {
+			margin-top: 4dp;
+			font-size: 11dp;
+			line-height: 14dp;
+			color: #8593a1;
+		}
+	</style>
+</head>
+<body>
+	<div id="additional" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="ad-scroll" class="scroll"/>
+	</div>
+
+	<div id="tooltip" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="tt-scroll" class="scroll"/>
+	</div>
+</body>
+</rml>
