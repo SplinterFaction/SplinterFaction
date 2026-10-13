@@ -635,6 +635,11 @@ end
 
 -- Stacked columns: one rect per (column, band). With MAX_COLUMNS = 360 and at
 -- most TOP_N + 2 bands this is well under 4k instances, baked once per refresh.
+--
+-- The shapes are antialiased, so two rects that merely touch leave a faint
+-- seam where their soft edges meet. To have none, the bands are drawn opaque,
+-- on whole pixels, each column one pixel into the next and each band one pixel
+-- into the one below it: what is drawn later simply covers the soft edge.
 local function BakeStack()
 	local p = plot
 	local hiddenSet = hidden[GROUPINGS[sel.group].key]
@@ -644,18 +649,18 @@ local function BakeStack()
 	local buckets = view.buckets
 	-- Draw largest first so it sits at the bottom of the stack
 	for c = 1, n do
-		local cx1 = p.x1 + (c-1) * colW
-		local cx2 = math_min(cx1 + colW + 0.5, p.x2)   -- slight overlap hides seams between columns
+		local cx1 = math_floor(p.x1 + (c-1) * colW)
+		local cx2 = math_min(math_floor(p.x1 + c * colW) + 1, p.x2)
 		local base = p.y1
 		for bi = 1, #buckets do
 			local b = buckets[bi]
 			if not hiddenSet[b.key] then
 				local v = b.cols[c]
 				if v > 0 then
-					local h = v * scaleY
-					glColor(b.color[1], b.color[2], b.color[3], 0.85)
-					glRect(cx1, base, cx2, base + h)
-					base = base + h
+					local top = base + v * scaleY
+					glColor(b.color[1] * 0.9, b.color[2] * 0.9, b.color[3] * 0.9, 1)
+					glRect(cx1, math_max(math_floor(base) - 1, p.y1), cx2, math_floor(top + 0.5))
+					base = top
 				end
 			end
 		end

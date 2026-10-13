@@ -574,6 +574,12 @@ local function Flush()
 	-- how the first premultiplied-alpha fix ended up applying to nothing and
 	-- cached panels stayed washed out.
 	if rttActive and glBlendFuncSeparate then
+		-- gl.BlendFuncSeparate only sets the functions; it does not switch
+		-- blending on, and TexCache switched it off for its clear. Without
+		-- this the first batch of a cache was drawn unblended: harmless when
+		-- that batch was an opaque panel background, wrong for a cache that
+		-- is a single batch of translucent shapes (the graph plots).
+		glBlending(true)
 		glBlendFuncSeparate(blendSrc or GL.SRC_ALPHA, blendDst or GL.ONE_MINUS_SRC_ALPHA,
 		                    GL.ONE, GL.ONE_MINUS_SRC_ALPHA)
 	else
@@ -1238,6 +1244,7 @@ function SG.TexCache(cache, x1, y1, x2, y2, fn, ...)
 		-- Flush (engine text, raw texture blits). Flush re-applies the same
 		-- separate functions for every shape batch - see the comment there.
 		if gl.BlendFuncSeparate then
+			gl.Blending(true) -- switched off for the clear above; BlendFuncSeparate does not switch it back on
 			gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA,
 			                     GL.ONE,       GL.ONE_MINUS_SRC_ALPHA)
 		else
