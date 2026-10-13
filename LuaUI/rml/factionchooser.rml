@@ -1,0 +1,139 @@
+<rml>
+<head>
+	<title>SplinterFaction faction chooser</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The dim over the whole screen. For a player it also takes the mouse,
+		   so nothing behind it can be clicked while a faction is being
+		   chosen; a spectator's clicks go through. */
+		#dim {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(5, 7, 10, 210);
+			pointer-events: auto;
+		}
+		#dim.spectator {
+			pointer-events: none;
+		}
+		/* The cards and, above them, the heading. Its position is set from
+		   Lua (hud.PlacePanel); its size here must match GROUP_WIDTH and
+		   GROUP_HEIGHT in gui_rml_factionchooser.lua. */
+		#chooser {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 880dp;
+			height: 500dp;
+		}
+		#heading {
+			position: absolute;
+			left: 0dp;
+			top: -112dp;
+			width: 880dp;
+			text-align: center;
+		}
+		#title {
+			font-size: 24dp;
+			letter-spacing: 3dp;
+		}
+		#timer {
+			height: 22dp;
+			margin-top: 8dp;
+			font-size: 16dp;
+			color: #f0f4f8;
+		}
+		#timer.urgent {
+			color: #ff5a4f;
+		}
+		#timer-bar {
+			margin-top: 6dp;
+		}
+		#timer-fill {
+			width: 100%;
+			background-color: #5fd0e8;
+		}
+		#timer-fill.urgent {
+			background-color: #ff5a4f;
+		}
+		#cards {
+			display: flex;
+			flex-direction: row;
+		}
+		.card {
+			position: relative;
+			width: 420dp;
+			height: 500dp;
+			box-sizing: border-box;
+			padding: 0dp 13dp;
+			text-align: center;
+			pointer-events: auto;
+		}
+		.card.second {
+			margin-left: 40dp;
+		}
+		.card:hover {
+			background-color: rgba(19, 25, 32, 245);
+		}
+		/* the one not chosen steps back */
+		.card.passed {
+			opacity: 0.4;
+			pointer-events: none;
+		}
+		.accent {
+			height: 4dp;
+			margin: 0dp -13dp;
+		}
+		.cname {
+			height: 44dp;
+			font-size: 19dp;
+			line-height: 42dp;
+		}
+		.hero {
+			display: block;
+			width: 392dp;
+			height: 220dp;
+		}
+		.cdesc {
+			height: 172dp;
+			padding: 12dp 6dp 0dp 6dp;
+			box-sizing: border-box;
+			font-size: 14dp;
+			line-height: 21dp;
+			color: #c2ccd6;
+		}
+		.cstate {
+			margin-top: 14dp;
+			padding: 7dp 0dp 8dp 0dp;
+			font-size: 12dp;
+			color: #8593a1;
+			border: 1dp #35434f;
+		}
+		.card:hover .cstate {
+			color: #f0f4f8;
+		}
+		.card.chosen .cstate {
+			color: #0b0e12;
+			background-color: #6fdc8c;
+			border-color: #6fdc8c;
+		}
+	</style>
+</head>
+<body>
+	<div id="root" class="hidden">
+		<div id="dim"/>
+		<div id="chooser">
+			<div id="heading">
+				<div id="title" class="title">Choose Your Faction</div>
+				<div id="timer"/>
+				<div id="timer-bar" class="bar">
+					<div id="timer-fill" class="bar-fill"/>
+				</div>
+			</div>
+			<div id="cards"/>
+		</div>
+	</div>
+</body>
+</rml>

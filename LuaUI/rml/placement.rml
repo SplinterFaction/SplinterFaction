@@ -1,0 +1,144 @@
+<rml>
+<head>
+	<title>SplinterFaction start placement</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* ---- the start spots, over the map ----------------------------------
+		   Each marker is moved from Lua to follow its spot on the ground (left
+		   and top are the spot's center; the margins pull the square onto
+		   it). The size here must match MARKER_SIZE in gui_rml_placement.lua.
+
+		   free  open, on the player's side      mine  the player's pick
+		   done  the player's confirmed pick     mate  taken by an ally
+		   foe   the other side's (shown for reference only)
+		   can   may be clicked                  hot   under the mouse */
+		.spot {
+			position: absolute;
+			width: 56dp;
+			height: 56dp;
+			margin: -28dp 0dp 0dp -28dp;
+			box-sizing: border-box;
+			text-align: center;
+			font-weight: bold;
+			font-size: 20dp;
+			line-height: 46dp;
+			color: #f0f4f8;
+			background-color: rgba(5, 7, 10, 205);
+			border: 4dp #5c6875;
+		}
+		.spot.can {
+			pointer-events: auto;
+		}
+		.spot.free { border-color: #4fbd6c; }
+		.spot.mate { border-color: #8593a1; color: #c2ccd6; }
+		.spot.foe {
+			border-color: rgba(255, 90, 79, 120);
+			background-color: rgba(5, 7, 10, 120);
+			color: #8593a1;
+		}
+		.spot.hot {
+			border-color: #9bf0b0;
+			background-color: rgba(26, 52, 34, 225);
+		}
+		.spot.mine { border-color: #5fd0e8; }
+		.spot.done { border-color: #6fdc8c; }
+		/* a second square around a confirmed pick */
+		.ring {
+			position: absolute;
+			left: -12dp;
+			top: -12dp;
+			width: 72dp;
+			height: 72dp;
+			box-sizing: border-box;
+			border: 3dp rgba(111, 220, 140, 150);
+		}
+		/* how many allied teams share the spot, when more than one */
+		.count {
+			position: absolute;
+			right: -10dp;
+			top: -10dp;
+			padding: 0dp 4dp;
+			font-size: 12dp;
+			line-height: 15dp;
+			color: #f2d64b;
+			background-color: #0b0e12;
+			border: 1dp #35434f;
+		}
+
+		/* ---- the panel at the bottom -----------------------------------------
+		   Its position is set from Lua (hud.PlacePanel); its size here must
+		   match PANEL_WIDTH and PANEL_HEIGHT in gui_rml_placement.lua. */
+		#placement {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 560dp;
+			height: 96dp;
+			box-sizing: border-box;
+			padding: 14dp 16dp;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			pointer-events: auto;
+		}
+		#words {
+			flex: 1;
+			margin-right: 16dp;
+			text-align: center;
+		}
+		#title {
+			font-size: 15dp;
+			line-height: 20dp;
+			white-space: nowrap;
+			color: #f0f4f8;
+		}
+		#title.quiet {
+			color: #c2ccd6;
+		}
+		#timer {
+			font-size: 13dp;
+			line-height: 20dp;
+			color: #f0f4f8;
+		}
+		#timer.urgent {
+			color: #ff5a4f;
+		}
+		#timer-bar {
+			margin-top: 4dp;
+		}
+		#timer-fill {
+			width: 100%;
+		}
+		#timer-fill.urgent {
+			background-color: #ff5a4f;
+		}
+		#confirm {
+			width: 150dp;
+			padding-left: 0dp;
+			padding-right: 0dp;
+		}
+		#confirm.done {
+			color: #0b0e12;
+			background-color: #6fdc8c;
+			border-color: #6fdc8c;
+		}
+	</style>
+</head>
+<body>
+	<div id="root" class="hidden">
+		<div id="spots"/>
+		<div id="placement" class="panel">
+			<div class="bracket tl"/>
+			<div class="bracket br"/>
+			<div id="words">
+				<div id="title"/>
+				<div id="timer"/>
+				<div id="timer-bar" class="bar">
+					<div id="timer-fill" class="bar-fill"/>
+				</div>
+			</div>
+			<div id="confirm" class="button disabled">Confirm</div>
+		</div>
+	</div>
+</body>
+</rml>

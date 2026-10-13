@@ -392,10 +392,15 @@ end
 -- Hide-GUI (F5) support: call at the start of a widget's Update. Hides the
 -- document while the engine's GUI is hidden and shows it again afterwards.
 -- Returns true while hidden, so the widget can skip its refresh.
+--
+-- The same call hides the HUD during the pregame flow (faction choice and
+-- start placement): the placement widget sets WG.HudPregame for as long as it
+-- lasts. A widget whose window should stay usable then (the game menu,
+-- options) sets hud.showInPregame = true after loading this module.
 local guiHidden = false
 
 function hud.FollowGuiHidden(document)
-	local hidden = Spring.IsGUIHidden() and true or false
+	local hidden = (Spring.IsGUIHidden() or (WG.HudPregame and not hud.showInPregame)) and true or false
 	if hidden ~= guiHidden then
 		guiHidden = hidden
 		if hidden then

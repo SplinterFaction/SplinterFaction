@@ -291,6 +291,7 @@ function widget:Initialize()
 		return
 	end
 	hud = helpers
+	hud.showInPregame = true -- a window the player opens; usable during faction choice and placement
 	document = result
 
 	widgetHandler.knownChanged = true
