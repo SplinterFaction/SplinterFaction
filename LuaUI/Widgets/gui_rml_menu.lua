@@ -5,7 +5,7 @@
 --
 --  A small MENU handle sits in the top right corner. Clicking it, or pressing
 --  Esc, opens the menu: resume, the windows that used to have a button each
---  (settings, keybinds, widgets, sharing, economy, graph, log), and resign and quit,
+--  (settings, keybinds, widgets, sharing, economy, graph, log, game info), and resign and quit,
 --  which both ask first. Esc or a click outside the menu closes it. The menu
 --  does not pause the game.
 --
@@ -75,6 +75,8 @@ local WINDOWS = {
 		action = function() WG.StaticEndGraph.Toggle() end},
 	{id = "m-log", available = function() return WG.StaticChatLog and WG.StaticChatLog.Toggle end,
 		action = function() WG.StaticChatLog.Toggle() end},
+	{id = "m-info", available = function() return WG['gameinfo'] and WG['gameinfo'].toggle end,
+		action = function() WG['gameinfo'].toggle() end},
 }
 
 -- Things that cannot be taken back ask first.

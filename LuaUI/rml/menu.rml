@@ -89,6 +89,7 @@
 				<div id="m-economy" class="button quiet">Economy</div>
 				<div id="m-graph" class="button quiet">Graph</div>
 				<div id="m-log" class="button quiet">Log</div>
+				<div id="m-info" class="button quiet">Game Info</div>
 
 				<div id="m-resign" class="button quiet group">Resign</div>
 				<div id="m-quit" class="button quiet">Quit</div>

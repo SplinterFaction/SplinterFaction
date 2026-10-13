@@ -1,0 +1,137 @@
+<rml>
+<head>
+	<title>SplinterFaction game info</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The information window: this game and map, the controls, and the
+		   engine's console commands. Its position is set from Lua
+		   (hud.PlacePanel); its size here must match PANEL_WIDTH and
+		   PANEL_HEIGHT in gui_rml_info.lua. */
+		#info {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 1000dp;
+			height: 640dp;
+			box-sizing: border-box;
+			padding: 12dp 14dp 14dp 16dp;
+			pointer-events: auto;
+		}
+		.grow {
+			flex: 1;
+		}
+		/* the window's inside: 640 less the borders and padding */
+		#body {
+			display: flex;
+			flex-direction: column;
+			height: 612dp;
+		}
+		#tabs {
+			display: flex;
+			flex-direction: row;
+			margin-top: 10dp;
+		}
+		#page {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: hidden;
+			margin-top: 8dp;
+			padding: 6dp 12dp 10dp 12dp;
+			background-color: #0f1319;
+			border: 1dp #232d38;
+			font-size: 13dp;
+		}
+		.columns {
+			display: flex;
+			flex-direction: row;
+		}
+		.column {
+			flex: 1;
+			margin-right: 22dp;
+		}
+		.column.last {
+			margin-right: 0dp;
+		}
+		.head {
+			margin-top: 12dp;
+			padding-bottom: 3dp;
+			margin-bottom: 4dp;
+			color: #ff9b21;
+			border-bottom: 1dp #232d38;
+		}
+		.big {
+			margin-top: 8dp;
+			font-size: 17dp;
+			font-weight: bold;
+			color: #f0f4f8;
+		}
+		.note {
+			margin: 2dp 0dp 4dp 0dp;
+			color: #8593a1;
+		}
+		/* a name and its value, or a key and what it does */
+		.row {
+			display: flex;
+			flex-direction: row;
+			min-height: 19dp;
+			line-height: 19dp;
+		}
+		.row:hover {
+			background-color: #1a222b;
+		}
+		.k {
+			flex: 1;
+			color: #8593a1;
+		}
+		.v {
+			margin-left: 10dp;
+			text-align: right;
+			color: #c2ccd6;
+		}
+		/* a mod option that is not at its default */
+		.row.changed .k { color: #f0f4f8; }
+		.row.changed .v { color: #ff9b21; }
+		.key {
+			width: 46%;
+			color: #f2d64b;
+		}
+		.does {
+			flex: 1;
+			color: #c2ccd6;
+		}
+		.gap {
+			height: 8dp;
+		}
+		.cmd {
+			width: 230dp;
+			color: #f0f4f8;
+		}
+		.sync {
+			width: 84dp;
+			color: #5c6875;
+		}
+		.sync.synced {
+			color: #5fd0e8;
+		}
+	</style>
+</head>
+<body>
+	<div id="info" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="body">
+			<div class="window-head">
+				<div class="title">Game Info</div>
+				<div class="grow"/>
+				<div id="close" class="close">X</div>
+			</div>
+			<div id="tabs">
+				<div id="tab1" class="tab" data-tab="1">Game</div>
+				<div id="tab2" class="tab" data-tab="2">Controls</div>
+				<div id="tab3" class="tab" data-tab="3">Commands</div>
+			</div>
+			<div id="page"/>
+		</div>
+	</div>
+</body>
+</rml>

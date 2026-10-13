@@ -42,6 +42,11 @@ local BOX_BOTTOM_FRAC = 0.10
 
 local LAYOUT_NAME = "chat"
 
+-- the right edge of the tooltip panel in its default place (order menu 328 wide,
+-- tooltip 320 beside it; see gui_rml_tooltip.lua), and the gap to keep from it
+local TOOLTIP_RIGHT = 648
+local CLEARANCE     = 24
+
 local MAX_LINES            = 6       -- messages shown at once
 local LINE_LIFETIME        = 10      -- seconds before fade starts
 local FADE_TIME            = 6       -- seconds of fadeout
@@ -484,8 +489,13 @@ end
 -- widget api
 --------------------------------------------------------------------------------
 
+-- Centered, but never over the tooltip and additional info panels, which
+-- stand in the bottom left and reach TOOLTIP_RIGHT dp into the screen: on a
+-- screen where the centered box would touch them it is moved right instead.
 local function DefaultOrigin(vsx, vsy, w, h, scale)
-	return (vsx - w) * 0.5, vsy * BOX_BOTTOM_FRAC
+	local x = math.max((vsx - w) * 0.5, (TOOLTIP_RIGHT + CLEARANCE) * scale)
+	x = math.max(0, math.min(x, vsx - w - CLEARANCE * scale))
+	return x, vsy * BOX_BOTTOM_FRAC
 end
 
 local function Place()

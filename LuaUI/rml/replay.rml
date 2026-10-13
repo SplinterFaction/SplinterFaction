@@ -1,0 +1,81 @@
+<rml>
+<head>
+	<title>SplinterFaction replay controls</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* Replay controls: pause and speed, under the resource bar. Only
+		   there while a replay is watched. Its position is set from Lua
+		   (hud.PlacePanel); its size here must match PANEL_WIDTH and
+		   PANEL_HEIGHT in gui_rml_replay.lua. */
+		#replay {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 560dp;
+			height: 40dp;
+			box-sizing: border-box;
+			padding: 6dp 10dp;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			pointer-events: auto;
+		}
+		#replay-label {
+			margin-right: 10dp;
+		}
+		.rb {
+			height: 26dp;
+			box-sizing: border-box;
+			margin-right: 4dp;
+			padding: 0dp 8dp;
+			text-align: center;
+			font-size: 12dp;
+			line-height: 22dp;
+			color: #8593a1;
+			background-color: #131920;
+			border: 1dp #232d38;
+			border-bottom: 2dp #232d38;
+		}
+		.rb:hover {
+			color: #f0f4f8;
+			background-color: #1a222b;
+		}
+		.rb.active {
+			color: #f0f4f8;
+			background-color: #1a222b;
+			border-bottom: 2dp #ff9b21;
+		}
+		#replay-pause {
+			width: 62dp;
+			margin-right: 10dp;
+			color: #f0f4f8;
+		}
+		#replay-pause.active {
+			border-bottom: 2dp #5fd0e8;
+		}
+		#replay-speeds {
+			display: flex;
+			flex-direction: row;
+			flex: 1;
+		}
+		#replay-speeds .rb {
+			flex: 1;
+			padding: 0dp;
+		}
+		#replay-now {
+			width: 52dp;
+			text-align: right;
+			font-size: 12dp;
+			color: #8593a1;
+		}
+	</style>
+</head>
+<body>
+	<div id="replay" class="panel">
+		<div id="replay-label" class="label">Replay</div>
+		<div id="replay-pause" class="rb">Pause</div>
+		<div id="replay-speeds"/>
+		<div id="replay-now"/>
+	</div>
+</body>
+</rml>

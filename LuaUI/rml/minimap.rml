@@ -1,0 +1,34 @@
+<rml>
+<head>
+	<title>SplinterFaction minimap frame</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* A frame around the engine's minimap. The minimap itself is drawn by
+		   the engine, underneath; this is only the border and the two corner
+		   brackets, and it never takes the mouse. Position and size are set
+		   from Lua to wrap the minimap. */
+		#minimap-frame {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100px;
+			height: 100px;
+			box-sizing: border-box;
+			border: 2dp #0b0e12;
+		}
+		#minimap-line {
+			width: 100%;
+			height: 100%;
+			box-sizing: border-box;
+			border: 1dp #35434f;
+		}
+	</style>
+</head>
+<body>
+	<div id="minimap-frame">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="minimap-line"/>
+	</div>
+</body>
+</rml>
