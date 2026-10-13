@@ -1,0 +1,185 @@
+<rml>
+<head>
+	<title>SplinterFaction build and order menus</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* Two panels at the bottom left: orders below, the build list above.
+		   Their positions are set from Lua (hud.PlacePanel), and their sizes
+		   here must match PANEL_WIDTH, ORDER_HEIGHT and BUILD_HEIGHT in
+		   gui_rml_buildorder.lua. */
+		#orders, #build {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 320dp;
+			box-sizing: border-box;
+			pointer-events: auto;
+		}
+		#orders {
+			height: 212dp;
+			padding: 10dp 3dp 0dp 10dp;
+		}
+		#build {
+			height: 534dp;
+			padding: 10dp 6dp 10dp 10dp;
+		}
+
+		/* ---- orders: five to a row --------------------------------------- */
+		#order-grid {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+		.order {
+			position: relative;
+			width: 55dp;
+			height: 33dp;
+			margin: 0dp 6dp 6dp 0dp;
+			box-sizing: border-box;
+			background-color: #1a222b;
+			border: 1dp #232d38;
+			overflow: hidden;
+		}
+		.order:hover {
+			background-color: #212b36;
+			border-color: #35434f;
+		}
+		.order.active {
+			background-color: rgba(255, 155, 33, 40);
+			border-color: #ff9b21;
+		}
+		.order.disabled {
+			opacity: 0.35;
+		}
+		.cap {
+			padding: 3dp 2dp 0dp 2dp;
+			font-size: 11dp;
+			line-height: 12dp;
+			text-align: center;
+			color: #f0f4f8;
+		}
+		/* a command with states (fire at will, hold fire...) names the state
+		   it is in and shows which one of how many along its bottom edge */
+		.states {
+			position: absolute;
+			left: 3dp;
+			right: 3dp;
+			bottom: 3dp;
+			height: 3dp;
+			display: flex;
+			flex-direction: row;
+		}
+		.st {
+			flex: 1;
+			margin: 0dp 1dp;
+			background-color: #35434f;
+		}
+
+		/* ---- build list --------------------------------------------------- */
+		#build-scroll {
+			height: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+		.section {
+			margin: 0dp 0dp 6dp 0dp;
+			padding: 0dp 0dp 4dp 0dp;
+			border-bottom: 1dp #ff9b21;
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 13dp;
+			letter-spacing: 1.5dp;
+			text-transform: uppercase;
+			color: #f0f4f8;
+		}
+		.section.next {
+			margin-top: 10dp;
+		}
+		.category {
+			margin: 2dp 0dp 4dp 0dp;
+		}
+		.cards {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			margin-bottom: 4dp;
+		}
+		/* three to a row: 3 x (94 + 3) fits beside the scrollbar */
+		.card {
+			position: relative;
+			width: 94dp;
+			margin: 0dp 3dp 3dp 0dp;
+			box-sizing: border-box;
+			background-color: #1a222b;
+			border: 1dp #232d38;
+		}
+		.card:hover {
+			border-color: #8593a1;
+		}
+		.card.active {
+			border-color: #ff9b21;
+			background-color: rgba(255, 155, 33, 50);
+		}
+		.card.disabled {
+			opacity: 0.35;
+		}
+		.pic {
+			display: block;
+			width: 92dp;
+			height: 92dp;
+			background-color: #131920;
+		}
+		/* how many are queued */
+		.queue {
+			position: absolute;
+			right: 3dp;
+			top: 72dp;
+			padding: 0dp 5dp;
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 13dp;
+			line-height: 17dp;
+			color: #0b0e12;
+			background-color: #ff9b21;
+		}
+		.info {
+			padding: 2dp 4dp 3dp 4dp;
+			font-size: 12dp;
+			line-height: 14dp;
+		}
+		.line {
+			display: flex;
+			flex-direction: row;
+			height: 14dp;
+		}
+		.grow {
+			flex: 1;
+		}
+		.metal { color: #a9c9ea; }
+		.energy { color: #f2d64b; }
+		.slash { color: #5c6875; margin: 0dp 3dp; }
+		.supply { color: #ff9b21; }
+		.key { color: #8593a1; }
+		.key.match { color: #6fdc8c; }
+		/* tech tiers keep the colors the game already uses for them */
+		.t0 { color: #00cccc; }
+		.t1 { color: #ff8000; }
+		.t2 { color: #ff40ff; }
+		.t3 { color: #33e633; }
+		.t4 { color: #ff4040; }
+	</style>
+</head>
+<body>
+	<div id="build" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="build-scroll"/>
+	</div>
+
+	<div id="orders" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="order-grid"/>
+	</div>
+</body>
+</rml>

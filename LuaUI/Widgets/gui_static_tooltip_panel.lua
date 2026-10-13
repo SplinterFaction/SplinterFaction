@@ -1076,9 +1076,23 @@ local function ResolveTooltipData()
 	local currentTooltip = spGetCurrentTooltip() or ""
 	local mx, my = spGetMouseState()
 
+	-- The build/order menu is an RmlUi panel now. While the mouse is on an
+	-- RmlUi element the engine asks no widget for a tooltip, so the menu
+	-- publishes the hovered command's tooltip itself: nil off its panels,
+	-- "" between its cards.
+	local overMenu = false
+	local BOM = WG.StaticBuildOrderMenu
+	if BOM and BOM.GetTooltip then
+		local menuTooltip = BOM.GetTooltip()
+		if menuTooltip then
+			currentTooltip = menuTooltip
+			overMenu = true
+		end
+	end
+
 	-- UI takes precedence over the world: only trace for a hovered unit or
 	-- feature when no widget claims the cursor position.
-	if not CursorOverWidgetUI(mx, my, currentTooltip) then
+	if not overMenu and not CursorOverWidgetUI(mx, my, currentTooltip) then
 		local worldType, worldID = ResolveHoveredWorldObject()
 		if worldType == "unit" and worldID then
 			return { type = "unit", id = worldID }
@@ -2530,4 +2544,4 @@ function widget:DrawScreen()
 
 	-- Hand the accumulated shape instances to the GPU.
 	Flush()
-end
+end
