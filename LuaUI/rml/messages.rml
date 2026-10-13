@@ -1,0 +1,44 @@
+<rml>
+<head>
+	<title>SplinterFaction messages</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* Messages from the game (missions, tutorials), typed out letter by
+		   letter under the resource bar. They never take the mouse. The box's
+		   position is set from Lua (hud.PlacePanel); its size here must match
+		   BOX_WIDTH and BOX_HEIGHT in gui_rml_messages.lua. The panel inside
+		   is as tall as its lines. */
+		#messages {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 640dp;
+			height: 190dp;
+		}
+		#messages-panel {
+			position: relative;
+			padding: 9dp 16dp 11dp 16dp;
+			border-left: 2dp #5fd0e8;
+		}
+		#messages-head {
+			height: 16dp;
+			font-size: 10dp;
+			color: #5fd0e8;
+		}
+		.mline {
+			min-height: 23dp;
+			font-size: 17dp;
+			line-height: 23dp;
+			color: #f0f4f8;
+		}
+	</style>
+</head>
+<body>
+	<div id="messages">
+		<div id="messages-panel" class="panel hidden">
+			<div id="messages-head" class="label">Transmission</div>
+			<div id="messages-lines"/>
+		</div>
+	</div>
+</body>
+</rml>

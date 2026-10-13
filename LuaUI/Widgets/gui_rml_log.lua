@@ -98,7 +98,7 @@ end
 local function LinesRML()
 	local chat = WG.Chatterbox
 	if not chat or not chat.GetLog then
-		return '<div class="none">Chat log source not loaded (enable ChatterboxChat).</div>'
+		return '<div class="none">Chat log source not loaded (enable the Chat widget).</div>'
 	end
 	local log = chat.GetLog()
 	local tab = TABS[currentTab]

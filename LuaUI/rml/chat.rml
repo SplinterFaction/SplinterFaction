@@ -1,0 +1,49 @@
+<rml>
+<head>
+	<title>SplinterFaction chat</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The newest chat lines, low in the middle of the screen. They fade
+		   out by themselves and never take the mouse; the whole history is in
+		   the Log window. The box's position is set from Lua (hud.PlacePanel);
+		   its size here must match BOX_WIDTH and BOX_HEIGHT in
+		   gui_rml_chat.lua. Lines sit at the bottom of the box and grow up. */
+		#chat {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 650dp;
+			height: 200dp;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			align-items: flex-start; /* a line is as wide as its text, not as the box */
+			overflow: hidden;
+		}
+		/* A line is laid over the map with nothing behind it, so it carries
+		   its own dark backing and a bar in its channel's color. */
+		.line {
+			margin-top: 3dp;
+			padding: 3dp 10dp 4dp 9dp;
+			font-size: 17dp;
+			line-height: 22dp;
+			color: #f0f4f8;
+			background-color: rgba(11, 14, 18, 170);
+			border-left: 2dp #35434f;
+			font-effect: shadow(1dp 1dp #000000);
+		}
+		.name {
+			font-weight: bold;
+		}
+		.line.ally { color: #6fdc8c; border-left: 2dp #6fdc8c; }
+		.line.marker { color: #6fdc8c; border-left: 2dp #6fdc8c; }
+		.line.whisper { color: #ff7366; border-left: 2dp #ff7366; }
+		.line.spectator { color: #f2d64b; border-left: 2dp #f2d64b; }
+		.line.event { color: #5fd0e8; border-left: 2dp #5fd0e8; }
+		.line.system { color: #8593a1; }
+	</style>
+</head>
+<body>
+	<div id="chat"/>
+</body>
+</rml>

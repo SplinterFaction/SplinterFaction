@@ -1,0 +1,38 @@
+<rml>
+<head>
+	<title>SplinterFaction pause banner</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* "Game paused", in the middle of the screen. It never takes the
+		   mouse. Its position is set from Lua (hud.PlacePanel), and the widget
+		   fades it in and out; its size here must match BANNER_WIDTH and
+		   BANNER_HEIGHT in gui_rml_pause.lua. */
+		#pause {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 360dp;
+			height: 70dp;
+			box-sizing: border-box;
+			padding-top: 13dp;
+			text-align: center;
+		}
+		#pause-title {
+			font-size: 22dp;
+			letter-spacing: 6dp;
+		}
+		#pause-rule {
+			width: 60dp;
+			margin: 7dp auto 0dp auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="pause" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="pause-title" class="title">Game Paused</div>
+		<div id="pause-rule" class="accent-line"/>
+	</div>
+</body>
+</rml>

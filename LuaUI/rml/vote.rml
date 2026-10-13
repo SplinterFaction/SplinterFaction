@@ -1,0 +1,84 @@
+<rml>
+<head>
+	<title>SplinterFaction vote</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* A vote someone has called: what it is about, and yes or no. Its
+		   position is set from Lua (hud.PlacePanel); its size here must match
+		   PANEL_WIDTH and PANEL_HEIGHT in gui_rml_vote.lua. */
+		#vote {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 380dp;
+			height: 112dp;
+			box-sizing: border-box;
+			padding: 10dp 14dp 12dp 14dp;
+			pointer-events: auto;
+		}
+		#vote-head {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 22dp;
+		}
+		.grow {
+			flex: 1;
+		}
+		#vote-dismiss {
+			width: 40dp;
+			font-size: 11dp;
+			letter-spacing: 1dp;
+		}
+		#vote-title {
+			height: 26dp;
+			margin-top: 2dp;
+			font-size: 16dp;
+			line-height: 24dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #f0f4f8;
+		}
+		#vote-buttons {
+			display: flex;
+			flex-direction: row;
+			margin-top: 6dp;
+		}
+		#vote-buttons .button {
+			flex: 1;
+			padding-top: 4dp;
+			padding-bottom: 5dp;
+		}
+		#vote-yes {
+			margin-right: 8dp;
+			color: #0b0e12;
+			background-color: #6fdc8c;
+			border-color: #6fdc8c;
+		}
+		#vote-yes:hover {
+			background-color: #9bf0b0;
+			border-color: #9bf0b0;
+		}
+		/* (an id rule with a display would outrank the theme's .hidden) */
+		#vote-yes.hidden {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="vote" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="vote-head">
+			<div class="label">Vote</div>
+			<div class="grow"/>
+			<div id="vote-dismiss" class="close">ESC</div>
+		</div>
+		<div id="vote-title"/>
+		<div id="vote-buttons">
+			<div id="vote-yes" class="button">Yes</div>
+			<div id="vote-no" class="button danger">No</div>
+		</div>
+	</div>
+</body>
+</rml>
