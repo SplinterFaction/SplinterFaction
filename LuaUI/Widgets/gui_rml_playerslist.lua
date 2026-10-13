@@ -807,6 +807,9 @@ function widget:Initialize()
 	view = hud.NewView(document)
 	view.Assume("popup", "hidden", true) -- set in the markup
 
+	-- this list replaces the engine's own player list (/info)
+	spSendCommands("info 0")
+
 	-- the top bar shows these, so the engine need not
 	spSendCommands("fps 0")
 	spSendCommands("clock 0")
@@ -860,6 +863,7 @@ function widget:Shutdown()
 		WG.StaticPlayersList = nil
 		WG['advplayerlist_api'] = nil
 
+		spSendCommands("info 1")
 		spSendCommands("fps 1")
 		spSendCommands("clock 1")
 		spSendCommands("speed 1")
