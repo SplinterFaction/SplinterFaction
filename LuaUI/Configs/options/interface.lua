@@ -157,10 +157,5 @@ return {
 			{ id = "locklos", name = "Show their line of sight", type = "bool", api = {"advplayerlist_api", "GetLockLos", "SetLockLos"}, default = false },
 		  } },
 		{ id = "spectateselected", name = "Spectate selected", type = "bool", widget = "Spectate Selected", requires = "Spectate Selected" },
-		{ id = "pip", name = "Picture-in-picture", type = "bool", widget = "Picture-in-Picture", requires = "Picture-in-Picture",
-		  children = {
-			{ id = "pip2", name = "Second window", type = "bool", widget = "Picture-in-Picture #2", requires = "Picture-in-Picture #2" },
-			{ id = "pip3", name = "Third window", type = "bool", widget = "Picture-in-Picture #3", requires = "Picture-in-Picture #3" },
-		  } },
 	},
 }
