@@ -1,0 +1,119 @@
+<rml>
+<head>
+	<title>SplinterFaction survival panel</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The survival threat readout, on the right edge. Its position and
+		   its height are set from Lua: the height depends on how many
+		   survival teams there are, so the heights here must match the ones
+		   in gui_rml_survival.lua (CHROME, TITLE, COUNTDOWN, LINE, STATUS). */
+		#survival {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 190dp;
+			box-sizing: border-box;
+			padding: 8dp 10dp;
+			/* drag it anywhere */
+			pointer-events: auto;
+			cursor: move;
+			border-color: #a8332b;
+		}
+		#survival .bracket.tl { border-color: #ff5a4f; }
+		#survival .bracket.br { border-color: #ff5a4f; }
+		#head {
+			height: 20dp;
+			font-size: 12dp;
+			line-height: 16dp;
+		}
+		#countdown {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 34dp;
+		}
+		#count {
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 24dp;
+			color: #f0f4f8;
+		}
+		#count.none { color: #5c6875; }
+		#count.urgent { color: #ff9b21; }
+		#count.surge { color: #ff5a4f; }
+		.line {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 18dp;
+			font-size: 12dp;
+		}
+		.grow {
+			flex: 1;
+		}
+		.fig {
+			color: #f0f4f8;
+		}
+		.fig.off {
+			color: #5c6875;
+		}
+		#wave-number {
+			margin-left: 8dp;
+		}
+		#regrow.running {
+			color: #ff9b21;
+		}
+		/* the kinds of wave keep the colors the game already uses for them */
+		.kind { letter-spacing: 1dp; color: #cccccc; }
+		.kind.assault { color: #f2732e; }
+		.kind.raid { color: #f2d933; }
+		.kind.siege { color: #8c59f2; }
+		.kind.air { color: #33bfcc; }
+		.kind.drop { color: #2e85fa; }
+		.kind.horde { color: #a6a6a6; }
+		.rage { color: #f24073; }
+		.defeated { color: #808080; }
+		#pressure-track {
+			flex: 1;
+			height: 5dp;
+			margin-left: 10dp;
+			background-color: #1a222b;
+		}
+		#pressure-fill {
+			height: 5dp;
+			width: 0%;
+		}
+		#status {
+			height: 20dp;
+			text-align: center;
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 13dp;
+			line-height: 22dp;
+			letter-spacing: 2dp;
+		}
+		#status.rage { color: #f24073; }
+		#status.surge { color: #ff5a4f; }
+		#status.prep { color: #6fdc8c; }
+	</style>
+</head>
+<body>
+	<div id="survival" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="head" class="title">Survival Threat</div>
+		<div id="countdown">
+			<div class="label">Next wave</div>
+			<div class="grow"/>
+			<div id="count" class="none">--:--</div>
+		</div>
+		<div class="line"><div class="label">Wave</div><div id="wave-number" class="fig">0</div><div class="grow"/><div id="wave-kind" class="kind"/></div>
+		<div class="line"><div class="label">Next</div><div class="grow"/><div id="next-kind" class="kind"/></div>
+		<div class="line"><div class="label">Beacons</div><div class="grow"/><div id="beacons" class="fig">0</div></div>
+		<div class="line"><div class="label">Regrowth</div><div class="grow"/><div id="regrow" class="fig off">--</div></div>
+		<div id="teams"/>
+		<div class="line"><div class="label">Pressure</div><div id="pressure-track"><div id="pressure-fill"/></div></div>
+		<div id="status"/>
+	</div>
+</body>
+</rml>

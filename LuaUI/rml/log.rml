@@ -1,0 +1,71 @@
+<rml>
+<head>
+	<title>SplinterFaction log</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The scrollback window for chat and console output. Its position is
+		   set from Lua (hud.PlacePanel); its size here must match PANEL_WIDTH
+		   and PANEL_HEIGHT in gui_rml_log.lua. */
+		#log {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 1100dp;
+			height: 660dp;
+			box-sizing: border-box;
+			padding: 12dp 14dp 12dp 16dp;
+			pointer-events: auto;
+		}
+		.grow {
+			flex: 1;
+		}
+		#tabs {
+			display: flex;
+			flex-direction: row;
+			margin-right: 14dp;
+		}
+		/* 660 less the padding, borders and the head */
+		#lines {
+			height: 587dp;
+			margin-top: 8dp;
+			overflow-y: auto;
+			overflow-x: hidden;
+			font-size: 14dp;
+			line-height: 19dp;
+		}
+		.line {
+			display: flex;
+			flex-direction: row;
+		}
+		.time {
+			width: 58dp;
+			color: #5c6875;
+		}
+		/* long lines wrap under their own text, not under the time */
+		.said {
+			flex: 1;
+			color: #c2ccd6;
+		}
+		.none {
+			color: #5c6875;
+		}
+	</style>
+</head>
+<body>
+	<div id="log" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div class="window-head">
+			<div class="title">Log</div>
+			<div class="grow"/>
+			<div id="tabs">
+				<div id="tab-1" class="tab" data-tab="1">Chat</div>
+				<div id="tab-2" class="tab" data-tab="2">Console</div>
+				<div id="tab-3" class="tab" data-tab="3">All</div>
+			</div>
+			<div id="close" class="close">X</div>
+		</div>
+		<div id="lines"/>
+	</div>
+</body>
+</rml>

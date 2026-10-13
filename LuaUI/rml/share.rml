@@ -1,0 +1,213 @@
+<rml>
+<head>
+	<title>SplinterFaction share window</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The share window: who to give to on the left, what to give on the
+		   right. Its position is set from Lua (hud.PlacePanel); its size here
+		   must match PANEL_WIDTH and PANEL_HEIGHT in gui_rml_share.lua. */
+		#share {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 640dp;
+			height: 424dp;
+			box-sizing: border-box;
+			padding: 12dp 16dp 14dp 16dp;
+			pointer-events: auto;
+		}
+		.grow {
+			flex: 1;
+		}
+		#columns {
+			display: flex;
+			flex-direction: row;
+			height: 296dp;
+			margin-top: 10dp;
+		}
+		.column {
+			flex: 1;
+		}
+		.column.second {
+			margin-left: 16dp;
+		}
+		.sec {
+			height: 18dp;
+		}
+		.sec.next {
+			margin-top: 12dp;
+		}
+		.note {
+			margin-left: 8dp;
+			font-size: 11dp;
+			color: #5c6875;
+		}
+		.list {
+			overflow-y: auto;
+			overflow-x: hidden;
+			background-color: #131920;
+			border: 1dp #232d38;
+			box-sizing: border-box;
+		}
+		/* the allies get what the enemies leave: 296 = 18 + 164 + 12 + 18 + 84 */
+		#allies { height: 164dp; }
+		#enemies { height: 84dp; }
+		#units { height: 84dp; padding: 4dp 0dp; font-size: 12dp; }
+
+		/* ---- who ---------------------------------------------------------- */
+		.player {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 28dp;
+			box-sizing: border-box;
+			padding-left: 8dp;
+			border-left: 3dp rgba(0, 0, 0, 0);
+			font-size: 13dp;
+			color: #8593a1;
+		}
+		.player:hover {
+			background-color: #1a222b;
+		}
+		.player.selected {
+			color: #f0f4f8;
+			background-color: rgba(111, 220, 140, 40);
+			border-left: 3dp #6fdc8c;
+		}
+		.swatch {
+			width: 12dp;
+			height: 16dp;
+			margin-right: 9dp;
+		}
+		.empty {
+			padding: 6dp 10dp;
+			font-size: 12dp;
+			color: #5c6875;
+		}
+
+		/* ---- what --------------------------------------------------------- */
+		.urow {
+			display: flex;
+			flex-direction: row;
+			height: 15dp;
+			padding: 0dp 10dp;
+			color: #f0f4f8;
+		}
+		.ucount {
+			color: #6fdc8c;
+		}
+		#check-row {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 28dp;
+			font-size: 13dp;
+			color: #c2ccd6;
+		}
+		#check-row:hover {
+			color: #f0f4f8;
+		}
+		#check {
+			width: 13dp;
+			height: 13dp;
+			margin-right: 9dp;
+			box-sizing: border-box;
+			border: 1dp #8593a1;
+		}
+		#check.on {
+			background-color: #ff9b21;
+			border-color: #ff9b21;
+		}
+		/* A slider: the tall box is what the mouse grabs, the track inside it
+		   is what is drawn. */
+		.slider {
+			height: 22dp;
+			padding-top: 8dp;
+			box-sizing: border-box;
+			cursor: ew-resize;
+		}
+		.track {
+			position: relative;
+			height: 6dp;
+			background-color: #1a222b;
+		}
+		.fill {
+			height: 6dp;
+			width: 0%;
+		}
+		.handle {
+			position: absolute;
+			top: -4dp;
+			width: 4dp;
+			height: 14dp;
+			margin-left: -2dp;
+			background-color: #f0f4f8;
+		}
+		.handle.dragging {
+			background-color: #ff9b21;
+		}
+		#metal-fill { background-color: #a9c9ea; }
+		#energy-fill { background-color: #f2d64b; }
+		.amount {
+			display: flex;
+			flex-direction: row;
+			height: 16dp;
+			font-size: 12dp;
+			color: #8593a1;
+		}
+		#metal-amount { color: #a9c9ea; margin-right: 4dp; }
+		#energy-amount { color: #f2d64b; margin-right: 4dp; }
+
+		#footer {
+			display: flex;
+			flex-direction: row;
+			margin-top: 14dp;
+		}
+		#footer .button {
+			width: 150dp;
+			margin-left: 8dp;
+		}
+		#result {
+			font-size: 12dp;
+			line-height: 32dp;
+			color: #ff9b21;
+		}
+	</style>
+</head>
+<body>
+	<div id="share" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div class="window-head">
+			<div class="title">Share</div>
+			<div class="grow"/>
+			<div id="close" class="close">X</div>
+		</div>
+		<div id="columns">
+			<div class="column">
+				<div class="line sec"><span class="label">Allies</span><span class="note">click one to give to</span></div>
+				<div id="allies" class="list"/>
+				<div class="line sec next"><span class="label">Enemies</span><span class="note">giving to an enemy is unusual</span></div>
+				<div id="enemies" class="list"/>
+			</div>
+			<div class="column second">
+				<div class="sec"><span class="label">Selected units</span></div>
+				<div id="units" class="list"/>
+				<div id="check-row"><div id="check"/><div>Share selected units</div></div>
+				<div class="sec"><span class="label">Metal to send</span></div>
+				<div id="metal-slider" class="slider"><div class="track"><div id="metal-fill" class="fill"/><div id="metal-handle" class="handle"/></div></div>
+				<div class="amount"><div id="metal-amount">0</div><div id="metal-max">/ 0</div></div>
+				<div class="sec"><span class="label">Energy to send</span></div>
+				<div id="energy-slider" class="slider"><div class="track"><div id="energy-fill" class="fill"/><div id="energy-handle" class="handle"/></div></div>
+				<div class="amount"><div id="energy-amount">0</div><div id="energy-max">/ 0</div></div>
+			</div>
+		</div>
+		<div id="footer">
+			<div id="result"/>
+			<div class="grow"/>
+			<div id="cancel" class="button quiet">Cancel</div>
+			<div id="apply" class="button">Apply</div>
+		</div>
+	</div>
+</body>
+</rml>

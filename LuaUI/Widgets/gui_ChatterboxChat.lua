@@ -29,7 +29,7 @@ local MAX_BOX_WIDTH        = 650
 local DRAW_BACKGROUND      = false
 local HIDE_DEFAULT_CONSOLE = true -- set true if you want to hide engine console/chat
 
--- Persistent scrollback shared with the Static Log panel (gui_static_chatlog.lua).
+-- Persistent scrollback shared with the Log window (gui_rml_log.lua).
 -- Every parsed line is appended here regardless of channel; the floating overlay
 -- still only shows actual chat. MAX_LOG caps retained history.
 local MAX_LOG  = 1000
@@ -551,7 +551,7 @@ function widget:Initialize()
 		spSendCommands("console 0")
 	end
 
-	-- Shared interface for the Static Log panel (gui_static_chatlog.lua).
+	-- Shared interface for the Log window (gui_rml_log.lua).
 	WG.Chatterbox = {
 		GetLog = function() return fullLog end,
 		IsChat = IsChat,

@@ -150,6 +150,57 @@ div {
 	color: #5fd0e8;
 }
 
+/* ---- windows: a panel with a title, a close button and tabs ----------------- */
+
+.window-head {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 30dp;
+	padding-bottom: 8dp;
+	border-bottom: 1dp #232d38;
+}
+
+.close {
+	width: 26dp;
+	height: 22dp;
+	text-align: center;
+	font-size: 13dp;
+	line-height: 21dp;
+	color: #8593a1;
+	border: 1dp #35434f;
+	pointer-events: auto;
+}
+
+.close:hover {
+	color: #ffffff;
+	background-color: #a8332b;
+	border-color: #ff5a4f;
+}
+
+.tab {
+	margin-right: 6dp;
+	padding: 3dp 14dp 4dp 14dp;
+	font-size: 12dp;
+	letter-spacing: 1.5dp;
+	text-transform: uppercase;
+	color: #8593a1;
+	border: 1dp #232d38;
+	border-bottom: 2dp #232d38;
+	pointer-events: auto;
+}
+
+.tab:hover {
+	color: #f0f4f8;
+	background-color: #1a222b;
+}
+
+.tab.active {
+	color: #f0f4f8;
+	background-color: #1a222b;
+	border-bottom: 2dp #ff9b21;
+}
+
 /* ---- progress bars -------------------------------------------------------- */
 
 .bar {

@@ -140,11 +140,13 @@ function hud.PlacePanel(element, name, widthDp, heightDp, defaultOrigin)
 end
 
 -- Registers a panel with tweak mode. onMove is called after the player drops
--- the panel somewhere new; it should call hud.PlacePanel again.
-function hud.RegisterPanel(name, label, onMove)
+-- the panel somewhere new; it should call hud.PlacePanel again. isVisible
+-- (optional) says whether the panel is on screen at the moment: a window that
+-- is closed should not be offered for dragging.
+function hud.RegisterPanel(name, label, onMove, isVisible)
 	local layout = WG.StaticLayout
 	if layout and layout.Register then
-		layout.Register(name, {label = label, onMove = onMove})
+		layout.Register(name, {label = label, onMove = onMove, isVisible = isVisible})
 		return true
 	end
 	return false
