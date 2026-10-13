@@ -150,7 +150,7 @@ return {
 			{ id = "allyselselect", name = "Select tracked player's units", type = "bool", api = {"allyselectedunits", "getSelectPlayerUnits", "setSelectPlayerUnits"}, configVar = {"Ally Selected Units", "selectPlayerUnits"},
 			  desc = "When following a player's camera, mirror their selection." },
 		  } },
-		{ id = "lockhideenemies", name = "Tracked player viewpoint only", type = "bool", requires = "Static Players List",
+		{ id = "lockhideenemies", name = "Tracked player viewpoint only", type = "bool", requires = "Players List",
 		  api = {"advplayerlist_api", "GetLockHideEnemies", "SetLockHideEnemies"}, default = false,
 		  desc = "When following a player's camera, only show what they can see.",
 		  children = {

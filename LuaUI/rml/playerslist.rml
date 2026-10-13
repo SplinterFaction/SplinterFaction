@@ -1,0 +1,208 @@
+<rml>
+<head>
+	<title>SplinterFaction players list</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The players list, at the bottom right. Its position and its height
+		   are set from Lua: the height is worked out from the rows, so the
+		   heights here must match the ones in gui_rml_playerslist.lua
+		   (CHROME, TOPBAR, ROW, GROUP_GAP, SPEC_HEADER, SPEC_ROW). */
+		#players {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 336dp;
+			box-sizing: border-box;
+			padding: 9dp;
+			pointer-events: auto;
+		}
+		#topbar {
+			display: flex;
+			flex-direction: row;
+			height: 24dp;
+			font-size: 12dp;
+			line-height: 18dp;
+			box-sizing: border-box;
+			padding-bottom: 6dp;
+		}
+		#topbar .label {
+			margin-right: 5dp;
+			line-height: 18dp;
+		}
+		#topbar .fig {
+			margin-right: 16dp;
+			color: #f0f4f8;
+		}
+
+		/* ---- one alliance ----------------------------------------------- */
+		.group {
+			margin-bottom: 7dp;
+			background-color: #131920;
+			border-left: 2dp #35434f;
+		}
+		.group.enemy {
+			background-color: rgba(255, 90, 79, 26);
+			border-left: 2dp #a8332b;
+		}
+		.prow {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 19dp;
+			box-sizing: border-box;
+			padding: 0dp 4dp 0dp 6dp;
+			font-size: 12dp;
+		}
+		/* a spectator clicks a player to watch through their camera */
+		.prow.watchable:hover {
+			background-color: #212b36;
+		}
+		.prow.locked {
+			background-color: rgba(95, 208, 232, 50);
+		}
+		.pname {
+			white-space: nowrap;
+		}
+		.prow.dim .pname {
+			color: #5c6875;
+		}
+		.ptag {
+			margin-left: 6dp;
+			font-size: 10dp;
+			color: #ff9b21;
+		}
+		.ptag.dc {
+			color: #ff5a4f;
+		}
+		.grow {
+			flex: 1;
+		}
+
+		/* alliance toward this team: a square you click to offer or withdraw */
+		.ally {
+			width: 9dp;
+			height: 9dp;
+			margin-right: 7dp;
+			box-sizing: border-box;
+			border: 2dp #ff5a4f;
+		}
+		.ally:hover { background-color: rgba(240, 244, 248, 90); }
+		.ally.offered { border-color: #ff9b21; }
+		.ally.asked { border-color: #5fd0e8; }
+		.ally.mutual { border-color: #6fdc8c; background-color: #6fdc8c; }
+
+		/* metal over energy */
+		.res {
+			width: 58dp;
+			margin-right: 6dp;
+		}
+		.track {
+			height: 5dp;
+			margin: 1dp 0dp;
+			background-color: #0b0e12;
+		}
+		.fill {
+			height: 5dp;
+			width: 0%;
+		}
+		.fill.metal { background-color: #a9c9ea; }
+		.fill.energy { background-color: #f2d64b; }
+
+		/* team upgrade levels: weapons over armor */
+		.upg {
+			width: 32dp;
+			margin-right: 6dp;
+			text-align: center;
+			font-size: 9dp;
+			line-height: 9dp;
+			color: #5c6875;
+		}
+		.upg .on.w { color: #ff965a; }
+		.upg .on.a { color: #78beff; }
+
+		/* cpu and ping, each a cell colored from good to bad */
+		.net {
+			display: flex;
+			flex-direction: row;
+			width: 26dp;
+			margin-right: 6dp;
+		}
+		.cell {
+			flex: 1;
+			height: 14dp;
+			margin-right: 2dp;
+			text-align: center;
+			font-size: 10dp;
+			line-height: 14dp;
+			color: #0b0e12;
+			background-color: #35434f;
+		}
+		.cell.l1 { background-color: #1cd11c; }
+		.cell.l2 { background-color: #66bf33; }
+		.cell.l3 { background-color: #b8b833; }
+		.cell.l4 { background-color: #d1452e; color: #f0f4f8; }
+		.cell.l5 { background-color: #ff264d; color: #f0f4f8; }
+		/* as wide as the cpu/ping cells and the fps together */
+		.nonet {
+			width: 54dp;
+		}
+		.fps {
+			width: 22dp;
+			text-align: right;
+			font-size: 11dp;
+			color: #8593a1;
+		}
+
+		/* ---- spectators --------------------------------------------------- */
+		#spechdr {
+			height: 20dp;
+			box-sizing: border-box;
+			padding: 0dp 6dp;
+			font-size: 11dp;
+			line-height: 20dp;
+			color: #8593a1;
+			background-color: #1a222b;
+		}
+		#spechdr:hover {
+			color: #f0f4f8;
+			background-color: #212b36;
+		}
+		.srow {
+			height: 16dp;
+			padding-left: 14dp;
+			font-size: 11dp;
+			line-height: 16dp;
+			color: #8593a1;
+		}
+
+		/* what is under the mouse: a player's system, or what the alliance
+		   square will do. Beside the list, its bottom level with the row. */
+		#popup {
+			position: absolute;
+			padding: 6dp 10dp 7dp 10dp;
+			font-size: 12dp;
+			line-height: 15dp;
+			white-space: nowrap;
+			color: #8593a1;
+			border-color: #35434f;
+		}
+		#popup .first { color: #f0f4f8; }
+		#popup .second { color: #c2ccd6; }
+	</style>
+</head>
+<body>
+	<div id="players" class="panel">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="topbar">
+			<div class="label">Time</div><div id="tb-time" class="fig">0:00</div>
+			<div class="label">Speed</div><div id="tb-speed" class="fig">1.00</div>
+			<div class="label">FPS</div><div id="tb-fps" class="fig">0</div>
+		</div>
+		<div id="list"/>
+		<div id="spechdr"/>
+		<div id="speclist"/>
+	</div>
+	<div id="popup" class="panel hidden"/>
+</body>
+</rml>

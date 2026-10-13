@@ -158,6 +158,44 @@ function hud.UnregisterPanel(name)
 end
 
 --------------------------------------------------------------------------------
+--  Team colors
+--------------------------------------------------------------------------------
+
+-- A team color as text on the dark panels. A color too dark to read is made
+-- brighter: first by scaling it up (which keeps its hue and saturation), then
+-- by mixing in white. Takes r, g, b in 0..1 and returns an RCSS color.
+local MIN_LUMINANCE = 0.45
+
+local function Luminance(r, g, b)
+	return 0.2126 * r + 0.7152 * g + 0.0722 * b
+end
+
+function hud.ReadableColor(r, g, b)
+	r, g, b = r or 1, g or 1, b or 1
+	if Luminance(r, g, b) < MIN_LUMINANCE then
+		local peak = math.max(r, g, b)
+		if peak > 0.001 then
+			r, g, b = r / peak, g / peak, b / peak
+		else
+			r, g, b = 0.5, 0.5, 0.5 -- a black team color: fall back to grey
+		end
+		local luminance = Luminance(r, g, b)
+		if luminance < MIN_LUMINANCE then
+			local t = (MIN_LUMINANCE - luminance) / (1 - luminance)
+			r = r + (1 - r) * t
+			g = g + (1 - g) * t
+			b = b + (1 - b) * t
+		end
+	end
+	return string.format("rgb(%d,%d,%d)", math.floor(r * 255 + 0.5), math.floor(g * 255 + 0.5), math.floor(b * 255 + 0.5))
+end
+
+-- a color exactly as given, for swatches and bars
+function hud.Rgb(r, g, b)
+	return string.format("rgb(%d,%d,%d)", math.floor((r or 1) * 255 + 0.5), math.floor((g or 1) * 255 + 0.5), math.floor((b or 1) * 255 + 0.5))
+end
+
+--------------------------------------------------------------------------------
 --  Unit pictures
 --------------------------------------------------------------------------------
 
