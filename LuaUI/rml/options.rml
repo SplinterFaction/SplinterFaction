@@ -1,0 +1,275 @@
+<rml>
+<head>
+	<title>SplinterFaction options</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The options window. Its position is set from Lua (hud.PlacePanel);
+		   its size here must match PANEL_WIDTH and PANEL_HEIGHT in
+		   gui_rml_options.lua. */
+		#options {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 780dp;
+			height: 660dp;
+			box-sizing: border-box;
+			padding: 12dp 14dp 10dp 16dp;
+			pointer-events: auto;
+		}
+		.grow {
+			flex: 1;
+		}
+		#tabs {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			margin-top: 10dp;
+		}
+		#tabs .tab {
+			margin-bottom: 6dp;
+		}
+		/* The window's inside: 660 less the borders and padding. The list
+		   takes what the head, the tabs and the footer leave. */
+		#body {
+			display: flex;
+			flex-direction: column;
+			height: 636dp;
+		}
+		#list {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: hidden;
+			margin-top: 4dp;
+		}
+		#footer {
+			height: 34dp;
+			padding-top: 6dp;
+			box-sizing: border-box;
+			border-top: 1dp #232d38;
+			font-size: 12dp;
+			line-height: 14dp;
+			color: #8593a1;
+			overflow: hidden;
+		}
+		#footer.warn {
+			color: #ff9b21;
+		}
+
+		/* ---- rows --------------------------------------------------------- */
+		.sep {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 32dp;
+			padding: 6dp 10dp 0dp 10dp;
+			box-sizing: border-box;
+		}
+		.sep .label {
+			color: #ff9b21;
+		}
+		.rule {
+			flex: 1;
+			height: 1dp;
+			margin-left: 10dp;
+			background-color: #232d38;
+		}
+		.orow {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 26dp;
+			padding: 0dp 10dp;
+			font-size: 13dp;
+			color: #c2ccd6;
+		}
+		.orow:hover {
+			background-color: #1a222b;
+			color: #f0f4f8;
+		}
+		/* the name takes the left of the row, the control the right */
+		.oname {
+			width: 46%;
+			box-sizing: border-box;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.orow.action .oname {
+			color: #8593a1;
+		}
+		/* an option under another one is set in, with a line down its side */
+		.orow.child .oname {
+			border-left: 1dp #35434f;
+		}
+		.star {
+			color: #ff9b21;
+		}
+		.control {
+			flex: 1;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		/* on / off */
+		.toggle {
+			position: relative;
+			width: 36dp;
+			height: 16dp;
+			box-sizing: border-box;
+			background-color: #1a222b;
+			border: 1dp #35434f;
+		}
+		.knob {
+			position: absolute;
+			left: 1dp;
+			top: 1dp;
+			width: 14dp;
+			height: 12dp;
+			background-color: #8593a1;
+		}
+		.toggle.on {
+			background-color: rgba(255, 155, 33, 60);
+			border-color: #ff9b21;
+		}
+		.toggle.on .knob {
+			left: 19dp;
+			background-color: #ff9b21;
+		}
+		/* switched on, but its widget is not running */
+		.toggle.half {
+			border-color: #ff5a4f;
+		}
+		.toggle.half .knob {
+			left: 10dp;
+			background-color: #ff5a4f;
+		}
+
+		/* a number: the tall box is what the mouse grabs */
+		.slider {
+			flex: 1;
+			height: 22dp;
+			padding-top: 9dp;
+			box-sizing: border-box;
+			cursor: ew-resize;
+		}
+		.track {
+			position: relative;
+			height: 4dp;
+			background-color: #232d38;
+		}
+		.fill {
+			height: 4dp;
+			width: 0%;
+			background-color: #ff9b21;
+		}
+		.handle {
+			position: absolute;
+			top: -5dp;
+			width: 4dp;
+			height: 14dp;
+			margin-left: -2dp;
+			background-color: #f0f4f8;
+		}
+		.val {
+			width: 58dp;
+			text-align: right;
+			font-size: 12dp;
+			color: #8593a1;
+		}
+
+		/* one of several */
+		.select {
+			flex: 1;
+			display: flex;
+			flex-direction: row;
+			height: 20dp;
+			box-sizing: border-box;
+			padding: 0dp 7dp;
+			font-size: 12dp;
+			line-height: 18dp;
+			color: #f0f4f8;
+			background-color: #1a222b;
+			border: 1dp #35434f;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.select:hover, .select.open {
+			border-color: #ff9b21;
+		}
+		.select.none {
+			color: #8593a1;
+		}
+		.arrow {
+			color: #8593a1;
+		}
+		.act {
+			flex: 1;
+			height: 20dp;
+			box-sizing: border-box;
+			text-align: center;
+			font-size: 12dp;
+			line-height: 18dp;
+			color: #f0f4f8;
+			border: 1dp #35434f;
+		}
+		.act:hover {
+			background-color: #212b36;
+			border-color: #ff9b21;
+		}
+
+		/* ---- the open list of a "one of several" option -------------------
+		   It is drawn over everything; a click anywhere else closes it. */
+		#drop-catch {
+			position: absolute;
+			left: 0dp;
+			top: 0dp;
+			width: 100%;
+			height: 100%;
+			pointer-events: auto;
+		}
+		#drop {
+			position: absolute;
+			max-height: 264dp;
+			overflow-y: auto;
+			overflow-x: hidden;
+			box-sizing: border-box;
+			background-color: #131920;
+			border: 1dp #ff9b21;
+			pointer-events: auto;
+		}
+		.choice {
+			height: 22dp;
+			padding: 0dp 7dp;
+			font-size: 12dp;
+			line-height: 21dp;
+			color: #c2ccd6;
+			white-space: nowrap;
+		}
+		.choice:hover {
+			color: #f0f4f8;
+			background-color: #212b36;
+		}
+		.choice.current {
+			color: #ff9b21;
+		}
+	</style>
+</head>
+<body>
+	<div id="options" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="body">
+			<div class="window-head">
+				<div class="title">Options</div>
+				<div class="grow"/>
+				<div id="close" class="close">X</div>
+			</div>
+			<div id="tabs"/>
+			<div id="list"/>
+			<div id="footer"/>
+		</div>
+	</div>
+	<div id="drop-catch" class="hidden"/>
+	<div id="drop" class="hidden"/>
+</body>
+</rml>
