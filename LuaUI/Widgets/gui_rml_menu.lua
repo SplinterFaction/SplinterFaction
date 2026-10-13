@@ -5,7 +5,7 @@
 --
 --  A small MENU handle sits in the top right corner. Clicking it, or pressing
 --  Esc, opens the menu: resume, the windows that used to have a button each
---  (settings, keybinds, sharing, economy, graph, log), and resign and quit,
+--  (settings, keybinds, widgets, sharing, economy, graph, log), and resign and quit,
 --  which both ask first. Esc or a click outside the menu closes it. The menu
 --  does not pause the game.
 --
@@ -22,7 +22,7 @@
 function widget:GetInfo()
 	return {
 		name    = "Game Menu",
-		desc    = "Esc menu: settings, keybinds, sharing, graphs, log, resign, quit (RmlUi)",
+		desc    = "Esc menu: settings, keybinds, widgets, sharing, graphs, log, resign, quit (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",
 		license = "GNU GPL, v2 or later",
@@ -65,6 +65,8 @@ local WINDOWS = {
 	{id = "m-settings", available = function() return WG.options and WG.options.toggle end, action = OpenSettings},
 	{id = "m-keybinds", available = function() return WG.StaticKeybinds and WG.StaticKeybinds.Toggle end,
 		action = function() WG.StaticKeybinds.Toggle() end},
+	{id = "m-widgets", available = function() return WG.StaticWidgetSelector and WG.StaticWidgetSelector.Toggle end,
+		action = function() WG.StaticWidgetSelector.Toggle() end},
 	{id = "m-sharing", available = function() return WG.StaticShareMenu and WG.StaticShareMenu.Toggle end,
 		action = function() WG.StaticShareMenu.Toggle() end},
 	{id = "m-economy", available = function() return WG.StaticEconGraph and WG.StaticEconGraph.Toggle end,

@@ -600,6 +600,13 @@ local function Listen(containerId, attribute, cards)
 		if not cmd or cmd.disabled or not button then
 			return
 		end
+		-- a click while the hotbind prompt is up cancels the prompt and does
+		-- nothing else, so a mis-triggered capture never eats a build order
+		local hotbind = WG.StaticHotbind
+		if hotbind and hotbind.IsCapturing and hotbind.IsCapturing() then
+			hotbind.Cancel()
+			return
+		end
 		if button == 1 then
 			spPlaySoundFile("leftclick", 1.0, "ui")
 		elseif button == 3 then

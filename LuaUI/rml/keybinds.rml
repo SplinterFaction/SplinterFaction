@@ -1,0 +1,196 @@
+<rml>
+<head>
+	<title>SplinterFaction keybinds</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The keybinds window. Its position is set from Lua (hud.PlacePanel);
+		   its size here must match PANEL_WIDTH and PANEL_HEIGHT in
+		   gui_rml_keybinds.lua. */
+		#keybinds {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 580dp;
+			height: 640dp;
+			box-sizing: border-box;
+			padding: 12dp 14dp 12dp 16dp;
+			pointer-events: auto;
+		}
+		.grow {
+			flex: 1;
+		}
+		/* the window's inside: 640 less the borders and padding */
+		#body {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			height: 614dp;
+		}
+		#tabs {
+			display: flex;
+			flex-direction: row;
+			margin-top: 10dp;
+		}
+		#list {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: hidden;
+			margin-top: 8dp;
+			background-color: #0f1319;
+			border: 1dp #232d38;
+		}
+		.khead {
+			height: 24dp;
+			padding: 8dp 10dp 0dp 10dp;
+			box-sizing: border-box;
+			color: #ff9b21;
+		}
+		.krow {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 24dp;
+			padding: 0dp 8dp 0dp 10dp;
+			font-size: 13dp;
+			color: #c2ccd6;
+		}
+		.krow:hover {
+			background-color: #1a222b;
+		}
+		.kname {
+			flex: 1;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		/* a binding changed here, and so written to the user's file */
+		.krow.edited .kname {
+			color: #5fd0e8;
+		}
+		.badge {
+			width: 132dp;
+			height: 17dp;
+			box-sizing: border-box;
+			text-align: center;
+			font-size: 12dp;
+			line-height: 15dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #f0f4f8;
+			background-color: #1a222b;
+			border: 1dp #35434f;
+		}
+		.badge.unbound {
+			color: #5c6875;
+		}
+		.krow.capturing .badge {
+			color: #ff9b21;
+			border-color: #ff9b21;
+			background-color: rgba(255, 155, 33, 50);
+		}
+
+		#status {
+			height: 22dp;
+			padding-top: 5dp;
+			box-sizing: border-box;
+			font-size: 12dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #8593a1;
+		}
+		#status.text { color: #f0f4f8; }
+		#status.ok { color: #6fdc8c; }
+		#status.warn { color: #ff9b21; }
+		#status.err { color: #ff5a4f; }
+		#footer {
+			display: flex;
+			flex-direction: row;
+			margin-top: 6dp;
+		}
+		#footer .button {
+			flex: 1;
+		}
+		#reset {
+			margin-left: 8dp;
+		}
+
+		/* ---- "are you sure": over the window, which it dims ---------------- */
+		#confirm-dim {
+			position: absolute;
+			left: 0dp;
+			top: 0dp;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(4, 6, 9, 190);
+		}
+		#confirm {
+			position: absolute;
+			left: 60dp;
+			top: 190dp;
+			width: 426dp;
+			padding: 14dp 16dp;
+			box-sizing: border-box;
+			background-color: #131920;
+			border: 1dp #ff9b21;
+		}
+		#confirm-title {
+			font-size: 14dp;
+			color: #f0f4f8;
+		}
+		#confirm-lines {
+			margin: 6dp 0dp 8dp 8dp;
+			font-size: 13dp;
+			line-height: 17dp;
+			color: #ff9b21;
+		}
+		#confirm-note {
+			font-size: 12dp;
+			color: #8593a1;
+		}
+		#confirm-buttons {
+			display: flex;
+			flex-direction: row;
+			margin-top: 14dp;
+		}
+		#confirm-buttons .button {
+			flex: 1;
+		}
+		#confirm-no {
+			margin-left: 8dp;
+		}
+	</style>
+</head>
+<body>
+	<div id="keybinds" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="body">
+			<div class="window-head">
+				<div class="title">Keybinds</div>
+				<div class="grow"/>
+				<div id="close" class="close">X</div>
+			</div>
+			<div id="tabs">
+				<div id="tab-sf" class="tab" data-tab="1">SF Keys</div>
+				<div id="tab-all" class="tab" data-tab="2">All Bindings</div>
+			</div>
+			<div id="list"/>
+			<div id="status"/>
+			<div id="footer">
+				<div id="reapply" class="button quiet">Reapply key files</div>
+				<div id="reset" class="button quiet">Reset all rebinds</div>
+			</div>
+
+			<div id="confirm-dim" class="hidden"/>
+			<div id="confirm" class="hidden">
+				<div id="confirm-title"/>
+				<div id="confirm-lines"/>
+				<div id="confirm-note"/>
+				<div id="confirm-buttons">
+					<div id="confirm-yes" class="button danger">Confirm</div>
+					<div id="confirm-no" class="button quiet">Cancel</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</rml>

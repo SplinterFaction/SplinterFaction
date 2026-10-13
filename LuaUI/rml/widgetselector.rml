@@ -1,0 +1,154 @@
+<rml>
+<head>
+	<title>SplinterFaction widget selector</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The widget list. Its position is set from Lua (hud.PlacePanel); its
+		   size here must match PANEL_WIDTH and PANEL_HEIGHT in
+		   gui_rml_widgetselector.lua. */
+		#widgetselector {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 460dp;
+			height: 660dp;
+			box-sizing: border-box;
+			padding: 12dp 14dp 12dp 16dp;
+			pointer-events: auto;
+		}
+		.grow {
+			flex: 1;
+		}
+		/* the window's inside: 660 less the borders and padding */
+		#body {
+			display: flex;
+			flex-direction: column;
+			height: 634dp;
+		}
+		#count {
+			margin-right: 12dp;
+			font-size: 12dp;
+			color: #8593a1;
+		}
+		#list {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: hidden;
+			margin-top: 10dp;
+			background-color: #0f1319;
+			border: 1dp #232d38;
+		}
+		#none {
+			padding: 14dp;
+			text-align: center;
+			font-size: 13dp;
+			color: #8593a1;
+		}
+		/* A row is muted while its widget is off, green while it runs, and
+		   amber when it is switched on but not running (it removed itself, or
+		   failed to load). */
+		.wrow {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 22dp;
+			padding: 0dp 8dp 0dp 10dp;
+			font-size: 13dp;
+			color: #8593a1;
+		}
+		.wrow:hover {
+			background-color: #1a222b;
+		}
+		.dot {
+			width: 6dp;
+			height: 6dp;
+			margin-right: 9dp;
+			background-color: #35434f;
+		}
+		.wname {
+			flex: 1;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.wrow.on { color: #f0f4f8; }
+		.wrow.on .dot { background-color: #6fdc8c; }
+		.wrow.idle { color: #ff9b21; }
+		.wrow.idle .dot { background-color: #ff9b21; }
+		/* a widget from the user's own Widgets folder, not from the game */
+		.user {
+			padding: 0dp 6dp;
+			font-size: 10dp;
+			line-height: 13dp;
+			letter-spacing: 1dp;
+			color: #5fd0e8;
+			border: 1dp #35434f;
+		}
+
+		/* what the mouse is on */
+		#info {
+			height: 70dp;
+			margin-top: 8dp;
+			padding: 6dp 10dp;
+			box-sizing: border-box;
+			overflow: hidden;
+		}
+		#info-name {
+			font-size: 13dp;
+			line-height: 17dp;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		#info-name.on { color: #6fdc8c; }
+		#info-name.idle { color: #ff9b21; }
+		#info-desc {
+			font-size: 12dp;
+			line-height: 15dp;
+			height: 30dp;
+			overflow: hidden;
+			color: #c2ccd6;
+		}
+		#info-from {
+			font-size: 11dp;
+			line-height: 14dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #8593a1;
+		}
+		#footer {
+			display: flex;
+			flex-direction: row;
+			margin-top: 8dp;
+		}
+		#footer .button {
+			flex: 1;
+		}
+		#allow {
+			margin-left: 8dp;
+		}
+	</style>
+</head>
+<body>
+	<div id="widgetselector" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="body">
+			<div class="window-head">
+				<div class="title">Widgets</div>
+				<div class="grow"/>
+				<div id="count"/>
+				<div id="close" class="close">X</div>
+			</div>
+			<div id="list"/>
+			<div id="info" class="raised">
+				<div id="info-name" class="strong"/>
+				<div id="info-desc"/>
+				<div id="info-from"/>
+			</div>
+			<div id="footer">
+				<div id="reload" class="button quiet">Reload LuaUI</div>
+				<div id="allow" class="button quiet">Allow user widgets</div>
+			</div>
+		</div>
+	</div>
+</body>
+</rml>

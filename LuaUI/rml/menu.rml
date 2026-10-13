@@ -83,6 +83,7 @@
 
 				<div id="m-settings" class="button quiet group">Settings</div>
 				<div id="m-keybinds" class="button quiet">Keybinds</div>
+				<div id="m-widgets" class="button quiet">Widgets</div>
 
 				<div id="m-sharing" class="button quiet group">Sharing</div>
 				<div id="m-economy" class="button quiet">Economy</div>

@@ -1,0 +1,58 @@
+<rml>
+<head>
+	<title>SplinterFaction hotbind prompt</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The prompt that asks for a key, and then says what happened. Its
+		   position is set from Lua (hud.PlacePanel); its size here must match
+		   PANEL_WIDTH and PANEL_HEIGHT in gui_rml_hotbind.lua. It never takes
+		   the mouse. */
+		#hotbind {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 320dp;
+			height: 78dp;
+			box-sizing: border-box;
+			padding: 9dp 12dp;
+			text-align: center;
+			border-color: #5fd0e8;
+		}
+		#hotbind.ok { border-color: #6fdc8c; }
+		#hotbind.warn { border-color: #ff9b21; }
+		#hotbind.err { border-color: #ff5a4f; }
+		#first {
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 17dp;
+			line-height: 21dp;
+			color: #f2d64b;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		#hotbind.ok #first { color: #6fdc8c; }
+		#hotbind.warn #first { color: #ff9b21; }
+		#hotbind.err #first { color: #ff5a4f; }
+		#hotbind.dim #first { color: #8593a1; }
+		#second {
+			font-size: 13dp;
+			line-height: 18dp;
+			color: #f0f4f8;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		#third {
+			font-size: 11dp;
+			line-height: 15dp;
+			color: #8593a1;
+		}
+	</style>
+</head>
+<body>
+	<div id="hotbind" class="panel hidden">
+		<div id="first"/>
+		<div id="second"/>
+		<div id="third"/>
+	</div>
+</body>
+</rml>
