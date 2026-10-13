@@ -1,0 +1,103 @@
+<rml>
+<head>
+	<title>SplinterFaction game menu</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* A small handle in the top right corner, and the menu it (or Esc)
+		   opens. The handle's position is set from Lua (hud.PlacePanel); its
+		   size here must match BUTTON_WIDTH and BUTTON_HEIGHT in
+		   gui_rml_menu.lua. */
+		#menu-button {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 84dp;
+			height: 30dp;
+			box-sizing: border-box;
+			pointer-events: auto;
+			text-align: center;
+			font-size: 12dp;
+			letter-spacing: 2dp;
+			line-height: 27dp;
+			color: #8593a1;
+		}
+		#menu-button:hover {
+			color: #f0f4f8;
+			border-color: #ff9b21;
+		}
+		#backdrop {
+			position: absolute;
+			left: 0dp;
+			top: 0dp;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(4, 6, 9, 150);
+			pointer-events: auto;
+		}
+		#menu {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 280dp;
+			margin-left: -140dp;
+			margin-top: -235dp;
+			pointer-events: auto;
+		}
+		#menu-head {
+			padding: 14dp 18dp 2dp 18dp;
+		}
+		#menu-rule {
+			width: 36dp;
+			margin: 6dp 0dp 0dp 18dp;
+		}
+		#menu-items {
+			padding: 8dp 18dp 18dp 18dp;
+		}
+		#menu-items .button {
+			margin-top: 6dp;
+		}
+		/* a wider gap opens a new group of buttons */
+		#menu-items .group {
+			margin-top: 16dp;
+		}
+		#confirm-text {
+			margin: 14dp 0dp 8dp 0dp;
+			font-size: 15dp;
+			color: #f0f4f8;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="menu-button" class="panel">MENU</div>
+
+	<div id="backdrop" class="hidden"/>
+	<div id="menu" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="menu-head" class="title">Game Menu</div>
+		<div id="menu-rule" class="accent-line"/>
+		<div id="menu-items">
+			<div id="main-items">
+				<div id="m-resume" class="button">Resume</div>
+
+				<div id="m-settings" class="button quiet group">Settings</div>
+				<div id="m-keybinds" class="button quiet">Keybinds</div>
+
+				<div id="m-sharing" class="button quiet group">Sharing</div>
+				<div id="m-economy" class="button quiet">Economy</div>
+				<div id="m-graph" class="button quiet">Graph</div>
+				<div id="m-log" class="button quiet">Log</div>
+
+				<div id="m-resign" class="button quiet group">Resign</div>
+				<div id="m-quit" class="button quiet">Quit</div>
+			</div>
+			<div id="confirm-items" class="hidden">
+				<div id="confirm-text"/>
+				<div id="m-confirm-yes" class="button danger">Yes</div>
+				<div id="m-confirm-no" class="button quiet">Cancel</div>
+			</div>
+		</div>
+	</div>
+</body>
+</rml>
