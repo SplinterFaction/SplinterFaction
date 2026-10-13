@@ -40,6 +40,12 @@ local MAX_TYPES    = 14 -- as many cards as the strip holds
 
 local LAYOUT_NAME = "selectedunits" -- same as the old widget, so a saved position carries over
 
+-- for keeping clear of the tooltip panel (see RowShift), in dp
+local CARD_PITCH    = 61  -- a card and the gap after it (.unit in selection.rml: 58 + 3)
+local ROW_EXTRA     = 5   -- the row's left padding and its borders
+local TOOLTIP_RIGHT = 648 -- right edge of the tooltip panel in its default place
+local CLEARANCE     = 16
+
 local REFRESH_DELAY = 0.1 -- a drag-select changes the selection many times a second
 
 local SOUND_LEFT   = "LuaUI/Sounds/buildbar_add.wav"
@@ -86,6 +92,8 @@ local function SelectedTypes()
 	return types
 end
 
+local RowShift -- defined with the placement, below
+
 local function Refresh()
 	dirty = false
 	local types = SelectedTypes()
@@ -113,6 +121,7 @@ local function Refresh()
 		view.SetClass("u" .. i .. "-n", "hidden", entry.count < 2 and #types == 1)
 	end
 	view.SetClass("row", "hidden", #types == 0)
+	view.SetStyle("row", "left", RowShift(#types) .. "px")
 end
 
 --------------------------------------------------------------------------------
@@ -194,8 +203,34 @@ local function DefaultOrigin(vsx, vsy, w, h, scale)
 	return (vsx - w) * 0.5, 0
 end
 
+local stripX, stripW = 0, 0 -- where the strip is, in pixels
+local stripMoved = false    -- the player has dragged it somewhere else in tweak mode
+
 local function Place()
-	hud.PlacePanel(view.Element("selection"), LAYOUT_NAME, STRIP_WIDTH, STRIP_HEIGHT, DefaultOrigin)
+	local vsx, vsy = Spring.GetViewGeometry()
+	local x, _, w = hud.PlacePanel(view.Element("selection"), LAYOUT_NAME, STRIP_WIDTH, STRIP_HEIGHT, DefaultOrigin)
+	stripX, stripW = x or 0, w or 0
+	stripMoved = (x ~= math.floor((vsx - stripW) * 0.5))
+	dirty = true
+end
+
+-- The row is centered in the strip and grows both ways, and with enough types
+-- selected its left end would run under the tooltip panel, which stands in
+-- the bottom left and reaches TOOLTIP_RIGHT dp into the screen. From there on
+-- the row is pushed right instead: its left end stops at the tooltip and it
+-- grows to the right only. (Not when the player has put the strip elsewhere.)
+RowShift = function(cardCount)
+	if stripMoved or cardCount == 0 then
+		return 0
+	end
+	local vsx = Spring.GetViewGeometry()
+	local scale = hud.GetScale()
+	local rowW = (cardCount * CARD_PITCH + ROW_EXTRA) * scale
+	local rowLeft = stripX + (stripW - rowW) * 0.5
+	local shift = (TOOLTIP_RIGHT + CLEARANCE) * scale - rowLeft
+	-- never off the right edge of the screen
+	shift = math.min(shift, vsx - CLEARANCE * scale - (rowLeft + rowW))
+	return math.max(0, math.floor(shift + 0.5))
 end
 
 --------------------------------------------------------------------------------

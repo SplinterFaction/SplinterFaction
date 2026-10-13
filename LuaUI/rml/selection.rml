@@ -20,6 +20,8 @@
 			justify-content: center;
 		}
 		#row {
+			position: relative; /* moved right from Lua when it would reach the tooltip panel */
+			left: 0px;
 			display: flex;
 			flex-direction: row;
 			box-sizing: border-box;
