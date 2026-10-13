@@ -50,6 +50,16 @@
 			width: 3dp;
 			height: 38dp;
 		}
+		/* the icons are light symbols on transparent */
+		.icon {
+			display: block;
+			width: 26dp;
+			height: 26dp;
+			margin-left: 8dp;
+		}
+		.ability.dim .icon {
+			opacity: 0.35;
+		}
 		.name {
 			margin-left: 9dp;
 			font-size: 14dp;

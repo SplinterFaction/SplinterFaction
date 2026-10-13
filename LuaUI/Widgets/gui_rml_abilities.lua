@@ -65,12 +65,15 @@ local KEY_ESCAPE    = 27
 --   radius  : targeting circle radius in elmos (kind == "target" only)
 --   accent  : the ability's own color: the stripe on its button and, for a
 --             targeted ability, the circle drawn on the ground
+--   icon    : file name (without .png) in LuaUI/Images/abilities/. The icons
+--             are drawn by Tools/abilityicons/draw_ability_icons.py.
 --------------------------------------------------------------------------------
 
 local ABILITIES = {
 	{
 		kind    = "target",
 		label   = "Scanner Sweep",
+		icon    = "scanner_sweep",
 		accent  = {1, 0.5, 0.0, 1},   -- orange
 		costRP  = 100,
 		cooldownSeconds = 20,          -- mirror of the gadget value, for the fill/countdown only
@@ -81,6 +84,7 @@ local ABILITIES = {
 	{
 		kind       = "instant",
 		baseLabel  = "Weapons Upgrade",
+		icon       = "weapons_upgrade",
 		accent     = {0.90, 0.22, 0.22, 1},   -- red
 		levelParam = "upgrade_weapons_level",
 		levels     = {
@@ -100,6 +104,7 @@ local ABILITIES = {
 	{
 		kind       = "instant",
 		baseLabel  = "Armor Upgrade",
+		icon       = "armor_upgrade",
 		accent     = {0.18, 0.52, 0.98, 1},   -- blue
 		levelParam = "upgrade_armor_level",
 		levels     = {
@@ -119,6 +124,7 @@ local ABILITIES = {
 	{
 		kind    = "selection",
 		label   = "Production Boost (x5)",
+		icon    = "production_boost",
 		accent  = {0.25, 0.82, 0.35, 1},   -- green
 		cmdID   = 35410,                   -- CMD_BUILD_BOOST (unit_research_buildboost.lua)
 		tooltip = "Select builders to boost their production by x5 for 20 seconds",
@@ -486,15 +492,27 @@ local function Refresh()
 	RefreshTip()
 end
 
+local ICON_DIR = "LuaUI/Images/abilities/"
+
+-- an ability with no icon, or whose file is missing, gets an empty tile
+local function IconRML(name)
+	local path = name and (ICON_DIR .. name .. ".png")
+	if path and VFS.FileExists(path) then
+		-- the leading slash makes the path absolute instead of relative to the document
+		return '<img class="icon" src="/' .. path .. '"/>'
+	end
+	return '<div class="icon"/>'
+end
+
 local function BuildList()
 	local parts = {}
 	for i, a in ipairs(ABILITIES) do
 		parts[i] = string.format(
 			'<div id="a%d" class="ability" data-a="%d">'
-			.. '<div class="stripe" style="background-color: %s;"/>'
+			.. '<div class="stripe" style="background-color: %s;"/>%s'
 			.. '<div id="a%d-name" class="name"/><div class="grow"/><div id="a%d-right" class="right"/>'
 			.. '<div id="a%d-curtain" class="curtain"/></div>',
-			i, i, Rgb(a.accent), i, i, i)
+			i, i, Rgb(a.accent), IconRML(a.icon), i, i, i)
 	end
 	view.Element("list").inner_rml = table.concat(parts)
 	view.Element("abilities").style["height"] = PanelHeight() .. "dp"
