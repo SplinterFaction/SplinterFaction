@@ -112,7 +112,7 @@
 
 		<div id="cell-metal" class="cell">
 			<div class="line head">
-				<img class="icon" src="/LuaUI/Images/metal.png"/>
+				<img class="icon" src="/LuaUI/Images/rml/metal.png"/>
 				<div class="label">Metal</div>
 				<div class="grow"/>
 				<div id="metal-net" class="net good">+0.0</div>
@@ -137,7 +137,7 @@
 
 		<div id="cell-energy" class="cell">
 			<div class="line head">
-				<img class="icon" src="/LuaUI/Images/energy2.png"/>
+				<img class="icon" src="/LuaUI/Images/rml/energy.png"/>
 				<div class="label">Energy</div>
 				<div class="grow"/>
 				<div id="energy-net" class="net good">+0.0</div>
@@ -162,7 +162,7 @@
 
 		<div id="cell-supply" class="cell">
 			<div class="line head">
-				<img class="icon" src="/LuaUI/Images/supply.png"/>
+				<img class="icon" src="/LuaUI/Images/rml/supply.png"/>
 				<div class="label">Supply</div>
 				<div class="grow"/>
 				<div id="supply-free" class="net">0 free</div>
@@ -182,7 +182,7 @@
 
 		<div id="cell-research" class="cell">
 			<div class="line head">
-				<img class="icon" src="/LuaUI/Images/research.png"/>
+				<img class="icon" src="/LuaUI/Images/rml/research.png"/>
 				<div class="label">Research</div>
 				<div class="grow"/>
 				<div id="research-spent" class="net bad hidden">-0</div>

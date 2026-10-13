@@ -15,11 +15,11 @@ local BASE_WIDTH = 1920
 local BASE_HEIGHT = 1080
 
 -- Saira SemiCondensed is the HUD typeface. RmlUi names a face by the family
--- name stored in the file, and these two files carry different ones:
---   SemiBold -> family "Saira SemiCondensed SemiBold" (the body face)
---   Bold     -> family "Saira SemiCondensed", weight bold (figures, titles)
--- The first face is also registered as the fallback face, so a glyph or a
--- family that is missing never leaves text blank.
+-- name stored in the file, and both files register as "Saira SemiCondensed":
+-- SemiBold as weight 600 (what "font-weight: normal" picks, being the closest)
+-- and Bold as weight 700. The first face is also the fallback for glyphs
+-- missing elsewhere; a fallback does not cover a family name that does not
+-- exist, which draws no text at all.
 local FONT_FILES = {
 	"LuaUI/Fonts/Saira_SemiCondensed-SemiBold.ttf",
 	"LuaUI/Fonts/Saira_SemiCondensed-Bold.ttf",

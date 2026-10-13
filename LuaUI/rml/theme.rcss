@@ -8,6 +8,16 @@
  * alpha runs 0-255, and borders are "width color" with no style word.
  * Sizes are in dp: one dp is one pixel at 1920x1080 and scales from there.
  *
+ * Type: both Saira SemiCondensed files register under the one family name
+ * "Saira SemiCondensed" (SemiBold as weight 600, Bold as 700). "normal" picks
+ * the SemiBold face, "bold" the Bold face. A family name that does not exist
+ * draws no text at all, so do not invent one.
+ *
+ * Images: the engine draws RmlUi with premultiplied alpha but loads image
+ * files as they are. An image with transparency must therefore be saved
+ * premultiplied (color already multiplied by alpha), or its transparent
+ * parts show as a solid box. Premultiplied copies live in LuaUI/Images/rml/.
+ *
  * Palette
  *   background      #0b0e12      text        #c2ccd6
  *   surface         #131920      heading     #f0f4f8
@@ -23,7 +33,7 @@
  */
 
 body {
-	font-family: Saira SemiCondensed SemiBold;
+	font-family: Saira SemiCondensed;
 	font-size: 14dp;
 	font-weight: normal;
 	font-style: normal;
