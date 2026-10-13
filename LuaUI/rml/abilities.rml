@@ -1,0 +1,105 @@
+<rml>
+<head>
+	<title>SplinterFaction abilities</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The support powers, above the players list at the bottom right.
+		   The position is set from Lua (hud.PlacePanel); the size here must
+		   match PANEL_WIDTH and PanelHeight() in gui_rml_abilities.lua
+		   (34dp of chrome and title, then 46dp for each ability). */
+		#abilities {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 300dp;
+			box-sizing: border-box;
+			padding: 9dp 10dp 4dp 10dp;
+			pointer-events: auto;
+		}
+		#head {
+			height: 19dp;
+			font-size: 13dp;
+		}
+		.ability {
+			position: relative;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 40dp;
+			margin-bottom: 6dp;
+			box-sizing: border-box;
+			background-color: #1a222b;
+			border: 1dp #232d38;
+			overflow: hidden;
+		}
+		/* only something that can be used right now answers the mouse */
+		.ability.ready:hover {
+			background-color: #212b36;
+			border-color: #8593a1;
+		}
+		.ability.targeting {
+			border-color: #5fd0e8;
+			background-color: rgba(95, 208, 232, 45);
+		}
+		.ability.deny {
+			border-color: #ff5a4f;
+			background-color: rgba(255, 90, 79, 70);
+		}
+		/* each ability keeps its own color, as a stripe down its left edge */
+		.stripe {
+			width: 3dp;
+			height: 38dp;
+		}
+		.name {
+			margin-left: 9dp;
+			font-size: 14dp;
+			color: #f0f4f8;
+		}
+		.ability.dim .name {
+			color: #5c6875;
+		}
+		.grow {
+			flex: 1;
+		}
+		.right {
+			/* stays readable on top of the cooldown curtain */
+			position: relative;
+			z-index: 1;
+			margin-right: 10dp;
+			font-size: 13dp;
+			color: #8593a1;
+		}
+		.right.ok { color: #5fd0e8; }
+		.right.short { color: #ff5a4f; }
+		.right.wait { color: #ff9b21; }
+		/* a dark curtain that draws back to the left as a cooldown runs out */
+		.curtain {
+			position: absolute;
+			left: 0dp;
+			top: 0dp;
+			height: 38dp;
+			width: 0%;
+			background-color: rgba(4, 6, 9, 150);
+		}
+
+		/* what the ability under the mouse does, beside the panel */
+		#tip {
+			position: absolute;
+			padding: 5dp 10dp 6dp 10dp;
+			font-size: 13dp;
+			white-space: nowrap;
+			color: #f0f4f8;
+			border-color: #35434f;
+		}
+	</style>
+</head>
+<body>
+	<div id="abilities" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="head" class="title">Abilities</div>
+		<div id="list"/>
+	</div>
+	<div id="tip" class="panel hidden"/>
+</body>
+</rml>

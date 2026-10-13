@@ -735,6 +735,10 @@ function widget:Initialize()
 	hud.RegisterPanel(LAYOUT_BUILD, "Build Menu", Place)
 	Place()
 
+	-- the options window sets this flag when one of the three card options
+	-- (costs, tech requirement, hotkeys) is changed
+	WG.buildOrderUI = WG.buildOrderUI or {}
+
 	OverrideDefaultMenu()
 	ProcessCommands()
 	hud.ShowPassive(document)
@@ -743,6 +747,7 @@ end
 
 function widget:Shutdown()
 	WG.StaticBuildOrderMenu = nil
+	WG.buildOrderUI = nil
 	if hud then
 		hud.UnregisterPanel(LAYOUT_ORDER)
 		hud.UnregisterPanel(LAYOUT_BUILD)
@@ -780,6 +785,10 @@ function widget:Update()
 
 	if not hovered then
 		lastHoverSound = nil
+	end
+	if WG.buildOrderUI and WG.buildOrderUI.updateConfigInt then
+		WG.buildOrderUI.updateConfigInt = nil
+		commandsDirty = true
 	end
 
 	local _, cmdID = spGetActiveCommand()

@@ -1,0 +1,71 @@
+<rml>
+<head>
+	<title>SplinterFaction selected units</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* One card for each type of unit in the selection, in a row at the
+		   bottom center. #selection is an invisible strip as wide as the
+		   most cards the row can hold, which keeps the row centered and gives
+		   tweak mode a rectangle that does not change with the selection. Its
+		   position is set from Lua (hud.PlacePanel); the size here must match
+		   STRIP_WIDTH and STRIP_HEIGHT in gui_rml_selection.lua. */
+		#selection {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 864dp;
+			height: 66dp;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+		#row {
+			display: flex;
+			flex-direction: row;
+			box-sizing: border-box;
+			height: 66dp;
+			padding: 3dp 0dp 3dp 3dp;
+			pointer-events: auto;
+		}
+		/* an id rule outranks the theme's .hidden, so say it again here */
+		#row.hidden {
+			display: none;
+		}
+		.unit {
+			position: relative;
+			width: 58dp;
+			height: 58dp;
+			margin-right: 3dp;
+			box-sizing: border-box;
+			border: 1dp #232d38;
+			background-color: #131920;
+		}
+		.unit:hover {
+			border-color: #ff9b21;
+		}
+		.pic {
+			display: block;
+			width: 56dp;
+			height: 56dp;
+		}
+		/* how many of this type are selected */
+		.count {
+			position: absolute;
+			right: 0dp;
+			bottom: 0dp;
+			padding: 0dp 4dp;
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 13dp;
+			line-height: 16dp;
+			color: #f0f4f8;
+			background-color: rgba(11, 14, 18, 215);
+		}
+	</style>
+</head>
+<body>
+	<div id="selection">
+		<div id="row" class="panel hidden"/>
+	</div>
+</body>
+</rml>

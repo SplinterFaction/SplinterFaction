@@ -63,8 +63,6 @@ return {
 		  onSet = function() if WG.buildOrderUI then WG.buildOrderUI.updateConfigInt = true end end },
 		{ id = "showhotkeys", name = "Show hotkeys", type = "bool", config = "evo_showhotkeys",
 		  onSet = function() if WG.buildOrderUI then WG.buildOrderUI.updateConfigInt = true end end },
-		{ id = "oldunitpics", name = "Old style unit pictures", type = "bool", requires = "Static Selected Units Buttons",
-		  api = {"selunitbuttons", "getOldUnitIcons", "setOldUnitIcons"}, default = false },
 
 		{ type = "separator", name = "Units" },
 		{ id = "autoteamcolors", name = "Auto team colors", type = "bool", config = "AutoTeamColors", default = false,
