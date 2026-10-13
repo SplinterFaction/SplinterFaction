@@ -1,0 +1,199 @@
+<rml>
+<head>
+	<title>SplinterFaction resource bar</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* One strip at the top center: metal, energy, supply, research.
+		   Its position is set from Lua (hud.PlacePanel), and its size here
+		   must match BAR_WIDTH and BAR_HEIGHT in gui_rml_resourcebar.lua. */
+		#resbar {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 940dp;
+			height: 68dp;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: row;
+			align-items: stretch;
+		}
+		.cell {
+			flex: 1;
+			padding: 7dp 14dp 0dp 14dp;
+		}
+		#cell-research {
+			flex: none;
+			width: 170dp;
+		}
+		.divider {
+			margin: 8dp 0dp;
+		}
+		.line {
+			display: flex;
+			flex-direction: row;
+			align-items: flex-end;
+		}
+		.grow {
+			flex: 1;
+		}
+		.head {
+			height: 16dp;
+		}
+		.figures {
+			height: 26dp;
+		}
+		.icon {
+			width: 14dp;
+			height: 14dp;
+			margin: 0dp 6dp 1dp 0dp;
+		}
+		.net {
+			font-size: 13dp;
+		}
+		.value {
+			line-height: 24dp;
+		}
+		.sub {
+			margin: 0dp 0dp 2dp 5dp;
+		}
+		.flow {
+			font-size: 12dp;
+			margin: 0dp 0dp 2dp 8dp;
+		}
+		.slash {
+			font-size: 12dp;
+			color: #5c6875;
+			margin: 0dp 0dp 2dp 5dp;
+		}
+
+		/* The storage bar. The taller box around it is what the mouse grabs
+		   to set the share level, so the 6dp bar is not a fiddly target. */
+		.grab {
+			height: 14dp;
+			padding-top: 4dp;
+			box-sizing: border-box;
+		}
+		.grab.live {
+			pointer-events: auto;
+			cursor: ew-resize;
+		}
+		/* share level: above this much of storage, the excess goes to allies */
+		.share {
+			position: absolute;
+			top: -3dp;
+			width: 2dp;
+			height: 12dp;
+			margin-left: -1dp;
+			background-color: #f0f4f8;
+		}
+		.share.dragging {
+			background-color: #ff9b21;
+		}
+
+		/* each resource keeps its own color; a bar changes color only to
+		   say something (see the comments in the widget) */
+		#metal-cur { color: #a9c9ea; }
+		#metal-fill { background-color: #a9c9ea; }
+		#energy-cur { color: #f2d64b; }
+		#energy-fill { background-color: #f2d64b; }
+		#supply-fill { background-color: #6fdc8c; }
+		#research-cur { color: #be78ff; }
+		#research-rule { height: 2dp; margin-top: 6dp; background-color: rgba(190, 120, 255, 90); }
+
+		#metal-fill.low, #energy-fill.low, #supply-fill.full { background-color: #ff5a4f; }
+		#metal-fill.high, #supply-fill.high { background-color: #ff9b21; }
+		#energy-fill.high { background-color: #6fdc8c; }
+	</style>
+</head>
+<body>
+	<div id="resbar" class="panel">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+
+		<div id="cell-metal" class="cell">
+			<div class="line head">
+				<img class="icon" src="/LuaUI/Images/metal.png"/>
+				<div class="label">Metal</div>
+				<div class="grow"/>
+				<div id="metal-net" class="net good">+0.0</div>
+			</div>
+			<div class="line figures">
+				<div id="metal-cur" class="value">0</div>
+				<div id="metal-max" class="sub">/ 0</div>
+				<div class="grow"/>
+				<div id="metal-in" class="flow good">+0.0</div>
+				<div class="slash">/</div>
+				<div id="metal-out" class="flow bad">-0.0</div>
+			</div>
+			<div id="metal-grab" class="grab">
+				<div class="bar">
+					<div id="metal-fill" class="bar-fill"/>
+					<div id="metal-share" class="share"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="divider"/>
+
+		<div id="cell-energy" class="cell">
+			<div class="line head">
+				<img class="icon" src="/LuaUI/Images/energy2.png"/>
+				<div class="label">Energy</div>
+				<div class="grow"/>
+				<div id="energy-net" class="net good">+0.0</div>
+			</div>
+			<div class="line figures">
+				<div id="energy-cur" class="value">0</div>
+				<div id="energy-max" class="sub">/ 0</div>
+				<div class="grow"/>
+				<div id="energy-in" class="flow good">+0.0</div>
+				<div class="slash">/</div>
+				<div id="energy-out" class="flow bad">-0.0</div>
+			</div>
+			<div id="energy-grab" class="grab">
+				<div class="bar">
+					<div id="energy-fill" class="bar-fill"/>
+					<div id="energy-share" class="share"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="divider"/>
+
+		<div id="cell-supply" class="cell">
+			<div class="line head">
+				<img class="icon" src="/LuaUI/Images/supply.png"/>
+				<div class="label">Supply</div>
+				<div class="grow"/>
+				<div id="supply-free" class="net">0 free</div>
+			</div>
+			<div class="line figures">
+				<div id="supply-used" class="value">0</div>
+				<div id="supply-max" class="sub">/ 0</div>
+			</div>
+			<div class="grab">
+				<div class="bar">
+					<div id="supply-fill" class="bar-fill"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="divider"/>
+
+		<div id="cell-research" class="cell">
+			<div class="line head">
+				<img class="icon" src="/LuaUI/Images/research.png"/>
+				<div class="label">Research</div>
+				<div class="grow"/>
+				<div id="research-spent" class="net bad hidden">-0</div>
+			</div>
+			<div class="line figures">
+				<div id="research-cur" class="value">0</div>
+				<div class="grow"/>
+				<div id="research-rate" class="flow good">+0.0/s</div>
+			</div>
+			<div id="research-rule"/>
+		</div>
+	</div>
+</body>
+</rml>

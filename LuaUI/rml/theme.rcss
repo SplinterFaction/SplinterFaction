@@ -1,0 +1,247 @@
+/*
+ * SplinterFaction HUD theme ("Bastion", after the website theme). Every HUD
+ * document links this file, so colors, type sizes and shared states are
+ * changed here and nowhere else.
+ *
+ * RmlUi notes: there are no default styles (hence the display rules below),
+ * there are no variables (the palette is repeated as literal values), rgba()
+ * alpha runs 0-255, and borders are "width color" with no style word.
+ * Sizes are in dp: one dp is one pixel at 1920x1080 and scales from there.
+ *
+ * Palette
+ *   background      #0b0e12      text        #c2ccd6
+ *   surface         #131920      heading     #f0f4f8
+ *   raised surface  #1a222b      muted       #8593a1
+ *   hover, input    #212b36
+ *   border          #232d38      firm border #35434f
+ *   ember (accent)  #ff9b21      dim ember   #c9761a
+ *   signal          #5fd0e8
+ *   good #6fdc8c    warn #ff9b21    bad #ff5a4f
+ *
+ * Shape: everything is square. A panel is marked by two ember corner
+ * brackets instead of rounded corners.
+ */
+
+body {
+	font-family: Saira SemiCondensed SemiBold;
+	font-size: 14dp;
+	font-weight: normal;
+	font-style: normal;
+	color: #c2ccd6;
+	width: 100%;
+	height: 100%;
+	/* the HUD lets clicks through unless a panel asks for them */
+	pointer-events: none;
+}
+
+div {
+	display: block;
+}
+
+/* ---- panels ------------------------------------------------------------ */
+
+.panel {
+	background-color: rgba(11, 14, 18, 235);
+	border: 1dp #232d38;
+}
+
+/* a panel inside a panel */
+.raised {
+	background-color: #1a222b;
+	border: 1dp #232d38;
+}
+
+/* Corner brackets. Put <div class="bracket tl"/> and <div class="bracket br"/>
+   first inside a positioned panel. */
+.bracket {
+	position: absolute;
+	width: 9dp;
+	height: 9dp;
+}
+
+.bracket.tl {
+	left: -1dp;
+	top: -1dp;
+	border-left: 2dp #ff9b21;
+	border-top: 2dp #ff9b21;
+}
+
+.bracket.br {
+	right: -1dp;
+	bottom: -1dp;
+	border-right: 2dp #ff9b21;
+	border-bottom: 2dp #ff9b21;
+}
+
+/* a section rule */
+.accent-line {
+	height: 2dp;
+	background-color: #ff9b21;
+}
+
+.divider {
+	width: 1dp;
+	background-color: #232d38;
+}
+
+/* ---- type -------------------------------------------------------------- */
+
+/* small capitals above a figure */
+.label {
+	font-size: 11dp;
+	color: #8593a1;
+	letter-spacing: 1.5dp;
+	text-transform: uppercase;
+}
+
+/* the figure itself */
+.value {
+	font-family: Saira SemiCondensed;
+	font-weight: bold;
+	font-size: 21dp;
+	color: #f0f4f8;
+}
+
+.sub {
+	font-size: 12dp;
+	color: #8593a1;
+}
+
+.strong {
+	font-family: Saira SemiCondensed;
+	font-weight: bold;
+	color: #f0f4f8;
+}
+
+.title {
+	font-family: Saira SemiCondensed;
+	font-weight: bold;
+	font-size: 16dp;
+	letter-spacing: 2dp;
+	text-transform: uppercase;
+	color: #f0f4f8;
+}
+
+/* ---- status colors: reserved meanings, never decoration ------------------ */
+
+.good {
+	color: #6fdc8c;
+}
+
+.warn {
+	color: #ff9b21;
+}
+
+.bad {
+	color: #ff5a4f;
+}
+
+.signal {
+	color: #5fd0e8;
+}
+
+/* ---- progress bars -------------------------------------------------------- */
+
+.bar {
+	position: relative;
+	height: 6dp;
+	background-color: #1a222b;
+}
+
+.bar-fill {
+	height: 6dp;
+	width: 0%;
+	background-color: #5fd0e8;
+}
+
+/* ---- buttons ---------------------------------------------------------------- */
+
+.button {
+	display: block;
+	text-align: center;
+	font-family: Saira SemiCondensed;
+	font-weight: bold;
+	font-size: 13dp;
+	letter-spacing: 1.5dp;
+	text-transform: uppercase;
+	color: #0b0e12;
+	background-color: #ff9b21;
+	border: 1dp #ff9b21;
+	padding: 7dp 14dp 8dp 14dp;
+	pointer-events: auto;
+}
+
+.button:hover {
+	background-color: #ffb04d;
+	border-color: #ffb04d;
+}
+
+.button:active {
+	background-color: #c9761a;
+	border-color: #c9761a;
+}
+
+/* a secondary action next to a main one */
+.button.quiet {
+	color: #f0f4f8;
+	background-color: rgba(0, 0, 0, 0);
+	border-color: #35434f;
+}
+
+.button.quiet:hover {
+	background-color: #1a222b;
+	border-color: #ff9b21;
+}
+
+/* something that cannot be undone */
+.button.danger {
+	color: #ffffff;
+	background-color: #a8332b;
+	border-color: #ff5a4f;
+}
+
+/* cannot be used right now; the widget also ignores clicks on it */
+.button.disabled {
+	color: #5c6875;
+	background-color: rgba(0, 0, 0, 0);
+	border-color: #232d38;
+}
+
+/* ---- scrollbars -------------------------------------------------------------
+   RmlUi gives a scrollbar no size of its own; without these rules it takes
+   the whole width of a scrolling element and squeezes the content to nothing. */
+
+scrollbarvertical {
+	width: 6dp;
+	margin-left: 4dp;
+}
+
+scrollbarvertical slidertrack {
+	background-color: #131920;
+}
+
+scrollbarvertical sliderbar {
+	width: 6dp;
+	min-height: 24dp;
+	background-color: #35434f;
+}
+
+scrollbarvertical sliderbar:hover {
+	background-color: #ff9b21;
+}
+
+scrollbarvertical sliderarrowdec,
+scrollbarvertical sliderarrowinc {
+	width: 0dp;
+	height: 0dp;
+}
+
+scrollbarhorizontal {
+	height: 0dp;
+}
+
+/* ---- hidden: keep this the last rule, so it wins over any display above ---- */
+
+.hidden {
+	display: none;
+}

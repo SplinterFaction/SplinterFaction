@@ -14,6 +14,10 @@
 Spring.SendCommands({"ctrlpanel " .. LUAUI_DIRNAME .. "ctrlpanel.txt"})
 VFS.Include("init.lua", nil, VFS.ZIP)
 
+-- RmlUi: fonts, cursors and the shared context for the HUD documents.
+-- VFS.ZIP: always take the game's rml_setup.lua, never a loose local copy.
+VFS.Include(LUAUI_DIRNAME .. "rml_setup.lua", nil, VFS.ZIP)
+
 VFS.Include(LUAUI_DIRNAME .. 'utils.lua', utilFile)
 
 WG = {}
