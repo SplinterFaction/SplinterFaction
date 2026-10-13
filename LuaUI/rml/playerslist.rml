@@ -33,6 +33,26 @@
 			margin-right: 16dp;
 			color: #f0f4f8;
 		}
+		#topbar .grow {
+			flex: 1;
+		}
+		/* erases every map mark and drawing (the engine's /clearmapmarks) */
+		#tb-marks {
+			height: 18dp;
+			box-sizing: border-box;
+			padding: 0dp 7dp;
+			font-size: 10dp;
+			line-height: 15dp;
+			letter-spacing: 1dp;
+			text-transform: uppercase;
+			color: #8593a1;
+			border: 1dp #35434f;
+		}
+		#tb-marks:hover {
+			color: #f0f4f8;
+			border-color: #ff9b21;
+			background-color: #1a222b;
+		}
 
 		/* ---- one alliance ----------------------------------------------- */
 		.group {
@@ -198,6 +218,8 @@
 			<div class="label">Time</div><div id="tb-time" class="fig">0:00</div>
 			<div class="label">Speed</div><div id="tb-speed" class="fig">1.00</div>
 			<div class="label">FPS</div><div id="tb-fps" class="fig">0</div>
+			<div class="grow"/>
+			<div id="tb-marks">Clear marks</div>
 		</div>
 		<div id="list"/>
 		<div id="spechdr"/>
