@@ -1,0 +1,100 @@
+<rml>
+<head>
+	<title>SplinterFaction layout (tweak mode)</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* Tweak mode (Ctrl+F11): every panel of the HUD as a rectangle that
+		   can be dragged to a new place. The overlay covers the screen and
+		   takes the mouse, so the panels underneath do not. Each rectangle's
+		   place and size are set from Lua. */
+		#tweak {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(4, 6, 9, 110);
+			pointer-events: auto;
+		}
+		.rect {
+			position: absolute;
+			box-sizing: border-box;
+			overflow: hidden;
+			text-align: center;
+			background-color: rgba(95, 208, 232, 46);
+			border: 2dp #5fd0e8;
+			pointer-events: auto;
+			cursor: move;
+			drag: drag;
+		}
+		.rect:hover {
+			background-color: rgba(95, 208, 232, 90);
+		}
+		/* moved from its default place by the player */
+		.rect.moved {
+			background-color: rgba(255, 155, 33, 46);
+			border-color: #ff9b21;
+		}
+		.rect.moved:hover {
+			background-color: rgba(255, 155, 33, 90);
+		}
+		/* a panel that is not on screen at the moment (a closed window) */
+		.rect.off {
+			opacity: 0.45;
+		}
+		.rect.dragging {
+			background-color: rgba(240, 244, 248, 70);
+			border-color: #f0f4f8;
+			opacity: 1;
+		}
+		.rlabel {
+			position: absolute;
+			left: 0dp;
+			top: 50%;
+			width: 100%;
+			margin-top: -10dp;
+			font-weight: bold;
+			font-size: 14dp;
+			line-height: 20dp;
+			white-space: nowrap;
+			color: #f0f4f8;
+			font-effect: shadow(1dp 1dp #000000);
+		}
+		/* what to do, and the way out */
+		#tweak-bar {
+			position: absolute;
+			left: 50%;
+			bottom: 14dp;
+			width: 760dp;
+			margin-left: -380dp;
+			box-sizing: border-box;
+			padding: 8dp 10dp 8dp 16dp;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			pointer-events: auto;
+		}
+		#tweak-hint {
+			flex: 1;
+			font-size: 13dp;
+			color: #c2ccd6;
+		}
+		#tweak-bar .button {
+			margin-left: 8dp;
+			padding: 4dp 12dp 5dp 12dp;
+		}
+	</style>
+</head>
+<body>
+	<div id="tweak" class="hidden">
+		<div id="rects"/>
+		<div id="tweak-bar" class="panel">
+			<div class="bracket tl"/>
+			<div class="bracket br"/>
+			<div id="tweak-hint">Drag a panel to move it. Right click puts it back.</div>
+			<div id="tweak-reset" class="button quiet">Reset all</div>
+			<div id="tweak-done" class="button">Done</div>
+		</div>
+	</div>
+</body>
+</rml>

@@ -112,8 +112,7 @@ end
 --
 --  A panel is an absolutely positioned element of a known size in dp. Its
 --  position is its default spot unless the player has dragged it in tweak
---  mode (Ctrl+F11), which is still handled by api_staticgui_layout.lua
---  (WG.StaticLayout) while old and new panels live side by side.
+--  mode (Ctrl+F11), which is handled by api_hud_layout.lua (WG.StaticLayout).
 --
 --  defaultOrigin(vsx, vsy, w, h, scale) returns the default bottom-left
 --  corner in screen pixels (y counts up from the bottom, as everywhere in
