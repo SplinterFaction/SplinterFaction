@@ -901,11 +901,20 @@ local function FollowDrag()
 		if not opt.applyOnRelease then
 			Set(opt, value, true)
 		end
+		Refresh()
 	end
-	local _, _, leftDown = Spring.GetMouseState()
-	if not leftDown then
-		local final, changed = drag.value, drag.changed
-		drag = nil
+end
+
+-- The button came back up. RmlUi says so (see hud.OnDrag): the engine cannot,
+-- once RmlUi has taken the press.
+local function EndDrag()
+	if not drag then
+		return
+	end
+	local opt = rows[drag.row] and rows[drag.row].opt
+	local final, changed = drag.value, drag.changed
+	drag = nil
+	if opt then
 		if opt.applyOnRelease then
 			if final ~= Get(opt) then Set(opt, final) end
 		elseif changed then
@@ -1013,6 +1022,10 @@ function widget:Initialize()
 	end)
 	local list = view.Element("list")
 	list:AddEventListener("mousedown", OnListMouseDown)
+	-- a slider's release; the rows are made on the fly, so these are heard
+	-- here and the sliders get "drag: drag" from options.rml
+	list:AddEventListener("mouseup", EndDrag)
+	list:AddEventListener("dragend", EndDrag)
 	list:AddEventListener("mouseover", function(event)
 		hoverRow = hud.EventAttribute(event, "data-row")
 		ShowFooter()

@@ -151,6 +151,8 @@
 			padding-top: 9dp;
 			box-sizing: border-box;
 			cursor: ew-resize;
+			/* so that the release is reported wherever the mouse ends up */
+			drag: drag;
 		}
 		.track {
 			position: relative;

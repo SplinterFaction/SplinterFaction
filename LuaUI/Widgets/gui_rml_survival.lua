@@ -289,8 +289,8 @@ end
 -- dragging
 --------------------------------------------------------------------------------
 
-local function FollowDrag()
-	local mx, my, leftDown = spGetMouseState()
+local function MoveToMouse()
+	local mx, my = spGetMouseState()
 	local vsx, vsy = Spring.GetViewGeometry()
 	local x = max(0, min(mx - drag.dx, vsx - panelRect[3]))
 	local y = max(0, min(my - drag.dy, vsy - panelRect[4]))
@@ -298,19 +298,25 @@ local function FollowDrag()
 	local element = view.Element("survival")
 	element.style["left"] = string.format("%dpx", x)
 	element.style["top"] = string.format("%dpx", vsy - (y + panelRect[4]))
+	return x, y
+end
 
-	if not leftDown then
-		drag = nil
-		-- The layout module keeps the position, so that it persists and is
-		-- worked out per resolution alongside every other panel.
-		local layout = WG.StaticLayout
-		if layout and layout.Set then
-			layout.Set(LAYOUT_NAME, x, y)
-		else
-			draggedTo = {x, y}
-		end
-		Place()
+-- the button came back up (see hud.OnDrag): the panel stays where it is now
+local function Drop()
+	if not drag then
+		return
 	end
+	local x, y = MoveToMouse()
+	drag = nil
+	-- The layout module keeps the position, so that it persists and is
+	-- worked out per resolution alongside every other panel.
+	local layout = WG.StaticLayout
+	if layout and layout.Set then
+		layout.Set(LAYOUT_NAME, x, y)
+	else
+		draggedTo = {x, y}
+	end
+	Place()
 end
 
 --------------------------------------------------------------------------------
@@ -331,12 +337,12 @@ function widget:Initialize()
 	view = hud.NewView(document)
 	view.Assume("survival", "hidden", true) -- set in the markup
 
-	hud.OnClick(view, "survival", function()
+	hud.OnDrag(view, "survival", function()
 		if panelRect then
 			local mx, my = spGetMouseState()
 			drag = {dx = mx - panelRect[1], dy = my - panelRect[2]}
 		end
-	end)
+	end, Drop)
 
 	WG.StaticSurvivalPanel = {
 		Toggle = function()
@@ -413,7 +419,7 @@ function widget:Update()
 		return -- hidden with the rest of the GUI (F5)
 	end
 	if drag then
-		FollowDrag()
+		MoveToMouse()
 		return
 	end
 	local now = Spring.GetTimer()

@@ -348,8 +348,35 @@ function hud.EventAttribute(event, attribute)
 	return nil
 end
 
+-- Dragging. The engine cannot say whether a button is held once RmlUi has
+-- taken the press: Spring.GetMouseState reports it as up from the start. So a
+-- widget learns of the release from RmlUi instead. onPress is called when the
+-- left button goes down on the element, and onRelease when it comes back up,
+-- wherever the mouse is by then:
+--   "mouseup"  reaches the element when the mouse has not left it;
+--   "dragend"  reaches it wherever the mouse went, once it moved far enough
+--              to count as a drag (which needs the RCSS property drag: drag,
+--              set here).
+-- Both can arrive for one release, so onRelease must not mind a second call.
+-- Between the two, read the mouse with Spring.GetMouseState (its position is
+-- always right) or hud.MouseFraction, once a frame.
+function hud.OnDrag(view, id, onPress, onRelease)
+	local element = view.Element(id)
+	if not element then
+		return
+	end
+	element.style["drag"] = "drag"
+	element:AddEventListener("mousedown", function(event)
+		if event.parameters and event.parameters.button == 0 then
+			onPress(event)
+		end
+	end)
+	element:AddEventListener("mouseup", onRelease)
+	element:AddEventListener("dragend", onRelease)
+end
+
 -- Where the mouse is along an element, from 0 at its left edge to 1 at its
--- right edge. For sliders: call it while the left button is held.
+-- right edge. For sliders: call it every frame between a press and its release.
 function hud.MouseFraction(element)
 	if not element then
 		return nil

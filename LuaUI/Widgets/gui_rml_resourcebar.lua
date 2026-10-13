@@ -59,7 +59,6 @@ local spGetTeamResources   = Spring.GetTeamResources
 local spGetTeamRulesParam  = Spring.GetTeamRulesParam
 local spGetSpectatingState = Spring.GetSpectatingState
 local spGetGameFrame       = Spring.GetGameFrame
-local spGetMouseState      = Spring.GetMouseState
 local spSetShareLevel      = Spring.SetShareLevel
 
 local floor = math.floor
@@ -272,11 +271,14 @@ local function FollowDrag()
 	if level then
 		SetShare(name, level)
 	end
-	local _, _, leftDown = spGetMouseState()
-	if not leftDown then
-		dragging = nil
-	end
 	Refresh()
+end
+
+local function EndDrag()
+	if dragging then
+		dragging = nil
+		Refresh()
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -318,7 +320,7 @@ function widget:Initialize()
 	spSetShareLevel("energy", shareLevel.energy)
 
 	for _, name in ipairs({"metal", "energy"}) do
-		hud.OnClick(view, name .. "-grab", function() StartDrag(name) end)
+		hud.OnDrag(view, name .. "-grab", function() StartDrag(name) end, EndDrag)
 	end
 
 	hud.RegisterPanel(LAYOUT_NAME, "Resources", Place)

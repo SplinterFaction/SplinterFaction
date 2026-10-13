@@ -387,10 +387,15 @@ function widget:Initialize()
 	ListenToList("allies", "data-ally", function() return allies end)
 	ListenToList("enemies", "data-enemy", function() return enemies end)
 	for _, name in ipairs({"metal", "energy"}) do
-		hud.OnClick(view, name .. "-slider", function()
+		hud.OnDrag(view, name .. "-slider", function()
 			dragging = name
 			SlideTo(name)
 			Refresh()
+		end, function()
+			if dragging then
+				dragging = nil
+				Refresh()
+			end
 		end)
 	end
 
@@ -446,11 +451,7 @@ function widget:Update()
 		return
 	end
 	if dragging then
-		SlideTo(dragging)
-		local _, _, leftDown = Spring.GetMouseState()
-		if not leftDown then
-			dragging = nil
-		end
+		SlideTo(dragging) -- until RmlUi reports the release (see hud.OnDrag)
 		Refresh()
 		return
 	end
