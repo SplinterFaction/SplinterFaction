@@ -1,0 +1,373 @@
+<rml>
+<head>
+	<title>SplinterFaction economy graph</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* The economy graph window. Its position is set from Lua
+		   (hud.PlacePanel); its size here must match PANEL_WIDTH and
+		   PANEL_HEIGHT in gui_rml_econgraph.lua.
+
+		   The plot itself (#plot) is drawn with gl by the widget, and the
+		   engine draws gl UNDER RmlUi. So the window has no background of its
+		   own: every part except #plot carries the panel color (class "fill")
+		   and the parts tile the window exactly, leaving #plot as a hole the
+		   gl drawing shows through. Use padding, not margins, between parts,
+		   or the map shows through the gaps. */
+		#econgraph {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 1180dp;
+			height: 700dp;
+			box-sizing: border-box;
+			border: 1dp #232d38;
+			pointer-events: auto;
+		}
+		.fill {
+			background-color: rgba(11, 14, 18, 235);
+		}
+		.grow {
+			flex: 1;
+		}
+		#head {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 50dp;
+			box-sizing: border-box;
+			padding: 0dp 14dp 0dp 16dp;
+			border-bottom: 1dp #232d38;
+		}
+		#subtitle {
+			margin-left: 14dp;
+			font-size: 13dp;
+			color: #8593a1;
+		}
+		#window {
+			margin-right: 14dp;
+			font-size: 12dp;
+			color: #8593a1;
+		}
+		/* 700 less the borders and the head */
+		#main {
+			display: flex;
+			flex-direction: row;
+			height: 648dp;
+		}
+
+		/* ---- left: what to show, and the legend ------------------------------ */
+		#side {
+			width: 250dp;
+			box-sizing: border-box;
+			padding: 4dp 12dp 0dp 16dp;
+			border-right: 1dp #232d38;
+		}
+		.sec {
+			height: 16dp;
+			margin-top: 8dp;
+			font-size: 10dp;
+		}
+		.picks {
+			display: flex;
+			flex-direction: row;
+		}
+		.pick {
+			flex: 1;
+			height: 24dp;
+			box-sizing: border-box;
+			margin-right: 4dp;
+			text-align: center;
+			font-size: 12dp;
+			line-height: 20dp;
+			color: #8593a1;
+			background-color: #131920;
+			border: 1dp #232d38;
+			border-bottom: 2dp #232d38;
+		}
+		.pick.last {
+			margin-right: 0dp;
+		}
+		.pick:hover {
+			color: #f0f4f8;
+			background-color: #1a222b;
+		}
+		.pick.active {
+			color: #f0f4f8;
+			background-color: #1a222b;
+			border-bottom: 2dp #ff9b21;
+		}
+		#res1.active { border-bottom: 2dp #a9c9ea; }
+		#res2.active { border-bottom: 2dp #f2d64b; }
+		#mode1.active { border-bottom: 2dp #ff5a4f; }
+		#mode2.active { border-bottom: 2dp #6fdc8c; }
+		#now {
+			margin-top: 14dp;
+		}
+		#now-value {
+			color: #f0f4f8;
+		}
+		/* one band of the stack; a click hides or shows it in the plot */
+		.lrow {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 21dp;
+			padding: 0dp 4dp;
+			font-size: 12dp;
+		}
+		.lrow:hover {
+			background-color: #1a222b;
+		}
+		.sw {
+			width: 11dp;
+			height: 11dp;
+			margin-right: 7dp;
+			box-sizing: border-box;
+		}
+		.lname {
+			flex: 1;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.lval {
+			margin-left: 6dp;
+			color: #f0f4f8;
+		}
+		.lpct {
+			width: 30dp;
+			text-align: right;
+			color: #8593a1;
+		}
+		.lrow.off .sw {
+			opacity: 0.35;
+		}
+		.lrow.off .lname, .lrow.off .lval {
+			color: #5c6875;
+		}
+
+		/* ---- right: the plot, its scales, and the two "now" bars -------------- */
+		#right {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+		}
+		#plotrow {
+			display: flex;
+			flex-direction: row;
+			height: 520dp;
+		}
+		#right-top {
+			height: 10dp;
+		}
+		#axis {
+			position: relative;
+			width: 52dp;
+		}
+		/* gl draws here */
+		#plot {
+			position: relative;
+			flex: 1;
+		}
+		#values {
+			position: relative;
+			width: 60dp;
+		}
+		.tick {
+			position: absolute;
+			right: 6dp;
+			height: 14dp;
+			margin-bottom: -7dp;
+			font-size: 11dp;
+			line-height: 14dp;
+			color: #8593a1;
+		}
+		#ax0 { bottom: 0%; margin-bottom: 0dp; }
+		#ax1 { bottom: 20%; }
+		#ax2 { bottom: 40%; }
+		#ax3 { bottom: 60%; }
+		#ax4 { bottom: 80%; }
+		#ax5 { bottom: 100%; margin-bottom: -14dp; }
+		.end {
+			position: absolute;
+			left: 6dp;
+			height: 14dp;
+			margin-bottom: -7dp;
+			font-weight: bold;
+			font-size: 12dp;
+			line-height: 14dp;
+		}
+		#end-line { color: #f0f4f8; }
+		#end-stack.use { color: #ff5a4f; }
+		#end-stack.make { color: #6fdc8c; }
+		#nodata {
+			position: absolute;
+			left: 0dp;
+			top: 46%;
+			width: 100%;
+			text-align: center;
+			font-size: 15dp;
+			color: #8593a1;
+		}
+		#times {
+			height: 22dp;
+			box-sizing: border-box;
+			padding: 0dp 60dp 0dp 52dp;
+		}
+		#times-inner {
+			position: relative;
+			height: 22dp;
+		}
+		.time {
+			position: absolute;
+			top: 4dp;
+			width: 60dp;
+			margin-left: -30dp;
+			text-align: center;
+			font-size: 11dp;
+			color: #8593a1;
+		}
+		#tm0 { left: 0%; margin-left: 0dp; text-align: left; }
+		#tm1 { left: 20%; }
+		#tm2 { left: 40%; }
+		#tm3 { left: 60%; }
+		#tm4 { left: 80%; }
+		#tm5 { left: 100%; margin-left: -60dp; text-align: right; }
+		#bars {
+			flex: 1;
+			box-sizing: border-box;
+			padding: 2dp 14dp 0dp 14dp;
+		}
+		.cap {
+			height: 18dp;
+			font-size: 12dp;
+			color: #8593a1;
+		}
+		.cap.next {
+			margin-top: 6dp;
+		}
+		.cap .use { color: #ff5a4f; }
+		.cap .make { color: #6fdc8c; }
+		.cap .n { color: #f0f4f8; }
+		/* everything of the moment, as shares of one bar */
+		.live {
+			display: flex;
+			flex-direction: row;
+			height: 22dp;
+			background-color: #0f1319;
+			border: 1dp #232d38;
+			box-sizing: border-box;
+			overflow: hidden;
+		}
+		.seg {
+			height: 20dp;
+			box-sizing: border-box;
+			border-right: 1dp #0b0e12;
+			text-align: center;
+			font-size: 11dp;
+			line-height: 19dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #0b0e12;
+		}
+		.nothing {
+			flex: 1;
+			text-align: center;
+			font-size: 11dp;
+			line-height: 19dp;
+			color: #5c6875;
+		}
+
+		/* ---- what is under the mouse, in the plot or on a bar ------------------ */
+		#tip {
+			position: absolute;
+			padding: 6dp 9dp;
+			font-size: 12dp;
+			line-height: 16dp;
+			white-space: nowrap;
+			pointer-events: none;
+			background-color: rgba(5, 7, 10, 240);
+			border: 1dp #35434f;
+		}
+		#tip .d { color: #8593a1; }
+		#tip .n { color: #f0f4f8; }
+	</style>
+</head>
+<body>
+	<div id="econgraph" class="hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div id="head" class="fill">
+			<div id="title" class="title"/>
+			<div id="subtitle"/>
+			<div class="grow"/>
+			<div id="window"/>
+			<div id="close" class="close">X</div>
+		</div>
+		<div id="main">
+			<div id="side" class="fill">
+				<div class="sec label">Resource</div>
+				<div class="picks">
+					<div id="res1" class="pick">Metal</div>
+					<div id="res2" class="pick last">Energy</div>
+				</div>
+				<div class="sec label">Show</div>
+				<div class="picks">
+					<div id="mode1" class="pick">Expense</div>
+					<div id="mode2" class="pick last">Income</div>
+				</div>
+				<div class="sec label">Group</div>
+				<div class="picks">
+					<div id="group1" class="pick">By unit</div>
+					<div id="group2" class="pick last">By category</div>
+				</div>
+				<div class="sec label">Window</div>
+				<div class="picks">
+					<div id="win1" class="pick">2m</div>
+					<div id="win2" class="pick">5m</div>
+					<div id="win3" class="pick">10m</div>
+					<div id="win4" class="pick last">All</div>
+				</div>
+				<div id="now" class="sec label">Now <span id="now-value"/> /s</div>
+				<div id="legend"/>
+			</div>
+			<div id="right">
+				<div id="right-top" class="fill"/>
+				<div id="plotrow">
+					<div id="axis" class="fill">
+						<div id="ax0" class="tick"/>
+						<div id="ax1" class="tick"/>
+						<div id="ax2" class="tick"/>
+						<div id="ax3" class="tick"/>
+						<div id="ax4" class="tick"/>
+						<div id="ax5" class="tick"/>
+					</div>
+					<div id="plot">
+						<div id="nodata">Collecting economy samples...</div>
+					</div>
+					<div id="values" class="fill">
+						<div id="end-stack" class="end"/>
+						<div id="end-line" class="end"/>
+					</div>
+				</div>
+				<div id="times" class="fill">
+					<div id="times-inner">
+						<div id="tm0" class="time"/>
+						<div id="tm1" class="time"/>
+						<div id="tm2" class="time"/>
+						<div id="tm3" class="time"/>
+						<div id="tm4" class="time"/>
+						<div id="tm5" class="time"/>
+					</div>
+				</div>
+				<div id="bars" class="fill">
+					<div id="cap1" class="cap"/>
+					<div id="bar1" class="live"/>
+					<div id="cap2" class="cap next"/>
+					<div id="bar2" class="live"/>
+				</div>
+			</div>
+		</div>
+		<div id="tip" class="hidden"/>
+	</div>
+</body>
+</rml>
