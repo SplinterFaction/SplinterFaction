@@ -30,11 +30,14 @@
 			flex-direction: row;
 			flex-wrap: wrap;
 		}
+		/* Five of 54 + 5 = 295dp in a 307dp row: the 12dp to spare is for the
+		   rounding of dp to pixels at an odd scale, which once wrapped the
+		   fifth button onto a new row. */
 		.order {
 			position: relative;
-			width: 55dp;
+			width: 54dp;
 			height: 33dp;
-			margin: 0dp 6dp 6dp 0dp;
+			margin: 0dp 5dp 6dp 0dp;
 			box-sizing: border-box;
 			background-color: #1a222b;
 			border: 1dp #232d38;
@@ -104,10 +107,11 @@
 			flex-wrap: wrap;
 			margin-bottom: 4dp;
 		}
-		/* three to a row: 3 x (94 + 3) fits beside the scrollbar */
+		/* three to a row: 3 x (92 + 3) = 285dp in the 294dp beside the
+		   scrollbar, with room to spare for rounding at odd scales */
 		.card {
 			position: relative;
-			width: 94dp;
+			width: 92dp;
 			margin: 0dp 3dp 3dp 0dp;
 			box-sizing: border-box;
 			background-color: #1a222b;
@@ -125,8 +129,8 @@
 		}
 		.pic {
 			display: block;
-			width: 92dp;
-			height: 92dp;
+			width: 90dp;
+			height: 90dp;
 			background-color: #131920;
 		}
 		/* how many are queued */
