@@ -137,6 +137,8 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 1000,
 		customparams             = {
+			light_color		= purple, -- Projectile light (modelled shell has no engine glow sprite)
+			light_opacity	= 0.2,
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -208,6 +210,8 @@ weaponDefs                 = {
 		turret                   = true,
 		weaponVelocity           = 1000,
 		customparams             = {
+			light_color		= purple, -- Projectile light (modelled shell has no engine glow sprite)
+			light_opacity	= 0.1,
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second

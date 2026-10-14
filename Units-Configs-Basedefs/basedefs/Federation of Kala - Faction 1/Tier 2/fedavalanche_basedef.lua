@@ -158,6 +158,8 @@ weaponDefs                 = {
 		weaponTimer            = 1,
 		weaponVelocity         = 250,
 		customparams             = {
+			light_color		= orange, -- Projectile light (modelled shell has no engine glow sprite)
+			light_opacity	= 0.2,
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
