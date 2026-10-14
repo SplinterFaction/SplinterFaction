@@ -34,6 +34,10 @@ return {
 	id = "ui", name = "Interface", order = 20,
 	options = {
 		{ type = "separator", name = "General" },
+		{ id = "uiscale", name = "Interface size", type = "slider", min = 0.7, max = 1.5, step = 0.05, config = "ui_scale", default = 1,
+		  format = "%.2f", applyOnRelease = true,
+		  desc = "Scales every panel of the HUD. Panel positions follow.",
+		  onSet = function() OPT.rescaleHud() end },
 		{ id = "guiopacity", name = "Panel opacity", type = "slider", min = 0.2, max = 1, step = 0.01, config = "ui_opacity",
 		  desc = "Background opacity of the interface panels." },
 		{ id = "guishader", name = "Blur behind panels", type = "bool", widget = "GUI Shader", requires = "GUI Shader",

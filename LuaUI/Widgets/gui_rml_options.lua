@@ -86,7 +86,7 @@ end
 --
 -- Definition files also get an `OPT` helper table:
 --     OPT.get(id), OPT.set(id, v), OPT.widgetActive(name),
---     OPT.getConfigInt/Float/String(key, default)
+--     OPT.getConfigInt/Float/String(key, default), OPT.rescaleHud()
 --
 -- Other widgets can register options at runtime with
 --     WG.options.register(tabId, optionTable [, afterId])
@@ -454,6 +454,14 @@ local function SortTabs()
 end
 
 local OPT = {}   -- helper table handed to definition files
+
+-- Every RmlUi panel sizes and places itself from ui_scale in its ViewResize,
+-- so a new scale is applied by telling every widget the view was resized.
+-- (This widget's own window goes along with it.)
+function OPT.rescaleHud()
+	local vsx, vsy = Spring.GetViewGeometry()
+	widgetHandler:ViewResize(vsx, vsy)
+end
 
 function OPT.get(id)
 	local opt = optById[id]
