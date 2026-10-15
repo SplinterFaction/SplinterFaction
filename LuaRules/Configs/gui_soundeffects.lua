@@ -34,10 +34,7 @@ GUIUnitSoundEffects = {
 }
 
 for _, udef in pairs(UnitDefs) do
-	if (not GUIUnitSoundEffects[udef.name]) and string.find(udef.name, "chicken") then
-		--Spring.Echo("[RESPONSEDOUND FALLBACK]: Chicken", udef.name)
-		GUIUnitSoundEffects[udef.name] = {}
-	elseif not GUIUnitSoundEffects[udef.name] then
+	if not GUIUnitSoundEffects[udef.name] then
 
 		if udef.customParams.unittype == "mobile" then
 			if udef.customParams.requiretech == "tech0" or udef.customParams.requiretech == "tech1" then

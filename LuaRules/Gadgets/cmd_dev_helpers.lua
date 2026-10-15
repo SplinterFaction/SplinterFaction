@@ -504,7 +504,7 @@ else	-- UNSYNCED
 
 	function gadget:Initialize()
 		-- doing it via GotChatMsg ensures it will only listen to the caller
-		gadgetHandler:AddChatAction('givecat', GiveCat, "")   -- Give a category of units, options /luarules givecat [cor|arm|scav|chicken]
+		gadgetHandler:AddChatAction('givecat', GiveCat, "")   -- Give a category of units, options /luarules givecat [cor|arm|scav]
 		gadgetHandler:AddChatAction('destroyunits', destroyUnits, "")  -- self-destrucs the selected units /luarules destroyunits
 		gadgetHandler:AddChatAction('wreckunits', wreckUnits, "")  -- turns the selected units into wrecks /luarules wreckunits
 		gadgetHandler:AddChatAction('reclaimunits', reclaimUnits, "")  -- reclaims and refunds the selected units /luarules reclaimUnits
@@ -758,12 +758,6 @@ else	-- UNSYNCED
 		if string.find(line, "scav") then
 			local Condition = function(ud)
 				return string.find(ud.name, '_scav')
-			end
-			Accept[#Accept + 1] = Condition
-		end
-		if string.find(line, "chicken") then
-			local Condition = function(ud)
-				return string.find(ud.name, 'chicken')
 			end
 			Accept[#Accept + 1] = Condition
 		end

@@ -23,7 +23,6 @@ end
 local armBlueColor       = "#004DFF" -- Armada Blue
 local corRedColor        = "#FF1005" -- Cortex Red
 local scavPurpColor      = "#6809A1" -- Scav Purple
-local chickenOrangeColor = "#CC8914" -- Chicken Orange
 local gaiaGrayColor      = "#000000" -- Gaia black
 
 -- Palettes. Each one names the two main colors; everything else (further teams,
@@ -304,8 +303,6 @@ if gadgetHandler:IsSyncedCode() then
 			setHexColor(teamID, gaiaGrayColor)
 		elseif luaAI and string.find(luaAI, "Scavenger") then
 			setHexColor(teamID, scavPurpColor)
-		elseif luaAI and string.find(luaAI, "Chicken") then
-			setHexColor(teamID, chickenOrangeColor)
 		else
 			local allyTeamID = select(6, Spring.GetTeamInfo(teamID, false))
 			if not allyMembers[allyTeamID] then
@@ -389,7 +386,6 @@ else	-- UNSYNCED
 		armblue       = armBlueColor,
 		corred        = corRedColor,
 		scavpurp      = scavPurpColor,
-		chickenorange = chickenOrangeColor,
 		gaiagray      = gaiaGrayColor,
 	}
 	local iconDevMode = "no" --Spring.GetModOptions().teamcolors_icon_dev_mode

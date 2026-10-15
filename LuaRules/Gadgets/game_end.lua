@@ -25,7 +25,7 @@ if gadgetHandler:IsSyncedCode() then
 	local gaiaTeamID = Spring.GetGaiaTeamID()
 	local gaiaAllyTeamID = select(6, Spring.GetTeamInfo(gaiaTeamID))
 
-	-- Exclude Scavengers / Chickens AI
+	-- Exclude Scavengers AI
 	local ignoredTeams = {
 		[gaiaTeamID] = true,
 	}
@@ -33,7 +33,7 @@ if gadgetHandler:IsSyncedCode() then
 	local teamList = Spring.GetTeamList()
 	for i = 1, #teamList do
 		local luaAI = Spring.GetTeamLuaAI(teamList[i])
-		if (luaAI and (luaAI:find("Chickens") or luaAI:find("Scavengers") or luaAI:find("ScavReduxAI"))) or Spring.GetModOptions().scoremode ~= "disabled" then
+		if (luaAI and (luaAI:find("Scavengers") or luaAI:find("ScavReduxAI"))) or Spring.GetModOptions().scoremode ~= "disabled" then
 			ignoredTeams[teamList[i]] = true
 
 			-- ignore all other teams in this allyteam as well

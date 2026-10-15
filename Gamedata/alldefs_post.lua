@@ -198,13 +198,6 @@ function UnitDef_Post(name, uDef)
 		end
 	end
 
-	--------------------------------------------------------------------------------
-	----- Turn off Chicken Egg drops
-	--------------------------------------------------------------------------------
-	if uDef.corpse == "chicken_egg" then
-		uDef.corpse = ""
-	end
-
 	if uDef.customparams and uDef.customparams.corpse	== nil then
 		uDef.customparams.corpse = uDef.unitname .. "_dead"
 	end
