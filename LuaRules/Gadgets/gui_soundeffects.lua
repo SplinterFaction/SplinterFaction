@@ -53,14 +53,10 @@ local CMD_MOVE = CMD.MOVE
 VFS.Include('luarules/configs/gui_soundeffects.lua')
 
 -- convert key: name -> unitdefid
--- + add scavenger units
 local newGUIUnitSoundEffects = {}
 for name, defs in pairs(GUIUnitSoundEffects) do
 	if UnitDefNames[name] then
 		newGUIUnitSoundEffects[UnitDefNames[name].id] = defs
-		if UnitDefNames[name..'_scav'] then
-			newGUIUnitSoundEffects[UnitDefNames[name..'_scav'].id] = defs
-		end
 	end
 end
 GUIUnitSoundEffects = newGUIUnitSoundEffects

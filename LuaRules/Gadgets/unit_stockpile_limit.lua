@@ -58,16 +58,6 @@ if gadgetHandler:IsSyncedCode() then -- SYNCED --
 
 	}
 	----------------------------------------------------------------------------
-	-- Scav copies
-	----------------------------------------------------------------------------
-
-	local isStockpilingUnitScav = {}
-	for defID, maxCount in pairs(isStockpilingUnit) do
-		isStockpilingUnitScav[UnitDefNames[UnitDefs[defID].name .. "_scav"].id] = maxCount
-	end
-	table.mergeInPlace(isStockpilingUnit, isStockpilingUnitScav)
-
-	----------------------------------------------------------------------------
 	----------------------------------------------------------------------------
 
 	local GetUnitStockpile	= Spring.GetUnitStockpile

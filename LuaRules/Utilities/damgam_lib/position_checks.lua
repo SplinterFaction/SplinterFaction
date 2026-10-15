@@ -18,22 +18,6 @@ local mapSizeZ = Game.mapSizeZ
 local landLevel
 local seaLevel
 
--- Get TeamIDs and AllyTeamIDs of Scavengers
-local scavengerTeamID
-local scavengerAllyTeamID
-if Spring.Utilities.Gametype.IsScavengers() then
-    local teams = Spring.GetTeamList()
-    for i = 1,#teams do
-        local luaAI = Spring.GetTeamLuaAI(teams[i])
-        if not scavengerTeamID then
-            if luaAI and luaAI ~= "" and string.sub(luaAI, 1, 12) == 'ScavengersAI' then
-                scavengerTeamID = i - 1
-                _,_,_,_,_,scavengerAllyTeamID = Spring.GetTeamInfo(scavengerTeamID)
-            end
-        end
-    end
-end
-
 -- Team Startboxes
 local AllyTeamStartboxes = {}
 for _,testAllyTeamID in ipairs(Spring.GetAllyTeamList()) do
@@ -224,40 +208,6 @@ local function SurfaceCheck(posx, posy, posz, posradius, sea) -- if true then po
     return true -- nothing failed, so it's good.
 end
 
-local function ScavengerSpawnAreaCheck(posx, posy, posz, posradius) -- if true then position is within Scavengers spawn area.
-    local posradius = posradius or 1000
-    if scavengerAllyTeamID then
-        local scavTechPercentage = Spring.GetGameRulesParam("scavStatsTechPercentage")
-        if scavTechPercentage then
-            if Spring.GetModOptions().scavspawnarea == true then
-                if not AllyTeamStartboxes[scavengerAllyTeamID+1].allyTeamHasStartbox then return true end -- Scavs do not have a startbox so we allow them to spawn anywhere
-                if StartboxCheck(posx, posy, posz, scavengerAllyTeamID) == true then return true end -- Area is within startbox, so it's for sure in the spawn box.
-                
-                -- Spawn Box grows with Scavengers tech, getting that into from GameRulesParameter set by Scav gadget
-                local SpawnBoxMinX = math.floor(AllyTeamStartboxes[scavengerAllyTeamID+1].xMin-(((mapSizeX)*0.01)*scavTechPercentage))
-                local SpawnBoxMaxX = math.ceil(AllyTeamStartboxes[scavengerAllyTeamID+1].xMax+(((mapSizeX)*0.01)*scavTechPercentage))
-                local SpawnBoxMinZ = math.floor(AllyTeamStartboxes[scavengerAllyTeamID+1].zMin-(((mapSizeZ)*0.01)*scavTechPercentage))
-                local SpawnBoxMaxZ = math.ceil(AllyTeamStartboxes[scavengerAllyTeamID+1].zMax+(((mapSizeZ)*0.01)*scavTechPercentage))      
-                
-                if posx < SpawnBoxMinX then return false end
-                if posx > SpawnBoxMaxX then return false end
-                if posz < SpawnBoxMinZ then return false end
-                if posz > SpawnBoxMaxZ then return false end       
-
-                return true
-            else
-                return true
-            end
-        else
-            if not AllyTeamStartboxes[scavengerAllyTeamID+1].allyTeamHasStartbox then return true end -- There's no info about tech percentage, but if there's no startbox, we assume they can spawn anywhere, right?
-            if StartboxCheck(posx, posy, posz, scavengerAllyTeamID) == true then return true end -- Area is within startbox, so it's for sure in the spawn box, even if we don't have info about how big spawn box is.
-            return false -- but otherwise, don't let them spawn, don't risk spawning in place they shouldn't spawn.
-        end
-    else
-        return false -- Scavs aren't in the game, so they don't have a spawn area.
-    end
-end
-
 local function LavaCheck(posx, posy, posz, posradius) -- Returns false if area is in lava
     local posradius = posradius or 1000
     local lavaLevel = Spring.GetGameRulesParam("lavaLevel")
@@ -314,7 +264,4 @@ return {
     SurfaceCheck = SurfaceCheck,
     LavaCheck = LavaCheck,
     MapIsLandOrSea = MapIsLandOrSea,
-
-    -- Scavengers
-    ScavengerSpawnAreaCheck = ScavengerSpawnAreaCheck,
 }

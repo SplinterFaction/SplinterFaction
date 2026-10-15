@@ -8,7 +8,9 @@ local function getSettings()
 	end
 
 	local teamCount, playerCount = 0, 0
-	local isSinglePlayer, is1v1, isTeams, isBigTeams, isSmallTeams, isScavengers, isPvE, isCoop, isFFA, isSandbox = false, false, false, false, false, false, false, false, false, false
+	-- isPvE stays false: SF has no PvE AI teams that sit outside the normal
+	-- ally team list (the Chickens and Scavengers AIs were removed).
+	local isSinglePlayer, is1v1, isTeams, isBigTeams, isSmallTeams, isPvE, isCoop, isFFA, isSandbox = false, false, false, false, false, false, false, false, false
 
 	local gaiaAllyTeamID = select(6, Spring.GetTeamInfo(Spring.GetGaiaTeamID(), false))
 	local allyTeamList = Spring.GetAllyTeamList()
@@ -28,15 +30,6 @@ local function getSettings()
 					allyteamEntirelyHuman = false
 				else
 					playerCount = playerCount + 1
-				end
-
-				local luaAI = Spring.GetTeamLuaAI(team)
-
-				if luaAI then
-					if luaAI:find("Scavengers") then
-						isScavengers = true
-						isAllyTeamValid = false
-					end
 				end
 			end
 
@@ -65,7 +58,6 @@ local function getSettings()
 	isSinglePlayer = playerCount == 1
 	isSmallTeams = isTeams and isSmallTeams
 	isBigTeams = isTeams and not isSmallTeams
-	isPvE = isScavengers
 
 	if teamCount > 2 then
 		isFFA = true
@@ -89,7 +81,6 @@ local function getSettings()
 		isTeams = isTeams,
 		isBigTeams = isBigTeams,
 		isSmallTeams = isSmallTeams,
-		isScavengers = isScavengers,
 		isPvE = isPvE,
 		isCoop = isCoop,
 		isFFA = isFFA,
@@ -108,7 +99,6 @@ return {
 		IsTeams        = function () return getSettings().isTeams        end,
 		IsBigTeams     = function () return getSettings().isBigTeams     end,
 		IsSmallTeams   = function () return getSettings().isSmallTeams   end,
-		IsScavengers   = function () return getSettings().isScavengers   end,
 		IsPvE          = function () return getSettings().isPvE          end,
 		IsCoop         = function () return getSettings().isCoop         end,
 		IsFFA          = function () return getSettings().isFFA          end,

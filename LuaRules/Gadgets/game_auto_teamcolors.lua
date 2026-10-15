@@ -22,7 +22,6 @@ end
 -- Special colors
 local armBlueColor       = "#004DFF" -- Armada Blue
 local corRedColor        = "#FF1005" -- Cortex Red
-local scavPurpColor      = "#6809A1" -- Scav Purple
 local gaiaGrayColor      = "#000000" -- Gaia black
 
 -- Palettes. Each one names the two main colors; everything else (further teams,
@@ -301,8 +300,6 @@ if gadgetHandler:IsSyncedCode() then
 		local luaAI = Spring.GetTeamLuaAI(teamID)
 		if teamID == gaiaTeamID then
 			setHexColor(teamID, gaiaGrayColor)
-		elseif luaAI and string.find(luaAI, "Scavenger") then
-			setHexColor(teamID, scavPurpColor)
 		else
 			local allyTeamID = select(6, Spring.GetTeamInfo(teamID, false))
 			if not allyMembers[allyTeamID] then
@@ -385,7 +382,6 @@ else	-- UNSYNCED
 	local iconDevModeColors = {
 		armblue       = armBlueColor,
 		corred        = corRedColor,
-		scavpurp      = scavPurpColor,
 		gaiagray      = gaiaGrayColor,
 	}
 	local iconDevMode = "no" --Spring.GetModOptions().teamcolors_icon_dev_mode
