@@ -544,6 +544,7 @@ local BEHAVIOR_FILES = {
 	"luarules/configs/simpleai/behaviors/b_commander.lua",     -- order 20; consumes services
 	"luarules/configs/simpleai/behaviors/b_economy.lua",       -- order 30
 	"luarules/configs/simpleai/behaviors/b_throttle.lua",      -- order 32; pauses/cancels factory work while stalling
+	"luarules/configs/simpleai/behaviors/b_morph.lua",         -- order 33; commander tech morphs and extractor upgrades
 	"luarules/configs/simpleai/behaviors/b_upgrades.lua",      -- order 35
 	"luarules/configs/simpleai/behaviors/b_combat.lua",        -- order 50
 	"luarules/configs/simpleai/behaviors/b_surrender.lua",     -- order 90; gg and self-destruct when the game is obviously lost
@@ -953,8 +954,8 @@ if gadgetHandler:IsSyncedCode() then
 
 	-- ============================================================
 	-- UNIT FINISHED
-	-- Mirrors ai_Commander_AutoUpgrade: read techlevel from
-	-- commander customparams after each morph completes.
+	-- Read techlevel from commander customparams after each morph
+	-- completes (the morphs themselves are queued by b_morph).
 	-- ============================================================
 	function gadget:UnitFinished(unitID, unitDefID, unitTeam)
 		if not TeamBuildLists[unitTeam] then return end
