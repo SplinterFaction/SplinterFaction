@@ -1,7 +1,7 @@
 function widget:GetInfo()
 	return {
 		name    = "Initial Settings",
-		desc    = "Applies recommended engine settings on first run, then reloads during pregame so they take effect.",
+		desc    = "Restarts a single-player match once on first run if the loading screen could not apply the recommended settings in time.",
 		author  = "Scary le Poo",
 		date    = "2026",
 		license = "GNU GPL, v2 or later",
@@ -11,12 +11,17 @@ function widget:GetInfo()
 end
 
 --------------------------------------------------------------------------------
--- Marker: written to springsettings.cfg once the settings below have been applied.
--- Bump SETTINGS_VERSION to force a re-apply for everyone on their next launch.
+-- The settings themselves, the version marker, and which settings need a
+-- reload are in LuaUI/Configs/initial_settings.lua. The loading screen
+-- (LuaIntro/Addons/initial_settings.lua) writes them on a first run while the
+-- match loads, which works in multiplayer too. This widget is the safety net:
+-- if the loading screen had to change a setting the engine may already have
+-- read, it restarts a single-player match once. In multiplayer a restart is
+-- not possible (it would disconnect everyone, or a joining player has no start
+-- script to come back with), so there the settings stand as written.
 --------------------------------------------------------------------------------
 
-local MARKER_KEY       = "SFInitialSettingsVersion"
-local SETTINGS_VERSION = 1
+local SETTINGS = VFS.Include("LuaUI/Configs/initial_settings.lua")
 
 --------------------------------------------------------------------------------
 -- Reload tunables
@@ -31,80 +36,6 @@ local FORCE_APPLY   = false         -- ignore the marker and re-run every launch
 local DEBUG         = true          -- verbose decision trace to infolog
 
 --------------------------------------------------------------------------------
--- Settings. Ordered list so application order is deterministic.
---   integer number -> SetConfigInt
---   fractional     -> SetConfigFloat
---   boolean        -> SetConfigInt (1/0)
---   string         -> SetConfigString
---------------------------------------------------------------------------------
-
-local settings = {
-	{ "AdvModelShading",             1 },
-	{ "AllowDeferredMapRendering",   1 },
-	{ "AllowDeferredModelRendering", 1 },
-	{ "AllowSpectatorJoin",          true },
-	{ "FeatureDrawDistance",         150000 },
-	{ "GrassDetail",                 0 },   -- engine grass off: the Map Grass GL4 widget draws the grass (also enforced in LuaIntro)
-	{ "GroundDetail",                200 },
-	{ "HangTimeout",                 -1 },
-	{ "HardwareCursor",              1 },
-	{ "InputTextGeo",                "0.26 0.73 0.02 0.028" },
-	{ "LoadingMT",                   1 },
-	{ "MSAALevel",                   8 },
-	{ "MaxNanoParticles",            5000 },
-	{ "MaxParticles",                25000 },
-	{ "MaxSounds",                   256 },
-	{ "MaxTextureAtlasSizeX",        8192 },
-	{ "MaxTextureAtlasSizeY",        8192 },
-	{ "ReconnectTimeout",            300 },
-	{ "ScreenshotCounter",           1 },
-	{ "ShadowMapSize",               8192 },
-	{ "Shadows",                     1 },
-	{ "ShowFPS",                     0 },
-	{ "ShowPlayerInfo",              0 },
-	{ "ShowSpeed",                   0 },
-	{ "Softparticles",               1 },
-	{ "SplashScreenDir",             "./MenuLoadscreens" },
-	{ "UnitIconDist",                300 },
-	{ "UnitIconFadeAmount",          0 },
-	{ "UnitIconFadeVanish",          3000 },
-	{ "UnitIconScaleUI",             1.05 },
-	{ "UnitIconsAsUI",               1 },
-	{ "UnitIconsHideWithUI",         1 },
-	{ "Water",                       4 },
-	{ "evo_buildorderui",            1 },
-	{ "evo_musicInitialValue",       1 },
-	{ "evo_simplifiedresourcebar",   0 },
-	{ "snd_volmaster",               200 },
-	{ "snd_volmusic",                20 },
-}
-
---------------------------------------------------------------------------------
--- Rebuilt by an in-process reload. SpringApp::Reload destroys CGame and
--- everything it owns, so these are re-read from configHandler on the way back
--- up (CTextureAtlas reads MaxTextureAtlasSizeX/Y in its constructor).
---------------------------------------------------------------------------------
-
-local RELOAD_FIXES = {
-	AllowDeferredMapRendering   = true,
-	AllowDeferredModelRendering = true,
-	MaxSounds                   = true,
-	MaxTextureAtlasSizeX        = true,
-	MaxTextureAtlasSizeY        = true,
-	ShadowMapSize               = true,
-}
-
---------------------------------------------------------------------------------
--- Read once into CGlobalRendering's constructor at process start.
--- CGlobalRendering is NOT destroyed by a reload, so only a fresh process helps.
---------------------------------------------------------------------------------
-
-local PROCESS_ONLY = {
-	LoadingMT = true,
-	MSAALevel = true,
-}
-
---------------------------------------------------------------------------------
 
 local FONT_CANDIDATES = {
 	"fonts/Saira_SemiCondensed-SemiBold.ttf",
@@ -114,10 +45,7 @@ local FONT_CANDIDATES = {
 }
 
 local spGetConfigInt    = Spring.GetConfigInt
-local spGetConfigString = Spring.GetConfigString
 local spSetConfigInt    = Spring.SetConfigInt
-local spSetConfigFloat  = Spring.SetConfigFloat
-local spSetConfigString = Spring.SetConfigString
 local spGetGameFrame    = Spring.GetGameFrame
 local spEcho            = Spring.Echo
 
@@ -172,77 +100,6 @@ local function elapsed(dt)
 	-- Fall back to accumulating the callin delta, then to a fixed guess.
 	waited = waited + ((type(dt) == "number" and dt > 0) and dt or (1 / 60))
 	return waited
-end
-
---------------------------------------------------------------------------------
--- Value encoding / writing
---------------------------------------------------------------------------------
-
-local function encode(value)
-	local t = type(value)
-	if t == "boolean" then
-		return "int", (value and 1 or 0)
-	elseif t == "number" then
-		if value % 1 == 0 then
-			return "int", value
-		end
-		return "float", value
-	end
-	return "string", tostring(value)
-end
-
-local function setValue(key, kind, value)
-	if kind == "int" then
-		spSetConfigInt(key, value, false)
-	elseif kind == "float" then
-		if spSetConfigFloat then
-			spSetConfigFloat(key, value, false)
-		else
-			spSetConfigString(key, tostring(value), false)
-		end
-	else
-		spSetConfigString(key, value, false)
-	end
-end
-
-local function currentAsString(key)
-	local ok, v = pcall(spGetConfigString, key, "")
-	if ok and v ~= nil and v ~= "" then
-		return tostring(v)
-	end
-	return nil
-end
-
---------------------------------------------------------------------------------
-
-local function applySettings()
-	local applied, failed = 0, 0
-	local reloadDirty, processDirty = false, false
-
-	for i = 1, #settings do
-		local key = settings[i][1]
-		local kind, value = encode(settings[i][2])
-		local before = currentAsString(key)
-
-		local ok = pcall(setValue, key, kind, value)
-		if ok then
-			applied = applied + 1
-			local changed = (before ~= tostring(value))
-			if changed then
-				if RELOAD_FIXES[key]  then reloadDirty  = true end
-				if PROCESS_ONLY[key]  then processDirty = true end
-				if DEBUG and (RELOAD_FIXES[key] or PROCESS_ONLY[key]) then
-					spEcho("[Initial Settings] " .. key .. ": "
-						.. tostring(before) .. " -> " .. tostring(value))
-				end
-			end
-		else
-			failed = failed + 1
-			spEcho("[Initial Settings] failed to set: " .. tostring(key))
-		end
-	end
-
-	return applied, failed, reloadDirty, processDirty
 end
 
 --------------------------------------------------------------------------------
@@ -321,53 +178,46 @@ function widget:Initialize()
 	vsx, vsy = Spring.GetViewGeometry()
 	uiScale = vsy / 1080
 
-	local marker = spGetConfigInt(MARKER_KEY, 0) or 0
+	local marker  = spGetConfigInt(SETTINGS.MARKER_KEY, 0) or 0
+	local pending = (spGetConfigInt(SETTINGS.PENDING_KEY, 0) or 0) == 1
 	if DEBUG then
-		spEcho("[Initial Settings] marker=" .. marker .. " required=" .. SETTINGS_VERSION
-			.. " forceApply=" .. tostring(FORCE_APPLY))
+		spEcho("[Initial Settings] marker=" .. marker .. " required=" .. SETTINGS.VERSION
+			.. " pending=" .. tostring(pending) .. " forceApply=" .. tostring(FORCE_APPLY))
 	end
 
-	if marker >= SETTINGS_VERSION and not FORCE_APPLY then
-		if DEBUG then
-			spEcho("[Initial Settings] already applied at this version, standing down. "
-				.. "Set FORCE_APPLY = true or bump SETTINGS_VERSION to re-run.")
+	-- Normally the loading screen has already written the settings. If it did
+	-- not (it failed, or this is an old loading screen), write them here.
+	local reloadDirty = pending
+	if marker < SETTINGS.VERSION or FORCE_APPLY then
+		local applied, failed, dirty, processDirty = SETTINGS.Apply(Spring, DEBUG and function(text)
+			spEcho("[Initial Settings] " .. text)
+		end or nil)
+		reloadDirty = reloadDirty or dirty or FORCE_APPLY
+		spEcho("[Initial Settings] applied " .. applied .. " engine settings"
+			.. (failed > 0 and (" (" .. failed .. " failed)") or "") .. ".")
+		if processDirty then
+			spEcho("[Initial Settings] MSAA / LoadingMT are read at process start; "
+				.. "they will apply on the next launch.")
 		end
-		removeMe = true
-		return
-	end
-
-	local applied, failed, reloadDirty, processDirty = applySettings()
-
-	-- Only mark as done if nothing blew up, so a broken run retries next launch.
-	local marked = false
-	if failed == 0 then
-		spSetConfigInt(MARKER_KEY, SETTINGS_VERSION, false)
-		marked = true
-	end
-
-	spEcho("[Initial Settings] applied " .. applied .. " engine settings"
-		.. (failed > 0 and (" (" .. failed .. " failed)") or "") .. ".")
-
-	if processDirty then
-		spEcho("[Initial Settings] MSAA / LoadingMT are read at process start; "
-			.. "they will apply on the next launch.")
-	end
-
-	-- Never reload unless the marker is safely persisted, or the next launch
-	-- re-applies and reloads again, forever.
-	if FORCE_APPLY then
-		reloadDirty = true
-		if DEBUG then
-			spEcho("[Initial Settings] FORCE_APPLY: treating settings as changed.")
+		-- Only mark as done if nothing blew up, so a broken run retries next
+		-- launch. Never reload unless the marker is safely persisted, or the
+		-- next launch re-applies and reloads again, forever.
+		if failed ~= 0 then
+			removeMe = true
+			return
 		end
+		spSetConfigInt(SETTINGS.MARKER_KEY, SETTINGS.VERSION, false)
+	end
+
+	-- the note is acted on once, here, whatever happens next
+	if pending then
+		spSetConfigInt(SETTINGS.PENDING_KEY, 0, false)
 	end
 
 	if DEBUG then
-		spEcho("[Initial Settings] reloadDirty=" .. tostring(reloadDirty)
-			.. " markerWritten=" .. tostring(marked))
+		spEcho("[Initial Settings] reloadDirty=" .. tostring(reloadDirty))
 	end
-
-	if not (reloadDirty and marked) then
+	if not reloadDirty then
 		if DEBUG then
 			spEcho("[Initial Settings] nothing requires a reload, standing down.")
 		end
@@ -377,8 +227,9 @@ function widget:Initialize()
 
 	local ok, why = canReload()
 	if not ok then
-		spEcho("[Initial Settings] settings need a reload to take effect ("
-			.. tostring(why) .. "). They will apply on the next launch.")
+		spEcho("[Initial Settings] no reload (" .. tostring(why) .. "). The settings were "
+			.. "written while the match loaded and normally already apply; if one did not "
+			.. "make it in time, it applies on the next launch.")
 		removeMe = true
 		return
 	end
