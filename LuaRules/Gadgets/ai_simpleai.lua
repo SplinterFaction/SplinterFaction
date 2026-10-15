@@ -551,7 +551,12 @@ local BEHAVIOR_FILES = {
 
 local services  = {}
 local behaviors = {}
-do
+-- Behavior modules are synced-only: they issue orders, set unit build speeds
+-- and publish GameRulesParams, none of which exist in unsynced Lua, and the
+-- unsynced half of this gadget has no callins that use them. Loading them in
+-- unsynced used to run every TeamInit there too, which crashed the unsynced
+-- load once b_adaptive's TeamInit started calling SetGameRulesParam.
+if gadgetHandler:IsSyncedCode() then
 	for i = 1, #BEHAVIOR_FILES do
 		behaviors[#behaviors + 1] = VFS.Include(BEHAVIOR_FILES[i])(ctx, lib, sharedCfg, services)
 	end
