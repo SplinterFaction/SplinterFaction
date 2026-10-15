@@ -41,6 +41,13 @@
 		.line.spectator { color: #f2d64b; border-left: 2dp #f2d64b; }
 		.line.event { color: #5fd0e8; border-left: 2dp #5fd0e8; }
 		.line.system { color: #8593a1; }
+		/* a player's game out of sync: the most serious line there is */
+		.line.desync {
+			color: #ffb3ac;
+			background-color: rgba(70, 14, 12, 215);
+			border-left: 4dp #ff5a4f;
+		}
+		.line.warning { color: #ff9b21; border-left: 2dp #ff9b21; }
 	</style>
 </head>
 <body>

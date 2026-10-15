@@ -88,6 +88,13 @@ local fullLog   = {}   -- persistent scrollback (all channels); read by the Log 
 local serial    = 0    -- numbers the lines, for their element ids
 local shownSignature = ""
 
+-- The engine's sync messages (rml/syncmessages.lua). It repeats them every few
+-- seconds while they last: the first one about a set of players goes to chat,
+-- the repeats only to the log.
+local sync
+local syncSeen = {}         -- kind .. names -> the game second it was last shown in chat
+local NORESPONSE_REPEAT = 60 -- a "not reporting" warning may come back to chat after this many seconds
+
 local pendingSpeed  = nil   -- coalesced speed-change entry awaiting flush
 local pendingSpeedT = 0     -- os.clock() of the last speed line seen
 
@@ -105,6 +112,8 @@ local COLOR_WHISPER = {1.00, 0.45, 0.40, 1.00}
 local COLOR_SPEC    = {0.95, 0.84, 0.29, 1.00}
 local COLOR_SYSTEM  = {0.52, 0.58, 0.63, 1.00}
 local COLOR_EVENT   = {0.37, 0.82, 0.91, 1.00}   -- speed / pause game events
+local COLOR_DESYNC  = {1.00, 0.35, 0.31, 1.00}   -- a player's game out of sync
+local COLOR_WARNING = {1.00, 0.61, 0.13, 1.00}   -- a player not reporting its game state
 
 --------------------------------------------------------------------------------
 -- helpers (carried over)
@@ -313,6 +322,51 @@ local function ParseChatLine(line)
 		end
 	end
 
+	-- Sync messages from the game server. They never start with "<name>", so
+	-- a chat line cannot pass for one.
+	do
+		local report = sync and sync.Parse(text)
+		if report then
+			local names = table.concat(report.names, ", ")
+			local key = report.kind .. ":" .. names
+			local now = spGetGameSeconds and spGetGameSeconds() or 0
+			local seen = syncSeen[key]
+			local fresh = not seen or (report.kind == "noresponse" and now - seen >= NORESPONSE_REPEAT)
+			if not fresh then
+				return {
+					channel   = "system",
+					bodyColor = (report.kind == "desync") and COLOR_DESYNC or COLOR_WARNING,
+					body      = raw,
+					raw       = raw,
+				}
+			end
+			syncSeen[key] = now
+			local single = (#report.names == 1) and report.names[1] or nil
+			if report.kind == "desync" then
+				return {
+					channel   = "desync",
+					player    = sync.JoinNames(report.names),
+					nameColor = single and GetPlayerColorByName(single) or COLOR_DESYNC,
+					bodyColor = COLOR_DESYNC,
+					separator = "",
+					body      = string.format("%s out of sync since %s (frame %d)",
+						(#report.names == 1) and "is" or "are", sync.FrameTime(report.frame), report.frame),
+					raw       = raw,
+				}
+			end
+			return {
+				channel   = "warning",
+				player    = sync.JoinNames(report.names),
+				nameColor = single and GetPlayerColorByName(single) or COLOR_WARNING,
+				bodyColor = COLOR_WARNING,
+				separator = "",
+				body      = string.format("did not report their game state in time (frame %d)",
+					report.frame),
+				raw       = raw,
+			}
+		end
+	end
+
 	-- Map marker: "playername added point:" / "playername added point: label text"
 	do
 		local player, label = text:match("^(.+) added point:%s*(.*)$")
@@ -512,6 +566,7 @@ end
 
 function widget:Initialize()
 	RefreshPlayerCache()
+	sync = include("rml/syncmessages.lua")
 
 	if HIDE_DEFAULT_CONSOLE then
 		spSendCommands("console 0")

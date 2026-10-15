@@ -1,0 +1,123 @@
+<rml>
+<head>
+	<title>SplinterFaction desync alert</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* A desync: whose game no longer matches the host's, since when, and
+		   whether it is still going on. Red, in the upper middle of the
+		   screen, and it stays until put away; put away, it is a small chip
+		   under the resource bar that can be opened again. The widget sets
+		   the positions (hud.PlacePanel); the sizes here must match
+		   PANEL_WIDTH, PANEL_HEIGHT, CHIP_WIDTH and CHIP_HEIGHT in
+		   gui_rml_desync.lua. */
+		#desync {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 620dp;
+			height: 118dp;
+			box-sizing: border-box;
+			padding: 11dp 14dp 12dp 16dp;
+			background-color: rgba(30, 10, 10, 240);
+			border: 2dp #ff5a4f;
+			pointer-events: auto;
+		}
+		/* the first seconds, to catch the eye */
+		#desync.flash {
+			background-color: rgba(90, 22, 18, 245);
+		}
+		#desync-head {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 22dp;
+		}
+		#desync-tag {
+			padding: 0dp 7dp;
+			font-weight: bold;
+			font-size: 13dp;
+			line-height: 19dp;
+			letter-spacing: 2dp;
+			color: #0b0e12;
+			background-color: #ff5a4f;
+		}
+		#desync-state {
+			margin-left: 10dp;
+			font-size: 12dp;
+			color: #ff9b91;
+		}
+		#desync-state.over {
+			color: #8593a1;
+		}
+		.grow {
+			flex: 1;
+		}
+		#desync-hide {
+			width: 52dp;
+			font-size: 11dp;
+			letter-spacing: 1dp;
+		}
+		#desync-title {
+			margin-top: 6dp;
+			font-weight: bold;
+			font-size: 18dp;
+			line-height: 23dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #f0f4f8;
+		}
+		#desync-text {
+			margin-top: 2dp;
+			font-size: 13dp;
+			line-height: 17dp;
+			color: #e0c4c1;
+		}
+		#desync-dump {
+			margin-top: 3dp;
+			font-size: 11dp;
+			line-height: 14dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #8593a1;
+		}
+
+		/* put away */
+		#desync-chip {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 300dp;
+			height: 22dp;
+			box-sizing: border-box;
+			padding: 0dp 8dp;
+			text-align: center;
+			font-weight: bold;
+			font-size: 12dp;
+			line-height: 20dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #f0f4f8;
+			background-color: rgba(120, 28, 24, 235);
+			border: 1dp #ff5a4f;
+			pointer-events: auto;
+		}
+		#desync-chip:hover {
+			background-color: rgba(160, 36, 30, 245);
+		}
+	</style>
+</head>
+<body>
+	<div id="desync" class="hidden">
+		<div id="desync-head">
+			<div id="desync-tag">DESYNC</div>
+			<div id="desync-state"/>
+			<div class="grow"/>
+			<div id="desync-hide" class="close">HIDE</div>
+		</div>
+		<div id="desync-title"/>
+		<div id="desync-text"/>
+		<div id="desync-dump"/>
+	</div>
+	<div id="desync-chip" class="hidden"/>
+</body>
+</rml>
