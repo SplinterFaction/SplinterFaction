@@ -10,6 +10,11 @@ function gadget:GetInfo()
 	}
 end
 
+-- Synced only: the unsynced copy would send its own morph orders.
+if not gadgetHandler:IsSyncedCode() then
+	return false
+end
+
 local CMD_MORPH_QUEUE = 34410
 local teamTechLevel = {}
 local mexTechLevel = {}

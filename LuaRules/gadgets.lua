@@ -16,6 +16,15 @@
 --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Synced code always loads from the game archive. Dev Lua is a per-client
+-- setting, and loading synced gadgets from loose files on one client means
+-- different synced code there, which desyncs every multiplayer game.
+-- Unsynced may still read loose files for development.
+local VFSMODE = VFS.ZIP_ONLY -- FIXME: ZIP_FIRST ?
+if Spring.IsDevLuaEnabled() and SendToUnsynced == nil then
+  VFSMODE = VFS.RAW_ONLY
+end
+
 VFS.Include('init.lua', nil, VFSMODE)
 
 local isMission = VFS.FileExists("mission.lua")	-- or Game.gameName:find("Scenario Editor")
@@ -30,11 +39,6 @@ local GADGETS_DIR = Script.GetName():gsub('US$', '') .. '/Gadgets/'
 local SCRIPT_DIR = Script.GetName() .. '/'
 local LOG_SECTION = "" -- FIXME: "LuaRules" section is not registered anywhere
 
-
-local VFSMODE = VFS.ZIP_ONLY -- FIXME: ZIP_FIRST ?
-if (Spring.IsDevLuaEnabled()) then
-  VFSMODE = VFS.RAW_ONLY
-end
 
 VFS.Include('LuaRules/setupdefs.lua', nil, VFSMODE)
 

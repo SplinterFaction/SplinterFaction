@@ -29,10 +29,10 @@ function isAuthorized(playerID)
 		return true
 	else
 		local playername = Spring.GetPlayerInfo(playerID, false)
-		local authorized = false
-
-		local authorized = false
-		if (_G and _G.permissions.devhelpers[playername]) or (SYNCED and SYNCED.permissions.devhelpers[playername]) then
+		-- No permissions table is defined anywhere in SF; without these nil
+		-- checks this errored whenever cheats were off.
+		local perms = (_G and _G.permissions) or (SYNCED and SYNCED.permissions)
+		if perms and perms.devhelpers and perms.devhelpers[playername] then
 			if startPlayers == nil or startPlayers[playername] == nil then
 				return true
 			end
@@ -214,15 +214,18 @@ if gadgetHandler:IsSyncedCode() then
 			table.insert(words, word)
 		end
 		
-		if words[1] == 'desync' then
-			Spring.Echo("Synced: Attempting to trigger a /desync")
-			Spring.SendCommands("desync")
-		end
-		
+		-- Everything below, including the deliberate desync, needs cheats
+		-- or devhelpers permission.
 		if not isAuthorized(playerID) then
 			return
 		end
-		
+
+		if words[1] == 'desync' then
+			Spring.Echo("Synced: Attempting to trigger a /desync")
+			Spring.SendCommands("desync")
+			return
+		end
+
 		if words[1] == "givecat" then
 			GiveCat(words)
 		elseif words[1] == "xpunits" then
