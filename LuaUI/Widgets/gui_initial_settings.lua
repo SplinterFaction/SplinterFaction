@@ -44,7 +44,7 @@ local settings = {
 	{ "AllowDeferredModelRendering", 1 },
 	{ "AllowSpectatorJoin",          true },
 	{ "FeatureDrawDistance",         150000 },
-	{ "GrassDetail",                 200 },
+	{ "GrassDetail",                 0 },   -- engine grass off: the Map Grass GL4 widget draws the grass (also enforced in LuaIntro)
 	{ "GroundDetail",                200 },
 	{ "HangTimeout",                 -1 },
 	{ "HardwareCursor",              1 },

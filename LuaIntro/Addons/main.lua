@@ -26,6 +26,14 @@ end
 -- LuaIntro is early enough to enforce them for fresh installs.
 Spring.SetConfigInt('AllowDeferredMapRendering', 1)
 Spring.SetConfigInt('AllowDeferredModelRendering', 1)
+-- The engine's own grass stays off: SplinterFaction draws grass with the
+-- "Map Grass GL4" widget, which reads the same grass map, so with both on a
+-- map that has one gets two kinds of grass on top of each other. The engine
+-- reads GrassDetail once, when it builds its grass drawer during loading
+-- (GrassDetail 0 turns it off for the match; changing it later does not), so
+-- this has to happen here. Until 2026-09-27 the old options widget did the
+-- same on every launch.
+Spring.SetConfigInt('GrassDetail', 0)
 
 local defaultFont2 = 'Saira_SemiCondensed-SemiBold.ttf'
 local fontfile2 = 'luaui/fonts/'..Spring.GetConfigString("ui_font2", defaultFont2)
