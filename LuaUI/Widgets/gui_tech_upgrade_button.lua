@@ -108,6 +108,7 @@ local spGiveOrderToUnitArray  = Spring.GiveOrderToUnitArray
 local spGetMyTeamID           = Spring.GetMyTeamID
 local spGetSpectatingState    = Spring.GetSpectatingState
 local spGetTeamRulesParam     = Spring.GetTeamRulesParam
+local spGetUnitRulesParam     = Spring.GetUnitRulesParam
 local spGetCameraPosition     = Spring.GetCameraPosition
 local spGetGroundHeight       = Spring.GetGroundHeight
 local spGetGameFrame          = Spring.GetGameFrame
@@ -288,7 +289,11 @@ local function ScanUnit(unitID, unitDefID)
 		local id = d.id
 		if id and id >= CMD_MORPH_FIRST and id <= CMD_MORPH_LAST then
 			local inMorph = morphing[unitID] ~= nil
-			if d.disabled and not inMorph then
+			-- unit_morph also disables the command when the team is short on
+			-- research points; that case keeps its (greyed) button, only a
+			-- tech lock hides it.
+			if d.disabled and not inMorph
+					and (spGetUnitRulesParam(unitID, "morphRpShort") or 0) ~= 1 then
 				return nil    -- tech-locked: no button
 			end
 			local rp = info.rp or ParseTooltipRP(d.tooltip) or 0
