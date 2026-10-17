@@ -625,7 +625,7 @@ if (gadgetHandler:IsSyncedCode()) then
     return math.min (MaxMorphTimeBonus, bonus) -- max MaxMorphTimeBonus
   end
 
-  local function GetMorphTooltip(unitID, unitDefID, teamID, morphDef, teamTech, unitXP, unitRank, unreachedTechs)
+  local function GetMorphTooltip(unitID, unitDefID, teamID, morphDef, teamTech, unitXP, unitRank, unreachedTechs, rpShort)
     local ud = UnitDefs[morphDef.into]
     local tt = ''
     if (morphDef.text ~= nil) then
@@ -692,7 +692,116 @@ if (gadgetHandler:IsSyncedCode()) then
         tt = tt..str
       end
     end
+    if rpShort then
+      tt = tt .. RedStr .. '\nNot enough research points (needs ' .. morphDef.research .. ')'
+    end
     return tt
+  end
+
+  --------------------------------------------------------------------------------
+  -- Research point gate for the start button.
+  --
+  -- The start (Upgrade) button is disabled while the team can't pay the morph's
+  -- RP cost, since StartMorph would just refuse it. The Queue button stays
+  -- enabled in that case: queueing is the wait-until-affordable path.
+  -- Metal and energy are not gated here; they drain over the morph's duration
+  -- like a build, so a low stockpile only slows the morph down.
+  --------------------------------------------------------------------------------
+
+  local rpGatedUnits = {}   -- [unitID] = true if any of its morph buttons costs RP
+  local rpShortState = {}   -- [unitID] = { [morphCmd] = rpShort } as last applied
+
+  local function IsResearchShort(teamID, morphDef)
+    local cost = morphDef.research or 0
+    return cost > 0 and GG.Research ~= nil and not GG.Research.CanAfford(teamID, cost)
+  end
+
+  -- Single place that decides a morph button's enabled state. Returns reqLocked
+  -- (tech, xp or rank missing) so XP polling knows whether it still has work.
+  -- Units that are mid-morph are left alone: StartMorph owns their buttons.
+  local function ApplyMorphButtonState(unitID, unitDefID, teamID, morphDef, unitRank)
+    if morphingUnits[unitID] then
+      return true
+    end
+    local cmdDescIdx = spFindUnitCmdDesc(unitID, morphDef.cmd)
+    if not cmdDescIdx then
+      return false
+    end
+
+    local teamTech = teamTechLevel[teamID] or 0
+    local unitXP   = spGetUnitExperience(unitID) or 0
+    unitRank = unitRank or GetUnitRank(unitID)
+    local unreachedTechs = TechReqList(teamID, morphDef.require)
+
+    local reqLocked = (morphDef.tech > teamTech) or (morphDef.rank > unitRank)
+            or (morphDef.xp > unitXP) or (#unreachedTechs > 0)
+    local rpShort = IsResearchShort(teamID, morphDef)
+    local disabled = reqLocked or rpShort
+
+    local tooltip = GetMorphTooltip(unitID, unitDefID, teamID, morphDef, teamTech, unitXP,
+                                    unitRank, unreachedTechs, rpShort)
+    spEditUnitCmdDesc(unitID, cmdDescIdx, {
+      disabled = disabled,
+      name     = (disabled and "\255\255\064\064" or "\255\255\255\255") .. morphDef.cmdname,
+      tooltip  = tooltip,
+    })
+
+    -- Queue: only real requirements lock it, and a unit already in the queue
+    -- keeps its queue button disabled (QueueMorph set that).
+    local queued = ipairs_containsElement(teamQueuedUnits[teamID] or {}, "unitID", unitID)
+    local queueIdx = spFindUnitCmdDesc(unitID, CMD_MORPH_QUEUE)
+    if queueIdx then
+      spEditUnitCmdDesc(unitID, queueIdx, { disabled = reqLocked or (queued and true or false),
+                                            tooltip = "Queue " .. tooltip })
+    end
+
+    if (morphDef.research or 0) > 0 then
+      rpGatedUnits[unitID] = true
+      local states = rpShortState[unitID]
+      if not states then
+        states = {}
+        rpShortState[unitID] = states
+      end
+      if states[morphDef.cmd] ~= rpShort then
+        states[morphDef.cmd] = rpShort
+        -- Lets gui_tech_upgrade_button tell "can't afford yet" (show greyed)
+        -- apart from "tech locked" (hide).
+        spSetUnitRulesParam(unitID, "morphRpShort", rpShort and 1 or 0, { allied = true })
+      end
+    end
+
+    return reqLocked
+  end
+
+  local function ApplyUnitMorphButtons(unitID, unitDefID, teamID, unitRank)
+    local morphDefSet = morphDefs[UnitDefs[unitDefID].name]
+    if not morphDefSet then
+      return
+    end
+    for _, morphDef in pairs(morphDefSet) do
+      ApplyMorphButtonState(unitID, unitDefID, teamID, morphDef, unitRank)
+    end
+  end
+
+  -- Called periodically: only touches a button when its RP affordability flipped.
+  local function RefreshResearchGates()
+    for unitID in pairs(rpGatedUnits) do
+      local unitDefID = spGetUnitDefID(unitID)
+      local teamID = spGetUnitTeam(unitID)
+      local morphDefSet = unitDefID and morphDefs[UnitDefs[unitDefID].name]
+      if not (morphDefSet and teamID) then
+        rpGatedUnits[unitID] = nil
+        rpShortState[unitID] = nil
+      elseif not morphingUnits[unitID] then
+        local states = rpShortState[unitID] or {}
+        for _, morphDef in pairs(morphDefSet) do
+          if (morphDef.research or 0) > 0
+                  and states[morphDef.cmd] ~= IsResearchShort(teamID, morphDef) then
+            ApplyMorphButtonState(unitID, unitDefID, teamID, morphDef)
+          end
+        end
+      end
+    end
   end
 
   -- Usage eg. UpdateCmdDesc(unitID, CMD_MORPH_PAUSE, morphPauseCmdDesc, disabled, tooltip)
@@ -704,41 +813,10 @@ if (gadgetHandler:IsSyncedCode()) then
   end
 
   local function UpdateMorphReqs(teamID)
-    local newMorphCmdDesc = {}
-
-    local teamTech  = teamTechLevel[teamID] or 0
     local teamUnits = Spring.GetTeamUnits(teamID)
     for n = 1,#teamUnits do
-      local unitID   = teamUnits[n]
-      local unitXP   = spGetUnitExperience(unitID)
-      local unitRank = GetUnitRank(unitID)
-      local unitDefID = spGetUnitDefID(unitID)
-
-      local morphDefs = morphDefs[UnitDefs[unitDefID].name] or {}
-
-      for _,morphDef in pairs(morphDefs) do
-        local morphCmdDescIdx = spFindUnitCmdDesc(unitID, morphDef.cmd)
-        if morphCmdDescIdx then
-          local unreachedTechs = TechReqList(teamID, morphDef.require)
-          newMorphCmdDesc.disabled = (morphDef.tech > teamTech) or (morphDef.rank > unitRank)
-                  or (morphDef.xp > unitXP) or (#unreachedTechs > 0)
-          --if (morphCmdDesc.disabled) then
-          --  morphCmdDesc.name = "\255\255\64\64"..morphDef.cmdname    -- Reddish
-          --else
-          --  morphCmdDesc.name = "\255\255\255\255"..morphDef.cmdname
-          --end
-          newMorphCmdDesc.name = newMorphCmdDesc.disabled and "\255\255\64\64"..morphDef.cmdname
-                  or "\255\255\255\255"..morphDef.cmdname
-          newMorphCmdDesc.tooltip = GetMorphTooltip(unitID, unitDefID, teamID, morphDef, teamTech, unitXP,
-                                                    unitRank, unreachedTechs)
-          spEditUnitCmdDesc(unitID, morphCmdDescIdx, newMorphCmdDesc)
-          -- Enable/disable pause and queue buttons
-          --UpdateCmdDesc(unitID, CMD_MORPH_PAUSE, {disabled=true})
-          --TODO: Remove time info from 'Pause' button
-          UpdateCmdDesc(unitID, CMD_MORPH_QUEUE, {disabled=newMorphCmdDesc.disabled,
-                                                  tooltip="Queue "..newMorphCmdDesc.tooltip})
-        end
-      end
+      local unitID    = teamUnits[n]
+      ApplyUnitMorphButtons(unitID, spGetUnitDefID(unitID), teamID)
     end
   end
 
@@ -780,6 +858,9 @@ if (gadgetHandler:IsSyncedCode()) then
     morphCmdDesc.tooltip = nil
     morphCmdDesc.texture = nil
     morphCmdDesc.text = nil
+
+    -- Final state, including the research point gate
+    ApplyMorphButtonState(unitID, unitDefID, teamID, morphDef, unitRank)
   end
 
   local function AddExtraUnitMorph(unitID, unitDef, teamID, morphDef)  -- adds extra unit morph (planetwars morphing)
@@ -1131,6 +1212,11 @@ if (gadgetHandler:IsSyncedCode()) then
     if pauseDescID then
       spEditUnitCmdDesc(unitID, pauseDescID, {id=CMD_MORPH_PAUSE, disabled=true})
     end
+
+    -- The blanket re-enable above ignores requirements and RP; settle the real state.
+    if unitDefID then
+      ApplyMorphButtonState(unitID, unitDefID, morphData.teamID, morphData.def)
+    end
   end
 
   local function FinishMorph(unitID, morphData)
@@ -1445,13 +1531,13 @@ if (gadgetHandler:IsSyncedCode()) then
           if (morphDef) then
             local cmdDescID = spFindUnitCmdDesc(unitID, morphDef.cmd)
             if (not cmdDescID) then
-              AddMorphButtons(unitID, unitDefName, teamID, morphDef, teamTechLevel[teamID])
+              AddMorphButtons(unitID, unitDefID, teamID, morphDef, teamTechLevel[teamID])
             end
             useXPMorph = (morphDef.xp > 0) or useXPMorph
           end
         end
         if (useXPMorph) then
-          XpMorphUnits[#XpMorphUnits+1] = { id=unitID, defID= unitDefName, team=teamID} end
+          XpMorphUnits[#XpMorphUnits+1] = { id=unitID, defID= unitDefID, team=teamID} end
       end
     end
 
@@ -1570,6 +1656,10 @@ if (gadgetHandler:IsSyncedCode()) then
 
     --if updateButtons then
     UpdateMorphReqs(teamID) --end
+
+    -- Last, since StopMorph / UpdateMorphReqs above may have re-registered it
+    rpGatedUnits[unitID] = nil
+    rpShortState[unitID] = nil
   end
 
   function gadget:UnitTaken(unitID, unitDefID, oldTeamID, teamID)
@@ -1587,23 +1677,7 @@ if (gadgetHandler:IsSyncedCode()) then
     local morphDefSet = morphDefs[UnitDefs[unitDefID].name]
 
     if (morphDefSet) then
-      local teamTech = teamTechLevel[teamID] or 0
-      local unitXP   = spGetUnitExperience(unitID)
-      for _, morphDef in pairs(morphDefSet) do
-        if (morphDef) then
-          local cmdDescID = spFindUnitCmdDesc(unitID, morphDef.cmd)
-          if (cmdDescID) then
-            local morphCmdDesc = {}
-            local teamReqTechs = TechReqList(teamID,morphDef.require)
-            local teamHasTechs = teamReqTechs and #teamReqTechs == 0
-
-            morphCmdDesc.disabled = (morphDef.tech > teamTech) or (morphDef.rank > newRank)
-                    or (morphDef.xp > unitXP) or (not teamHasTechs)
-            morphCmdDesc.tooltip  = GetMorphTooltip(unitID, unitDefID, teamID, morphDef, teamTech, unitXP, newRank, teamReqTechs)
-            spEditUnitCmdDesc(unitID, cmdDescID, morphCmdDesc)
-          end
-        end
-      end
+      ApplyUnitMorphButtons(unitID, unitDefID, teamID, newRank)
     end
   end
 
@@ -1683,6 +1757,11 @@ if (gadgetHandler:IsSyncedCode()) then
     -- Retry research-point-blocked queue heads once per second. Keys are collected
     -- into an array first because StartQueue clears and may re-set rpWaiting[teamID],
     -- and re-adding a key while pairs() iterates is undefined behavior in Lua 5.1.
+    -- Grey out / re-enable Upgrade buttons as research point balances change.
+    if n % 15 == 7 and next(rpGatedUnits) then
+      RefreshResearchGates()
+    end
+
     if n % 30 == 0 and next(rpWaiting) then
       local waiting = {}
       for teamID in pairs(rpWaiting) do
@@ -1721,17 +1800,9 @@ if (gadgetHandler:IsSyncedCode()) then
 
           local xpMorphLeft = false
           for _,morphDef in pairs(morphDefSet) do
-            if (morphDef) then
-              local cmdDescIdx = spFindUnitCmdDesc(unitID, morphDef.cmd)
-              if (cmdDescIdx) then
-                local morphCmdDesc = {}
-                local teamOwnsReqUnit = TechReqList(teamID, morphDef.require)
-                morphCmdDesc.disabled = morphDef.tech > teamTech or morphDef.rank > unitRank or morphDef.xp > unitXP or not teamOwnsReqUnit
-                morphCmdDesc.tooltip  = GetMorphTooltip(unitID, unitDefID, teamID, morphDef, teamTech, unitXP, unitRank, teamOwnsReqUnit)
-                spEditUnitCmdDesc(unitID, cmdDescIdx, morphCmdDesc)
-
-                xpMorphLeft = morphCmdDesc.disabled or xpMorphLeft
-              end
+            if (morphDef) and spFindUnitCmdDesc(unitID, morphDef.cmd) then
+              local reqLocked = ApplyMorphButtonState(unitID, unitDefID, teamID, morphDef, unitRank)
+              xpMorphLeft = reqLocked or xpMorphLeft
             end
           end
           if not xpMorphLeft then
