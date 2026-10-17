@@ -303,9 +303,15 @@ function widget:Initialize()
 	toggleGame = Toggler(1)
 	actionHandler = function() toggleGame() end
 	widgetHandler:AddAction("customgameinfo", actionHandler)
-	Spring.SendCommands("unbind Any+i gameinfo")
-	Spring.SendCommands("unbind i gameinfo")
-	Spring.SendCommands("bind i customgameinfo")
+	local function TakeKey()
+		Spring.SendCommands("unbind Any+i gameinfo")
+		Spring.SendCommands("unbind i gameinfo")
+		Spring.SendCommands("bind i customgameinfo")
+	end
+	TakeKey()
+	if WG.SFKeybindings and WG.SFKeybindings.AddReapplyHook then
+		WG.SFKeybindings.AddReapplyHook("Game Info", TakeKey)
+	end
 
 	WG['gameinfo'] = { toggle = toggleGame }
 	WG['keybinds'] = { toggle = Toggler(2) }
@@ -317,6 +323,9 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
+	if WG.SFKeybindings and WG.SFKeybindings.RemoveReapplyHook then
+		WG.SFKeybindings.RemoveReapplyHook("Game Info")
+	end
 	if document then
 		Spring.SendCommands("unbind i customgameinfo")
 		Spring.SendCommands("bind Any+i gameinfo")

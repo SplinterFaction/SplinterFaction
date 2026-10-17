@@ -1,18 +1,20 @@
 //
 // Splinter Faction default keybindings
-// Loaded by LuaUI/Widgets/gui_sf_keybindings.lua via "keyload".
+// Applied by LuaUI/Widgets/gui_sf_keybindings.lua, which reads this file from
+// the game archive only (a loose copy in the write dir is ignored).
 //
-// Do NOT put "unbindall" in this file. The engine has already loaded the user's
-// own uikeys.txt by the time this runs; unbindall would destroy it.
+// The bindings are rebuilt from scratch at game start, in this order:
+//   unbindall, then this file, then the engine's built-in defaults
+//   ("keydefaults"), then the player's rebinds in sf_uikeys.txt.
+// The player's uikeys.txt is NOT used: in installs shared between several
+// games it is full of other games' binds.
 //
-// Priority note: binds are appended per keyset and the engine takes the first
-// valid action in the list, so everything here sits behind the user's own
-// bindings. Keys they have already claimed keep their meaning; these fill in
-// the rest.
+// Per keyset the engine runs the first-bound action that is available, so a
+// bind here wins over an engine default on the same key, and the defaults
+// still fill every key this file does not mention.
 //
-// Users who want to remove one of these can create sf_uikeys.txt in their
-// Recoil write dir (next to uikeys.txt) and put "unbind" lines in it -- that
-// file is loaded after this one.
+// Players change binds in game through the Keybinds window, which writes
+// sf_uikeys.txt in the write dir (its unbind lines remove what it replaces).
 //
 
 

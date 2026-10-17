@@ -33,6 +33,27 @@ local ORDER_FILENAME     = LUAUI_DIRNAME .. 'Config/' .. modShortUpper .. '_orde
 local CONFIG_FILENAME    = LUAUI_DIRNAME .. 'Config/' .. modShortUpper .. '_data.lua'
 local WIDGET_DIRNAME     = LUAUI_DIRNAME .. 'widgets/'
 
+-- Loose widgets in the player's data directory are only loaded when the
+-- "allowuserwidgets" modoption is on. Players who share one Recoil install
+-- between several games otherwise get other games' widgets loaded into SF,
+-- where they shadow or knock out SF's own (same-name widgets collide).
+local function IsTruthy(v)
+  return v == true or v == 1 or v == "1" or v == "true" or v == "yes"
+end
+local ALLOW_USER_WIDGETS = IsTruthy((Spring.GetModOptions() or {}).allowuserwidgets)
+
+-- VFS mode for reading a widget file. fromZip == nil means "not known"
+-- (the selector, which the engine ships raw), so the archive wins but a raw
+-- file is still found.
+local function WidgetVFSMode(fromZip)
+  if fromZip == true then
+    return VFS.ZIP
+  elseif fromZip == false then
+    return VFS.RAW_ONLY
+  end
+  return VFS.ZIP_FIRST
+end
+
 local SELECTOR_BASENAME = 'selector.lua'
 
 local SAFEWRAP = 1
@@ -352,23 +373,31 @@ function widgetHandler:Initialize()
 
   local unsortedWidgets = {}
 
-  -- stuff the raw widgets into unsortedWidgets
-  local widgetFiles = VFS.DirList(WIDGET_DIRNAME, "*.lua", VFS.RAW_ONLY)
-  for k,wf in ipairs(widgetFiles) do
-    GetWidgetInfo(wf, VFS.RAW_ONLY)
-    local widget = self:LoadWidget(wf, false)
-    if (widget) then
-      table.insert(unsortedWidgets, widget)
-    end
-  end
-
-  -- stuff the zip widgets into unsortedWidgets
+  -- Zip widgets first, so that when user widgets are allowed a same-name
+  -- user widget is the one rejected, never the game's.
   local widgetFiles = VFS.DirList(WIDGET_DIRNAME, "*.lua", VFS.ZIP_ONLY)
   for k,wf in ipairs(widgetFiles) do
     GetWidgetInfo(wf, VFS.ZIP_ONLY)
     local widget = self:LoadWidget(wf, true)
     if (widget) then
       table.insert(unsortedWidgets, widget)
+    end
+  end
+
+  -- then the raw (user) widgets, only if the modoption allows them
+  if ALLOW_USER_WIDGETS then
+    local widgetFiles = VFS.DirList(WIDGET_DIRNAME, "*.lua", VFS.RAW_ONLY)
+    for k,wf in ipairs(widgetFiles) do
+      GetWidgetInfo(wf, VFS.RAW_ONLY)
+      local widget = self:LoadWidget(wf, false)
+      if (widget) then
+        table.insert(unsortedWidgets, widget)
+      end
+    end
+  else
+    local skipped = #VFS.DirList(WIDGET_DIRNAME, "*.lua", VFS.RAW_ONLY)
+    if skipped > 0 then
+      Spring.Log(section, LOG.INFO, string.format("Skipping %d user widget file(s) in %s (modoption allowuserwidgets is off)", skipped, WIDGET_DIRNAME))
     end
   end
 
@@ -407,7 +436,12 @@ end
 
 function widgetHandler:LoadWidget(filename, fromZip)
   local basename = Basename(filename)
-  local text = VFS.LoadFile(filename)
+  if (fromZip == false) and (not ALLOW_USER_WIDGETS) then
+    return nil
+  end
+  -- explicit mode: a loose file with the same path must never stand in for
+  -- the game's copy (VFS.LoadFile defaults to raw-first)
+  local text = VFS.LoadFile(filename, WidgetVFSMode(fromZip))
   if (text == nil) then
     Spring.Log(section, LOG.ERROR, 'Failed to load: ' .. basename .. '  (missing file: ' .. filename ..')')
     return nil
@@ -448,6 +482,11 @@ function widgetHandler:LoadWidget(filename, fromZip)
 
   local knownInfo = self.knownWidgets[name]
   if (knownInfo) then
+    if knownInfo.fromZip and (fromZip == false) then
+      -- even a disabled game widget keeps its name
+      Spring.Log(section, LOG.ERROR, 'Failed to load: ' .. basename .. '  (user widget has the same name as a game widget)')
+      return nil
+    end
     if (knownInfo.active) then
       Spring.Log(section, LOG.ERROR, 'Failed to load: ' .. basename .. '  (duplicate name)')
       return nil
@@ -881,7 +920,7 @@ function widgetHandler:EnableWidget(name)
     if (not order or (order <= 0)) then
       self.orderList[name] = 1
     end
-    local w = self:LoadWidget(ki.filename)
+    local w = self:LoadWidget(ki.filename, ki.fromZip)
     if (not w) then return false end
     self:InsertWidget(w)
     self:SaveConfigData()

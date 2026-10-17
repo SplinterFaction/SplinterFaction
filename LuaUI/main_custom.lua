@@ -18,11 +18,25 @@ VFS.Include("init.lua", nil, VFS.ZIP)
 -- VFS.ZIP: always take the game's rml_setup.lua, never a loose local copy.
 VFS.Include(LUAUI_DIRNAME .. "rml_setup.lua", nil, VFS.ZIP)
 
-VFS.Include(LUAUI_DIRNAME .. 'utils.lua', utilFile)
+local LUAUI_VFSMODE = LUAUI_VFSMODE or VFS.ZIP_FIRST
+
+-- utils.lua is shipped raw by the engine, so it has to stay reachable; the
+-- archive still wins if the game ever ships its own.
+VFS.Include(LUAUI_DIRNAME .. 'utils.lua', utilFile, LUAUI_VFSMODE)
+
+-- The engine's include() (from utils.lua) calls VFS.Include with no mode,
+-- which is raw-first: a loose LuaUI/widgets_custom.lua from another game in a
+-- shared install would replace SF's widget handler. Same behavior, explicit mode.
+function include(filename, envTable)
+  if (string.find(filename, '.h.lua', 1, true)) then
+    filename = 'Headers/' .. filename
+  end
+  return VFS.Include(LUAUI_DIRNAME .. filename, envTable, LUAUI_VFSMODE)
+end
 
 WG = {}
 VFS.Include("init.lua", nil, VFS.ZIP)
-VFS.Include("common/luautilities/glvolumes.lua")
+VFS.Include("common/luautilities/glvolumes.lua", nil, LUAUI_VFSMODE)
 
 include("setupdefs.lua")
 include("savetable.lua")

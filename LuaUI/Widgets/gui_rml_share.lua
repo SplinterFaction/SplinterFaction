@@ -369,8 +369,14 @@ function widget:Initialize()
 	view.Assume("share", "hidden", true) -- set in the markup
 
 	-- H is this window's key, not the engine's share dialog
-	Spring.SendCommands("unbindkeyset h")
-	Spring.SendCommands("unbindkeyset H")
+	local function TakeKey()
+		Spring.SendCommands("unbindkeyset h")
+		Spring.SendCommands("unbindkeyset H")
+	end
+	TakeKey()
+	if WG.SFKeybindings and WG.SFKeybindings.AddReapplyHook then
+		WG.SFKeybindings.AddReapplyHook("Share", TakeKey)
+	end
 
 	hud.OnClick(view, "close", Close)
 	hud.OnClick(view, "cancel", Close)
@@ -412,6 +418,9 @@ function widget:Shutdown()
 	WG.StaticShareMenu = nil
 	if hud then
 		hud.UnregisterPanel(LAYOUT_NAME)
+	end
+	if WG.SFKeybindings and WG.SFKeybindings.RemoveReapplyHook then
+		WG.SFKeybindings.RemoveReapplyHook("Share")
 	end
 	if document then
 		document:Close()

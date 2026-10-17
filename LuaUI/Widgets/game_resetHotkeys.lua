@@ -10,7 +10,7 @@ function widget:GetInfo()
   }
 end
 
-function widget:Initialize()
+local function ApplyHotkeys()
 
 	-- bind k to cloak
 	Spring.SendCommands({
@@ -60,4 +60,18 @@ function widget:Initialize()
 		Spring.SendCommands({"unbindaction specteam"})
 	end
 
+end
+
+function widget:Initialize()
+	ApplyHotkeys()
+	-- re-run whenever SF Keybindings rebuilds the bind table
+	if WG.SFKeybindings and WG.SFKeybindings.AddReapplyHook then
+		WG.SFKeybindings.AddReapplyHook("Reset Hotkeys", ApplyHotkeys)
+	end
+end
+
+function widget:Shutdown()
+	if WG.SFKeybindings and WG.SFKeybindings.RemoveReapplyHook then
+		WG.SFKeybindings.RemoveReapplyHook("Reset Hotkeys")
+	end
 end

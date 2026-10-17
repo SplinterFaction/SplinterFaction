@@ -1452,8 +1452,14 @@ function widget:Initialize()
 	Spring.SendCommands({ "showhealthbars 0" })
 	Spring.SendCommands({ "showrezbars 0" })
 	widgetHandler:AddAction("showhealthbars", showhealthbars)
-	Spring.SendCommands({ "unbind f9 showhealthbars" })
-	Spring.SendCommands({ "bind f9 luaui showhealthbars" })
+	local function TakeKey()
+		Spring.SendCommands({ "unbind f9 showhealthbars" })
+		Spring.SendCommands({ "bind f9 luaui showhealthbars" })
+	end
+	TakeKey()
+	if WG.SFKeybindings and WG.SFKeybindings.AddReapplyHook then
+		WG.SFKeybindings.AddReapplyHook("Health Bars", TakeKey)
+	end
 
 	-- morph gadget hooks, same globals the old widget registered
 	widgetHandler:RegisterGlobal('MorphUpdate', MorphUpdate)
@@ -1511,6 +1517,9 @@ end
 
 function widget:Shutdown()
 	widgetHandler:RemoveAction("showhealthbars")
+	if WG.SFKeybindings and WG.SFKeybindings.RemoveReapplyHook then
+		WG.SFKeybindings.RemoveReapplyHook("Health Bars")
+	end
 	Spring.SendCommands({ "unbind f9 luaui" })
 	Spring.SendCommands({ "bind f9 showhealthbars" })
 

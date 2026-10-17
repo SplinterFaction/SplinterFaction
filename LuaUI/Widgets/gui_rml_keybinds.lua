@@ -143,7 +143,8 @@ local function ParseGameKeysFile()
 	sfSections = {}
 	sfKnown    = {}
 
-	local text = VFS.FileExists(GAME_KEYS_FILE) and VFS.LoadFile(GAME_KEYS_FILE)
+	-- archive only, like the loader: a loose copy must not change what is listed
+	local text = VFS.FileExists(GAME_KEYS_FILE, VFS.ZIP) and VFS.LoadFile(GAME_KEYS_FILE, VFS.ZIP)
 	if not text then
 		SetStatus("could not read " .. GAME_KEYS_FILE, COL.err)
 		return
@@ -478,14 +479,18 @@ local function FinishCapture(keyset)
 end
 
 local function ReapplyKeys()
-	if WG.SFKeybindings and WG.SFKeybindings.Apply then
-		WG.SFKeybindings.Apply()
-	else
-		spSendCommands("keyload " .. GAME_KEYS_FILE)
-		spSendCommands("keyload " .. USER_KEYS_FILE)
+	-- The loader owns the bind table (it drops uikeys.txt and rebuilds from
+	-- the game file, engine defaults and sf_uikeys.txt). Without it there is
+	-- no safe way to rebuild here: keyload only appends, keyreload brings back
+	-- the shared uikeys.txt.
+	if not (WG.SFKeybindings and WG.SFKeybindings.Apply) then
+		SetStatus("SF Keybindings widget is not running; cannot reload binds", COL.err)
+		return false
 	end
+	WG.SFKeybindings.Apply()
 	listDirty = true
 	SetStatus("keybind files reloaded", COL.ok)
+	return true
 end
 
 local function ResetAll()
@@ -493,12 +498,11 @@ local function ResetAll()
 	editedLine = {}
 	SaveEdits()
 
-	-- Back to engine defaults + the user's uikeys.txt, then SF defaults on top
-	spSendCommands("keyreload")
-	ReapplyKeys()
-
+	-- sf_uikeys.txt is now empty, so a rebuild leaves SF binds + engine defaults
+	if ReapplyKeys() then
+		SetStatus("all rebinds cleared", COL.warn)
+	end
 	listDirty = true
-	SetStatus("all rebinds cleared", COL.warn)
 end
 
 --------------------------------------------------------------------------------

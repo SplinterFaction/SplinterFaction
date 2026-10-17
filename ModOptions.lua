@@ -757,6 +757,23 @@ local options= {
 		-- (step <= 0) means that there is no quantization
 	},
 	-- End Control Victory Options
+
+	-- Interface Options
+	{
+		key    = 'interfaceoptions',
+		name   = 'Interface Options',
+		desc   = 'Options that affect the player interface rather than gameplay.',
+		type   = 'section',
+	},
+	{
+		key    = 'allowuserwidgets',
+		name   = 'Allow User Widgets',
+		desc   = 'Load loose widgets from LuaUI/Widgets in each player\'s data directory. Off by default: in an install shared with other games, their widgets get loaded into SplinterFaction and break its interface.',
+		type   = 'bool',
+		def    = false,
+		section= 'interfaceoptions',
+	},
+	-- End Interface Options
 }
 
 return options

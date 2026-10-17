@@ -1000,7 +1000,11 @@ function widget:Initialize()
 	view.Assume("drop-catch", "hidden", true)
 
 	-- F10 is this window's key
-	spSendCommands('unbindkeyset f10')
+	local function TakeKey() spSendCommands('unbindkeyset f10') end
+	TakeKey()
+	if WG.SFKeybindings and WG.SFKeybindings.AddReapplyHook then
+		WG.SFKeybindings.AddReapplyHook("Options", TakeKey)
+	end
 
 	-- The values the old options widget kept for itself are taken over once,
 	-- so nothing set there is lost.
@@ -1084,6 +1088,9 @@ end
 
 function widget:Shutdown()
 	WG.options = nil
+	if WG.SFKeybindings and WG.SFKeybindings.RemoveReapplyHook then
+		WG.SFKeybindings.RemoveReapplyHook("Options")
+	end
 	if hud then
 		hud.UnregisterPanel(LAYOUT_NAME)
 	end
