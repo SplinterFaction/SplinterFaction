@@ -22,11 +22,15 @@ end
 -- So the bind table is rebuilt from scratch, in priority order:
 --
 --   1. unbindall                     drops everything, including uikeys.txt
---   2. luaui/configs/sf_keys.txt     SF's binds, read from the game archive only
---   3. keydefaults                   the engine's built-in binds, as fallbacks
+--   2. sf_keys.txt                   SF's binds, read from the game archive only
+--   3. sf_keys_engine_defaults.txt   the engine's built-in binds (generated from
+--                                    the engine source), as fallbacks
 --   4. sf_uikeys.txt (write dir)     the player's own rebinds from the Keybinds
 --                                    window; its unbind lines remove what it
 --                                    replaces, so it wins conflicts
+--
+-- The engine's own "keydefaults" is not a registered console action, so it
+-- cannot be sent from Lua; that is why the defaults are shipped as a file.
 --
 -- uikeys.txt is never read or written. A player who runs /keyreload gets it
 -- back until the next /sfkeys (or the next game).
@@ -44,6 +48,9 @@ end
 -- Shipped inside the game archive; always read with VFS.ZIP so a loose file at
 -- the same path in the write dir can never stand in for it.
 local GAME_KEYS_FILE = "luaui/configs/sf_keys.txt"
+
+-- The engine's default bindings, same rules. Loaded after GAME_KEYS_FILE.
+local ENGINE_KEYS_FILE = "luaui/configs/sf_keys_engine_defaults.txt"
 
 -- Raw file in the write dir, written by the Keybinds window. Set to nil to
 -- disable it.
@@ -99,18 +106,21 @@ end
 -- Loading
 --------------------------------------------------------------------------------
 
+local function AppendArchiveKeyFile(path, cmds, what)
+	local text = VFS.LoadFile(path, VFS.ZIP)
+	if text then
+		ReadKeyLines(text, cmds)
+		Log("read " .. path)
+	else
+		spEcho("[SF Keybindings] missing " .. path .. " -- no " .. what .. " applied")
+	end
+end
+
 local function BuildCommands()
 	local cmds = { "unbindall" }
 
-	local text = VFS.LoadFile(GAME_KEYS_FILE, VFS.ZIP)
-	if text then
-		ReadKeyLines(text, cmds)
-		Log("read " .. GAME_KEYS_FILE)
-	else
-		spEcho("[SF Keybindings] missing " .. GAME_KEYS_FILE .. " -- no SF default binds applied")
-	end
-
-	cmds[#cmds + 1] = "keydefaults"
+	AppendArchiveKeyFile(GAME_KEYS_FILE, cmds, "SF binds")
+	AppendArchiveKeyFile(ENGINE_KEYS_FILE, cmds, "engine default binds")
 
 	if USER_KEYS_FILE and RawFileExists(USER_KEYS_FILE) then
 		-- raw on purpose: this file lives in the write dir

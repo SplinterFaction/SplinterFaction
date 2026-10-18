@@ -1,0 +1,191 @@
+//
+// Recoil engine default keybindings, as a key file
+//
+// Generated from the defaultBindings table in rts/Game/UI/KeyBindings.cpp
+// (RecoilEngine 01efdf43). This is the exact set the engine binds at
+// startup before it reads the player's uikeys.txt, in the same order.
+//
+// Applied by LuaUI/Widgets/gui_sf_keybindings.lua right after sf_keys.txt,
+// so an SF bind on the same key wins over the default. Do not add SF binds
+// here; they go in sf_keys.txt. To refresh after an engine update, regenerate
+// this file from the engine source rather than editing it by hand.
+//
+// The engine's "keydefaults" command does the same thing, but it is not a
+// registered console action, so it cannot be issued from Lua; it only works
+// as a line inside a key file. Shipping the list is simpler than relying on
+// that.
+//
+
+fakemeta space
+
+bind esc                    quitmessage
+bind Shift+esc              quitmenu
+bind Ctrl+Shift+esc         quitforce
+bind Alt+Shift+esc          reloadforce
+bind Any+pause              pause
+bind c                      controlunit
+bind Any+h                  sharedialog
+bind Any+i                  gameinfo
+bind Any+j                  mouse2
+bind backspace              mousestate
+bind Shift+backspace        togglecammode
+bind Ctrl+backspace         togglecammode
+bind Any+tab                toggleoverview
+bind Any+enter              chat
+bind Alt+ctrl+z,Alt+ctrl+z  chatswitchall
+bind Alt+ctrl+a,Alt+ctrl+a  chatswitchally
+bind Alt+ctrl+s,Alt+ctrl+s  chatswitchspec
+bind Any+tab                edit_complete
+bind Any+backspace          edit_backspace
+bind Any+delete             edit_delete
+bind Any+home               edit_home
+bind Alt+left               edit_home
+bind Any+end                edit_end
+bind Alt+right              edit_end
+bind Any+up                 edit_prev_line
+bind Any+down               edit_next_line
+bind Any+left               edit_prev_char
+bind Any+right              edit_next_char
+bind Ctrl+left              edit_prev_word
+bind Ctrl+right             edit_next_word
+bind Any+enter              edit_return
+bind Any+escape             edit_escape
+bind Ctrl+v                 pastetext
+bind Any+home               increaseViewRadius
+bind Any+end                decreaseViewRadius
+bind Alt+insert             speedup
+bind Alt+delete             slowdown
+bind Alt+=                  speedup
+bind Alt++                  speedup
+bind Alt+-                  slowdown
+bind Alt+numpad+            speedup
+bind Alt+numpad-            slowdown
+bind ,                      prevmenu
+bind .                      nextmenu
+bind Shift+,                decguiopacity
+bind Shift+.                incguiopacity
+bind 1                      specteam 0
+bind 2                      specteam 1
+bind 3                      specteam 2
+bind 4                      specteam 3
+bind 5                      specteam 4
+bind 6                      specteam 5
+bind 7                      specteam 6
+bind 8                      specteam 7
+bind 9                      specteam 8
+bind 0                      specteam 9
+bind Ctrl+1                 specteam 10
+bind Ctrl+2                 specteam 11
+bind Ctrl+3                 specteam 12
+bind Ctrl+4                 specteam 13
+bind Ctrl+5                 specteam 14
+bind Ctrl+6                 specteam 15
+bind Ctrl+7                 specteam 16
+bind Ctrl+8                 specteam 17
+bind Ctrl+9                 specteam 18
+bind Ctrl+0                 specteam 19
+bind Any+0                  group0
+bind Any+1                  group1
+bind Any+2                  group2
+bind Any+3                  group3
+bind Any+4                  group4
+bind Any+5                  group5
+bind Any+6                  group6
+bind Any+7                  group7
+bind Any+8                  group8
+bind Any+9                  group9
+bind [                      buildfacing inc
+bind Shift+[                buildfacing inc
+bind ]                      buildfacing dec
+bind Shift+]                buildfacing dec
+bind Any+z                  buildspacing inc
+bind Any+x                  buildspacing dec
+bind a                      attack
+bind Shift+a                attack
+bind Alt+a                  areaattack
+bind Alt+Shift+a            areaattack
+bind Alt+b                  debug
+bind Alt+v                  debugcolvol
+bind Alt+p                  debugpath
+bind d                      manualfire
+bind Shift+d                manualfire
+bind Ctrl+d                 selfd
+bind Ctrl+Shift+d           selfd queued
+bind e                      reclaim
+bind Shift+e                reclaim
+bind f                      fight
+bind Shift+f                fight
+bind Alt+f                  forcestart
+bind g                      guard
+bind Shift+g                guard
+bind k                      cloak
+bind Shift+k                cloak
+bind l                      loadunits
+bind Shift+l                loadunits
+bind m                      move
+bind Shift+m                move
+bind Alt+o                  singlestep
+bind p                      patrol
+bind Shift+p                patrol
+bind q                      groupselect
+bind q                      groupadd
+bind Ctrl+q                 aiselect
+bind Shift+q                groupclear
+bind r                      repair
+bind Shift+r                repair
+bind s                      stop
+bind Shift+s                stop
+bind u                      unloadunits
+bind Shift+u                unloadunits
+bind w                      wait
+bind Shift+w                wait queued
+bind x                      onoff
+bind Shift+x                onoff
+bind Ctrl+t                 trackmode
+bind Any+t                  track
+bind Ctrl+f1                viewfps
+bind Ctrl+f2                viewta
+bind Ctrl+f3                viewspring
+bind Ctrl+f4                viewrot
+bind Ctrl+f5                viewfree
+bind Any+f1                 ShowElevation
+bind Any+f2                 ShowPathTraversability
+bind Any+f3                 LastMsgPos
+bind Any+f4                 ShowMetalMap
+bind Any+f5                 HideInterface
+bind Any+f6                 MuteSound
+bind Any+l                  togglelos
+bind Ctrl+Shift+f8          savegame
+bind Ctrl+Shift+f10         createvideo
+bind Any+f11                screenshot
+bind Any+f12                screenshot
+bind Alt+enter              fullscreen
+bind Any+`,Any+`            drawlabel
+bind Any+\,Any+\            drawlabel
+bind Any+~,Any+~            drawlabel
+bind Any+§,Any+§            drawlabel
+bind Any+^,Any+^            drawlabel
+bind Any+`                  drawinmap
+bind Any+\                  drawinmap
+bind Any+~                  drawinmap
+bind Any+§                  drawinmap
+bind Any+^                  drawinmap
+bind Any+up                 moveforward
+bind Any+down               moveback
+bind Any+right              moveright
+bind Any+left               moveleft
+bind Any+pageup             moveup
+bind Any+pagedown           movedown
+bind Any+ctrl               moveslow
+bind Any+shift              movefast
+bind Any+ctrl               movetilt
+bind Any+alt                movereset
+bind Any+alt                moverotate
+bind Ctrl+a                 select AllMap++_ClearSelection_SelectAll+
+bind Ctrl+b                 select AllMap+_Builder_Idle+_ClearSelection_SelectOne+
+bind Ctrl+c                 select AllMap+_ManualFireUnit+_ClearSelection_SelectOne+
+bind Ctrl+r                 select AllMap+_Radar+_ClearSelection_SelectAll+
+bind Ctrl+v                 select AllMap+_Not_Builder_Not_Commander_InPrevSel_Not_InHotkeyGroup+_SelectAll+
+bind Ctrl+w                 select AllMap+_Not_Aircraft_Weapons+_ClearSelection_SelectAll+
+bind Ctrl+x                 select AllMap+_InPrevSel_Not_InHotkeyGroup+_SelectAll+
+bind Ctrl+z                 select AllMap+_InPrevSel+_ClearSelection_SelectAll+
