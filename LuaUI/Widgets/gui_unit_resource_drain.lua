@@ -1,7 +1,7 @@
 function widget:GetInfo()
 	return {
 		name      = "Unit Resource Drain Numbers",
-		desc      = "Displays your units' metal/energy drain as screen-space labels",
+		desc      = "Shows each of your units' net metal and energy per second as a one-line label under it: resource icon plus signed number",
 		author    = "",
 		date      = "2026-03-20",
 		license   = "GPL v2 or later",
@@ -29,10 +29,19 @@ local CAM_HEIGHT_MAX    = 2500   -- above this dist, hidden entirely
 -- "energy", "metal", "both"
 local DISPLAY_MODE      = "both"
 
-local METAL_LABEL_COLOR  = {0.40, 0.95, 1.00, 1.00}
-local ENERGY_LABEL_COLOR = {1.00, 1.00, 0.00, 1.00}
+-- One line per unit: [metal icon] +2.5   [energy icon] -12. The icons are the
+-- resource bar's, so the resource is told by the icon and the number only
+-- carries the sign and amount.
+local METAL_ICON         = "LuaUI/Images/rml/metal.png"   -- grey; tinted below
+local ENERGY_ICON        = "LuaUI/Images/rml/energy.png"  -- already yellow
+local METAL_ICON_COLOR   = {0.40, 0.95, 1.00, 1.00}
+local ENERGY_ICON_COLOR  = {1.00, 1.00, 1.00, 1.00}
 local VALUE_POS_COLOR    = {0.0, 1.0, 0.0, 1.00}
 local VALUE_NEG_COLOR    = {1, 0.0, 0.0, 1.00}
+
+local ICON_SCALE         = 0.9   -- icon height as a fraction of the text size
+local ICON_GAP           = 2     -- icon to number
+local GROUP_GAP          = 8     -- metal group to energy group
 
 local EDGE_PADDING      = 10
 local BOTTOM_DIR_X      = 0
@@ -73,6 +82,10 @@ local math_sqrt     = math.sqrt
 local math_max      = math.max
 local math_min      = math.min
 local string_format = string.format
+
+local glColor   = gl.Color
+local glTexture = gl.Texture
+local glTexRect = gl.TexRect
 
 --------------------------------------------------------------------------------
 -- State
@@ -252,50 +265,62 @@ function widget:DrawScreenEffects()
 	end
 	if textSize < TEXT_SIZE_MIN then return end
 
-	local lineSpacing = textSize + 2
-	local colGap      = 4
+	local iconSize = textSize * ICON_SCALE
+	local iconY    = -iconSize * 0.5 -- icon and text both centered on the anchor's y
 
+	-- Pass 1: text, one font batch. The label is centered on the anchor.
 	font:Begin()
-
 	for i = 1, #drawList do
 		local d = drawList[i]
-
-		-- Project world anchor to screen this frame — always current, never stale
 		local sx, sy, sz = spWorldToScreenCoords(d.wx, d.wy, d.wz)
-		if sz and sz > 0 then
-			local mc = d.metalPos  and VALUE_POS_COLOR or VALUE_NEG_COLOR
-			local ec = d.energyPos and VALUE_POS_COLOR or VALUE_NEG_COLOR
+		d.sx, d.sy, d.onScreen = sx, sy, (sz and sz > 0)
+		if d.onScreen then
+			local mw = d.hasMetal  and (font:GetTextWidth(d.metalStr)  * textSize) or 0
+			local ew = d.hasEnergy and (font:GetTextWidth(d.energyStr) * textSize) or 0
+			local total = 0
+			if d.hasMetal  then total = total + iconSize + ICON_GAP + mw end
+			if d.hasEnergy then total = total + iconSize + ICON_GAP + ew end
+			if d.hasMetal and d.hasEnergy then total = total + GROUP_GAP end
 
-			if d.hasMetal and d.hasEnergy then
-				local my = sy + lineSpacing * 0.5
-				local ey = sy - lineSpacing * 0.5
-
-				font:SetTextColor(METAL_LABEL_COLOR[1],  METAL_LABEL_COLOR[2],  METAL_LABEL_COLOR[3],  1)
-				font:Print("Metal:",    sx,            my, textSize, "or")
-				font:SetTextColor(mc[1], mc[2], mc[3], 1)
-				font:Print(d.metalStr,  sx + colGap,   my, textSize, "ol")
-
-				font:SetTextColor(ENERGY_LABEL_COLOR[1], ENERGY_LABEL_COLOR[2], ENERGY_LABEL_COLOR[3], 1)
-				font:Print("Energy:",   sx,            ey, textSize, "or")
-				font:SetTextColor(ec[1], ec[2], ec[3], 1)
-				font:Print(d.energyStr, sx + colGap,   ey, textSize, "ol")
-
-			elseif d.hasMetal then
-				font:SetTextColor(METAL_LABEL_COLOR[1], METAL_LABEL_COLOR[2], METAL_LABEL_COLOR[3], 1)
-				font:Print("Metal:",   sx,          sy, textSize, "or")
-				font:SetTextColor(mc[1], mc[2], mc[3], 1)
-				font:Print(d.metalStr, sx + colGap, sy, textSize, "ol")
-
-			elseif d.hasEnergy then
-				font:SetTextColor(ENERGY_LABEL_COLOR[1], ENERGY_LABEL_COLOR[2], ENERGY_LABEL_COLOR[3], 1)
-				font:Print("Energy:",   sx,          sy, textSize, "or")
-				font:SetTextColor(ec[1], ec[2], ec[3], 1)
-				font:Print(d.energyStr, sx + colGap, sy, textSize, "ol")
+			local x = sx - total * 0.5
+			if d.hasMetal then
+				d.mix = x
+				x = x + iconSize + ICON_GAP
+				local c = d.metalPos and VALUE_POS_COLOR or VALUE_NEG_COLOR
+				font:SetTextColor(c[1], c[2], c[3], 1)
+				font:Print(d.metalStr, x, sy, textSize, "ov")
+				x = x + mw + GROUP_GAP
+			end
+			if d.hasEnergy then
+				d.eix = x
+				x = x + iconSize + ICON_GAP
+				local c = d.energyPos and VALUE_POS_COLOR or VALUE_NEG_COLOR
+				font:SetTextColor(c[1], c[2], c[3], 1)
+				font:Print(d.energyStr, x, sy, textSize, "ov")
 			end
 		end
 	end
-
 	font:End()
+
+	-- Pass 2: icons, one texture bind each
+	glTexture(METAL_ICON)
+	glColor(METAL_ICON_COLOR[1], METAL_ICON_COLOR[2], METAL_ICON_COLOR[3], 1)
+	for i = 1, #drawList do
+		local d = drawList[i]
+		if d.onScreen and d.hasMetal then
+			glTexRect(d.mix, d.sy + iconY, d.mix + iconSize, d.sy + iconY + iconSize)
+		end
+	end
+	glTexture(ENERGY_ICON)
+	glColor(ENERGY_ICON_COLOR[1], ENERGY_ICON_COLOR[2], ENERGY_ICON_COLOR[3], 1)
+	for i = 1, #drawList do
+		local d = drawList[i]
+		if d.onScreen and d.hasEnergy then
+			glTexRect(d.eix, d.sy + iconY, d.eix + iconSize, d.sy + iconY + iconSize)
+		end
+	end
+	glTexture(false)
+	glColor(1, 1, 1, 1)
 end
 
 --------------------------------------------------------------------------------
