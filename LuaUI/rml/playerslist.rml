@@ -140,22 +140,23 @@
 		.upg .on.w { color: #ff965a; }
 		.upg .on.a { color: #78beff; }
 
-		/* cpu and ping, each a cell colored from good to bad */
+		/* cpu over ping, each a strip colored from good to bad */
 		.net {
 			display: flex;
-			flex-direction: row;
-			width: 26dp;
+			flex-direction: column;
+			width: 32dp;
 			margin-right: 6dp;
 		}
 		.cell {
-			flex: 1;
-			height: 14dp;
-			margin-right: 2dp;
+			height: 9dp;
 			text-align: center;
-			font-size: 10dp;
-			line-height: 14dp;
+			font-size: 8dp;
+			line-height: 9dp;
 			color: #0b0e12;
 			background-color: #35434f;
+		}
+		.cell.top {
+			margin-bottom: 1dp;
 		}
 		.cell.l1 { background-color: #1cd11c; }
 		.cell.l2 { background-color: #66bf33; }
@@ -164,7 +165,7 @@
 		.cell.l5 { background-color: #ff264d; color: #f0f4f8; }
 		/* as wide as the cpu/ping cells and the fps together */
 		.nonet {
-			width: 54dp;
+			width: 60dp;
 		}
 		.fps {
 			width: 22dp;

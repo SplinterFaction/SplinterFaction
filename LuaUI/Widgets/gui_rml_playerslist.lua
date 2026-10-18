@@ -456,7 +456,7 @@ local function RowRML(i, row)
 	end
 	if row.kind == "player" then
 		parts[#parts + 1] = string.format(
-			'<div class="net" data-net="%d"><div id="r%d-cpu" class="cell">C</div><div id="r%d-ping" class="cell">P</div></div>'
+			'<div class="net" data-net="%d"><div id="r%d-cpu" class="cell top">CPU</div><div id="r%d-ping" class="cell">PING</div></div>'
 			.. '<div id="r%d-fps" class="fps" data-net="%d"/>', i, i, i, i, i)
 	else
 		-- an AI has no cpu, ping or fps: keep its bars in line with the others'
