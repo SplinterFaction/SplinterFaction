@@ -65,6 +65,7 @@ local useFloor = true
 
 local timeStamp  = 0
 local lastUpdate = 0
+local lastTimer  = nil -- Spring timer of the previous Update, for the dt it is not given
 
 local debug = false
 local origPrint = print
@@ -493,6 +494,13 @@ end
 
 
 local function Update(dt)
+  -- The engine's Update call-in carries no dt (main_custom.lua calls this
+  -- bare), so measure it here. A dt argument, if ever given, still wins.
+  if (dt == nil) then
+    local now = Spring.GetTimer()
+    dt = lastTimer and Spring.DiffTimers(now, lastTimer) or 0
+    lastTimer = now
+  end
   timeStamp = timeStamp + dt
   if (timeStamp < (lastUpdate + 1.0)) then
     return  -- only update every 1.0 seconds
