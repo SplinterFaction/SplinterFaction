@@ -512,6 +512,21 @@ function widgetHandler:LoadWidget(filename, fromZip)
   end
 
   local info  = widget:GetInfo()
+
+  -- A renamed widget keeps its saved state: GetInfo().previousNames lists
+  -- the names it had before, and the first of those with saved order or
+  -- config data stands in for the new name when the new name has none.
+  if (type(info.previousNames) == "table") then
+    for _, old in ipairs(info.previousNames) do
+      if (self.orderList[name] == nil and self.orderList[old] ~= nil) then
+        self.orderList[name] = self.orderList[old]
+      end
+      if (self.configData[name] == nil and self.configData[old] ~= nil) then
+        self.configData[name] = self.configData[old]
+      end
+    end
+  end
+
   local order = self.orderList[name]
   if (((order ~= nil) and (order > 0)) or
       ((order == nil) and  -- unknown widget

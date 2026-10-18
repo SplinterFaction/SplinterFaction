@@ -22,7 +22,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Players List",
+		name    = "Bastion Players List",
+		previousNames = {"Players List"},
 		desc    = "Players by alliance with resources, upgrades, cpu/ping and fps; spectators; alliance offers; spectator click-to-follow (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

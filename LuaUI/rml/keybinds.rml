@@ -5,7 +5,7 @@
 	<style>
 		/* The keybinds window. Its position is set from Lua (hud.PlacePanel);
 		   its size here must match PANEL_WIDTH and PANEL_HEIGHT in
-		   gui_rml_keybinds.lua. */
+		   gui_bastion_keybinds.lua. */
 		#keybinds {
 			position: absolute;
 			left: 0px;

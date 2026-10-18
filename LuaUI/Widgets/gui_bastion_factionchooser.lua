@@ -22,7 +22,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Faction Chooser",
+		name    = "Bastion Faction Chooser",
+		previousNames = {"Faction Chooser"},
 		desc    = "Pregame faction choice; sends the choice to the game_spawn gadget (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-13",

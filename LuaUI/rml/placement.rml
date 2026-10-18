@@ -6,7 +6,7 @@
 		/* ---- the start spots, over the map ----------------------------------
 		   Each marker is moved from Lua to follow its spot on the ground (left
 		   and top are the spot's center; the margins pull the square onto
-		   it). The size here must match MARKER_SIZE in gui_rml_placement.lua.
+		   it). The size here must match MARKER_SIZE in gui_bastion_placement.lua.
 
 		   free  open, on the player's side      mine  the player's pick
 		   done  the player's confirmed pick     mate  taken by an ally
@@ -67,7 +67,7 @@
 
 		/* ---- the panel at the bottom -----------------------------------------
 		   Its position is set from Lua (hud.PlacePanel); its size here must
-		   match PANEL_WIDTH and PANEL_HEIGHT in gui_rml_placement.lua. */
+		   match PANEL_WIDTH and PANEL_HEIGHT in gui_bastion_placement.lua. */
 		#placement {
 			position: absolute;
 			left: 0px;

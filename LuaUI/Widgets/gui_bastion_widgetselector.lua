@@ -25,7 +25,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Widget Selector",
+		name    = "Bastion Widget Selector",
+		previousNames = {"Widget Selector"},
 		desc    = "Widget list: switch on and off, reorder, reload LuaUI (RmlUi)",
 		author  = "trepan, jK, Bluestone (original); SplinterFaction Team",
 		date    = "2026-10-13",

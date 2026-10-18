@@ -5,7 +5,7 @@
 	<style>
 		/* The support powers, above the players list at the bottom right.
 		   The position is set from Lua (hud.PlacePanel); the size here must
-		   match PANEL_WIDTH and PanelHeight() in gui_rml_abilities.lua
+		   match PANEL_WIDTH and PanelHeight() in gui_bastion_abilities.lua
 		   (34dp of chrome and title, then 46dp for each ability). */
 		#abilities {
 			position: absolute;

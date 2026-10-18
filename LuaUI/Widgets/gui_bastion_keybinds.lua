@@ -28,7 +28,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Keybinds",
+		name    = "Bastion Keybinds",
+		previousNames = {"Keybinds"},
 		desc    = "Rebind keys in-game and build custom named binds (selection filters, unit roles...). Writes changes to sf_uikeys.txt in the write dir; never touches uikeys.txt. (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-18",

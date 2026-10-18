@@ -6,7 +6,7 @@
 		/* The survival threat readout, on the right edge. Its position and
 		   its height are set from Lua: the height depends on how many
 		   survival teams there are, so the heights here must match the ones
-		   in gui_rml_survival.lua (CHROME, TITLE, COUNTDOWN, LINE, STATUS). */
+		   in gui_bastion_survival.lua (CHROME, TITLE, COUNTDOWN, LINE, STATUS). */
 		#survival {
 			position: absolute;
 			left: 0px;

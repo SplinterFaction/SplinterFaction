@@ -5,7 +5,7 @@
 	<style>
 		/* The options window. Its position is set from Lua (hud.PlacePanel);
 		   its size here must match PANEL_WIDTH and PANEL_HEIGHT in
-		   gui_rml_options.lua. */
+		   gui_bastion_options.lua. */
 		#options {
 			position: absolute;
 			left: 0px;

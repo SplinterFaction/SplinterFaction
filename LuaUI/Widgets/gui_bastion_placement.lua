@@ -35,7 +35,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Start Placement",
+		name    = "Bastion Start Placement",
+		previousNames = {"Start Placement"},
 		desc    = "Pregame start position choice (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-13",

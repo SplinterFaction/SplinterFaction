@@ -6,7 +6,7 @@
 		/* Messages from the game (missions, tutorials), typed out letter by
 		   letter under the resource bar. They never take the mouse. The box's
 		   position is set from Lua (hud.PlacePanel); its size here must match
-		   BOX_WIDTH and BOX_HEIGHT in gui_rml_messages.lua. The panel inside
+		   BOX_WIDTH and BOX_HEIGHT in gui_bastion_messages.lua. The panel inside
 		   is as tall as its lines. */
 		#messages {
 			position: absolute;

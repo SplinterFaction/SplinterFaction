@@ -5,7 +5,7 @@
 	<style>
 		/* One strip at the top center: metal, energy, supply, research.
 		   Its position is set from Lua (hud.PlacePanel), and its size here
-		   must match BAR_WIDTH and BAR_HEIGHT in gui_rml_resourcebar.lua. */
+		   must match BAR_WIDTH and BAR_HEIGHT in gui_bastion_resourcebar.lua. */
 		#resbar {
 			position: absolute;
 			left: 0px;

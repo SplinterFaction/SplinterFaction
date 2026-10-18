@@ -9,7 +9,7 @@
 		   under the resource bar that can be opened again. The widget sets
 		   the positions (hud.PlacePanel); the sizes here must match
 		   PANEL_WIDTH, PANEL_HEIGHT, CHIP_WIDTH and CHIP_HEIGHT in
-		   gui_rml_desync.lua. */
+		   gui_bastion_desync.lua. */
 		#desync {
 			position: absolute;
 			left: 0px;

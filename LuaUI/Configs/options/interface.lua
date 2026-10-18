@@ -53,10 +53,10 @@ return {
 		  get = function() return FontIndex("ui_font2") end,
 		  set = function(idx) Spring.SetConfigString("ui_font2", fontFiles[idx]) end,
 		  desc = "Font for names, buttons and titles. Reloads the interface." },
-		{ id = "tooltips", name = "Tooltips", type = "bool", widget = "Tooltip Panel", requires = "Tooltip Panel" },
+		{ id = "tooltips", name = "Tooltips", type = "bool", widget = "Bastion Tooltip Panel", requires = "Bastion Tooltip Panel" },
 		{ id = "resourceprompts", name = "Resource warnings", type = "bool", config = "evo_resourceprompts",
 		  desc = "Chat messages and audio cues when metal or energy needs attention." },
-		{ id = "pausescreen", name = "Pause overlay", type = "bool", widget = "Pause Screen", requires = "Pause Screen" },
+		{ id = "pausescreen", name = "Pause overlay", type = "bool", widget = "Bastion Pause Screen", requires = "Bastion Pause Screen" },
 		{ id = "simpleminimapcolors", name = "Simple minimap colors", type = "bool", config = "SimpleMiniMapColors", cmd = "minimap simplecolors %d",
 		  desc = "Green is you, blue is allied, red is enemy." },
 

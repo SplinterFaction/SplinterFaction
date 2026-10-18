@@ -5,7 +5,7 @@
 	<style>
 		/* The economy graph window. Its position is set from Lua
 		   (hud.PlacePanel); its size here must match PANEL_WIDTH and
-		   PANEL_HEIGHT in gui_rml_econgraph.lua.
+		   PANEL_HEIGHT in gui_bastion_econgraph.lua.
 
 		   The plot itself (#plot) is drawn with gl by the widget, and the
 		   engine draws gl UNDER RmlUi. So the window has no background of its

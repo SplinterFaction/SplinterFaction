@@ -19,7 +19,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Share Menu",
+		name    = "Bastion Share Menu",
+		previousNames = {"Share Menu"},
 		desc    = "Share resources and units via hotkey H (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

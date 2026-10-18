@@ -21,7 +21,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Game Menu",
+		name    = "Bastion Game Menu",
+		previousNames = {"Game Menu"},
 		desc    = "Esc menu: settings, keybinds, widgets, sharing, graphs, log, resign, quit (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

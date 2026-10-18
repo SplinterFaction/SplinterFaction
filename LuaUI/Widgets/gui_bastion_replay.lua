@@ -15,7 +15,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "replay buttons",
+		name    = "Bastion Replay Buttons",
+		previousNames = {"replay buttons"},
 		desc    = "Pause and speed buttons while watching a replay (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-13",

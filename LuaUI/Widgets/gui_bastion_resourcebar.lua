@@ -19,7 +19,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Resource Bar",
+		name    = "Bastion Resource Bar",
+		previousNames = {"Resource Bar"},
 		desc    = "Top resource bar for metal, energy, supply and research (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

@@ -17,7 +17,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Log",
+		name    = "Bastion Log",
+		previousNames = {"Log"},
 		desc    = "Scrollback window for chat and console output: Chat / Console / All tabs (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

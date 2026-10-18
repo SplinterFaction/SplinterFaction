@@ -6,7 +6,7 @@
 		/* "Game paused", in the middle of the screen. It never takes the
 		   mouse. Its position is set from Lua (hud.PlacePanel), and the widget
 		   fades it in and out; its size here must match BANNER_WIDTH and
-		   BANNER_HEIGHT in gui_rml_pause.lua. */
+		   BANNER_HEIGHT in gui_bastion_pause.lua. */
 		#pause {
 			position: absolute;
 			left: 0px;

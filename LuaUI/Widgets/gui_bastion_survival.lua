@@ -19,7 +19,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Survival Panel",
+		name    = "Bastion Survival Panel",
+		previousNames = {"Survival Panel"},
 		desc    = "Wave countdown, threat type, beacons, surge/rage warnings for Survival AI games. Drag to move. (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

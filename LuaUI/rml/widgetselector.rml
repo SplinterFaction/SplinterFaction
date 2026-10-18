@@ -5,7 +5,7 @@
 	<style>
 		/* The widget list. Its position is set from Lua (hud.PlacePanel); its
 		   size here must match PANEL_WIDTH and PANEL_HEIGHT in
-		   gui_rml_widgetselector.lua. */
+		   gui_bastion_widgetselector.lua. */
 		#widgetselector {
 			position: absolute;
 			left: 0px;

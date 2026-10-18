@@ -20,7 +20,7 @@
 		}
 		/* The cards and, above them, the heading. Its position is set from
 		   Lua (hud.PlacePanel); its size here must match GROUP_WIDTH and
-		   GROUP_HEIGHT in gui_rml_factionchooser.lua. */
+		   GROUP_HEIGHT in gui_bastion_factionchooser.lua. */
 		#chooser {
 			position: absolute;
 			left: 0px;

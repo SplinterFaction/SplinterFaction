@@ -6,7 +6,7 @@
 		/* Two panels at the bottom left: orders below, the build list above.
 		   Their positions are set from Lua (hud.PlacePanel), and their sizes
 		   here must match PANEL_WIDTH, ORDER_HEIGHT and BUILD_HEIGHT in
-		   gui_rml_buildorder.lua. */
+		   gui_bastion_buildorder.lua. */
 		#orders, #build {
 			position: absolute;
 			left: 0px;

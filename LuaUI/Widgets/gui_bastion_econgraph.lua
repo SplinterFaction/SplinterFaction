@@ -23,7 +23,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Economy Graph",
+		name    = "Bastion Economy Graph",
+		previousNames = {"Economy Graph"},
 		desc    = "Where is my metal/energy going? Stacked per-unit expense (or income) over time with the other side of the ledger drawn as a line, plus a live breakdown bar. Open from the game menu, WG.StaticEconGraph, or /econgraph. (RmlUi)",
 		author  = "Scary le Poo",
 		date    = "2026-10-13",

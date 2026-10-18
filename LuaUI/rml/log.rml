@@ -5,7 +5,7 @@
 	<style>
 		/* The scrollback window for chat and console output. Its position is
 		   set from Lua (hud.PlacePanel); its size here must match PANEL_WIDTH
-		   and PANEL_HEIGHT in gui_rml_log.lua. */
+		   and PANEL_HEIGHT in gui_bastion_log.lua. */
 		#log {
 			position: absolute;
 			left: 0px;

@@ -8,7 +8,7 @@
 		   most cards the row can hold, which keeps the row centered and gives
 		   tweak mode a rectangle that does not change with the selection. Its
 		   position is set from Lua (hud.PlacePanel); the size here must match
-		   STRIP_WIDTH and STRIP_HEIGHT in gui_rml_selection.lua. */
+		   STRIP_WIDTH and STRIP_HEIGHT in gui_bastion_selection.lua. */
 		#selection {
 			position: absolute;
 			left: 0px;

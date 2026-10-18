@@ -43,7 +43,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "HUD Layout",
+		name    = "Bastion HUD Layout",
+		previousNames = {"HUD Layout"},
 		desc    = "Tweak mode (Ctrl+F11): drag any HUD panel to a new place. Remembers where panels were put. (RmlUi)",
 		author  = "Scary le Poo; SplinterFaction Team",
 		date    = "2026-10-13",

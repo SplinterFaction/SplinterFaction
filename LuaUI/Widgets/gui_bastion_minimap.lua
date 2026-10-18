@@ -12,7 +12,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Minimap Top Left",
+		name    = "Bastion Minimap",
+		previousNames = {"Minimap Top Left"},
 		desc    = "Places the default minimap in the top-left corner with a frame around it (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-13",

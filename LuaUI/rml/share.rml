@@ -5,7 +5,7 @@
 	<style>
 		/* The share window: who to give to on the left, what to give on the
 		   right. Its position is set from Lua (hud.PlacePanel); its size here
-		   must match PANEL_WIDTH and PANEL_HEIGHT in gui_rml_share.lua. */
+		   must match PANEL_WIDTH and PANEL_HEIGHT in gui_bastion_share.lua. */
 		#share {
 			position: absolute;
 			left: 0px;

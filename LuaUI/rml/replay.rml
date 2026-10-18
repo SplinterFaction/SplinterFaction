@@ -6,7 +6,7 @@
 		/* Replay controls: pause and speed, under the resource bar. Only
 		   there while a replay is watched. Its position is set from Lua
 		   (hud.PlacePanel); its size here must match PANEL_WIDTH and
-		   PANEL_HEIGHT in gui_rml_replay.lua. */
+		   PANEL_HEIGHT in gui_bastion_replay.lua. */
 		#replay {
 			position: absolute;
 			left: 0px;

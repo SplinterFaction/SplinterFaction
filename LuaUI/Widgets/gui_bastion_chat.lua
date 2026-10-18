@@ -18,7 +18,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Chat",
+		name    = "Bastion Chat",
+		previousNames = {"Chat"},
 		desc    = "Chat lines with team-colored player names and a color per channel; feeds the Log window (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-13",
@@ -43,7 +44,7 @@ local BOX_BOTTOM_FRAC = 0.10
 local LAYOUT_NAME = "chat"
 
 -- the right edge of the tooltip panel in its default place (order menu 328 wide,
--- tooltip 320 beside it; see gui_rml_tooltip.lua), and the gap to keep from it
+-- tooltip 320 beside it; see gui_bastion_tooltip.lua), and the gap to keep from it
 local TOOLTIP_RIGHT = 648
 local CLEARANCE     = 24
 
@@ -53,7 +54,7 @@ local FADE_TIME            = 6       -- seconds of fadeout
 local FADE_STEPS           = 20      -- the fade moves in this many steps, not every frame
 local HIDE_DEFAULT_CONSOLE = true    -- hide the engine's console/chat
 
--- Persistent scrollback shared with the Log window (gui_rml_log.lua).
+-- Persistent scrollback shared with the Log window (gui_bastion_log.lua).
 -- Every parsed line is appended here regardless of channel; the floating overlay
 -- still only shows actual chat. MAX_LOG caps retained history.
 local MAX_LOG  = 1000
@@ -572,7 +573,7 @@ function widget:Initialize()
 		spSendCommands("console 0")
 	end
 
-	-- Shared interface for the Log window (gui_rml_log.lua). It is offered even
+	-- Shared interface for the Log window (gui_bastion_log.lua). It is offered even
 	-- if the document below fails to load: the log does not need the overlay.
 	WG.Chatterbox = {
 		GetLog = function() return fullLog end,

@@ -5,7 +5,7 @@
 	<style>
 		/* The players list, at the bottom right. Its position and its height
 		   are set from Lua: the height is worked out from the rows, so the
-		   heights here must match the ones in gui_rml_playerslist.lua
+		   heights here must match the ones in gui_bastion_playerslist.lua
 		   (CHROME, TOPBAR, ROW, GROUP_GAP, SPEC_HEADER, SPEC_ROW). */
 		#players {
 			position: absolute;

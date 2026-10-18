@@ -19,7 +19,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Abilities",
+		name    = "Bastion Abilities",
+		previousNames = {"Abilities"},
 		desc    = "Player-cast support powers: scanner sweep, team upgrades, production boost (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

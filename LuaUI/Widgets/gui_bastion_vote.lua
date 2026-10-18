@@ -16,7 +16,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Vote interface",
+		name    = "Bastion Vote",
+		previousNames = {"Vote interface"},
 		desc    = "Shows a called vote with Yes and No buttons (RmlUi)",
 		author  = "Floris; SplinterFaction Team",
 		date    = "2026-10-13",

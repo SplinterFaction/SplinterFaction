@@ -20,7 +20,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Messages",
+		name    = "Bastion Messages",
+		previousNames = {"Messages"},
 		desc    = "Typewrites messages from the game under the resource bar (missions, tutorials) (RmlUi)",
 		author  = "Floris; SplinterFaction Team",
 		date    = "2026-10-13",

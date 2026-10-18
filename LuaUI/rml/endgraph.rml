@@ -5,7 +5,7 @@
 	<style>
 		/* The end-of-game statistics window. Its position is set from Lua
 		   (hud.PlacePanel); its size here must match PANEL_WIDTH and
-		   PANEL_HEIGHT in gui_rml_endgraph.lua.
+		   PANEL_HEIGHT in gui_bastion_endgraph.lua.
 
 		   As in econgraph.rml, the plot (#plot) is drawn with gl UNDER RmlUi,
 		   so the window has no background of its own: every part except #plot

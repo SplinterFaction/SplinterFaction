@@ -6,7 +6,7 @@
 		/* The information window: this game and map, the controls, and the
 		   engine's console commands. Its position is set from Lua
 		   (hud.PlacePanel); its size here must match PANEL_WIDTH and
-		   PANEL_HEIGHT in gui_rml_info.lua. */
+		   PANEL_HEIGHT in gui_bastion_info.lua. */
 		#info {
 			position: absolute;
 			left: 0px;

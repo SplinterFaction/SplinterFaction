@@ -17,7 +17,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Options",
+		name    = "Bastion Options",
+		previousNames = {"Options", "Static Options"},
 		desc    = "Options window. Options are declared as data in LuaUI/configs/options/*.lua; this widget only shows and applies them. (RmlUi)",
 		author  = "Scary le Poo",
 		date    = "2026-10-12",

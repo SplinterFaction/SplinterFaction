@@ -36,7 +36,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Hotbind",
+		name    = "Bastion Hotbind",
+		previousNames = {"Hotbind"},
 		desc    = "Hover a build or order button and press Ctrl+Insert to bind it to a key; Ctrl+Delete to unbind. Writes through the Keybinds widget. (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-13",

@@ -21,7 +21,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Build/Order Menu",
+		name    = "Bastion Build/Order Menu",
+		previousNames = {"Build/Order Menu"},
 		desc    = "Build and order menus with categorized build sections (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

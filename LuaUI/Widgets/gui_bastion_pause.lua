@@ -15,7 +15,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Pause Screen",
+		name    = "Bastion Pause Screen",
+		previousNames = {"Pause Screen"},
 		desc    = "Washes the picture out and shows a banner while the game is paused (RmlUi)",
 		author  = "Floris; SplinterFaction Team",
 		date    = "2026-10-13",

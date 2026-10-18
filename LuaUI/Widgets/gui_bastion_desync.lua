@@ -21,7 +21,7 @@
 --  record.
 --
 --  Every desync also goes to chat as its own red line, once per player (see
---  gui_rml_chat.lua), and to the Log window.
+--  gui_bastion_chat.lua), and to the Log window.
 --
 --  Interface: WG.Desync = { IsActive(), GetPlayers() } for other widgets.
 --
@@ -30,7 +30,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Desync Alert",
+		name    = "Bastion Desync Alert",
+		previousNames = {"Desync Alert"},
 		desc    = "Tells every player at once when someone's game goes out of sync, and whose (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-14",

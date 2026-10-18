@@ -21,7 +21,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Tooltip Panel",
+		name    = "Bastion Tooltip Panel",
+		previousNames = {"Tooltip Panel"},
 		desc    = "Panel-style tooltip with a spacebar-toggled Additional Info panel (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",

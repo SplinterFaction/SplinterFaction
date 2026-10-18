@@ -5,7 +5,7 @@
 	<style>
 		/* A vote someone has called: what it is about, and yes or no. Its
 		   position is set from Lua (hud.PlacePanel); its size here must match
-		   PANEL_WIDTH and PANEL_HEIGHT in gui_rml_vote.lua. */
+		   PANEL_WIDTH and PANEL_HEIGHT in gui_bastion_vote.lua. */
 		#vote {
 			position: absolute;
 			left: 0px;

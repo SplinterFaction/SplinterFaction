@@ -21,7 +21,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Game info",
+		name    = "Bastion Game Info",
+		previousNames = {"Game info"},
 		desc    = "Game, map and mod option facts, the controls, and the console commands, in one window (RmlUi)",
 		author  = "Floris; SplinterFaction Team",
 		date    = "2026-10-13",

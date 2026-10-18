@@ -21,7 +21,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "End Graph",
+		name    = "Bastion End Graph",
+		previousNames = {"End Graph"},
 		desc    = "End-of-game statistics graph, also available during the game (non-spectators then see only their own and allied lines). (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-13",

@@ -7,7 +7,7 @@
 		   out by themselves and never take the mouse; the whole history is in
 		   the Log window. The box's position is set from Lua (hud.PlacePanel);
 		   its size here must match BOX_WIDTH and BOX_HEIGHT in
-		   gui_rml_chat.lua. Lines sit at the bottom of the box and grow up. */
+		   gui_bastion_chat.lua. Lines sit at the bottom of the box and grow up. */
 		#chat {
 			position: absolute;
 			left: 0px;

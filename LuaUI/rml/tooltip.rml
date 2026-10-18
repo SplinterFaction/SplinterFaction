@@ -6,7 +6,7 @@
 		/* The tooltip, beside the order menu, and Additional Info above it.
 		   Their positions are set from Lua (hud.PlacePanel), and their sizes
 		   here must match PANEL_WIDTH, TOOLTIP_HEIGHT and ADDITIONAL_HEIGHT in
-		   gui_rml_tooltip.lua. */
+		   gui_bastion_tooltip.lua. */
 		#tooltip, #additional {
 			position: absolute;
 			left: 0px;

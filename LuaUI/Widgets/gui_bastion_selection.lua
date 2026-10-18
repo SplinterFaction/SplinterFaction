@@ -21,7 +21,8 @@
 
 function widget:GetInfo()
 	return {
-		name    = "Selected Units",
+		name    = "Bastion Selected Units",
+		previousNames = {"Selected Units"},
 		desc    = "Cards for the types of unit in the current selection (RmlUi)",
 		author  = "SplinterFaction Team",
 		date    = "2026-10-12",
