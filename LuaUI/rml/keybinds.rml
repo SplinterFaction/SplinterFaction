@@ -10,8 +10,8 @@
 			position: absolute;
 			left: 0px;
 			top: 0px;
-			width: 580dp;
-			height: 640dp;
+			width: 720dp;
+			height: 700dp;
 			box-sizing: border-box;
 			padding: 12dp 14dp 12dp 16dp;
 			pointer-events: auto;
@@ -19,12 +19,12 @@
 		.grow {
 			flex: 1;
 		}
-		/* the window's inside: 640 less the borders and padding */
+		/* the window's inside: 700 less the borders and padding */
 		#body {
 			position: relative;
 			display: flex;
 			flex-direction: column;
-			height: 614dp;
+			height: 674dp;
 		}
 		#tabs {
 			display: flex;
@@ -82,6 +82,198 @@
 		.badge.unbound {
 			color: #5c6875;
 		}
+		.rowedit {
+			width: 44dp;
+			height: 17dp;
+			margin-right: 8dp;
+			box-sizing: border-box;
+			text-align: center;
+			font-size: 10dp;
+			line-height: 15dp;
+			letter-spacing: 1dp;
+			color: #5c6875;
+			border: 1dp #232d38;
+		}
+		.rowedit:hover {
+			color: #ff9b21;
+			border-color: #ff9b21;
+		}
+		.krow.new {
+			color: #ff9b21;
+		}
+
+		/* ---- the bind editor: takes the list's place ------------------------ */
+		#editor {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: hidden;
+			margin-top: 8dp;
+			padding: 10dp 12dp;
+			box-sizing: border-box;
+			background-color: #0f1319;
+			border: 1dp #232d38;
+		}
+		.erow {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			margin-bottom: 8dp;
+		}
+		.elabel {
+			width: 72dp;
+			font-size: 11dp;
+			letter-spacing: 1dp;
+			text-transform: uppercase;
+			color: #ff9b21;
+		}
+		.elabel.wide {
+			width: auto;
+			margin: 8dp 0dp 4dp 0dp;
+		}
+		.ehint {
+			font-size: 11dp;
+			color: #5c6875;
+			margin-left: 8dp;
+		}
+		.field {
+			flex: 1;
+			height: 22dp;
+			box-sizing: border-box;
+			padding: 3dp 8dp 0dp 8dp;
+			font-size: 13dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #f0f4f8;
+			background-color: #1a222b;
+			border: 1dp #35434f;
+			pointer-events: auto;
+		}
+		.field.focused {
+			border-color: #ff9b21;
+		}
+		.field.placeholder {
+			color: #5c6875;
+		}
+		.field.mono {
+			font-size: 12dp;
+		}
+		.field.bad {
+			border-color: #ff5a4f;
+		}
+		.keybadge {
+			width: 160dp;
+			margin-right: 8dp;
+			cursor: pointer;
+		}
+		.keybadge.capturing {
+			color: #ff9b21;
+			border-color: #ff9b21;
+		}
+		.chips {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+		.chip {
+			margin: 0dp 5dp 5dp 0dp;
+			padding: 2dp 9dp 3dp 9dp;
+			font-size: 12dp;
+			white-space: nowrap;
+			color: #c2ccd6;
+			background-color: #1a222b;
+			border: 1dp #35434f;
+			pointer-events: auto;
+		}
+		.chip:hover {
+			border-color: #8593a1;
+		}
+		.chip.on {
+			color: #0b0e12;
+			background-color: #ff9b21;
+			border-color: #ff9b21;
+		}
+		.chip.not {
+			color: #ff5a4f;
+			border-color: #ff5a4f;
+			background-color: rgba(255, 90, 79, 40);
+		}
+		/* SF's own filters (sfselect), told apart from the engine's */
+		.chip.off.custom {
+			color: #8fb8c9;
+			border-color: #2f5868;
+		}
+		.chips.disabled .chip {
+			color: #3d4852;
+			border-color: #232d38;
+		}
+		#ed-buttons {
+			display: flex;
+			flex-direction: row;
+			margin-top: 10dp;
+		}
+		#ed-buttons .button {
+			flex: 1;
+			margin-right: 8dp;
+		}
+		#ed-buttons .button.last {
+			margin-right: 0dp;
+		}
+
+		/* ---- value picker: over the window ---------------------------------- */
+		#picker {
+			position: absolute;
+			left: 140dp;
+			top: 120dp;
+			width: 440dp;
+			padding: 12dp 14dp;
+			box-sizing: border-box;
+			background-color: #131920;
+			border: 1dp #ff9b21;
+		}
+		#picker-title {
+			font-size: 13dp;
+			color: #f0f4f8;
+			margin-bottom: 8dp;
+		}
+		#picker-list {
+			height: 260dp;
+			overflow-y: auto;
+			overflow-x: hidden;
+			margin-top: 6dp;
+			background-color: #0f1319;
+			border: 1dp #232d38;
+		}
+		#picker-list.hidden {
+			display: none;
+		}
+		.popt {
+			height: 22dp;
+			padding: 4dp 10dp 0dp 10dp;
+			box-sizing: border-box;
+			font-size: 13dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #c2ccd6;
+			pointer-events: auto;
+		}
+		.popt:hover {
+			background-color: #1a222b;
+			color: #f0f4f8;
+		}
+		.popt .sub {
+			color: #5c6875;
+		}
+		#picker-buttons {
+			display: flex;
+			flex-direction: row;
+			margin-top: 10dp;
+		}
+		#picker-buttons .button {
+			flex: 1;
+		}
+		#picker-no {
+			margin-left: 8dp;
+		}
 		.krow.capturing .badge {
 			color: #ff9b21;
 			border-color: #ff9b21;
@@ -124,7 +316,7 @@
 		}
 		#confirm {
 			position: absolute;
-			left: 60dp;
+			left: 147dp;
 			top: 190dp;
 			width: 426dp;
 			padding: 14dp 16dp;
@@ -172,8 +364,41 @@
 			<div id="tabs">
 				<div id="tab-sf" class="tab" data-tab="1">SF Keys</div>
 				<div id="tab-all" class="tab" data-tab="2">All Bindings</div>
+				<div id="tab-custom" class="tab" data-tab="3">Custom Binds</div>
 			</div>
 			<div id="list"/>
+
+			<div id="editor" class="hidden">
+				<div class="erow">
+					<div class="elabel">Name</div>
+					<div id="ed-name" class="field" data-act="field:name"/>
+				</div>
+				<div class="erow">
+					<div class="elabel">Key</div>
+					<div id="ed-key" class="badge keybadge" data-act="capture"/>
+					<div id="ed-keytext" class="field" data-act="field:key"/>
+				</div>
+				<div class="elabel wide">Command</div>
+				<div id="ed-verbs" class="chips"/>
+				<div id="ed-select">
+					<div class="elabel wide">Source</div>
+					<div id="ed-sources" class="chips"/>
+					<div class="elabel wide">Filters   <span class="ehint">click: require, again: exclude (NOT), again: off. Blue chips are SF filters (sfselect).</span></div>
+					<div id="ed-filters" class="chips"/>
+					<div class="elabel wide">Result</div>
+					<div id="ed-results" class="chips"/>
+				</div>
+				<div class="elabel wide">Action line   <span class="ehint">editable; chips follow it when it parses</span></div>
+				<div class="erow">
+					<div id="ed-line" class="field mono" data-act="field:line"/>
+				</div>
+				<div id="ed-hint" class="ehint"/>
+				<div id="ed-buttons">
+					<div id="ed-save" class="button" data-act="save">Save</div>
+					<div id="ed-delete" class="button danger" data-act="delete">Delete</div>
+					<div id="ed-cancel" class="button quiet last" data-act="cancel">Cancel</div>
+				</div>
+			</div>
 			<div id="status"/>
 			<div id="footer">
 				<div id="reapply" class="button quiet">Reapply key files</div>
@@ -181,6 +406,15 @@
 			</div>
 
 			<div id="confirm-dim" class="hidden"/>
+			<div id="picker" class="hidden">
+				<div id="picker-title"/>
+				<div id="picker-search" class="field" data-act="field:pick"/>
+				<div id="picker-list"/>
+				<div id="picker-buttons">
+					<div id="picker-yes" class="button" data-act="pick-ok">OK</div>
+					<div id="picker-no" class="button quiet" data-act="pick-cancel">Cancel</div>
+				</div>
+			</div>
 			<div id="confirm" class="hidden">
 				<div id="confirm-title"/>
 				<div id="confirm-lines"/>
