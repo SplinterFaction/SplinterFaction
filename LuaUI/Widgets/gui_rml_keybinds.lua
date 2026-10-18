@@ -85,6 +85,7 @@ local document
 local view
 local lastUpdate
 local Refresh -- defined under "showing"; the editor's handlers call it
+local FocusField -- defined with the text fields; the editor and picker call it
 
 --------------------------------------------------------------------------------
 -- state
@@ -108,6 +109,7 @@ local actions          -- the keybind_actions module
 local editor           -- the bind editor's state while it is open (see OpenEditor)
 local picker           -- the value picker's state while it is open (see OpenPicker)
 local focus            -- which text field takes typing: "name" | "key" | "line" | "pick"
+local caret            -- caret position in the focused field, in characters from the start
 local unitOptions      -- cached picker options: every unit def
 local paramOptions = {}-- cached picker options per customParams key
 
@@ -710,13 +712,28 @@ local function EventString(event, attribute)
 	return nil
 end
 
--- drops the last UTF-8 code point
-local function Utf8Backspace(s)
-	local i = #s
-	while i > 1 and s:byte(i) >= 0x80 and s:byte(i) < 0xC0 do
-		i = i - 1
+-- UTF-8 helpers for the text fields (Lua 5.1 has no utf8 library)
+local function Utf8Len(s)
+	local n = 0
+	for i = 1, #s do
+		local b = s:byte(i)
+		if b < 0x80 or b >= 0xC0 then n = n + 1 end
 	end
-	return s:sub(1, i - 1)
+	return n
+end
+
+-- byte offset just after the first n characters
+local function Utf8Offset(s, n)
+	if n <= 0 then return 0 end
+	local count, i = 0, 1
+	while i <= #s do
+		local b = s:byte(i)
+		local size = (b >= 0xF0 and 4) or (b >= 0xE0 and 3) or (b >= 0xC0 and 2) or 1
+		i = i + size
+		count = count + 1
+		if count == n then return i - 1 end
+	end
+	return #s
 end
 
 local function NewSpec()
@@ -807,7 +824,7 @@ local function OpenEditor(row)
 		SyncChipsFromLine()
 	else
 		SyncLineFromChips()
-		focus = "name"
+		FocusField("name")
 	end
 	listMarkup = nil -- the list is rebuilt when the editor closes
 end
@@ -825,7 +842,7 @@ end
 
 local function OpenPicker(title, kind, options, current, onPick)
 	picker = { title = title, kind = kind, options = options or {}, query = current or "", onPick = onPick, visible = {} }
-	focus = "pick"
+	FocusField("pick")
 end
 
 local function ClosePicker()
@@ -932,7 +949,7 @@ local function ChipClick(kind, index, button)
 		elseif v.arg == "text" then
 			e.verbArg = e.verbArg or ""
 			SyncLineFromChips()
-			focus = "line"
+			FocusField("line")
 		else
 			e.verbArg = nil
 			SyncLineFromChips()
@@ -1028,13 +1045,58 @@ local function FieldSet(text)
 	end
 end
 
-local function FieldAppend(utf8)
-	if utf8 == "\n" or utf8 == "\r" then return end
-	FieldSet(FieldGet() .. utf8)
+-- gives a field the keyboard, caret at the end
+FocusField = function(name)
+	focus = name
+	caret = Utf8Len(FieldGet())
 end
 
-local function FieldBackspace()
-	FieldSet(Utf8Backspace(FieldGet()))
+local function ClampCaret()
+	local n = Utf8Len(FieldGet())
+	if not caret or caret > n then caret = n end
+	if caret < 0 then caret = 0 end
+end
+
+local function FieldInsert(utf8)
+	if utf8 == "\n" or utf8 == "\r" then return end
+	ClampCaret()
+	local text = FieldGet()
+	local at = Utf8Offset(text, caret)
+	FieldSet(text:sub(1, at) .. utf8 .. text:sub(at + 1))
+	caret = caret + Utf8Len(utf8)
+end
+
+-- removes the character before (dir = -1) or after (dir = 1) the caret
+local function FieldErase(dir)
+	ClampCaret()
+	local text = FieldGet()
+	local from, to
+	if dir < 0 then
+		if caret == 0 then return end
+		from, to = Utf8Offset(text, caret - 1), Utf8Offset(text, caret)
+		caret = caret - 1
+	else
+		if caret >= Utf8Len(text) then return end
+		from, to = Utf8Offset(text, caret), Utf8Offset(text, caret + 1)
+	end
+	FieldSet(text:sub(1, from) .. text:sub(to + 1))
+end
+
+local function MoveCaret(where)
+	ClampCaret()
+	local n = Utf8Len(FieldGet())
+	if where == "left" then caret = math.max(0, caret - 1)
+	elseif where == "right" then caret = math.min(n, caret + 1)
+	elseif where == "home" then caret = 0
+	elseif where == "end" then caret = n
+	end
+end
+
+-- the field's text with the caret drawn in
+local function WithCaret(text)
+	ClampCaret()
+	local at = Utf8Offset(text, caret)
+	return hud.Escape(text:sub(1, at)) .. "|" .. hud.Escape(text:sub(at + 1))
 end
 
 --------------------------------------------------------------------------------
@@ -1135,8 +1197,11 @@ end
 --------------------------------------------------------------------------------
 
 local function SetField(id, text, placeholder, focused)
-	local shown = (text ~= "") and text or placeholder
-	view.SetText(id, hud.Escape(shown) .. (focused and "|" or ""))
+	if focused then
+		view.SetText(id, (text ~= "") and WithCaret(text) or ("|" .. hud.Escape(placeholder)))
+	else
+		view.SetText(id, hud.Escape((text ~= "") and text or placeholder))
+	end
 	view.SetClass(id, "placeholder", text == "")
 	view.SetClass(id, "focused", focused)
 end
@@ -1278,7 +1343,7 @@ local function OnEditorMouseDown(event)
 	end
 	local kind, rest = act:match("^(%a+):?(.*)$")
 	if kind == "field" then
-		focus = rest
+		FocusField(rest)
 		capture = nil
 	elseif act == "capture" and button == 0 then
 		PlayClickSound()
@@ -1313,7 +1378,7 @@ local function OnPickerMouseDown(event)
 	local button = event.parameters and event.parameters.button
 	local act = EventString(event, "data-act")
 	if act == "field:pick" then
-		focus = "pick"
+		FocusField("pick")
 	elseif act == "pick-ok" and button == 0 then
 		PlayClickSound()
 		PickerAccept()
@@ -1702,7 +1767,17 @@ function widget:KeyPress(key, mods, isRepeat)
 			return true
 		end
 		if sym == "backspace" then
-			FieldBackspace()
+			FieldErase(-1)
+			Refresh()
+			return true
+		end
+		if sym == "delete" then
+			FieldErase(1)
+			Refresh()
+			return true
+		end
+		if sym == "left" or sym == "right" or sym == "home" or sym == "end" then
+			MoveCaret(sym)
 			Refresh()
 			return true
 		end
@@ -1712,7 +1787,7 @@ function widget:KeyPress(key, mods, isRepeat)
 			return true
 		end
 		if sym == "tab" then
-			if focus == "name" then focus = "key" elseif focus == "key" then focus = "line" else focus = nil end
+			if focus == "name" then FocusField("key") elseif focus == "key" then FocusField("line") else focus = nil end
 			Refresh()
 			return true
 		end
@@ -1762,7 +1837,7 @@ function widget:TextInput(utf8)
 	if not document or not isOpen or not focus or not (editor or picker) then
 		return false
 	end
-	FieldAppend(utf8)
+	FieldInsert(utf8)
 	Refresh()
 	return true
 end
