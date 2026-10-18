@@ -576,6 +576,18 @@ function widgetHandler:NewWidget()
     end
   end
 
+  -- Keyboard ownership: while a widget owns the keyboard, every key press,
+  -- release and text input goes to it first, and nothing else sees them --
+  -- not bound actions (which otherwise run before any widget's KeyPress)
+  -- and not the engine. For windows that take typed text or capture keys.
+  wh.TakeKeyboard    = function (_) self.keyboardOwner = widget end
+  wh.ReleaseKeyboard = function (_)
+    if (self.keyboardOwner == widget) then
+      self.keyboardOwner = nil
+    end
+  end
+  wh.OwnsKeyboard    = function (_) return (self.keyboardOwner == widget) end
+
   wh.UpdateCallIn = function (_, name)
     self:UpdateWidgetCallIn(name, widget)
   end
@@ -824,6 +836,9 @@ function widgetHandler:RemoveWidget(widget)
     widget:Shutdown()
   end
   ArrayRemove(self.widgets, widget)
+  if (self.keyboardOwner == widget) then
+    self.keyboardOwner = nil
+  end
   self:RemoveWidgetGlobals(widget)
   self.actionHandler:RemoveWidgetActions(widget)
   for _,listname in ipairs(callInLists) do
@@ -1427,6 +1442,14 @@ function widgetHandler:KeyPress(key, mods, isRepeat, label, unicode)
     return true
   end
 
+  local ko = self.keyboardOwner
+  if (ko) then
+    if (ko.KeyPress) then
+      ko:KeyPress(key, mods, isRepeat, label, unicode)
+    end
+    return true
+  end
+
   if (self.actionHandler:KeyAction(true, key, mods, isRepeat)) then
     return true
   end
@@ -1452,6 +1475,14 @@ function widgetHandler:KeyRelease(key, mods, label, unicode)
     return true
   end
 
+  local ko = self.keyboardOwner
+  if (ko) then
+    if (ko.KeyRelease) then
+      ko:KeyRelease(key, mods, label, unicode)
+    end
+    return true
+  end
+
   if (self.actionHandler:KeyAction(false, key, mods, false)) then
     return true
   end
@@ -1466,6 +1497,14 @@ end
 
 function widgetHandler:TextInput(utf8, ...)
   if (self.tweakMode) then
+    return true
+  end
+
+  local ko = self.keyboardOwner
+  if (ko) then
+    if (ko.TextInput) then
+      ko:TextInput(utf8, ...)
+    end
     return true
   end
 

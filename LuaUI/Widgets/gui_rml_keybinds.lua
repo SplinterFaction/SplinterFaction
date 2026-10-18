@@ -1382,6 +1382,12 @@ local function Open()
 	capture = nil
 	confirm = nil
 	editor, picker, focus = nil, nil, nil
+	-- every key is ours while the window is open: typing a name must not open
+	-- the share window on "h", and capturing a key must not run what that key
+	-- is bound to
+	if widgetHandler.TakeKeyboard then
+		widgetHandler:TakeKeyboard()
+	end
 	LoadEdits()
 	ParseGameKeysFile()
 	listDirty = true
@@ -1396,6 +1402,9 @@ local function Close()
 	capture = nil
 	confirm = nil
 	editor, picker, focus = nil, nil, nil
+	if widgetHandler.ReleaseKeyboard then
+		widgetHandler:ReleaseKeyboard()
+	end
 	PlayClickSound()
 	Refresh()
 end
@@ -1578,6 +1587,9 @@ end
 
 function widget:Shutdown()
 	WG.StaticKeybinds = nil
+	if widgetHandler.ReleaseKeyboard then
+		widgetHandler:ReleaseKeyboard()
+	end
 	if hud then
 		hud.UnregisterPanel(LAYOUT_NAME)
 	end
@@ -1675,7 +1687,9 @@ function widget:KeyPress(key, mods, isRepeat)
 		return true
 	end
 
-	return false
+	-- the window owns the keyboard while open (widgetHandler:TakeKeyboard), so
+	-- anything else pressed here goes nowhere; the game is a Close away
+	return true
 end
 
 function widget:TextInput(utf8)

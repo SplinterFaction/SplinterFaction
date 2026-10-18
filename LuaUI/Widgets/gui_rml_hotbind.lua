@@ -193,12 +193,23 @@ local function BeginCapture()
 
 	capture = {action = action, label = label}
 	status  = nil
+	-- the key pressed next is the bind, not a command to run
+	if widgetHandler.TakeKeyboard then
+		widgetHandler:TakeKeyboard()
+	end
 	return true
+end
+
+local function ReleaseKeys()
+	if widgetHandler.ReleaseKeyboard then
+		widgetHandler:ReleaseKeyboard()
+	end
 end
 
 local function FinishCapture(keyset)
 	local action, label = capture.action, capture.label
 	capture = nil
+	ReleaseKeys()
 
 	local ok, displaced = WG.StaticKeybinds.Bind(action, keyset)
 	if not ok then
@@ -250,6 +261,7 @@ end
 local function Cancel()
 	if capture then
 		capture = nil
+		ReleaseKeys()
 		SetStatus("Cancelled", nil, "dim")
 		if document then
 			Refresh()
@@ -301,6 +313,7 @@ end
 
 function widget:Shutdown()
 	WG.StaticHotbind = nil
+	ReleaseKeys()
 	if hud then
 		hud.UnregisterPanel(LAYOUT_NAME)
 	end
@@ -336,6 +349,7 @@ function widget:KeyPress(key, mods, isRepeat)
 			if (sym == BIND_KEY or sym == UNBIND_KEY) and mods.ctrl then
 				SetStatus("Reserved key", "Ctrl+" .. sym .. " is the hotbind key", "err")
 				capture = nil
+				ReleaseKeys()
 			else
 				FinishCapture(keyset)
 			end
