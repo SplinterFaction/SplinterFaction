@@ -167,11 +167,25 @@
 		.nonet {
 			width: 60dp;
 		}
-		.fps {
+		/* fps: a chip naming it over the number */
+		.fpsbox {
 			width: 22dp;
-			text-align: right;
-			font-size: 11dp;
-			color: #8593a1;
+		}
+		.chip {
+			height: 9dp;
+			margin-bottom: 1dp;
+			text-align: center;
+			font-size: 8dp;
+			line-height: 9dp;
+			color: #0b0e12;
+			background-color: #8593a1;
+		}
+		.fps {
+			height: 9dp;
+			text-align: center;
+			font-size: 9dp;
+			line-height: 9dp;
+			color: #c4ced8;
 		}
 
 		/* ---- spectators --------------------------------------------------- */
