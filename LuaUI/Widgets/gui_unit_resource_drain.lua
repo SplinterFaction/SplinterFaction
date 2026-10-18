@@ -122,11 +122,15 @@ local function Round2(x)
 	return math_floor(x * 100 + 0.5) / 100
 end
 
+-- At most two decimals, and only as many as the value needs:
+-- 5 -> "+5", 2.5 -> "+2.5", 0.25 -> "+0.25"
 local function FormatValue(value)
+	local text = string_format("%.2f", Round2(math_abs(value)))
+	text = text:gsub("0+$", ""):gsub("%.$", "")
 	if value >= 0 then
-		return string_format("+%.2f", Round2(value))
+		return "+" .. text
 	else
-		return string_format("-%.2f", Round2(math_abs(value)))
+		return "-" .. text
 	end
 end
 
