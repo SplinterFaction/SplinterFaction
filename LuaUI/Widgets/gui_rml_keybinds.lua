@@ -326,6 +326,50 @@ local function AddEdit(op, keyset, action)
 	spSendCommands(op .. " " .. keyset .. " " .. action)
 end
 
+-- The engine's "unbind <keyset> <action>" matches the stored action's command
+-- word against the whole string given, so "unbind Ctrl+c select AllMap+..."
+-- never matches anything: only argument-less actions can be named. So a line
+-- is removed by unbinding its verb on that keyset, and every other action with
+-- the same verb on that keyset is bound again right after. Both steps are
+-- recorded, so sf_uikeys.txt replays to the same state.
+--   lines: set { [actionLine] = true } of the lines to remove from keyset
+local function UnbindLines(keyset, lines)
+	local verbs, keep = {}, {}
+	for line in pairs(lines) do
+		local verb = line:match("^(%S+)")
+		if verb then verbs[verb:lower()] = verb end
+	end
+	for _, b in ipairs(spGetKeyBindings(keyset) or {}) do
+		if b.command and verbs[b.command:lower()] then
+			local l = ActionLine(b.command, b.extra)
+			if not lines[l] then
+				keep[#keep + 1] = l
+			end
+		end
+	end
+	for _, verb in pairs(verbs) do
+		AddEdit("unbind", keyset, verb)
+	end
+	for i = 1, #keep do
+		AddEdit("bind", keyset, keep[i])
+	end
+end
+
+local function UnbindLine(keyset, line)
+	UnbindLines(keyset, { [line] = true })
+end
+
+-- drops the player's own "bind" entries for an action from the edit list (the
+-- file), without touching the live bindings
+local function ForgetBindEdits(line)
+	for i = #edits, 1, -1 do
+		if edits[i].op == "bind" and edits[i].action == line then
+			table.remove(edits, i)
+		end
+	end
+	RebuildEditedIndex()
+end
+
 --------------------------------------------------------------------------------
 -- Live binding queries
 --------------------------------------------------------------------------------
@@ -373,6 +417,12 @@ local function PrettyLabel(line)
 	return line
 end
 
+-- what the Custom Binds tab lists: named binds, and selection binds of the
+-- player's own making
+local function IsCustomLine(a)
+	return names[a] ~= nil or a:match("^sfselect") ~= nil or (a:match("^select ") ~= nil and not sfKnown[a])
+end
+
 local function AddRow(line, label)
 	items[#items + 1] = {
 		kind  = "row",
@@ -397,10 +447,11 @@ local function BuildList()
 		-- Runtime hotbinds live in sf_uikeys.txt but have no section in
 		-- sf_keys.txt, so synthesize one for them. Walking the edit list is
 		-- cheap and only happens when the panel is open and the list is dirty.
+		-- (Custom binds have their own tab.)
 		local extra, seenExtra = {}, {}
 		for i = 1, #edits do
 			local e = edits[i]
-			if e.op == "bind" and not sfKnown[e.action] and not seenExtra[e.action] then
+			if e.op == "bind" and not sfKnown[e.action] and not seenExtra[e.action] and not IsCustomLine(e.action) then
 				seenExtra[e.action] = true
 				extra[#extra + 1] = e.action
 			end
@@ -424,8 +475,7 @@ local function BuildList()
 		for i = 1, #edits do
 			local e = edits[i]
 			local a = e.action
-			if e.op == "bind" and not seen[a]
-				and (names[a] or a:match("^sfselect") or (a:match("^select ") and not sfKnown[a])) then
+			if e.op == "bind" and not seen[a] and IsCustomLine(a) then
 				seen[a] = true
 				rows[#rows + 1] = a
 			end
@@ -481,13 +531,30 @@ local function KeysetFromKey(key, mods)
 	return prefix .. sym
 end
 
+-- every removal grouped by keyset, so same-verb lines on one keyset go in one
+-- UnbindLines call and are not re-bound as each other's siblings
+local function RemoveBindings(removals)
+	for ks, lines in pairs(removals) do
+		UnbindLines(ks, lines)
+	end
+end
+
+local function AddRemoval(removals, keyset, line)
+	local ks = keyset:lower()
+	removals[ks] = removals[ks] or {}
+	removals[ks][line] = true
+end
+
 local function ApplyRebind(row, keyset, conflicts)
+	local removals = {}
 	for i = 1, #row.keys do
-		AddEdit("unbind", row.keys[i], row.line)
+		AddRemoval(removals, row.keys[i], row.line)
 	end
 	for i = 1, #conflicts do
-		AddEdit("unbind", conflicts[i].boundWith, conflicts[i].line)
+		AddRemoval(removals, conflicts[i].boundWith, conflicts[i].line)
 	end
+	ForgetBindEdits(row.line)
+	RemoveBindings(removals)
 	AddEdit("bind", keyset, row.line)
 
 	SaveEdits()
@@ -501,7 +568,7 @@ local function ClearBinding(row)
 		return
 	end
 	for i = 1, #row.keys do
-		AddEdit("unbind", row.keys[i], row.line)
+		UnbindLine(row.keys[i], row.line)
 	end
 	SaveEdits()
 	listDirty = true
@@ -1008,17 +1075,21 @@ local function SaveEditor()
 
 	local function Commit()
 		if not sameBind then
+			local removals = {}
 			if orig then
 				for i = 1, #orig.keys do
-					AddEdit("unbind", orig.keys[i], orig.line)
+					AddRemoval(removals, orig.keys[i], orig.line)
 				end
+				-- the old version's own bind lines leave the file
+				ForgetBindEdits(orig.line)
 				if orig.line ~= line then
 					names[orig.line] = nil
 				end
 			end
 			for i = 1, #conflicts do
-				AddEdit("unbind", conflicts[i].boundWith, conflicts[i].line)
+				AddRemoval(removals, conflicts[i].boundWith, conflicts[i].line)
 			end
+			RemoveBindings(removals)
 			AddEdit("bind", keyset, line)
 		end
 		names[line] = (name ~= "") and name or nil
@@ -1049,14 +1120,9 @@ end
 local function DeleteEditor()
 	local orig = editor and editor.original
 	if not orig then return end
-	for i = #edits, 1, -1 do
-		if edits[i].action == orig.line then
-			table.remove(edits, i)
-		end
-	end
-	RebuildEditedIndex()
+	ForgetBindEdits(orig.line)
 	for i = 1, #orig.keys do
-		AddEdit("unbind", orig.keys[i], orig.line)
+		UnbindLine(orig.keys[i], orig.line)
 	end
 	names[orig.line] = nil
 	SaveEdits()
