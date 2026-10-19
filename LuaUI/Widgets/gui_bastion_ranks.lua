@@ -205,6 +205,32 @@ local function ReadTerritoryThresholds()
 	territoryRead = true
 end
 
+-- A bought upgrade shows up as a higher level param. The first reading sets
+-- the baseline, so a reload mid-game does not replay every level bought so far.
+local function PollUpgrades()
+	if isSpec or #upgrades == 0 then
+		return
+	end
+	local first = upgradeLevels == nil
+	if first then
+		upgradeLevels = {}
+	end
+	for i, upgrade in ipairs(upgrades) do
+		local level = tonumber(TeamParam(viewedTeam, upgrade.param)) or 0
+		local known = upgradeLevels[i]
+		if first or known == nil then
+			upgradeLevels[i] = level
+		elseif level > known then
+			for l = known + 1, level do
+				queue[#queue + 1] = {upgrade = i, level = l}
+			end
+			upgradeLevels[i] = level
+		elseif level < known then
+			upgradeLevels[i] = level
+		end
+	end
+end
+
 local function RefreshStrip()
 	ReadTerritoryThresholds()
 	if isSpec then
@@ -236,17 +262,33 @@ end
 --------------------------------------------------------------------------------
 
 local function FillCard(entry)
-	local track = tracks[entry.track]
 	local level = entry.level
-	view.SetText("rankup-track-text", hud.Escape(track.name) .. " · Rank " .. (ROMAN[level] or tostring(level)))
-	view.SetText("rankup-title", hud.Escape(track.titles[level] or ("Rank " .. level)))
-	view.SetText("rankup-sub", hud.Escape(Achievement(track, entry.value)))
+	local id, label, title, sub
+	if entry.upgrade then
+		local upgrade = upgrades[entry.upgrade]
+		id = upgrade.id
+		label = upgrade.name .. " · Level " .. (ROMAN[level] or tostring(level))
+		title = upgrade.titles[level] or ("Level " .. level)
+		local mult = upgrade.mults and upgrade.mults[level]
+		sub = mult and string.format("+%d%% %s", math.floor((mult - 1) * 100 + 0.5), upgrade.effect)
+			or (upgrade.effect .. " upgraded")
+	else
+		local track = tracks[entry.track]
+		id = track.id
+		label = track.name .. " · Rank " .. (ROMAN[level] or tostring(level))
+		title = track.titles[level] or ("Rank " .. level)
+		sub = Achievement(track, entry.value)
+	end
+	view.SetText("rankup-track-text", hud.Escape(label))
+	view.SetText("rankup-title", hud.Escape(title))
+	view.SetText("rankup-sub", hud.Escape(sub))
 	local emblem = view.Element("rankup-emblem")
 	if emblem then
-		emblem:SetAttribute("src", "/LuaUI/Images/rml/rank_" .. track.id .. ".png")
+		emblem:SetAttribute("src", "/LuaUI/Images/rml/rank_" .. id .. ".png")
 	end
+	local tier = math.min(level, 5) -- the frame has five looks; upgrades go to six
 	for t = 1, 5 do
-		view.SetClass("rankup-frame", "t" .. t, t == level)
+		view.SetClass("rankup-frame", "t" .. t, t == tier)
 	end
 	local chevron = level >= 5 and "rank_chevron_ember.png" or "rank_chevron.png"
 	local rml = {}
@@ -263,8 +305,10 @@ local function StartCard(entry)
 	card = entry
 	card.t0 = Now()
 	FillCard(entry)
-	fresh = entry.track
-	freshUntil = card.t0 + HOLD_TIME + FADE_TIME + 6
+	if entry.track then
+		fresh = entry.track
+		freshUntil = card.t0 + HOLD_TIME + FADE_TIME + 6
+	end
 	local sound = SOUNDS[math.min(entry.level, #SOUNDS)]
 	if sound then
 		Spring.PlaySoundFile(sound, SOUND_VOLUME, "ui")
@@ -345,6 +389,7 @@ function widget:Initialize()
 		return
 	end
 	tracks = config.tracks
+	upgrades = config.upgrades or {}
 
 	local helpers = include("rml/hud.lua")
 	local result, reason = helpers.LoadDocument(DOCUMENT_PATH, widget)
@@ -398,6 +443,7 @@ function widget:PlayerChanged(playerID)
 	if teamID ~= viewedTeam or spec ~= isSpec then
 		viewedTeam = teamID
 		isSpec = spec
+		upgradeLevels = nil
 		queue = {}
 		if card then
 			EndCard()
@@ -415,6 +461,7 @@ function widget:GameFrame(n)
 				fresh = nil
 			end
 			RefreshStrip()
+			PollUpgrades()
 		end
 	end
 end

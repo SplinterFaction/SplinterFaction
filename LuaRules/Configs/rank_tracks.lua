@@ -31,6 +31,29 @@ return {
 	-- scanner probes and drop pods carry a 518,181,504 sentinel cost.
 	maxCountedCost = 500000,
 
+	-- Team upgrades (game_team_upgrades.lua) get a card too, though no place in
+	-- the strip: the HUD watches the level params that gadget mirrors. The
+	-- multipliers are repeated here only for the card's wording; the gadget's
+	-- table is the one that matters.
+	upgrades = {
+		{
+			id     = "weapons",
+			name   = "Weapons",
+			param  = "upgrade_weapons_level",
+			effect = "weapon damage",
+			mults  = {1.15, 1.30, 1.50, 1.65, 1.80, 2.00},
+			titles = {"Calibrated", "Hardened", "Overcharged", "Lethal", "Devastating", "Annihilating"},
+		},
+		{
+			id     = "armor",
+			name   = "Armor",
+			param  = "upgrade_armor_level",
+			effect = "hit points",
+			mults  = {1.15, 1.30, 1.50, 1.65, 1.80, 2.00},
+			titles = {"Plated", "Reinforced", "Hardened", "Fortified", "Bulwark", "Impregnable"},
+		},
+	},
+
 	tracks = {
 		{
 			id     = "combat",

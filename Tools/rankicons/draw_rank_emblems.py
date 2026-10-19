@@ -115,7 +115,32 @@ def territory():
     return ember, steel
 
 
+def weapons():
+    """A shell: the shard pointing up, flanked by two angled steel lines."""
+    ember, de = layer()
+    steel, ds = layer()
+    poly(de, [(48, 12), (60, 44), (60, 78), (36, 78), (36, 44)], fill=255)
+    ds.line([pt(24, 76), pt(24, 46), pt(38, 22)], fill=255, width=int(4 * S), joint="curve")
+    ds.line([pt(72, 76), pt(72, 46), pt(58, 22)], fill=255, width=int(4 * S), joint="curve")
+    # a dark groove splits the shell head from its body
+    hole = Image.new("L", (BIG, BIG), 0)
+    ImageDraw.Draw(hole).rectangle([pt(36, 50), pt(60, 54)], fill=255)
+    ember.paste(0, mask=hole)
+    return ember, steel
+
+
+def armor():
+    """A plate: a square frame with a smaller ember plate set into it."""
+    ember, de = layer()
+    steel, ds = layer()
+    stroke_poly(ds, [(16, 14), (80, 14), (80, 66), (48, 84), (16, 66)], 4)
+    poly(de, [(32, 28), (64, 28), (64, 58), (48, 68), (32, 58)], fill=255)
+    return ember, steel
+
+
 EMBLEMS = {
+    "weapons": weapons,
+    "armor": armor,
     "combat": combat,
     "economy": economy,
     "industry": industry,
