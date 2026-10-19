@@ -287,7 +287,7 @@ local function WriteHeader()
 			or (spec and "spectator-limited") or "player"
 	Write("#SFREC 2")
 	Write("H game " .. Clean(Game.gameName) .. " " .. Clean(Game.gameVersion))
-	Write("H engine " .. Clean(Engine and Engine.version or Game.version))
+	Write("H engine " .. Clean(Engine.version))
 	Write("H map " .. Clean(Game.mapName))
 	Write("H mapsize " .. Game.mapSizeX .. " " .. Game.mapSizeZ)
 	Write("H view " .. view)

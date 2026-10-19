@@ -34,7 +34,7 @@ local function new(class, shaderParams, shaderName, logEntries)
 end
 
 local function IsGeometryShaderSupported()
-	return gl.HasExtension("GL_ARB_geometry_shader4") and (gl.SetShaderParameter ~= nil or gl.SetGeometryShaderParameter ~= nil)
+	return gl.HasExtension("GL_ARB_geometry_shader4") and (gl.SetGeometryShaderParameter ~= nil)
 end
 
 local function IsTesselationShaderSupported()

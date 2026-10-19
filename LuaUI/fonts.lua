@@ -89,39 +89,10 @@ end
 
 
 local function CreateFontFiles(fontName)
-  local _, _, name, size = string.find(fontName, '^(.*)_(%d*)$')
-  if ((not name) or (not size)) then
-    return false
-  end
-
-  local fullName = name .. '.ttf'
-  local inData = VFS.LoadFile(fullName)
-  if (not inData) then
-    fullName = name .. '.otf'
-    inData = VFS.LoadFile(fullName)
-  end
-  if (not inData) then
-    return false
-  end
-  
-  print('CreateFontFiles = ' .. fullName .. ', ' .. size)
-
-  return
-    Spring.MakeFont(fullName, {
-      inData = inData,
-      height = tonumber(size),
-      minChar = 0,
-      maxChar = 255,
-    --[[
-      texWidth = 
-      outlineMode = 
-      outlineRadius = 
-      outlineWeight = 
-      padding = 
-      spacing = 
-      debug =
-    --]]
-    })
+  -- Spring.MakeFont was removed from the engine in 0.82; bitmap font atlases
+  -- can no longer be generated at runtime. Fonts must ship with prebuilt
+  -- <name>.lua / <name>.png files, or go through gl.LoadFont instead.
+  return false
 end
 
 

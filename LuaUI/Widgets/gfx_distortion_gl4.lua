@@ -79,7 +79,6 @@ local spGetUnitHeight = Spring.GetUnitHeight
 local spGetUnitLosState = Spring.GetUnitLosState
 local spGetFeatureDefID = Spring.GetFeatureDefID
 local spGetFeaturePosition = Spring.GetFeaturePosition
-local spGetProjectileName = Spring.GetProjectileName
 local spGetModKeyState = Spring.GetModKeyState
 local spGetTimer = Spring.GetTimer
 local spDiffTimers = Spring.DiffTimers
@@ -1477,7 +1476,8 @@ local function updateProjectileDistortions(newgameframe)
 				end
 				numadded = numadded + 1
 				if debugproj then
-					spEcho("Adding projdistortion", projectileID, spGetProjectileName(projectileID))
+					local wd = WeaponDefs[spGetProjectileDefID(projectileID) or -1]
+					spEcho("Adding projdistortion", projectileID, wd and wd.name or "?")
 				end
 				trackedProjectileTypes[projectileID] = distortionType
 				trackedProjectiles[projectileID] = gameFrame
