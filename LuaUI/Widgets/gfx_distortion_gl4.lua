@@ -1789,6 +1789,19 @@ function widget:Initialize()
 	WG.distortionsgl4.AddDistortion = AddDistortion
 	WG.distortionsgl4.RemoveDistortion = RemoveDistortion
 	WG.distortionsgl4.GetDistortionVBO = GetDistortionVBO
+	-- SF: spawn a one-shot point distortion at a world position from a plain
+	-- {distortionType = "point", distortionConfig = {...}} table (same shape as
+	-- the config files). Used by gfx_shields_gl4 for shield impacts. The table
+	-- is initialized in place on first use, so callers should keep and reuse it.
+	WG.distortionsgl4.AddPointEffectAt = function(distortionTable, px, py, pz)
+		if not distortionTable.initComplete then
+			InitializeDistortion(distortionTable)
+		end
+		local t = distortionTable.distortionParamTable
+		if not t then return nil end
+		t[1], t[2], t[3] = px, py, pz
+		return AddDistortion(nil, nil, nil, pointDistortionVBO, t)
+	end
 	-- SF: the deferred lights widget owns the GadgetWeaponExplosion/Barrelfire
 	-- globals and forwards to these. If lights are disabled, register them here.
 	WG.distortionsgl4.VisibleExplosion = function(px, py, pz, weaponID, ownerID)

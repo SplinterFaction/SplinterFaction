@@ -14,6 +14,18 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 if not gadgetHandler:IsSyncedCode() then
+	-- SF: unsynced half only relays absorbed hits to gfx_shields_gl4.lua
+	local function PersonalShieldHit(_, unitID, absorbed, maxStrength, hx, hy, hz)
+		if Script.LuaUI("ShieldGL4_PersonalHit") then
+			Script.LuaUI.ShieldGL4_PersonalHit(unitID, absorbed, maxStrength, hx, hy, hz)
+		end
+	end
+	function gadget:Initialize()
+		gadgetHandler:AddSyncAction("PersonalShieldHit", PersonalShieldHit)
+	end
+	function gadget:Shutdown()
+		gadgetHandler:RemoveSyncAction("PersonalShieldHit")
+	end
 	return
 end
 --------------------------------------------------------------------------------
@@ -159,11 +171,34 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer, w
 			return adjustedDamage
 		end
 		local remainingDamage = 0
+		local absorbed = damage
 		if shieldedUnit.shieldStrength >= damage then
 			shieldedUnit.shieldStrength = shieldedUnit.shieldStrength - damage
 		else
 			remainingDamage = damage - shieldedUnit.shieldStrength
+			absorbed = shieldedUnit.shieldStrength
 			shieldedUnit.shieldStrength = 0
+		end
+		-- SF: tell the GL4 shield widget where the overshield took the hit
+		if absorbed > 0 then
+			local hx, hy, hz
+			if projectileID and projectileID > 0 then
+				hx, hy, hz = Spring.GetProjectilePosition(projectileID)
+			end
+			if not hx and attackerID and Spring.ValidUnitID(attackerID) then
+				-- beams and the like: point the hit at the attacker, on the unit's surface
+				local ax, ay, az = Spring.GetUnitPosition(attackerID)
+				local ux, uy, uz = Spring.GetUnitPosition(unitID)
+				if ax and ux then
+					local dx, dy, dz = ax - ux, ay - uy, az - uz
+					local len = math.sqrt(dx * dx + dy * dy + dz * dz)
+					if len > 1 then
+						local r = (UnitDefs[unitDefID].radius or 20)
+						hx, hy, hz = ux + dx / len * r, uy + dy / len * r, uz + dz / len * r
+					end
+				end
+			end
+			SendToUnsynced("PersonalShieldHit", unitID, absorbed, shieldedUnit.shieldMaxStrength, hx, hy, hz)
 		end
 		Spring.SetUnitRulesParam(unitID, "personalShield", shieldedUnit.shieldStrength, IN_LOS)
 		shieldedUnit.lastFrameDamaged = Spring.GetGameFrame()

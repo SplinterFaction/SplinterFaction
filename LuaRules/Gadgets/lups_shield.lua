@@ -1,10 +1,16 @@
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+-- SF: this gadget is also the data source for gfx_shields_gl4.lua. The unsynced
+-- half forwards shield carriers, airLOS visibility, fallback position/charge and
+-- every absorbed hit to LuaUI (ShieldGL4_* globals). While that widget is
+-- active the LUPS sphere/jitter effects are kept hidden; if it is not, the
+-- LUPS effects show as before.
+
 function gadget:GetInfo()
 	return {
 		name    = "Lups Shield",
-		desc    = "Draws variable shields for shielded units",
+		desc    = "Draws variable shields for shielded units, feeds the GL4 shield widget",
 		author  = "GoogleFrog",
 		date    = "14 November 2017",
 		license = "GNU GPL, v2 or later",
@@ -101,6 +107,16 @@ local highEnoughQuality = false
 
 local hitUpdateNeeded = false
 
+-- SF: GL4 shield widget bridge
+local gl4Active = false
+local function GL4Call(name, ...)
+	if Script.LuaUI(name) then
+		Script.LuaUI[name](...)
+		return true
+	end
+	return false
+end
+
 local myAllyTeamID = spGetMyAllyTeamID()
 
 local shieldUnits = IterableMap.New()
@@ -132,8 +148,9 @@ local function UpdateVisibility(unitID, unitData, unitVisible, forceUpdate)
 	for i = 1, #unitData.fxTable do
 		local fxID = unitData.fxTable[i]
 		local fx = Lups.GetParticles(fxID)
-		fx.visibleToMyAllyTeam = unitVisible
+		fx.visibleToMyAllyTeam = unitVisible and not gl4Active -- SF: GL4 widget draws instead
 	end
+	GL4Call("ShieldGL4_Visible", unitID, unitVisible)
 end
 
 local function AddUnit(unitID, unitDefID)
@@ -157,6 +174,7 @@ local function AddUnit(unitID, unitDefID)
 		capacity    = def.damageMultShieldCapacity,
 		decayFactor = def.decayFactor,
 		radius      = def.shieldRadius,
+		shieldCapacity = tonumber(def.shieldCapacity) or 0, -- SF: for the GL4 charge fallback
 		fxTable     = fxTable,
 		allyTeamID  = Spring.GetUnitAllyTeam(unitID)
 	}
@@ -169,6 +187,7 @@ local function AddUnit(unitID, unitDefID)
 
 	IterableMap.Add(shieldUnits, unitID, unitData)
 
+	GL4Call("ShieldGL4_Add", unitID, unitDefID)
 	local _, fullview = spGetSpectatingState()
 	UpdateVisibility(unitID, unitData, fullview, true)
 end
@@ -182,6 +201,7 @@ local function RemoveUnit(unitID)
 		end
 		IterableMap.Remove(shieldUnits, unitID)
 	end
+	GL4Call("ShieldGL4_Remove", unitID)
 end
 
 local PI = math.pi
@@ -311,6 +331,13 @@ end
 
 local function AddShieldHitData(_, hitFrame, unitID, dmg, dx, dy, dz)
 	local unitData = IterableMap.Get(shieldUnits, unitID)
+	-- SF: GL4 widget gets the absolute hit position
+	if unitData and unitData.unitVisible and Script.LuaUI("ShieldGL4_Hit") then
+		local ux, uy, uz = Spring.GetUnitPosition(unitID)
+		if ux then
+			Script.LuaUI.ShieldGL4_Hit(unitID, dmg, ux + dx, uy + dy, uz + dz)
+		end
+	end
 	if unitData and unitData.hitData then
 		--Spring.Echo(hitFrame, unitID, dmg)
 		local rdx, rdy, rdz = dx - unitData.shieldPos[1], dy - unitData.shieldPos[2], dz - unitData.shieldPos[3]
@@ -366,9 +393,29 @@ function gadget:GameFrame(n)
 	end
 
 	if n % LOS_UPDATE_PERIOD == 0 then
+		-- SF: hide/show the LUPS effects when the GL4 widget comes or goes
+		local nowActive = Script.LuaUI("ShieldGL4_Active") and true or false
+		local forceUpdate = (nowActive ~= gl4Active)
+		gl4Active = nowActive
+		local pushState = nowActive and Script.LuaUI("ShieldGL4_State")
+
 		local _, fullview = spGetSpectatingState()
 		for unitID, unitData in IterableMap.Iterator(shieldUnits) do
-			UpdateVisibility(unitID, unitData, fullview)
+			UpdateVisibility(unitID, unitData, fullview, forceUpdate)
+			if forceUpdate and nowActive then
+				GL4Call("ShieldGL4_Add", unitID, unitData.unitDefID)
+			end
+			if pushState and unitData.unitVisible then
+				local ux, uy, uz = Spring.GetUnitPosition(unitID)
+				local _, power = Spring.GetUnitShieldState(unitID)
+				local charge = 1
+				if power and unitData.shieldCapacity and unitData.shieldCapacity > 0 then
+					charge = math.max(0, math.min(1, power / unitData.shieldCapacity))
+				end
+				if ux then
+					Script.LuaUI.ShieldGL4_State(unitID, ux, uy, uz, charge)
+				end
+			end
 		end
 	end
 end
@@ -380,11 +427,15 @@ function gadget:Initialize(n)
 	end
 
 	shieldUnitDefs = include("LuaRules/Configs/lups_shield_fxs.lua")
-	highEnoughQuality = (Lups.Config.quality or 2) >= 3 --Require High(or Ultra?) quality to render hit positions
-	--highEnoughQuality = false
+	-- SF: the ZK hit-position path (hitData / GetShieldHitPositions) fed a LUPS
+	-- ShieldSphereColorHQ class SF never had, and lups_shield_fxs.lua does not
+	-- set the shieldPos/shieldRadius fields it needs, so it is kept off.
+	-- Impacts are drawn by gfx_shields_gl4.lua instead.
+	highEnoughQuality = false
 
+	-- SF: always registered, the GL4 widget consumes hits at any quality level
+	gadgetHandler:AddSyncAction("AddShieldHitDataHandler", AddShieldHitData)
 	if highEnoughQuality then
-		gadgetHandler:AddSyncAction("AddShieldHitDataHandler", AddShieldHitData)
 		GG.GetShieldHitPositions = GetShieldHitPositions
 	end
 
@@ -397,8 +448,8 @@ function gadget:Initialize(n)
 end
 
 function gadget:Shutdown()
+	gadgetHandler:RemoveSyncAction("AddShieldHitDataHandler", AddShieldHitData)
 	if highEnoughQuality then
-		gadgetHandler:RemoveSyncAction("AddShieldHitDataHandler", AddShieldHitData)
 		GG.GetShieldHitPositions = nil
 	end
 
