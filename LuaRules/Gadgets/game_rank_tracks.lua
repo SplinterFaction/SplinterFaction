@@ -141,6 +141,46 @@ local function IsPlayerTeam(teamID)
 	return teamID and teamID ~= gaiaID
 end
 
+-- Territory thresholds follow the map: a fraction of the fair share of metal
+-- spots per team. The spot generator publishes the count at its start, which
+-- may be after this gadget's, so this runs at game start (and again on a
+-- reload). The result is published for the HUD as rank_territory_t<rank>.
+local territoryScaled = false
+local function ScaleTerritory()
+	if territoryScaled or not TRACK_TERRITORY then
+		return
+	end
+	local track = TRACKS[TRACK_TERRITORY]
+	local fractions = track.shareFractions
+	local spots = (Spring.GetGameRulesParam("metalSpot_count"))
+	if not spots then
+		spots = GG.metalMakerSpots and #GG.metalMakerSpots or nil
+	end
+	if not spots or spots <= 0 or not fractions then
+		return
+	end
+	local teams = 0
+	for _, teamID in ipairs(spGetTeamList()) do
+		if IsPlayerTeam(teamID) then
+			teams = teams + 1
+		end
+	end
+	local share = spots / max(1, teams)
+	local thresholds = {}
+	for i, fraction in ipairs(fractions) do
+		local t = floor(fraction * share + 0.5)
+		if i > 1 and t <= thresholds[i - 1] then
+			t = thresholds[i - 1] + 1
+		end
+		thresholds[i] = max(1, t)
+	end
+	track.thresholds = thresholds
+	for i, t in ipairs(thresholds) do
+		Spring.SetGameRulesParam("rank_territory_t" .. i, t)
+	end
+	territoryScaled = true
+end
+
 local function Prepare(teamID)
 	if values[teamID] then
 		return
@@ -198,6 +238,9 @@ function gadget:Initialize()
 			Publish(teamID)
 		end
 	end
+	if spGetGameFrame() > 0 then
+		ScaleTerritory()
+	end
 	-- extractors already standing (a /luarules reload mid-game)
 	if spGetGameFrame() > 0 then
 		for _, unitID in ipairs(Spring.GetAllUnits()) do
@@ -209,6 +252,10 @@ function gadget:Initialize()
 			end
 		end
 	end
+end
+
+function gadget:GameStart()
+	ScaleTerritory()
 end
 
 function gadget:UnitFinished(unitID, unitDefID, teamID)

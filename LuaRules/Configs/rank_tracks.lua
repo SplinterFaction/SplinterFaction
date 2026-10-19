@@ -61,7 +61,13 @@ return {
 			name   = "Territory",
 			unit   = "extractors",
 			desc   = "Metal extractors held",
-			thresholds = {3, 5, 8, 12, 18},
+			-- Maps differ: 40 spots on Altored Divide, 120 on Flats and Forests.
+			-- So the ranks are fractions of a fair share (the map's metal spots
+			-- divided by the number of teams); 40 spots and 4 teams give
+			-- 3/4/6/9/14, 120 spots give 8/12/18/27/42. thresholds is the fallback when the spot
+			-- count is unknown.
+			shareFractions = {0.25, 0.4, 0.6, 0.9, 1.4},
+			thresholds = {3, 4, 6, 9, 14},
 			titles = {"Scout", "Claimant", "Holdfast", "Occupier", "Dominion"},
 		},
 	},

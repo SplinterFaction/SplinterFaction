@@ -183,7 +183,30 @@ end
 -- the strip
 --------------------------------------------------------------------------------
 
+-- the gadget scales the territory thresholds to the map; read them once
+local territoryRead = false
+local function ReadTerritoryThresholds()
+	if territoryRead then
+		return
+	end
+	for i, track in ipairs(tracks) do
+		if track.id == "territory" then
+			local thresholds = {}
+			for rank = 1, #track.thresholds do
+				local t = (Spring.GetGameRulesParam("rank_territory_t" .. rank))
+				if not t then
+					return
+				end
+				thresholds[rank] = tonumber(t)
+			end
+			track.thresholds = thresholds
+		end
+	end
+	territoryRead = true
+end
+
 local function RefreshStrip()
+	ReadTerritoryThresholds()
 	if isSpec then
 		view.SetClass("ranks", "hidden", true)
 		return
