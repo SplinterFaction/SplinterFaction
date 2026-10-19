@@ -41,8 +41,8 @@ local CONFIG_PATH   = "LuaRules/Configs/rank_tracks.lua"
 local STRIP_WIDTH  = 372
 local STRIP_HEIGHT = 48
 local STRIP_MARGIN = 14   -- from the top right corner, like the players list
-local CARD_WIDTH   = 400
-local CARD_HEIGHT  = 336
+local CARD_WIDTH   = 320
+local CARD_HEIGHT  = 252
 local CARD_TOP     = 92   -- below the resource bar, where the vote window goes
 
 local LAYOUT_STRIP = "ranks"
@@ -50,7 +50,7 @@ local LAYOUT_CARD  = "rankup"
 
 -- the card's timing, in seconds
 local SLAM_TIME   = 0.22  -- coming in: from oversized and clear to in place
-local HOLD_TIME   = 2.6   -- fully shown
+local HOLD_TIME   = 2.2   -- fully shown
 local FADE_TIME   = 0.45  -- going away
 local GAP_TIME    = 0.5   -- between two cards
 local FADE_STEPS  = 20    -- opacity moves in this many steps (as the pause banner does)
@@ -255,7 +255,7 @@ local function AnimateCard()
 		local p = t / SLAM_TIME
 		p = 1 - (1 - p) * (1 - p) -- ease out
 		opacity = p
-		lift = (1 - p) * 28 -- starts a little high and settles
+		lift = (1 - p) * 20 -- starts a little high and settles
 	elseif t < SLAM_TIME + HOLD_TIME then
 		opacity, lift = 1, 0
 	elseif t < SLAM_TIME + HOLD_TIME + FADE_TIME then

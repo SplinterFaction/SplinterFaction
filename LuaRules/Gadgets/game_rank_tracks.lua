@@ -124,10 +124,17 @@ for unitDefID, def in pairs(UnitDefs) do
 	end
 end
 
--- unitDefID -> metal cost, so a kill does not look it up again
+-- unitDefID -> metal cost, so a kill does not look it up again. Units priced
+-- above the sanity cap (lootboxes, probes, drop pods) count as nothing.
+local MAX_COST = config.maxCountedCost or 500000
 local metalCost = {}
 for unitDefID, def in pairs(UnitDefs) do
-	metalCost[unitDefID] = def.metalCost or 0
+	local cost = def.metalCost or 0
+	if cost >= MAX_COST then
+		cost = 0
+		isExtractor[unitDefID] = nil
+	end
+	metalCost[unitDefID] = cost
 end
 
 local function IsPlayerTeam(teamID)

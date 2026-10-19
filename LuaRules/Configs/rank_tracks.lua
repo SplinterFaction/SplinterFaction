@@ -7,8 +7,11 @@
 --  Each track has five ranks. A team is at rank N once its value reaches
 --  thresholds[N]; rank 0 is "nothing yet". Thresholds roughly double so the
 --  first rank comes in the opening minutes and the fifth is a real feat.
---  Tune from recorded games (sfrec) rather than by feel: a typical 25-minute
---  game should hand out eight to twelve rank-ups across the four tracks.
+--  Tuned from recorded games (sfrec). Reference points, Altored Divide, Oct
+--  2026: a low-economy T1 game held ~50 M/s and 5 extractors and built ~57k
+--  metal in 21 minutes (Economy II, Territory II, Industry IV-V); the
+--  AdaptiveAI on the same team reached 1400 M/s, 25 extractors and 300k
+--  built (V on all three). Combat is scaled like Industry: kills are metal.
 --------------------------------------------------------------------------------
 
 return {
@@ -20,8 +23,12 @@ return {
 	economy = {
 		sampleFrames  = 30,  -- one sample a second
 		sustainWindow = 10,  -- ten seconds of income must hold
-		energyWeight  = 0.05, -- one metal of income counts as this much energy
+		energyWeight  = 0.02, -- energy income counts this much; SF energy runs in the thousands
 	},
+
+	-- Units whose metal cost is this or more are not counted anywhere: lootboxes,
+	-- scanner probes and drop pods carry a 518,181,504 sentinel cost.
+	maxCountedCost = 500000,
 
 	tracks = {
 		{
@@ -29,7 +36,7 @@ return {
 			name   = "Combat",
 			unit   = "metal",            -- how the HUD words "x to next"
 			desc   = "Metal value of enemy units destroyed",
-			thresholds = {300, 900, 2400, 5600, 12000},
+			thresholds = {500, 1500, 4000, 10000, 25000},
 			titles = {"Skirmisher", "Raider", "Vanguard", "Warlord", "Annihilator"},
 		},
 		{
@@ -37,7 +44,7 @@ return {
 			name   = "Economy",
 			unit   = "income",
 			desc   = "Sustained income, metal and weighted energy",
-			thresholds = {8, 16, 32, 60, 110},
+			thresholds = {20, 45, 100, 250, 600},
 			titles = {"Prospector", "Tycoon", "Magnate", "Baron", "Sovereign"},
 		},
 		{
@@ -45,7 +52,7 @@ return {
 			name   = "Industry",
 			unit   = "metal",
 			desc   = "Metal value of your own production",
-			thresholds = {500, 1500, 4000, 9000, 18000},
+			thresholds = {1000, 3000, 8000, 20000, 50000},
 			titles = {"Machinist", "Foreman", "Fabricator", "Foundry Master", "Warmaker"},
 		},
 		{
@@ -53,7 +60,7 @@ return {
 			name   = "Territory",
 			unit   = "extractors",
 			desc   = "Metal extractors held",
-			thresholds = {3, 6, 10, 15, 22},
+			thresholds = {3, 5, 8, 12, 18},
 			titles = {"Scout", "Claimant", "Holdfast", "Occupier", "Dominion"},
 		},
 	},

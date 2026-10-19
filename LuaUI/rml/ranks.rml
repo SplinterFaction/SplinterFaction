@@ -88,16 +88,16 @@
 			position: absolute;
 			left: 0px;
 			top: 0px;
-			width: 400dp;
-			height: 336dp;
+			width: 320dp;
+			height: 252dp;
 			box-sizing: border-box;
-			padding: 16dp 20dp 20dp 20dp;
+			padding: 12dp 16dp 16dp 16dp;
 			border: 1dp #35434f;
 			text-align: center;
 		}
 		#rankup .bracket {
-			width: 12dp;
-			height: 12dp;
+			width: 10dp;
+			height: 10dp;
 		}
 		#rankup .bracket.tl { border-left: 3dp #ff9b21; border-top: 3dp #ff9b21; }
 		#rankup .bracket.tr { right: -1dp; top: -1dp; border-right: 3dp #ff9b21; border-top: 3dp #ff9b21; }
@@ -114,34 +114,34 @@
 			flex-direction: row;
 			align-items: center;
 			justify-content: center;
-			height: 16dp;
-			margin-top: 4dp;
-			font-size: 11dp;
-			letter-spacing: 3dp;
+			height: 14dp;
+			margin-top: 2dp;
+			font-size: 10dp;
+			letter-spacing: 2.5dp;
 			text-transform: uppercase;
 			color: #8593a1;
 		}
 		#rankup-track .dash {
-			width: 48dp;
+			width: 36dp;
 			height: 1dp;
 			background-color: #35434f;
-			margin: 0dp 12dp 0dp 12dp;
+			margin: 0dp 10dp 0dp 10dp;
 		}
 
 		/* the badge: a square panel of its own, framed by rank (t1..t5) */
 		#rankup-frame {
 			position: relative;
-			width: 124dp;
-			height: 124dp;
-			margin: 12dp auto 0dp auto;
+			width: 88dp;
+			height: 88dp;
+			margin: 8dp auto 0dp auto;
 			box-sizing: border-box;
 			background-color: #0b0e12;
 			border: 2dp #232d38;
 		}
 		#rankup-frame .fb {
 			position: absolute;
-			width: 12dp;
-			height: 12dp;
+			width: 10dp;
+			height: 10dp;
 		}
 		#rankup-frame .fb.tl { left: -2dp; top: -2dp; border-left: 2dp #8593a1; border-top: 2dp #8593a1; }
 		#rankup-frame .fb.tr { right: -2dp; top: -2dp; border-right: 2dp #8593a1; border-top: 2dp #8593a1; }
@@ -159,20 +159,20 @@
 		}
 		#rankup-frame .inner {
 			position: absolute;
-			left: 5dp;
-			top: 5dp;
-			width: 110dp;
-			height: 110dp;
+			left: 4dp;
+			top: 4dp;
+			width: 76dp;
+			height: 76dp;
 			box-sizing: border-box;
 			border: 1dp #c9761a;
 			display: none;
 		}
 		#rankup-emblem {
 			position: absolute;
-			left: 22dp;
-			top: 22dp;
-			width: 76dp;
-			height: 76dp;
+			left: 15dp;
+			top: 15dp;
+			width: 54dp;
+			height: 54dp;
 		}
 		/* rank II: the standard pair of ember brackets */
 		#rankup-frame.t2 .fb.tl, #rankup-frame.t2 .fb.br { border-color: #ff9b21; }
@@ -181,7 +181,7 @@
 		#rankup-frame.t3 .fb { display: block; border-color: #ff9b21; }
 		/* rank IV: heavier brackets, the accent line */
 		#rankup-frame.t4 { border-color: #35434f; }
-		#rankup-frame.t4 .fb { display: block; width: 14dp; height: 14dp; border-color: #ff9b21; }
+		#rankup-frame.t4 .fb { display: block; width: 12dp; height: 12dp; border-color: #ff9b21; }
 		#rankup-frame.t4 .fb.tl, #rankup-frame.t4 .fb.bl { border-left-width: 3dp; }
 		#rankup-frame.t4 .fb.tr, #rankup-frame.t4 .fb.br { border-right-width: 3dp; }
 		#rankup-frame.t4 .fb.tl, #rankup-frame.t4 .fb.tr { border-top-width: 3dp; }
@@ -189,7 +189,7 @@
 		#rankup-frame.t4 .top { display: block; }
 		/* rank V: solid ember, with the dim inner square */
 		#rankup-frame.t5 { border-color: #ff9b21; }
-		#rankup-frame.t5 .fb { display: block; width: 16dp; height: 16dp; border-color: #ff9b21; }
+		#rankup-frame.t5 .fb { display: block; width: 13dp; height: 13dp; border-color: #ff9b21; }
 		#rankup-frame.t5 .fb.tl, #rankup-frame.t5 .fb.bl { border-left-width: 3dp; }
 		#rankup-frame.t5 .fb.tr, #rankup-frame.t5 .fb.br { border-right-width: 3dp; }
 		#rankup-frame.t5 .fb.tl, #rankup-frame.t5 .fb.tr { border-top-width: 3dp; }
@@ -202,37 +202,41 @@
 			display: flex;
 			flex-direction: row;
 			justify-content: center;
-			height: 14dp;
-			margin-top: 8dp;
+			height: 12dp;
+			margin-top: 6dp;
 		}
 		#rankup-chevrons img {
-			width: 18dp;
-			height: 10dp;
+			width: 14dp;
+			height: 8dp;
 			margin: 2dp 0dp 0dp 0dp;
 		}
 
 		#rankup-title {
-			height: 44dp;
-			margin-top: 10dp;
+			height: 32dp;
+			margin-top: 6dp;
 			font-weight: bold;
-			font-size: 36dp;
-			line-height: 44dp;
-			letter-spacing: 6dp;
+			font-size: 26dp;
+			line-height: 32dp;
+			letter-spacing: 4dp;
 			text-transform: uppercase;
 			white-space: nowrap;
 			color: #f0f4f8;
 			font-effect: glow(2dp 6dp #ff9b21);
 		}
 		#rankup-sub {
-			height: 18dp;
-			margin-top: 2dp;
-			font-size: 13dp;
-			line-height: 18dp;
+			height: 16dp;
+			margin-top: 1dp;
+			font-size: 12dp;
+			line-height: 16dp;
 			color: #c2ccd6;
 		}
 		#rankup-bar {
-			width: 300dp;
-			margin: 10dp auto 0dp auto;
+			width: 220dp;
+			height: 4dp;
+			margin: 8dp auto 0dp auto;
+		}
+		#rankup-bar .bar-fill {
+			height: 4dp;
 		}
 		#rankup-bar .bar-fill {
 			width: 100%;
