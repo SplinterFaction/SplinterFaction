@@ -210,16 +210,21 @@ local function UnitFinished(_,unitID,unitDefID)
       if (fx.class=="GroundFlash") then
         fx.options.pos = { Spring.GetUnitPosition(unitID) }
       end
-      if (fx.options.heightFactor) then
+      if (fx.class=="AirJet" and WG.airjets) then
+        fx = nil -- SF: gfx_airjets_gl4 draws these
+      end
+      if fx and (fx.options.heightFactor) then
 		local pos = fx.options.pos or {0, 0, 0}
         fx.options.pos = { pos[1], Spring.GetUnitHeight(unitID)*fx.options.heightFactor, pos[3] }
       end
-	  if (fx.options.radiusFactor) then
+	  if fx and (fx.options.radiusFactor) then
 		fx.options.size = Spring.GetUnitRadius(unitID)*fx.options.radiusFactor
 	  end
-      fx.options.unit = unitID
-      AddFxs( unitID,LupsAddFX(fx.class,fx.options) )
-      fx.options.unit = nil
+      if fx then
+        fx.options.unit = unitID
+        AddFxs( unitID,LupsAddFX(fx.class,fx.options) )
+        fx.options.unit = nil
+      end
     end
   end
 end
@@ -263,9 +268,11 @@ local function UnitEnteredLos(_,unitID)
       if (fx.class=="GroundFlash") then
         fx.options.pos = { Spring.GetUnitPosition(unitID) }
       end
-    fx.options.unit = unitID
-    AddFxs( unitID,LupsAddFX(fx.class,fx.options) )
-    fx.options.unit = nil
+      if not (fx.class=="AirJet" and WG.airjets) then -- SF: gfx_airjets_gl4 draws these
+        fx.options.unit = unitID
+        AddFxs( unitID,LupsAddFX(fx.class,fx.options) )
+        fx.options.unit = nil
+      end
     end
   end
 end
@@ -354,6 +361,19 @@ local function CheckForExistingUnits()
   end
 
   widgetHandler:RemoveWidgetCallIn("Update",widget)
+
+  -- SF: lets gfx_airjets_gl4 re-run unit effect setup when it is enabled or
+  -- disabled mid-game, so the LUPS AirJet entries are added or dropped
+  WG.lupsManagerRefresh = function()
+    for unitID in pairs(particleIDs) do
+      ClearFxs(unitID)
+    end
+    registeredUnits = {}
+    local allUnits = Spring.GetAllUnits()
+    for i=1,#allUnits do
+      UnitFinished(nil, allUnits[i], Spring.GetUnitDefID(allUnits[i]))
+    end
+  end
 end
 
 
@@ -430,6 +450,7 @@ end
 --------------------------------------------------------------------------------
 
 function widget:Shutdown()
+  WG.lupsManagerRefresh = nil
   if (initialized) then
     for _,unitFxIDs in pairs(particleIDs) do
       for i=1,#unitFxIDs do
