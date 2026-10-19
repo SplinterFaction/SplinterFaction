@@ -13,6 +13,7 @@
 --    RankUpEvent and are queued, so two reached in the same fight play one
 --    after the other instead of on top of each other.
 --
+--  Players only: a spectator sees nothing of it, and neither does a replay.
 --  Nothing here affects play. The widget can be switched off in Options.
 --
 --------------------------------------------------------------------------------
@@ -40,7 +41,12 @@ local CONFIG_PATH   = "LuaRules/Configs/rank_tracks.lua"
 -- must match #ranks and #rankup in ranks.rml
 local STRIP_WIDTH  = 372
 local STRIP_HEIGHT = 48
-local STRIP_MARGIN = 14   -- from the top right corner, like the players list
+local STRIP_MARGIN = 10   -- from the top edge, matching the menu button
+local STRIP_GAP    = 8    -- between the strip and the menu button
+-- the menu button's place, so the strip sits to its left: must match
+-- BUTTON_WIDTH and MARGIN in gui_bastion_menu.lua
+local MENU_BUTTON_WIDTH  = 84
+local MENU_BUTTON_MARGIN = 10
 local CARD_WIDTH   = 320
 local CARD_HEIGHT  = 252
 local CARD_TOP     = 92   -- below the resource bar, where the vote window goes
@@ -87,6 +93,7 @@ local fresh = nil  -- track index with the latest rank-up, highlighted in the st
 local freshUntil = 0
 
 local viewedTeam = Spring.GetMyTeamID()
+local isSpec = Spring.GetSpectatingState()
 local lastStripFrame = -1
 
 --------------------------------------------------------------------------------
@@ -177,6 +184,10 @@ end
 --------------------------------------------------------------------------------
 
 local function RefreshStrip()
+	if isSpec then
+		view.SetClass("ranks", "hidden", true)
+		return
+	end
 	local teamID = viewedTeam
 	local any = false
 	for i, track in ipairs(tracks) do
@@ -274,7 +285,7 @@ end
 --------------------------------------------------------------------------------
 
 local function RankUpEvent(teamID, trackIndex, level, value)
-	if teamID ~= viewedTeam or not tracks[trackIndex] then
+	if isSpec or teamID ~= viewedTeam or not tracks[trackIndex] then
 		return
 	end
 	queue[#queue + 1] = {track = trackIndex, level = level, value = value}
@@ -285,7 +296,8 @@ end
 --------------------------------------------------------------------------------
 
 local function StripOrigin(vsx, vsy, w, h, scale)
-	return vsx - STRIP_MARGIN * scale - w, vsy - STRIP_MARGIN * scale - h
+	local x = vsx - (MENU_BUTTON_MARGIN + MENU_BUTTON_WIDTH + STRIP_GAP) * scale - w
+	return x, vsy - STRIP_MARGIN * scale - h
 end
 
 local function CardOrigin(vsx, vsy, w, h, scale)
@@ -299,6 +311,10 @@ local function Place()
 end
 
 function widget:Initialize()
+	if Spring.IsReplay() then
+		widgetHandler:RemoveWidget(self)
+		return
+	end
 	local ok, config = pcall(VFS.Include, CONFIG_PATH)
 	if not ok or type(config) ~= "table" or type(config.tracks) ~= "table" then
 		Spring.Echo("[Bastion Ranks] could not read " .. CONFIG_PATH)
@@ -328,6 +344,7 @@ function widget:Initialize()
 	Place()
 	hud.ShowPassive(document)
 	viewedTeam = Spring.GetMyTeamID()
+	isSpec = Spring.GetSpectatingState()
 	RefreshStrip()
 end
 
@@ -350,12 +367,14 @@ function widget:ViewResize()
 	end
 end
 
--- a spectator switching teams sees that team's ranks; pending cards for the
--- old team are dropped
+-- a player who resigns or dies becomes a spectator: the strip goes away and
+-- pending cards are dropped
 function widget:PlayerChanged(playerID)
 	local teamID = Spring.GetMyTeamID()
-	if teamID ~= viewedTeam then
+	local spec = Spring.GetSpectatingState()
+	if teamID ~= viewedTeam or spec ~= isSpec then
 		viewedTeam = teamID
+		isSpec = spec
 		queue = {}
 		if card then
 			EndCard()
