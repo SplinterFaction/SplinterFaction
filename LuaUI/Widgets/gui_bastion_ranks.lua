@@ -65,11 +65,11 @@ local STRIP_PERIOD = 15   -- frames between strip refreshes; matches the gadget
 
 -- a sound per rank; file paths, as Spring.PlaySoundFile takes them
 local SOUNDS = {
-	"sounds/ui/upgrade.wav",
-	"sounds/ui/upgrade.wav",
-	"sounds/ui/upgradecomplete.wav",
-	"sounds/ui/upgradecomplete.wav",
-	"sounds/ui/enoughincomefort1.wav",
+	"sounds/ui/rankup/SD_Low+Hi_01.wav",
+	"sounds/ui/rankup/SD_Low+Hi_01.wav",
+	"sounds/ui/rankup/SD_Low+Hi_04.wav",
+	"sounds/ui/rankup/SD_Low+Hi_04.wav",
+	"sounds/ui/rankup/SD_Low+Hi_06.wav",
 }
 local SOUND_VOLUME = 0.8
 
