@@ -13,46 +13,34 @@ end
 
 if gadgetHandler:IsSyncedCode() then
 
-    local cannonWeapons = {}
+    -- SF: every weapon explosion is relayed. The lights/distortion configs
+    -- (DeferredLightsGL4WeaponsConfig / DistortionGL4WeaponsConfig) decide
+    -- per weapon what, if anything, to show; the old per-type watch list here
+    -- silently dropped StarburstLauncher, AircraftBomb, TorpedoLauncher,
+    -- LightningCannon and DGun explosions before they ever reached a widget.
+    local cannonWeapons = {}   -- weapons that get a barrelfire (muzzle) event
+    local watchedProjectiles = {}
 
     function gadget:Initialize()
         for wdid, wd in pairs(WeaponDefs) do
-            if wd.type == "Flame" then
-                Script.SetWatchExplosion(wdid, true)
+            Script.SetWatchExplosion(wdid, true)
+            local wtype = wd.type
+            if wtype == "Cannon" or wtype == "LaserCannon" or wtype == "DGun" then
+                local minDamage = (wtype == "LaserCannon") and 10 or 20
+                if (wd.damages[0] or 0) >= minDamage then
+                    cannonWeapons[wdid] = true
+                    watchedProjectiles[wdid] = true
+                    Script.SetWatchProjectile(wdid, true)
+                end
             end
-			if wd.type == "Cannon" then
-				cannonWeapons[wdid] = true
-				Script.SetWatchExplosion(wdid, true)
-				if wd.damages[0] >= 20 then
-					Script.SetWatchProjectile(wdid, true)
-				end
-			end
-			if wd.type == "LaserCannon" then
-				cannonWeapons[wdid] = true
-				Script.SetWatchExplosion(wdid, true)
-				if wd.damages[0] >= 10 then
-					Script.SetWatchProjectile(wdid, true)
-				end
-			end
-			if wd.type == "BeamLaser" then
-				Script.SetWatchExplosion(wdid, true)
-			end
-			if wd.type == "MissileLauncher" then
-				Script.SetWatchExplosion(wdid, true)
-			end
         end
     end
     function gadget:Shutdown()
-        for wdid, wd in pairs(WeaponDefs) do
-            if wd.type == "Flame" then
-                Script.SetWatchExplosion(wdid, false)
-            end
-            if wd.type == "Cannon" then
-                Script.SetWatchExplosion(wdid, false)
-				if wd.damages[0] >= 20 then
-					Script.SetWatchProjectile(wdid, false)
-				end
-            end
+        for wdid in pairs(WeaponDefs) do
+            Script.SetWatchExplosion(wdid, false)
+        end
+        for wdid in pairs(watchedProjectiles) do
+            Script.SetWatchProjectile(wdid, false)
         end
     end
 

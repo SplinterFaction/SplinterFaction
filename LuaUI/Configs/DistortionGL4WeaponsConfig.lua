@@ -908,6 +908,26 @@ local BaseClasses = {
 			effectType = "airShockwave",
 		},
 	},
+	ImpactShockWave = { -- SF: direct-hit punch for small-AoE weapons, sized by damage in AssignDistortionsToAllWeapons
+		distortionType = "point", -- or cone or beam
+		distortionConfig = {
+			posx = 0,
+			posy = 0,
+			posz = 0,
+			radius = 30,
+			noiseScaleSpace = 0.15,
+			noiseStrength = 0.15,
+			onlyModelMap = 0,
+			lifeTime = 4,
+			refractiveIndex = 1.04,
+			decay = 3,
+			rampUp = 1,
+			effectStrength = 2.0,
+			startRadius = 0.35,
+			shockWidth = -1.3,
+			effectType = "airShockwave",
+		},
+	},
 	ExploShockWaveS = {
 		distortionType = "point", -- or cone or beam
 		distortionConfig = {
@@ -2205,12 +2225,15 @@ local function AssignDistortionsToAllWeapons()
 				if weaponDef.type == "AircraftBomb" then
 					if weaponDef.paralyzer then
 					else
-						explosionDistortions[weaponID] =
-							{ GetDistortionClass("AirShockWave", GetClosestSizeClass(radius), overrideTable) }
-						explosionDistortions[weaponID] =
-							{ GetDistortionClass("GroundShockWave", GetClosestSizeClass(radius), overrideTable) }
-						explosionDistortions[weaponID] =
-							{ GetDistortionClass("ExplosionHeat", GetClosestSizeClass(radius), overrideTable) }
+						-- SF: BAR assigned these three one after another, each overwriting the
+						-- last, and then the generic cannon shockwave below replaced that too,
+						-- so bombs only ever got a plain ExploShockWave. They are one list,
+						-- and the generic assignment skips weapons that already have one.
+						explosionDistortions[weaponID] = {
+							GetDistortionClass("AirShockWave", GetClosestSizeClass(radius), overrideTable),
+							GetDistortionClass("GroundShockWave", GetClosestSizeClass(radius), overrideTable),
+							GetDistortionClass("ExplosionHeat", GetClosestSizeClass(radius), overrideTable),
+						}
 					end
 				end
 
@@ -2220,8 +2243,16 @@ local function AssignDistortionsToAllWeapons()
 				-- end
 
 				-- UNIT explosions
-				if weaponDef.customParams.unitexplosion then
-					effectiveRangeExplo = effectiveRangeExplo * 2.1
+				if weaponDef.customParams.unitexplosion or isUnitExplosion then -- SF: name fallback for Unit_Explosions.lua defs
+					-- SF: BAR scales death shockwaves up 2.1x because its death weapons have
+					-- small AoEs. SF's Unit_Explosions.lua uses the AoE as a display radius
+					-- (200/400/600/1000 for small/medium/large/huge), so scale down instead.
+					-- Units get 0.6x, buildings 0.45x of that radius; tune here.
+					if string.find(weaponDef.name, "building") then
+						effectiveRangeExplo = areaofeffect * 0.45
+					else
+						effectiveRangeExplo = areaofeffect * 0.6
+					end
 
 					if string.find(weaponDef.name, "windboom") then
 						effectiveRangeExplo = 40
@@ -2241,9 +2272,7 @@ local function AssignDistortionsToAllWeapons()
 						effectiveRangeExplo = 100
 					end
 
-					if string.find(weaponDef.name, "building") then
-						effectiveRangeExplo = effectiveRangeExplo * 0.5
-					end
+					-- (BAR's "building" * 0.5 step is folded into the SF scaling above)
 
 					if string.find(weaponDef.name, "penetrator") then
 						effectiveRangeExplo = effectiveRangeExplo * 0.6
@@ -2287,9 +2316,32 @@ local function AssignDistortionsToAllWeapons()
 				-- 	Spring.Echo('-==--===-', weaponDef.customParams.unitexplosion, distortionClass, effectiveRangeExplo, GetClosestSizeClass(effectiveRangeExplo), GetDistortionClass(distortionClass, GetClosestSizeClass(effectiveRangeExplo), overrideTable))
 				-- end
 
-				if not weaponDef.customParams.noexplosionlight and areaofeffect > 15 then --need to add noexplosiondistortion to units - now used same as lights
+				if weaponDef.customParams.noexplosionlight then
+					-- opted out (same param the lights honour)
+				elseif explosionDistortions[weaponID] then
+					-- already assigned above (aircraft bombs); keep it
+				elseif areaofeffect > 15 then
+					-- splash weapons: shockwave class and size follow the splash radius
 					explosionDistortions[weaponID] =
 						{ GetDistortionClass(distortionClass, GetClosestSizeClass(effectiveRangeExplo), overrideTable) }
+				elseif damage >= 8 then
+					-- SF: direct-hit weapons (laser bolts, small shells, lightning). BAR gave
+					-- these nothing because the size was tied to AoE; here the punch
+					-- follows damage instead so every hit registers and heavy bolts hit harder.
+					local impactRadius = math.floor(math.min(60, 14 + 1.1 * math.sqrt(damage)) + 0.5)
+					local power = math.min(1, damage / 400)
+					local impactOverrides = {
+						radius = impactRadius,
+						effectStrength = 1.2 + 1.8 * power,
+						noiseStrength = 0.1 + 0.15 * power,
+						lifeTime = 3 + math.floor(2 * power + 0.5),
+					}
+					local impact = GetDistortionClass("ImpactShockWave", nil, impactOverrides)
+					-- GetDistortionClass only applies overrides when a sizekey resolves; apply by hand
+					for k, v in pairs(impactOverrides) do
+						impact.distortionConfig[k] = v
+					end
+					explosionDistortions[weaponID] = { impact }
 				end
 			end
 		end
