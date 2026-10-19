@@ -11,7 +11,8 @@
 --  2026: a low-economy T1 game held ~50 M/s and 5 extractors and built ~57k
 --  metal in 21 minutes (Economy II, Territory II, Industry IV-V); the
 --  AdaptiveAI on the same team reached 1400 M/s, 25 extractors and 300k
---  built (V on all three). Combat is scaled like Industry: kills are metal.
+--  built (V on all three). The replay of the same game put the player at 75k
+--  metal destroyed (Combat V at 16 minutes), the AIs at 36k to 117k.
 --------------------------------------------------------------------------------
 
 return {
@@ -36,7 +37,7 @@ return {
 			name   = "Combat",
 			unit   = "metal",            -- how the HUD words "x to next"
 			desc   = "Metal value of enemy units destroyed",
-			thresholds = {500, 1500, 4000, 10000, 25000},
+			thresholds = {750, 2500, 7000, 20000, 50000},
 			titles = {"Skirmisher", "Raider", "Vanguard", "Warlord", "Annihilator"},
 		},
 		{
