@@ -1,0 +1,311 @@
+<rml>
+<head>
+	<title>SplinterFaction rank tracks</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* Two panels. The strip (#ranks) sits top right and shows the viewed
+		   team's rank on each of the four tracks with a bar to the next one.
+		   The card (#rankup) slams in under the resource bar when a rank is
+		   reached and goes away by itself. Neither takes the mouse. Positions
+		   are set from Lua (hud.PlacePanel); the sizes here must match the
+		   constants in gui_bastion_ranks.lua. */
+
+		/* ---- the strip ---- */
+
+		#ranks {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 372dp;
+			height: 48dp;
+			box-sizing: border-box;
+			padding: 5dp;
+			display: flex;
+			flex-direction: row;
+		}
+		.cell {
+			width: 88dp;
+			margin-right: 3dp;
+			box-sizing: border-box;
+			padding: 4dp 6dp 4dp 6dp;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			border-left: 2dp #232d38;
+		}
+		.cell.last {
+			margin-right: 0dp;
+		}
+		/* the track that ranked up most recently */
+		.cell.fresh {
+			border-left: 2dp #ff9b21;
+			background-color: #1a222b;
+		}
+		.cell .emblem {
+			width: 22dp;
+			height: 22dp;
+			margin-right: 7dp;
+		}
+		.cell .col {
+			width: 46dp;
+		}
+		.cell .lvl {
+			height: 13dp;
+			font-weight: bold;
+			font-size: 12dp;
+			line-height: 13dp;
+			letter-spacing: 1dp;
+			color: #f0f4f8;
+		}
+		.cell .lvl.max {
+			color: #ff9b21;
+		}
+		.cell .bar {
+			height: 4dp;
+			margin-top: 3dp;
+			background-color: #131920;
+		}
+		.cell .bar-fill {
+			height: 4dp;
+		}
+		.cell.fresh .bar-fill {
+			background-color: #ff9b21;
+		}
+		.cell .next {
+			height: 11dp;
+			margin-top: 2dp;
+			font-size: 9dp;
+			line-height: 11dp;
+			letter-spacing: 0.5dp;
+			text-transform: uppercase;
+			white-space: nowrap;
+			color: #8593a1;
+		}
+
+		/* ---- the card ---- */
+
+		#rankup {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 400dp;
+			height: 336dp;
+			box-sizing: border-box;
+			padding: 16dp 20dp 20dp 20dp;
+			border: 1dp #35434f;
+			text-align: center;
+		}
+		#rankup .bracket {
+			width: 12dp;
+			height: 12dp;
+		}
+		#rankup .bracket.tl { border-left: 3dp #ff9b21; border-top: 3dp #ff9b21; }
+		#rankup .bracket.tr { right: -1dp; top: -1dp; border-right: 3dp #ff9b21; border-top: 3dp #ff9b21; }
+		#rankup .bracket.bl { left: -1dp; bottom: -1dp; border-left: 3dp #ff9b21; border-bottom: 3dp #ff9b21; }
+		#rankup .bracket.br { border-right: 3dp #ff9b21; border-bottom: 3dp #ff9b21; }
+		#rankup-rule {
+			position: absolute;
+			left: 0dp;
+			top: 0dp;
+			width: 100%;
+		}
+		#rankup-track {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			height: 16dp;
+			margin-top: 4dp;
+			font-size: 11dp;
+			letter-spacing: 3dp;
+			text-transform: uppercase;
+			color: #8593a1;
+		}
+		#rankup-track .dash {
+			width: 48dp;
+			height: 1dp;
+			background-color: #35434f;
+			margin: 0dp 12dp 0dp 12dp;
+		}
+
+		/* the badge: a square panel of its own, framed by rank (t1..t5) */
+		#rankup-frame {
+			position: relative;
+			width: 124dp;
+			height: 124dp;
+			margin: 12dp auto 0dp auto;
+			box-sizing: border-box;
+			background-color: #0b0e12;
+			border: 2dp #232d38;
+		}
+		#rankup-frame .fb {
+			position: absolute;
+			width: 12dp;
+			height: 12dp;
+		}
+		#rankup-frame .fb.tl { left: -2dp; top: -2dp; border-left: 2dp #8593a1; border-top: 2dp #8593a1; }
+		#rankup-frame .fb.tr { right: -2dp; top: -2dp; border-right: 2dp #8593a1; border-top: 2dp #8593a1; }
+		#rankup-frame .fb.bl { left: -2dp; bottom: -2dp; border-left: 2dp #8593a1; border-bottom: 2dp #8593a1; }
+		#rankup-frame .fb.br { right: -2dp; bottom: -2dp; border-right: 2dp #8593a1; border-bottom: 2dp #8593a1; }
+		#rankup-frame .fb.tr, #rankup-frame .fb.bl { display: none; }
+		#rankup-frame .top {
+			position: absolute;
+			left: 0dp;
+			top: 0dp;
+			width: 100%;
+			height: 2dp;
+			background-color: #ff9b21;
+			display: none;
+		}
+		#rankup-frame .inner {
+			position: absolute;
+			left: 5dp;
+			top: 5dp;
+			width: 110dp;
+			height: 110dp;
+			box-sizing: border-box;
+			border: 1dp #c9761a;
+			display: none;
+		}
+		#rankup-emblem {
+			position: absolute;
+			left: 22dp;
+			top: 22dp;
+			width: 76dp;
+			height: 76dp;
+		}
+		/* rank II: the standard pair of ember brackets */
+		#rankup-frame.t2 .fb.tl, #rankup-frame.t2 .fb.br { border-color: #ff9b21; }
+		/* rank III: all four corners */
+		#rankup-frame.t3 { border-color: #35434f; }
+		#rankup-frame.t3 .fb { display: block; border-color: #ff9b21; }
+		/* rank IV: heavier brackets, the accent line */
+		#rankup-frame.t4 { border-color: #35434f; }
+		#rankup-frame.t4 .fb { display: block; width: 14dp; height: 14dp; border-color: #ff9b21; }
+		#rankup-frame.t4 .fb.tl, #rankup-frame.t4 .fb.bl { border-left-width: 3dp; }
+		#rankup-frame.t4 .fb.tr, #rankup-frame.t4 .fb.br { border-right-width: 3dp; }
+		#rankup-frame.t4 .fb.tl, #rankup-frame.t4 .fb.tr { border-top-width: 3dp; }
+		#rankup-frame.t4 .fb.bl, #rankup-frame.t4 .fb.br { border-bottom-width: 3dp; }
+		#rankup-frame.t4 .top { display: block; }
+		/* rank V: solid ember, with the dim inner square */
+		#rankup-frame.t5 { border-color: #ff9b21; }
+		#rankup-frame.t5 .fb { display: block; width: 16dp; height: 16dp; border-color: #ff9b21; }
+		#rankup-frame.t5 .fb.tl, #rankup-frame.t5 .fb.bl { border-left-width: 3dp; }
+		#rankup-frame.t5 .fb.tr, #rankup-frame.t5 .fb.br { border-right-width: 3dp; }
+		#rankup-frame.t5 .fb.tl, #rankup-frame.t5 .fb.tr { border-top-width: 3dp; }
+		#rankup-frame.t5 .fb.bl, #rankup-frame.t5 .fb.br { border-bottom-width: 3dp; }
+		#rankup-frame.t5 .top { display: block; height: 3dp; }
+		#rankup-frame.t5 .inner { display: block; }
+
+		/* the tally of chevrons under the badge */
+		#rankup-chevrons {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			height: 14dp;
+			margin-top: 8dp;
+		}
+		#rankup-chevrons img {
+			width: 18dp;
+			height: 10dp;
+			margin: 2dp 0dp 0dp 0dp;
+		}
+
+		#rankup-title {
+			height: 44dp;
+			margin-top: 10dp;
+			font-weight: bold;
+			font-size: 36dp;
+			line-height: 44dp;
+			letter-spacing: 6dp;
+			text-transform: uppercase;
+			white-space: nowrap;
+			color: #f0f4f8;
+			font-effect: glow(2dp 6dp #ff9b21);
+		}
+		#rankup-sub {
+			height: 18dp;
+			margin-top: 2dp;
+			font-size: 13dp;
+			line-height: 18dp;
+			color: #c2ccd6;
+		}
+		#rankup-bar {
+			width: 300dp;
+			margin: 10dp auto 0dp auto;
+		}
+		#rankup-bar .bar-fill {
+			width: 100%;
+			background-color: #ff9b21;
+		}
+	</style>
+</head>
+<body>
+	<div id="ranks" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+
+		<div id="cell-1" class="cell">
+			<img class="emblem" src="/LuaUI/Images/rml/rank_combat.png"/>
+			<div class="col">
+				<div id="lvl-1" class="lvl">I</div>
+				<div class="bar"><div id="fill-1" class="bar-fill"/></div>
+				<div id="next-1" class="next"></div>
+			</div>
+		</div>
+		<div id="cell-2" class="cell">
+			<img class="emblem" src="/LuaUI/Images/rml/rank_economy.png"/>
+			<div class="col">
+				<div id="lvl-2" class="lvl">I</div>
+				<div class="bar"><div id="fill-2" class="bar-fill"/></div>
+				<div id="next-2" class="next"></div>
+			</div>
+		</div>
+		<div id="cell-3" class="cell">
+			<img class="emblem" src="/LuaUI/Images/rml/rank_industry.png"/>
+			<div class="col">
+				<div id="lvl-3" class="lvl">I</div>
+				<div class="bar"><div id="fill-3" class="bar-fill"/></div>
+				<div id="next-3" class="next"></div>
+			</div>
+		</div>
+		<div id="cell-4" class="cell last">
+			<img class="emblem" src="/LuaUI/Images/rml/rank_territory.png"/>
+			<div class="col">
+				<div id="lvl-4" class="lvl">I</div>
+				<div class="bar"><div id="fill-4" class="bar-fill"/></div>
+				<div id="next-4" class="next"></div>
+			</div>
+		</div>
+	</div>
+
+	<div id="rankup" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket tr"/>
+		<div class="bracket bl"/>
+		<div class="bracket br"/>
+		<div id="rankup-rule" class="accent-line"/>
+
+		<div id="rankup-track">
+			<div class="dash"/>
+			<div id="rankup-track-text">Combat · Rank IV</div>
+			<div class="dash"/>
+		</div>
+
+		<div id="rankup-frame" class="t1">
+			<div class="fb tl"/>
+			<div class="fb tr"/>
+			<div class="fb bl"/>
+			<div class="fb br"/>
+			<div class="top"/>
+			<div class="inner"/>
+			<img id="rankup-emblem" src="/LuaUI/Images/rml/rank_combat.png"/>
+		</div>
+		<div id="rankup-chevrons"></div>
+
+		<div id="rankup-title">Warlord</div>
+		<div id="rankup-sub"></div>
+		<div id="rankup-bar" class="bar"><div class="bar-fill"/></div>
+	</div>
+</body>
+</rml>

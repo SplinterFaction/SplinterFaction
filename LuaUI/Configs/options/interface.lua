@@ -57,6 +57,8 @@ return {
 		{ id = "resourceprompts", name = "Resource warnings", type = "bool", config = "evo_resourceprompts",
 		  desc = "Chat messages and audio cues when metal or energy needs attention." },
 		{ id = "pausescreen", name = "Pause overlay", type = "bool", widget = "Bastion Pause Screen", requires = "Bastion Pause Screen" },
+		{ id = "ranktracks", name = "Rank-ups", type = "bool", widget = "Bastion Ranks", requires = "Bastion Ranks",
+		  desc = "Cosmetic ranks for combat, economy, industry and territory: the strip top right, and a card when one is reached." },
 		{ id = "simpleminimapcolors", name = "Simple minimap colors", type = "bool", config = "SimpleMiniMapColors", cmd = "minimap simplecolors %d",
 		  desc = "Green is you, blue is allied, red is enemy." },
 
