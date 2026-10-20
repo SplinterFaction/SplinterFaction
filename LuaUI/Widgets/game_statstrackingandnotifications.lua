@@ -56,6 +56,12 @@ local dontRemindMeToTechToT4 = 0
 local notificationQueue = {}
 local dt = 1 -- Timeout Decrement (1 second, matches the GameFrame call frequency of every 30 frames at 30fps)
 
+-- The first two minutes (timeouts.notification starts at 120) are a grace
+-- period with no notifications. Anything queued during it is thrown away,
+-- not saved up: otherwise the whole opening's worth of warnings plays back
+-- to back the moment the grace ends.
+local gracePeriod = true
+
 --[[
 HOW TO ADD A NEW NOTIFICATION — end to end guide
 
@@ -450,6 +456,15 @@ local function updateNotifications(dt)
 	end
 
 	-- Spring.Echo("notificationTimeout is " .. timeouts.notification)
+
+	if gracePeriod then
+		if timeouts.notification > 0 then
+			notificationQueue = {}
+			return
+		end
+		gracePeriod = false
+		notificationQueue = {}
+	end
 
 	-- Check if the timeout has reached 0
 	if timeouts.notification <= 0 then
