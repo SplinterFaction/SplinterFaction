@@ -97,7 +97,7 @@ do
 			Spring.Echo("DistortionGL4Config: cannot parse " .. path .. ": " .. tostring(err))
 			return {}
 		end
-		local env = setmetatable({}, { __index = _G })
+		local env = setmetatable({}, { __index = getfenv(1) }) -- SF: _G inside a widget lacks `math`
 		setfenv(chunk, env)
 		local ok, perr = pcall(chunk)
 		if not ok then

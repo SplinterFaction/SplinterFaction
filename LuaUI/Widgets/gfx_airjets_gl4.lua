@@ -88,12 +88,14 @@ local function loadLupsUnitFx()
 		spEcho("[AirjetsGL4] cannot parse " .. path .. ": " .. tostring(err))
 		return {}
 	end
-	local env = setmetatable({}, { __index = _G })
+	-- fall back to this widget's own environment (not _G, which inside a widget
+	-- is not the full global table and has no `math`)
+	local env = setmetatable({}, { __index = getfenv(1) })
 	setfenv(chunk, env)
 	local ok, perr = pcall(chunk)
 	if not ok then
 		spEcho("[AirjetsGL4] error running " .. path .. ": " .. tostring(perr))
-		return {}
+		return nil
 	end
 	return env.effectUnitDefs or {}
 end
@@ -105,6 +107,7 @@ local effectDefIDList = {}
 local function BuildDefs()
 	effectDefs, effectDefIDList = {}, {}
 	local lupsFx = loadLupsUnitFx()
+	if not lupsFx then return false end
 	for unitDefName, fxList in pairs(lupsFx) do
 		local ud = UnitDefNames[unitDefName]
 		if ud and type(fxList) == "table" then
@@ -137,6 +140,7 @@ local function BuildDefs()
 			end
 		end
 	end
+	return true
 end
 
 --------------------------------------------------------------------------------
@@ -627,7 +631,14 @@ function widget:Initialize()
 		widgetHandler:RemoveWidget()
 		return
 	end
-	BuildDefs()
+	-- if the config cannot be read, leave WG.airjets unset so the LUPS jets stay
+	if not BuildDefs() then
+		goodbye("could not load lupsunitfxs.lua")
+		return
+	end
+	if next(effectDefs) == nil then
+		spEcho("[AirjetsGL4] no AirJet entries found in lupsunitfxs.lua")
+	end
 	if not initGL4() then return end
 	reInitialize()
 
@@ -649,8 +660,7 @@ function widget:Initialize()
 		return popElementInstance(jetInstanceVBO, key)
 	end
 	WG.airjets.reload = function()
-		BuildDefs()
-		reInitialize()
+		if BuildDefs() then reInitialize() end
 	end
 
 	-- the LUPS manager may already have added AirJet particles for existing units
