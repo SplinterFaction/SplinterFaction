@@ -2,21 +2,21 @@ effectUnitDefs = {
 ------------------
 ------------------
 	fedairplant = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine1", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine2", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine3", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine4", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine5", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine6", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine7", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine8", onActive=false, emitVector = {0, 1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine1", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine2", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine3", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine4", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine5", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine6", onActive=false, emitVector = {0,-1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine7", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine8", onActive=false, emitVector = {0, -1, 0}}},
 	},
 
 	lozairplant = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine1", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine2", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine3", onActive=false, emitVector = {0, 1, 0}}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine4", onActive=false, emitVector = {0, 1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine1", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine2", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine3", onActive=false, emitVector = {0, -1, 0}}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75},	width =  4, length=45, piece="engine4", onActive=false, emitVector = {0, -1, 0}}},
 	},
 
 	airscout = {
@@ -81,12 +81,12 @@ effectUnitDefs = {
 	},
 
 	lozairengineer = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing1thrust1", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing1thrust2", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing2thrust1", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing2thrust2", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing3thrust1", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0}, width =  2, length=15, piece="wing3thrust2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0}, width =  2, length=15, piece="wing1thrust1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0}, width =  2, length=15, piece="wing1thrust2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0}, width =  2, length=15, piece="wing2thrust1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0}, width =  2, length=15, piece="wing2thrust2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0}, width =  2, length=15, piece="wing3thrust1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0}, width =  2, length=15, piece="wing3thrust2", onActive=true}},
 	},
 
 	lozwasp = {
@@ -113,36 +113,36 @@ effectUnitDefs = {
 	},
 
 	lozdragonfly = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine1", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine2", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine3", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine4", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine5", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine6", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine7", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  2, length=20, piece="engine8", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine4", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine5", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine6", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine7", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  2, length=20, piece="engine8", onActive=true}},
 	},
 
 	lozcrane = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine1", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine2", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine3", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine4", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine5", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine6", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine7", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  3, length=30, piece="engine8", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine4", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine5", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine6", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine7", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  3, length=30, piece="engine8", onActive=true}},
 	},
 
 	loztitan = {
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine1", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine2", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine3", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine4", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine5", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine6", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine7", onActive=true}},
-		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,1.0,0},	width =  4, length=40, piece="engine8", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine1", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine2", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine3", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine4", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine5", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine6", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine7", onActive=true}},
+		{class='AirJet',	options={color={1,0.5,0.0,0.75}, emitVector={0,-1.0,0},	width =  4, length=40, piece="engine8", onActive=true}},
 	},
 
 	lozlocust = {
