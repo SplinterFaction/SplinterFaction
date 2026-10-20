@@ -108,6 +108,18 @@ local function Refresh()
 	-- a spectator has nothing to resign from
 	view.SetClass("m-resign", "hidden", Spring.GetSpectatingState())
 
+	-- the music row, while the player is running
+	local music = WG.music and WG.music.GetStatus and WG.music.GetStatus()
+	view.SetClass("music", "hidden", not music)
+	if music then
+		local label = "Now playing"
+		if music.paused then label = "Paused" elseif music.silent then label = "Silence" elseif not music.playing then label = "Music" end
+		view.SetText("music-label", label)
+		view.SetText("music-title", hud.Escape(music.title ~= "" and music.title or "-"))
+		view.SetText("music-artist", hud.Escape(music.artist))
+		view.SetText("m-music-pause", (music.playing and not music.paused) and "Pause" or "Play")
+	end
+
 	local confirm = confirming and CONFIRM[confirming]
 	if confirm then
 		view.SetText("confirm-text", confirm.text)
@@ -166,6 +178,7 @@ function widget:Initialize()
 	view.Assume("backdrop", "hidden", true)
 	view.Assume("confirm-items", "hidden", true)
 	view.Assume("main-items", "hidden", false)
+	view.Assume("music", "hidden", true)
 
 	OnButton("menu-button", function() SetOpen(not open) end)
 	hud.OnClick(view, "backdrop", function() SetOpen(false) end)
@@ -178,6 +191,9 @@ function widget:Initialize()
 			end
 		end)
 	end
+	OnButton("m-music-prev", function() if WG.music then WG.music.Previous() Refresh() end end)
+	OnButton("m-music-pause", function() if WG.music then WG.music.TogglePause() Refresh() end end)
+	OnButton("m-music-next", function() if WG.music then WG.music.Next() Refresh() end end)
 	OnButton("m-resign", function()
 		confirming = "resign"
 		Refresh()

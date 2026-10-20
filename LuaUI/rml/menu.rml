@@ -40,7 +40,7 @@
 			left: 50%;
 			width: 280dp;
 			margin-left: -140dp;
-			margin-top: -235dp;
+			margin-top: -280dp;
 			pointer-events: auto;
 		}
 		#menu-head {
@@ -59,6 +59,54 @@
 		/* a wider gap opens a new group of buttons */
 		#menu-items .group {
 			margin-top: 16dp;
+		}
+		/* the music row: what is playing, and previous / pause / next */
+		#music {
+			margin-top: 14dp;
+			padding: 8dp 10dp 8dp 10dp;
+			border: 1dp #232d38;
+			border-left: 2dp #ff9b21;
+			background-color: #131920;
+		}
+		#music-label {
+			font-size: 10dp;
+			letter-spacing: 1.5dp;
+			text-transform: uppercase;
+			color: #8593a1;
+		}
+		#music-title {
+			height: 18dp;
+			margin-top: 2dp;
+			font-weight: bold;
+			font-size: 13dp;
+			line-height: 18dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #f0f4f8;
+		}
+		#music-artist {
+			height: 14dp;
+			font-size: 11dp;
+			line-height: 14dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #c2ccd6;
+		}
+		#music-controls {
+			display: flex;
+			flex-direction: row;
+			margin-top: 7dp;
+		}
+		#music-controls .button {
+			flex: 1;
+			margin-top: 0dp;
+			margin-right: 6dp;
+			padding: 3dp 0dp 4dp 0dp;
+			font-size: 12dp;
+			letter-spacing: 1dp;
+		}
+		#music-controls .button.last {
+			margin-right: 0dp;
 		}
 		#confirm-text {
 			margin: 14dp 0dp 8dp 0dp;
@@ -93,6 +141,17 @@
 
 				<div id="m-resign" class="button quiet group">Resign</div>
 				<div id="m-quit" class="button quiet">Quit</div>
+
+				<div id="music" class="hidden">
+					<div id="music-label">Now playing</div>
+					<div id="music-title"></div>
+					<div id="music-artist"></div>
+					<div id="music-controls">
+						<div id="m-music-prev" class="button quiet">Prev</div>
+						<div id="m-music-pause" class="button quiet">Pause</div>
+						<div id="m-music-next" class="button quiet last">Next</div>
+					</div>
+				</div>
 			</div>
 			<div id="confirm-items" class="hidden">
 				<div id="confirm-text"/>
