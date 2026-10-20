@@ -82,7 +82,6 @@ local commonVS = [[
 
 uniform sampler2D heightmapTex;
 uniform float heightOffset;
-uniform float zPull;
 uniform float fadeStart;
 uniform float fadeEnd;
 
@@ -103,6 +102,7 @@ float DistFade(vec3 p) {
 ]]
 
 local ringVS = commonVS .. [[
+uniform float zPull;
 layout (location = 0) in vec2 gridPos;   // -1..1
 layout (location = 1) in vec4 unitPos;   // x, y, z, ring radius
 layout (location = 2) in vec4 unitColor; // rgb, unused
@@ -201,6 +201,11 @@ local data = {}
 local count = 0
 
 local function RingRadius(unitDefID)
+	-- a unit that died this frame, or an enemy seen only as a radar blip,
+	-- has no def for us
+	if not unitDefID then
+		return false
+	end
 	local r = ringRadius[unitDefID]
 	if r == nil then
 		r = false
@@ -334,12 +339,12 @@ local function UpdateUniforms()
 	for _, shader in ipairs({ ringShader, lineShader }) do
 		shader:ActivateWith(function()
 			shader:SetUniform("heightOffset", TUNE.heightOffset)
-			shader:SetUniform("zPull", TUNE.zPull)
 			shader:SetUniform("fadeStart", TUNE.fadeStart)
 			shader:SetUniform("fadeEnd", TUNE.fadeEnd)
 		end)
 	end
 	ringShader:ActivateWith(function()
+		ringShader:SetUniform("zPull", TUNE.zPull) -- the line shader has no use for it
 		ringShader:SetUniform("ringAlpha", TUNE.ringAlpha)
 		ringShader:SetUniform("ringWidth", TUNE.ringWidth)
 	end)
