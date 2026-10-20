@@ -50,7 +50,7 @@ local TUNE = {
 
 local spGetVisibleUnits   = Spring.GetVisibleUnits
 local spGetUnitDefID      = Spring.GetUnitDefID
-local spGetUnitPosition   = Spring.GetUnitPosition
+local spGetUnitViewPosition = Spring.GetUnitViewPosition
 local spGetUnitTeam       = Spring.GetUnitTeam
 local spGetUnitTransporter = Spring.GetUnitTransporter
 local spGetGroundHeight   = Spring.GetGroundHeight
@@ -238,7 +238,9 @@ local function Collect()
 		local unitID = units[i]
 		local radius = RingRadius(spGetUnitDefID(unitID))
 		if radius and count < TUNE.maxUnits and not spGetUnitTransporter(unitID) then
-			local x, y, z = spGetUnitPosition(unitID)
+			-- the drawn position, interpolated between sim frames: the sim
+			-- position only moves 30 times a second, which stutters on fast aircraft
+			local x, y, z = spGetUnitViewPosition(unitID)
 			if x then
 				local ground = max(spGetGroundHeight(x, z), 0)
 				if y - ground > TUNE.minHeight then

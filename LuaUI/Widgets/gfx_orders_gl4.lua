@@ -123,6 +123,7 @@ local KIND_OF_CMD = {
 local spGetSelectedUnits  = Spring.GetSelectedUnits
 local spGetUnitCommands   = Spring.GetUnitCommands
 local spGetUnitPosition   = Spring.GetUnitPosition
+local spGetUnitViewPosition = Spring.GetUnitViewPosition
 local spGetFeaturePosition = Spring.GetFeaturePosition
 local spValidUnitID       = Spring.ValidUnitID
 local spValidFeatureID    = Spring.ValidFeatureID
@@ -564,7 +565,8 @@ local function PushUnit(unitID, restAlpha, isAlly)
 	if not list then
 		return
 	end
-	local ux, _, uz = spGetUnitPosition(unitID)
+	-- the drawn (interpolated) position, so the line's start does not stutter
+	local ux, _, uz = spGetUnitViewPosition(unitID)
 	if not ux then
 		return
 	end
@@ -587,7 +589,7 @@ local function PushUnit(unitID, restAlpha, isAlly)
 		local x, z = o.x, o.z
 		if o.target then
 			if spValidUnitID(o.target) then
-				local tx, _, tz = spGetUnitPosition(o.target)
+				local tx, _, tz = spGetUnitViewPosition(o.target)
 				if tx then x, z = tx, tz end
 			end
 		end
