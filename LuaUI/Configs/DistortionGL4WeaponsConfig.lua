@@ -1729,6 +1729,34 @@ local SizeRadius = {
 
 local globalDamageMult = tonumber(Spring.GetModOptions().multiplier_weapondamage) or 1
 
+--------------------------------------------------------------------------------
+-- SF small-impact tuning
+--
+-- Direct-hit weapons (damageAreaOfEffect <= maxAoE) get an ImpactShockWave
+-- sized by damage rather than splash; these are the knobs. The matching light
+-- knobs are the `smallImpact` block in DeferredLightsGL4WeaponsConfig.
+--
+--   radius         = min(radiusMax, radiusBase + radiusPerSqrtDamage * sqrt(damage))
+--   power          = min(1, damage / powerDamage)
+--   effectStrength = strengthBase + strengthPerPower * power   (how hard it bends the view)
+--   noiseStrength  = noiseBase + noisePerPower * power         (how ragged the ring is)
+--   lifeTime       = lifeBase + round(lifePerPower * power)    (frames)
+--------------------------------------------------------------------------------
+local smallImpact = {
+	maxAoE              = 15,
+	minDamage           = 8,
+	powerDamage         = 400,
+	radiusBase          = 18,   -- elmos; 50 dmg -> ~29, 200 -> ~39, 500 -> ~52
+	radiusPerSqrtDamage = 1.5,
+	radiusMax           = 70,
+	strengthBase        = 1.6,
+	strengthPerPower    = 1.9,
+	noiseBase           = 0.12,
+	noisePerPower       = 0.15,
+	lifeBase            = 4,
+	lifePerPower        = 2,
+}
+
 local function GetClosestSizeClass(desiredsize)
 	local delta = math.huge
 	local best = nil
@@ -2320,21 +2348,23 @@ local function AssignDistortionsToAllWeapons()
 					-- opted out (same param the lights honour)
 				elseif explosionDistortions[weaponID] then
 					-- already assigned above (aircraft bombs); keep it
-				elseif areaofeffect > 15 then
+				elseif areaofeffect > smallImpact.maxAoE then
 					-- splash weapons: shockwave class and size follow the splash radius
 					explosionDistortions[weaponID] =
 						{ GetDistortionClass(distortionClass, GetClosestSizeClass(effectiveRangeExplo), overrideTable) }
-				elseif damage >= 8 then
+				elseif damage >= smallImpact.minDamage then
 					-- SF: direct-hit weapons (laser bolts, small shells, lightning). BAR gave
 					-- these nothing because the size was tied to AoE; here the punch
 					-- follows damage instead so every hit registers and heavy bolts hit harder.
-					local impactRadius = math.floor(math.min(60, 14 + 1.1 * math.sqrt(damage)) + 0.5)
-					local power = math.min(1, damage / 400)
+					-- Knobs: the smallImpact block at the top of this file.
+					local si = smallImpact
+					local impactRadius = math.floor(math.min(si.radiusMax, si.radiusBase + si.radiusPerSqrtDamage * math.sqrt(damage)) + 0.5)
+					local power = math.min(1, damage / si.powerDamage)
 					local impactOverrides = {
 						radius = impactRadius,
-						effectStrength = 1.2 + 1.8 * power,
-						noiseStrength = 0.1 + 0.15 * power,
-						lifeTime = 3 + math.floor(2 * power + 0.5),
+						effectStrength = si.strengthBase + si.strengthPerPower * power,
+						noiseStrength = si.noiseBase + si.noisePerPower * power,
+						lifeTime = si.lifeBase + math.floor(si.lifePerPower * power + 0.5),
 					}
 					local impact = GetDistortionClass("ImpactShockWave", nil, impactOverrides)
 					-- GetDistortionClass only applies overrides when a sizekey resolves; apply by hand

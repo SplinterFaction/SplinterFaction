@@ -515,6 +515,32 @@ local ColorSets = { -- TODO add advanced dual-color sets!
 
 local globalDamageMult = tonumber(Spring.GetModOptions().multiplier_weapondamage) or 1
 
+--------------------------------------------------------------------------------
+-- SF small-impact tuning
+--
+-- BAR sizes explosion lights from the splash radius, so direct-hit weapons
+-- (AoE <= smallImpact.maxAoE: laser bolts, small shells, lightning) end up
+-- with a ~20 elmo, ~0.14 alpha, 9 frame flash that barely reads. This block
+-- gives those weapons a floor that scales with damage instead; it only ever
+-- raises a value, never lowers one BAR already set higher. The matching
+-- distortion knobs are the `smallImpact` block in DistortionGL4WeaponsConfig.
+--
+--   radius   = max(auto, radiusBase + radiusPerSqrtDamage * sqrt(damage))
+--   alpha    = max(auto, alphaBase  + alphaPerPower * min(1, damage / powerDamage))
+--   lifetime = max(auto, lifeBase   + lifePerPower  * min(1, damage / powerDamage))
+--------------------------------------------------------------------------------
+local smallImpact = {
+	maxAoE              = 15,   -- weapons with damageAreaOfEffect at or below this get the floor
+	minDamage           = 8,    -- below this, no explosion light at all (pings, dummy weapons)
+	powerDamage         = 400,  -- damage at which the "power" factor reaches 1
+	radiusBase          = 34,   -- elmos
+	radiusPerSqrtDamage = 2.2,  -- 50 dmg -> +15.6, 200 -> +31, 500 -> +49
+	alphaBase           = 0.26,
+	alphaPerPower       = 0.34, -- 0.26 .. 0.60
+	lifeBase            = 11,   -- frames
+	lifePerPower        = 6,    -- 11 .. 17
+}
+
 local function GetClosestSizeClass(desiredsize)
 	local delta = math.huge
 	local best = nil
@@ -1126,6 +1152,46 @@ local function applySFCustomParams()
 	end
 end
 applySFCustomParams()
+
+--------------------------------------------------------------------------------
+-- 3b. SF small-impact floor (see the smallImpact block at the top of the file)
+--------------------------------------------------------------------------------
+
+local function applySmallImpactFloor()
+	for weaponID = 0, #WeaponDefs do
+		local wd = WeaponDefs[weaponID]
+		local lt = explosionLights[weaponID]
+		local cp = wd.customParams or {}
+		if lt and not cp.expl_light_skip and not cp.noexplosionlight
+			and (wd.damageAreaOfEffect or 0) <= smallImpact.maxAoE
+			and wd.type ~= "BeamLaser" and wd.type ~= "Shield" then
+			local damage = 100
+			for cat = 0, #wd.damages do
+				if Game.armorTypes[cat] and Game.armorTypes[cat] == "default" then
+					damage = wd.damages[cat]
+					break
+				end
+			end
+			if damage >= smallImpact.minDamage then
+				local power = math.min(1, damage / smallImpact.powerDamage)
+				local floorRadius = smallImpact.radiusBase + smallImpact.radiusPerSqrtDamage * math.sqrt(damage)
+				local floorAlpha = smallImpact.alphaBase + smallImpact.alphaPerPower * power
+				local floorLife = smallImpact.lifeBase + smallImpact.lifePerPower * power
+				local lc = lt.lightConfig
+				if (lc.radius or 0) < floorRadius or (lc.a or 0) < floorAlpha or (lc.lifetime or 0) < floorLife then
+					lt = privateCopy(lt)
+					explosionLights[weaponID] = lt
+					lc = lt.lightConfig
+					lc.radius = math.max(lc.radius or 0, floorRadius)
+					lc.a = math.max(lc.a or 0, floorAlpha)
+					lc.lifetime = math.max(lc.lifetime or 0, floorLife)
+					lt.yOffset = lc.radius / 5
+				end
+			end
+		end
+	end
+end
+applySmallImpactFloor()
 
 --------------------------------------------------------------------------------
 -- 4. SF manual overrides, keyed by weapondef name (lowercase, as in WeaponDefNames)
