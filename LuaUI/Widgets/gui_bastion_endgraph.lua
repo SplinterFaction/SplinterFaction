@@ -736,15 +736,25 @@ end
 local function FinalRanksRML()
 	local parts = {}
 	local tracks = awardConfig and awardConfig.tracks or {}
+	-- the head: the track names with their emblems
+	parts[#parts + 1] = '<div class="rankrow head"><div class="who label">Player</div>'
+	for _, track in ipairs(tracks) do
+		parts[#parts + 1] = string.format('<div class="col"><img src="/LuaUI/Images/rml/rank_%s.png"/><div class="label">%s</div></div>',
+			track.id, hud.Escape(track.name))
+	end
+	parts[#parts + 1] = "</div>"
+	-- a row per player: the numeral and the rank's title in each column
 	for _, tm in ipairs(team) do
 		local c = tm.color
-		parts[#parts + 1] = string.format('<div class="rankline"><div class="who" style="color: %s;">%s</div>',
+		parts[#parts + 1] = string.format('<div class="rankrow"><div class="who" style="color: %s;">%s</div>',
 			hud.ReadableColor(c[1], c[2], c[3]), hud.Escape(tm.name))
 		for _, track in ipairs(tracks) do
 			local level = tonumber((Spring.GetTeamRulesParam(tm.id, "rank_" .. track.id .. "_level"))) or 0
-			local class = level == 0 and "none" or (level >= #(track.thresholds or {}) and "max" or "")
-			parts[#parts + 1] = string.format('<img class="em" src="/LuaUI/Images/rml/rank_%s.png"/><div class="lv %s">%s</div>',
-				track.id, class, level > 0 and (ROMAN[level] or tostring(level)) or "-")
+			local top = level >= #(track.thresholds or {})
+			local class = level == 0 and "none" or (top and "max" or "")
+			local title = level > 0 and (track.titles and track.titles[level]) or ""
+			parts[#parts + 1] = string.format('<div class="col"><div class="lv %s">%s</div><div class="ttl %s">%s</div></div>',
+				class, level > 0 and (ROMAN[level] or tostring(level)) or "-", top and "max" or "", hud.Escape(title))
 		end
 		parts[#parts + 1] = "</div>"
 	end

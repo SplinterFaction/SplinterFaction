@@ -78,46 +78,57 @@
 			font-size: 14dp;
 			color: #8593a1;
 		}
-		/* the final ranks, one line per player */
-		#ranks-head {
-			margin-bottom: 8dp;
-		}
+		/* the final ranks: a table, one row per player, a column per track */
 		#final-ranks {
 			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			margin-bottom: 14dp;
+			flex-direction: column;
+			margin-bottom: 16dp;
 		}
-		.rankline {
+		.rankrow {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			width: 25%;
-			box-sizing: border-box;
-			padding: 4dp 12dp 4dp 0dp;
-			margin-bottom: 4dp;
+			height: 26dp;
+			border-bottom: 1dp #232d38;
 		}
-		.rankline .who {
-			width: 118dp;
-			font-size: 12dp;
+		.rankrow.head {
+			height: 30dp;
+			border-bottom: 1dp #35434f;
+		}
+		.rankrow .who {
+			width: 220dp;
+			font-size: 13dp;
 			white-space: nowrap;
 			overflow: hidden;
 		}
-		.rankline .em {
+		.rankrow .col {
+			width: 190dp;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+		.rankrow.head .col img {
 			width: 16dp;
 			height: 16dp;
-			margin-left: 6dp;
+			margin-right: 7dp;
 		}
-		.rankline .lv {
-			width: 22dp;
-			margin-left: 3dp;
+		.rankrow .lv {
+			width: 26dp;
 			font-weight: bold;
-			font-size: 11dp;
+			font-size: 13dp;
 			letter-spacing: 1dp;
 			color: #f0f4f8;
 		}
-		.rankline .lv.none { color: #5c6875; }
-		.rankline .lv.max { color: #ff9b21; }
+		.rankrow .lv.none { color: #5c6875; }
+		.rankrow .lv.max { color: #ff9b21; }
+		.rankrow .ttl {
+			font-size: 11dp;
+			letter-spacing: 1dp;
+			text-transform: uppercase;
+			color: #8593a1;
+			white-space: nowrap;
+		}
+		.rankrow .ttl.max { color: #ff9b21; }
 
 		#awards-head {
 			margin-bottom: 8dp;
