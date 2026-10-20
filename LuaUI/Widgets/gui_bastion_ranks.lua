@@ -39,13 +39,12 @@ local DOCUMENT_PATH = "LuaUI/rml/ranks.rml"
 local CONFIG_PATH   = "LuaRules/Configs/rank_tracks.lua"
 
 -- must match #ranks and #rankup in ranks.rml
-local STRIP_WIDTH  = 372
-local STRIP_HEIGHT = 48
-local STRIP_MARGIN = 10   -- from the top edge, matching the menu button
-local STRIP_GAP    = 8    -- between the strip and the menu button
--- the menu button's place, so the strip sits to its left: must match
--- BUTTON_WIDTH and MARGIN in gui_bastion_menu.lua
-local MENU_BUTTON_WIDTH  = 84
+local STRIP_WIDTH  = 250
+local STRIP_HEIGHT = 160
+local STRIP_GAP    = 8    -- between the menu button and the strip
+-- the menu button's place, so the strip sits under it, right-aligned with
+-- it: must match BUTTON_HEIGHT and MARGIN in gui_bastion_menu.lua
+local MENU_BUTTON_HEIGHT = 30
 local MENU_BUTTON_MARGIN = 10
 local CARD_WIDTH   = 320
 local CARD_HEIGHT  = 252
@@ -249,6 +248,10 @@ local function RefreshStrip()
 			local max = level >= #track.thresholds
 			view.SetText("lvl-" .. i, level > 0 and (ROMAN[level] or tostring(level)) or "-")
 			view.SetClass("lvl-" .. i, "max", max)
+			view.SetClass("lvl-" .. i, "none", level == 0)
+			view.SetText("ttl-" .. i, hud.Escape(level > 0 and (track.titles and track.titles[level]) or "Unranked"))
+			view.SetClass("ttl-" .. i, "max", max)
+			view.SetClass("ttl-" .. i, "none", level == 0)
 			view.SetStyle("fill-" .. i, "width", string.format("%d%%", math.floor(Progress(track, level, value) * 100 + 0.5)))
 			view.SetText("next-" .. i, ToNext(track, level, value))
 		end
@@ -363,8 +366,8 @@ end
 --------------------------------------------------------------------------------
 
 local function StripOrigin(vsx, vsy, w, h, scale)
-	local x = vsx - (MENU_BUTTON_MARGIN + MENU_BUTTON_WIDTH + STRIP_GAP) * scale - w
-	return x, vsy - STRIP_MARGIN * scale - h
+	local x = vsx - MENU_BUTTON_MARGIN * scale - w
+	return x, vsy - (MENU_BUTTON_MARGIN + MENU_BUTTON_HEIGHT + STRIP_GAP) * scale - h
 end
 
 local function CardOrigin(vsx, vsy, w, h, scale)
@@ -403,6 +406,10 @@ function widget:Initialize()
 	view = hud.NewView(document)
 	view.Assume("ranks", "hidden", true)
 	view.Assume("rankup", "hidden", true)
+	for i = 1, 4 do
+		view.Assume("lvl-" .. i, "none", true)
+		view.Assume("ttl-" .. i, "none", true)
+	end
 	view.Assume("rankup-frame", "t1", true)
 
 	widgetHandler:RegisterGlobal("RankUpEvent", RankUpEvent)

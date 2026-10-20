@@ -10,31 +10,31 @@
 		   are set from Lua (hud.PlacePanel); the sizes here must match the
 		   constants in gui_bastion_ranks.lua. */
 
-		/* ---- the strip ---- */
+		/* ---- the strip: four rows under the menu button ---- */
 
 		#ranks {
 			position: absolute;
 			left: 0px;
 			top: 0px;
-			width: 372dp;
-			height: 48dp;
+			width: 250dp;
+			height: 160dp;
 			box-sizing: border-box;
-			padding: 5dp;
+			padding: 6dp 8dp 6dp 6dp;
 			display: flex;
-			flex-direction: row;
+			flex-direction: column;
 		}
 		.cell {
-			width: 88dp;
-			margin-right: 3dp;
+			height: 34dp;
+			margin-bottom: 3dp;
 			box-sizing: border-box;
-			padding: 4dp 6dp 4dp 6dp;
+			padding: 3dp 6dp 3dp 6dp;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			border-left: 2dp #232d38;
 		}
 		.cell.last {
-			margin-right: 0dp;
+			margin-bottom: 0dp;
 		}
 		/* the track that ranked up most recently */
 		.cell.fresh {
@@ -42,27 +42,55 @@
 			background-color: #1a222b;
 		}
 		.cell .emblem {
-			width: 22dp;
-			height: 22dp;
-			margin-right: 7dp;
+			width: 20dp;
+			height: 20dp;
+			margin-right: 8dp;
 		}
 		.cell .col {
-			width: 46dp;
+			flex: 1;
+		}
+		.cell .top {
+			display: flex;
+			flex-direction: row;
+			align-items: baseline;
+			height: 14dp;
+		}
+		.cell .track {
+			font-size: 10dp;
+			line-height: 14dp;
+			letter-spacing: 1.5dp;
+			text-transform: uppercase;
+			color: #8593a1;
 		}
 		.cell .lvl {
-			height: 13dp;
+			margin-left: 8dp;
 			font-weight: bold;
 			font-size: 12dp;
-			line-height: 13dp;
+			line-height: 14dp;
 			letter-spacing: 1dp;
 			color: #f0f4f8;
 		}
-		.cell .lvl.max {
-			color: #ff9b21;
+		.cell .ttl {
+			margin-left: 5dp;
+			font-size: 10dp;
+			line-height: 14dp;
+			letter-spacing: 1dp;
+			text-transform: uppercase;
+			white-space: nowrap;
+			color: #c2ccd6;
+		}
+		.cell .lvl.none, .cell .ttl.none { color: #5c6875; }
+		.cell .lvl.max, .cell .ttl.max { color: #ff9b21; }
+		.cell .bottom {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 12dp;
+			margin-top: 2dp;
 		}
 		.cell .bar {
+			flex: 1;
 			height: 4dp;
-			margin-top: 3dp;
 			background-color: #131920;
 		}
 		.cell .bar-fill {
@@ -72,12 +100,13 @@
 			background-color: #ff9b21;
 		}
 		.cell .next {
-			height: 11dp;
-			margin-top: 2dp;
+			width: 64dp;
+			margin-left: 8dp;
 			font-size: 9dp;
-			line-height: 11dp;
+			line-height: 12dp;
 			letter-spacing: 0.5dp;
 			text-transform: uppercase;
+			text-align: right;
 			white-space: nowrap;
 			color: #8593a1;
 		}
@@ -252,33 +281,57 @@
 		<div id="cell-1" class="cell">
 			<img class="emblem" src="/LuaUI/Images/rml/rank_combat.png"/>
 			<div class="col">
-				<div id="lvl-1" class="lvl">I</div>
-				<div class="bar"><div id="fill-1" class="bar-fill"/></div>
-				<div id="next-1" class="next"></div>
+				<div class="top">
+					<div class="track">Combat</div>
+					<div id="lvl-1" class="lvl none">-</div>
+					<div id="ttl-1" class="ttl none">Unranked</div>
+				</div>
+				<div class="bottom">
+					<div class="bar"><div id="fill-1" class="bar-fill"/></div>
+					<div id="next-1" class="next"></div>
+				</div>
 			</div>
 		</div>
 		<div id="cell-2" class="cell">
 			<img class="emblem" src="/LuaUI/Images/rml/rank_economy.png"/>
 			<div class="col">
-				<div id="lvl-2" class="lvl">I</div>
-				<div class="bar"><div id="fill-2" class="bar-fill"/></div>
-				<div id="next-2" class="next"></div>
+				<div class="top">
+					<div class="track">Economy</div>
+					<div id="lvl-2" class="lvl none">-</div>
+					<div id="ttl-2" class="ttl none">Unranked</div>
+				</div>
+				<div class="bottom">
+					<div class="bar"><div id="fill-2" class="bar-fill"/></div>
+					<div id="next-2" class="next"></div>
+				</div>
 			</div>
 		</div>
 		<div id="cell-3" class="cell">
 			<img class="emblem" src="/LuaUI/Images/rml/rank_industry.png"/>
 			<div class="col">
-				<div id="lvl-3" class="lvl">I</div>
-				<div class="bar"><div id="fill-3" class="bar-fill"/></div>
-				<div id="next-3" class="next"></div>
+				<div class="top">
+					<div class="track">Industry</div>
+					<div id="lvl-3" class="lvl none">-</div>
+					<div id="ttl-3" class="ttl none">Unranked</div>
+				</div>
+				<div class="bottom">
+					<div class="bar"><div id="fill-3" class="bar-fill"/></div>
+					<div id="next-3" class="next"></div>
+				</div>
 			</div>
 		</div>
 		<div id="cell-4" class="cell last">
 			<img class="emblem" src="/LuaUI/Images/rml/rank_territory.png"/>
 			<div class="col">
-				<div id="lvl-4" class="lvl">I</div>
-				<div class="bar"><div id="fill-4" class="bar-fill"/></div>
-				<div id="next-4" class="next"></div>
+				<div class="top">
+					<div class="track">Territory</div>
+					<div id="lvl-4" class="lvl none">-</div>
+					<div id="ttl-4" class="ttl none">Unranked</div>
+				</div>
+				<div class="bottom">
+					<div class="bar"><div id="fill-4" class="bar-fill"/></div>
+					<div id="next-4" class="next"></div>
+				</div>
 			</div>
 		</div>
 	</div>
