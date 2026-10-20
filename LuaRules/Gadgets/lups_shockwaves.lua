@@ -8,7 +8,7 @@ function gadget:GetInfo()
     date      = "Jan. 2008",
     license   = "GNU GPL, v2 or later",
     layer     = 0,
-    enabled   = true
+    enabled   = false  -- DEPRECATED: explosion shockwaves now come from gfx_distortion_gl4.lua + DistortionGL4WeaponsConfig.lua; this doubled them up on AoE > 70 weapons
   }
 end
 

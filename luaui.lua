@@ -40,7 +40,7 @@ if ALLOW_USER_WIDGETS then
   -- use a versionned directory name if it exists (a full raw replacement of
   -- the UI, so only honored when user widgets are allowed)
   local sansslash = string.sub(LUAUI_DIRNAME, 1, -2)
-  local versiondir = sansslash .. '-' .. ((Game and Game.version) or (Engine and Engine.version) or "Engine version error") .. '/'
+  local versiondir = sansslash .. '-' .. Engine.version .. '/'
   if (VFS.FileExists(versiondir  .. 'main_custom.lua', VFS.RAW_ONLY)) then
     LUAUI_DIRNAME = versiondir
     STARTUP_FILENAME = LUAUI_DIRNAME .. 'main_custom.lua'

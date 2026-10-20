@@ -20,7 +20,6 @@ if (gadgetHandler:IsSyncedCode()) then
 	--SYNCED
 
 	local destroyQueue = {}
-	local replaceQueue={}
 	local createQueue={}
 	local customtoggleQueue={}
 
@@ -30,27 +29,6 @@ if (gadgetHandler:IsSyncedCode()) then
 		for i,u in pairs(destroyQueue) do
 			Spring.DestroyUnit(u, true, false, u) --using selfD to prevent plane crashing anim
 			destroyQueue[i]=nil
-		end
-		for i,u in pairs(replaceQueue) do
-			local x, y, z
-			x, y, z = Spring.GetUnitPosition(u.unit)
-			nu = Spring.CreateUnit(u.target,x,y,z,0,u.team)
-			if nu then
-				if u.LineageRoot then
-					Spring.SetUnitLineage(nu,u.team,true)
-				end
-				Spring.SetUnitBlocking(nu, false)
-				Spring_SetUnitCOBValue(nu, 82, Spring.GetUnitHeading(u.unit))
-				Spring.SetUnitHealth(nu, Spring.GetUnitHealth(u.unit) / UnitDefs[Spring.GetUnitDefID(u.unit)].health * UnitDefs[Spring.GetUnitDefID(nu)].health)
-				local c = Spring.GetUnitCommands(u.unit)
-				for i = 1, #c do
-					Spring.GiveOrderToUnit(nu, c[i].id, c[i].params, c[i].options.coded)
-				end
-				Spring.DestroyUnit(u.unit, false, true, u.unit)
-			else
-				Spring.Echo("Error: Failed to replace team["..u.team.."] "..UnitDefs[Spring.GetUnitDefID(u.unit)].humanName.." with "..UnitDefNames[u.target].humanName)
-			end
-			replaceQueue[i] = nil
 		end
 		for i,u in pairs(createQueue) do
 			Spring.CreateUnit(u.target,u.x,u.y,u.z,0,u.team)
@@ -64,10 +42,6 @@ if (gadgetHandler:IsSyncedCode()) then
 
 	local function Destroy(u, ud, team)
 		table.insert(destroyQueue, u)
-	end
-
-	local function SwitchToSomeUnit(u,ud,team)
-		table.insert(replaceQueue, {unit=u, team=team, target="someunit" })
 	end
 
 	local function GetCentralHeading(unit, ud, team)
@@ -92,7 +66,6 @@ if (gadgetHandler:IsSyncedCode()) then
 
 	function gadget:Initialize()
 		gadgetHandler:RegisterGlobal("Destroy", Destroy)
-		gadgetHandler:RegisterGlobal("SwitchToSomeUnit", SwitchToSomeUnit)
 		gadgetHandler:RegisterGlobal("GetCentralHeading", GetCentralHeading)
 		gadgetHandler:RegisterGlobal("CheckUnitPower", CheckUnitPower)
 	end

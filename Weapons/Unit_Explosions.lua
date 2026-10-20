@@ -35,6 +35,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-small-orange",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -51,6 +52,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-medium-orange",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -67,6 +69,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-large-orange",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -83,6 +86,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-huge-orange",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -101,6 +105,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-small-blue",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -117,6 +122,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-medium-blue",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -133,6 +139,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-large-blue",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -149,6 +156,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-huge-blue",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -167,6 +175,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-small-blue-emp",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -183,6 +192,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-medium-blue-emp",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -199,6 +209,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-large-blue-emp",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -215,6 +226,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-huge-blue-emp",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -233,6 +245,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-small-green",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -249,6 +262,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-medium-green",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -265,6 +279,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-large-green",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -281,6 +296,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-huge-green",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -299,6 +315,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-small-purple",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -315,6 +332,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-medium-purple",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -331,6 +349,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-large-purple",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -347,6 +366,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-huge-purple",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -365,6 +385,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-small-red",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -381,6 +402,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-medium-red",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -397,6 +419,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-large-red",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -413,6 +436,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-huge-red",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -431,6 +455,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-small-white",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -447,6 +472,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-medium-white",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -463,6 +489,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-large-white",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -479,6 +506,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericbuildingexplosion-huge-white",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -500,6 +528,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-small-orange",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -516,6 +545,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-medium-orange",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -532,6 +562,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-large-orange",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -548,6 +579,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-huge-orange",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= orange, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -566,6 +598,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-small-blue",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -582,6 +615,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-medium-blue",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -598,6 +632,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-large-blue",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -614,6 +649,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-huge-blue",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= blue, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -632,6 +668,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-small-green",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -648,6 +685,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-medium-green",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -664,6 +702,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-large-green",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -680,6 +719,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-huge-green",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= green, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -698,6 +738,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-small-purple",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -714,6 +755,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-medium-purple",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -730,6 +772,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-large-purple",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -746,6 +789,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-huge-purple",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= purple, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -765,6 +809,7 @@ unitDeaths = {
 		explosionGenerator="custom:genericunitexplosion-small-red",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -781,6 +826,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-medium-red",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -797,6 +843,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-large-red",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -813,6 +860,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-huge-red",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -832,6 +880,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-small-white",
 		cameraShake=smallExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= smallExplosion, -- In Elmos
 			expl_light_life		= smallExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -848,6 +897,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-medium-white",
 		cameraShake=mediumExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -864,6 +914,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-large-white",
 		cameraShake=largeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= largeExplosion, -- In Elmos
 			expl_light_life		= largeExplosionTTL, -- In frames I.E. 30 frames = 1 second
@@ -880,6 +931,7 @@ unitDeaths = {
 		explosiongenerator="custom:genericunitexplosion-huge-white",
 		cameraShake=hugeExplosion,
 		customparams = {
+			unitexplosion		= 1, -- lights/distortion configs pick the unit-death classes off this
 			expl_light_color	= white, -- As a string, RGB
 			expl_light_radius	= hugeExplosion, -- In Elmos
 			expl_light_life		= hugeExplosionTTL, -- In frames I.E. 30 frames = 1 second

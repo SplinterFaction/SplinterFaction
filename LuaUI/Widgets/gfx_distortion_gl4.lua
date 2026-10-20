@@ -79,7 +79,6 @@ local spGetUnitHeight = Spring.GetUnitHeight
 local spGetUnitLosState = Spring.GetUnitLosState
 local spGetFeatureDefID = Spring.GetFeatureDefID
 local spGetFeaturePosition = Spring.GetFeaturePosition
-local spGetProjectileName = Spring.GetProjectileName
 local spGetModKeyState = Spring.GetModKeyState
 local spGetTimer = Spring.GetTimer
 local spDiffTimers = Spring.DiffTimers
@@ -1477,7 +1476,8 @@ local function updateProjectileDistortions(newgameframe)
 				end
 				numadded = numadded + 1
 				if debugproj then
-					spEcho("Adding projdistortion", projectileID, spGetProjectileName(projectileID))
+					local wd = WeaponDefs[spGetProjectileDefID(projectileID) or -1]
+					spEcho("Adding projdistortion", projectileID, wd and wd.name or "?")
 				end
 				trackedProjectileTypes[projectileID] = distortionType
 				trackedProjectiles[projectileID] = gameFrame
@@ -1789,6 +1789,26 @@ function widget:Initialize()
 	WG.distortionsgl4.AddDistortion = AddDistortion
 	WG.distortionsgl4.RemoveDistortion = RemoveDistortion
 	WG.distortionsgl4.GetDistortionVBO = GetDistortionVBO
+	-- SF: spawn a one-shot point distortion at a world position from a plain
+	-- {distortionType = "point", distortionConfig = {...}} table (same shape as
+	-- the config files). Used by gfx_shields_gl4 for shield impacts. The table
+	-- is initialized in place on first use, so callers should keep and reuse it.
+	WG.distortionsgl4.AddPointEffectAt = function(distortionTable, px, py, pz, instanceID)
+		if not distortionTable.initComplete then
+			InitializeDistortion(distortionTable)
+		end
+		local t = distortionTable.distortionParamTable
+		if not t then return nil end
+		t[1], t[2], t[3] = px, py, pz
+		-- pass an instanceID returned earlier to move/resize a persistent (lifeTime 0) effect
+		return AddDistortion(instanceID, nil, nil, pointDistortionVBO, t)
+	end
+	WG.distortionsgl4.RemovePointEffect = function(instanceID)
+		if instanceID and pointDistortionVBO.instanceIDtoIndex and pointDistortionVBO.instanceIDtoIndex[instanceID] then
+			return popElementInstance(pointDistortionVBO, instanceID)
+		end
+		return nil
+	end
 	-- SF: the deferred lights widget owns the GadgetWeaponExplosion/Barrelfire
 	-- globals and forwards to these. If lights are disabled, register them here.
 	WG.distortionsgl4.VisibleExplosion = function(px, py, pz, weaponID, ownerID)

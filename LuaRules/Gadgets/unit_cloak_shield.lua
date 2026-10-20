@@ -810,8 +810,34 @@ local IsUnitSelected      = Spring.IsUnitSelected
 local GetUnitAllyTeam     = Spring.GetUnitAllyTeam
 local DrawGroundCircle    = gl.DrawGroundCircle
 
+-- SF: gfx_shields_gl4.lua draws the field when present (ShieldGL4_Cloak);
+-- the display-list sphere below is only the fallback without it.
+local function GL4CloakPresent()
+  return Script.LuaUI("ShieldGL4_Cloak") and true or false
+end
+
+local function GL4CloakSend(unitID, radius)
+  if Script.LuaUI("ShieldGL4_Cloak") then
+    Script.LuaUI.ShieldGL4_Cloak(unitID, radius)
+  end
+end
+
+local resendFrame = 0
+function gadget:GameFrame(n)
+  -- re-send every live field now and then so the widget picks them up after
+  -- being enabled, a /luaui reload, or a spectator view change
+  if n % 30 == 0 and next(drawUnits) and GL4CloakPresent() then
+    for unitID, radius in pairs(drawUnits) do
+      GL4CloakSend(unitID, radius)
+    end
+  end
+end
+
 function gadget:DrawWorld()
   if (not next(drawUnits)) then
+    return
+  end
+  if GL4CloakPresent() then
     return
   end
 
@@ -884,6 +910,7 @@ local function UnitUpdate(cmd, unitID, radius)
   else
     drawUnits[unitID] = radius
   end
+  GL4CloakSend(unitID, radius)
 end
 
 function gadget:UnitDestroyed(unitID)

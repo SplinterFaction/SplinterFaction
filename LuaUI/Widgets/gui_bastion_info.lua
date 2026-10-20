@@ -88,7 +88,7 @@ local function GamePage()
 	local left = {}
 	left[#left + 1] = '<div class="big">' .. hud.Escape(Game.gameName or "") .. '</div>'
 	left[#left + 1] = Row("Version", Game.gameVersion or "?")
-	left[#left + 1] = Row("Engine", (Engine and Engine.version) or Game.version or "?")
+	left[#left + 1] = Row("Engine", Engine.version or "?")
 	left[#left + 1] = '<div class="big">' .. hud.Escape(Game.mapName or "") .. '</div>'
 	if Game.mapDescription and Game.mapDescription ~= "" then
 		left[#left + 1] = '<div class="note">' .. hud.Escape(Game.mapDescription) .. '</div>'
