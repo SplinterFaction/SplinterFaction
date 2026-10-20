@@ -17,6 +17,10 @@
 --     a near-empty shield flickers, a collapse expands and dissolves
 --   * personal shields draw nothing at rest; a hit paints the impact and a
 --     short whole-body flash on a sphere hugging the unit, then it vanishes
+--   * cloak fields (unit_cloak_shield.lua area cloak): a dim veil of flowing
+--     noise that slightly darkens what is behind it, a soft ring where the
+--     dome meets the ground, smooth grow/shrink, and a faint edge refraction
+--     through the distortion widget; allies and spectators only
 --
 -- Data sources (all unsynced-gadget to LuaUI globals, see lups_shield.lua and
 -- unit_protoss_style_shields.lua):
@@ -27,6 +31,7 @@
 --                                               the player cannot read directly
 --   ShieldGL4_Hit(unitID, damage, hx, hy, hz)   engine shield absorbed a hit
 --   ShieldGL4_PersonalHit(unitID, dmg, max, hx, hy, hz) overshield absorbed a hit
+--   ShieldGL4_Cloak(unitID, radius)             area cloak field radius (0 = off)
 --   ShieldGL4_Active()                          lets the gadget suppress LUPS
 --
 -- Big hits also spawn a point distortion through WG.distortionsgl4.
@@ -90,6 +95,16 @@ local cfg = {
 	personalLife       = 28,   -- frames an instance stays after its last hit
 	personalColor      = { 0.40, 0.70, 1.00 },
 	personalStrengthMult = 4.0,
+
+	-- cloak fields
+	cloakColor        = { 0.42, 0.62, 0.70 }, -- veil tint (customparams area_cloak_color overrides)
+	cloakVeilAlpha    = 0.11,  -- flat darkening veil across the dome
+	cloakRimAlpha     = 0.16,  -- faint edge
+	cloakRingAlpha    = 0.55,  -- ground contact ring
+	cloakNoiseScale   = 2.6,   -- noise cells per radius
+	cloakNoiseSpeed   = 0.35,  -- noise drift
+	cloakGrowSmooth   = 0.12,  -- per draw frame interpolation toward the target radius
+	cloakDistortion   = 0.9,   -- effectStrength of the edge refraction (0 = none)
 
 	maxDistance       = 9000,  -- camera distance beyond which bubbles are skipped
 }
@@ -228,6 +243,11 @@ uniform float lowChargeFlicker;
 uniform float intersectRange;
 uniform float intersectAlpha;
 uniform float personalFlashFrames;
+uniform float cloakVeilAlpha;
+uniform float cloakRimAlpha;
+uniform float cloakRingAlpha;
+uniform float cloakNoiseScale;
+uniform float cloakNoiseSpeed;
 
 in vec3 v_worldPos;
 in vec3 v_normal;
@@ -267,6 +287,23 @@ vec2 worley(vec3 p) {
 }
 
 float hash1(float n) { return fract(sin(n) * 43758.5453123); }
+
+// ---- 3D value noise for the cloak veil ----
+float vnoise(vec3 p) {
+	vec3 i = floor(p);
+	vec3 f = fract(p);
+	f = f * f * (3.0 - 2.0 * f);
+	float n000 = hash3(i + vec3(0.0, 0.0, 0.0)).x;
+	float n100 = hash3(i + vec3(1.0, 0.0, 0.0)).x;
+	float n010 = hash3(i + vec3(0.0, 1.0, 0.0)).x;
+	float n110 = hash3(i + vec3(1.0, 1.0, 0.0)).x;
+	float n001 = hash3(i + vec3(0.0, 0.0, 1.0)).x;
+	float n101 = hash3(i + vec3(1.0, 0.0, 1.0)).x;
+	float n011 = hash3(i + vec3(0.0, 1.0, 1.0)).x;
+	float n111 = hash3(i + vec3(1.0, 1.0, 1.0)).x;
+	return mix(mix(mix(n000, n100, f.x), mix(n010, n110, f.x), f.y),
+	           mix(mix(n001, n101, f.x), mix(n011, n111, f.x), f.y), f.z);
+}
 
 // theta from world +y, phi around y (matches AddHit in Lua)
 vec3 sphericalDir(float theta, float phi) {
@@ -360,13 +397,27 @@ void main() {
 			col = mix(col, v_bad.rgb, 0.6);
 			additive += fres * 0.8;
 		}
-	} else {
+	} else if (kind < 1.5) {
 		// ---- personal overshield: only the impact and a short body flash ----
 		float sinceHit = frame - v_center.w;
 		float flash = exp(-max(sinceHit, 0.0) / personalFlashFrames);
 		alpha = (fres * 0.30 * flash + 0.015 * flash) * faceMult;
 		col = baseCol;
 		additive = (hitGlow * 0.8 + fres * flash * 0.5 + edge * flash * 0.12) * faceMult;
+	} else {
+		// ---- cloak field: dim veil, flowing noise, ground ring ----
+		vec3 np = n * cloakNoiseScale + vec3(timeInfo.y * cloakNoiseSpeed * 0.4, timeInfo.y * cloakNoiseSpeed, 0.0);
+		float veil = vnoise(np) * 0.6 + vnoise(np * 2.3 + 7.1) * 0.4;
+		veil = smoothstep(0.25, 0.85, veil);
+		float rim = pow(1.0 - ndv, 1.4) * cloakRimAlpha * (0.5 + 0.5 * veil);
+		// the veil is mostly dark: a low alpha with a dark colour darkens what is behind it
+		alpha = (cloakVeilAlpha * (0.55 + 0.45 * veil) + rim) * faceMult;
+		col = v_good.rgb * v_good.a * (0.25 + 0.5 * veil);
+		// ground ring and a faint glint of the noise crests
+		additive = (intersect * cloakRingAlpha + veil * veil * 0.05 + rim * 0.35) * faceMult;
+		if (v_state.z > 0.5) {
+			additive += pow(1.0 - ndv, 1.4) * 0.35; // collapse flash
+		}
 	}
 
 	alpha = clamp(alpha * v_fade, 0.0, 1.0);
@@ -399,6 +450,10 @@ local dirty     = {}  -- slot -> true when the instance needs uploading
 local defShield = {}
 
 local personalColorDef = {}   -- unitDefID -> {r,g,b}
+local cloakColorDef = {}      -- unitDefID -> {r,g,b}
+local CLOAK_KEY_OFFSET = 1000000 -- cloak instances are keyed unitID + this (bubbles: unitID, personal: -unitID)
+local myAllyTeamID = Spring.GetMyAllyTeamID()
+local spec, fullview = Spring.GetSpectatingState()
 local unitRadiusCache = {}
 
 local gameFrame = 0
@@ -465,6 +520,9 @@ local function BuildDefs()
 		defShield[unitDefID] = entry
 		if cp.isshieldedunit == "1" then
 			personalColorDef[unitDefID] = parseColor(cp.personal_shield_color, cfg.personalColor)
+		end
+		if cp.area_cloak and cp.area_cloak ~= "0" then
+			cloakColorDef[unitDefID] = parseColor(cp.area_cloak_color, cfg.cloakColor)
 		end
 	end
 end
@@ -585,6 +643,11 @@ local function UpdateUniforms()
 		shader:SetUniform("intersectRange", cfg.intersectRange)
 		shader:SetUniform("intersectAlpha", cfg.intersectAlpha)
 		shader:SetUniform("personalFlashFrames", cfg.personalFlashFrames)
+		shader:SetUniform("cloakVeilAlpha", cfg.cloakVeilAlpha)
+		shader:SetUniform("cloakRimAlpha", cfg.cloakRimAlpha)
+		shader:SetUniform("cloakRingAlpha", cfg.cloakRingAlpha)
+		shader:SetUniform("cloakNoiseScale", cfg.cloakNoiseScale)
+		shader:SetUniform("cloakNoiseSpeed", cfg.cloakNoiseSpeed)
 	end)
 end
 
@@ -892,6 +955,109 @@ local function PersonalHit(unitID, damage, maxStrength, hx, hy, hz)
 end
 
 --------------------------------------------------------------------------------
+-- Cloak fields (unit_cloak_shield.lua)
+--------------------------------------------------------------------------------
+
+local cloakDistortionTable = {
+	distortionType = "point",
+	distortionConfig = {
+		posx = 0, posy = 0, posz = 0,
+		radius = 300,
+		noiseScaleSpace = 0.02,
+		noiseStrength = 0.3,
+		onlyModelMap = 0,
+		lifeTime = 0, -- persistent, removed by hand
+		effectStrength = 0.9,
+		startRadius = 1.0,
+		effectType = "shieldSphere",
+	},
+}
+
+local function CloakVisibleToMe(unitID)
+	if fullview then return true end
+	local allyTeam = Spring.GetUnitAllyTeam(unitID)
+	return allyTeam ~= nil and allyTeam == myAllyTeamID
+end
+
+local function CloakSetDistortion(rec, remove)
+	if not (WG.distortionsgl4 and WG.distortionsgl4.AddPointEffectAt) then return end
+	if remove or cfg.cloakDistortion <= 0 then
+		if rec.distID and WG.distortionsgl4.RemovePointEffect then
+			WG.distortionsgl4.RemovePointEffect(rec.distID)
+		end
+		rec.distID = nil
+		return
+	end
+	local dc = cloakDistortionTable.distortionConfig
+	dc.radius = rec.radius
+	dc.effectStrength = cfg.cloakDistortion
+	cloakDistortionTable.initComplete = nil
+	cloakDistortionTable.distortionParamTable = nil
+	rec.distID = WG.distortionsgl4.AddPointEffectAt(cloakDistortionTable, rec.x, rec.y, rec.z, rec.distID)
+	rec.distRadius, rec.distX, rec.distY, rec.distZ = rec.radius, rec.x, rec.y, rec.z
+end
+
+local function CloakUpdate(unitID, radius)
+	radius = tonumber(radius) or 0
+	local key = unitID + CLOAK_KEY_OFFSET
+	local rec = shields[key]
+	if radius <= 0 then
+		if rec then
+			rec.targetRadius = 0
+			if rec.popFrame == 0 then rec.popFrame = gameFrame end
+		end
+		return
+	end
+	if not spValidUnitID(unitID) or not CloakVisibleToMe(unitID) then return end
+	if not rec then
+		local unitDefID = spGetUnitDefID(unitID)
+		local x, y, z = spGetUnitViewPosition(unitID, true)
+		if not x then return end
+		local col = cloakColorDef[unitDefID] or cfg.cloakColor
+		rec = {
+			kind = 2,
+			unitID = unitID,
+			radius = radius * 0.3, -- grows in
+			targetRadius = radius,
+			rimAlpha = cfg.cloakRimAlpha,
+			good = col,
+			bad = col,
+			colorMult = 1,
+			cellScale = cfg.cellScale,
+			capacity = 1,
+			spawnFrame = gameFrame,
+			charge = 1,
+			visible = true,
+			popFrame = 0,
+			x = x, y = y, z = z,
+			lastHitFrame = -1000,
+		}
+		AddInstance(key, rec)
+		CloakSetDistortion(rec)
+	else
+		rec.targetRadius = radius
+		if rec.popFrame > 0 then
+			-- switched back on mid-collapse
+			rec.popFrame = 0
+			rec.spawnFrame = gameFrame
+			local d = instData[rec.slot]
+			d[13], d[15] = gameFrame, 0
+			MarkDirty(rec.slot)
+		end
+	end
+end
+
+local function CloakRemoveAll()
+	for slot = numInstances, 1, -1 do
+		local key = instKeys[slot]
+		if key > CLOAK_KEY_OFFSET then
+			CloakSetDistortion(shields[key], true)
+			RemoveInstance(key)
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
 -- Per-frame update
 --------------------------------------------------------------------------------
 
@@ -943,7 +1109,7 @@ local function UpdateShields()
 			local visible = rec.visible and (popFrame == 0 or frame - popFrame < cfg.popFrames) and x ~= nil
 			if charge <= 0.001 and popFrame == 0 then visible = false end
 			SetState(rec, charge, popFrame, visible, spawnFrame)
-		else
+		elseif rec.kind == 1 then
 			-- personal: track the unit, expire after the last hit fades
 			if frame - rec.lastHitFrame > cfg.personalLife then
 				toRemove = toRemove or {}
@@ -952,10 +1118,38 @@ local function UpdateShields()
 				local x, y, z = spGetUnitViewPosition(unitID, true)
 				if x then SetCenter(rec, x, y, z) end
 			end
+		else
+			-- cloak field: follow the unit, ease the radius, collapse when switched off
+			local x, y, z = spGetUnitViewPosition(unitID, true)
+			if x then SetCenter(rec, x, y, z) end
+			if rec.popFrame > 0 and frame - rec.popFrame >= cfg.popFrames then
+				toRemove = toRemove or {}
+				toRemove[#toRemove + 1] = key
+			else
+				local target = (rec.popFrame > 0) and rec.radius or rec.targetRadius
+				local r = rec.radius + (target - rec.radius) * cfg.cloakGrowSmooth
+				if mathAbs(target - r) < 0.5 then r = target end
+				if r ~= rec.radius then
+					rec.radius = r
+					local d = instData[rec.slot]
+					d[1] = r
+					MarkDirty(rec.slot)
+				end
+				SetState(rec, 1, rec.popFrame, true, rec.spawnFrame)
+				-- keep the edge refraction in step (cheap: a few cloakers at most)
+				if rec.distID and (mathAbs((rec.distRadius or 0) - r) > 2 or mathAbs((rec.distX or 0) - rec.x) > 3
+					or mathAbs((rec.distY or 0) - rec.y) > 3 or mathAbs((rec.distZ or 0) - rec.z) > 3) then
+					CloakSetDistortion(rec)
+				end
+			end
 		end
 	end
 	if toRemove then
-		for i = 1, #toRemove do RemoveInstance(toRemove[i]) end
+		for i = 1, #toRemove do
+			local rec = shields[toRemove[i]]
+			if rec and rec.kind == 2 then CloakSetDistortion(rec, true) end
+			RemoveInstance(toRemove[i])
+		end
 	end
 end
 
@@ -1015,14 +1209,23 @@ end
 function widget:UnitDestroyed(unitID)
 	RemoveInstance(unitID)
 	RemoveInstance(-unitID)
+	local rec = shields[unitID + CLOAK_KEY_OFFSET]
+	if rec then
+		CloakSetDistortion(rec, true)
+		RemoveInstance(unitID + CLOAK_KEY_OFFSET)
+	end
 end
 
 function widget:PlayerChanged()
-	-- the gadget re-sends adds/visibility on its own schedule; just drop stale personal flashes
+	myAllyTeamID = Spring.GetMyAllyTeamID()
+	spec, fullview = Spring.GetSpectatingState()
+	-- the gadgets re-send adds/visibility on their own schedule; drop stale
+	-- personal flashes and cloak fields (visibility rules may have changed)
 	for slot = numInstances, 1, -1 do
 		local key = instKeys[slot]
 		if key < 0 then RemoveInstance(key) end
 	end
+	CloakRemoveAll()
 end
 
 --------------------------------------------------------------------------------
@@ -1062,6 +1265,7 @@ function widget:Initialize()
 	widgetHandler:RegisterGlobal("ShieldGL4_Hit", ShieldHit)
 	widgetHandler:RegisterGlobal("ShieldGL4_PersonalHit", PersonalHit)
 	widgetHandler:RegisterGlobal("ShieldGL4_Active", function() return true end)
+	widgetHandler:RegisterGlobal("ShieldGL4_Cloak", CloakUpdate)
 
 	-- gadget-independent bootstrap for shields already on the map (the gadget
 	-- also re-adds on its next sweep, AddInstance ignores duplicates)
@@ -1080,6 +1284,7 @@ function widget:Initialize()
 		end,
 		hit = ShieldHit,
 		personalHit = PersonalHit,
+		cloak = CloakUpdate,
 		-- debug: copy of the raw instance floats for a unitID (negative = personal)
 		debugInstance = function(key)
 			local slot = indexOf[key]
@@ -1099,6 +1304,8 @@ function widget:Shutdown()
 	widgetHandler:DeregisterGlobal("ShieldGL4_Hit")
 	widgetHandler:DeregisterGlobal("ShieldGL4_PersonalHit")
 	widgetHandler:DeregisterGlobal("ShieldGL4_Active")
+	widgetHandler:DeregisterGlobal("ShieldGL4_Cloak")
+	CloakRemoveAll()
 	DestroyResources()
 	WG.shieldsgl4 = nil
 end
