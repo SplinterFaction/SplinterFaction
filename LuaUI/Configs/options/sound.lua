@@ -40,10 +40,13 @@ return {
 		{ id = "musicplayer", name = "Music player", type = "bool", widget = "Bastion Music", requires = "Bastion Music",
 		  children = {
 			{ id = "musicartist", name = "Artist", type = "select", options = artistNames, values = artistFolders,
+			  -- get returns the stored value (the folder); the options widget maps
+			  -- it to the row's index through values, so returning an index here
+			  -- would never match and the dropdown would always show the first entry
 			  get = function()
 				local folder = Spring.GetConfigString("music_artist", "elevenlabs")
-				for i = 1, #artistFolders do if artistFolders[i] == folder then return i end end
-				return 1
+				for i = 1, #artistFolders do if artistFolders[i] == folder then return folder end end
+				return ""
 			  end,
 			  set = function(idx)
 				local folder = artistFolders[idx] or ""
