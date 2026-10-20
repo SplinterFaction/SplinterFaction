@@ -64,20 +64,27 @@ local TUNE = {
 	showAllies    = true,
 }
 
--- Per order kind. color: used when teamColor is false. size: mark radius in
--- elmos. width: ribbon half width in elmos. flow: pattern scroll speed.
--- shape / pattern pick the GLSL branch (see the fragment shaders).
+-- Per order kind, colors after cmdcolors_mod.txt. size: mark radius in
+-- elmos. width: half width of the line's glow in elmos (the bright core is
+-- about a quarter of it). flow: pattern and pulse speed. shape / pattern pick
+-- the GLSL branch (see the fragment shaders). Allies' orders are drawn in
+-- their team color whatever is set here.
 local STYLE = {
-	move    = { shape = 1, pattern = 1, teamColor = true,  color = {0.55, 0.95, 0.60}, size = 26, width = 2.2, flow = 1.0 },
-	fight   = { shape = 2, pattern = 2, teamColor = false, color = {1.00, 0.72, 0.25}, size = 30, width = 2.6, flow = 1.3 },
-	attack  = { shape = 3, pattern = 3, teamColor = false, color = {1.00, 0.30, 0.25}, size = 30, width = 2.8, flow = 2.0 },
-	patrol  = { shape = 4, pattern = 4, teamColor = false, color = {0.45, 0.70, 1.00}, size = 22, width = 2.0, flow = 0.9 },
-	rally   = { shape = 5, pattern = 1, teamColor = true,  color = {0.95, 0.85, 0.40}, size = 22, width = 1.6, flow = 0.5 },
-	guard   = { shape = 6, pattern = 1, teamColor = false, color = {0.70, 0.90, 1.00}, size = 28, width = 1.6, flow = 0.6 },
-	repair  = { shape = 6, pattern = 1, teamColor = false, color = {0.40, 0.95, 0.55}, size = 26, width = 1.6, flow = 0.6 },
-	reclaim = { shape = 7, pattern = 1, teamColor = false, color = {0.85, 0.60, 1.00}, size = 26, width = 1.6, flow = 0.6 },
-	build   = { shape = 8, pattern = 5, teamColor = false, color = {0.35, 0.75, 1.00}, size = 24, width = 1.4, flow = 0.4 },
-	other   = { shape = 1, pattern = 1, teamColor = false, color = {0.80, 0.80, 0.80}, size = 20, width = 1.4, flow = 0.5 },
+	move    = { shape = 1, pattern = 1, color = {0.50, 1.00, 0.50}, size = 26, width = 7.0, flow = 1.0 },
+	fight   = { shape = 2, pattern = 2, color = {0.55, 0.55, 1.00}, size = 30, width = 8.0, flow = 1.3 },
+	attack  = { shape = 3, pattern = 3, color = {1.00, 0.25, 0.25}, size = 30, width = 8.5, flow = 2.0 },
+	patrol  = { shape = 4, pattern = 4, color = {0.35, 0.35, 1.00}, size = 22, width = 6.5, flow = 0.9 },
+	rally   = { shape = 5, pattern = 1, color = {0.50, 1.00, 0.50}, size = 22, width = 5.5, flow = 0.5 },
+	guard   = { shape = 6, pattern = 1, color = {0.35, 0.35, 1.00}, size = 28, width = 5.5, flow = 0.6 },
+	repair  = { shape = 6, pattern = 1, color = {0.30, 1.00, 1.00}, size = 26, width = 5.5, flow = 0.6 },
+	capture = { shape = 6, pattern = 1, color = {1.00, 1.00, 0.30}, size = 26, width = 5.5, flow = 0.6 },
+	reclaim = { shape = 7, pattern = 1, color = {1.00, 0.25, 1.00}, size = 26, width = 5.5, flow = 0.6 },
+	restore = { shape = 7, pattern = 1, color = {0.10, 1.00, 0.10}, size = 26, width = 5.5, flow = 0.6 },
+	resurrect = { shape = 7, pattern = 1, color = {0.25, 0.60, 1.00}, size = 26, width = 5.5, flow = 0.6 },
+	load    = { shape = 1, pattern = 1, color = {0.30, 1.00, 1.00}, size = 22, width = 5.0, flow = 0.5 },
+	unload  = { shape = 1, pattern = 1, color = {1.00, 1.00, 0.10}, size = 22, width = 5.0, flow = 0.5 },
+	build   = { shape = 8, pattern = 5, color = {0.35, 0.75, 1.00}, size = 24, width = 4.5, flow = 0.4 },
+	other   = { shape = 1, pattern = 1, color = {0.80, 0.80, 0.80}, size = 20, width = 4.5, flow = 0.5 },
 }
 
 --------------------------------------------------------------------------------
@@ -108,9 +115,9 @@ local KIND_OF_CMD = {
 	[CMD_ATTACK] = "attack", [CMD_MANUALFIRE] = "attack", [CMD_SET_TARGET] = "attack",
 	[CMD_PATROL] = "patrol",
 	[CMD_GUARD] = "guard",
-	[CMD_REPAIR] = "repair", [CMD_CAPTURE] = "repair",
-	[CMD_RECLAIM] = "reclaim", [CMD_RESURRECT] = "reclaim", [CMD_RESTORE] = "reclaim",
-	[CMD_LOAD_UNITS] = "other", [CMD_UNLOAD_UNITS] = "other", [CMD_UNLOAD_UNIT] = "other",
+	[CMD_REPAIR] = "repair", [CMD_CAPTURE] = "capture",
+	[CMD_RECLAIM] = "reclaim", [CMD_RESURRECT] = "resurrect", [CMD_RESTORE] = "restore",
+	[CMD_LOAD_UNITS] = "load", [CMD_UNLOAD_UNITS] = "unload", [CMD_UNLOAD_UNIT] = "unload",
 }
 
 local spGetSelectedUnits  = Spring.GetSelectedUnits
@@ -359,36 +366,48 @@ void main() {
 	int pattern = int(v_params.x + 0.5);
 	float age = v_params.y;
 	float queued = v_params.z;
-	// draw-in: nothing beyond how far the line has drawn
-	if (v_uv.x > age * drawInLength) discard;
-
-	float across = 1.0 - v_uv.y * v_uv.y;        // soft edges
-	float core = smoothstep(0.0, 0.5, across);
-	float m = core;
 	float x = v_uv.x;
+	float a = abs(v_uv.y);           // 0 at the center line, 1 at the glow's edge
+	// draw-in: nothing beyond how far the line has drawn
+	if (x > age * drawInLength) discard;
 
+	// a wide, soft pulse travelling down the line: the glow swells as it passes
+	float speed = (pattern == 3) ? 2.0 : ((pattern == 2) ? 1.3 : ((pattern == 4) ? 0.9 : 1.0));
+	float ph = fract(x / 260.0 - age * speed * 0.55);
+	float pulse = exp(-pow((ph - 0.5) * 3.2, 2.0));
+
+	// the bright core, and the glow that fades out to the edge
+	float coreW = 0.22;
+	float glowW = 0.55 + 0.45 * pulse;
+	float core = exp(-(a * a) / (coreW * coreW) * 1.4);
+	float glow = exp(-(a * a) / (glowW * glowW) * 1.4) * (1.0 - a);
+	float m = core + glow * (0.35 + 0.55 * pulse);
+
+	// the pattern rides on the core only
 	if (pattern == 1) {
 		// move: a gentle forward flow
-		m *= 0.55 + 0.45 * (0.5 + 0.5 * sin(x * 0.08 - age * 7.0));
+		core *= 0.6 + 0.4 * (0.5 + 0.5 * sin(x * 0.08 - age * 7.0));
 	} else if (pattern == 2) {
-		// fight: chevrons marching forward
-		float chev = fract((x - abs(v_uv.y) * 14.0) / 46.0 - age * 1.6);
-		m *= 0.35 + 0.65 * smoothstep(0.35, 0.5, chev) * (1.0 - smoothstep(0.5, 0.65, chev)) + 0.2;
+		// fight: chevrons marching forward, points first
+		float chev = fract((x + a * 16.0) / 46.0 - age * 1.6);
+		core *= 0.3 + 0.7 * (smoothstep(0.35, 0.5, chev) * (1.0 - smoothstep(0.5, 0.65, chev)));
 	} else if (pattern == 3) {
-		// attack: fast hot flow, brighter and tighter
-		m *= 0.5 + 0.5 * (0.5 + 0.5 * sin(x * 0.14 - age * 14.0));
-		m = min(m * 1.2, 1.0);
+		// attack: fast hot flow
+		core *= 0.55 + 0.45 * (0.5 + 0.5 * sin(x * 0.14 - age * 14.0));
 	} else if (pattern == 4) {
 		// patrol: dashes walking along
-		m *= step(0.5, fract(x / 40.0 - age * 1.0)) * 0.9 + 0.1;
+		core *= 0.15 + 0.85 * step(0.5, fract(x / 40.0 - age * 1.0));
 	} else {
 		// build: thin and still
-		m *= 0.7;
+		core *= 0.7;
 	}
+	m = core + glow * (0.35 + 0.55 * pulse);
 
 	float alpha = v_alpha * mix(1.0, 0.6, queued);
+	// the core overshoots to white a little, the glow stays in color
+	vec3 rgb = v_color.rgb + vec3(0.35) * core * core;
 	if (m * alpha <= 0.003) discard;
-	fragColor = vec4(v_color.rgb, m * alpha);
+	fragColor = vec4(rgb, clamp(m, 0.0, 1.0) * alpha);
 }
 ]]
 
@@ -556,13 +575,13 @@ local function PushUnit(unitID, restAlpha, isAlly)
 		flash = 0
 	end
 	local teamID = spGetUnitTeam(unitID)
-	local tc = teamID and TeamColor(teamID) or nil
+	local tc = (isAlly and teamID) and TeamColor(teamID) or nil
 	local px, pz = ux, uz
 	local uv = 0
 	for i = 1, list.n do
 		local o = list[i]
 		local style = STYLE[o.kind] or STYLE.other
-		local color = (style.teamColor and tc) or style.color
+		local color = tc or style.color
 		local queued = i > 1
 		-- a tracked target moves: follow it
 		local x, z = o.x, o.z
@@ -588,7 +607,7 @@ local function PushUnit(unitID, restAlpha, isAlly)
 	local last = list[list.n]
 	if last and last.kind == "patrol" and list.n >= 2 then
 		local first = list[1]
-		PushRibbon(px, pz, first.x, first.z, STYLE.patrol, (STYLE.patrol.teamColor and tc) or STYLE.patrol.color, restAlpha, 0, true, uv)
+		PushRibbon(px, pz, first.x, first.z, STYLE.patrol, tc or STYLE.patrol.color, restAlpha, 0, true, uv)
 	end
 end
 
@@ -607,8 +626,7 @@ local function PushRally(unitID, restAlpha)
 	if not ux then
 		return
 	end
-	local teamID = spGetUnitTeam(unitID)
-	local color = TeamColor(teamID or myTeam)
+	local color = STYLE.rally.color
 	local fresh = freshAt[unitID]
 	local t0 = fresh and fresh.t0 or 0
 	local flash = fresh and fresh.flash or 0
@@ -700,16 +718,31 @@ local function Fail(msg)
 	return false
 end
 
-local function Quad(x0, x1)
+-- a strip from x0 to x1, -1..1 across, with sub steps along it (each
+-- vertex samples the heightmap, so a strip with steps follows the ground)
+local RIBBON_SUB = 6
+local function Strip(x0, x1, sub)
 	local vbo = gl.GetVBO(GL.ARRAY_BUFFER, false)
 	local ibo = gl.GetVBO(GL.ELEMENT_ARRAY_BUFFER, false)
 	if not (vbo and ibo) then return nil end
-	vbo:Define(4, { { id = 0, name = "quadPos", size = 2 } })
-	vbo:Upload({ x0, -1, x1, -1, x1, 1, x0, 1 })
-	ibo:Define(6)
-	ibo:Upload({ 0, 1, 2, 0, 2, 3 })
-	return vbo, ibo
+	local verts, idx = {}, {}
+	for i = 0, sub do
+		local x = x0 + (x1 - x0) * i / sub
+		verts[#verts + 1] = x; verts[#verts + 1] = -1
+		verts[#verts + 1] = x; verts[#verts + 1] = 1
+	end
+	for i = 0, sub - 1 do
+		local a = i * 2
+		idx[#idx + 1] = a; idx[#idx + 1] = a + 1; idx[#idx + 1] = a + 3
+		idx[#idx + 1] = a; idx[#idx + 1] = a + 3; idx[#idx + 1] = a + 2
+	end
+	vbo:Define((sub + 1) * 2, { { id = 0, name = "quadPos", size = 2 } })
+	vbo:Upload(verts)
+	ibo:Define(#idx)
+	ibo:Upload(idx)
+	return vbo, ibo, #idx
 end
+local ribbonIndices = 6
 
 local markLayout = {
 	{ id = 1, name = "markPos",    size = 4 },
@@ -775,8 +808,8 @@ local function CreateResources()
 	}, "Orders GL4 ribbons")
 	if not ribbonShader:Initialize() then return Fail("ribbon shader failed to compile") end
 
-	markTemplate, markIndex = Quad(-1, 1)
-	ribbonTemplate, ribbonIndex = Quad(0, 1)
+	markTemplate, markIndex = Strip(-1, 1, 1)
+	ribbonTemplate, ribbonIndex, ribbonIndices = Strip(0, 1, RIBBON_SUB)
 	if not (markTemplate and ribbonTemplate) then return Fail("could not create templates") end
 	markVBO, markVAO = BuildInstanceBuffer("mark", markCapacity)
 	ribbonVBO, ribbonVAO = BuildInstanceBuffer("ribbon", ribbonCapacity)
@@ -922,7 +955,7 @@ function widget:DrawWorldPreUnit()
 	if numRibbons > 0 then
 		ribbonShader:Activate()
 		ribbonShader:SetUniform("now", now)
-		ribbonVAO:DrawElements(GL.TRIANGLES, 6, 0, numRibbons, 0)
+		ribbonVAO:DrawElements(GL.TRIANGLES, ribbonIndices, 0, numRibbons, 0)
 		ribbonShader:Deactivate()
 	end
 	if numMarks > 0 then
