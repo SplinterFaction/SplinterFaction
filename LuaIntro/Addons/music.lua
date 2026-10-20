@@ -19,7 +19,7 @@ function addon.Initialize()
 		return
 	end
 	local extensions = "{*.ogg,*.mp3}"
-	local artist = Spring.GetConfigString("music_artist", "")
+	local artist = Spring.GetConfigString("music_artist", "elevenlabs") -- same default as the player
 	local tracks = {}
 	local function add(dir)
 		for _, path in ipairs(VFS.DirList(dir, extensions) or {}) do

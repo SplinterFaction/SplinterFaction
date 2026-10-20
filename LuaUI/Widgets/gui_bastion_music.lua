@@ -46,6 +46,7 @@ local DEFAULT_VOLUME = 20       -- percent, snd_volmusic when unset
 
 -- config keys (shared with LuaIntro/Addons/music.lua and the options)
 local CFG_ARTIST       = "music_artist"            -- folder name, "" for all
+local DEFAULT_ARTIST   = "elevenlabs"              -- when nothing is chosen yet; "" for all
 local CFG_SILENCE_MAX  = "music_silence_max"       -- seconds, 0 for none
 local CFG_SILENCE      = "UseSoundtrackSilenceTimer"
 local CFG_FADES        = "UseSoundtrackFades"
@@ -316,7 +317,7 @@ function widget:Initialize()
 		widgetHandler:RemoveWidget(self)
 		return
 	end
-	selectedArtist = spGetConfigString(CFG_ARTIST, "")
+	selectedArtist = spGetConfigString(CFG_ARTIST, DEFAULT_ARTIST)
 	if selectedArtist ~= "" and not artistByFolder[selectedArtist] then
 		selectedArtist = ""
 	end

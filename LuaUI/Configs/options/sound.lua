@@ -41,7 +41,7 @@ return {
 		  children = {
 			{ id = "musicartist", name = "Artist", type = "select", options = artistNames, values = artistFolders,
 			  get = function()
-				local folder = Spring.GetConfigString("music_artist", "")
+				local folder = Spring.GetConfigString("music_artist", "elevenlabs")
 				for i = 1, #artistFolders do if artistFolders[i] == folder then return i end end
 				return 1
 			  end,
