@@ -54,6 +54,53 @@ return {
 		},
 	},
 
+	-- End-of-game awards, handed out by game_rank_tracks.lua when the game is
+	-- over and shown by the Awards tab of the end graph. Two kinds:
+	--   player   one per team slot (a commander: human or AI). Every player
+	--            gets at least one: the awards are drafted in this order, the
+	--            best team taking each, and whoever is left empty-handed gets
+	--            their best remaining award.
+	--   alliance one per ally team, only when some alliance has two or more
+	--            players; otherwise these fall into the player draft.
+	-- stat names the per-team figure the gadget keeps; better says which way
+	-- wins; min is the least a team needs for the award to be given at all;
+	-- unit is how the HUD words the figure. winnersOnly: only the winning
+	-- alliance can take it.
+	awards = {
+		{ id = "warlord",      kind = "player",   name = "Warlord",       stat = "combat",     better = "max", min = 1,   unit = "metal",   emblem = "combat",
+		  desc = "Most enemy metal destroyed" },
+		{ id = "industrialist", kind = "player",  name = "Industrialist", stat = "industry",   better = "max", min = 1,   unit = "metal",   emblem = "industry",
+		  desc = "Most metal built" },
+		{ id = "magnate",      kind = "player",   name = "Magnate",       stat = "economy",    better = "max", min = 1,   unit = "income",  emblem = "economy",
+		  desc = "Highest sustained income" },
+		{ id = "landgrab",     kind = "player",   name = "Landgrab",      stat = "territory",  better = "max", min = 1,   unit = "extractors", emblem = "territory",
+		  desc = "Most extractors held" },
+		{ id = "comeback",     kind = "alliance", name = "Comeback",      stat = "comeback",   better = "max", min = 0.15, unit = "share", emblem = "comeback", winnersOnly = true,
+		  desc = "Biggest recovery in army strength" },
+		{ id = "firstblood",   kind = "alliance", name = "First Blood",   stat = "firstkill",  better = "min", unit = "time",  emblem = "firstblood",
+		  desc = "The first kill of the game" },
+		{ id = "efficient",    kind = "player",   name = "Efficient",     stat = "efficiency", better = "max", min = 1.0, unit = "ratio", emblem = "efficient",
+		  desc = "Best kill to loss ratio" },
+		{ id = "juggernaut",   kind = "player",   name = "Juggernaut",    stat = "biggestkill", better = "max", min = 1, unit = "metal", emblem = "juggernaut",
+		  desc = "The largest unit destroyed" },
+		{ id = "fortress",     kind = "alliance", name = "Fortress",      stat = "damagetaken", better = "max", min = 1, unit = "damage", emblem = "armor", aliveOnly = true,
+		  desc = "Most damage taken and still standing" },
+		{ id = "armsdealer",   kind = "player",   name = "Arms Dealer",   stat = "weapons",    better = "max", min = 1,   unit = "level",   emblem = "weapons",
+		  desc = "Highest weapons upgrade, first to reach it" },
+		{ id = "ironclad",     kind = "player",   name = "Ironclad",      stat = "armor",      better = "max", min = 1,   unit = "level",   emblem = "armor",
+		  desc = "Highest armor upgrade, first to reach it" },
+		{ id = "combinedarms", kind = "alliance", name = "Combined Arms", stat = "unittypes",  better = "max", min = 2,   unit = "types",   emblem = "industry",
+		  desc = "Most different unit types fielded" },
+		{ id = "lockstep",     kind = "alliance", name = "Lockstep",      stat = "lockstep",   better = "max", min = 0.3, unit = "ratio", emblem = "economy", needsPartners = true,
+		  desc = "Closest-matched economies within an alliance" },
+		{ id = "assemblyline", kind = "player",   name = "Assembly Line", stat = "unitsbuilt", better = "max", min = 1,   unit = "units",   emblem = "industry",
+		  desc = "Most units built" },
+		{ id = "survivor",     kind = "player",   name = "Survivor",      stat = "survived",   better = "max", min = 1,   unit = "time",    emblem = "armor",
+		  desc = "Held out the longest after the first loss" },
+		{ id = "bloodbath",    kind = "player",   name = "Bloodbath",     stat = "lost",       better = "max", min = 1,   unit = "metal",   emblem = "combat",
+		  desc = "Most metal thrown into the fight" },
+	},
+
 	tracks = {
 		{
 			id     = "combat",

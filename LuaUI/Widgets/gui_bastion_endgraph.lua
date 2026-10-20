@@ -13,6 +13,12 @@
 --  WG.StaticGUI (api_staticgui_shapes.lua) when that is running, which
 --  batches it and keeps it in a texture between refreshes.
 --
+--  The window has a second tab, Awards: the end-of-game awards and final
+--  ranks handed out by game_rank_tracks.lua (read from game rules params,
+--  wording from LuaRules/Configs/rank_tracks.lua). It opens on that tab
+--  when the game ends, with the awards coming in one by one; opened during
+--  the game it shows the graph, and the Awards tab only says to wait.
+--
 --  Replaces gui_static_endgraph.lua (kept in Widgets/disabled/). The
 --  gathering of teams and data is carried over unchanged.
 --
@@ -167,6 +173,18 @@ local enoughData   = false
 local plotCache    = nil
 local plotDirty    = true
 local pageDirty    = true
+
+-- the Awards tab
+local tab = "graph"             -- "graph" | "awards"
+local awardConfig = nil         -- from LuaRules/Configs/rank_tracks.lua
+local awards = nil              -- the list read from the params, once given
+local awardsBuilt = false       -- the pane's rows exist
+local ceremony = nil            -- {t = seconds since start, shown = n}
+local ceremonyOrder = nil       -- the awards in the order they come in
+local CEREMONY_STEP = 0.35      -- seconds between one award coming in and the next
+local AWARD_SOUND = "sounds/ui/rankup/SD_Low+Hi_01.wav"
+local AWARD_SOUND_MINE = "sounds/ui/rankup/SD_Low+Hi_06.wav"
+local ROMAN = {"I", "II", "III", "IV", "V"}
 local refreshTimer = 0
 local legendMarkup
 local plotHover    = false -- the mouse is on #plot (told by RmlUi)
@@ -563,8 +581,13 @@ local function Refresh()
 	end
 	pageDirty = false
 
-	page.SetText("title", statName[selectedStat][2])
-	page.SetText("subtitle", isDelta and "per interval" or "")
+	if tab == "awards" then
+		page.SetText("title", "Awards")
+		page.SetText("subtitle", "")
+	else
+		page.SetText("title", statName[selectedStat][2])
+		page.SetText("subtitle", isDelta and "per interval" or "")
+	end
 	page.SetText("total-value", formatTime(gameTime, false))
 	for i = 1, #statName do
 		page.SetClass("st" .. i, "active", i == selectedStat)
@@ -584,6 +607,219 @@ local function Refresh()
 	end
 	page.SetText("values", enoughData and EndLabelsRML() or "")
 	RefreshTip()
+end
+
+--------------------------------------------------------------------------------
+-- the Awards tab
+--------------------------------------------------------------------------------
+
+local function TeamByID(teamID)
+	for _, tm in ipairs(team) do
+		if tm.id == teamID then
+			return tm
+		end
+	end
+	return nil
+end
+
+local function AllyTeamOf(teamID)
+	return select(6, spGetTeamInfo(teamID, false))
+end
+
+-- players of an ally team, as "name, name"
+local function AllianceNames(ally)
+	local names = {}
+	for _, tm in ipairs(team) do
+		if AllyTeamOf(tm.id) == ally then
+			names[#names + 1] = hud.Escape(tm.name)
+		end
+	end
+	return table.concat(names, ", ")
+end
+
+local function WithCommas(n)
+	local str = tostring(math_floor(n + 0.5))
+	while true do
+		local replaced
+		str, replaced = str:gsub("^(-?%d+)(%d%d%d)", "%1,%2")
+		if replaced == 0 then break end
+	end
+	return str
+end
+
+-- the award's figure, short: the row already carries the award's wording
+local function Figure(award, value, unitName)
+	local unit = award.unit
+	if unit == "metal" then
+		if award.stat == "biggestkill" and unitName then
+			local def = UnitDefNames and UnitDefNames[unitName]
+			local human = def and def.humanName or unitName
+			return hud.Escape(human) .. ", " .. WithCommas(value) .. " metal"
+		end
+		return WithCommas(value) .. " metal"
+	elseif unit == "income" then
+		return "+" .. WithCommas(value) .. "/s"
+	elseif unit == "extractors" then
+		return WithCommas(value) .. " extractors"
+	elseif unit == "share" then
+		return string.format("+%d%% army strength", math_floor(value * 100 + 0.5))
+	elseif unit == "time" then
+		return formatTime(value / 30, true)
+	elseif unit == "ratio" then
+		if award.stat == "lockstep" then
+			return string.format("%d%% matched", math_floor(value * 100 + 0.5))
+		end
+		return string.format("%.1f : 1", value)
+	elseif unit == "damage" then
+		return numFormat(value) .. " damage"
+	elseif unit == "level" then
+		return "level " .. (ROMAN[value] or tostring(value))
+	elseif unit == "types" then
+		return WithCommas(value) .. " types"
+	elseif unit == "units" then
+		return WithCommas(value) .. " units"
+	end
+	return tostring(value)
+end
+
+-- Reads the awards once the gadget has published them. Returns true when
+-- they are in hand.
+local function ReadAwards()
+	if awards then
+		return true
+	end
+	local count = Spring.GetGameRulesParam("awards_count")
+	if not count or count <= 0 then
+		return false
+	end
+	if not awardConfig then
+		local ok, cfg = pcall(VFS.Include, "LuaRules/Configs/rank_tracks.lua")
+		awardConfig = ok and type(cfg) == "table" and cfg or {awards = {}, tracks = {}}
+	end
+	local byID = {}
+	for _, a in ipairs(awardConfig.awards or {}) do
+		byID[a.id] = a
+	end
+	local list = {}
+	for i = 1, count do
+		local prefix = "awards_" .. i .. "_"
+		local id = Spring.GetGameRulesParam(prefix .. "id")
+		local def = id and byID[id]
+		if def then
+			list[#list + 1] = {
+				def   = def,
+				kind  = Spring.GetGameRulesParam(prefix .. "kind") or "player",
+				who   = Spring.GetGameRulesParam(prefix .. "who"),
+				value = Spring.GetGameRulesParam(prefix .. "value") or 0,
+				unit  = Spring.GetGameRulesParam(prefix .. "unit"),
+			}
+		end
+	end
+	-- the rows keep the published order (alliance first); the ceremony brings
+	-- the local player's own in last
+	local myTeam, myAlly, spec = Spring.GetMyTeamID(), AllyTeamOf(Spring.GetMyTeamID()), Spring.GetSpectatingState()
+	local order = {}
+	for i, a in ipairs(list) do
+		a.index = i
+		a.mine = not spec and ((a.kind == "alliance" and a.who == myAlly) or (a.kind == "player" and a.who == myTeam)) or false
+		order[i] = a
+	end
+	table.sort(order, function(a, b)
+		if a.mine ~= b.mine then return b.mine end
+		return a.index < b.index
+	end)
+	awards = list
+	ceremonyOrder = order
+	return true
+end
+
+local function FinalRanksRML()
+	local parts = {}
+	local tracks = awardConfig and awardConfig.tracks or {}
+	for _, tm in ipairs(team) do
+		local c = tm.color
+		parts[#parts + 1] = string.format('<div class="rankline"><div class="who" style="color: %s;">%s</div>',
+			hud.ReadableColor(c[1], c[2], c[3]), hud.Escape(tm.name))
+		for _, track in ipairs(tracks) do
+			local level = tonumber((Spring.GetTeamRulesParam(tm.id, "rank_" .. track.id .. "_level"))) or 0
+			local class = level == 0 and "none" or (level >= #(track.thresholds or {}) and "max" or "")
+			parts[#parts + 1] = string.format('<img class="em" src="/LuaUI/Images/rml/rank_%s.png"/><div class="lv %s">%s</div>',
+				track.id, class, level > 0 and (ROMAN[level] or tostring(level)) or "-")
+		end
+		parts[#parts + 1] = "</div>"
+	end
+	return table.concat(parts)
+end
+
+local function AwardRowsRML()
+	local parts = {}
+	for i, a in ipairs(awards) do
+		local winner, sub, color
+		local mine = a.mine
+		if a.kind == "alliance" then
+			winner = "Alliance " .. tostring(a.who + 1)
+			sub = AllianceNames(a.who)
+			color = "#f0f4f8"
+		else
+			local tm = TeamByID(a.who)
+			winner = tm and hud.Escape(tm.name) or ("Team " .. tostring(a.who))
+			local c = tm and tm.color or {1, 1, 1}
+			color = hud.ReadableColor(c[1], c[2], c[3])
+		end
+		parts[#parts + 1] = string.format(
+			'<div id="aw%d" class="award %s%s"><img class="emblem" src="/LuaUI/Images/rml/rank_%s.png"/>' ..
+			'<div class="text"><div class="name">%s</div><div class="figure">%s</div></div>' ..
+			'<div class="winner" style="color: %s;">%s%s</div></div>',
+			i, a.kind, mine and " mine" or "", a.def.emblem or "combat",
+			hud.Escape(a.def.name), hud.Escape(a.def.desc or "") .. " · " .. Figure(a.def, a.value, a.unit),
+			color, winner, sub and ('<div class="sub">' .. sub .. '</div>') or "")
+	end
+	return table.concat(parts)
+end
+
+local function BuildAwards()
+	if awardsBuilt or not ReadAwards() then
+		return
+	end
+	if #team == 0 then getTeamInfo() end
+	page.Element("final-ranks").inner_rml = FinalRanksRML()
+	page.Element("award-rows").inner_rml = AwardRowsRML()
+	page.Forget() -- the new rows reuse no ids, but the cache must not assume them
+	page.SetClass("awards-wait", "hidden", true)
+	page.SetClass("awards-body", "hidden", false)
+	awardsBuilt = true
+	ceremony = {t = 0, shown = 0}
+end
+
+-- brings the awards in one after another, with a sound each; the local
+-- player's own last and loudest
+local function StepCeremony(dt)
+	if not ceremony or not awards then
+		return
+	end
+	ceremony.t = ceremony.t + (dt or 0)
+	local due = math_floor(ceremony.t / CEREMONY_STEP)
+	while ceremony.shown < #awards and ceremony.shown < due do
+		ceremony.shown = ceremony.shown + 1
+		local a = ceremonyOrder[ceremony.shown]
+		page.SetClass("aw" .. a.index, "in", true)
+		spPlaySoundFile(a.mine and AWARD_SOUND_MINE or AWARD_SOUND, a.mine and 0.8 or 0.35, "ui")
+	end
+	if ceremony.shown >= #awards then
+		ceremony = nil
+	end
+end
+
+local function SetTab(name)
+	tab = name
+	if tab == "awards" then
+		BuildAwards() -- first: it forgets the view's cache
+	end
+	page.SetClass("tab-graph", "active", tab == "graph")
+	page.SetClass("tab-awards", "active", tab == "awards")
+	page.SetClass("main", "hidden", tab ~= "graph")
+	page.SetClass("awards", "hidden", tab ~= "awards")
+	pageDirty = true
 end
 
 --------------------------------------------------------------------------------
@@ -653,6 +889,9 @@ local function HandleGameOver()
 		RefreshData()
 		document:PullToFront()
 	end)
+	-- the awards are the payoff: open on them. The gadget publishes them in
+	-- the same frame, but the params may land a frame later; Update retries.
+	pcall(SetTab, "awards")
 end
 
 -- Receives RP samples from game_researchpoints_ledger (gadget). The gadget's
@@ -685,6 +924,15 @@ function widget:Initialize()
 	getTeamInfo()
 
 	hud.OnClick(page, "close", Close)
+	hud.OnClick(page, "tab-graph", function()
+		if tab ~= "graph" then PlayClickSound() SetTab("graph") end
+	end)
+	hud.OnClick(page, "tab-awards", function()
+		if tab ~= "awards" then PlayClickSound() SetTab("awards") end
+	end)
+	page.Assume("awards", "hidden", true)
+	page.Assume("awards-body", "hidden", true)
+	page.Assume("tab-graph", "active", true)
 	page.Element("stats"):AddEventListener("mousedown", function(event)
 		local i = hud.EventAttribute(event, "data-st")
 		if i and statName[i] and i ~= selectedStat and event.parameters and event.parameters.button == 0 then
@@ -793,6 +1041,15 @@ function widget:Update(dt)
 	if pageDirty then
 		Refresh()
 	end
+	if tab == "awards" then
+		if not awardsBuilt then
+			BuildAwards()
+			if awardsBuilt then
+				SetTab("awards") -- restate the tab after the view forgot itself
+			end
+		end
+		StepCeremony(dt)
+	end
 
 	-- where in the plot the mouse is
 	local at = nil
@@ -809,7 +1066,7 @@ function widget:Update(dt)
 end
 
 function widget:DrawScreen()
-	if not document or not isOpen or guiHidden then return end
+	if not document or not isOpen or guiHidden or tab ~= "graph" then return end
 
 	-- #plot may have moved (the window was dragged, the view resized)
 	local rect = ReadPlotRect()

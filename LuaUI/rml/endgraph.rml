@@ -49,6 +49,147 @@
 		#total-value {
 			color: #f0f4f8;
 		}
+		/* Graph / Awards, in the head */
+		#tabs {
+			display: flex;
+			flex-direction: row;
+			margin-left: 18dp;
+		}
+		#tabs .tab {
+			padding-top: 2dp;
+			padding-bottom: 3dp;
+		}
+
+		/* ---- the awards pane: covers #main, with the plot hole under it -------- */
+		#awards {
+			position: absolute;
+			left: 0dp;
+			top: 50dp;
+			width: 100%;
+			height: 608dp;
+			box-sizing: border-box;
+			padding: 18dp 24dp 16dp 24dp;
+			background-color: rgba(11, 14, 18, 245);
+			overflow-y: auto;
+		}
+		#awards-wait {
+			margin-top: 200dp;
+			text-align: center;
+			font-size: 14dp;
+			color: #8593a1;
+		}
+		/* the final ranks, one line per player */
+		#ranks-head {
+			margin-bottom: 8dp;
+		}
+		#final-ranks {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			margin-bottom: 14dp;
+		}
+		.rankline {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			width: 25%;
+			box-sizing: border-box;
+			padding: 4dp 12dp 4dp 0dp;
+			margin-bottom: 4dp;
+		}
+		.rankline .who {
+			width: 118dp;
+			font-size: 12dp;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.rankline .em {
+			width: 16dp;
+			height: 16dp;
+			margin-left: 6dp;
+		}
+		.rankline .lv {
+			width: 22dp;
+			margin-left: 3dp;
+			font-weight: bold;
+			font-size: 11dp;
+			letter-spacing: 1dp;
+			color: #f0f4f8;
+		}
+		.rankline .lv.none { color: #5c6875; }
+		.rankline .lv.max { color: #ff9b21; }
+
+		#awards-head {
+			margin-bottom: 8dp;
+		}
+		#award-rows {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+		/* one award. It starts out of place and clear; the widget brings each
+		   one in, one after another. */
+		.award {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			width: 50%;
+			box-sizing: border-box;
+			height: 56dp;
+			margin-bottom: 6dp;
+			padding: 6dp 14dp 6dp 10dp;
+			border-left: 3dp #232d38;
+			background-color: #131920;
+			opacity: 0;
+			margin-left: 24dp;
+		}
+		.award.in {
+			opacity: 1;
+			margin-left: 0dp;
+		}
+		.award.alliance {
+			width: 100%;
+			border-left: 3dp #35434f;
+		}
+		.award.mine {
+			border-left: 3dp #ff9b21;
+			background-color: #1a222b;
+		}
+		.award .emblem {
+			width: 36dp;
+			height: 36dp;
+			margin-right: 12dp;
+		}
+		.award .text {
+			flex: 1;
+			overflow: hidden;
+		}
+		.award .name {
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 15dp;
+			letter-spacing: 1.5dp;
+			text-transform: uppercase;
+			color: #f0f4f8;
+			white-space: nowrap;
+		}
+		.award .figure {
+			font-size: 12dp;
+			color: #8593a1;
+			white-space: nowrap;
+		}
+		.award .winner {
+			margin-left: 12dp;
+			text-align: right;
+			font-weight: bold;
+			font-size: 14dp;
+			white-space: nowrap;
+		}
+		.award .winner .sub {
+			font-weight: normal;
+			font-size: 11dp;
+			color: #8593a1;
+		}
 		/* 660 less the borders and the head */
 		#main {
 			display: flex;
@@ -255,6 +396,10 @@
 		<div id="head" class="fill">
 			<div id="title" class="title"/>
 			<div id="subtitle"/>
+			<div id="tabs">
+				<div id="tab-graph" class="tab active">Graph</div>
+				<div id="tab-awards" class="tab">Awards</div>
+			</div>
 			<div class="grow"/>
 			<div id="total">Total time <span id="total-value"/></div>
 			<div id="close" class="close">X</div>
@@ -295,6 +440,15 @@
 						<div id="tm5" class="time"/>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div id="awards" class="hidden">
+			<div id="awards-wait">Awards are handed out when the game ends.</div>
+			<div id="awards-body" class="hidden">
+				<div id="ranks-head" class="label">Final ranks</div>
+				<div id="final-ranks"/>
+				<div id="awards-head" class="label">Awards</div>
+				<div id="award-rows"/>
 			</div>
 		</div>
 		<div id="tip" class="hidden"/>

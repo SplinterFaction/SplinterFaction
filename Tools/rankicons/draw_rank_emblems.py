@@ -138,7 +138,53 @@ def armor():
     return ember, steel
 
 
+def comeback():
+    """A rising arrow out of a dip: the line falls, then climbs in ember."""
+    ember, de = layer()
+    steel, ds = layer()
+    ds.line([pt(14, 30), pt(34, 62)], fill=255, width=int(5 * S))
+    de.line([pt(34, 62), pt(70, 26)], fill=255, width=int(5 * S))
+    poly(de, [(58, 20), (80, 16), (76, 38)], fill=255)
+    stroke_poly(ds, [(10, 80), (86, 80)], 3, closed=False)
+    return ember, steel
+
+
+def firstblood():
+    """A single drop over a thin ring."""
+    ember, de = layer()
+    steel, ds = layer()
+    ring(ds, 48, 52, 30, 4)
+    poly(de, [(48, 22), (62, 46), (62, 54), (48, 70), (34, 54), (34, 46)], fill=255)
+    de.ellipse([pt(34, 44), pt(62, 70)], fill=255)
+    return ember, steel
+
+
+def efficient():
+    """A ratio: a big ember block over a small steel one, split by a slash."""
+    ember, de = layer()
+    steel, ds = layer()
+    ds.line([pt(30, 84), pt(66, 12)], fill=255, width=int(5 * S))
+    poly(de, [(14, 16), (44, 16), (44, 46), (14, 46)], fill=255)
+    ds.rectangle([pt(58, 58), pt(78, 78)], fill=255)
+    return ember, steel
+
+
+def juggernaut():
+    """A skull-sized target: a big ember hex with a steel reticle over it."""
+    ember, de = layer()
+    steel, ds = layer()
+    poly(de, [(48, 10), (80, 29), (80, 67), (48, 86), (16, 67), (16, 29)], fill=255)
+    ring(ds, 48, 48, 20, 4)
+    for a, b in (((48, 22), (48, 34)), ((48, 62), (48, 74)), ((22, 48), (34, 48)), ((62, 48), (74, 48))):
+        ds.line([pt(*a), pt(*b)], fill=255, width=int(4 * S))
+    return ember, steel
+
+
 EMBLEMS = {
+    "comeback": comeback,
+    "firstblood": firstblood,
+    "efficient": efficient,
+    "juggernaut": juggernaut,
     "weapons": weapons,
     "armor": armor,
     "combat": combat,
