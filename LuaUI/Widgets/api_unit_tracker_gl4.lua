@@ -55,7 +55,7 @@ function widget:GetInfo()
 		author = "Beherith (SF port)",
 		date = "2026",
 		license = "GNU GPL, v2 or later",
-		layer = -828888,
+		layer = -2000000000, -- before every widget that registers with it in Initialize (Distortion GL4 is -999999999)
 		enabled = true,
 	}
 end
@@ -276,6 +276,15 @@ function widget:UnitDestroyed(unitID, unitDefID, unitTeam, attackerID, attackerD
 	alliedUnitsRemove(unitID, reason or "UnitDestroyed")
 end
 
+-- The engine sends UnitDestroyed (and RenderUnitDestroyed) only for units of the player's own ally team
+-- (EventHandler.h, CanReadAllyTeam), and UnitLeftLos only when LOS changes. An enemy that dies in view therefore
+-- produces no event at all: it stays in visibleUnits, and every listener keeps its per-unit instances (lights,
+-- health bars...) for a unit id that is gone or recycled. The sweep in GameFrame closes that hole.
+function widget:RenderUnitDestroyed(unitID, unitDefID, unitTeam)
+	visibleUnitsRemove(unitID, "RenderUnitDestroyed")
+	alliedUnitsRemove(unitID, "RenderUnitDestroyed")
+end
+
 function widget:UnitFinished(unitID, unitDefID, unitTeam)
 	widget:UnitDestroyed(unitID, unitDefID, unitTeam, nil, nil, nil, nil, "UnitFinished")
 	widget:UnitCreated(unitID, unitDefID, unitTeam, nil, "UnitFinished")
@@ -304,8 +313,23 @@ function widget:UnitLeftLos(unitID, unitTeam, allyTeam, unitDefID)
 	end
 end
 
+local SWEEP_EVERY = 10 -- frames
+
 function widget:GameFrame(n)
 	gameFrame = n
+	if n % SWEEP_EVERY == 0 then
+		-- units that died, were deleted or left sight without an event (enemy deaths, see above)
+		for unitID, unitDefID in pairs(visibleUnits) do
+			if not isValidLivingSeenUnit(unitID, unitDefID) then
+				visibleUnitsRemove(unitID, "Sweep")
+			end
+		end
+		for unitID in pairs(alliedUnits) do
+			if spValidUnitID(unitID) ~= true or spGetUnitIsDead(unitID) ~= false then
+				alliedUnitsRemove(unitID, "Sweep")
+			end
+		end
+	end
 	if debuglevel >= 1 and n % 60 == 0 then
 		local cnt = 0
 		for unitID, unitDefID in pairs(visibleUnits) do

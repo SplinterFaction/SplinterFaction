@@ -369,7 +369,7 @@ local function resizeInstanceVBOTable(iT)
 			if iT.featureIDs then isValidID = Spring.ValidFeatureID(objectID)
 			else isValidID = Spring.ValidUnitID(objectID) end
 			if isValidID then
-				local offset = new_usedElements * iTStep
+				local offset = (i - 1) * iTStep -- the element's old place, not its new one (BAR fix)
 				for j = 1, iTStep do
 					new_instanceData_count = new_instanceData_count + 1
 					new_instanceData[new_instanceData_count] = iT.instanceData[j + offset]
@@ -452,6 +452,7 @@ local function pushElementInstance(iT,thisInstance, instanceID, updateExisting, 
 	if (iTusedElements + 1 ) >= iT.maxElements then -- add 1 extra for safety (not the best idea, but we seem to be running over it by 1)
 		resizeInstanceVBOTable(iT)
 		iTusedElements = iT.usedElements -- because during validation of unitIDs during resizing, we can decrease the actual size of the table!
+		endOffset = iTusedElements * iTStep -- or the new element lands past the compacted data, leaving a hole (BAR fix)
 		thisInstanceIndex = iT.instanceIDtoIndex[instanceID]  -- this too, can change, TODO, also do this in VBOIDtable!
 	end
 
@@ -508,6 +509,9 @@ local function popElementInstance(iT, instanceID, noUpload)
 	-- instanceID: an optional key given to the item, so it can be easily removed by reference, defaults to the last element of the buffer, but this will screw up the instanceIDtoIndex table if used in mixed keys mode
 	-- noUpload: prevent the VBO from being uploaded, if you feel like you are going to do a lot of ops and wish to manually upload when done instead
 	-- returns nil on failure, the the index of the element on success
+	-- Every Lua table is brought up to date before the GPU is touched. A failing Upload used to abort
+	-- half-way (usedElements not decremented, unit ids not shuffled), after which every later pop found "a nil
+	-- element at the back of the array" and the engine finally crashed inside the next upload.
 	if instanceID == nil then
 		Spring.Echo("Tried to remove element with nil instanceID from instanceTable " .. iT.myName)
 		return nil
@@ -545,104 +549,90 @@ local function popElementInstance(iT, instanceID, noUpload)
 				iT.numZombies = iT.numZombies - 1
 			end
 		end
+		if iT.debug then validateInstanceVBOTable(iT,'pop') end
+		return oldElementIndex
+	end
 
-	else
-		local lastElementInstanceID = iT.indextoInstanceID[lastElementIndex]
-		if lastElementInstanceID == nil then --
-			Spring.Echo("We somehow have a nil element at the back of the array, which is completely invalid, probably about to crash", iT.myName)
-			dbgt(iT.instanceIDtoIndex, "instanceIDtoIndex")
-			dbgt(iT.indextoInstanceID, "indextoInstanceID")
-			dbgt(iT.indextoUnitID, "indextoUnitID")
+	local lastElementInstanceID = iT.indextoInstanceID[lastElementIndex]
+	if lastElementInstanceID == nil then --
+		Spring.Echo("We somehow have a nil element at the back of the array, which is completely invalid, probably about to crash", iT.myName)
+		dbgt(iT.instanceIDtoIndex, "instanceIDtoIndex")
+		dbgt(iT.indextoInstanceID, "indextoInstanceID")
+		dbgt(iT.indextoUnitID, "indextoUnitID")
+	end
+	local iTStep = iT.instanceStep
+	local endOffset = (iT.usedElements - 1)*iTStep
+
+	-- the last element moves into the freed slot
+	iT.instanceIDtoIndex[lastElementInstanceID] = oldElementIndex -- lastElementInstanceID was somehow nil here?
+	iT.indextoInstanceID[oldElementIndex] = lastElementInstanceID
+	iT.indextoInstanceID[lastElementIndex] = nil --- somehow this got forgotten? TODO for VBOIDtable
+
+	local oldOffset = (oldElementIndex-1)*iTStep
+	local instanceData = iT.instanceData
+	for i = 1, iTStep do
+		instanceData[oldOffset + i ] = instanceData[endOffset + i]
+	end
+
+	-- Do the unitID shuffle if needed:
+	local popunitID, popunitValid = nil, false
+	if iT.indextoUnitID then
+		popunitID = iT.indextoUnitID[lastElementIndex]
+		if popunitID == nil then
+			Spring.Echo("TODO: what the f is happening here?, how the f could we have popped a nil from the back of?", iT.myName) -- TODO TODO
 		end
-		local iTStep = iT.instanceStep
-		local endOffset = (iT.usedElements - 1)*iTStep
+		popunitValid = (popunitID ~= nil) and ((iT.featureIDs and Spring.ValidFeatureID(popunitID)) or ((not iT.featureIDs) and Spring.ValidUnitID(popunitID))) or false
 
-		iT.instanceIDtoIndex[lastElementInstanceID] = oldElementIndex -- lastElementInstanceID was somehow nil here?
-		iT.indextoInstanceID[oldElementIndex] = lastElementInstanceID
-		iT.indextoInstanceID[lastElementIndex] = nil --- somehow this got forgotten? TODO for VBOIDtable
-
-		local oldOffset = (oldElementIndex-1)*iTStep
-		local instanceData = iT.instanceData
-		for i = 1, iTStep do
-			instanceData[oldOffset + i ] = instanceData[endOffset + i]
+		if iT.debugZombies then
+			local gf = Spring.GetGameFrame()
+			if iT.lastpopgameframe == nil then
+				iT.lastpopgameframe = gf
+				iT.zombies = {}
+				iT.numZombies = 0
+			elseif iT.lastpopgameframe ~= gf then -- New gameframe
+				iT.lastpopgameframe = gf
+				if iT.numZombies and iT.numZombies > 0 then -- WE HAVE ZOMBIES AAAAARGH
+					local s = "Warning: We have " .. tostring(iT.numZombies) .. " zombie units left over in " .. iT.myName
+					for zombie, zgf in pairs(iT.zombies) do
+						s = s .. " " .. tostring(zombie) ..'/'..tostring(zgf)
+					end
+					Spring.Echo(s)
+				end
+				iT.zombies = {}
+				iT.numZombies = 0
+			elseif iT.zombies[instanceID] then -- same gameframe
+				--Spring.Echo("Good, we are killing a stupid zombie", gf, instanceID, iT.numZombies)
+				iT.zombies[instanceID] = nil
+				iT.numZombies = iT.numZombies - 1
+			end
+			-- the element moved back belongs to a unit that is gone: a light nobody removed (see api_unit_tracker_gl4)
+			if not popunitValid and iT.zombies[lastElementInstanceID] == nil then
+				iT.zombies[lastElementInstanceID] = gf
+				iT.numZombies = iT.numZombies + 1
+			end
 		end
+
+		iT.indextoUnitID[oldElementIndex] = popunitID
+		iT.indextoUnitID[lastElementIndex] = nil
+	end
+	iT.usedElements = iT.usedElements - 1
+
+	-- GPU last
+	if noUpload ~= true then
 		--size_t LuaVBOImpl::Upload(const sol::stack_table& luaTblData, const sol::optional<int> attribIdxOpt, const sol::optional<int> elemOffsetOpt, const sol::optional<int> luaStartIndexOpt, const sol::optional<int> luaFinishIndexOpt)
-		--Spring.Echo("Removing instanceID",instanceID,"from iT at position", oldElementIndex, "shuffling back at", iT.usedElements,"endoffset=",endOffset,'oldOffset=',oldOffset)
-		if noUpload ~= true then
-			--Spring.Echo("Upload", oldElementIndex -1, oldOffset+1, oldOffset+iTStep)
-			iT.instanceVBO:Upload(iT.instanceData,nil,oldElementIndex-1,oldOffset +1,oldOffset + iTStep)
-		else
+		local ok, err = pcall(iT.instanceVBO.Upload, iT.instanceVBO, instanceData, nil, oldElementIndex-1, oldOffset +1, oldOffset + iTStep)
+		if not ok then
+			Spring.Echo("instancevbotable: upload failed while removing", instanceID, "from", iT.myName, err)
 			iT.dirty = true
-		end
-		-- Do the unitID shuffle if needed:
-		if iT.indextoUnitID then
-			--Spring.Echo("popElementInstance,unitID, iT.unitIDattribID, thisInstanceIndex",unitID, iT.unitIDattribID, oldElementIndex)
-			local popunitID = iT.indextoUnitID[lastElementIndex]
-			if popunitID == nil then
-				Spring.Echo("TODO: what the f is happening here?, how the f could we have popped a nil from the back of?", iT.myName) -- TODO TODO
-			end
-
-			if iT.debugZombies then
-				local gf = Spring.GetGameFrame()
-				--Spring.Echo("Popping", instanceID)
-				if iT.lastpopgameframe == nil then
-					iT.lastpopgameframe = gf
-					iT.zombies = {}
-					iT.numZombies = 0
-				else
-					if iT.lastpopgameframe ~= gf then -- New gameframe
-						iT.lastpopgameframe = gf
-						if iT.numZombies and iT.numZombies > 0 then -- WE HAVE ZOMBIES AAAAARGH
-							local s = "Warning: We have " .. tostring(iT.numZombies) .. " zombie units left over in " .. iT.myName
-							for zombie, gf in pairs(iT.zombies) do
-								s = s .. " " .. tostring(zombie) ..'/'..tostring(gf)
-								Spring.Echo("ZOMBIE instanceID", zombie, 'gf',gf)
-								--Spring.SendCommands({"pause 1"})
-								Spring.Debug.TraceFullEcho(nil,nil,nil, iT.myName)
-							end
-							Spring.Echo(s)
-							iT.zombies = {}
-							iT.numZombies = 0
-						end
-					else -- same gameframe
-						if iT.zombies[instanceID] then
-							--Spring.Echo("Good, we are killing a stupid zombie", gf, instanceID, iT.numZombies)
-							iT.zombies[instanceID] = nil
-							iT.numZombies = iT.numZombies - 1
-						end
-					end
-				end
-			end
-
-			iT.indextoUnitID[oldElementIndex] = popunitID
-			iT.indextoUnitID[lastElementIndex] = nil
-
-			if (iT.featureIDs and Spring.ValidFeatureID(popunitID)) or Spring.ValidUnitID(popunitID) then
-				if noUpload ~= true then
-					if iT.featureIDs then
-						iT.instanceVBO:InstanceDataFromFeatureIDs(popunitID, iT.unitIDattribID, oldElementIndex-1)
-					else
-						iT.instanceVBO:InstanceDataFromUnitIDs(popunitID, iT.unitIDattribID, oldElementIndex-1)
-					end
-				end
+		elseif iT.indextoUnitID and popunitValid then
+			if iT.featureIDs then
+				iT.instanceVBO:InstanceDataFromFeatureIDs(popunitID, iT.unitIDattribID, oldElementIndex-1)
 			else
-				if iT.debugZombies then
-					--Spring.Echo("Warning: Tried to pop back an invalid" .. ((iT.featureIDs and "featureID") or "unitID"), popunitID, "from", iT.myName, "while removing instance", instanceID, counttable(iT.instanceIDtoIndex), counttable(iT.indextoInstanceID), counttable(iT.indextoUnitID))
-					--Spring.Debug.TraceFullEcho()
-					local gf = Spring.GetGameFrame()
-					if iT.lastpopgameframe == nil or iT.lastpopgameframe ~= gf then -- New gameframe
-						iT.lastpopgameframe = gf
-						iT.zombies = {}
-						iT.numZombies = 0
-					end
-					if iT.zombies[lastElementInstanceID] == nil then
-						iT.zombies[lastElementInstanceID] = gf
-						iT.numZombies = iT.numZombies + 1
-					end
-				end
+				iT.instanceVBO:InstanceDataFromUnitIDs(popunitID, iT.unitIDattribID, oldElementIndex-1)
 			end
 		end
-		iT.usedElements = iT.usedElements - 1
+	else
+		iT.dirty = true
 	end
 
 	if iT.debug then validateInstanceVBOTable(iT,'pop') end
