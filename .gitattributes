@@ -11,6 +11,11 @@
 /Objects3D/blender[[:space:]]files export-ignore
 /Icons/z/source export-ignore
 /Bitmaps/source export-ignore
+/Units-Disabled export-ignore
+/LuaUI/Widgets/disabled export-ignore
+/.github export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
 *.psd export-ignore
 *.xcf export-ignore
 *.blend export-ignore
