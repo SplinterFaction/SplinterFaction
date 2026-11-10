@@ -33,6 +33,12 @@ end
 --  After that everything settles to a resting alpha so a big army does not
 --  turn the ground into string.
 --
+--  Set Target (unit_target_on_the_move.lua) is not an order in the queue: the
+--  gadget keeps each unit's targets itself and hands them over through
+--  UnitTargetList / UnitTargetIndex. They are drawn for the same units, as a
+--  chain of their own from the unit, in the "target" style. While this widget
+--  takes them the gadget does not draw its own lines for selected units.
+--
 --  Everything tunable is in STYLE and TUNE below, also reachable through
 --  WG.orders for the options menu.
 --
@@ -73,6 +79,7 @@ local STYLE = {
 	move    = { shape = 1, pattern = 1, color = {0.50, 1.00, 0.50}, size = 26, width = 7.0, flow = 1.0 },
 	fight   = { shape = 2, pattern = 2, color = {0.55, 0.55, 1.00}, size = 30, width = 8.0, flow = 1.3 },
 	attack  = { shape = 3, pattern = 3, color = {1.00, 0.25, 0.25}, size = 30, width = 8.5, flow = 2.0 },
+	target  = { shape = 3, pattern = 3, color = {1.00, 0.75, 0.00}, size = 28, width = 7.0, flow = 1.6 }, -- Set Target
 	patrol  = { shape = 4, pattern = 4, color = {0.35, 0.35, 1.00}, size = 22, width = 6.5, flow = 0.9 },
 	rally   = { shape = 5, pattern = 1, color = {0.50, 1.00, 0.50}, size = 22, width = 5.5, flow = 0.5 },
 	guard   = { shape = 6, pattern = 1, color = {0.35, 0.35, 1.00}, size = 28, width = 5.5, flow = 0.6 },
@@ -103,7 +110,6 @@ local CMD_RESURRECT  = CMD.RESURRECT
 local CMD_CAPTURE    = CMD.CAPTURE
 local CMD_RESTORE    = CMD.RESTORE
 local CMD_MANUALFIRE = CMD.MANUALFIRE
-local CMD_SET_TARGET = 34923
 local CMD_LOAD_UNITS = CMD.LOAD_UNITS
 local CMD_UNLOAD_UNITS = CMD.UNLOAD_UNITS
 local CMD_UNLOAD_UNIT = CMD.UNLOAD_UNIT
@@ -112,7 +118,7 @@ local CMD_INSERT     = CMD.INSERT
 local KIND_OF_CMD = {
 	[CMD_MOVE] = "move", [CMD_RAW_MOVE] = "move",
 	[CMD_FIGHT] = "fight",
-	[CMD_ATTACK] = "attack", [CMD_MANUALFIRE] = "attack", [CMD_SET_TARGET] = "attack",
+	[CMD_ATTACK] = "attack", [CMD_MANUALFIRE] = "attack",
 	[CMD_PATROL] = "patrol",
 	[CMD_GUARD] = "guard",
 	[CMD_REPAIR] = "repair", [CMD_CAPTURE] = "capture",
@@ -123,6 +129,7 @@ local KIND_OF_CMD = {
 local spGetSelectedUnits  = Spring.GetSelectedUnits
 local spGetUnitCommands   = Spring.GetUnitCommands
 local spGetUnitPosition   = Spring.GetUnitPosition
+local spGetUnitRulesParam = Spring.GetUnitRulesParam
 local spGetUnitViewPosition = Spring.GetUnitViewPosition
 local spGetFeaturePosition = Spring.GetFeaturePosition
 local spValidUnitID       = Spring.ValidUnitID
@@ -437,6 +444,11 @@ local echoUntil = {}
 local freshAt = {}
 local allyUntil = {}     -- allied unitID -> seconds
 
+-- Set Target: unitID -> {n = count, index = the one being shot at, t0 = when
+-- it last changed, [i] = {unit = id} or {x =, z =} or {skip = true}}
+local unitTargets = {}
+local targetSeeded = {}  -- unitID -> true once its rules params have been looked at
+
 local selected = {}      -- unitID -> true
 local selectedList = {}
 local dirty = true
@@ -613,6 +625,81 @@ local function PushUnit(unitID, restAlpha, isAlly)
 	end
 end
 
+-- where a Set Target entry is now; nil when it cannot be seen
+local function TargetPoint(e)
+	if e.unit then
+		if not spValidUnitID(e.unit) then
+			return nil
+		end
+		local x, _, z = spGetUnitViewPosition(e.unit)
+		if not x then
+			x, _, z = spGetUnitPosition(e.unit) -- a radar blip
+		end
+		return x, z
+	end
+	return e.x, e.z
+end
+
+-- A unit that had a target before this widget started (luaui reload) has sent
+-- no list here: its current target is still in the gadget's rules params.
+local function SeedTargets(unitID)
+	targetSeeded[unitID] = true
+	local id = spGetUnitRulesParam(unitID, "targetID")
+	if id and id >= 0 then
+		unitTargets[unitID] = { n = 1, { unit = id } }
+		return
+	end
+	local x = spGetUnitRulesParam(unitID, "targetCoordX")
+	local z = spGetUnitRulesParam(unitID, "targetCoordZ")
+	if x and z and x ~= -1 and z ~= -1 then
+		unitTargets[unitID] = { n = 1, { x = x, z = z } }
+	end
+end
+
+-- draws one unit's Set Target chain
+local function PushTargets(unitID, restAlpha)
+	local ut = unitTargets[unitID]
+	if not ut then
+		if targetSeeded[unitID] then
+			return
+		end
+		SeedTargets(unitID)
+		ut = unitTargets[unitID]
+		if not ut then
+			return
+		end
+	end
+	if ut.n == 0 then
+		return
+	end
+	local px, _, pz = spGetUnitViewPosition(unitID)
+	if not px then
+		return
+	end
+	local style = STYLE.target
+	local color = style.color
+	local current = ut.index or 1
+	local t0 = ut.t0 or 0
+	local uv = 0
+	for i = 1, ut.n do
+		local e = ut[i]
+		if e and not e.skip then
+			local x, z = TargetPoint(e)
+			if x then
+				local queued = i ~= current
+				-- the flash belongs to the newest target
+				local et0, eflash = 0, 0
+				if i == ut.n and ut.t0 then
+					et0, eflash = t0, queued and TUNE.queuedFlash or 1
+				end
+				uv = PushRibbon(px, pz, x, z, style, color, restAlpha, et0, queued, uv)
+				PushMark(x, z, style, color, restAlpha, et0, eflash, queued)
+				px, pz = x, z
+			end
+		end
+	end
+end
+
 local function PushRally(unitID, restAlpha)
 	-- the rally point of a factory is its own (non-factory) queue: the first
 	-- move order in GetUnitCommands is where new units go
@@ -661,6 +748,7 @@ local function Rebuild()
 			else
 				PushUnit(unitID, rest, false)
 			end
+			PushTargets(unitID, rest)
 		end
 	end
 	-- echoes: own units just ordered, not selected
@@ -675,6 +763,7 @@ local function Rebuild()
 			else
 				PushUnit(unitID, rest, false)
 			end
+			PushTargets(unitID, rest)
 		end
 	end
 	-- allies: their latest orders, quietly
@@ -882,8 +971,55 @@ function widget:UnitCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpts
 	end
 end
 
+-- Set Target, from unit_target_on_the_move.lua (unsynced). One call per
+-- target of the unit, index 1 first; index 0 means it has none any more.
+-- (a, b, c) is a position, or a alone is the target unit.
+local function OnUnitTargetList(unitID, index, userTarget, a, b, c)
+	if not index or index == 0 then
+		unitTargets[unitID] = nil
+		targetSeeded[unitID] = true
+		return
+	end
+	local ut = unitTargets[unitID]
+	if not ut then
+		ut = { n = 0 }
+		unitTargets[unitID] = ut
+		targetSeeded[unitID] = true
+	end
+	local e
+	if not userTarget then
+		e = { skip = true } -- set by a gadget, not the player: not drawn
+	elseif tonumber(b) then
+		e = { x = a, z = c }
+	else
+		e = { unit = a }
+	end
+	-- the list is sent whole each time: only a target that differs is new
+	local old = ut[index]
+	if not old or old.unit ~= e.unit or old.x ~= e.x or old.z ~= e.z or old.skip ~= e.skip then
+		local now = Now()
+		ut.t0 = now
+		if not e.skip and not spectating and not selected[unitID] and spGetUnitTeam(unitID) == myTeam then
+			echoUntil[unitID] = now + TUNE.echoTime
+		end
+	end
+	ut[index] = e
+	ut.n = index
+	if index == 1 then
+		ut.index = nil
+	end
+end
+
+local function OnUnitTargetIndex(unitID, index)
+	local ut = unitTargets[unitID]
+	if ut then
+		ut.index = index
+	end
+end
+
 function widget:UnitDestroyed(unitID)
 	orders[unitID], orderTime[unitID], echoUntil[unitID], allyUntil[unitID], freshAt[unitID] = nil, nil, nil, nil, nil
+	unitTargets[unitID], targetSeeded[unitID] = nil, nil
 	dirty = true
 end
 
@@ -996,6 +1132,8 @@ function widget:Initialize()
 		return
 	end
 	widget:SelectionChanged(spGetSelectedUnits())
+	widgetHandler:RegisterGlobal("UnitTargetList", OnUnitTargetList)
+	widgetHandler:RegisterGlobal("UnitTargetIndex", OnUnitTargetIndex)
 
 	WG.orders = {
 		getRestAlpha  = function() return TUNE.restAlpha end,
@@ -1010,6 +1148,9 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
+	-- the gadget draws the Set Target lines itself again
+	widgetHandler:DeregisterGlobal("UnitTargetList")
+	widgetHandler:DeregisterGlobal("UnitTargetIndex")
 	DestroyResources()
 	WG.orders = nil
 end

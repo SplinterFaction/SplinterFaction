@@ -65,7 +65,8 @@ if gadgetHandler:IsSyncedCode() then
 	local spGetUnitsInRectangle = Spring.GetUnitsInRectangle
 	local spGetUnitsInCylinder = Spring.GetUnitsInCylinder
 	local spSetUnitRulesParam = Spring.SetUnitRulesParam
-	local spGetCommandQueue = Spring.GetCommandQueue
+	local spGetUnitCommands = Spring.GetUnitCommands
+	local spGetUnitCommandCount = Spring.GetUnitCommandCount
 	local spGetUnitCurrentCommand = Spring.GetUnitCurrentCommand
 	local spGiveOrderArrayToUnitArray = Spring.GiveOrderArrayToUnitArray
 	local spGetUnitWeaponTryTarget = Spring.GetUnitWeaponTryTarget
@@ -572,7 +573,7 @@ Target]],
 				pausedTargets[unitID] = nil
 			end
 		else
-			local activeCommandIsDgun = spGetCommandQueue(unitID, 0) ~= 0 and spGetCommandQueue(unitID, 1)[1].id == CMD_DGUN
+			local activeCommandIsDgun = spGetUnitCommandCount(unitID) ~= 0 and spGetUnitCommands(unitID, 1)[1].id == CMD_DGUN
 			if pausedTargets[unitID] and not activeCommandIsDgun then
 				if waitingForInsertRemoval[unitID] then
 					waitingForInsertRemoval[unitID] = nil
@@ -586,7 +587,7 @@ Target]],
 	end
 
 	function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag, playerID, fromSynced, fromLua)
-		if spGetCommandQueue(unitID, 0) == 0 or not cmdOptions.meta then
+		if spGetUnitCommandCount(unitID) == 0 or not cmdOptions.meta then
 			if processCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions) then
 				return false --command was used & fully processed, so block command
 			elseif cmdID == CMD_STOP then
@@ -717,7 +718,20 @@ else	-- UNSYNCED
 		return targetList[unitID] and targetList[unitID].currentIndex
 	end
 
+	-- The Orders GL4 widget draws the targets of selected units when it is
+	-- running: it registers UnitTargetList / UnitTargetIndex. Only units the
+	-- local player may see the orders of are handed over.
+	local function forwardToLuaUI(name, unitID, ...)
+		if Script.LuaUI(name) then
+			local _, fullView = spGetSpectatingState()
+			if fullView or spGetUnitAllyTeam(unitID) == spGetMyAllyTeamID() then
+				Script.LuaUI[name](unitID, ...)
+			end
+		end
+	end
+
 	function handleTargetListEvent(_, unitID, index, alwaysSeen, ignoreStop, userTarget, targetA, targetB, targetC)
+		forwardToLuaUI("UnitTargetList", unitID, index, userTarget, targetA, targetB, targetC)
 		if index == 0 then
 			targetList[unitID] = nil
 			return
@@ -735,6 +749,7 @@ else	-- UNSYNCED
 	end
 
 	function handleTargetIndexEvent(_, unitID, index)
+		forwardToLuaUI("UnitTargetIndex", unitID, index)
 		if not targetList[unitID] then
 			return
 		end
@@ -814,8 +829,10 @@ else	-- UNSYNCED
 	function gadget:DrawWorld()
 		_, fullview = spGetSpectatingState()
 		local init = false
+		-- selected units' targets are drawn by the Orders GL4 widget when it runs
+		local widgetDraws = Script.LuaUI("UnitTargetList")
 		for unitID, unitData in pairs(targetList) do
-			if drawTarget[unitID] or drawAllTargets[spGetUnitTeam(unitID)] or spIsUnitSelected(unitID) then
+			if drawTarget[unitID] or drawAllTargets[spGetUnitTeam(unitID)] or (not widgetDraws and spIsUnitSelected(unitID)) then
 				if fullview or spGetUnitAllyTeam(unitID) == myAllyTeam then
 					if not init then
 						init = true
