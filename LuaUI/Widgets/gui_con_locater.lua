@@ -13,7 +13,6 @@ function widget:GetInfo()
   }
 end
 
-include"keysym.h.lua"
 
 
 
@@ -48,10 +47,10 @@ local activationHeight = nil
 
 -- the keys that activate the constructor-indicating graphics
 local activationKeyTable = {
-    --[KEYSYMS.C] = true,
-    --[KEYSYMS.Q] = true,
-    --[KEYSYMS.B] = true,
-    [KEYSYMS.SPACE] = true,
+    --[Spring.GetKeyCode("c")] = true,
+    --[Spring.GetKeyCode("q")] = true,
+    --[Spring.GetKeyCode("b")] = true,
+    [Spring.GetKeyCode("space")] = true,
 }
 
 -- enabling this means having your cursor on a constructor activates

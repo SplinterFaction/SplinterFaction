@@ -813,7 +813,7 @@ if gadgetHandler:IsSyncedCode() then
 							local hpRatio    = EffectiveRatio(unitID, unitDefID,
 							                                  unitHealth, unitMaxHealth)
 							local ux, uy, uz = Spring.GetUnitPosition(unitID)
-							local unitCmds   = Spring.GetCommandQueue(unitID, 0)
+							local unitCmds   = Spring.GetUnitCommandCount(unitID)
 
 							-- ======== BEHAVIOR DISPATCH ========
 							-- Every AI-driven unit class is claimed by a behavior

@@ -220,7 +220,6 @@ local mousepos = {0,0,0}
 local cursorradius = 50
 local removeUnitGrassFrames = 25
 local placementMode = false -- this controls wether we are in 'game mode' or placement map dev mode
-include("keysym.h.lua") -- so we can do hacky keypress
 local grassInstanceData = {}
 ---------------------------VAO VBO stuff:---------------------------------------
 
@@ -459,8 +458,8 @@ end
 
 function widget:KeyPress(key, modifier, isRepeat)
 	if not placementMode then return false end
-	if key == KEYSYMS.LEFTBRACKET then cursorradius = mathMax(8, cursorradius *0.8) end
-	if key == KEYSYMS.RIGHTBRACKET then cursorradius = mathMin(512, cursorradius *1.2) end
+	if key == Spring.GetKeyCode("[") then cursorradius = mathMax(8, cursorradius *0.8) end
+	if key == Spring.GetKeyCode("]") then cursorradius = mathMin(512, cursorradius *1.2) end
 	return false
 end
 

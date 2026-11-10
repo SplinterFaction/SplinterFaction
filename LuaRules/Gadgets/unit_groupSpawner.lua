@@ -25,7 +25,7 @@ VFS.Include("gamedata/taptools.lua")
 -- # Requires the api_delay.lua gadget
 local DelayCall = GG.Delay.DelayCall
 -- Synced Read
-local GetCommandQueue      = Spring.GetCommandQueue
+local GetCommandQueue      = Spring.GetUnitCommands
 local GetUnitBasePosition  = Spring.GetUnitBasePosition
 local GetUnitBuildFacing   = Spring.GetUnitBuildFacing
 local GetUnitStates        = Spring.GetUnitStates

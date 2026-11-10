@@ -12,7 +12,6 @@ function widget:GetInfo()
   }
 end
 
-include("keysym.h.lua")
 
 ---- CHANGELOG -----
 -- versus666,		v3.03	(17dec2011)	: 	Back to alt BACKQUOTE to remove selected units from group
@@ -269,17 +268,17 @@ end
 function widget:KeyPress(key, modifier, isRepeat)
 	if ( modifier.alt and not modifier.meta ) then
 		local gr
-		if (key == KEYSYMS.N_0) then gr = 0 end
-		if (key == KEYSYMS.N_1) then gr = 1 end
-		if (key == KEYSYMS.N_2) then gr = 2 end 
-		if (key == KEYSYMS.N_3) then gr = 3 end
-		if (key == KEYSYMS.N_4) then gr = 4 end
-		if (key == KEYSYMS.N_5) then gr = 5 end
-		if (key == KEYSYMS.N_6) then gr = 6 end
-		if (key == KEYSYMS.N_7) then gr = 7 end
-		if (key == KEYSYMS.N_8) then gr = 8 end
-		if (key == KEYSYMS.N_9) then gr = 9 end
- 		if (key == KEYSYMS.BACKQUOTE) then gr = -1 end
+		if (key == Spring.GetKeyCode("0")) then gr = 0 end
+		if (key == Spring.GetKeyCode("1")) then gr = 1 end
+		if (key == Spring.GetKeyCode("2")) then gr = 2 end 
+		if (key == Spring.GetKeyCode("3")) then gr = 3 end
+		if (key == Spring.GetKeyCode("4")) then gr = 4 end
+		if (key == Spring.GetKeyCode("5")) then gr = 5 end
+		if (key == Spring.GetKeyCode("6")) then gr = 6 end
+		if (key == Spring.GetKeyCode("7")) then gr = 7 end
+		if (key == Spring.GetKeyCode("8")) then gr = 8 end
+		if (key == Spring.GetKeyCode("9")) then gr = 9 end
+ 		if (key == Spring.GetKeyCode("tilde")) then gr = -1 end
 		if (gr ~= nil) then
 				if (gr == -1) then gr = nil end
 				selUnitDefIDs = {}
@@ -340,7 +339,7 @@ function widget:KeyPress(key, modifier, isRepeat)
 			end
 			
 	elseif (modifier.ctrl and not modifier.meta) then	
-		if (key == KEYSYMS.BACKQUOTE) then
+		if (key == Spring.GetKeyCode("tilde")) then
 			local mx,my = GetMouseState()
 			local _,pos = TraceScreenRay(mx,my,true)     
 			local mindist = math.huge
@@ -361,7 +360,7 @@ function widget:KeyPress(key, modifier, isRepeat)
 			end
 		end
 		 --[[
-		if (key == KEYSYMS.Q) then
+		if (key == Spring.GetKeyCode("q")) then
 			local units = GetSelectedUnits()
 			for _, unitID in ipairs(units) do
 			SetUnitGroup(unitID,-1)

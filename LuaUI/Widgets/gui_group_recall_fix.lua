@@ -14,7 +14,6 @@ function widget:GetInfo()
   }
 end
 
-include("keysym.h.lua")
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -49,18 +48,10 @@ local previousGroup = 99
 local currentIteration = 1
 local previousKey = 99
 local previousTime = spGetTimer()
-local groupNumber = {
-	[KEYSYMS.N_1] = 1,
-	[KEYSYMS.N_2] = 2,
-	[KEYSYMS.N_3] = 3,
-	[KEYSYMS.N_4] = 4,
-	[KEYSYMS.N_5] = 5,
-	[KEYSYMS.N_6] = 6,
-	[KEYSYMS.N_7] = 7,
-	[KEYSYMS.N_8] = 8,
-	[KEYSYMS.N_9] = 9,
-	[KEYSYMS.N_0] = 0,
-}
+local groupNumber = {} -- key code -> control group
+for group = 0, 9 do
+	groupNumber[Spring.GetKeyCode(tostring(group))] = group
+end
 
 local function GroupRecallFix(key, modifier, isRepeat)
 	if (not modifier.ctrl and not modifier.alt and not modifier.meta) then --check key for group. Reference: unit_auto_group.lua by Licho

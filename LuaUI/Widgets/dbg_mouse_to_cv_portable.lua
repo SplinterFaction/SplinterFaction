@@ -10,7 +10,6 @@ function widget:GetInfo()
   }
 end
 
-include("keysym.h.lua")
 
 local floor = math.floor
 
@@ -29,7 +28,7 @@ local handle
 
 function widget:KeyPress(key, modifier, isRepeat)
 	if modifier.alt then
-		if key == KEYSYMS.M then
+		if key == Spring.GetKeyCode("m") then
 			enabled = not enabled
 		end
 	end

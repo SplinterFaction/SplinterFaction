@@ -36,7 +36,7 @@ local spGetUnitDefID			= Spring.GetUnitDefID
 local spIsUnitInView 			= Spring.IsUnitInView
 local spGetUnitSelfDTime		= Spring.GetUnitSelfDTime
 local spGetAllUnits				= Spring.GetAllUnits
-local spGetCommandQueue			= Spring.GetCommandQueue
+local spGetCommandQueue			= Spring.GetUnitCommands
 local spIsUnitAllied			= Spring.IsUnitAllied
 local spGetCameraDirection		= Spring.GetCameraDirection
 

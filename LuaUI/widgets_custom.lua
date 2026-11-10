@@ -18,7 +18,6 @@ function pwl() -- ???  (print widget list)
 end
 
 
-include("keysym.h.lua")
 include("utils.lua")
 include("system.lua")
 include("cache.lua") --contain cached override for Spring.GetVisibleUnit (performance optimization). All overrides that are placed here have global reach
@@ -1483,7 +1482,7 @@ function widgetHandler:KeyRelease(key, mods, label, unicode)
     local mo = self.mouseOwner
     if (mo and mo.TweakKeyRelease) then
       mo:TweakKeyRelease(key, mods, label, unicode)
-    elseif (key == KEYSYMS.ESCAPE) then
+    elseif (key == Spring.GetKeyCode("esc")) then
       Spring.Log(section, LOG.INFO, "LuaUI TweakMode: OFF")
       self.tweakMode = false
     end

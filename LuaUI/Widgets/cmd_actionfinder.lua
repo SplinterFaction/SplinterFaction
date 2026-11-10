@@ -1,5 +1,4 @@
 include("colors.h.lua")
-include("keysym.h.lua")
 include("utils.lua")
 
 function widget:GetInfo()
@@ -276,7 +275,7 @@ end
 
 function widget:KeyPress(key, mods, isRepeat)
 
-  if key == KEYSYMS.S and mods.alt and mods.ctrl and not (mods.meta or mods.shift) then
+  if key == Spring.GetKeyCode("s") and mods.alt and mods.ctrl and not (mods.meta or mods.shift) then
 	if inSpecMode then
 	  LeaveSpecMode()
 	  return true
@@ -286,7 +285,7 @@ function widget:KeyPress(key, mods, isRepeat)
 	end
   end
   
-  if key == KEYSYMS.C and mods.alt and mods.ctrl and not (mods.meta or mods.shift) then
+  if key == Spring.GetKeyCode("c") and mods.alt and mods.ctrl and not (mods.meta or mods.shift) then
 	if inAttractMode then
 	  LeaveAttractMode()
 	  return true

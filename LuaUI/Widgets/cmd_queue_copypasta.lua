@@ -1,4 +1,3 @@
-include("keysym.h.lua")
 
 function widget:GetInfo()
   return {
@@ -15,7 +14,7 @@ end
 local queues = {}
 
 local function GetQueue(unit_id)
-  return Spring.GetCommandQueue(unit_id)
+  return Spring.GetUnitCommands(unit_id, -1)
 end
 
 local function SetQueue(unit_id , queue, shift)
@@ -28,7 +27,7 @@ function widget:KeyPress(key, modifier, is_repeat)
     if not modifier.meta then return end
     local units=Spring.GetSelectedUnits()
     local saving=modifier.alt
-    local buffer_id=key-KEYSYMS.N_0
+    local buffer_id=key-Spring.GetKeyCode("0")
     if buffer_id<0 or buffer_id>9 then return end
     if saving then
       queues[buffer_id]={}

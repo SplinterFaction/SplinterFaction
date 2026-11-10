@@ -943,7 +943,7 @@ return function(ctx, lib, cfg)
 					-- chase and kill it instead of strolling past. ATTACK on the
 					-- unitID tracks it if it moves. Only (re)issue if we are not
 					-- already on this exact target, to avoid order thrashing.
-					local cmds  = Spring.GetCommandQueue(unitID, 1)
+					local cmds  = Spring.GetUnitCommands(unitID, 1)
 					local first = cmds and cmds[1]
 					local onIt  = first and first.id == CMD.ATTACK
 					    and first.params and first.params[1] == bthreat.uid
