@@ -113,6 +113,28 @@ local options= {
 			{key="enabled", name="Enabled", desc="Laughs in hardcore"},
 		}
 	},
+	{
+		key    = 'adaptiveai_start', -- read by LuaRules/Configs/simpleai/behaviors/b_adaptive.lua
+		name   = 'AdaptiveAI Starting Difficulty',
+		desc   = 'Where the AdaptiveAI starts before it has read the game: 0 easiest, 0.5 plain SimpleAI, 1 hardest. From 3 minutes in it reads the game every 30 seconds and hardens quickly (eases slowly) to keep the edge set below.',
+		type   = 'number',
+		section= 'aioptions',
+		def    = 0.6,
+		min    = 0,
+		max    = 1,
+		step   = 0.05,
+	},
+	{
+		key    = 'adaptiveai_edge', -- read by LuaRules/Configs/simpleai/behaviors/b_adaptive.lua
+		name   = 'AdaptiveAI Edge',
+		desc   = 'How far ahead of you the AdaptiveAI tries to stay (army value, kills, income, pressure, as a share of the total: 0.15 is about 57/43 in its favour). 0 steers for an even game.',
+		type   = 'number',
+		section= 'aioptions',
+		def    = 0.15,
+		min    = 0,
+		max    = 0.5,
+		step   = 0.05,
+	},
 
 	-- Resourcing
 	{

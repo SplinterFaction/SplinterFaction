@@ -77,25 +77,29 @@ return function(ctx, lib, cfg, services)
 	--------------------------------------------------------------------------
 	-- Tunables (owned by this behavior)
 	--------------------------------------------------------------------------
+	-- Kept as fields of one table, not as locals: the project selector below
+	-- reads nearly all of them, and Lua 5.1 allows a function only 60 upvalues.
+	-- As locals they took 22 of those and left room for three more.
+	local TUNE = {}
 	-- Constructor caps
-	local CONSTRUCTOR_MAX         = 4   -- max constructors for normal AI teams
-	local CONSTRUCTOR_MAX_CON_AI  = 12  -- higher cap for dedicated SimpleConstructorAI teams
+	TUNE.CONSTRUCTOR_MAX    = 4   -- max constructors for normal AI teams
+	TUNE.CONSTRUCTOR_MAX_CON_AI = 12  -- higher cap for dedicated SimpleConstructorAI teams
 	-- Minimum frames between STARTING any new constructor on a team. Because every
 	-- factory on a team is evaluated in the same GameFrame tick, without this they
 	-- all read the same stale count and queue a constructor at once. This rate-limit
 	-- lets the count catch up so the hard cap is actually respected.
-	local CON_BUILD_SPACING      = 150  -- ~5s at 30Hz
+	TUNE.CON_BUILD_SPACING = 150  -- ~5s at 30Hz
 
 	-- Higher-tier preference. Per-unit build weight scales with (techTier+1)^bias,
 	-- so advanced units/factories are chosen far more often while lower tiers still appear.
-	local TECH_UNIT_BIAS    = 1.8    -- combat unit tech preference
-	local TECH_FAC_BIAS     = 2.4    -- factory tech preference (want advanced plants to unlock advanced units)
+	TUNE.TECH_UNIT_BIAS = 1.8    -- combat unit tech preference
+	TUNE.TECH_FAC_BIAS = 2.4    -- factory tech preference (want advanced plants to unlock advanced units)
 
 	-- Turret demand model
-	local TURRET_BASE        = 2     -- always want at least this many turrets once a factory exists
-	local TURRET_PER_FAC     = 1     -- + this many wanted per factory
-	local TURRET_PER_MEX_DIV = 3     -- + 1 wanted per this many mexes
-	local TURRET_CAP         = 20    -- absolute max turrets to build per team
+	TUNE.TURRET_BASE   = 2     -- always want at least this many turrets once a factory exists
+	TUNE.TURRET_PER_FAC = 1     -- + this many wanted per factory
+	TUNE.TURRET_PER_MEX_DIV = 3     -- + 1 wanted per this many mexes
+	TUNE.TURRET_CAP    = 20    -- absolute max turrets to build per team
 
 	-- Anti-air demand model. ctx.intel.airThreat[teamID] carries the frame of
 	-- the last enemy-aircraft evidence (armed air spotted inside the base scan
@@ -104,25 +108,25 @@ return function(ctx, lib, cfg, services)
 	-- toward the count below -- a reactive rung that jumps the queue like the
 	-- generic under-attack turret slot, because against bombers a random
 	-- ground turret is a dead spend. AA turrets are a subset of IsTurret, so
-	-- they also count toward TURRET_CAP and the generic desired-turret model.
-	local AA_THREAT_MEMORY   = 1800  -- frames the last air evidence stays "fresh" (~60s)
-	local AA_BASE            = 2     -- AA turrets wanted while the threat is fresh...
-	local AA_PER_FAC_DIV     = 2     -- ...+1 per this many factories
-	local AA_CAP             = 6     -- absolute max AA from this reactive model
+	-- they also count toward TUNE.TURRET_CAP and the generic desired-turret model.
+	TUNE.AA_THREAT_MEMORY = 1800  -- frames the last air evidence stays "fresh" (~60s)
+	TUNE.AA_BASE       = 2     -- AA turrets wanted while the threat is fresh...
+	TUNE.AA_PER_FAC_DIV = 2     -- ...+1 per this many factories
+	TUNE.AA_CAP        = 6     -- absolute max AA from this reactive model
 
-	local MEX_TARGET_EARLY  = 2      -- grab this many mexes before anything else
-	local MEX_TARGET_MID    = 8      -- expand to this many once economy is running
-	local MEX_RANGE_EARLY   = 2000   -- mex search radius before base established
-	local MEX_RANGE_MID     = 5000   -- mex search radius once we have 2+ factories
-	local CONVERTER_MAX     = 3      -- max energy converters per team
-	local FACTORY_MAX       = 12     -- max factories per team
-	local LAND_FAC_MIN      = 3      -- build at least this many land factories before any air/sea
+	TUNE.MEX_TARGET_EARLY = 2      -- grab this many mexes before anything else
+	TUNE.MEX_TARGET_MID = 8      -- expand to this many once economy is running
+	TUNE.MEX_RANGE_EARLY = 2000   -- mex search radius before base established
+	TUNE.MEX_RANGE_MID = 5000   -- mex search radius once we have 2+ factories
+	TUNE.CONVERTER_MAX = 3      -- max energy converters per team
+	TUNE.FACTORY_MAX  = 12     -- max factories per team
+	TUNE.LAND_FAC_MIN = 3      -- build at least this many land factories before any air/sea
 	-- Factory build pacing. A flat frame-based limiter (like the constructor one),
 	-- so the Nth factory is no slower to start than the 2nd. When resources are
 	-- overflowing we build them much faster, since extra production capacity is
 	-- the best sink for a surplus.
-	local FACTORY_SPACING       = 90   -- normal min frames between starting factories (~3s)
-	local FACTORY_SPACING_FLOOD = 45   -- min frames when overflowing (~1.5s)
+	TUNE.FACTORY_SPACING  = 90   -- normal min frames between starting factories (~3s)
+	TUNE.FACTORY_SPACING_FLOOD = 45   -- min frames when overflowing (~1.5s)
 
 	-- Storage growth model. The AI used to finish every game on the stock
 	-- 1k/1k pool, which late-game income fills and drains inside one AI
@@ -866,8 +870,8 @@ return function(ctx, lib, cfg, services)
 		SimpleConstructorDelay[teamID] = 0
 		-- Negative seeds so the very first constructor/factory are not gated
 		-- by the spacing limiters at game start.
-		SimpleLastConStart[teamID]     = -CON_BUILD_SPACING
-		SimpleLastFacStart[teamID]     = -FACTORY_SPACING
+		SimpleLastConStart[teamID]     = -TUNE.CON_BUILD_SPACING
+		SimpleLastFacStart[teamID]     = -TUNE.FACTORY_SPACING
 	end
 
 	--------------------------------------------------------------------------
@@ -890,9 +894,9 @@ return function(ctx, lib, cfg, services)
 		local pacingMult = knobsK and knobsK.pacingMult or 1
 		-- True only if enough frames have passed since this team last STARTED a
 		-- constructor. Shared by every factory/builder so the whole team starts at
-		-- most one constructor per CON_BUILD_SPACING, letting the count catch up.
+		-- most one constructor per TUNE.CON_BUILD_SPACING, letting the count catch up.
 		local conSpacingOk = (nowFrame - (SimpleLastConStart[unitTeam] or 0))
-				>= CON_BUILD_SPACING * pacingMult
+				>= TUNE.CON_BUILD_SPACING * pacingMult
 
 		local supplyUsed = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyUsed") or 0)
 		local supplyMax  = math.round(Spring.GetTeamRulesParam(unitTeam, "supplyMax")  or 0)
@@ -913,7 +917,7 @@ return function(ctx, lib, cfg, services)
 		local overflowing  = mstorage > 0 and estorage > 0
 				and mcurrent > mpool * FACTORY_OVERFLOW
 				and ecurrent > epool * FACTORY_OVERFLOW
-		local facSpacing   = (overflowing and FACTORY_SPACING_FLOOD or FACTORY_SPACING)
+		local facSpacing   = (overflowing and TUNE.FACTORY_SPACING_FLOOD or TUNE.FACTORY_SPACING)
 				* pacingMult
 		local facSpacingOk = (nowFrame - (SimpleLastFacStart[unitTeam] or 0)) >= facSpacing
 
@@ -925,7 +929,7 @@ return function(ctx, lib, cfg, services)
 		-- the throttle has had to pause one in the last couple of minutes
 		-- (a paused factory is spare capacity already).
 		if (STOR.stallPaused[unitTeam] or 0) > 0 then STOR.lastPaused[unitTeam] = nowFrame end
-		local facAllowed = math.min(FACTORY_MAX, STOR.FAC_BASE + math.floor(mincome / STOR.FAC_INCOME_EACH))
+		local facAllowed = math.min(TUNE.FACTORY_MAX, STOR.FAC_BASE + math.floor(mincome / STOR.FAC_INCOME_EACH))
 		local facRoom = SimpleFactoriesCount[unitTeam] < facAllowed
 				and (nowFrame - (STOR.lastPaused[unitTeam] or -99999)) >= STOR.FAC_PAUSE_MEMORY
 
@@ -1054,7 +1058,7 @@ return function(ctx, lib, cfg, services)
 		local r = math.random(0, 20)
 
 		-- Dynamic mex search range: cast a wide net once we have factories running
-		local mexRange  = (SimpleFactoriesCount[unitTeam] >= 2) and MEX_RANGE_MID or MEX_RANGE_EARLY
+		local mexRange  = (SimpleFactoriesCount[unitTeam] >= 2) and TUNE.MEX_RANGE_MID or TUNE.MEX_RANGE_EARLY
 		local myDefID   = Spring.GetUnitDefID(unitID)
 		local commLeash = (buildType == "Commander") and STOR.BASE.CommLeash(unitTeam, unitID) or nil
 		local commHome  = commLeash and STOR.HomeOf(unitTeam)
@@ -1075,9 +1079,9 @@ return function(ctx, lib, cfg, services)
 		local turrets      = GetBuildable(unitTeam, "turret")
 		local supplies     = GetBuildable(unitTeam, "supply")
 		local storages     = GetBuildable(unitTeam, "storage")
-		local factories    = GetBuildableTechBiased(unitTeam, "factory", TECH_FAC_BIAS)
+		local factories    = GetBuildableTechBiased(unitTeam, "factory", TUNE.TECH_FAC_BIAS)
 		local constructors = GetBuildable(unitTeam, "constructor")
-		local combats      = GetWeightedBuildable(unitTeam, "combat", TECH_UNIT_BIAS, CombatRoleWeight)
+		local combats      = GetWeightedBuildable(unitTeam, "combat", TUNE.TECH_UNIT_BIAS, CombatRoleWeight)
 		local buildings    = GetBuildable(unitTeam, "building")
 
 		-- Split factories: only offer air/sea once we have enough land factories
@@ -1092,8 +1096,8 @@ return function(ctx, lib, cfg, services)
 				landFactories[#landFactories + 1] = id
 			end
 		end
-		-- Before LAND_FAC_MIN land factories, only offer land factories
-		if landFacCount < LAND_FAC_MIN then
+		-- Before TUNE.LAND_FAC_MIN land factories, only offer land factories
+		if landFacCount < TUNE.LAND_FAC_MIN then
 			factories = landFactories
 		end
 
@@ -1106,12 +1110,12 @@ return function(ctx, lib, cfg, services)
 		end
 
 		local turretCount  = SimpleTurretCount[unitTeam] or 0
-		local belowTurretCap = turretCount < TURRET_CAP
+		local belowTurretCap = turretCount < TUNE.TURRET_CAP
 		-- How many turrets this base actually wants, scaled to its size.
-		local desiredTurrets = math.min(TURRET_CAP,
-			TURRET_BASE
-			+ (SimpleFactoriesCount[unitTeam] or 0) * TURRET_PER_FAC
-			+ math.floor((SimpleT1Mexes[unitTeam] or 0) / TURRET_PER_MEX_DIV))
+		local desiredTurrets = math.min(TUNE.TURRET_CAP,
+			TUNE.TURRET_BASE
+			+ (SimpleFactoriesCount[unitTeam] or 0) * TUNE.TURRET_PER_FAC
+			+ math.floor((SimpleT1Mexes[unitTeam] or 0) / TUNE.TURRET_PER_MEX_DIV))
 		local underDefended = (SimpleFactoriesCount[unitTeam] or 0) > 0
 			and turretCount < desiredTurrets and belowTurretCap
 		local canAffordTurret = ecurrent > epool * 0.20 and mcurrent > mpool * 0.15
@@ -1120,9 +1124,9 @@ return function(ctx, lib, cfg, services)
 		-- actually has AA turrets buildable at current tech, only below the
 		-- AA and overall turret caps.
 		local airStamp  = SimpleAirThreat[unitTeam]
-		local airFresh  = airStamp and (nowFrame - airStamp) < AA_THREAT_MEMORY
-		local desiredAA = math.min(AA_CAP, AA_BASE
-			+ math.floor((SimpleFactoriesCount[unitTeam] or 0) / AA_PER_FAC_DIV))
+		local airFresh  = airStamp and (nowFrame - airStamp) < TUNE.AA_THREAT_MEMORY
+		local desiredAA = math.min(TUNE.AA_CAP, TUNE.AA_BASE
+			+ math.floor((SimpleFactoriesCount[unitTeam] or 0) / TUNE.AA_PER_FAC_DIV))
 		local needAA    = airFresh and #aaTurrets > 0
 			and (SimpleAATurretCount[unitTeam] or 0) < desiredAA
 			and belowTurretCap and canAffordTurret
@@ -1329,7 +1333,7 @@ return function(ctx, lib, cfg, services)
 		if buildType == "Builder" or buildType == "Commander" then
 
 			-- PRIORITY 1: early mexes (always grab the first few immediately)
-			if mexspot and SimpleT1Mexes[unitTeam] < MEX_TARGET_EARLY then
+			if mexspot and SimpleT1Mexes[unitTeam] < TUNE.MEX_TARGET_EARLY then
 				rung = "P1"
 				success = TryBuild(extractors, function(p) AtMex(p, mexspot) end)
 
@@ -1380,7 +1384,7 @@ return function(ctx, lib, cfg, services)
 				-- PRIORITY 2: energy - urgent if low or econ pressure is high
 			elseif energyWanted and genRoom and nearHome and genPick then
 				rung = "P2"
-				if mcurrent > mpool * 0.60 and SimpleConverterCount[unitTeam] < CONVERTER_MAX then
+				if mcurrent > mpool * 0.60 and SimpleConverterCount[unitTeam] < TUNE.CONVERTER_MAX then
 					if TryBuild(converters, function(p) SimpleBuildOrder(unitID, p) end) then
 						SimpleConverterCount[unitTeam] = SimpleConverterCount[unitTeam] + 1
 						success = true
@@ -1392,7 +1396,7 @@ return function(ctx, lib, cfg, services)
 
 				-- PRIORITY 3: metal income low and econ pressure high — grab more mexes
 			elseif econPressure > 0.5 and goal and mincome < goal.m * 0.6
-					and mexspot and SimpleT1Mexes[unitTeam] < MEX_TARGET_MID then
+					and mexspot and SimpleT1Mexes[unitTeam] < TUNE.MEX_TARGET_MID then
 				rung = "P3"
 				success = TryBuild(extractors, function(p) AtMex(p, mexspot) end)
 
@@ -1501,7 +1505,7 @@ return function(ctx, lib, cfg, services)
 				end
 
 				-- PRIORITY 6: mid-game mex expansion (factory exists, energy healthy)
-			elseif mexspot and SimpleT1Mexes[unitTeam] < MEX_TARGET_MID
+			elseif mexspot and SimpleT1Mexes[unitTeam] < TUNE.MEX_TARGET_MID
 					and SimpleFactoriesCount[unitTeam] > 0
 					and ecurrent > epool * 0.30
 					and not STOR.Hostile(unitTeam, unitposx, unitposz, mexspot.x, mexspot.z) then
@@ -1524,7 +1528,7 @@ return function(ctx, lib, cfg, services)
 				-- PRIORITY 8: expand constructors
 			elseif not stalling and ecurrent > epool * 0.50 and mcurrent > mpool * 0.45
 					and conSpacingOk
-					and SimpleConstructorCount[unitTeam] < CONSTRUCTOR_MAX
+					and SimpleConstructorCount[unitTeam] < TUNE.CONSTRUCTOR_MAX
 					and supplyUsed < supplyMax - 5 then
 				rung = "P8"
 
@@ -1651,7 +1655,7 @@ return function(ctx, lib, cfg, services)
 					and supplyUsed < supplyMax * 0.95 then
 				local luaAI = Spring.GetTeamLuaAI(unitTeam)
 				local isConAI = string.sub(luaAI, 1, 19) == 'SimpleConstructorAI'
-				local conCap  = isConAI and CONSTRUCTOR_MAX_CON_AI or CONSTRUCTOR_MAX
+				local conCap  = isConAI and TUNE.CONSTRUCTOR_MAX_CON_AI or TUNE.CONSTRUCTOR_MAX
 				-- Two-part guard against worker floods:
 				--   1. Hard cap: never exceed conCap live constructors.
 				--   2. Spacing: only ONE constructor may START per team per window.
@@ -1801,7 +1805,7 @@ return function(ctx, lib, cfg, services)
 		active.gen, active.tur, active.rec = 0, 0, 0
 		active.genOut = 0   -- E/s of the plants builders are on their way to or building
 		for unitID, need in pairs(jobs) do
-			local queue = Spring.GetCommandQueue(unitID, 1)
+			local queue = Spring.GetUnitCommands(unitID, 1)
 			local head  = queue and queue[1]
 			-- a reclaimer counts while it is reclaiming; everyone else while
 			-- the order at the head of the queue is a build order
@@ -1890,7 +1894,7 @@ return function(ctx, lib, cfg, services)
 				local w = SAFE.watch[unitID]
 				local now = tick.frame or 0
 				if not w then w = { x = ux, z = uz, since = now }; SAFE.watch[unitID] = w end
-				local queue = (unitCmds > 0) and Spring.GetCommandQueue(unitID, 1)
+				local queue = (unitCmds > 0) and Spring.GetUnitCommands(unitID, 1)
 				local head  = queue and queue[1]
 				local dx, dz = ux - w.x, uz - w.z
 				if not (head and head.id < 0)                         -- not holding a build order
