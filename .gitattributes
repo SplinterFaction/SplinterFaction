@@ -1,2 +1,21 @@
 # Declare files that will always have CRLF line endings on checkout.
 *.lua text eol=crlf
+
+# Development files. They stay in the repo but are left out of the release .sdz,
+# which is built with git archive.
+/Goldwave[[:space:]]Settings export-ignore
+/Lego[[:space:]]Models export-ignore
+/Scriptor_v1(RC1) export-ignore
+/Tools export-ignore
+/UnusedUnittextures export-ignore
+/Objects3D/blender[[:space:]]files export-ignore
+/Icons/z/source export-ignore
+/Bitmaps/source export-ignore
+*.psd export-ignore
+*.xcf export-ignore
+*.blend export-ignore
+*.blend1 export-ignore
+*.bak export-ignore
+*.exe export-ignore
+*.bat export-ignore
+*.py export-ignore
