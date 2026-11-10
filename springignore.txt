@@ -44,7 +44,3 @@
 *.exe
 *.bat
 *.py
-
-# Unit script sources. They ship in the sdz, but the game runs the compiled .cob
-# files, so the sources cannot affect sync.
-*.bos
