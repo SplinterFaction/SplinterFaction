@@ -32,6 +32,7 @@
 
 #define OPTION_TREEWIND 11
 #define OPTION_PBROVERRIDE 12
+#define OPTION_TEX2_SPECULAR 13 // SF unit skins: tex2 is not a PBR map, see tex2Params
 
 
 %%GLOBAL_OPTIONS%%
@@ -111,6 +112,11 @@ uniform int drawPass = 1;
 uniform int bitOptions;
 
 uniform float brightnessFactor = 1.5;
+uniform float albedoFactor = 1.0; // base colour multiplier, before lighting (brightnessFactor scales the lit result, glow included)
+// OPTION_TEX2_SPECULAR: x = self-illumination per unit of tex2 red, y = metalness per unit of tex2 green,
+// z = roughness where green is 0, w = roughness taken off per unit of green
+uniform vec4 tex2Params = vec4(0.35, 0.6, 0.9, 1.4);
+uniform float teamGlow = 0.0; // OPTION_TEX2_SPECULAR: extra self-illumination on team-coloured surfaces (tex1 alpha)
 //int bitOptions = 1 +  2 + 8 + 16 + 128 + 256;
 
 float simFrame = (timeInfo.z * 30.0);
@@ -871,6 +877,7 @@ void main(void){
 	#endif
 	vec4 teamColor = teamCol;
 	vec3 albedoColor = SRGBtoLINEAR(mix(texColor1.rgb, teamColor.rgb, texColor1.a));
+	albedoColor *= albedoFactor;
 
 	if (BITMASK_FIELD(bitOptions, OPTION_HEALTH_TEXRAPTORS)) {
 		float texHeight = normalTexVal.a;
@@ -912,6 +919,20 @@ void main(void){
 		emissiveness = 0.2;
 		roughness = 0.8;
 		metalness = 0.1;
+	}
+
+	// SF's unit skin tex2 was painted for the old engine shader: red = glow, green = reflectivity, and all
+	// three channels are the paint's own brightness at different gains (blue the strongest). Read as PBR
+	// (red emissive, green metalness, blue roughness) the whole unit is self-lit by 15 to 50 percent, light
+	// paint is the most metallic, and dark paint and the panel seams are the most polished. Here red is
+	// still glow but scaled down, green sets how metallic AND how polished the surface is, blue is ignored.
+	// The glow that matters is the team colour's: tex1 alpha is the team colour mask, so those surfaces get
+	// teamGlow on top (still shaped by red, so panel lines and plating stay visible in the glow).
+	if (BITMASK_FIELD(bitOptions, OPTION_TEX2_SPECULAR)){
+		float teamMask = smoothstep(0.08, 0.55, texColor1.a);
+		emissiveness = clamp(emissiveness * (tex2Params.x + teamMask * teamGlow * 2.0), 0.0, 1.0);
+		metalness = clamp(texColor2.g * tex2Params.y, 0.0, 1.0);
+		roughness = clamp(tex2Params.z - texColor2.g * tex2Params.w, 0.3, 1.0);
 	}
 
 	//roughness = SNORM2NORM( sin(simFrame * 0.25) );

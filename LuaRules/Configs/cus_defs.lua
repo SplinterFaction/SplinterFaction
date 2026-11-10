@@ -11,6 +11,7 @@ local OPTION_HEALTH_TEXRAPTORS	= 512	-- Progressive blood pooling on damaged rap
 local OPTION_MODELSFOG			= 1024	-- Applies linear fog effect to units based on zoom level
 local OPTION_TREEWIND			= 2048	-- Makes trees sway gently in the breeze
 local OPTION_PBROVERRIDE		= 4096	-- Forces Recoil default tex2 (non PBR) behaviour
+local OPTION_TEX2_SPECULAR		= 8192	-- SF unit skins: tex2 red = glow (scaled), green = reflectivity (metalness and polish), blue ignored. Tuned by tex2Params
 
 local defaultBitShaderOptions = OPTION_SHADOWMAPPING + OPTION_NORMALMAPPING + OPTION_MODELSFOG
 local defaultUnitBitShaderOptions = defaultBitShaderOptions + OPTION_VERTEX_AO + OPTION_HEALTH_TEXTURING + OPTION_HEALTH_DISPLACE
@@ -39,10 +40,20 @@ local uniformBins = {
 	-- DEFAULT UNIFORM BINS
 	defaultunit = {
 		-- by default gadget will assign these options to every unit texture set bin
-		-- Tex2 guide: red is glow, green is metalicity, blue is roughness
-		bitOptions = OPTION_NORMALMAPPING + OPTION_VERTEX_AO + OPTION_HEALTH_DISPLACE + OPTION_SHADOWMAPPING,
+		-- Tex2 guide (stock CUS, without OPTION_TEX2_SPECULAR): red is glow, green is metalicity, blue is roughness
+		-- With OPTION_TEX2_SPECULAR (what the lego2skin texture was painted for): red is glow, green is reflectivity
+		bitOptions = OPTION_NORMALMAPPING + OPTION_VERTEX_AO + OPTION_HEALTH_DISPLACE + OPTION_SHADOWMAPPING + OPTION_TEX2_SPECULAR,
 		baseVertexDisplacement = 0.0,
-		brightnessFactor = 1.3,
+		brightnessFactor = 1.3,	-- scales the lit result, glow included
+		albedoFactor = 1.1,		-- scales the base colour before lighting: "make the unit brighter" without more glow
+		-- OPTION_TEX2_SPECULAR tuning: { glow, metal, roughMax, roughSlope }
+		--   glow       self-illumination per unit of tex2 red (1 = stock CUS: the whole unit is self-lit and blooms)
+		--   metal      metalness per unit of tex2 green (metal loses its paint colour, keep it low)
+		--   roughMax   roughness where green is 0 (panel seams, dark paint)
+		--   roughSlope roughness taken off per unit of green (higher = shinier light paint)
+		tex2Params = {0.3, 0.4, 0.95, 1.1},
+		-- extra glow on team-coloured surfaces (tex1 alpha is the mask); 0 = none, 1 = strong
+		teamGlow = 0.6,
 		materialIndex = 1,
 	},
 	-- These are the default featureDef uniformBins, you probably don't want to mess with them unless you really know what you're doing

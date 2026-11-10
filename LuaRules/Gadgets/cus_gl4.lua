@@ -435,7 +435,7 @@ local function SetShaderUniforms(drawPass, shaderID, uniformBinID)
 	for uniformLocationName, uniformValue in pairs(uniformBins[uniformBinID]) do
 		if uniformLocationName == 'bitOptions' then
 			gl.UniformInt(uniformLocationName, uniformValue)
-		elseif uniformLocationName == 'treadRect' then
+		elseif type(uniformValue) == 'table' then -- a vec4: treadRect, tex2Params
 			gl.Uniform(uniformLocationName, uniformValue[1], uniformValue[2], uniformValue[3], uniformValue[4])
 		else
 			gl.Uniform(uniformLocationName, uniformValue)
