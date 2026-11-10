@@ -758,6 +758,31 @@ local options= {
 	},
 	-- End Control Victory Options
 
+	-- Pregame Options
+	{
+		key    = 'pregameoptions',
+		name   = 'Pregame Options',
+		desc   = 'Options for the faction choice and start placement that happen after the game loads.',
+		type   = 'section',
+	},
+	{
+		key    = 'skipfactionchooser',
+		name   = 'Skip Faction Chooser',
+		desc   = 'Skip the in-game faction chooser. Every player and AI starts as the faction picked in the lobby.',
+		type   = 'bool',
+		def    = false,
+		section= 'pregameoptions',
+	},
+	{
+		key    = 'skipplacement',
+		name   = 'Skip Start Placement',
+		desc   = 'Skip the in-game start placement. Everyone starts at the start position set by the lobby (fixed, random, or chosen in the start box before the game begins).',
+		type   = 'bool',
+		def    = false,
+		section= 'pregameoptions',
+	},
+	-- End Pregame Options
+
 	-- Interface Options
 	{
 		key    = 'interfaceoptions',

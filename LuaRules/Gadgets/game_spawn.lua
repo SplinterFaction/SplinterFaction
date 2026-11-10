@@ -159,6 +159,17 @@ end
 
 local modOptions = Spring.GetModOptions()
 
+-- Bool modoptions arrive as "1"/"0" from most lobbies, but not from all.
+local function IsTruthy(v)
+	return v == true or v == 1 or v == "1" or v == "true"
+end
+
+-- "skipfactionchooser": no faction phase; each team plays the side set in the lobby.
+-- "skipplacement":      no placement phase; each team spawns at the start
+--                       position the engine got from the lobby.
+local skipFaction   = IsTruthy(modOptions.skipfactionchooser)
+local skipPlacement = IsTruthy(modOptions.skipplacement)
+
 local function IsTeamAI(teamID)
 	local players = Spring.GetPlayerList(teamID, true)
 	return not players or #players == 0
@@ -319,6 +330,19 @@ local function GetStartUnit(teamID)
 	end
 end
 
+-- The commander of the side a team was given in the lobby, or nil when the
+-- lobby set no side or one this game does not have.
+local function LobbyStartUnit(teamID)
+	local side = select(5, Spring.GetTeamInfo(teamID))
+	if not side or side == "" then return nil end
+	local startUnit = Spring.GetSideData(side)
+	local def = startUnit and UnitDefNames[startUnit]
+	if def and validStartComm[def.id] then
+		return startUnit
+	end
+	return nil
+end
+
 --------------------------------------------------------------------------------
 -- Unit spawning
 --   spawnX, spawnZ: confirmed placement coordinates, or nil to fall back to
@@ -364,7 +388,11 @@ local function SpawnStartUnit(teamID, spawnX, spawnZ)
 		local ex, _, ez = Spring.GetTeamStartPosition(teamID)
 		x, z = ex, ez
 
-		if IsTeamAI(teamID) then
+		-- An AI cannot click a position in the start box, so it gets a random
+		-- one inside it.  When placement is skipped in favour of the lobby's,
+		-- that only applies to "choose in game" (2): a fixed or random position
+		-- from the lobby is used as it is.
+		if IsTeamAI(teamID) and (not skipPlacement or Game.startPosType == 2) then
 			local _, _, _, _, _, allyID = Spring.GetTeamInfo(teamID)
 			local bxMin, bzMin, bxMax, bzMax = Spring.GetAllyTeamStartBox(allyID)
 			local mx, mz = Game.mapSizeX, Game.mapSizeZ
@@ -448,14 +476,29 @@ function gadget:GameStart()
 		if spots and #spots > 0 then
 			mapSpots     = spots
 			isFFA        = ffa
-			usePlacement = true
+			usePlacement = not skipPlacement
 		end
 	else
 		Spring.Echo("[Game Spawn] GG.StartSpots missing (game_start_spots.lua not loaded?) — skipping placement phase")
 	end
 
+	-- Faction chooser skipped: lock in the lobby's side for every team (AI
+	-- included) and let the faction phase end on the first game frame.  A team
+	-- with no usable lobby side is left unset and gets a random faction there.
+	if skipFaction then
+		for _, teamID in ipairs(allNonGaiaTeams) do
+			local startUnit = LobbyStartUnit(teamID)
+			if startUnit then
+				Spring.SetTeamRulesParam(teamID, "startUnit", UnitDefNames[startUnit].id, ACCESS_LEVEL)
+			else
+				Spring.Echo("[Game Spawn] Team " .. teamID .. " has no lobby faction — will be random")
+			end
+			factionChosen[teamID] = true
+		end
+	end
+
 	-- Broadcast initial phase state
-	factionDeadline = CHOICE_TIMEOUT_FRAMES
+	factionDeadline = skipFaction and 0 or CHOICE_TIMEOUT_FRAMES
 	Spring.SetGameRulesParam("phase",               "faction")
 	Spring.SetGameRulesParam("factionDeadlineFrame", factionDeadline)
 	Spring.SetGameRulesParam("placementDeadlineFrame", 0)
@@ -463,7 +506,9 @@ function gadget:GameStart()
 	Spring.Echo("[Game Spawn] Phase: faction  deadline=" .. factionDeadline)
 	Spring.Echo("[Game Spawn] Human teams=" .. #humanTeams ..
 			            "  AI teams=" .. (#allNonGaiaTeams - #humanTeams) ..
-			            "  usePlacement=" .. tostring(usePlacement))
+			            "  usePlacement=" .. tostring(usePlacement) ..
+			            "  skipFaction=" .. tostring(skipFaction) ..
+			            "  skipPlacement=" .. tostring(skipPlacement))
 
 	-- Edge case: all-AI game, advance faction immediately
 	if #humanTeams == 0 then
@@ -478,7 +523,7 @@ function gadget:RecvLuaMsg(msg, playerID)
 
 	-- ── Faction choice ────────────────────────────────────────────────────────
 	if firstByte == FACTION_BYTE then
-		if phase ~= "faction" then return end
+		if phase ~= "faction" or skipFaction then return end
 
 		local commDefID = tonumber(msg:sub(2) or "-1")
 		if not validStartComm[commDefID] then return end
@@ -603,7 +648,8 @@ function gadget:GameFrame(n)
 					pendingPlacementAdvance = true
 				end
 			else
-				-- No map spots — spawn at engine-assigned positions immediately
+				-- No map spots, or placement skipped by modoption — spawn at
+				-- engine-assigned positions immediately
 				for _, teamID in ipairs(allNonGaiaTeams) do
 					SpawnStartUnit(teamID, nil, nil)
 				end

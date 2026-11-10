@@ -173,6 +173,13 @@ local function Place()
 end
 
 function widget:Initialize()
+	-- "skipfactionchooser" modoption: the gadget uses the lobby's factions
+	local skip = (Spring.GetModOptions() or {}).skipfactionchooser
+	if skip == true or skip == 1 or skip == "1" or skip == "true" then
+		widgetHandler:RemoveWidget(self)
+		return
+	end
+
 	local helpers = include("rml/hud.lua")
 	local result, reason = helpers.LoadDocument(DOCUMENT_PATH, widget)
 	if not result then
