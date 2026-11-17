@@ -28,9 +28,26 @@ jobs:
             echo "match=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # The repo keeps version = "$VERSION" (so the dev checkout always loads as the same game); only the .sdz gets
+      # the tag. Nothing is committed: the stamped modinfo.lua goes into a throwaway tree that is archived.
+      - name: Stamp the version into modinfo.lua
+        if: steps.gate.outputs.match == 'true'
+        shell: bash
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if grep -q '\$VERSION' modinfo.lua; then
+            sed -i "s/\\\$VERSION/$TAG/" modinfo.lua
+          else
+            echo "::warning::modinfo.lua has no \$VERSION; its version is left as committed."
+          fi
+          grep -n 'version' modinfo.lua
+
       - name: Build the .sdz
         if: steps.gate.outputs.match == 'true'
-        run: git archive --format=zip HEAD -o release.sdz
+        run: |
+          git add modinfo.lua
+          git archive --format=zip "$(git write-tree)" -o release.sdz
 
       - name: Attach the .sdz to the release
         if: steps.gate.outputs.match == 'true'
