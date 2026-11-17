@@ -7,7 +7,9 @@
 --  commands, five to a row; a command with states (fire at will, hold fire...)
 --  names the state it is in. The build panel lists what the selection can
 --  build, sorted the way the unit defs ask for (customParams.buildmenucategory)
---  under "Factory Units" and "Structures".
+--  under "Factory Units" and "Structures". A row of tabs at the top of the
+--  build panel, "All" and one per category on offer, narrows the list to one
+--  category; the list scrolls, it is never paged.
 --
 --  Left click gives the command, right click on a build card takes one off the
 --  queue, and the modifier keys work as they do everywhere else.
@@ -103,6 +105,11 @@ local commandsDirty = true
 local buildCards = {}   -- build commands in the order they are shown; card i has the id "b<i>"
 local orderCards = {}   -- the same for orders, with the id "o<i>"
 local buildSignature    -- what the build list's markup was made from
+local buildTabs = {}    -- the tabs above the build list: [1] is "All" (false), the rest category titles
+local tabsSignature     -- what the tabs' markup was made from
+local tabsCategories    -- the categories on offer, joined: the filter goes back to "All" when this changes
+local buildFilter       -- the category the list is narrowed to, or nil for all
+local lastSections      -- the sections ShowBuildList was last given
 local orderSignature
 local showBuild, showOrders = false, false
 local activeCmdID
@@ -378,14 +385,82 @@ local function BuildCardRML(index, cmd, hotkeys)
 	return concat(parts)
 end
 
+-- The tabs above the list: "All", then every category on offer in the order
+-- the list shows them (a category both families have is one tab). With fewer
+-- than two categories there is nothing to choose between and the row is hidden.
+-- Returns the category to narrow the list to, or nil for all of it.
+local function ShowBuildTabs(sections)
+	local tabs = {false}
+	local seen = {}
+	for _, section in ipairs(sections) do
+		for _, category in ipairs(section.categories) do
+			if category.title and not seen[category.title] then
+				seen[category.title] = true
+				tabs[#tabs + 1] = category.title
+			end
+		end
+	end
+	-- A different set of categories is a different kind of builder: start on
+	-- "All" again. Nothing on offer (nothing selected, or a list without
+	-- categories) is not a different set: coming back to the same kind of
+	-- builder finds the list as it was left.
+	local categories = concat(tabs, "\n", 2)
+	if categories ~= "" and categories ~= tabsCategories then
+		tabsCategories = categories
+		buildFilter = nil
+	end
+	buildTabs = tabs
+	local filter = (buildFilter and seen[buildFilter]) and buildFilter or nil
+
+	local signature = categories .. "\n=" .. tostring(filter)
+	if signature == tabsSignature then
+		return filter
+	end
+	tabsSignature = signature
+
+	local parts = {}
+	if #tabs > 2 then
+		for i, title in ipairs(tabs) do
+			local active = (title or nil) == filter
+			parts[i] = string.format('<div class="tab%s" data-tab="%d">%s</div>',
+				active and " active" or "", i, hud.Escape(title or "All"))
+		end
+	end
+	local row = view.Element("build-tabs")
+	if row then
+		row.inner_rml = concat(parts)
+	end
+	view.SetClass("build-tabs", "hidden", #parts == 0)
+	return filter
+end
+
 -- Rebuilds the build list's markup, but only when what it is made from has
 -- changed; queue counts and the like are restated by RefreshCards instead.
 local function ShowBuildList(sections)
+	lastSections = sections
+	local filter = ShowBuildTabs(sections)
+
+	-- narrowed to one category: only its cards, and no heading the tab already gives
+	if filter then
+		local narrowed = {}
+		for _, section in ipairs(sections) do
+			for _, category in ipairs(section.categories) do
+				if category.title == filter then
+					narrowed[#narrowed + 1] = {title = section.title, categories = {{cmds = category.cmds}}}
+				end
+			end
+		end
+		if #narrowed == 1 then
+			narrowed[1].title = nil -- one family: the tab says it all
+		end
+		sections = narrowed
+	end
+
 	local hotkeys = HotkeysActive()
 	local cards = {}
 	local signature = {showCost and "c" or "-", showTechReq and "t" or "-", hotkeys and "h" or "-"}
 	for _, section in ipairs(sections) do
-		signature[#signature + 1] = "|" .. section.title
+		signature[#signature + 1] = "|" .. (section.title or "")
 		for _, category in ipairs(section.categories) do
 			signature[#signature + 1] = ":" .. (category.title or "")
 			for _, cmd in ipairs(category.cmds) do
@@ -405,7 +480,9 @@ local function ShowBuildList(sections)
 	local parts = {}
 	local index = 0
 	for s, section in ipairs(sections) do
-		parts[#parts + 1] = string.format('<div class="section%s">%s</div>', s > 1 and " next" or "", hud.Escape(section.title))
+		if section.title then
+			parts[#parts + 1] = string.format('<div class="section%s">%s</div>', s > 1 and " next" or "", hud.Escape(section.title))
+		end
 		for _, category in ipairs(section.categories) do
 			if category.title then
 				parts[#parts + 1] = '<div class="category label">' .. hud.Escape(category.title) .. '</div>'
@@ -425,6 +502,25 @@ local function ShowBuildList(sections)
 	end
 	view.Forget() -- the cards are new elements
 	hovered = nil
+end
+
+-- Narrows the build list to one category (by its title), or shows all of it
+-- (nil). A category that is not on offer shows all. Returns what it was set to.
+local function SetBuildCategory(title)
+	local filter = nil
+	for i = 2, #buildTabs do
+		if buildTabs[i] == title then
+			filter = title
+		end
+	end
+	if filter ~= buildFilter then
+		buildFilter = filter
+		if lastSections then
+			ShowBuildList(lastSections)
+		end
+		commandsDirty = true -- queue counts and the active card, on the new cards
+	end
+	return buildFilter
 end
 
 -- red for the first state, through yellow, to green for the last
@@ -701,6 +797,17 @@ function widget:Initialize()
 	view.Assume("orders", "hidden", true)
 
 	Listen("build-scroll", "data-b", function() return buildCards end)
+
+	local tabRow = view.Element("build-tabs")
+	if tabRow then
+		tabRow:AddEventListener("mousedown", function(event)
+			local index = hud.EventAttribute(event, "data-tab")
+			if index and buildTabs[index] ~= nil and event.parameters and event.parameters.button == 0 then
+				spPlaySoundFile("leftclick", 1.0, "ui")
+				SetBuildCategory(buildTabs[index] or nil)
+			end
+		end)
+	end
 	Listen("order-grid", "data-o", function() return orderCards end)
 
 	-- What the hotbind widget and the tooltip panel ask of this widget.
@@ -713,6 +820,16 @@ function widget:Initialize()
 			end
 			return cmd, (cmd.disabled and true or false)
 		end,
+		-- the build list's category tabs: the titles on offer (without "All"),
+		-- the one it is narrowed to (nil for all), and a way to set it
+		GetBuildCategories = function()
+			local titles = {}
+			for i = 2, #buildTabs do
+				titles[#titles + 1] = buildTabs[i]
+			end
+			return titles, buildFilter
+		end,
+		SetBuildCategory = SetBuildCategory,
 		-- the order panel's rectangle in screen pixels (y up)
 		GetOrderRect = function()
 			if orderRect then

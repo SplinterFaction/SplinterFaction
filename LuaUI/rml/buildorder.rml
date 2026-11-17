@@ -22,6 +22,8 @@
 		#build {
 			height: 534dp;
 			padding: 10dp 6dp 10dp 10dp;
+			display: flex;
+			flex-direction: column;
 		}
 
 		/* ---- orders: five to a row --------------------------------------- */
@@ -79,8 +81,45 @@
 		}
 
 		/* ---- build list --------------------------------------------------- */
+		/* "All" and one tab per category, above the list; they wrap onto a
+		   second row when there are many. The list takes the height left over. */
+		#build-tabs {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			flex: 0 0 auto;
+			margin: 0dp 0dp 4dp 0dp;
+		}
+		.tab {
+			margin: 0dp 3dp 4dp 0dp;
+			padding: 3dp 7dp 3dp 7dp;
+			box-sizing: border-box;
+			font-size: 11dp;
+			line-height: 13dp;
+			letter-spacing: 0.5dp;
+			text-transform: uppercase;
+			color: #8593a1;
+			background-color: #1a222b;
+			border: 1dp #232d38;
+		}
+		.tab:hover {
+			color: #f0f4f8;
+			background-color: #212b36;
+			border-color: #35434f;
+		}
+		.tab.active {
+			color: #f0f4f8;
+			background-color: rgba(255, 155, 33, 40);
+			border-color: #ff9b21;
+		}
+		/* an id outranks the theme's .hidden class, so say it again for the
+		   two that set a display of their own */
+		#build.hidden, #build-tabs.hidden {
+			display: none;
+		}
 		#build-scroll {
-			height: 100%;
+			flex: 1 1 0dp;
+			min-height: 0dp;
 			overflow-y: auto;
 			overflow-x: hidden;
 		}
@@ -177,6 +216,7 @@
 	<div id="build" class="panel hidden">
 		<div class="bracket tl"/>
 		<div class="bracket br"/>
+		<div id="build-tabs" class="hidden"/>
 		<div id="build-scroll"/>
 	</div>
 
