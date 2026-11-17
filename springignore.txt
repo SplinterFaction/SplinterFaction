@@ -23,3 +23,24 @@
 /*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/.svn
 /*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/.svn
 /*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/.svn
+
+# Development files. The game never loads them, so they do not need to be part of
+# the checksum.
+/Goldwave Settings
+/Lego Models
+/Scriptor_v1(RC1)
+/Tools
+/UnusedUnittextures
+/Objects3D/blender files
+/Icons/z/source
+/Bitmaps/source
+/Units-Disabled
+/LuaUI/Widgets/disabled
+*.psd
+*.xcf
+*.blend
+*.blend1
+*.bak
+*.exe
+*.bat
+*.py
