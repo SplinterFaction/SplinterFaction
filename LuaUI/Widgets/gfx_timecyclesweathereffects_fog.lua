@@ -693,16 +693,23 @@ function widget:DrawWorld()
 	-- how much fog: standing mist (more at night) plus what Weather asks for
 	local wg = WG.weather
 	local fogStart, fr, fg, fb, night
+	local heat, asked = 0, nil
 	if wg and wg.fogStart then
 		fogStart = wg.fogStart
 		fr, fg, fb = wg.fogR, wg.fogG, wg.fogB
 		night = wg.night or 0
+		heat  = max(0, min(1, wg.heat or 0))
+		asked = wg.rain
 	else
 		fogStart = 1
 		fr, fg, fb = glGetAtmosphere("fogColor")
 		night = 0
 	end
-	local amount = TUNE.baseMist + TUNE.nightMist * max(0, min(1, night)) + (1 - fogStart)
+	-- Heat burns the mist off: at full heat there is no ground fog at all unless it is raining.
+	-- (It used to be the other way round: the standing mist stayed and Weather's heat haze, which
+	-- is part of fogStart, was added on top, so a scorching day had more fog than a mild one.)
+	local amount = (TUNE.baseMist + TUNE.nightMist * max(0, min(1, night))) * (1 - heat)
+			+ max(0, asked or (1 - fogStart))
 	amount = max(0, min(1.5, amount * TUNE.amountMult))
 
 	local now = Now()
