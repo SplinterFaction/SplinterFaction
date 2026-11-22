@@ -112,6 +112,45 @@
 			background-color: rgba(255, 155, 33, 40);
 			border-color: #ff9b21;
 		}
+		/* under the list: a checkbox that leaves out what cannot be built yet */
+		#build-foot {
+			flex: 0 0 auto;
+			margin: 6dp 0dp 0dp 0dp;
+		}
+		.check {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			font-size: 11dp;
+			line-height: 13dp;
+			letter-spacing: 0.5dp;
+			text-transform: uppercase;
+			color: #8593a1;
+		}
+		.check:hover {
+			color: #f0f4f8;
+		}
+		.check .box {
+			width: 11dp;
+			height: 11dp;
+			margin: 0dp 6dp 0dp 0dp;
+			box-sizing: border-box;
+			background-color: #1a222b;
+			border: 1dp #35434f;
+		}
+		.check:hover .box {
+			border-color: #8593a1;
+		}
+		.check.on .box {
+			background-color: #ff9b21;
+			border-color: #ff9b21;
+		}
+		.check.on {
+			color: #f0f4f8;
+		}
+		.empty {
+			margin: 10dp 0dp;
+		}
 		/* an id outranks the theme's .hidden class, so say it again for the
 		   two that set a display of their own */
 		#build.hidden, #build-tabs.hidden {
@@ -218,6 +257,9 @@
 		<div class="bracket br"/>
 		<div id="build-tabs" class="hidden"/>
 		<div id="build-scroll"/>
+		<div id="build-foot">
+			<div id="build-hide" class="check"><div class="box"/><div>Hide what I cannot build</div></div>
+		</div>
 	</div>
 
 	<div id="orders" class="panel hidden">

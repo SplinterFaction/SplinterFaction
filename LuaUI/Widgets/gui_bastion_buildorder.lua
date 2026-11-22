@@ -9,7 +9,8 @@
 --  build, sorted the way the unit defs ask for (customParams.buildmenucategory)
 --  under "Factory Units" and "Structures". A row of tabs at the top of the
 --  build panel, "All" and one per category on offer, narrows the list to one
---  category; the list scrolls, it is never paged.
+--  category; the list scrolls, it is never paged. A checkbox under the list
+--  hides what cannot be built right now (the cards that would be greyed out).
 --
 --  Left click gives the command, right click on a build card takes one off the
 --  queue, and the modifier keys work as they do everywhere else.
@@ -110,6 +111,7 @@ local tabsSignature     -- what the tabs' markup was made from
 local tabsCategories    -- the categories on offer, joined: the filter goes back to "All" when this changes
 local buildFilter       -- the category the list is narrowed to, or nil for all
 local lastSections      -- the sections ShowBuildList was last given
+local hideUnavailable = false -- leave out the cards that cannot be built right now (saved with the widget)
 local orderSignature
 local showBuild, showOrders = false, false
 local activeCmdID
@@ -388,31 +390,37 @@ end
 -- The tabs above the list: "All", then every category on offer in the order
 -- the list shows them (a category both families have is one tab). With fewer
 -- than two categories there is nothing to choose between and the row is hidden.
+-- `sections` is everything the selection can build, `visible` what is left of
+-- it to show: a category with nothing left to show gets no tab.
 -- Returns the category to narrow the list to, or nil for all of it.
-local function ShowBuildTabs(sections)
-	local tabs = {false}
-	local seen = {}
-	for _, section in ipairs(sections) do
-		for _, category in ipairs(section.categories) do
-			if category.title and not seen[category.title] then
-				seen[category.title] = true
-				tabs[#tabs + 1] = category.title
+local function ShowBuildTabs(sections, visible)
+	local function Titles(list)
+		local titles, seen = {false}, {}
+		for _, section in ipairs(list) do
+			for _, category in ipairs(section.categories) do
+				if category.title and not seen[category.title] then
+					seen[category.title] = true
+					titles[#titles + 1] = category.title
+				end
 			end
 		end
+		return titles, seen
 	end
 	-- A different set of categories is a different kind of builder: start on
 	-- "All" again. Nothing on offer (nothing selected, or a list without
 	-- categories) is not a different set: coming back to the same kind of
-	-- builder finds the list as it was left.
-	local categories = concat(tabs, "\n", 2)
+	-- builder finds the list as it was left. This goes by everything the
+	-- builder can build, so a category coming into reach changes nothing.
+	local categories = concat(Titles(sections), "\n", 2)
 	if categories ~= "" and categories ~= tabsCategories then
 		tabsCategories = categories
 		buildFilter = nil
 	end
+	local tabs, seen = Titles(visible)
 	buildTabs = tabs
 	local filter = (buildFilter and seen[buildFilter]) and buildFilter or nil
 
-	local signature = categories .. "\n=" .. tostring(filter)
+	local signature = concat(tabs, "\n", 2) .. "\n=" .. tostring(filter)
 	if signature == tabsSignature then
 		return filter
 	end
@@ -438,7 +446,32 @@ end
 -- changed; queue counts and the like are restated by RefreshCards instead.
 local function ShowBuildList(sections)
 	lastSections = sections
-	local filter = ShowBuildTabs(sections)
+
+	-- without what cannot be built right now, if the player asked for that
+	local visible = sections
+	if hideUnavailable then
+		visible = {}
+		for _, section in ipairs(sections) do
+			local categories = {}
+			for _, category in ipairs(section.categories) do
+				local cmds = {}
+				for _, cmd in ipairs(category.cmds) do
+					if not cmd.disabled then
+						cmds[#cmds + 1] = cmd
+					end
+				end
+				if #cmds > 0 then
+					categories[#categories + 1] = {title = category.title, cmds = cmds}
+				end
+			end
+			if #categories > 0 then
+				visible[#visible + 1] = {title = section.title, categories = categories}
+			end
+		end
+	end
+
+	local filter = ShowBuildTabs(sections, visible)
+	sections = visible
 
 	-- narrowed to one category: only its cards, and no heading the tab already gives
 	if filter then
@@ -458,7 +491,7 @@ local function ShowBuildList(sections)
 
 	local hotkeys = HotkeysActive()
 	local cards = {}
-	local signature = {showCost and "c" or "-", showTechReq and "t" or "-", hotkeys and "h" or "-"}
+	local signature = {showCost and "c" or "-", showTechReq and "t" or "-", hotkeys and "h" or "-", hideUnavailable and "u" or "-"}
 	for _, section in ipairs(sections) do
 		signature[#signature + 1] = "|" .. (section.title or "")
 		for _, category in ipairs(section.categories) do
@@ -496,6 +529,10 @@ local function ShowBuildList(sections)
 		end
 	end
 
+	if index == 0 and hideUnavailable then
+		parts[#parts + 1] = '<div class="empty label">Nothing here can be built yet</div>'
+	end
+
 	local scroll = view.Element("build-scroll")
 	if scroll then
 		scroll.inner_rml = concat(parts)
@@ -521,6 +558,22 @@ local function SetBuildCategory(title)
 		commandsDirty = true -- queue counts and the active card, on the new cards
 	end
 	return buildFilter
+end
+
+-- Shows or hides the cards that cannot be built right now. Returns the setting.
+local function SetHideUnavailable(hide)
+	hide = hide and true or false
+	if hide ~= hideUnavailable then
+		hideUnavailable = hide
+		if lastSections then
+			ShowBuildList(lastSections)
+		end
+		commandsDirty = true
+	end
+	if view then
+		view.SetClass("build-hide", "on", hideUnavailable)
+	end
+	return hideUnavailable
 end
 
 -- red for the first state, through yellow, to green for the last
@@ -810,6 +863,17 @@ function widget:Initialize()
 	end
 	Listen("order-grid", "data-o", function() return orderCards end)
 
+	local hideBox = view.Element("build-hide")
+	if hideBox then
+		hideBox:AddEventListener("mousedown", function(event)
+			if event.parameters and event.parameters.button == 0 then
+				spPlaySoundFile("leftclick", 1.0, "ui")
+				SetHideUnavailable(not hideUnavailable)
+			end
+		end)
+	end
+	view.SetClass("build-hide", "on", hideUnavailable)
+
 	-- What the hotbind widget and the tooltip panel ask of this widget.
 	WG.StaticBuildOrderMenu = {
 		-- the command under the mouse and whether it is disabled, or nil
@@ -830,6 +894,9 @@ function widget:Initialize()
 			return titles, buildFilter
 		end,
 		SetBuildCategory = SetBuildCategory,
+		-- whether the cards that cannot be built right now are left out
+		GetHideUnavailable = function() return hideUnavailable end,
+		SetHideUnavailable = SetHideUnavailable,
 		-- the order panel's rectangle in screen pixels (y up)
 		GetOrderRect = function()
 			if orderRect then
@@ -882,6 +949,16 @@ function widget:Shutdown()
 		document = nil
 		widgetHandler:ConfigLayoutHandler(nil)
 		Spring.ForceLayoutUpdate()
+	end
+end
+
+function widget:GetConfigData()
+	return { hideUnavailable = hideUnavailable }
+end
+
+function widget:SetConfigData(data)
+	if type(data) == "table" and data.hideUnavailable ~= nil then
+		hideUnavailable = data.hideUnavailable and true or false
 	end
 end
 
