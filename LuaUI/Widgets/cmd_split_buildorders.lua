@@ -40,9 +40,9 @@ end
 --
 --  Sharing does not stop when the orders are given. Builders that were given a
 --  share form a crew. When one of them has nothing left to do it looks at the
---  crewmate with the most still queued and
---    * takes over one of its waiting jobs (the one nearest to itself), or
---    * if that mate has only the job in hand, goes and helps with it.
+--  crewmate with the most still queued and takes over one of its waiting jobs
+--  (the one nearest to itself). The job a mate has in hand is left to it: SF
+--  builders cannot help one another build.
 --  A builder leaves its crew when the player gives it any order that is not a
 --  queued build, so a builder sent elsewhere stays where it was sent.
 --
@@ -56,7 +56,7 @@ end
 --------------------------------------------------------------------------------
 
 local TUNE = {
-	stealing     = true,  -- idle crew members take or help with a crewmate's work
+	stealing     = true,  -- idle crew members take over a crewmate's waiting work
 	stealDelay   = 12,    -- frames between two looks by the same idle builder
 	crewTimeout  = 900,   -- frames an idle builder stays in a crew with nothing to do
 	virtualLife  = 20,    -- frames an assignment is trusted before the real queue is read again
@@ -326,7 +326,7 @@ local function FindWork(unitID)
 		return false
 	end
 
-	-- one of its waiting jobs, the nearest this builder can build...
+	-- one of its waiting jobs, the nearest this builder can build
 	local pick, pickDist = nil, huge
 	for i = 2, #mateBuilds do
 		local job = mateBuilds[i]
@@ -346,13 +346,6 @@ local function FindWork(unitID)
 		return true
 	end
 
-	-- ...or the job it has in hand: the same build order joins in on it
-	local current = mateBuilds[1]
-	if current and info.can[-current.id] then
-		spGiveOrderToUnit(unitID, current.id, current.params, 0)
-		virtual[unitID] = nil
-		return true
-	end
 	return false
 end
 

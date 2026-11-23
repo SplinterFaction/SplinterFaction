@@ -57,7 +57,7 @@ return {
 		{ id = "aacommandhelper", name = "AA area attack filter", type = "bool", widget = "AA Command Helper", requires = "AA Command Helper",
 		  desc = "Anti-air units ignore ground targets inside an area attack." },
 		{ id = "splitbuildorders", name = "Split build orders", type = "bool", widget = "Build Order Splitter", requires = "Build Order Splitter",
-		  desc = "Queued build orders go to whichever selected builder would finish each soonest, and builders that run out take over or help with the others' work." },
+		  desc = "Queued build orders go to whichever selected builder would finish each soonest, and builders that run out take over the others' waiting work." },
 		{ id = "globalbuild", name = "Global build", type = "bool", widget = "Global Build", requires = "Global Build",
 		  desc = "Alt+click a building, then place more of it anywhere: the builds go on a board and the best-placed builders take them. Alt+right click a marker cancels it. Alt+G keeps the selected builders off the board, or puts them back." },
 		{ id = "factorylink", name = "Linked factories", type = "bool", widget = "Factory Link", requires = "Factory Link",

@@ -52,8 +52,9 @@ end
 --
 --    A job goes back on the board if its builder dies or is given other
 --    orders, or its half-built frame is destroyed. One that cannot be built
---    (three tries) is dropped with a note. An idle builder with nothing in
---    its plan helps on a job in progress when it can get there in time.
+--    (three tries) is dropped with a note. Every job has one builder: SF
+--    builders cannot help one another build, so an idle builder with nothing
+--    in its plan stays idle.
 --
 --    Alt + right click on a job's marker takes it off the board.
 --
@@ -70,8 +71,6 @@ local TUNE = {
 	holdTime     = 20,    -- seconds a job is kept back for a busy builder before an idle one gets it
 	maxPlanJobs  = 60,    -- waiting jobs planned per pass (the oldest first)
 	maxTries     = 3,     -- failed starts before a job is dropped
-	help         = true,  -- idle builders with nothing planned help on jobs in progress
-	helpShare    = 0.7,   -- ...when their walk takes less than this share of what is left of the build
 	matchDist    = 24,    -- elmos within which a unit is taken to be a job's building
 }
 
@@ -117,7 +116,6 @@ local spectating = Spring.GetSpectatingState()
 local jobs = {}          -- array, oldest first
 local nextJobID = 1
 local excluded = {}      -- unitID -> true: builders the board leaves alone
-local helping = {}       -- unitID -> job: idle builders lending a hand
 local lastPlan = 0
 -- unitID -> {frame, timer, job}: an order of ours that is on its way to the
 -- builder. Until it shows in its queue the builder is not idle, whatever its
@@ -184,9 +182,6 @@ local function RemoveJobAt(index, stopBuilder)
 			end
 		end
 	end
-	for unitID, j in pairs(helping) do
-		if j == job then helping[unitID] = nil end
-	end
 end
 
 local function Reopen(job, failed)
@@ -217,7 +212,6 @@ end
 local function Plan(frame)
 	lastPlan = frame
 	if #jobs == 0 then
-		if next(helping) then helping = {} end
 		return
 	end
 
@@ -328,7 +322,6 @@ local function Plan(frame)
 				Order(bestWorker.unitID, job, frame)
 				if DEBUG then spEcho("GBDBG f=" .. frame .. " give job " .. job.id .. " to " .. bestWorker.unitID) end
 				job.state, job.builder, job.given = "active", bestWorker.unitID, frame
-				helping[bestWorker.unitID] = nil
 			else
 				job.state = "held"
 			end
@@ -336,35 +329,6 @@ local function Plan(frame)
 		bestWorker.x, bestWorker.z, bestWorker.time = job.x, job.z, bestDone
 	end
 
-	-- idle builders with nothing planned lend a hand
-	if TUNE.help then
-		for w = 1, #workers do
-			local worker = workers[w]
-			if worker.idle and not worker.first then
-				local best, bestLeft = nil, 0
-				for i = 1, #jobs do
-					local job = jobs[i]
-					if job.state == "active" and worker.info.can[job.def] and job.builder ~= worker.unitID then
-						local left = (BT.buildTime[job.def] or 1) / worker.info.buildSpeed
-						if job.unit and spValidUnitID(job.unit) then
-							local _, _, _, _, progress = spGetUnitHealth(job.unit)
-							left = left * (1 - (progress or 0))
-						end
-						local dx, dz = job.x - worker.x, job.z - worker.z
-						local walk = max(0, sqrt(dx * dx + dz * dz) - worker.info.range) / worker.info.speed
-						if walk < left * TUNE.helpShare and left > bestLeft then
-							best, bestLeft = job, left
-						end
-					end
-				end
-				if best then
-					Order(worker.unitID, best, frame)
-					if DEBUG then spEcho("GBDBG f=" .. frame .. " help job " .. best.id .. " with " .. worker.unitID) end
-					helping[worker.unitID] = best
-				end
-			end
-		end
-	end
 end
 
 --------------------------------------------------------------------------------
@@ -404,7 +368,6 @@ end
 function widget:UnitDestroyed(unitID, unitDefID, unitTeam)
 	if DEBUG then for i = 1, #jobs do if jobs[i].unit == unitID then spEcho("GBDBG f=" .. spGetGameFrame() .. " frame of job " .. jobs[i].id .. " destroyed, state " .. jobs[i].state) end end end
 	excluded[unitID] = nil
-	helping[unitID] = nil
 	ordered[unitID] = nil
 	if unitTeam ~= myTeam then return end
 	for i = 1, #jobs do
@@ -429,7 +392,7 @@ function widget:UnitTaken(unitID, unitDefID, unitTeam)
 end
 
 function widget:GameFrame(frame)
-	if (#jobs > 0 or next(helping)) and frame - lastPlan >= TUNE.planInterval then
+	if #jobs > 0 and frame - lastPlan >= TUNE.planInterval then
 		Plan(frame)
 	end
 end
