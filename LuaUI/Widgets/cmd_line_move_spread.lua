@@ -1,7 +1,7 @@
 function widget:GetInfo()
 	return {
 		name      = "Line Move Spread",
-		desc      = "Spreads a single-point move order for a group into a short line abreast, facing the direction of travel",
+		desc      = "Spreads a single-point move order for a group into a short line abreast, facing the direction of travel. With Ctrl the group also keeps to the pace of its slowest unit",
 		author    = "Scary le Poo",
 		date      = "2026-10-24",
 		license   = "GNU GPL, v2 or later",
@@ -178,6 +178,18 @@ function widget:CommandNotify(cmdID, cmdParams, cmdOptions)
 
 	for i = 1, #immobiles do
 		spGiveOrderToUnit(immobiles[i], cmdID, cmdParams, cmdOptions.coded)
+	end
+
+	-- Ctrl: the line arrives together. The engine's own group move would do
+	-- this, but this widget has taken the order; unit_group_pace.lua holds the
+	-- units to the speed of the slowest instead. Sent after the orders: a new
+	-- order is what ends the pace a unit was held to before.
+	if cmdOptions.ctrl then
+		local ids = {}
+		for i = 1, n do
+			ids[i] = movers[i].id
+		end
+		Spring.SendLuaRulesMsg("grouppace:" .. table.concat(ids, ","))
 	end
 
 	return true -- consumed; the engine's own group order is not issued
