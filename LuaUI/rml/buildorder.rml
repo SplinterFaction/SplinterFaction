@@ -148,6 +148,70 @@
 		.check.on {
 			color: #f0f4f8;
 		}
+		/* linked factories: their shared queue, between the tabs and the list */
+		#build-link {
+			flex: 0 0 auto;
+			margin: 0dp 0dp 8dp 0dp;
+		}
+		.linkhead {
+			margin: 0dp 0dp 4dp 0dp;
+			font-size: 11dp;
+			line-height: 13dp;
+			letter-spacing: 0.5dp;
+			text-transform: uppercase;
+			color: #ff9b21;
+		}
+		.linkhead .dim {
+			color: #8593a1;
+		}
+		.linkrow {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 34dp;
+			overflow: hidden;
+		}
+		.lq {
+			position: relative;
+			width: 32dp;
+			height: 32dp;
+			margin: 0dp 3dp 0dp 0dp;
+			box-sizing: border-box;
+			background-color: #131920;
+			border: 1dp #232d38;
+		}
+		.lq:hover {
+			border-color: #8593a1;
+		}
+		/* what a factory is building right now */
+		.lq.now {
+			border-color: #6fdc8c;
+		}
+		.lqpic {
+			display: block;
+			width: 30dp;
+			height: 30dp;
+		}
+		.lqn {
+			position: absolute;
+			right: 0dp;
+			bottom: 0dp;
+			padding: 0dp 3dp;
+			font-family: Saira SemiCondensed;
+			font-weight: bold;
+			font-size: 11dp;
+			line-height: 13dp;
+			color: #0b0e12;
+			background-color: #ff9b21;
+		}
+		.lq.now .lqn {
+			background-color: #6fdc8c;
+		}
+		.lqmore {
+			font-size: 11dp;
+			color: #8593a1;
+			margin: 0dp 0dp 0dp 3dp;
+		}
 		.empty {
 			margin: 10dp 0dp;
 		}
@@ -256,6 +320,10 @@
 		<div class="bracket tl"/>
 		<div class="bracket br"/>
 		<div id="build-tabs" class="hidden"/>
+		<div id="build-link" class="hidden">
+			<div id="build-link-head" class="linkhead"/>
+			<div id="build-link-row" class="linkrow"/>
+		</div>
 		<div id="build-scroll"/>
 		<div id="build-foot">
 			<div id="build-hide" class="check"><div class="box"/><div>Hide what I cannot build</div></div>

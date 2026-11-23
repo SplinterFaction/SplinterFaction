@@ -60,6 +60,12 @@ return {
 		  desc = "Queued build orders go to whichever selected builder would finish each soonest, and builders that run out take over or help with the others' work." },
 		{ id = "globalbuild", name = "Global build", type = "bool", widget = "Global Build", requires = "Global Build",
 		  desc = "Alt+click a building, then place more of it anywhere: the builds go on a board and the best-placed builders take them. Alt+right click a marker cancels it. Alt+G keeps the selected builders off the board, or puts them back." },
+		{ id = "factorylink", name = "Linked factories", type = "bool", widget = "Factory Link", requires = "Factory Link",
+		  desc = "Select factories and press Link (Alt+L): they share one build queue, and each takes the next unit from it as it comes free. Hold Space to order from one factory alone. Alt+Shift+L unlinks.",
+		  children = {
+			{ id = "factorylinkrally", name = "Shared rally point", type = "bool", api = {"factoryLink", "GetSharedRally", "SetSharedRally"}, configVar = {"Factory Link", "sharedRally"}, default = false,
+			  desc = "A move, fight, patrol or guard order to one linked factory goes to all of its group." },
+		  } },
 		{ id = "queuecopypaste", name = "Copy and paste queues", type = "bool", widget = "QueueCopypasta", requires = "QueueCopypasta",
 		  desc = "Space+Alt+number copies a queue, Space+number pastes it." },
 		{ id = "persistentbuildspacing", name = "Remember build spacing", type = "bool", widget = "Persistent Build Spacing", requires = "Persistent Build Spacing" },

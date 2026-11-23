@@ -75,6 +75,8 @@ M.verbs = {
 	{ key = "morph",             label = "Upgrade" },
 	{ key = "morphpause",        label = "Pause upgrade" },
 	{ key = "morphqueue",        label = "Queue upgrade" },
+	{ key = "factorylink",       label = "Link factories" },
+	{ key = "factoryunlink",     label = "Unlink factories" },
 	{ key = "splitselection",    label = "Split selection" },
 	{ key = "swapselectionhalf", label = "Swap half" },
 	{ key = "recombineselection",label = "Recombine" },

@@ -111,6 +111,7 @@ local tabsSignature     -- what the tabs' markup was made from
 local tabsCategories    -- the categories on offer, joined: the filter goes back to "All" when this changes
 local buildFilter       -- the category the list is narrowed to, or nil for all
 local lastSections      -- the sections ShowBuildList was last given
+local sharedItems = {}  -- the shared queue strip's items, in the order shown (linked factories)
 local hideUnavailable = false -- leave out the cards that cannot be built right now (saved with the widget)
 local orderSignature
 local showBuild, showOrders = false, false
@@ -635,16 +636,57 @@ local function ShowOrders(cmds)
 end
 
 --------------------------------------------------------------------------------
+-- the shared queue of linked factories, above the build list
+--------------------------------------------------------------------------------
+
+local SHARED_MAX = 8 -- as many as the row holds
+
+-- pool: what WG.factoryLink.Counts() returns second, or nil to hide the strip
+local function ShowSharedQueue(pool)
+	view.SetClass("build-link", "hidden", pool == nil)
+	if not pool then
+		sharedItems = {}
+		return
+	end
+	sharedItems = pool.items
+	view.SetText("build-link-head", string.format('Shared queue <span class="dim">&#183; %d factories%s</span>',
+		pool.factories, pool.rep and " &#183; repeat" or ""))
+	local parts = {}
+	for i = 1, math.min(#pool.items, SHARED_MAX) do
+		local item = pool.items[i]
+		parts[#parts + 1] = string.format('<div class="lq%s" data-l="%d">%s<div class="lqn">%d</div></div>',
+			item.building and " now" or "", i, hud.UnitPictureRML(item.def, "lqpic"), item.count)
+	end
+	if #pool.items > SHARED_MAX then
+		parts[#parts + 1] = string.format('<div class="lqmore">+%d</div>', #pool.items - SHARED_MAX)
+	elseif #pool.items == 0 then
+		parts[#parts + 1] = '<div class="lqmore">Nothing queued</div>'
+	end
+	view.SetText("build-link-row", concat(parts))
+end
+
+--------------------------------------------------------------------------------
 -- refreshing
 --------------------------------------------------------------------------------
 
 -- everything about a card that changes without the list changing
 local function RefreshCards()
 	local hotkeys = HotkeysActive()
+	-- linked factories share a queue (cmd_factory_link.lua): the cards count
+	-- what the group has queued, not what the one factory holds
+	local link = WG.factoryLink
+	local shared, pool
+	if link and showBuild then
+		shared, pool = link.Counts()
+	end
+	ShowSharedQueue(pool)
 	for i = 1, #buildCards do
 		local cmd = buildCards[i]
 		local id = "b" .. i
 		local queued = tonumber(cmd.params and cmd.params[1]) or 0
+		if shared then
+			queued = shared[-cmd.id] or 0
+		end
 		if queued > 0 then
 			view.SetText(id .. "-q", tostring(floor(queued)))
 		end
@@ -669,8 +711,31 @@ local function ProcessCommands()
 	showCost    = spGetConfigInt(SHOW_COST_CONFIG, 1) == 1
 	showTechReq = spGetConfigInt(SHOW_TECHREQ_CONFIG, 1) == 1
 
-	local states, orders, builds = {}, {}, {}
+	-- the engine's commands, then the ones widgets add (Link and Unlink)
+	local all = {}
 	for _, cmd in ipairs(widgetHandler.commands or {}) do
+		all[#all + 1] = cmd
+	end
+	for _, cmd in ipairs(widgetHandler.customCommands or {}) do
+		if cmd.id and cmd.name then
+			cmd.params = cmd.params or {}
+			all[#all + 1] = cmd
+		end
+	end
+	-- repeat on linked factories belongs to their group, not to the factory
+	local link = WG.factoryLink
+	local pool = link and link.SelectionPool()
+
+	local states, orders, builds = {}, {}, {}
+	for _, cmd in ipairs(all) do
+		if pool and cmd.id == CMD.REPEAT and #cmd.params > 1 then
+			local copy = {}
+			for key, value in pairs(cmd) do copy[key] = value end
+			copy.params = {}
+			for i = 1, #cmd.params do copy.params[i] = cmd.params[i] end
+			copy.params[1] = pool.rep and 1 or 0
+			cmd = copy
+		end
 		if cmd.name ~= "" and not (hiddenCMDs[cmd.name] or hiddenCMDs[cmd.action]) then
 			if UnitDefNames[cmd.name] then
 				builds[#builds + 1] = cmd
@@ -848,6 +913,7 @@ function widget:Initialize()
 	view = hud.NewView(document)
 	view.Assume("build", "hidden", true) -- set in the markup
 	view.Assume("orders", "hidden", true)
+	view.Assume("build-link", "hidden", true)
 
 	Listen("build-scroll", "data-b", function() return buildCards end)
 
@@ -862,6 +928,21 @@ function widget:Initialize()
 		end)
 	end
 	Listen("order-grid", "data-o", function() return orderCards end)
+
+	-- right click on the shared queue takes one away (Shift 5, Ctrl 20)
+	local linkRow = view.Element("build-link-row")
+	if linkRow then
+		linkRow:AddEventListener("mousedown", function(event)
+			local index = hud.EventAttribute(event, "data-l")
+			local item = index and sharedItems[index]
+			if item and WG.factoryLink and event.parameters and event.parameters.button == 1 then
+				local _, ctrl, _, shift = Spring.GetModKeyState()
+				spPlaySoundFile("rightclick", 1.0, "ui")
+				WG.factoryLink.Remove(item.def, (shift and 5 or 1) * (ctrl and 20 or 1))
+				lastUpdate = nil
+			end
+		end)
+	end
 
 	local hideBox = view.Element("build-hide")
 	if hideBox then
@@ -999,7 +1080,7 @@ function widget:Update()
 		activeCmdID = cmdID
 		lastUpdate = now
 		ProcessCommands()
-	elseif cmdID ~= activeCmdID or Spring.DiffTimers(now, lastUpdate) >= UPDATE_INTERVAL then
+	elseif cmdID ~= activeCmdID or not lastUpdate or Spring.DiffTimers(now, lastUpdate) >= UPDATE_INTERVAL then
 		activeCmdID = cmdID
 		lastUpdate = now
 		RefreshCards()

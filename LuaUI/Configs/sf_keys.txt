@@ -175,6 +175,13 @@ bind alt+x recombineselection
 
 
 //
+//  Linked Factories (shared build queue)
+//  -----------------------------
+bind alt+l factorylink
+bind alt+shift+l factoryunlink
+
+
+//
 //  Set Unit Target
 //  -----------------------------
 bind y settarget
