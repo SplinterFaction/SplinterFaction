@@ -49,6 +49,7 @@
 --           Debug: publishes game rules params per adaptive team --
 --             adaptiveai_d_<teamID>    current difficulty (0..1)
 --             adaptiveai_dom_<teamID>  smoothed player-dominance (-1..1)
+--             adaptiveai_aggr_<teamID> aggression (0..1, the adaptiveai_aggression modoption)
 --
 --  usage:   VFS.Include(path)(ctx, lib, cfg, services) -> handler table
 --
@@ -106,6 +107,21 @@ return function(ctx, lib, cfg, services)
 		local mo = Spring.GetModOptions and Spring.GetModOptions()
 		local v  = mo and tonumber(mo.adaptiveai_start)
 		if v then D_START = math.max(0, math.min(1, v)) end
+	end
+
+	-- Aggression (modoption adaptiveai_aggression, 0..1): how willing the team
+	-- is to attack and to see an attack through, whatever it costs. It does
+	-- not move with the game and is separate from difficulty: D is how well the
+	-- AI plays, aggression is its temperament. 0.5 is exactly the stock
+	-- behaviour (every aggression knob is a three-anchor lerp around the
+	-- b_combat constant); below it the team wants a bigger edge and pulls back
+	-- sooner, above it the team attacks on less, stays in a fight it is locally
+	-- losing, and holds the field for as long as the trade is going its way.
+	local AGGRESSION = 0.7
+	do
+		local mo = Spring.GetModOptions and Spring.GetModOptions()
+		local v  = mo and tonumber(mo.adaptiveai_aggression)
+		if v then AGGRESSION = math.max(0, math.min(1, v)) end
 	end
 
 	--------------------------------------------------------------------------
@@ -220,6 +236,28 @@ return function(ctx, lib, cfg, services)
 		k.pacingMult       = Tri(1.6, 1.0, 0.75, d)    -- constructor/factory start spacing
 		k.boostAllowed     = d >= 0.40                 -- low D never spends RP on boosts
 		k.upgradeCdMult    = Tri(3.0, 1.0, 0.7, d)     -- weapons/armor purchase cadence
+
+		-- Aggression knobs (b_combat). Mid anchors are b_combat's constants:
+		--   LAUNCH_RATIO x1, WAVE_PATIENCE x1, PATIENCE_RATIO 0.9, WAVE_BREAK 0.35,
+		--   OUTMATCH_RATIO 0.6, OUTMATCH_TICKS 2, RETREAT_ENTER x1 (wave members),
+		--   REINFORCE_HEALTH 0.6, REINFORCE_SHARE 0.5, WAVE_REGROUP_BEATEN 1800,
+		--   RAID.FLEE_RATIO 1.5
+		local a = AGGRESSION
+		k.aggression       = a
+		k.launchMult       = Tri(1.5, 1.0, 0.5, a)     -- x the edge a launch waits for
+		k.patienceMult     = Tri(1.75, 1.0, 0.4, a)    -- x how long a gathered army waits for that edge
+		k.patienceRatio    = Tri(1.0, 0.9, 0.5, a)     -- share of the enemy's army a patience launch still needs
+		k.waveBreak        = Tri(0.50, 0.35, 0.10, a)  -- wave called home at this share of what set out
+		k.outmatchRatio    = Tri(0.8, 0.6, 0.25, a)    -- locally outmatched below this x the enemy there
+		k.outmatchTicks    = Round(Tri(1, 2, 6, a))    -- ...for this many ticks running
+		-- Above stock only: a wave that would be called home stays out while what
+		-- it has killed is worth at least this x what it has lost.
+		k.tradeHold        = (a > 0.5) and (1.6 - (a - 0.5) * 2.0) or nil   -- 1.6 just above stock .. 0.6 at 1
+		k.waveRetreatMult  = Tri(1.3, 1.0, 0.3, a)     -- x the hp at which a wave member breaks off
+		k.reinforceHealth  = Tri(0.75, 0.6, 0.3, a)
+		k.reinforceShare   = Tri(0.6, 0.5, 0.25, a)
+		k.regroupBeaten    = Round(Tri(2700, 1800, 750, a))
+		k.raidFlee         = Tri(1.2, 1.5, 2.5, a)
 	end
 
 	local function PublishDebug(teamID)
@@ -227,6 +265,7 @@ return function(ctx, lib, cfg, services)
 		                         Round(D[teamID] * 1000) / 1000)
 		Spring.SetGameRulesParam("adaptiveai_dom_" .. teamID,
 		                         Round((dom[teamID] or 0) * 1000) / 1000)
+		Spring.SetGameRulesParam("adaptiveai_aggr_" .. teamID, AGGRESSION)
 	end
 
 	--------------------------------------------------------------------------

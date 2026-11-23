@@ -134,7 +134,10 @@ return function(ctx, lib, cfg)
 		target = {},     -- [allyTeamID] = { frame =, target = }
 	}
 	local outmatched  = {}   -- [teamID] = consecutive ticks the wave has been outmatched
-	local MEM = { x = {}, z = {}, v = {} }   -- scratch: wave members' positions and values this tick
+	-- scratch: wave members' positions and values this tick. Also (kept here because TeamTick is
+	-- near Lua's 60-upvalue limit) what the wave that is out has killed so far and when it last
+	-- killed something, by team.
+	local MEM = { x = {}, z = {}, v = {}, kills = {}, killAt = {}, HOLD_STALE = 1350 }
 	local IsTurret = ctx.IsTurret or {}
 
 	local valueOf = {}
@@ -265,6 +268,20 @@ return function(ctx, lib, cfg)
 		local allyTeamID   = tick.allyTeamID
 		local retargetIv   = K and K.retargetInterval or ATTACK_RETARGET
 		local useWeak      = (K == nil) or K.weakTargeting
+		-- Aggression (b_adaptive's adaptiveai_aggression knobs; stock without):
+		-- how small an edge the team attacks on, and how much of a beating a
+		-- wave takes before it is called home.
+		if K and K.launchMult then
+			launchRatio = launchRatio * K.launchMult
+			patience    = patience * K.patienceMult
+		end
+		local patienceRatio = K and K.patienceRatio   or PATIENCE_RATIO
+		local waveBreak     = K and K.waveBreak       or WAVE_BREAK
+		local outRatio      = K and K.outmatchRatio   or OUTMATCH_RATIO
+		local outTicks      = K and K.outmatchTicks   or OUTMATCH_TICKS
+		local tradeHold     = K and K.tradeHold       or nil
+		local reinHealth    = K and K.reinforceHealth or REINFORCE_HEALTH
+		local reinShare     = K and K.reinforceShare  or REINFORCE_SHARE
 
 		-- ---- Muster point: compute/refresh every ~40s or if unset ----
 		if not SimpleMusterPos[teamID] or n % 2400 == 0 then
@@ -391,7 +408,7 @@ return function(ctx, lib, cfg)
 					local against = EnemyValueNear(teamID, cx, cz, RAID.DANGER_R)
 					local t = raid.target
 					local alive = t and Spring.ValidUnitID(t.uid) and not Spring.GetUnitIsDead(t.uid)
-					if against > raidValue * RAID.FLEE_RATIO then
+					if against > raidValue * (K and K.raidFlee or RAID.FLEE_RATIO) then
 						-- Driven off. A raid's job is to keep the enemy busy, so
 						-- it tries somewhere else before it gives up (its old
 						-- target stays off the list for a while: FindRaidTarget
@@ -582,6 +599,7 @@ return function(ctx, lib, cfg)
 			end
 			if fresh then
 				waveStart[teamID] = sentValue
+				MEM.kills[teamID], MEM.killAt[teamID] = 0, n
 			else
 				waveStart[teamID] = (waveStart[teamID] or 0) + sentValue
 			end
@@ -603,7 +621,7 @@ return function(ctx, lib, cfg)
 			waveMembers[teamID]      = nil
 			waveStart[teamID]        = nil
 			waveEnded[teamID]        = n
-			waveRegroup[teamID]      = WAVE_REGROUP_BEATEN
+			waveRegroup[teamID]      = K and K.regroupBeaten or WAVE_REGROUP_BEATEN
 			outmatched[teamID]       = 0
 			SimpleSquadState[teamID] = "mustering"
 			SimpleAttackWave[teamID] = nil
@@ -612,9 +630,22 @@ return function(ctx, lib, cfg)
 		local state = SimpleSquadState[teamID]
 		if state == "attacking" then
 			local start = waveStart[teamID] or 0
+			-- FOLLOW THROUGH. An aggressive team (tradeHold, above stock
+			-- aggression only) does not call a wave home while the fight is
+			-- going its way: what the wave's own units have killed is worth
+			-- at least tradeHold times what the wave has lost (everything
+			-- that set out and is no longer in it: the dead, and the hurt
+			-- that went home). Losing units is the price of an attack; it
+			-- only turns back when it is paying more than the enemy is, or
+			-- when it has stopped killing anything (MEM.HOLD_STALE frames
+			-- without a kill: a remnant standing somewhere is not a fight).
+			local kills = MEM.kills[teamID] or 0
+			local lost  = math.max(0, start - waveValue)
+			local holding = tradeHold and kills > 0 and kills >= lost * tradeHold
+					and (n - (MEM.killAt[teamID] or 0)) <= MEM.HOLD_STALE
 			if waveCount == 0 then
 				EndWave("wiped")
-			elseif waveValue < start * WAVE_BREAK then
+			elseif waveValue < start * waveBreak and not holding then
 				EndWave("broken")
 			else
 				-- READ THE FIGHT. The first version of waves only ended when
@@ -647,11 +678,18 @@ return function(ctx, lib, cfg)
 					local against = EnemyValueNear(teamID, cx, cz, OUTMATCH_RADIUS)
 					-- allied waves standing with this one count on its side
 					if against > 0 then here = here + AlliedValueNear(teamID, cx, cz, WAVE_CORE_RADIUS) end
-					if against > 0 and here < against * OUTMATCH_RATIO then
+					if against > 0 and here < against * outRatio then
 						outmatched[teamID] = (outmatched[teamID] or 0) + 1
-						if outmatched[teamID] >= OUTMATCH_TICKS then
-							Log(teamID, ("outmatched;here=%d;against=%d"):format(here, against))
-							beaten = true
+						if outmatched[teamID] >= outTicks then
+							if holding then
+								-- outnumbered here, but winning the exchange: stay in it
+								if outmatched[teamID] == outTicks then
+									Log(teamID, ("holding;here=%d;against=%d;kills=%d;lost=%d"):format(here, against, kills, lost))
+								end
+							else
+								Log(teamID, ("outmatched;here=%d;against=%d;kills=%d;lost=%d"):format(here, against, kills, lost))
+								beaten = true
+							end
 						end
 					else
 						outmatched[teamID] = 0
@@ -706,9 +744,9 @@ return function(ctx, lib, cfg)
 					-- wave was just a slower trickle (a recording showed a
 					-- group leaving every 30 to 60 seconds).
 					if not baseThreat and atMuster >= musterSize
-							and (outmatched[teamID] or 0) == 0
-							and waveValue >= start * REINFORCE_HEALTH
-							and gathered >= math.max(WAVE_MIN_VALUE, waveValue * REINFORCE_SHARE) then
+							and ((outmatched[teamID] or 0) == 0 or holding)
+							and waveValue >= start * reinHealth
+							and gathered >= math.max(WAVE_MIN_VALUE, waveValue * reinShare) then
 						Launch("group", false)
 					end
 				end
@@ -750,7 +788,7 @@ return function(ctx, lib, cfg)
 						why = "strength"
 					elseif (n - math.max(SimpleLastLaunch[teamID], waveEnded[teamID] or 0)) >= patience
 							and gathered >= readyValue * PATIENCE_SHARE
-							and sideValue >= share * PATIENCE_RATIO then
+							and sideValue >= share * patienceRatio then
 						-- (patience needs a real army: a side that weak stays
 						-- home and defends)
 						why = "patience"
@@ -791,6 +829,12 @@ return function(ctx, lib, cfg)
 		-- death (enter threshold sinks toward 0.20); exit rules stay stock.
 		local K          = tick.knobs
 		local rEnter     = K and K.retreatEnter or RETREAT_ENTER
+		-- Aggression: a unit out with a wave breaks off at a different hp than
+		-- one at home (an aggressive team's wave fights on while hurt).
+		if K and K.waveRetreatMult then
+			local wm = waveMembers[teamID]
+			if wm and wm[unitID] then rEnter = rEnter * K.waveRetreatMult end
+		end
 
 		-- AIR: always independent, hunt nearest enemy
 		if IsAir[unitDefID] then
@@ -989,6 +1033,21 @@ return function(ctx, lib, cfg)
 	function B.BaseDamaged(teamID, frame)
 		SimpleLastLaunch[teamID] = math.min(SimpleLastLaunch[teamID] or 0,
 		                                    frame - WAVE_COOLDOWN / 2)
+	end
+
+	--------------------------------------------------------------------------
+	-- This team destroyed an enemy unit. If one of the wave's own units did it,
+	-- its value goes on the wave's side of the exchange (see FOLLOW THROUGH in
+	-- TeamTick); kills by the base's defences or by raiders do not count.
+	--------------------------------------------------------------------------
+	function B.UnitKilled(teamID, unitID, unitDefID, attackerID)
+		local wm = waveMembers[teamID]
+		if wm and attackerID and wm[attackerID] then
+			local _, _, _, _, bp = Spring.GetUnitHealth(unitID)
+			local v = lib.UnitStrength and lib.UnitStrength(unitDefID) or UnitValue(unitDefID)
+			MEM.kills[teamID]  = (MEM.kills[teamID] or 0) + v * (bp or 1)
+			MEM.killAt[teamID] = Spring.GetGameFrame()
+		end
 	end
 
 	return B

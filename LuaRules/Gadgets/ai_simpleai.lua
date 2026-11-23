@@ -1057,7 +1057,7 @@ if gadgetHandler:IsSyncedCode() then
 				and not Spring.AreTeamsAllied(attackerTeam, unitTeam) then
 			for i = 1, #behaviors do
 				local b = behaviors[i]
-				if b.UnitKilled then b.UnitKilled(attackerTeam, unitID, unitDefID) end
+				if b.UnitKilled then b.UnitKilled(attackerTeam, unitID, unitDefID, attackerID) end
 			end
 		end
 	end

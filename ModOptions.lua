@@ -135,6 +135,17 @@ local options= {
 		max    = 0.5,
 		step   = 0.05,
 	},
+	{
+		key    = 'adaptiveai_aggression', -- read by LuaRules/Configs/simpleai/behaviors/b_adaptive.lua
+		name   = 'AdaptiveAI Aggression',
+		desc   = 'How willing the AdaptiveAI is to attack and to see an attack through, whatever it costs. 0 is cautious: it waits for a big advantage and pulls back early. 0.5 is the old behaviour. 1 is reckless: it attacks on a small edge, fights on while hurt, and holds the field for as long as it is killing more than it loses.',
+		type   = 'number',
+		section= 'aioptions',
+		def    = 0.7,
+		min    = 0,
+		max    = 1,
+		step   = 0.05,
+	},
 
 	-- Resourcing
 	{
