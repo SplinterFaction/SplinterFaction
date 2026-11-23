@@ -116,7 +116,7 @@ local options= {
 	{
 		key    = 'adaptiveai_start', -- read by LuaRules/Configs/simpleai/behaviors/b_adaptive.lua
 		name   = 'AdaptiveAI Starting Difficulty',
-		desc   = 'Where the AdaptiveAI starts before it has read the game: 0 easiest, 0.5 plain SimpleAI, 1 hardest. From 3 minutes in it reads the game every 30 seconds and hardens quickly (eases slowly) to keep the edge set below.',
+		desc   = 'Where the AdaptiveAI starts before it has read the game: 0 easiest, 0.5 plain SimpleAI, 1 hardest. From 3 minutes in it reads the game every 30 seconds and hardens quickly (eases slowly) to keep the edge set below. The Relaxed, Easy and Beginner variants have their own fixed settings and ignore these three options.',
 		type   = 'number',
 		section= 'aioptions',
 		def    = 0.6,

@@ -37,6 +37,10 @@
 --           Modoptions (ModOptions.lua, "AI Opponent Options"):
 --             adaptiveai_start  starting D, 0..1 (0.5 = plain SimpleAI)
 --             adaptiveai_edge   how far ahead the AI tries to stay, 0..0.5
+--             adaptiveai_aggression  temperament, 0..1
+--           These three set up the plain AdaptiveAI only. The easier
+--           variants (AdaptiveAIRelaxed, AdaptiveAIEasy, AdaptiveAIBeginner:
+--           see VARIANTS below, and LuaAI.lua) carry their own fixed values.
 --
 --           Owns ctx state: none (all controller state is module-local;
 --           the only shared surfaces are tick.knobs / services.GetKnobs).
@@ -79,6 +83,7 @@ return function(ctx, lib, cfg, services)
 	local GAIN            = 0.15   -- step per unit of error beyond the deadband
 	local MAX_STEP_UP     = 0.07   -- max D increase per update: it HARDENS twice as fast...
 	local MAX_STEP_DOWN   = 0.035  -- ...as it eases (see brief)
+	local STEP_REF        = 0.035  -- a step cap of this size steers with GAIN x1; bigger caps steer harder in proportion
 	local EMA_KEEP        = 0.6    -- dominance smoothing: new = old*KEEP + raw*(1-KEEP)
 
 	-- Signal weights (must sum to 1). Army value dominates because it is the
@@ -125,6 +130,46 @@ return function(ctx, lib, cfg, services)
 	end
 
 	--------------------------------------------------------------------------
+	-- Profiles. The plain AdaptiveAI is set up by the modoptions above. The
+	-- variants are the same controller, tuned down and fixed: the modoptions do
+	-- not reach them, so one game can hold several of them side by side.
+	--   start      D at game start
+	--   target     the player dominance it steers for (negative: AI ahead,
+	--              0: an even game, positive: the player ahead)
+	--   aggression temperament, as the modoption
+	--   dMax       D never rises above this, however far ahead the player gets
+	--   stepUp / stepDown   most D can move per update, harder / easier
+	-- The key is the LuaAI name (LuaAI.lua); it has to begin with "AdaptiveAI",
+	-- which is what the core and ai_neverstall look for.
+	--------------------------------------------------------------------------
+	local DEFAULT_PROFILE = {
+		start = D_START, target = TARGET_DOM, aggression = AGGRESSION,
+		dMax = 1, stepUp = MAX_STEP_UP, stepDown = MAX_STEP_DOWN,
+	}
+	local VARIANTS = {
+		-- an even game, stock temperament, stops short of its best play
+		AdaptiveAIRelaxed  = { start = 0.50, target = 0.00, aggression = 0.50, dMax = 0.75, stepUp = 0.05,  stepDown = 0.05 },
+		-- lets the player keep a small lead, never plays above plain SimpleAI
+		AdaptiveAIEasy     = { start = 0.35, target = 0.10, aggression = 0.35, dMax = 0.55, stepUp = 0.035, stepDown = 0.07 },
+		-- lets the player keep a clear lead, slow and timid throughout
+		AdaptiveAIBeginner = { start = 0.15, target = 0.20, aggression = 0.15, dMax = 0.35, stepUp = 0.02,  stepDown = 0.07 },
+	}
+
+	-- name is the team's LuaAI name; the longest variant name it begins with wins
+	local function ProfileFor(name)
+		local best, bestLen = DEFAULT_PROFILE, 0
+		if type(name) == "string" then
+			for key, p in pairs(VARIANTS) do
+				local n = #key
+				if n > bestLen and string.sub(name, 1, n) == key then
+					best, bestLen = p, n
+				end
+			end
+		end
+		return best
+	end
+
+	--------------------------------------------------------------------------
 	-- Shared state / config
 	--------------------------------------------------------------------------
 	local gaiaTeamID    = cfg.gaiaTeamID
@@ -138,7 +183,8 @@ return function(ctx, lib, cfg, services)
 	--------------------------------------------------------------------------
 	-- Module-local controller state (all keyed by teamID unless noted)
 	--------------------------------------------------------------------------
-	local D           = {}   -- difficulty scalar in [0,1]
+	local D           = {}   -- difficulty scalar in [0, profile.dMax]
+	local profile     = {}   -- the team's profile (DEFAULT_PROFILE or one of VARIANTS)
 	local dom         = {}   -- EMA-smoothed player dominance in [-1,1]
 	local knobs       = {}   -- derived knob table (mutated in place; consumers may cache it)
 	local lastUpdate  = {}   -- frame of last controller update
@@ -242,7 +288,7 @@ return function(ctx, lib, cfg, services)
 		--   OUTMATCH_RATIO 0.6, OUTMATCH_TICKS 2, RETREAT_ENTER x1 (wave members),
 		--   REINFORCE_HEALTH 0.6, REINFORCE_SHARE 0.5, WAVE_REGROUP_BEATEN 1800,
 		--   RAID.FLEE_RATIO 1.5
-		local a = AGGRESSION
+		local a = profile[teamID].aggression
 		k.aggression       = a
 		k.launchMult       = Tri(1.5, 1.0, 0.5, a)     -- x the edge a launch waits for
 		k.patienceMult     = Tri(1.75, 1.0, 0.4, a)    -- x how long a gathered army waits for that edge
@@ -265,7 +311,7 @@ return function(ctx, lib, cfg, services)
 		                         Round(D[teamID] * 1000) / 1000)
 		Spring.SetGameRulesParam("adaptiveai_dom_" .. teamID,
 		                         Round((dom[teamID] or 0) * 1000) / 1000)
-		Spring.SetGameRulesParam("adaptiveai_aggr_" .. teamID, AGGRESSION)
+		Spring.SetGameRulesParam("adaptiveai_aggr_" .. teamID, profile[teamID].aggression)
 	end
 
 	--------------------------------------------------------------------------
@@ -284,8 +330,10 @@ return function(ctx, lib, cfg, services)
 
 	function B.TeamInit(teamID)
 		if not AdaptiveTeams[teamID] then return end
-		D[teamID]           = D_START
-		dom[teamID]         = TARGET_DOM   -- start AT target: no phantom step after warmup
+		local p = ProfileFor(AdaptiveTeams[teamID])
+		profile[teamID]     = p
+		D[teamID]           = math.min(p.start, p.dMax)
+		dom[teamID]         = p.target     -- start AT target: no phantom step after warmup
 		knobs[teamID]       = {}
 		lastUpdate[teamID]  = 0
 		killedVal[teamID]   = 0
@@ -394,18 +442,23 @@ return function(ctx, lib, cfg, services)
 
 		-- ---- Steer D (after warmup) ----
 		if n >= WARMUP_FRAMES then
-			local err  = dom[teamID] - TARGET_DOM
+			local p    = profile[teamID]
+			local err  = dom[teamID] - p.target
 			local step = 0
 			if err > DEADBAND then
-				-- Player closer to (or past) the AI than the target: get harder, quickly.
-				step = math.min(MAX_STEP_UP, (err - DEADBAND) * GAIN * 2)
+				-- Player doing better than the target: get harder (the plain
+				-- AdaptiveAI quickly, the easier variants less so).
+				step = math.min(p.stepUp, (err - DEADBAND) * GAIN * (p.stepUp / STEP_REF))
 			elseif err < -DEADBAND then
-				-- AI further ahead than the target: ease off, slowly.
-				step = math.max(-MAX_STEP_DOWN, (err + DEADBAND) * GAIN)
+				-- AI doing better than the target: ease off.
+				step = math.max(-p.stepDown, (err + DEADBAND) * GAIN * (p.stepDown / STEP_REF))
 			end
 			if step ~= 0 then
-				D[teamID] = Clamp01(D[teamID] + step)
-				RecomputeKnobs(teamID)
+				local d = math.min(p.dMax, Clamp01(D[teamID] + step))
+				if d ~= D[teamID] then
+					D[teamID] = d
+					RecomputeKnobs(teamID)
+				end
 			end
 		end
 

@@ -184,7 +184,7 @@ local ctx = {
 	-- ---- identity ----
 	aiTeams      = {},   -- array of AI team IDs (count kept in a core local)
 	isAITeam     = {},   -- [teamID] = true; O(1) membership for per-event callins
-	adaptiveTeams = {},  -- [teamID] = true for AdaptiveAI teams (b_adaptive keys off this)
+	adaptiveTeams = {},  -- [teamID] = LuaAI name for AdaptiveAI teams and its variants (b_adaptive picks the profile by it)
 
 	-- ---- unit classification (defID-keyed, immutable after load) ----
 	IsCommander = {}, IsFactory = {}, IsConstructor = {}, IsExtractor = {},
@@ -335,7 +335,7 @@ for i = 1, #teams do
 	) then
 		enabled = true
 		if isAdaptive then
-			AdaptiveTeams[teamID] = true
+			AdaptiveTeams[teamID] = luaAI
 		end
 		SimpleAITeamIDsCount = SimpleAITeamIDsCount + 1
 		SimpleAITeamIDs[SimpleAITeamIDsCount] = teamID
