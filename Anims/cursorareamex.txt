@@ -1,0 +1,17 @@
+hotspot center
+frame  anims/cursorareamex_0.png  0.05
+frame  anims/cursorareamex_1.png  0.05
+frame  anims/cursorareamex_2.png  0.05
+frame  anims/cursorareamex_3.png  0.05
+frame  anims/cursorareamex_4.png  0.05
+frame  anims/cursorareamex_5.png  0.05
+frame  anims/cursorareamex_6.png  0.05
+frame  anims/cursorareamex_7.png  0.05
+frame  anims/cursorareamex_8.png  0.05
+frame  anims/cursorareamex_9.png  0.05
+frame  anims/cursorareamex_10.png  0.05
+frame  anims/cursorareamex_11.png  0.05
+frame  anims/cursorareamex_12.png  0.05
+frame  anims/cursorareamex_13.png  0.05
+frame  anims/cursorareamex_14.png  0.05
+frame  anims/cursorareamex_15.png  0.05

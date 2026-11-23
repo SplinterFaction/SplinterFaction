@@ -1,6 +1,17 @@
 hotspot center
-frame  anims/cursorcapture_0.png  0.1
-frame  anims/cursorcapture_1.png  0.1
-frame  anims/cursorcapture_2.png  0.1
-frame  anims/cursorcapture_1.png  0.1
-
+frame  anims/cursorcapture_0.png  0.05
+frame  anims/cursorcapture_1.png  0.05
+frame  anims/cursorcapture_2.png  0.05
+frame  anims/cursorcapture_3.png  0.05
+frame  anims/cursorcapture_4.png  0.05
+frame  anims/cursorcapture_5.png  0.05
+frame  anims/cursorcapture_6.png  0.05
+frame  anims/cursorcapture_7.png  0.05
+frame  anims/cursorcapture_8.png  0.05
+frame  anims/cursorcapture_9.png  0.05
+frame  anims/cursorcapture_10.png  0.05
+frame  anims/cursorcapture_11.png  0.05
+frame  anims/cursorcapture_12.png  0.05
+frame  anims/cursorcapture_13.png  0.05
+frame  anims/cursorcapture_14.png  0.05
+frame  anims/cursorcapture_15.png  0.05

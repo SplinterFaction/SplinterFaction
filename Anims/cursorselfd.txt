@@ -1,3 +1,17 @@
 hotspot center
-frame  anims/cursorselfd_0.png  0.1
-frame  anims/cursorselfd_1.png  0.1
+frame  anims/cursorselfd_0.png  0.05
+frame  anims/cursorselfd_1.png  0.05
+frame  anims/cursorselfd_2.png  0.05
+frame  anims/cursorselfd_3.png  0.05
+frame  anims/cursorselfd_4.png  0.05
+frame  anims/cursorselfd_5.png  0.05
+frame  anims/cursorselfd_6.png  0.05
+frame  anims/cursorselfd_7.png  0.05
+frame  anims/cursorselfd_8.png  0.05
+frame  anims/cursorselfd_9.png  0.05
+frame  anims/cursorselfd_10.png  0.05
+frame  anims/cursorselfd_11.png  0.05
+frame  anims/cursorselfd_12.png  0.05
+frame  anims/cursorselfd_13.png  0.05
+frame  anims/cursorselfd_14.png  0.05
+frame  anims/cursorselfd_15.png  0.05

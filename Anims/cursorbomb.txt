@@ -1,2 +1,17 @@
-hotspot topleft
-frame  anims/cursorBomb.png  5 
+hotspot center
+frame  anims/cursorbomb_0.png  0.05
+frame  anims/cursorbomb_1.png  0.05
+frame  anims/cursorbomb_2.png  0.05
+frame  anims/cursorbomb_3.png  0.05
+frame  anims/cursorbomb_4.png  0.05
+frame  anims/cursorbomb_5.png  0.05
+frame  anims/cursorbomb_6.png  0.05
+frame  anims/cursorbomb_7.png  0.05
+frame  anims/cursorbomb_8.png  0.05
+frame  anims/cursorbomb_9.png  0.05
+frame  anims/cursorbomb_10.png  0.05
+frame  anims/cursorbomb_11.png  0.05
+frame  anims/cursorbomb_12.png  0.05
+frame  anims/cursorbomb_13.png  0.05
+frame  anims/cursorbomb_14.png  0.05
+frame  anims/cursorbomb_15.png  0.05

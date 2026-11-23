@@ -1,0 +1,17 @@
+hotspot center
+frame  anims/cursorareaattack_0.png  0.05
+frame  anims/cursorareaattack_1.png  0.05
+frame  anims/cursorareaattack_2.png  0.05
+frame  anims/cursorareaattack_3.png  0.05
+frame  anims/cursorareaattack_4.png  0.05
+frame  anims/cursorareaattack_5.png  0.05
+frame  anims/cursorareaattack_6.png  0.05
+frame  anims/cursorareaattack_7.png  0.05
+frame  anims/cursorareaattack_8.png  0.05
+frame  anims/cursorareaattack_9.png  0.05
+frame  anims/cursorareaattack_10.png  0.05
+frame  anims/cursorareaattack_11.png  0.05
+frame  anims/cursorareaattack_12.png  0.05
+frame  anims/cursorareaattack_13.png  0.05
+frame  anims/cursorareaattack_14.png  0.05
+frame  anims/cursorareaattack_15.png  0.05

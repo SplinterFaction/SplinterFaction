@@ -1,0 +1,17 @@
+hotspot center
+frame  anims/cursorrestore_0.png  0.05
+frame  anims/cursorrestore_1.png  0.05
+frame  anims/cursorrestore_2.png  0.05
+frame  anims/cursorrestore_3.png  0.05
+frame  anims/cursorrestore_4.png  0.05
+frame  anims/cursorrestore_5.png  0.05
+frame  anims/cursorrestore_6.png  0.05
+frame  anims/cursorrestore_7.png  0.05
+frame  anims/cursorrestore_8.png  0.05
+frame  anims/cursorrestore_9.png  0.05
+frame  anims/cursorrestore_10.png  0.05
+frame  anims/cursorrestore_11.png  0.05
+frame  anims/cursorrestore_12.png  0.05
+frame  anims/cursorrestore_13.png  0.05
+frame  anims/cursorrestore_14.png  0.05
+frame  anims/cursorrestore_15.png  0.05

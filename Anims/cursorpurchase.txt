@@ -1,2 +1,17 @@
-hotspot topleft
-frame  anims/cursorpurchase_0.png  0.100 
+hotspot center
+frame  anims/cursorpurchase_0.png  0.05
+frame  anims/cursorpurchase_1.png  0.05
+frame  anims/cursorpurchase_2.png  0.05
+frame  anims/cursorpurchase_3.png  0.05
+frame  anims/cursorpurchase_4.png  0.05
+frame  anims/cursorpurchase_5.png  0.05
+frame  anims/cursorpurchase_6.png  0.05
+frame  anims/cursorpurchase_7.png  0.05
+frame  anims/cursorpurchase_8.png  0.05
+frame  anims/cursorpurchase_9.png  0.05
+frame  anims/cursorpurchase_10.png  0.05
+frame  anims/cursorpurchase_11.png  0.05
+frame  anims/cursorpurchase_12.png  0.05
+frame  anims/cursorpurchase_13.png  0.05
+frame  anims/cursorpurchase_14.png  0.05
+frame  anims/cursorpurchase_15.png  0.05
