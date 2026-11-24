@@ -73,17 +73,51 @@ local function ResetPaint()
 	paint.queuedPos = {}
 end
 
--- Only metal makers will be snapped/previewed
-local function isMetalMaker(unitDefID)
-	local ud = UnitDefs[unitDefID]
-	return ud and ud.customParams and ud.customParams.metal_extractor
+-- Everything read from UnitDefs is read once, here. Reading ud.customParams or
+-- ud.buildOptions builds a fresh Lua table every time, and this widget used to
+-- do that for every build option of every selected builder on every drawn
+-- frame, which is what made it expensive.
+local isMex        = {}   -- [unitDefID] = true for metal extractors
+local mexCost      = {}   -- [unitDefID] = metal cost, for extractors
+local builderMexes = {}   -- [unitDefID] = array of extractor defIDs this builder can build (builders only)
+for unitDefID, ud in pairs(UnitDefs) do
+	local cp = ud.customParams
+	if cp and cp.metal_extractor then
+		isMex[unitDefID] = true
+		mexCost[unitDefID] = ud.metalCost or math.huge
+	end
+end
+for unitDefID, ud in pairs(UnitDefs) do
+	local opts = ud.buildOptions
+	if opts and #opts > 0 then
+		local list = {}
+		for i = 1, #opts do
+			if isMex[opts[i]] then
+				list[#list + 1] = opts[i]
+			end
+		end
+		builderMexes[unitDefID] = list
+	end
 end
 
+-- Only metal makers will be snapped/previewed
+local function isMetalMaker(unitDefID)
+	return isMex[unitDefID]
+end
+
+-- The nearest spot is only looked for again when the cursor's ground position
+-- has moved (or the spot list was replaced).
+local lastSpots, lastX, lastZ, lastSpot, lastDist
 local function GetClosestSpot(x, z)
-	if not WG.metalMakerSpots then return nil end
+	local spots = WG.metalMakerSpots
+	if not spots then return nil end
+	if spots == lastSpots and x == lastX and z == lastZ then
+		return lastSpot, lastDist
+	end
 	local bestDist = math.huge
 	local bestSpot = nil
-	for _, spot in ipairs(WG.metalMakerSpots) do
+	for i = 1, #spots do
+		local spot = spots[i]
 		local dx, dz = x - spot.x, z - spot.z
 		local distSq = dx * dx + dz * dz
 		if distSq < bestDist then
@@ -91,6 +125,7 @@ local function GetClosestSpot(x, z)
 			bestSpot = spot
 		end
 	end
+	lastSpots, lastX, lastZ, lastSpot, lastDist = spots, x, z, bestSpot, bestDist
 	return bestSpot, bestDist
 end
 
@@ -100,63 +135,77 @@ local function DoLine(x1, y1, z1, x2, y2, z2)
 end
 
 -- Return a metal-maker buildOption unitDefID that ALL selected builders can build (if any).
--- If none are common to all, returns nil.
-local function GetCommonMetalMakerBuildOption()
-	local sel = spGetSelectedUnits()
+-- If none are common to all, returns nil. Worked out when the selection
+-- changes (widget:SelectionChanged) and, since that call-in does not always
+-- reach this widget, again every COMMON_PERIOD seconds; not every frame.
+local COMMON_PERIOD = 0.25
+local commonMex = nil
+local commonMexAt = nil   -- os.clock() of the last time it was worked out
+
+local function ComputeCommonMetalMakerBuildOption(sel)
 	if not sel or #sel == 0 then return nil end
 
-	-- collect selected builders (units that actually have buildOptions)
-	local builders = {}
+	-- one entry per kind of builder in the selection
+	local kinds, nKinds = {}, 0
 	for i = 1, #sel do
-		local uID = sel[i]
-		local udID = spGetUnitDefID(uID)
-		local ud = udID and UnitDefs[udID]
-		if ud and ud.buildOptions and #ud.buildOptions > 0 then
-			builders[#builders + 1] = ud
+		local udID = spGetUnitDefID(sel[i])
+		if udID and builderMexes[udID] and not kinds[udID] then
+			kinds[udID] = true
+			nKinds = nKinds + 1
 		end
 	end
-	if #builders == 0 then return nil end
+	if nKinds == 0 then return nil end
 
-	-- count metal-maker options across builders
 	local counts = {}
-	for b = 1, #builders do
-		local opts = builders[b].buildOptions
-		for i = 1, #opts do
-			local bo = opts[i]
-			if isMetalMaker(bo) then
-				counts[bo] = (counts[bo] or 0) + 1
-			end
+	for udID in pairs(kinds) do
+		local list = builderMexes[udID]
+		for i = 1, #list do
+			counts[list[i]] = (counts[list[i]] or 0) + 1
 		end
 	end
 
 	-- pick one that every builder shares; prefer cheapest metal cost (nice default)
-	local need = #builders
 	local best, bestCost = nil, math.huge
 	for bo, c in pairs(counts) do
-		if c == need then
-			local cost = (UnitDefs[bo] and UnitDefs[bo].metalCost) or math.huge
+		if c == nKinds then
+			local cost = mexCost[bo] or math.huge
 			if cost < bestCost then
 				bestCost = cost
 				best = bo
 			end
 		end
 	end
-
 	return best
 end
 
+-- fresh: work it out now (a click is about to act on it)
+local function GetCommonMetalMakerBuildOption(fresh)
+	local now = os.clock()
+	if fresh or not commonMexAt or now - commonMexAt >= COMMON_PERIOD then
+		commonMex = ComputeCommonMetalMakerBuildOption(spGetSelectedUnits())
+		commonMexAt = now
+	end
+	return commonMex
+end
+
+function widget:SelectionChanged(sel)
+	commonMex = ComputeCommonMetalMakerBuildOption(sel)
+	commonMexAt = os.clock()
+end
+
 -- Compute hover info for "idle builder selected" mode
-local function GetHoverSpotAndBuildDef(screenX, screenY)
+local function GetHoverSpotAndBuildDef(screenX, screenY, fresh)
 	-- must have mex spots
 	if not WG.metalMakerSpots then return nil end
+
+	-- must have a common metal maker option among selected builders (the
+	-- cheap test first: with no builder selected nothing else is looked at)
+	local mexDefID = GetCommonMetalMakerBuildOption(fresh)
+	if not mexDefID then return nil end
 
 	-- must be "idle": no active command selected (not move/attack/build/etc)
 	local _, activeCmdID = spGetActiveCommand()
 	if activeCmdID ~= nil then return nil end
-
-	-- must have a common metal maker option among selected builders
-	local mexDefID = GetCommonMetalMakerBuildOption()
-	if not mexDefID then return nil end
 
 	local _, pos = spTraceScreenRay(screenX, screenY, true, true)
 	if not pos then return nil end
@@ -456,7 +505,7 @@ function widget:MousePress(x, y, button)
 
 	-- B) idle builder paint-to-queue (right-click)
 	if button == 3 then
-		local spot, mexDefID = GetHoverSpotAndBuildDef(x, y)
+		local spot, mexDefID = GetHoverSpotAndBuildDef(x, y, true)
 		if not spot then return false end
 
 		ResetPaint()
