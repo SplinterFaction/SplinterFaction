@@ -1,5 +1,7 @@
 -- $Id: draw.lua 4534 2009-05-04 23:35:06Z licho $
 
+VFS.Include("common/vfs_guard.lua", nil, VFS.ZIP) -- only the game's own Lua runs: see that file
+
 if (select == nil) then
   select = function(n,...) 
     local arg = arg
@@ -41,25 +43,17 @@ then
   -----------------------------
   -- DEPLOYMENT MODE
   -----------------------------
-  if (not Spring.IsDevLuaEnabled()) then
-    VFS.Include(Script.GetName() .. "/Deploy/draw.lua", nil, VFS.ZIP_ONLY)
-    Spring.Echo("LUARULES-DRAW  (DEPLOYMENT)")
-  else
-    VFS.Include(Script.GetName() .. "/Deploy/draw.lua", nil, VFS.RAW_ONLY)
-    Spring.Echo("LUARULES-DRAW  (DEPLOYMENT)  --  DEVMODE")
-  end
+  VFS.Include(Script.GetName() .. "/Deploy/draw.lua", nil, VFS.ZIP_ONLY)
+  Spring.Echo("LUARULES-DRAW  (DEPLOYMENT)")
 
 else
 
   -----------------------------
   -- NORMAL MODE
   -----------------------------
-  if (not Spring.IsDevLuaEnabled()) then
-    VFS.Include(Script.GetName() .. '/gadgets.lua', nil, VFS.ZIP_ONLY)
-    Spring.Echo("LUARULES-DRAW  (GADGETS)")
-  else
-    VFS.Include(Script.GetName() .. '/gadgets.lua', nil, VFS.RAW_ONLY)
-    Spring.Echo("LUARULES-DRAW  (GADGETS)  --  DEVMODE")
-  end
+  -- always the archive, dev Lua or not: unsynced gadget code sees the whole
+  -- game, so it is never taken from a player's loose files
+  VFS.Include(Script.GetName() .. '/gadgets.lua', nil, VFS.ZIP_ONLY)
+  Spring.Echo("LUARULES-DRAW  (GADGETS)")
 
 end

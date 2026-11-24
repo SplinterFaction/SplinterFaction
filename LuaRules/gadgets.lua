@@ -16,14 +16,11 @@
 --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Synced code always loads from the game archive. Dev Lua is a per-client
--- setting, and loading synced gadgets from loose files on one client means
--- different synced code there, which desyncs every multiplayer game.
--- Unsynced may still read loose files for development.
-local VFSMODE = VFS.ZIP_ONLY -- FIXME: ZIP_FIRST ?
-if Spring.IsDevLuaEnabled() and SendToUnsynced == nil then
-  VFSMODE = VFS.RAW_ONLY
-end
+-- Gadgets always load from the archives, synced and unsynced, dev Lua or
+-- not. Synced code from loose files on one client desyncs the game; unsynced
+-- gadget code sees the whole game, so loose files there are a map hack.
+-- (To work on the game, run it from its .sdd folder: that is an archive.)
+local VFSMODE = VFS.ZIP_ONLY
 
 VFS.Include('init.lua', nil, VFSMODE)
 

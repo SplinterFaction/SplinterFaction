@@ -16,39 +16,28 @@ LUAUI_VERSION = "LuaUI v0.3"
 
 LUAUI_DIRNAME = 'LuaUI/'
 
--- Players often share one Recoil install between several games, so the raw
--- LuaUI/ folder in their data directory can hold another game's handler,
--- includes and widgets. The game archive always wins; raw files are only a
--- fallback (the engine ships some LuaUI helpers, e.g. utils.lua, as raw files).
--- Loose user widgets are gated separately by the "allowuserwidgets" modoption
--- (see LuaUI/widgets_custom.lua).
-VFS.DEF_MODE = VFS.ZIP_FIRST
-LUAUI_VFSMODE = VFS.ZIP_FIRST
-
+-- Only the game's own Lua runs here. Nothing is loaded from the loose LuaUI/
+-- folder in a player's data directory: no replacement handler and no loose
+-- copy of a file the game includes. The guard (common/vfs_guard.lua) makes
+-- every load of code in this Lua state read from the archives, and the helpers
+-- the engine ships as loose files (utils.lua, savetable.lua, ...) are in the
+-- game archive for that reason.
+--
+-- The one exception is the host's "allowuserwidgets" modoption. With it on,
+-- the loose widgets in LuaUI/Widgets are loaded (LuaUI/widgets_custom.lua),
+-- and a file under LuaUI/Widgets that the game does not have can be included
+-- by them. Loose copies of the game's own files are still never used, and the
+-- gadgets are guarded whatever the option says (LuaRules/draw.lua).
 local function IsTruthy(v)
   return v == true or v == 1 or v == "1" or v == "true" or v == "yes"
 end
-local ALLOW_USER_WIDGETS = IsTruthy((Spring.GetModOptions() or {}).allowuserwidgets)
+VFS_GUARD_USER_WIDGETS = IsTruthy((Spring.GetModOptions() or {}).allowuserwidgets)
+VFS.Include("common/vfs_guard.lua", nil, VFS.ZIP)
+VFS.DEF_MODE = VFS.ZIP
+LUAUI_VFSMODE = VFS.ZIP
 
 local STARTUP_FILENAME = LUAUI_DIRNAME .. 'main_custom.lua'
 local STARTUP_VFSMODE  = VFS.ZIP
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-
-if ALLOW_USER_WIDGETS then
-  -- use a versionned directory name if it exists (a full raw replacement of
-  -- the UI, so only honored when user widgets are allowed)
-  local sansslash = string.sub(LUAUI_DIRNAME, 1, -2)
-  local versiondir = sansslash .. '-' .. Engine.version .. '/'
-  if (VFS.FileExists(versiondir  .. 'main_custom.lua', VFS.RAW_ONLY)) then
-    LUAUI_DIRNAME = versiondir
-    STARTUP_FILENAME = LUAUI_DIRNAME .. 'main_custom.lua'
-    STARTUP_VFSMODE  = VFS.RAW_ONLY
-    LUAUI_VFSMODE    = VFS.RAW_FIRST
-    VFS.DEF_MODE     = VFS.RAW_FIRST
-  end
-end
 
 Spring.Echo('Using LUAUI_DIRNAME = ' .. LUAUI_DIRNAME)
 

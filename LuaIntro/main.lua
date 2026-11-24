@@ -10,7 +10,8 @@
 --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-VFS.Include('init.lua')
+VFS.Include("common/vfs_guard.lua", nil, VFS.ZIP) -- only the game's own Lua runs: see that file
+VFS.Include('init.lua', nil, VFS.ZIP)
 
 LUA_NAME    = Script.GetName()
 LUA_DIRNAME = Script.GetName() .. "/"
@@ -19,7 +20,7 @@ LUA_VERSION = Script.GetName() .. " v1.0"
 _G[("%s_DIRNAME"):format(LUA_NAME:upper())] = LUA_DIRNAME -- creates LUAUI_DIRNAME
 _G[("%s_VERSION"):format(LUA_NAME:upper())] = LUA_VERSION -- creates LUAUI_VERSION
 
-VFS.DEF_MODE = VFS.RAW_FIRST
+VFS.DEF_MODE = VFS.ZIP
 
 
 -------------------------------------------------------------------------------

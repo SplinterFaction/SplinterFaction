@@ -18,10 +18,10 @@ VFS.Include("init.lua", nil, VFS.ZIP)
 -- VFS.ZIP: always take the game's rml_setup.lua, never a loose local copy.
 VFS.Include(LUAUI_DIRNAME .. "rml_setup.lua", nil, VFS.ZIP)
 
-local LUAUI_VFSMODE = LUAUI_VFSMODE or VFS.ZIP_FIRST
+local LUAUI_VFSMODE = LUAUI_VFSMODE or VFS.ZIP
 
--- utils.lua is shipped raw by the engine, so it has to stay reachable; the
--- archive still wins if the game ever ships its own.
+-- utils.lua and the other helpers the engine ships as loose files are in the
+-- game archive, so nothing has to be read from the player's LuaUI folder.
 VFS.Include(LUAUI_DIRNAME .. 'utils.lua', utilFile, LUAUI_VFSMODE)
 
 -- The engine's include() (from utils.lua) calls VFS.Include with no mode,

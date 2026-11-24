@@ -35,7 +35,10 @@ local function loadPersistentData()
 		file:close()
 		local func = loadstring(contents)
 		if func then
-			persistentCP = func() or {}
+			-- a saved table in the player's folder: data, so it runs with nothing in reach
+			setfenv(func, {})
+			local ok, saved = pcall(func)
+			persistentCP = (ok and type(saved) == "table") and saved or {}
 		else
 			persistentCP = {}
 		end

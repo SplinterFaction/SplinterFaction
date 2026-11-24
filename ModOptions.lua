@@ -826,7 +826,7 @@ local options= {
 	{
 		key    = 'allowuserwidgets',
 		name   = 'Allow User Widgets',
-		desc   = 'Load loose widgets from LuaUI/Widgets in each player\'s data directory. Off by default: in an install shared with other games, their widgets get loaded into SplinterFaction and break its interface.',
+		desc   = 'Off by default: only the game\'s own Lua runs and nothing is loaded from a player\'s local LuaUI folder. On: each player\'s loose widgets in LuaUI/Widgets are loaded too. Loose copies of the game\'s own files are never used either way.',
 		type   = 'bool',
 		def    = false,
 		section= 'interfaceoptions',

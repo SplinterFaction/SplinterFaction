@@ -32,18 +32,18 @@ local ORDER_FILENAME     = LUAUI_DIRNAME .. 'Config/' .. modShortUpper .. '_orde
 local CONFIG_FILENAME    = LUAUI_DIRNAME .. 'Config/' .. modShortUpper .. '_data.lua'
 local WIDGET_DIRNAME     = LUAUI_DIRNAME .. 'widgets/'
 
--- Loose widgets in the player's data directory are only loaded when the
--- "allowuserwidgets" modoption is on. Players who share one Recoil install
--- between several games otherwise get other games' widgets loaded into SF,
--- where they shadow or knock out SF's own (same-name widgets collide).
+-- Loose widgets in the player's data directory are only loaded when the host
+-- turns on the "allowuserwidgets" modoption. Otherwise only the game's own
+-- Lua runs: common/vfs_guard.lua (installed by luaui.lua) refuses loose code
+-- whatever mode is asked for here, and with the option on it lets through
+-- loose files under LuaUI/Widgets and nothing else.
 local function IsTruthy(v)
   return v == true or v == 1 or v == "1" or v == "true" or v == "yes"
 end
 local ALLOW_USER_WIDGETS = IsTruthy((Spring.GetModOptions() or {}).allowuserwidgets)
 
--- VFS mode for reading a widget file. fromZip == nil means "not known"
--- (the selector, which the engine ships raw), so the archive wins but a raw
--- file is still found.
+-- VFS mode for reading a widget file: the game's from the archives, a user
+-- widget from the loose files, and the archives first when it is not known.
 local function WidgetVFSMode(fromZip)
   if fromZip == true then
     return VFS.ZIP
@@ -274,8 +274,11 @@ end
 --------------------------------------------------------------------------------
 
 function widgetHandler:LoadConfigData()
+  -- The saved widget settings are a Lua file in the player's folder. It is
+  -- data: it runs with nothing in reach (no Spring, no VFS, no globals), and
+  -- it used to be run once with everything in reach before that was set up.
   local chunk, err = loadfile(CONFIG_FILENAME)
-  if (chunk == nil) or (chunk() == nil) or (err) then
+  if (chunk == nil) or (err) then
     if err then
       Spring.Log(section, LOG.ERROR, err)
     end
@@ -283,8 +286,12 @@ function widgetHandler:LoadConfigData()
   end
   local tmp = {math = {huge = math.huge}}
   setfenv(chunk, tmp)
-  self.orderList = chunk().order
-  self.configData = chunk().data
+  local ok, saved = pcall(chunk)
+  if (not ok) or (type(saved) ~= 'table') then
+    return
+  end
+  self.orderList = saved.order
+  self.configData = saved.data
   if (not self.orderList) then
     self.orderList = {} -- safety
   end
@@ -396,7 +403,7 @@ function widgetHandler:Initialize()
   else
     local skipped = #VFS.DirList(WIDGET_DIRNAME, "*.lua", VFS.RAW_ONLY)
     if skipped > 0 then
-      Spring.Log(section, LOG.INFO, string.format("Skipping %d user widget file(s) in %s (modoption allowuserwidgets is off)", skipped, WIDGET_DIRNAME))
+      Spring.Log(section, LOG.INFO, string.format("Skipping %d loose widget file(s) in %s (modoption allowuserwidgets is off)", skipped, WIDGET_DIRNAME))
     end
   end
 
