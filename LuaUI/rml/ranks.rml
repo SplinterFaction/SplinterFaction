@@ -5,8 +5,8 @@
 	<style>
 		/* Two panels. The strip (#ranks) sits top right and shows the viewed
 		   team's rank on each of the four tracks with a bar to the next one.
-		   The banner (#rankup), as wide as the resource bar and right
-		   under it, slams in when a rank is reached and goes away by itself. Neither takes the mouse. Positions
+		   The banner (#rankup), half the resource bar's width and centred
+		   right under it, slams in when a rank is reached and goes away by itself. Neither takes the mouse. Positions
 		   are set from Lua (hud.PlacePanel); the sizes here must match the
 		   constants in gui_bastion_ranks.lua. */
 
@@ -111,20 +111,24 @@
 			color: #8593a1;
 		}
 
-		/* ---- the banner: as wide as the resource bar, right under it ---- */
+		/* ---- the banner: half the resource bar's width, right under it ---- */
 
 		#rankup {
 			position: absolute;
 			left: 0px;
 			top: 0px;
-			width: 940dp;
-			height: 60dp;
+			width: 470dp;
+			height: 64dp;
 			box-sizing: border-box;
-			padding: 0dp 22dp 0dp 18dp;
+			padding: 0dp 18dp 0dp 14dp;
 			border: 1dp #35434f;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
+		}
+		/* #rankup's own display would otherwise beat the theme's .hidden */
+		#rankup.hidden {
+			display: none;
 		}
 		#rankup .bracket {
 			width: 10dp;
@@ -141,37 +145,33 @@
 			width: 100%;
 			height: 1dp;
 		}
-		/* track and rank, with the chevron tally under it */
-		#rankup-left {
-			margin-left: 16dp;
-			margin-bottom: 3dp;
-		}
-		#rankup-track-text {
-			height: 14dp;
-			font-size: 10dp;
-			line-height: 14dp;
-			letter-spacing: 2.5dp;
-			text-transform: uppercase;
-			white-space: nowrap;
-			color: #8593a1;
-		}
-		/* the title sits on the banner's centre whatever is either side of it */
+		/* track and rank, the title and what earned it, stacked on the
+		   banner's centre whatever is either side */
 		#rankup-mid {
 			position: absolute;
 			left: 0dp;
-			top: 9dp;
+			top: 4dp;
 			width: 100%;
-			height: 34dp;
+			text-align: center;
+		}
+		#rankup-track {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			justify-content: center;
+			height: 12dp;
+			font-size: 9dp;
+			line-height: 12dp;
+			letter-spacing: 2dp;
+			text-transform: uppercase;
+			white-space: nowrap;
+			color: #8593a1;
 		}
-		#rankup-mid .dash {
-			width: 46dp;
+		#rankup-track .dash {
+			width: 26dp;
 			height: 1dp;
 			background-color: #35434f;
-			margin: 0dp 20dp 0dp 20dp;
+			margin: 0dp 8dp 0dp 8dp;
 		}
 
 		/* the badge: a square panel of its own, framed by rank (t1..t5) */
@@ -243,35 +243,36 @@
 		#rankup-frame.t5 .top { display: block; height: 3dp; }
 		#rankup-frame.t5 .inner { display: block; }
 
+		/* the chevron tally, right, across from the badge */
 		#rankup-chevrons {
+			flex: 1;
 			display: flex;
 			flex-direction: row;
+			justify-content: flex-end;
 			height: 12dp;
-			margin-top: 3dp;
+			margin-bottom: 3dp;
 		}
 		#rankup-chevrons img {
-			width: 14dp;
-			height: 8dp;
-			margin: 2dp 2dp 0dp 0dp;
+			width: 12dp;
+			height: 7dp;
+			margin: 2dp 0dp 0dp 1dp;
 		}
 
 		#rankup-title {
-			height: 34dp;
+			height: 26dp;
 			font-weight: bold;
-			font-size: 27dp;
-			line-height: 34dp;
-			letter-spacing: 4dp;
+			font-size: 22dp;
+			line-height: 26dp;
+			letter-spacing: 3.5dp;
 			text-transform: uppercase;
 			white-space: nowrap;
 			color: #f0f4f8;
 			font-effect: glow(2dp 6dp #ff9b21);
 		}
 		#rankup-sub {
-			flex: 1;
-			margin-bottom: 3dp;
-			font-size: 13dp;
-			line-height: 16dp;
-			text-align: right;
+			height: 14dp;
+			font-size: 11dp;
+			line-height: 14dp;
 			white-space: nowrap;
 			color: #c2ccd6;
 		}
@@ -279,9 +280,9 @@
 		   it drains as the banner's time runs out (width set from Lua) */
 		#rankup-bar {
 			position: absolute;
-			left: 16dp;
-			bottom: 4dp;
-			width: 906dp;
+			left: 14dp;
+			bottom: 3dp;
+			width: 440dp;
 			height: 2dp;
 			background-color: #131920;
 		}
@@ -371,16 +372,16 @@
 			<div class="inner"/>
 			<img id="rankup-emblem" src="/LuaUI/Images/rml/rank_combat.png"/>
 		</div>
-		<div id="rankup-left">
-			<div id="rankup-track-text">Combat · Rank IV</div>
-			<div id="rankup-chevrons"></div>
-		</div>
-		<div id="rankup-sub"></div>
+		<div id="rankup-chevrons"></div>
 
 		<div id="rankup-mid">
-			<div class="dash"/>
+			<div id="rankup-track">
+				<div class="dash"/>
+				<div id="rankup-track-text">Combat · Rank IV</div>
+				<div class="dash"/>
+			</div>
 			<div id="rankup-title">Warlord</div>
-			<div class="dash"/>
+			<div id="rankup-sub"></div>
 		</div>
 		<div id="rankup-bar"><div id="rankup-drain"/></div>
 	</div>

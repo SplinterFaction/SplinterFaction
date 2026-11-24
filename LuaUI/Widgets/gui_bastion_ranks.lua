@@ -46,10 +46,10 @@ local STRIP_GAP    = 8    -- between the menu button and the strip
 -- it: must match BUTTON_HEIGHT and MARGIN in gui_bastion_menu.lua
 local MENU_BUTTON_HEIGHT = 30
 local MENU_BUTTON_MARGIN = 10
--- the banner: the resource bar's width (BAR_WIDTH in gui_bastion_resourcebar.lua)
+-- the banner: half the resource bar's width (BAR_WIDTH in gui_bastion_resourcebar.lua)
 -- and 6dp under it (its TOP_MARGIN 8 + BAR_HEIGHT 68)
-local CARD_WIDTH   = 940
-local CARD_HEIGHT  = 60
+local CARD_WIDTH   = 470
+local CARD_HEIGHT  = 64
 local CARD_TOP     = 82
 local DRAIN_STEPS  = 200  -- the ember line empties in this many steps
 
