@@ -327,6 +327,15 @@ function widget:Update(dt)
 	local rain = (raw - RAIN_THRESHOLD) / (1 - RAIN_THRESHOLD)
 	if rain < 0 then rain = 0 elseif rain > 1 then rain = 1 end
 
+	-- Before the game starts there is no weather: the choosing and placing
+	-- screens are clear. (The cycle has no seed yet then, and from its fixed
+	-- start it was always raining a little, so every game opened in rain and
+	-- fog and snapped to its real weather at the first frame.)
+	local pregame = spGetGameFrame() <= 0
+	if pregame then
+		rain, raw = 0, 0
+	end
+
 	-- Heat wave: the dry trough of the same oscillator, gated to daytime. The
 	-- (1-p)^2 term fades it in through the morning and out toward evening.
 	-- Wet-ground gating is applied after the wetness update below.
@@ -455,6 +464,7 @@ function widget:Update(dt)
 	-- their own duplicated damage accumulators.
 	local wg = WG.weather
 	if wg then
+		wg.pregame  = pregame
 		wg.night    = p
 		wg.war      = w
 		wg.rain     = rain

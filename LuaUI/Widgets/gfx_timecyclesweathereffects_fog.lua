@@ -29,10 +29,18 @@ end
 --              and glow, placed by other widgets (WG.fog.AddVolume) or by
 --              gadgets (Script.LuaUI.FogVolumeAdd). Battle smoke uses them.
 --
---  How much fog there is still comes from the Weather widget (rain, heat),
---  plus a little standing mist that thickens at night. Colour is Weather's fog
---  colour lit by the scene's sun and ambient light, so it follows the time of
---  day by itself.
+--  How much fog there is comes from the Weather widget, and there is none
+--  unless something calls for it (FogAmount below):
+--    night     mist gathers from dusk and is thickest at midnight
+--    rain      as much fog as it is raining
+--    wet ground  a thinner mist that lingers after rain until the ground dries
+--    heat      burns the mist off
+--  A clear dry day has no fog at all, and neither does the time before the
+--  game starts, nor a game with the Weather widget switched off. (There used
+--  to be a standing mist the whole time.) Battle smoke and other local
+--  volumes are separate and show whatever the weather.
+--  Colour is Weather's fog colour lit by the scene's sun and ambient light, so
+--  it follows the time of day by itself.
 --
 --  Cost is steps x pixels / RES_DIV^2; the shadow lookups are the dear part.
 --  WG.fog.SetQuality(0..3) trades it down: 0 off, 1 low (no shafts),
@@ -45,9 +53,12 @@ end
 --------------------------------------------------------------------------------
 
 local TUNE = {
-	-- how much fog (0..1) before Weather adds rain / heat haze
-	baseMist      = 0.20,   -- standing mist by day
-	nightMist     = 0.22,   -- more of it at full night
+	-- how much fog (0..1), see FogAmount
+	dayMist       = 0,      -- standing mist on a clear dry day (0 = none)
+	nightMist     = 0.42,   -- mist at full night
+	nightFrom     = 0.55,   -- Weather's night factor (0 noon .. 1 midnight) at which night mist starts
+	nightFull     = 0.95,   -- ... and at which it is all there
+	wetMist       = 0.20,   -- mist over fully wet ground once the rain has stopped
 	amountMult    = 1.0,    -- overall multiplier (the options menu sets this)
 
 	-- density
@@ -85,6 +96,8 @@ local TUNE = {
 }
 
 local MAX_VOLUMES = 8
+
+local lastAmount = 0 -- how much fog was drawn last frame (WG.fog.GetAmountNow)
 
 -- per quality: march steps, resolution divisor, shadow lookups
 local QUALITY = {
@@ -650,6 +663,7 @@ function widget:Initialize()
 		GetQuality   = function() return quality end,
 		SetQuality   = SetQuality,
 		GetAmount    = function() return TUNE.amountMult end,
+		GetAmountNow = function() return lastAmount end, -- how much fog is being drawn, 0 = none
 		SetAmount    = function(v) TUNE.amountMult = max(0, min(3, tonumber(v) or 1)) end,
 		GetBattleSmoke = function() return TUNE.battleSmoke end,
 		SetBattleSmoke = function(v) TUNE.battleSmoke = v and true or false end,
@@ -682,6 +696,24 @@ function widget:SetConfigData(data)
 	if data.battleSmoke ~= nil then TUNE.battleSmoke = data.battleSmoke and true or false end
 end
 
+-- How much fog the weather calls for right now, 0 = none (before the options
+-- menu's multiplier). wg is WG.weather; without it there is no weather and so
+-- no fog.
+local function FogAmount(wg)
+	if not (wg and wg.fogStart) or wg.pregame then
+		return 0
+	end
+	local night = max(0, min(1, wg.night or 0))
+	local rain  = max(0, min(1, wg.rain or 0))
+	local heat  = max(0, min(1, wg.heat or 0))
+	local wet   = max(0, min(1, wg.wetness or 0))
+	local n = max(0, min(1, (night - TUNE.nightFrom) / (TUNE.nightFull - TUNE.nightFrom)))
+	n = n * n * (3 - 2 * n)
+	local mist = TUNE.dayMist + (TUNE.nightMist - TUNE.dayMist) * n + TUNE.wetMist * wet * (1 - rain)
+	-- heat burns the mist off; rain brings its own
+	return mist * (1 - heat) + rain
+end
+
 -- the march, into the reduced-resolution texture (run by gl.RenderToTexture)
 
 function widget:DrawWorld()
@@ -690,27 +722,16 @@ function widget:DrawWorld()
 	end
 	local q = QUALITY[quality]
 
-	-- how much fog: standing mist (more at night) plus what Weather asks for
+	-- how much fog the weather calls for (none on a clear dry day)
 	local wg = WG.weather
-	local fogStart, fr, fg, fb, night
-	local heat, asked = 0, nil
+	local fr, fg, fb
 	if wg and wg.fogStart then
-		fogStart = wg.fogStart
 		fr, fg, fb = wg.fogR, wg.fogG, wg.fogB
-		night = wg.night or 0
-		heat  = max(0, min(1, wg.heat or 0))
-		asked = wg.rain
 	else
-		fogStart = 1
 		fr, fg, fb = glGetAtmosphere("fogColor")
-		night = 0
 	end
-	-- Heat burns the mist off: at full heat there is no ground fog at all unless it is raining.
-	-- (It used to be the other way round: the standing mist stayed and Weather's heat haze, which
-	-- is part of fogStart, was added on top, so a scorching day had more fog than a mild one.)
-	local amount = (TUNE.baseMist + TUNE.nightMist * max(0, min(1, night))) * (1 - heat)
-			+ max(0, asked or (1 - fogStart))
-	amount = max(0, min(1.5, amount * TUNE.amountMult))
+	local amount = max(0, min(1.5, FogAmount(wg) * TUNE.amountMult))
+	lastAmount = amount
 
 	local now = Now()
 	local camX, camY, camZ = Spring.GetCameraPosition()
