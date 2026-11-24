@@ -1,0 +1,176 @@
+<rml>
+<head>
+	<title>SplinterFaction profiler</title>
+	<link type="text/rcss" href="theme.rcss"/>
+	<style>
+		/* One profiler panel. The widget profiler and the gadget profiler each
+		   load this document, so the two can be on screen side by side. The
+		   position is set from Lua (hud.PlacePanel); the size here must match
+		   PANEL_WIDTH and PANEL_HEIGHT in Include/profiler_panel.lua. Nothing
+		   here takes the mouse. */
+		#prof {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 500dp;
+			height: 492dp;
+			box-sizing: border-box;
+			padding: 10dp 12dp 8dp 12dp;
+		}
+		#prof.hidden {
+			display: none;
+		}
+		.head {
+			display: flex;
+			flex-direction: row;
+			align-items: baseline;
+			height: 22dp;
+		}
+		.head .title {
+			font-size: 15dp;
+			line-height: 22dp;
+		}
+		#total {
+			flex: 1;
+			text-align: right;
+			font-size: 12dp;
+			line-height: 22dp;
+			white-space: nowrap;
+			color: #8593a1;
+		}
+		#total .fig {
+			font-weight: bold;
+			font-size: 15dp;
+			color: #f0f4f8;
+		}
+		/* the share of each frame this side of Lua takes */
+		#budget {
+			height: 4dp;
+			margin-top: 3dp;
+			background-color: #131920;
+		}
+		#budget-fill {
+			height: 4dp;
+			width: 0%;
+			background-color: #5fd38d;
+		}
+		#verdict {
+			height: 18dp;
+			margin-top: 5dp;
+			font-size: 12dp;
+			line-height: 18dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #5fd38d;
+		}
+		#verdict.warn { color: #ffcf5c; }
+		#verdict.bad { color: #ff5c5c; }
+		#verdict.wait { color: #8593a1; }
+
+		.cols, .row {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+		.cols {
+			height: 26dp;
+			margin-top: 4dp;
+			border-bottom: 1dp #232d38;
+			font-size: 9dp;
+			line-height: 11dp;
+			letter-spacing: 1dp;
+			text-transform: uppercase;
+			color: #8593a1;
+		}
+		.row {
+			height: 18dp;
+			box-sizing: border-box;
+			border-left: 2dp #1a222b;
+			font-size: 12dp;
+			line-height: 18dp;
+			color: #c2ccd6;
+		}
+		.row.warn { border-left: 2dp #ffcf5c; }
+		.row.bad { border-left: 2dp #ff5c5c; background-color: #2a1518; }
+		.row.idle { color: #5c6875; }
+
+		.c-name {
+			width: 178dp;
+			padding-left: 6dp;
+			box-sizing: border-box;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		.c-name .pre { color: #5c6875; }
+		.c-name .part { color: #6fb7ff; font-size: 10dp; }
+		.c-bar { width: 46dp; }
+		.c-load, .c-peak, .c-mem {
+			text-align: right;
+			white-space: nowrap;
+		}
+		.c-load { width: 44dp; }
+		.c-peak { width: 46dp; }
+		.c-mem { width: 52dp; }
+		.c-hot {
+			flex: 1;
+			padding-left: 10dp;
+			white-space: nowrap;
+			overflow: hidden;
+			font-size: 11dp;
+			color: #8593a1;
+		}
+		.cols .c-hot { font-size: 9dp; }
+		.barbg {
+			height: 5dp;
+			margin-right: 6dp;
+			background-color: #131920;
+		}
+		.barfill {
+			height: 5dp;
+			background-color: #5fd38d;
+		}
+		.warn .barfill { background-color: #ffcf5c; }
+		.bad .barfill { background-color: #ff5c5c; }
+		/* a figure that is over its line is the colour of how far over */
+		.v-warn { color: #ffcf5c; font-weight: bold; }
+		.v-bad { color: #ff5c5c; font-weight: bold; }
+		.v-zero { color: #3d4753; }
+
+		#rows {
+			height: 360dp;
+			overflow: hidden;
+		}
+		#foot {
+			height: 16dp;
+			margin-top: 4dp;
+			font-size: 10dp;
+			line-height: 16dp;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #5c6875;
+		}
+	</style>
+</head>
+<body>
+	<div id="prof" class="panel hidden">
+		<div class="bracket tl"/>
+		<div class="bracket br"/>
+		<div class="head">
+			<div id="title" class="title">Profiler</div>
+			<div id="total"></div>
+		</div>
+		<div id="budget"><div id="budget-fill"/></div>
+		<div id="verdict" class="wait">Measuring...</div>
+		<div class="cols">
+			<div class="c-name" id="col-name">Widget</div>
+			<div class="c-bar"></div>
+			<div class="c-load">Load<br/>ms/frame</div>
+			<div class="c-peak">Spike<br/>ms</div>
+			<div class="c-mem">Memory<br/>KB/s</div>
+			<div class="c-hot">Busiest<br/>call-in</div>
+		</div>
+		<div id="rows"></div>
+		<div id="foot"></div>
+	</div>
+</body>
+</rml>

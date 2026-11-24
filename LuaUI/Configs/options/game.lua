@@ -72,5 +72,11 @@ return {
 		{ id = "geospots", name = "Geovent markers", type = "bool", widget = "Geovent Spot Drawer", requires = "Geovent Spot Drawer" },
 		{ id = "geospotsminimap", name = "Geovents on minimap", type = "bool", widget = "Geovent Spot Drawer (Minimap)", requires = "Geovent Spot Drawer (Minimap)" },
 		{ id = "startradius", name = "Commander start radius", type = "bool", widget = "StartRadius", requires = "StartRadius" },
+
+		{ type = "separator", name = "Debug" },
+		{ id = "widgetprofiler", name = "Widget profiler", type = "bool", widget = "Bastion Widget Profiler", requires = "Bastion Widget Profiler",
+		  desc = "A panel listing the interface widgets that cost the most time and memory, worst first. Measuring has a small cost of its own; leave it off when you are not looking." },
+		{ id = "gadgetprofiler", name = "Gadget profiler", type = "bool", widget = "Bastion Gadget Profiler", requires = "Bastion Gadget Profiler",
+		  desc = "The same for the game's gadgets, shown beside the widget profiler. While it is on, the synced gadgets are timed on every player's machine." },
 	},
 }
