@@ -59,7 +59,8 @@ end
 --    Alt + right click on a job's marker takes it off the board.
 --
 --  Markers on the ground: white, waiting; yellow, kept for a builder that is
---  about to be free; green, being built.
+--  about to be free; green, being built. Until its frame is started a job also
+--  shows the building itself, see-through, as a builder's own queue does.
 --
 --------------------------------------------------------------------------------
 
@@ -614,6 +615,47 @@ function widget:DrawWorldPreUnit()
 		end
 	end
 	gl.LineWidth(1)
+	gl.Color(1, 1, 1, 1)
+end
+
+-- The building itself, see-through, on every job that has no frame yet: what
+-- the engine shows for the queue of a selected builder, but for the board.
+-- A job whose builder is selected is left to the engine, which draws its own.
+local GHOST_MAX = 150 -- ghosts drawn in one frame
+
+local function GhostHeight(job, ud)
+	local ground = spGetGroundHeight(job.x, job.z)
+	if ground < 0 and ud.floatOnWater then
+		return -(ud.waterline or 0)
+	end
+	return ground
+end
+
+function widget:DrawWorld()
+	if #jobs == 0 or Spring.IsGUIHidden() then return end
+	local drawn = 0
+	gl.DepthTest(true)
+	gl.Color(1, 1, 1, 1)
+	for i = 1, #jobs do
+		local job = jobs[i]
+		local hasFrame = job.unit and spValidUnitID(job.unit)
+		local engineDraws = job.state == "active" and job.builder and Spring.IsUnitSelected(job.builder)
+		if not hasFrame and not engineDraws then
+			local ud = UnitDefs[job.def]
+			local y = GhostHeight(job, ud)
+			local r = max(ud.xsize, ud.zsize) * 4
+			if Spring.IsAABBInView(job.x - r, y, job.z - r, job.x + r, y + (ud.height or 40), job.z + r) then
+				gl.PushMatrix()
+				gl.Translate(job.x, y, job.z)
+				gl.Rotate(job.facing * 90, 0, 1, 0)
+				gl.UnitShape(job.def, myTeam, false, true, false) -- engine state, see-through (nothing is drawn with the 4th argument false)
+				gl.PopMatrix()
+				drawn = drawn + 1
+				if drawn >= GHOST_MAX then break end
+			end
+		end
+	end
+	gl.DepthTest(false)
 	gl.Color(1, 1, 1, 1)
 end
 
