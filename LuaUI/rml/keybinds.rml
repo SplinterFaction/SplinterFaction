@@ -31,6 +31,15 @@
 			flex-direction: row;
 			margin-top: 10dp;
 		}
+		/* the filter above the All Bindings list */
+		#filter-row {
+			display: flex;
+			flex-direction: row;
+			margin-top: 8dp;
+		}
+		#filter-row.hidden {
+			display: none;
+		}
 		#list {
 			flex: 1;
 			overflow-y: auto;
@@ -365,6 +374,9 @@
 				<div id="tab-sf" class="tab" data-tab="1">SF Keys</div>
 				<div id="tab-all" class="tab" data-tab="2">All Bindings</div>
 				<div id="tab-custom" class="tab" data-tab="3">Custom Binds</div>
+			</div>
+			<div id="filter-row" class="hidden">
+				<div id="filter" class="field"/>
 			</div>
 			<div id="list"/>
 

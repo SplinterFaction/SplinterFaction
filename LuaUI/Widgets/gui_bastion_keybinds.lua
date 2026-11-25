@@ -109,7 +109,8 @@ local names      = {}  -- action line -> the player's name for it
 local actions          -- the keybind_actions module
 local editor           -- the bind editor's state while it is open (see OpenEditor)
 local picker           -- the value picker's state while it is open (see OpenPicker)
-local focus            -- which text field takes typing: "name" | "key" | "line" | "pick"
+local focus            -- which text field takes typing: "name" | "key" | "line" | "pick" | "filter"
+local filterText = ""  -- All Bindings: only rows with every word of this in the action or its keys
 local caret            -- caret position in the focused field, in characters from the start
 local unitOptions      -- cached picker options: every unit def
 local paramOptions = {}-- cached picker options per customParams key
@@ -509,9 +510,31 @@ local function BuildList()
 		end
 		table.sort(rows)
 
-		items[#items + 1] = { kind = "header", label = "All Bindings" }
+		-- the filter: every word typed must be in the action line or in its keys
+		local words = {}
+		for word in filterText:lower():gmatch("%S+") do
+			words[#words + 1] = word
+		end
+		local head = #items + 1
+		items[head] = { kind = "header", label = "All Bindings" }
 		for i = 1, #rows do
-			AddRow(rows[i])
+			local show = true
+			if #words > 0 then
+				local hay = (rows[i] .. " " .. table.concat(HotKeysFor(rows[i]), " ")):lower()
+				for w = 1, #words do
+					if not hay:find(words[w], 1, true) then
+						show = false
+						break
+					end
+				end
+			end
+			if show then
+				AddRow(rows[i])
+			end
+		end
+		if #words > 0 then
+			local shown = #items - head
+			items[head].label = (shown == 0) and "Nothing matches" or ("All Bindings   " .. shown .. " of " .. #rows)
 		end
 	end
 
@@ -1023,6 +1046,7 @@ end
 --------------------------------------------------------------------------------
 
 local function FieldGet()
+	if focus == "filter" then return filterText end
 	if focus == "pick" then return picker and picker.query or "" end
 	if not editor then return "" end
 	if focus == "name" then return editor.name end
@@ -1032,7 +1056,13 @@ local function FieldGet()
 end
 
 local function FieldSet(text)
-	if focus == "pick" then
+	if focus == "filter" then
+		if text ~= filterText then
+			filterText = text
+			listDirty = true
+			pcall(function() view.Element("list").scroll_top = 0 end)
+		end
+	elseif focus == "pick" then
 		if picker then picker.query = text end
 	elseif editor then
 		if focus == "name" then
@@ -1422,6 +1452,8 @@ Refresh = function()
 
 	RenderEditor()
 	RenderPicker()
+	view.SetClass("filter-row", "hidden", tab ~= "all" or editor ~= nil)
+	SetField("filter", filterText, "type to filter: an action or a key", focus == "filter")
 
 	if listDirty and not editor then
 		BuildList()
@@ -1514,6 +1546,10 @@ local function Open()
 	capture = nil
 	confirm = nil
 	editor, picker, focus = nil, nil, nil
+	filterText = ""
+	if tab == "all" then
+		FocusField("filter") -- ready to type
+	end
 	-- every key is ours while the window is open: typing a name must not open
 	-- the share window on "h", and capturing a key must not run what that key
 	-- is bound to
@@ -1553,6 +1589,9 @@ end
 local function OnListMouseDown(event)
 	if confirm or editor or picker then
 		return
+	end
+	if focus == "filter" then
+		focus = nil
 	end
 	local button = event.parameters and event.parameters.button
 
@@ -1633,6 +1672,7 @@ function widget:Initialize()
 	view.Assume("confirm-dim", "hidden", true)
 	view.Assume("editor", "hidden", true)
 	view.Assume("picker", "hidden", true)
+	view.Assume("filter-row", "hidden", true)
 
 	LoadEdits()
 	ParseGameKeysFile()
@@ -1655,6 +1695,17 @@ function widget:Initialize()
 		end
 	end)
 	view.Element("list"):AddEventListener("mousedown", OnListMouseDown)
+	view.Element("filter-row"):AddEventListener("mousedown", function(event)
+		if confirm or editor or picker then return end
+		local button = event.parameters and event.parameters.button
+		capture = nil
+		if button == 1 then
+			focus = "filter"
+			FieldSet("") -- right click clears
+		end
+		FocusField("filter")
+		Refresh()
+	end)
 	view.Element("editor"):AddEventListener("mousedown", OnEditorMouseDown)
 	view.Element("picker"):AddEventListener("mousedown", OnPickerMouseDown)
 	view.Element("tabs"):AddEventListener("mousedown", function(event)
@@ -1667,6 +1718,10 @@ function widget:Initialize()
 			if tab ~= TABS[index] then
 				tab = TABS[index]
 				listDirty = true
+				focus = nil
+				if tab == "all" then
+					FocusField("filter")
+				end
 				Refresh()
 				pcall(function() view.Element("list").scroll_top = 0 end)
 			end
@@ -1761,9 +1816,22 @@ function widget:KeyPress(key, mods, isRepeat)
 	end
 
 	-- a text field is taking the keys
-	if focus and (editor or picker) then
+	local filtering = (focus == "filter") and not confirm
+	-- the filter: Esc clears it, and with nothing in it closes the window as
+	-- usual; Page Up and Down still scroll the list
+	if filtering and (sym == "esc" or sym == "escape") and filterText == "" then
+		filtering = false
+		focus = nil
+	end
+	if filtering and (sym == "pageup" or sym == "pagedown") then
+		filtering = false
+	end
+	if filtering or (focus and focus ~= "filter" and (editor or picker)) then
 		if sym == "esc" or sym == "escape" then
-			if focus == "pick" then ClosePicker() else focus = nil end
+			if focus == "filter" then
+				FieldSet("")
+				caret = 0
+			elseif focus == "pick" then ClosePicker() else focus = nil end
 			Refresh()
 			return true
 		end
@@ -1783,7 +1851,7 @@ function widget:KeyPress(key, mods, isRepeat)
 			return true
 		end
 		if sym == "return" or sym == "enter" or sym == "numpad_enter" or sym == "kp_enter" then
-			if focus == "pick" then PickerAccept() else focus = nil end
+			if focus == "pick" then PickerAccept() elseif focus ~= "filter" then focus = nil end
 			Refresh()
 			return true
 		end
@@ -1835,8 +1903,11 @@ function widget:KeyPress(key, mods, isRepeat)
 end
 
 function widget:TextInput(utf8)
-	if not document or not isOpen or not focus or not (editor or picker) then
+	if not document or not isOpen or not focus or not (editor or picker or focus == "filter") then
 		return false
+	end
+	if capture or confirm then
+		return true
 	end
 	FieldInsert(utf8)
 	Refresh()
