@@ -31,7 +31,7 @@ end
 --    takes more, and a factory that is lost gives back what it held.
 --
 --    Repeat belongs to the group: a finished unit goes back on the end of the
---    shared queue. Rally points stay each factory's own, unless shared rally
+--    shared queue, unless it was ordered with Alt: that one is built once. Rally points stay each factory's own, unless shared rally
 --    is on (WG.factoryLink.tune.sharedRally), in which case a move, fight,
 --    patrol or guard order to one is given to all.
 --
@@ -165,23 +165,26 @@ end
 -- the shared queue
 --------------------------------------------------------------------------------
 
-local function PoolAdd(group, def, count, front)
+-- once: built one time and not put back by repeat (an Alt order, as in a
+-- factory of its own)
+local function PoolAdd(group, def, count, front, once)
 	local pool = group.pool
 	if count <= 0 then
 		return
 	end
+	once = once and true or nil
 	if front then
-		if pool[1] and pool[1].def == def then
+		if pool[1] and pool[1].def == def and pool[1].once == once then
 			pool[1].count = pool[1].count + count
 		else
-			table.insert(pool, 1, { def = def, count = count })
+			table.insert(pool, 1, { def = def, count = count, once = once })
 		end
 	else
 		local last = pool[#pool]
-		if last and last.def == def then
+		if last and last.def == def and last.once == once then
 			last.count = last.count + count
 		else
-			pool[#pool + 1] = { def = def, count = count }
+			pool[#pool + 1] = { def = def, count = count, once = once }
 		end
 	end
 end
@@ -217,7 +220,7 @@ local function PoolTake(group, unitID, info)
 			if entry.count <= 0 then
 				table.remove(pool, i)
 			end
-			return entry.def
+			return entry.def, entry.once
 		end
 	end
 	return nil
@@ -364,7 +367,7 @@ local function Link(units)
 				groupOf[member] = target
 			end
 			for p = 1, #group.pool do
-				PoolAdd(target, group.pool[p].def, group.pool[p].count)
+				PoolAdd(target, group.pool[p].def, group.pool[p].count, false, group.pool[p].once)
 			end
 			target.rep = target.rep or group.rep
 			DropGroup(group)
@@ -413,7 +416,7 @@ local function Lost(unitID)
 	end
 	local h = held[unitID] or {}
 	for i = #h, 1, -1 do
-		PoolAdd(group, h[i].def, 1, true)
+		PoolAdd(group, h[i].def, 1, true, h[i].once)
 	end
 	held[unitID] = nil
 	cool[unitID] = nil
@@ -448,7 +451,7 @@ local function Feed(group, unitID)
 		-- it never arrived, or the factory turned it down: back it goes
 		cool[unitID] = cool[unitID] or {}
 		for i = #h, 1, -1 do
-			PoolAdd(group, h[i].def, 1, true)
+			PoolAdd(group, h[i].def, 1, true, h[i].once)
 			cool[unitID][h[i].def] = clock + TUNE.retryTime
 			h[i] = nil
 		end
@@ -473,10 +476,10 @@ local function Feed(group, unitID)
 		return
 	end
 
-	local def = PoolTake(group, unitID, info)
+	local def, once = PoolTake(group, unitID, info)
 	if def then
 		spGiveOrderToUnit(unitID, -def, {}, 0)
-		h[#h + 1] = { def = def, time = clock, frame = spGetGameFrame() }
+		h[#h + 1] = { def = def, once = once, time = clock, frame = spGetGameFrame() }
 	end
 end
 
@@ -522,8 +525,9 @@ function widget:UnitFromFactory(unitID, unitDefID, unitTeam, factID)
 	end
 	for i = 1, #h do
 		if h[i].def == unitDefID then
+			local once = h[i].once
 			table.remove(h, i)
-			if group.rep then
+			if group.rep and not once then
 				PoolAdd(group, unitDefID, 1)
 			end
 			return
@@ -635,7 +639,7 @@ function widget:CommandNotify(cmdID, cmdParams, cmdOpts)
 			if cmdOpts.right then
 				RemoveFromGroup(group, def, count)
 			elseif GroupCan(group, def) then
-				PoolAdd(group, def, count, cmdOpts.alt)
+				PoolAdd(group, def, count, cmdOpts.alt, cmdOpts.alt)
 			end
 		end
 		if #others > 0 then
@@ -949,7 +953,7 @@ function widget:GetConfigData()
 			saved.held[m] = defs
 		end
 		for p = 1, #group.pool do
-			saved.pool[p] = { def = group.pool[p].def, count = group.pool[p].count }
+			saved.pool[p] = { def = group.pool[p].def, count = group.pool[p].count, once = group.pool[p].once }
 		end
 		data.groups[g] = saved
 	end
@@ -990,7 +994,7 @@ local function Restore(data)
 		end
 		for _, entry in ipairs(saved.pool or {}) do
 			if UnitDefs[entry.def] then
-				PoolAdd(group, entry.def, entry.count)
+				PoolAdd(group, entry.def, entry.count, false, entry.once)
 			end
 		end
 		if #group.members < 2 then
@@ -1025,7 +1029,7 @@ function widget:Initialize()
 					copy.held[unitID] = defs
 				end
 				for p = 1, #group.pool do
-					copy.pool[p] = { def = group.pool[p].def, count = group.pool[p].count }
+					copy.pool[p] = { def = group.pool[p].def, count = group.pool[p].count, once = group.pool[p].once }
 				end
 				list[g] = copy
 			end
@@ -1039,7 +1043,7 @@ function widget:Initialize()
 		Add = function(unitID, def, count, front)
 			local group = groupOf[unitID]
 			if group and GroupCan(group, def) then
-				PoolAdd(group, def, count or 1, front)
+				PoolAdd(group, def, count or 1, front, front)
 				return true
 			end
 			return false
