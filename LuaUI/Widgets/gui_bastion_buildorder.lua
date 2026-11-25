@@ -797,6 +797,22 @@ local function ApplyCommand(cmd, button)
 		return
 	end
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
+	-- Alt + left click on a building: place it for the Global Build board, to be
+	-- built by whichever builder is best placed, not by the selected one
+	if alt and button == 1 and cmd.id < 0 and WG.globalBuild then
+		local ud = UnitDefs[-cmd.id]
+		if ud and not ud.canMove then
+			local x, z
+			local first = (spGetSelectedUnits() or {})[1]
+			if first then
+				local ux, _, uz = Spring.GetUnitPosition(first)
+				x, z = ux, uz
+			end
+			if WG.globalBuild.StartSession(-cmd.id, x, z) then
+				return
+			end
+		end
+	end
 	Spring.SetActiveCommand(index, button, button == 1, button == 3, alt, ctrl, meta, shift)
 end
 

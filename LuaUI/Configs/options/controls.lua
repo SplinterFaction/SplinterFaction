@@ -59,7 +59,7 @@ return {
 		{ id = "splitbuildorders", name = "Split build orders", type = "bool", widget = "Build Order Splitter", requires = "Build Order Splitter",
 		  desc = "Queued build orders go to whichever selected builder would finish each soonest, and builders that run out take over the others' waiting work." },
 		{ id = "globalbuild", name = "Global build", type = "bool", widget = "Global Build", requires = "Global Build",
-		  desc = "Alt+click a building, then place more of it anywhere: the builds go on a board and the best-placed builders take them. Alt+right click a marker cancels it. Alt+G keeps the selected builders off the board, or puts them back." },
+		  desc = "Alt+click a building, or a building in a builder's build menu, then place it anywhere: the builds go on a board and the best-placed builders take them. Alt+right click a marker cancels it. Alt+G keeps the selected builders off the board, or puts them back." },
 		{ id = "factorylink", name = "Linked factories", type = "bool", widget = "Factory Link", requires = "Factory Link",
 		  desc = "Select factories and press Link (Alt+L): they share one build queue, and each takes the next unit from it as it comes free. Hold Space to order from one factory alone. Alt+Shift+L unlinks.",
 		  children = {

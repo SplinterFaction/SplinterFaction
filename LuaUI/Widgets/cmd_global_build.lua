@@ -16,7 +16,8 @@ end
 --
 --  PLACING
 --    Alt + left click on a building (yours or anyone's you can see) samples
---    it. You are then placing that building the usual way: click for one,
+--    it, and so does Alt + left click on a building in the build menu of a
+--    selected builder. You are then placing that building the usual way: click for one,
 --    Shift-drag for a line, Shift+Alt-drag for a filled box, Shift+Ctrl-drag
 --    for a hollow one, with the usual spacing and facing keys. A tag by the
 --    cursor says the builds are going to the board. When placing ends (a click
@@ -648,7 +649,7 @@ function widget:DrawWorld()
 				gl.PushMatrix()
 				gl.Translate(job.x, y, job.z)
 				gl.Rotate(job.facing * 90, 0, 1, 0)
-				gl.UnitShape(job.def, myTeam, false, true, false) -- engine state, see-through (nothing is drawn with the 4th argument false)
+				gl.UnitShape(job.def, myTeam, false, true, false) -- engine state, see-through; 4th argument true: our matrix already holds the camera
 				gl.PopMatrix()
 				drawn = drawn + 1
 				if drawn >= GHOST_MAX then break end
