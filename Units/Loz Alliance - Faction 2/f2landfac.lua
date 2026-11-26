@@ -7,7 +7,7 @@ unitName = "f2landfac"
 
 buildCostMetal = 100
 
-humanName = [[Land Factory]]
+humanName = [[Loz Land Factory]]
 
 objectName = "f2landfac.s3o"
 script = "f2landfac.cob"

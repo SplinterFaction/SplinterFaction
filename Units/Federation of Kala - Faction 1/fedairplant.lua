@@ -7,7 +7,7 @@ unitName = "fedairplant"
 buildCostEnergy = 0
 buildCostMetal = 100
 
-humanName = [[VTOL Factory]]
+humanName = [[Federation VTOL Factory]]
 
 objectName = "fedairplant.s3o"
 script = "fedairplant.cob"

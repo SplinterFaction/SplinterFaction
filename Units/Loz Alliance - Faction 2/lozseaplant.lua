@@ -6,7 +6,7 @@ unitName = "lozseaplant"
 
 buildCostMetal = 100
 
-humanName = [[Sea Factory]]
+humanName = [[Loz Sea Factory]]
 
 objectName = "sharedseaplant2.s3o"
 script = "sharedseaplant.cob"

@@ -6,7 +6,7 @@ unitName = "fedseaplant"
 
 buildCostMetal = 100
 
-humanName = [[Sea Factory]]
+humanName = [[Federation Sea Factory]]
 
 objectName = "fedseaplant.s3o"
 script = "fedseaplant.cob"
