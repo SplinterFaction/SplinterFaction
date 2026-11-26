@@ -998,11 +998,13 @@ function widget:Initialize()
 
 	-- the GLOBAL switch: Global Build's board mode
 	view.Assume("build-head", "hidden", true)
-	local globalSwitch = view.Element("build-global")
-	if globalSwitch then
-		globalSwitch:AddEventListener("mousedown", function(event)
+	-- (listened for on the row and found by its attribute, the way the tabs are)
+	local headRow = view.Element("build-head")
+	if headRow then
+		headRow:AddEventListener("mousedown", function(event)
 			local board = WG.globalBuild
-			if board and board.SetMode and event.parameters and event.parameters.button == 0 then
+			if hud.EventAttribute(event, "data-global") and board and board.SetMode
+				and event.parameters and event.parameters.button == 0 then
 				spPlaySoundFile("leftclick", 1.0, "ui")
 				board.SetMode(not board.GetMode())
 				lastUpdate = nil

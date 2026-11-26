@@ -95,7 +95,9 @@
 			display: none;
 		}
 		#build-title {
-			flex: 1;
+			flex: 1 1 0dp;
+			min-width: 0dp;
+			pointer-events: none; /* never in the way of the switch beside it */
 			font-size: 11dp;
 			line-height: 13dp;
 			letter-spacing: 1dp;
@@ -105,6 +107,9 @@
 			color: #8593a1;
 		}
 		#build-global {
+			flex: 0 0 auto;
+			pointer-events: auto;
+			cursor: pointer;
 			padding: 3dp 9dp 3dp 9dp;
 			box-sizing: border-box;
 			font-size: 11dp;
@@ -373,7 +378,7 @@
 		<div class="bracket br"/>
 		<div id="build-head" class="hidden">
 			<div id="build-title">Build</div>
-			<div id="build-global">Global</div>
+			<div id="build-global" data-global="1">Global</div>
 		</div>
 		<div id="build-tabs" class="hidden"/>
 		<div id="build-link" class="hidden">
