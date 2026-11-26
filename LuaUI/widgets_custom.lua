@@ -105,7 +105,11 @@ widgetHandler = {
 
   actionHandler = include("actions.lua"),
 
-  WG = {}, -- shared table for widgets
+  -- The shared table for widgets. It is the global WG (main_custom.lua), not a
+  -- table of its own: RmlUi runs event handlers outside the widget's
+  -- environment, where "WG" is the global one, and a handler that looked there
+  -- for another widget (WG.globalBuild, WG.factoryLink) found nothing.
+  WG = WG or {},
 
   globals = {}, -- global vars/funcs
 
