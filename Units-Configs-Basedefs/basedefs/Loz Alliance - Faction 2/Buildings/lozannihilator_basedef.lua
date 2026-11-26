@@ -61,7 +61,7 @@ unitDef                     = {
 		},
 	},
 	customParams                  = {
-		unitguide = [[The Annihilator is the Loz Alliance's Tier 3 heavy anti-armor turret, built exclusively to destroy MASSIVE-category targets. Its high-intensity beam laser holds on target long enough to burn through the armor of even the largest ground units and warships, dealing devastating single-target damage at considerable range. It has no interest in light targets — keep it screened from raiders and let it focus on the threats nothing else can handle.]],
+		unitguide = [[The Annihilator is the Loz Alliance's Tier 3 heavy anti-armor turret, built to destroy MASSIVE-category targets, which it always prefers, though it can fire at ordinary ground and naval targets too. Its high-intensity beam laser holds on target long enough to burn through the armor of even the largest ground units and warships, dealing devastating single-target damage at considerable range. It has no interest in light targets — keep it screened from raiders and let it focus on the threats nothing else can handle.]],
 		unittype				  = "building",
 		unitrole				  = "Special Turret",
 		unitrole_sound            = "turret",

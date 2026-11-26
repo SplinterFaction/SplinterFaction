@@ -140,7 +140,7 @@ weaponDefs                 = {
 		waterweapon				 = false,
 		noexplode                 = true,
 		customparams              = {
-			weaponguide = [[An upgraded high-intensity wave laser that fires in rapid bursts, stacking heat damage with every hit. Targets that absorb enough thermal energy malfunction and shut down entirely, a fate increasingly unavoidable the longer the Cauterizer stays on them.]],
+			weaponguide = [[An upgraded high-intensity wave laser that fires in rapid bursts, stacking heat damage with every hit. Targets that absorb enough thermal energy slow to a crawl and, at full heat, explode, a fate increasingly unavoidable the longer the Cauterizer stays on them.]],
 			expl_light_color	= red, -- As a string, RGB
 			expl_light_radius	= mediumExplosion, -- In Elmos
 			expl_light_life		= mediumExplosionTTL, -- In frames I.E. 30 frames = 1 second

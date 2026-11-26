@@ -83,7 +83,7 @@ unitDef                    = {
 		},
 	},
 	customParams                 = {
-		unitguide = [[The Luger is a self-propelled long-range artillery piece that lobs massive plasma shells at extreme range with a slow but devastating reload cycle. It defaults to hold-fire and must be directed manually — its enormous per-shot damage and wide blast radius make it capable of erasing grouped formations or key structures in a single volley. It is not a frontline unit and will not survive direct engagement; it needs screening, good positioning, and patience.]],
+		unitguide = [[The Luger is a self-propelled long-range artillery piece that lobs massive plasma shells at extreme range with a slow but devastating reload cycle. Its enormous per-shot damage and wide blast radius make it capable of erasing grouped formations or key structures in a single volley. It is not a frontline unit and will not survive direct engagement; it needs screening, good positioning, and patience.]],
 		unittype				  = "mobile",
 		unitrole				 = "Artillery - Tech 2",
 		buildmenucategory        = "Support",
