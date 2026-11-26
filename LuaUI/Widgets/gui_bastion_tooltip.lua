@@ -119,20 +119,49 @@ local function GetKeySymbol(k)
 	return keySymbol:sub(1, 1):upper() .. keySymbol:sub(2)
 end
 
+-- as the build hotkeys widget has them now (they can be changed in the
+-- Keybinds window), or the defaults while that widget is not there
 local humanNameToKeySymbols = {}
-for unitDefID = 1, #UnitDefs do
-	local ud = UnitDefs[unitDefID]
-	local name = ud.name
-	if name:find("_up", -5) then
-		name = name:sub(1, -5)
-	end
-	if nameToKeyCode and nameToKeyCode[name] then
-		local parts = {}
-		for i = 1, #nameToKeyCode[name] do
-			parts[#parts + 1] = GetKeySymbol(nameToKeyCode[name][i])
+local defNameToKeySymbols = {} -- by unit def name: two units may share a human name and not their keys
+local keysVersion
+local function ReadBuildKeys()
+	local api = WG.buildHotkeys
+	local live = api and api.GetKeys
+	keysVersion = api and api.version
+	humanNameToKeySymbols = {}
+	defNameToKeySymbols = {}
+	for unitDefID = 1, #UnitDefs do
+		local ud = UnitDefs[unitDefID]
+		local name = ud.name
+		if name:find("_up", -5) then
+			name = name:sub(1, -5)
 		end
-		humanNameToKeySymbols[ud.humanName] = table_concat(parts, " + ")
+		local codes
+		if live then
+			codes = live(name)
+		else
+			codes = nameToKeyCode and nameToKeyCode[name]
+		end
+		if codes then
+			local parts = {}
+			for i = 1, #codes do
+				parts[#parts + 1] = GetKeySymbol(codes[i])
+			end
+			humanNameToKeySymbols[ud.humanName] = table_concat(parts, " + ")
+			defNameToKeySymbols[ud.name] = humanNameToKeySymbols[ud.humanName]
+		end
 	end
+end
+ReadBuildKeys()
+
+local function HotkeyText(ud, humanName)
+	local keys
+	if ud then
+		keys = defNameToKeySymbols[ud.name]
+	else
+		keys = humanNameToKeySymbols[humanName]
+	end
+	return keys and ("Hotkey: " .. keys) or nil
 end
 
 --------------------------------------------------------------------------------
@@ -494,7 +523,7 @@ local function BuildBuildPanelData(buildData)
 		healthText = ud and FormatNbr(ud.health, 0) or (buildData.health and FormatNbr(buildData.health, 0) or nil),
 		shieldText = (ud and ud.shieldWeaponDef and WeaponDefs[ud.shieldWeaponDef]) and FormatNbr(WeaponDefs[ud.shieldWeaponDef].shieldPower, 0) or nil,
 		overshieldText = (ud and ud.customParams and ud.customParams.isshieldedunit == "1" and ud.customParams.shield_max_strength) and FormatNbr(ud.customParams.shield_max_strength, 0) or nil,
-		statusText = humanNameToKeySymbols[buildData.name] and ("Hotkey: " .. humanNameToKeySymbols[buildData.name]) or nil,
+		statusText = HotkeyText(ud, buildData.name),
 
 		metalCostText = FormatNbr(buildData.metalCost or (ud and ud.metalCost or 0), 0),
 		energyCostText = FormatNbr(buildData.energyCost or (ud and ud.energyCost or 0), 0),
@@ -1128,6 +1157,9 @@ end
 function widget:Update()
 	if not document then
 		return
+	end
+	if WG.buildHotkeys and WG.buildHotkeys.version ~= keysVersion then
+		ReadBuildKeys()
 	end
 	if hud.FollowGuiHidden(document) then
 		return -- hidden with the rest of the GUI (F5)

@@ -106,6 +106,95 @@ WG.buildHotkeys = {}
 WG.buildHotkeys.keysPressed = {}
 WG.buildHotkeys.hasUpdated = false
 
+--------------------------------------------------------------------------------
+-- The keys can be changed (Keybinds window, Build Keys tab). The defaults are
+-- LuaUI/Configs/evo_buildHotkeysConfig.lua; what the player changed is kept
+-- with this widget's settings. Other widgets ask here for the keys of a thing
+-- (the build menu and the tooltip, to print them) and watch `version`.
+--------------------------------------------------------------------------------
+
+local defaultKeys = {}
+for name, codes in pairs(nameToKeyCode) do
+	local copy = {}
+	for i = 1, #codes do copy[i] = codes[i] end
+	defaultKeys[name] = copy
+end
+local changedKeys = {} -- [name] = {key codes}; an empty list is "no keys"
+
+local function ApplyKeys(name)
+	local changed = changedKeys[name]
+	if changed == nil then
+		nameToKeyCode[name] = defaultKeys[name]
+	elseif #changed == 0 then
+		nameToKeyCode[name] = nil
+	else
+		nameToKeyCode[name] = changed
+	end
+	WG.buildHotkeys.version = WG.buildHotkeys.version + 1
+	updateCommands = true
+end
+
+local function SameKeys(a, b)
+	a, b = a or {}, b or {}
+	if #a ~= #b then return false end
+	for i = 1, #a do
+		if a[i] ~= b[i] then return false end
+	end
+	return true
+end
+
+WG.buildHotkeys.version = 0
+-- the key codes that build this (unit def name without any "_upN"), or nil
+WG.buildHotkeys.GetKeys = function(name) return nameToKeyCode[name] end
+WG.buildHotkeys.GetDefault = function(name) return defaultKeys[name] end
+WG.buildHotkeys.IsChanged = function(name) return changedKeys[name] ~= nil end
+WG.buildHotkeys.CountChanged = function()
+	local n = 0
+	for _ in pairs(changedKeys) do n = n + 1 end
+	return n
+end
+-- sets the keys of a thing: a list of key codes, or nil or {} for none
+WG.buildHotkeys.SetKeys = function(name, codes)
+	local copy = {}
+	for i = 1, #(codes or {}) do copy[i] = codes[i] end
+	changedKeys[name] = (not SameKeys(copy, defaultKeys[name])) and copy or nil
+	ApplyKeys(name)
+end
+WG.buildHotkeys.Reset = function(name)
+	changedKeys[name] = nil
+	ApplyKeys(name)
+end
+WG.buildHotkeys.ResetAll = function()
+	local names = {}
+	for name in pairs(changedKeys) do names[#names + 1] = name end
+	for i = 1, #names do
+		changedKeys[names[i]] = nil
+		ApplyKeys(names[i])
+	end
+end
+
+function widget:GetConfigData()
+	local keys = {}
+	for name, codes in pairs(changedKeys) do
+		keys[name] = table.concat(codes, ",")
+	end
+	return { keys = keys }
+end
+
+function widget:SetConfigData(data)
+	if type(data) ~= "table" or type(data.keys) ~= "table" then return end
+	for name, text in pairs(data.keys) do
+		if type(name) == "string" and type(text) == "string" then
+			local codes = {}
+			for code in text:gmatch("%d+") do
+				codes[#codes + 1] = tonumber(code)
+			end
+			changedKeys[name] = codes
+			ApplyKeys(name)
+		end
+	end
+end
+
 -- Clears a table in-place to avoid allocating a new one each call
 local function clearTable(t)
 	for k in pairs(t) do t[k] = nil end

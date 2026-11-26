@@ -94,8 +94,8 @@ local FocusField -- defined with the text fields; the editor and picker call it
 
 local isOpen = false
 
-local tab  = "sf" -- "sf" | "all" | "custom"
-local TABS = {"sf", "all", "custom"}
+local tab  = "sf" -- "sf" | "all" | "custom" | "build"
+local TABS = {"sf", "all", "custom", "build"}
 
 local sfSections = {}  -- ordered {title = , actions = {line, ...}}
 local sfKnown    = {}  -- line -> true
@@ -116,6 +116,7 @@ local unitOptions      -- cached picker options: every unit def
 local paramOptions = {}-- cached picker options per customParams key
 
 local capture          -- row currently awaiting a keypress
+local bcapture         -- Build Keys tab: {item, name, codes} while a thing's keys are being typed
 local confirm          -- {title, lines, onConfirm}
 local status           -- {text, color, expires}
 local listMarkup       -- the list's markup, as last set
@@ -436,6 +437,89 @@ local function AddRow(line, label)
 	}
 end
 
+-- Build Keys tab: everything some builder or factory can build, by the name
+-- its keys go under (an "_upN" variant shares its base's keys), and which of
+-- them sit together in one build menu.
+local buildThings
+local function BuildThings()
+	if buildThings then
+		return buildThings
+	end
+	local seen, structures, units, menus = {}, {}, {}, {}
+	for _, ud in pairs(UnitDefs) do
+		local menu = {}
+		for _, optionID in ipairs(ud.buildOptions or {}) do
+			local option = UnitDefs[optionID]
+			if option then
+				local name = option.name
+				if name:find("_up", -5) then
+					name = name:sub(1, -5)
+				end
+				menu[name] = true
+				if not seen[name] then
+					seen[name] = true
+					local base = UnitDefNames[name] or option
+					local entry = { name = name, label = base.humanName or name }
+					if base.isImmobile or base.isBuilding or base.isFactory then
+						structures[#structures + 1] = entry
+					else
+						units[#units + 1] = entry
+					end
+				end
+			end
+		end
+		if next(menu) then
+			menus[#menus + 1] = menu
+		end
+	end
+	local function ByLabel(a, b)
+		if a.label:lower() ~= b.label:lower() then
+			return a.label:lower() < b.label:lower()
+		end
+		return a.name < b.name
+	end
+	table.sort(structures, ByLabel)
+	table.sort(units, ByLabel)
+	-- two things with one name (each faction's Land Factory): told apart by the def's name
+	local count = {}
+	for _, list in ipairs({ structures, units }) do
+		for _, entry in ipairs(list) do count[entry.label] = (count[entry.label] or 0) + 1 end
+	end
+	local labels = {}
+	for _, list in ipairs({ structures, units }) do
+		for _, entry in ipairs(list) do
+			if count[entry.label] > 1 then
+				entry.label = entry.label .. "  (" .. entry.name .. ")"
+			end
+			labels[entry.name] = entry.label
+		end
+	end
+	buildThings = { structures = structures, units = units, menus = menus, labels = labels }
+	return buildThings
+end
+
+local function KeySymbols(codes)
+	local out = {}
+	for i = 1, #(codes or {}) do
+		local code = codes[i]
+		if code >= 97 and code <= 122 then
+			out[i] = string.char(code):upper()
+		else
+			local sym = spGetKeySymbol(code) or "?"
+			out[i] = sym:sub(1, 1):upper() .. sym:sub(2)
+		end
+	end
+	return out
+end
+
+local function FilterWords()
+	local words = {}
+	for word in filterText:lower():gmatch("%S+") do
+		words[#words + 1] = word
+	end
+	return words
+end
+
 local function BuildList()
 	items = {}
 
@@ -494,6 +578,45 @@ local function BuildList()
 			end
 		else
 			items[#items + 1] = { kind = "header", label = "No custom binds yet. EDIT on any row in the other tabs opens the same editor." }
+		end
+	elseif tab == "build" then
+		local api = WG.buildHotkeys
+		if not (api and api.GetKeys) then
+			items[#items + 1] = { kind = "header", label = "The build hotkeys widget is not running" }
+		else
+			local things = BuildThings()
+			local words = FilterWords()
+			local shown = 0
+			for _, group in ipairs({ { "Structures", things.structures }, { "Units", things.units } }) do
+				local head = #items + 1
+				items[head] = { kind = "header", label = group[1] }
+				for _, entry in ipairs(group[2]) do
+					local keys = KeySymbols(api.GetKeys(entry.name))
+					local show = true
+					if #words > 0 then
+						local hay = (entry.label .. " " .. entry.name .. " " .. table.concat(keys, " ")):lower()
+						for w = 1, #words do
+							if not hay:find(words[w], 1, true) then
+								show = false
+								break
+							end
+						end
+					end
+					if show then
+						shown = shown + 1
+						items[#items + 1] = {
+							kind = "row", build = true, name = entry.name, line = entry.name,
+							label = entry.label, keys = { table.concat(keys, " + ") }, bound = #keys > 0,
+						}
+					end
+				end
+				if #items == head then
+					items[head] = nil -- nothing of this kind left by the filter
+				end
+			end
+			if shown == 0 then
+				items[#items + 1] = { kind = "header", label = (#words > 0) and "Nothing matches" or "Nothing can be built" }
+			end
 		end
 	else
 		local all = spGetKeyBindings() or {}
@@ -1434,6 +1557,11 @@ local function ItemRML(i, item)
 	if item.kind == "header" then
 		return '<div class="khead label">' .. hud.Escape(item.label) .. '</div>'
 	end
+	if item.build then -- Build Keys: no editor, and changed is asked of the hotkeys widget
+		local changed = WG.buildHotkeys and WG.buildHotkeys.IsChanged and WG.buildHotkeys.IsChanged(item.name)
+		return string.format('<div id="k%d" class="krow%s" data-k="%d"><div class="kname">%s</div><div id="k%d-b" class="badge"/></div>',
+			i, changed and " edited" or "", i, hud.Escape(item.label), i)
+	end
 	if item.kind == "new" then
 		return '<div class="krow new" data-new="1"><div class="kname">' .. hud.Escape(item.label) .. '</div></div>'
 	end
@@ -1449,11 +1577,12 @@ Refresh = function()
 	view.SetClass("tab-sf", "active", tab == "sf")
 	view.SetClass("tab-all", "active", tab == "all")
 	view.SetClass("tab-custom", "active", tab == "custom")
+	view.SetClass("tab-build", "active", tab == "build")
 
 	RenderEditor()
 	RenderPicker()
-	view.SetClass("filter-row", "hidden", tab ~= "all" or editor ~= nil)
-	SetField("filter", filterText, "type to filter: an action or a key", focus == "filter")
+	view.SetClass("filter-row", "hidden", (tab ~= "all" and tab ~= "build") or editor ~= nil)
+	SetField("filter", filterText, (tab == "build") and "type to filter: a name or a key" or "type to filter: an action or a key", focus == "filter")
 
 	if listDirty and not editor then
 		BuildList()
@@ -1466,6 +1595,18 @@ Refresh = function()
 					capture = items[i]
 					break
 				end
+			end
+		end
+		if bcapture then
+			bcapture.item = nil
+			for i = 1, #items do
+				if items[i].build and items[i].name == bcapture.name then
+					bcapture.item = items[i]
+					break
+				end
+			end
+			if not bcapture.item then
+				bcapture = nil
 			end
 		end
 	end
@@ -1484,16 +1625,23 @@ Refresh = function()
 	for i, item in ipairs(items) do
 		if item.kind == "row" and not editor then
 			local waiting = (capture == item)
+			local typing = bcapture ~= nil and bcapture.item == item
 			local text
-			if waiting then
+			if typing then
+				local typed = KeySymbols(bcapture.codes)
+				text = (#typed > 0) and (table.concat(typed, " + ") .. " ...") or "press the keys..."
+				waiting = true
+			elseif waiting then
 				text = "press a key..."
+			elseif item.build and not item.bound then
+				text = "none"
 			elseif #item.keys == 0 then
 				text = "unbound"
 			else
 				text = table.concat(item.keys, ", ")
 			end
 			view.SetText("k" .. i .. "-b", hud.Escape(text))
-			view.SetClass("k" .. i .. "-b", "unbound", not waiting and #item.keys == 0)
+			view.SetClass("k" .. i .. "-b", "unbound", not waiting and (#item.keys == 0 or (item.build and not item.bound)))
 			view.SetClass("k" .. i, "capturing", waiting)
 		end
 	end
@@ -1507,7 +1655,11 @@ Refresh = function()
 		text, class = "Chips build the action line, or type it. Right click a value chip to change its value.", ""
 	else
 		status = nil
-		text, class = "Left click to rebind, right click to unbind, EDIT for the full editor. Written to " .. USER_KEYS_FILE, ""
+		if tab == "build" then
+			text, class = "Left click and type the keys, Enter to accept. Right click: back to the default, or no keys at all.", ""
+		else
+			text, class = "Left click to rebind, right click to unbind, EDIT for the full editor. Written to " .. USER_KEYS_FILE, ""
+		end
 	end
 	view.SetText("status", hud.Escape(text))
 	for _, name in ipairs({"text", "ok", "warn", "err"}) do
@@ -1544,6 +1696,7 @@ local function Open()
 	if isOpen or not document then return end
 	isOpen  = true
 	capture = nil
+	bcapture = nil
 	confirm = nil
 	editor, picker, focus = nil, nil, nil
 	filterText = ""
@@ -1568,6 +1721,7 @@ local function Close()
 	if not isOpen then return end
 	isOpen  = false
 	capture = nil
+	bcapture = nil
 	confirm = nil
 	editor, picker, focus = nil, nil, nil
 	if widgetHandler.ReleaseKeyboard then
@@ -1593,6 +1747,7 @@ local function OnListMouseDown(event)
 	if focus == "filter" then
 		focus = nil
 	end
+	bcapture = nil
 	local button = event.parameters and event.parameters.button
 
 	if button == 0 and hud.EventAttribute(event, "data-new") then
@@ -1616,6 +1771,29 @@ local function OnListMouseDown(event)
 	if not row or row.kind ~= "row" then
 		return
 	end
+	if row.build then
+		local api = WG.buildHotkeys
+		if not (api and api.SetKeys) then
+			return
+		end
+		PlayClickSound()
+		capture = nil
+		if button == 0 then
+			bcapture = { item = row, name = row.name, codes = {} }
+			SetStatus("type the keys for " .. row.label .. ": Enter accepts, Backspace takes one back, Esc cancels", COL.text)
+		elseif button == 1 then
+			if api.IsChanged(row.name) then
+				api.Reset(row.name)
+				SetStatus(row.label .. ": back to the default", COL.ok)
+			else
+				api.SetKeys(row.name, nil)
+				SetStatus(row.label .. ": no keys", COL.ok)
+			end
+			listDirty = true
+		end
+		Refresh()
+		return
+	end
 	if button == 0 then
 		PlayClickSound()
 		BeginCapture(row)
@@ -1628,6 +1806,21 @@ local function OnListMouseDown(event)
 end
 
 local function AskReset()
+	if tab == "build" then
+		local api = WG.buildHotkeys
+		local changed = api and api.CountChanged and api.CountChanged() or 0
+		if changed == 0 then
+			SetStatus("no build keys were changed", COL.textDim)
+			return
+		end
+		OpenConfirm("Put all " .. changed .. " changed build keys back to their defaults?", {}, function()
+			api.ResetAll()
+			listDirty = true
+			SetStatus("build keys are back to their defaults", COL.ok)
+		end)
+		confirm.note = "Other rebinds are not touched."
+		return
+	end
 	if #edits == 0 then
 		SetStatus("no rebinds to clear", COL.textDim)
 		return
@@ -1719,6 +1912,8 @@ function widget:Initialize()
 				tab = TABS[index]
 				listDirty = true
 				focus = nil
+				bcapture = nil
+				filterText = ""
 				if tab == "all" then
 					FocusField("filter")
 				end
@@ -1797,6 +1992,60 @@ function widget:KeyPress(key, mods, isRepeat)
 	if not document or not isOpen then return false end
 
 	local sym = spGetKeySymbol(key)
+
+	if bcapture then
+		-- Build Keys: the keys of a thing are being typed, one after another
+		local things = BuildThings()
+		local label = things.labels[bcapture.name] or bcapture.name
+		if sym == "esc" or sym == "escape" then
+			bcapture = nil
+			SetStatus("cancelled", COL.textDim)
+		elseif sym == "backspace" then
+			bcapture.codes[#bcapture.codes] = nil
+		elseif sym == "return" or sym == "enter" or sym == "numpad_enter" or sym == "kp_enter" then
+			local api, name, codes = WG.buildHotkeys, bcapture.name, bcapture.codes
+			bcapture = nil
+			if api and api.SetKeys then
+				api.SetKeys(name, codes)
+				listDirty = true
+				-- the same keys on something else in the same build menu?
+				local clash, seen = {}, {}
+				if #codes > 0 then
+					for _, menu in ipairs(things.menus) do
+						if menu[name] then
+							for other in pairs(menu) do
+								if other ~= name and not seen[other] then
+									local theirs = api.GetKeys(other)
+									local same = theirs ~= nil and #theirs == #codes
+									for i = 1, #codes do
+										if same and theirs[i] ~= codes[i] then same = false end
+									end
+									if same then
+										seen[other] = true
+										clash[#clash + 1] = things.labels[other] or other
+									end
+								end
+							end
+						end
+					end
+				end
+				local typed = table.concat(KeySymbols(codes), " + ")
+				if #codes == 0 then
+					SetStatus(label .. ": no keys", COL.ok)
+				elseif #clash > 0 then
+					table.sort(clash)
+					SetStatus(label .. " is now " .. typed .. ", the same as " .. table.concat(clash, ", ", 1, math.min(3, #clash))
+						.. (#clash > 3 and " and others" or "") .. " in the same menu", COL.warn)
+				else
+					SetStatus(label .. " is now " .. typed, COL.ok)
+				end
+			end
+		elseif not isRepeat and not MOD_KEYS[sym] and #bcapture.codes < 4 then
+			bcapture.codes[#bcapture.codes + 1] = key
+		end
+		Refresh()
+		return true
+	end
 
 	if capture then
 		if sym == "esc" or sym == "escape" then
@@ -1906,7 +2155,7 @@ function widget:TextInput(utf8)
 	if not document or not isOpen or not focus or not (editor or picker or focus == "filter") then
 		return false
 	end
-	if capture or confirm then
+	if capture or bcapture or confirm then
 		return true
 	end
 	FieldInsert(utf8)
@@ -1947,7 +2196,7 @@ function widget:GetConfigData()
 end
 
 function widget:SetConfigData(data)
-	if data and (data.tab == "sf" or data.tab == "all" or data.tab == "custom") then
+	if data and (data.tab == "sf" or data.tab == "all" or data.tab == "custom" or data.tab == "build") then
 		tab = data.tab
 	end
 end

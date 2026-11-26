@@ -137,21 +137,37 @@ local function GetKeySymbol(k)
 	return keySymbol:sub(1, 1):upper() .. keySymbol:sub(2)
 end
 
+-- The keys as the build hotkeys widget has them now (the player can change
+-- them in the Keybinds window), or the defaults while that widget is not there.
 local nameToKeySymbols = {}
-for unitDefID = 1, #UnitDefs do
-	local ud = UnitDefs[unitDefID]
-	local trimmedName = ud.name
-	if trimmedName:find("_up", -5) then
-		trimmedName = trimmedName:sub(1, -5)
-	end
-	if nameToKeyCode and nameToKeyCode[trimmedName] then
-		local symbols = {}
-		for i = 1, #nameToKeyCode[trimmedName] do
-			symbols[i] = GetKeySymbol(nameToKeyCode[trimmedName][i])
+local keysVersion
+local function ReadBuildKeys()
+	local api = WG.buildHotkeys
+	local live = api and api.GetKeys
+	keysVersion = api and api.version
+	nameToKeySymbols = {}
+	for unitDefID = 1, #UnitDefs do
+		local ud = UnitDefs[unitDefID]
+		local trimmedName = ud.name
+		if trimmedName:find("_up", -5) then
+			trimmedName = trimmedName:sub(1, -5)
 		end
-		nameToKeySymbols[ud.name] = symbols
+		local codes
+		if live then
+			codes = live(trimmedName)
+		else
+			codes = nameToKeyCode and nameToKeyCode[trimmedName]
+		end
+		if codes then
+			local symbols = {}
+			for i = 1, #codes do
+				symbols[i] = GetKeySymbol(codes[i])
+			end
+			nameToKeySymbols[ud.name] = symbols
+		end
 	end
 end
+ReadBuildKeys()
 
 local function HotkeysActive()
 	if not showHotkeys then
@@ -694,7 +710,7 @@ local function RefreshCards()
 		local cmd = buildCards[i]
 		local id = "b" .. i
 		local ud = boardMode and cmd.id < 0 and UnitDefs[-cmd.id]
-		cmd.noboard = (ud and not ud.canMove and board.Capable(-cmd.id) == 0) or false
+		cmd.noboard = (ud and (ud.isImmobile or ud.isBuilding or ud.isFactory) and board.Capable(-cmd.id) == 0) or false
 		view.SetClass(id, "noboard", cmd.noboard)
 		local queued = tonumber(cmd.params and cmd.params[1]) or 0
 		if shared then
@@ -817,7 +833,7 @@ local function ApplyCommand(cmd, button)
 	-- the board.
 	local board = WG.globalBuild
 	local ud = cmd.id < 0 and UnitDefs[-cmd.id]
-	if board and button == 1 and ud and not ud.canMove then
+	if board and button == 1 and ud and (ud.isImmobile or ud.isBuilding or ud.isFactory) then
 		if board.GetMode and board.GetMode() then
 			if alt then
 				board.DirectOnce(-cmd.id)
@@ -1129,6 +1145,11 @@ function widget:Update()
 
 	if not hovered then
 		lastHoverSound = nil
+	end
+	if WG.buildHotkeys and WG.buildHotkeys.version ~= keysVersion then
+		ReadBuildKeys()       -- the keys were changed: print the new ones
+		buildSignature = nil
+		commandsDirty = true
 	end
 	if WG.buildOrderUI and WG.buildOrderUI.updateConfigInt then
 		WG.buildOrderUI.updateConfigInt = nil

@@ -421,8 +421,9 @@ local boardMode = false
 local direct = nil
 
 local function IsBuilding(unitDefID)
+	-- (not "cannot move": a factory can be given move orders, for its rally point)
 	local ud = unitDefID and UnitDefs[unitDefID]
-	return ud ~= nil and not ud.canMove
+	return ud ~= nil and (ud.isImmobile or ud.isBuilding or ud.isFactory) and true or false
 end
 
 -- Would a build of this, placed now, go on the board?
@@ -578,7 +579,7 @@ local function SampleAt(mx, my)
 	if kind ~= "unit" then return nil end
 	local unitDefID = spGetUnitDefID(unitID)
 	local ud = unitDefID and UnitDefs[unitDefID]
-	if not ud or ud.canMove then return nil end
+	if not ud or not (ud.isImmobile or ud.isBuilding or ud.isFactory) then return nil end
 	local x, _, z = spGetUnitPosition(unitID)
 	return unitDefID, x, z
 end
