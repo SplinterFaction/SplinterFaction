@@ -3,6 +3,8 @@
 
 *Built on the Recoil Engine*
 
+**MANUAL VERSION 3.0** · 26 November 2026 · covers SplinterFaction 0.1.97 and the development build that follows it
+
 ---
 
 > **A NOTE TO THE NEW COMMANDER**
@@ -20,81 +22,89 @@
 **PROLOGUE — CHRONICLE OF IAMMAS**
 
 **PART I — GETTING STARTED**
-1. Installing and Launching
+
+1. Installing And Launching
 2. Your First Match: Setup
-3. Choosing a Faction
+3. Choosing A Faction
 4. Placing Your Start
 
 **PART II — WHAT IS A REAL-TIME STRATEGY GAME?**
+
 5. The Loop
-6. Macro and Micro
+6. Macro And Micro
 7. The Snowball
-8. Why You Lose (And It's Almost Never Combat)
+8. Why You Lose (And It'S Almost Never Combat)
 
 **PART III — THE INTERFACE**
+
 9. Camera Control
 10. Selecting Things
 11. Giving Orders
-12. Reading the Screen
+12. Reading The Screen
 
 **PART IV — ECONOMY**
-13. Metal, Energy and Supply
-14. EM Converters and Resource Locations
+
+13. Metal, Energy And Supply
+14. Em Converters And Resource Locations
 15. Making Power
 16. Supply
-17. Storage, Stall and Excess
+17. Storage, Stall And Excess
 18. Research Points
 
 **PART V — CONSTRUCTION**
-19. Constructors and the Build Queue
+
+19. Constructors And The Build Queue
 20. There Is No Build Assist
 21. There Is No Repair
-22. Laying Out a Base
+22. Laying Out A Base
 
 **PART VI — COMBAT**
+
 23. Unit Roles
-24. Specialist Weapons: Heat and Disruption
-25. Terrain, Water and Line of Fire
+24. Specialist Weapons: Heat And Disruption
+25. Terrain, Water And Line Of Fire
 26. Micro Techniques That Actually Matter
-27. Transports, Gunships and Ferry Lines
-28. Wreckage and Reclaim
+27. Transports, Gunships And Ferry Lines
+28. Wreckage And Reclaim
 
 **PART VII — THE FACTIONS**
-29. Federation of Kala
+
+29. Federation Of Kala
 30. Loz Alliance
 31. Matchup Notes
 
 **PART VIII — ADVANCED SYSTEMS**
-32. Tech Tiers and Upgrades
+
+32. Tech Tiers And Upgrades
 33. Shields (Loz Alliance)
-34. Stealth, Sensors and Seeing the Map
+34. Stealth, Sensors And Seeing The Map
 
 **PART IX — GAME MODES**
-35. Skirmish vs. AI
-36. SurvivalAI: Wave Defense
+
+35. Skirmish Vs. Ai
+36. Survivalai: Wave Defense
 37. Multiplayer
 
 **PART X — STRATEGY**
+
 38. Your First Five Minutes
 39. Scouting
-40. Attacking on a Timing
+40. Attacking On A Timing
 41. Turtling, Booming, Rushing
-42. Common Mistakes and Their Fixes
+42. Common Mistakes And Their Fixes
+- A. Glossary
+- B. Keybindings
+- C. Troubleshooting
+- D. Unit Reference: Federation Of Kala
+- E. Unit Reference: Loz Alliance
+- F. Shared Structures And Survival Mode
+- G. Revision History
 
-**APPENDICES**
-A. Glossary
-B. Keybindings
-C. Troubleshooting
-D. Unit Reference — Federation of Kala
-E. Unit Reference — Loz Alliance
-F. Unit Reference — Shared Structures
-
----
 ---
 
 # PROLOGUE — CHRONICLE OF IAMMAS
 
-<!-- IMAGE: full-width splash art — the two moons over Iammas, or the Federation and Loz fleets facing each other in orbit -->
+*[Image: full-width splash art — the two moons over Iammas, or the Federation and Loz fleets facing each other in orbit]*
 
 ### The Twin Eyes of War
 
@@ -156,8 +166,6 @@ The Federation of Kala and the Loz Alliance stand as reflections of each other. 
 
 Now, the long shadow of war falls once again. The Twin Eyes of Loz gleam coldly over a divided sky. And in their light, the Iammians march, not for peace, not for gods, but for the future of every world they've ever touched.
 
----
-
 > **THE FICTION IS THE MECHANICS.**
 >
 > Everything above is load-bearing. The two things each faction invented in the story are the two things you will actually be commanding:
@@ -168,11 +176,10 @@ Now, the long shadow of war falls once again. The Twin Eyes of Loz gleam coldly 
 > That difference is why Loz protection returns but their wounds never do, while Fed can bleed and walk it off. When §6 explains that Fed damage is a loan and Loz damage is a bill, this is where that comes from.
 
 ---
----
 
 # PART I — GETTING STARTED
 
-## 1. INSTALLING and LAUNCHING
+## 1. Installing And Launching
 
 **Get SplinterFaction from itch.io.** *(A Steam release is planned but not yet available.)*
 
@@ -180,7 +187,7 @@ What you're installing is **Coilbox** — a launcher that handles the engine, th
 
 > On Windows, unpack somewhere other than `Program Files`. Windows permissions there cause needless trouble.
 
-<!-- IMAGE: the Coilbox main screen on first launch, with the game/map download buttons and Singleplayer/Multiplayer buttons visible -->
+*[Image: the Coilbox main screen on first launch, with the game/map download buttons and Singleplayer/Multiplayer buttons visible]*
 
 ### Your first launch: downloading the game
 
@@ -210,18 +217,16 @@ Everything past this point works the same either way. The itch.io package is sim
 
 > **TIP:** If the game refuses to start, see Appendix C before reinstalling. Ninety percent of launch failures are graphics-driver or antivirus related, not corrupt files.
 
----
-
-## 2. YOUR FIRST MATCH: SETUP
+## 2. Your First Match: Setup
 
 > **Before you can host a game you need the game files and at least one map downloaded.** See §1 if you skipped that step.
 
 From the lobby you will choose:
 
 - **A map.** Small maps mean fast, violent games. Large maps mean long economic games. For your first match pick a small-to-medium map with a clear separation between start positions.
-- **Opponents.** Add a **SimpleAI** opponent for a standard skirmish. Add **SurvivalAI** instead if you want the wave-defense mode (Part IX).
+- **Opponents.** Add an AI opponent for a standard skirmish. **AdaptiveAI** is the best first choice: it watches how the game is going and matches itself to you (§35). **SimpleAI** is the plain, fixed-strength opponent. Add **SurvivalAI** instead if you want the wave-defense mode (Part IX).
 - **Teams.** Put yourself on one team and the AI on the other. Allies share vision and can share resources.
-- **Your faction.** You pick here in the lobby — and you'll be asked again when the game actually starts. See §3.
+- **Your faction.** Not here. The lobby has a faction setting, but with default options it is ignored — you choose when the game loads. See §3.
 
 ### Mod options and AI options
 
@@ -229,13 +234,13 @@ The lobby also exposes two sets of settings that are easy to miss and worth know
 
 **Mod options** change how the game itself behaves — rules and systems, not just cosmetics. Leave these at default for your first games; you want to learn the standard game before you start altering it.
 
-**AI options** configure your computer opponents. SimpleAI has a handful. **SurvivalAI has a great many** — wave pacing, difficulty scaling, beacon behavior and more. This is genuinely useful rather than trivia: if survival mode is too punishing while you're learning, you don't have to grit your teeth through it. Turn the pressure down, learn the systems, turn it back up. See Part IX.
+**AI settings are mod options too.** Two sections are worth knowing by name. *AI Opponent Options* holds the switch that stops AIs from ever running out of resources (on by default) and the three dials for AdaptiveAI: how hard it starts, how far ahead of you it tries to stay, and how aggressive it is. *Survival AI Options* holds a difficulty preset — Easy, Normal, Hard, Impossibru — and a couple of dozen finer settings for wave pacing, scaling and beacon behavior. This is genuinely useful rather than trivia: if survival mode is too punishing while you're learning, you don't have to grit your teeth through it. Turn the pressure down, learn the systems, turn it back up. See Part IX.
 
-Then start the game. You will not spawn immediately — first comes the faction confirmation, then start placement.
+**Three options change the start of the match itself.** *Skip Faction Chooser* uses the lobby's faction setting and drops the in-game choice. *Skip Start Placement* uses the lobby's start positions and drops the in-game placement. *Allow User Widgets* lets players' own interface add-ons load (Appendix C). All three are off by default.
 
----
+Then start the game. You will not spawn immediately — first you choose a faction, then a start position. Each step runs on a 30-second timer.
 
-## 3. CHOOSING A FACTION
+## 3. Choosing A Faction
 
 You are picking between two genuinely different armies, not two colors of the same army.
 
@@ -243,11 +248,13 @@ You are picking between two genuinely different armies, not two colors of the sa
 
 **LOZ ALLIANCE** — slow heavy tanks protected by personal energy shields. Durable, direct, unpleasant to stand in front of.
 
-<!-- IMAGE: the in-game faction chooser -->
+*[Image: the in-game faction chooser]*
 
-### You choose twice
+### You choose when the game loads
 
-**In the lobby**, before the match starts. Then **again when the game loads**, via the in-game faction chooser. The second prompt is your real commitment — it's also your chance to change your mind if the lobby filled up differently than you expected.
+When the match loads, the **faction chooser** puts both factions in front of you as two cards. Click one. **The click is final** — there is no confirm step and no changing your mind — and you have **30 seconds**. If the timer runs out you are given a faction at random. AI players always get a random faction.
+
+Whatever faction is set next to your name in the lobby is ignored, unless the host has turned on the *Skip Faction Chooser* mod option — in which case the lobby setting is used and this screen never appears.
 
 **Who can see your choice:** your **allies can see what you picked**. Your **enemies cannot**. This is a real strategic detail, not a technicality. Your opponent doesn't know whether they're facing cloaked walkers or shielded tanks until they scout you — and the same is true in reverse, which is one more reason §39 exists.
 
@@ -261,13 +268,13 @@ You can switch factions every match. Try both once you're comfortable.
 
 Full faction detail is in Part VII.
 
----
+## 4. Placing Your Start
 
-## 4. PLACING YOUR START
+After choosing a faction you choose where to start. The map shows its **numbered start spots**. Click one — on the ground or on the minimap — and press **Confirm**. A spot another player has already claimed is gone: first come, first served. You have **30 seconds**; if you have not confirmed by then, a free spot is picked for you. This is your first real decision of the match and it matters more than it looks.
 
-After choosing a faction you place your starting position on the map. This is your first real decision of the match and it matters more than it looks.
+(On a map that defines no start spots, and whenever the host has turned on *Skip Start Placement*, this step is skipped and everyone starts where the lobby put them.)
 
-<!-- IMAGE: the start-position placement screen, with resource locations and a geothermal vent visible -->
+*[Image: the start-position placement screen, with resource locations and a geothermal vent visible]*
 
 **What to look for:**
 
@@ -296,23 +303,28 @@ Practical consequences:
 - **In team games, don't get isolated.** A Commander alone in a far corner is a free win for anyone who finds it.
 
 ---
----
 
 # PART II — WHAT IS A REAL-TIME STRATEGY GAME?
 
-## 5. THE LOOP
+## 5. The Loop
 
 Everything in this game reduces to four steps, running continuously and simultaneously:
 
-```
-        ┌──────────────────────────────────────┐
-        │                                      │
-        ▼                                      │
-   [1] PRODUCE ─► [2] BUILD ──► [3] EXPAND ──► [4] FIGHT
-   turn power     production    take more      convert
-   into metal     and army      resource       army into
-                                locations      map control
-```
+#### Produce
+
+turn power into metal
+
+#### Build
+
+production and army
+
+#### Expand
+
+take more resource locations
+
+#### Fight
+
+convert army into map control
 
 **1. Produce.** You generate energy, and convert it into metal at fixed resource locations on the map.
 **2. Build.** You turn those resources into production buildings, then into army.
@@ -331,7 +343,7 @@ That's it. That's the genre. Chess with a clock that never stops and a board you
 
 The critical word in the loop is **simultaneously**. A new player does one thing at a time: builds a bit, then fights a bit, then remembers economy, then fights again. A good player never stops doing all four. Their resources are always being spent, their constructors are always constructing, their army is always somewhere doing something.
 
-## 6. MACRO AND MICRO
+## 6. Macro And Micro
 
 Two words you'll hear constantly.
 
@@ -345,12 +357,10 @@ New players almost universally over-invest in micro. They watch a battle for for
 
 ### Damage, and who gets it back
 
-The 80/20 split holds as a general truth and it's the right thing to believe while you're learning. But SplinterFaction leans further toward the micro end than the genre average, and the reason is worth understanding properly, because **it works differently for each faction.**
-
-**Nobody repairs anything.** There is no constructor repair in this game (§21). What each faction has instead is its own way of recovering — and they are not the same thing at all.
+The 80/20 split holds as a general truth and it's the right thing to believe while you're learning. But SplinterFaction leans further toward the micro end than the genre average, and the reason is worth understanding properly, because **it works differently for each faction.Nobody repairs anything.** There is no constructor repair in this game (§21). What each faction has instead is its own way of recovering — and they are not the same thing at all.
 
 **FED — damage is a loan.**
-Fed hulls **regenerate automatically** over time, out of combat. Fed also builds the **healstation**, a tower that repairs friendly Fed units in its radius. So when a Fed unit takes hull damage, that damage comes back. Slowly on its own, faster near a healstation, but it comes back.
+Fed hulls **regenerate automatically** over time, out of combat. Fed also builds the **healstation**, a tower that restores hull to friendly units in its radius. So when a Fed unit takes hull damage, that damage comes back. Slowly on its own, faster near a healstation, but it comes back.
 
 **LOZ — damage is a bill.**
 Loz units carry **personal shields** that absorb damage before the hull, and those shields **recharge quickly** once out of combat. But there is no hull regeneration and no healstation. **Once a Loz shield collapses and the hull starts taking hits, that damage is permanent for the rest of the match.**
@@ -386,7 +396,7 @@ Use it deliberately:
 
 So positioning and tactics genuinely matter here. Two things carry most of that weight:
 
-<!-- IMAGE: side-by-side comparison — an army clumped in a ball vs. the same army in a concave, both facing an enemy line -->
+*[Image: side-by-side comparison — an army clumped in a ball vs. the same army in a concave, both facing an enemy line]*
 
 **Form a concave, not a clump.** A concave is a shallow arc curving toward the enemy.
 
@@ -401,7 +411,7 @@ To be precise about why it works: **it isn't about line of fire.** Units in this
 
 Learn the drag-line early. It is the highest value-per-effort input in the game, and it takes about one second.
 
-## 7. THE SNOWBALL
+## 7. The Snowball
 
 RTS games are systems of **compounding advantage**. This is the single most important concept in the genre and the one that is least obvious from the outside.
 
@@ -415,7 +425,7 @@ Consequences:
 
 **Rule of thumb: your income should be roughly zero at all times.** Not your income *rate* — your *stored* resources. Money in the bank is money not working.
 
-## 8. WHY YOU LOSE (AND IT'S ALMOST NEVER COMBAT)
+## 8. Why You Lose (And It'S Almost Never Combat)
 
 New commanders think they lose battles. They almost never do. They lose one of these:
 
@@ -445,27 +455,26 @@ SplinterFaction has a **voice advisor** running throughout the match. It is not 
 If you take one habit from this section: when the advisor says something, *do the thing it said*, then go back to whatever you were doing. It takes five seconds and it fixes the majority of losses in the table above.
 
 ---
----
 
 # PART III — THE INTERFACE
 
-> **Note:** SplinterFaction uses a full custom "Static GUI" widget suite. Panels are consistently styled and can be toggled through the widget selector. Exact default keybinds are listed in Appendix B.
+> **Note:** SplinterFaction uses its own interface suite, called **Bastion**. Panels are consistently styled, can be moved (tweak mode, §12) and can be switched on or off in the widget selector, where each is listed as "Bastion …". Exact default keybinds are listed in Appendix B.
 
-## 9. CAMERA CONTROL
+## 9. Camera Control
 
 SplinterFaction uses the **Spring camera** by default. It's the one to learn — don't go hunting through camera modes, this is the one everything is designed around.
 
 - **Move:** push the mouse to the screen edge, or use the arrow keys.
 - **Zoom:** mouse wheel.
-- **Change the camera angle:** hold **Alt** and use the **mouse wheel**. This tilts your view between a near-overhead strategic look and a low, close-in view.
+- **Change the camera angle:** hold **Ctrl** and use the **mouse wheel**. This tilts your view between a near-overhead strategic look and a low, close-in view.
 - **Rotate the camera:** hold **Alt + middle mouse button** and drag.
-- **Jump to location:** click on the minimap.
+- **Jump to a location:** with nothing selected, left-click the minimap and the view centres there; keep the button down and drag, and the view follows. With units selected a click on the minimap is an order or a selection, exactly as on the main view — so deselect first, or drag the view with the middle mouse button instead.
 - **See the whole map:** press `Tab`. This snaps you out to a strategic overview of the entire battlefield in one keystroke, and back again. It's the fastest way to check the shape of a game, and far quicker than scrolling.
-- **Camera bookmarks:** you can save camera positions and snap back to them instantly. Set one on your main base and one on your front line. This single habit will improve your play more than any amount of unit micro.
+- **Drag the view:** hold the **middle mouse button** and move the mouse. `Ctrl + Shift + O` flips the camera to look from the opposite side.
 
 **Zoom out often.** New players play the whole game zoomed in on whatever's exciting. Pulling back to see the full battlefield is how you notice the army heading for your undefended flank.
 
-## 10. SELECTING THINGS
+## 10. Selecting Things
 
 - **Single click** — select one unit.
 - **Click and drag** — box-select everything in the rectangle.
@@ -474,19 +483,21 @@ SplinterFaction uses the **Spring camera** by default. It's the one to learn —
 - **Ctrl + click** — remove a unit from the current selection.
 - **Control groups** — select some units, press `Ctrl + [number]` to bind them to that number. Press the number to reselect them instantly. Press it twice to also jump the camera there.
 
-**Control groups are not optional.** Bind your main army to `1`. Bind your constructors to `2`. Bind your factory to `3`. Do this every single game until it is muscle memory. It is the difference between commanding an army and clicking at one.
+**Control groups are not optional.** Your Commander is already on `1` (below). Bind your main army to `2`. Bind your constructors to `3`. Bind your factory to `4`. Do this every single game until it is muscle memory. It is the difference between commanding an army and clicking at one.
 
-> **BIND YOUR COMMANDER TO A GROUP.** `Ctrl + C` selects it, but a dedicated group number is far more convenient — and given that your Commander is a loss condition (§4), being one keystroke away from checking on it is worth a number all by itself.
+> **YOUR COMMANDER IS ALREADY ON `1`.** The game puts it in control group 1 at the start of every match — and given that your Commander is a loss condition (§4), being one keystroke away from checking on it is worth a number all by itself. Press `1` twice to jump the camera to it. If you would rather have it on another number, or on none, the setting is **Menu → Settings → Game → Commander in group**.
 
 ### Auto-grouping — set it once, keep it forever
 
-**`Alt` + a number** assigns a unit to that control group *automatically and permanently*. From then on, units of that type join the group as they're produced — and **the setting persists between games.**
+**`Alt` + a number** assigns a unit to that control group *automatically and permanently*. From then on, units of that type join the group by themselves — the first time they stand idle after being built, or the moment they leave the factory if you turn on *Add units immediately* under Menu → Settings → Game — and **the setting persists between games.**
 
-You do not have to rebuild your control groups every match. Set it up once: assault units to `1`, constructors to `2`, anti-air to `3`, whatever suits you. Every game after that, your army sorts itself into the right groups as it comes out of the factory, with no input from you.
+You do not have to rebuild your control groups every match. Set it up once: assault units to `2`, constructors to `3`, anti-air to `4`, whatever suits you. Every game after that, your army sorts itself into the right groups as it comes out of the factory, with no input from you.
+
+`Alt + `` takes the selected units back out of their auto-group.
 
 This is one of those features that takes two minutes to configure and pays back for as long as you play the game. Do it before your next match, not after your fiftieth.
 
-## 11. GIVING ORDERS
+## 11. Giving Orders
 
 **Right-click is context-sensitive** and does the obvious thing:
 
@@ -576,9 +587,9 @@ Most new players move armies as a blob and wonder why they lose fights to equal 
 
 ### Tech upgrades in the orders menu
 
-Units that can be upgraded show their options in the orders menu as **Tech 1 Upgrade**, **Tech 2 Upgrade**, and so on — not as "morph." Mouse over any button in the orders menu and the tooltip explains what it does.
+Units that can be upgraded show their options in the orders menu as **Tech 2 Upgrade**, **Tech 3 Upgrade**, and so on — not as "morph." Mouse over any button in the orders menu and the tooltip explains what it does.
 
-**You don't have to select the unit at all.** Upgradeable units display a small **clickable upgrade button floating above them** in the world. Click it and the upgrade starts — no selection, no menu, no interruption to whatever else you were doing. This is by far the fastest way to keep your army current, and it's easy to miss because it looks like a status indicator rather than a control.
+**You don't have to select the unit at all.** Your Commander and your converters display a small **clickable upgrade button floating above them** in the world. Click it and the upgrade starts — no selection, no menu, no interruption to whatever else you were doing. This is by far the fastest way to keep your army current, and it's easy to miss because it looks like a status indicator rather than a control.
 
 Alongside the upgrade buttons in the orders menu you'll find **add to upgrade queue**, **pause upgrade** and **cancel upgrade**. Queued upgrades process one at a time as Research Points become available (§18), so you can queue up your intentions and let the RP economy work through them.
 
@@ -606,11 +617,23 @@ Set up repeat loops early and you free up all the attention you'd otherwise spen
 
 **Queuing:** hold `Shift` while issuing orders to queue them. You can chain a dozen commands — build this, then that, then move here, then patrol. Queue your constructors' work so they never go idle while you're looking elsewhere.
 
-## 12. READING THE SCREEN
+### Moving as a group
 
-SplinterFaction's interface is a custom "Static GUI" suite — all panels share a consistent visual language, and any of them can be toggled through the widget selector.
+Give several units a plain Move or Fight order to a single point and they do not pile onto that point: they arrive as a short **line abreast**, facing the way they came, wrapping into a second rank when there are more than about eight. You get a sensible formation for free.
 
-<!-- IMAGE: full annotated screenshot of the Static GUI in a live game — callouts on minimap, resources display, supply readout, RP, orders menu, build menu, selected units, tooltip -->
+Hold `Ctrl` while giving the order and the group also **keeps to the pace of its slowest unit**, so your fast units do not arrive alone thirty seconds before the rest. For anything more deliberate than a line, draw the formation yourself (above).
+
+### Wait, and changing the queue
+
+**Wait** (`W`) pauses a unit where it stands without clearing its orders; press it again and the unit carries on. A unit on Wait wears a large wait marker above it, selected or not, so a constructor or factory you paused and forgot is hard to miss.
+
+The queue is not append-only. Hold `Space` while giving an order and it goes to the **front** of the queue instead of the end: the unit does that first and then picks up where it left off.
+
+## 12. Reading The Screen
+
+SplinterFaction's interface is its own suite, **Bastion** — all panels share a consistent visual language, any of them can be moved, and any of them can be switched off in the widget selector.
+
+*[Image: full annotated screenshot of the interface in a live game — callouts on minimap, resources display, supply readout, RP, orders menu, build menu, selected units, tooltip]*
 
 ### On screen from the start
 
@@ -622,8 +645,10 @@ SplinterFaction's interface is a custom "Static GUI" suite — all panels share 
 - **Build menu** — what the selected constructor or factory can produce, organized by category.
 - **Selected units display** — what you currently have selected, and how many of each.
 - **Tooltip** — hover anything at all, in the world or in the interface, for a plain explanation of what it is and what it costs. Use it relentlessly.
-- **Additional info panel** — **hold `Space`** while hovering for a deeper breakdown than the tooltip gives: full stats, weapon details, the numbers behind the description. Holding `Space` also rings every one of your constructors so you can spot idle ones at a glance (§19).
+- **Additional info panel** — **press `Space`** while hovering for a deeper breakdown than the tooltip gives: full stats, weapon details, the numbers behind the description. Press it again to close it. Holding `Space` also rings every one of your constructors so you can spot idle ones at a glance (§19).
 - **Players list** — everyone in the game and their status.
+- **Abilities panel** — a column of buttons above the players list: **Scanner Sweep**, **Weapons Upgrade**, **Armor Upgrade** and **Production Boost**. These are *your* powers as a player, not the selected unit's; each costs Research Points and some have a cooldown (§18).
+- **Rank strip** — four small bars under the Menu button, one per track: Combat, Economy, Industry, Territory. Cosmetic; see *Ranks and awards* below.
 - **Menu** — options, settings, and quitting.
 
 ### Overlays that assist you
@@ -633,27 +658,61 @@ SplinterFaction's interface is a custom "Static GUI" suite — all panels share 
 - **Healthbars** — damage on units and structures, including shield strength where applicable. Given that hull damage is permanent (§21), this is how you know which units to rotate out.
 - **Range rings** — visualize weapon and build ranges. **Watch these when placing defenses.** There is no excuse for a turret that doesn't cover the thing it was built to cover.
 - **Unit resource drain labels** — what each structure is costing you to run. This is how you find the energy leak that's stalling you.
-- **Abilities panel** — context actions for the selected unit.
 
 ### Panels available from the top-right menu
 
+The **MENU** button sits in the top-right corner; `Esc` opens the same Game Menu. From top to bottom it offers Resume, **Settings**, **Keybinds**, **Widgets**, **Sharing**, **Economy**, **Graph**, **Log**, **Game Info**, Resign and Quit, with a small music player underneath (what is playing, and Prev / Pause / Next).
+
 - **Sharing menu** — send resources or units to an ally (§37).
-- **Economy graph** — a live, real-time picture of what your economy is actually doing: income against expenditure as it happens, rather than the single snapshot the resources display gives you. **This is the fastest way to understand your own macro.** The resources display tells you that you're floating metal right now; the graph shows you that you've been floating it for four minutes and the gap is widening. Open it occasionally even when nothing feels wrong — patterns show up in a line that are invisible in a number.
-- **Statistics graphs** — income, army value and more over the course of the match. Genuinely worth reading afterwards: if you lost, the graphs usually show you exactly where and when.
-- **Chat log** — messages from allies and the system.
+- **Economy graph** — a live, real-time picture of what your economy is actually doing: what you are spending, stacked up by *which units are spending it*, against your income, as it happens, rather than the single snapshot the resources display gives you. **This is the fastest way to understand your own macro.** The resources display tells you that you're floating metal right now; the graph shows you that you've been floating it for four minutes and the gap is widening. Open it occasionally even when nothing feels wrong — patterns show up in a line that are invisible in a number.
+- **Graph** — income, army value and more over the course of the match. During a game you see your own side's lines; afterwards, everyone's. Genuinely worth reading afterwards: if you lost, the graphs usually show you exactly where and when. A second tab, **Awards**, holds the end-of-game awards and everyone's final ranks, and the window opens on it by itself when the match ends.
+- **Log** — everything that was said and reported, with tabs for Chat, Console and All.
+- **Settings** (`F10`) — five tabs: *Graphics* (including a one-click graphics preset), *Interface* (interface size, panel opacity, fonts, and switches for most of the overlays in this chapter), *Sound* (volumes and the music player), *Controls* (camera, edge scrolling and the command helpers — Global Build, linked factories, split build orders) and *Game*.
+- **Game Info** (`I`) — the mod options this match is being played with (changed ones first), plus a reference list of controls and commands.
+
+### The build menu
+
+The build menu does more than list things:
+
+- **Category tabs.** Across the top: *All*, then one tab for each kind of thing on offer (Economy, Geothermal, Production, Combat, Utility for a constructor; Scout, Skirmish, Support, Utility for a factory). Click one to narrow the list.
+- **Hide what I cannot build.** A checkbox at the bottom. Tick it and everything you cannot build right now — too high a tech level, usually — is left out, so the list holds only what is actually available.
+- **Key sequences on the cards.** Each card can carry a short key sequence — `B` then `F` for a Land Factory. Type it with the builder selected and that card is picked. The first key is roughly the tier (`B`, then `V`, `C`, `X`). All of them can be changed (Appendix B, *Build Keys*).
+- **Queue counts.** A number on a card is how many of it are queued. Right-click the card to take one off (Shift takes five, Ctrl twenty).
+- **The GLOBAL switch.** At the top of a constructor's build menu. It sends everything you place to the Global Build board instead of to the selected constructor (§19).
+
+The **selected units** display under it is clickable too: left-click a card to keep only that type selected, right-click to drop that type from the selection, `Ctrl` + click to select every unit of that type you own, and middle-click to look at it.
+
+### Ranks and awards
+
+Each match keeps four running scores for you and hands out ranks as you pass thresholds:
+
+| Track | What it counts |
+|---|---|
+| **Combat** | Metal value of enemy units and structures you have destroyed |
+| **Economy** | Income you have sustained |
+| **Industry** | Metal value of what you have built |
+| **Territory** | Resource locations you hold |
+
+The strip under the Menu button shows your current rank on each track and a bar toward the next. When you reach a new rank a banner slides in under the resources display, holds a few seconds and leaves. At the end of the match the **Awards** tab of the Graph window shows everyone's final ranks.
+
+**Ranks are cosmetic.** They change nothing about your units or your economy, and they start from zero every match. They are still worth a glance: a Territory bar that has not moved in five minutes is the game telling you that you stopped expanding. If you would rather not see them, the switch is **Menu → Settings → Interface → Rank-ups**.
+
+### Weather and time of day
+
+Matches run through a day and night cycle, and the weather changes with it: rain, mist at night and over wet ground, heat shimmer in a heat wave. None of it affects play — no unit sees less or moves slower in the rain. It can cost frames on a weaker machine, and every part of it can be switched off under **Menu → Settings → Graphics** (Appendix C).
 
 ### Drawing on the map
 
-Hold the **backtick** key (`` ` ``, above Tab) and the mouse becomes a map-marking tool. Everything you draw is visible to your allies and invisible to your enemies.
+Hold the **backtick** key (```, above Tab) and the mouse becomes a map-marking tool. Everything you draw is visible to your allies and invisible to your enemies.
 
-<!-- IMAGE: a map with all four marker types visible at once - a freehand line, a text label, a ping, mid-erase -->
+*[Image: a map with all four marker types visible at once - a freehand line, a text label, a ping, mid-erase]*
 
 | Input | Result |
 |---|---|
-| `` ` `` + **left-click drag** | **Draw** a freehand line on the map |
-| `` ` `` + **double-click** | Place a **text label** — type it, press Enter |
-| `` ` `` + **middle-click** | Drop a **ping**, an animated marker that draws the eye |
-| `` ` `` + **right-click** | **Erase** drawings and pings in the area |
+| ``` + **left-click drag** | **Draw** a freehand line on the map |
+| ``` + **double-click** | Place a **text label** — type it, press Enter |
+| ``` + **middle-click** | Drop a **ping**, an animated marker that draws the eye |
+| ``` + **right-click** | **Erase** drawings and pings in the area |
 
 This is a communication tool and, in team games, it's a better one than chat. Typing takes both hands off the game and by the time you've written "there's an army coming through the north pass toward your third converter," it has arrived. An arrow drawn on the map takes half a second and is unambiguous.
 
@@ -671,11 +730,11 @@ Erase your own clutter occasionally. A map covered in ten minutes of accumulated
 
 The interface isn't fixed in place. **Tweak mode** lets you pick up GUI elements and put them where you want them.
 
-Enter tweak mode (`Ctrl + F11` by default), and the panels become draggable: click and drag any element to reposition it. Leave tweak mode and everything stays where you put it, including between sessions.
+Enter tweak mode (`Ctrl + F11` by default) and every panel is shown as a named rectangle you can pick up: click and drag it to where you want it. **Right-click** a rectangle to put that one panel back where it came from; **Reset all** (or typing `/resetlayout`) puts everything back. **Done** or `Esc` leaves tweak mode, and everything stays where you put it, including between sessions.
 
 This is worth ten minutes on your first evening, because the default arrangement is a compromise designed for everyone, and you are not everyone:
 
-- **Move what you check constantly to where your eyes already are.** If you spend the game watching your army on the left of the screen, having the resources display in the far top-right corner means a full eye movement every time you check it. Move it closer.
+- **Move what you check constantly to where your eyes already are.** If you spend the game watching your army on the left of the screen, having the resources display at the top centre of the screen means a full eye movement every time you check it. Move it closer.
 - **Move what you never use out of the way**, or turn it off entirely in the widget selector.
 - **Account for your monitor.** On an ultrawide, default positions can put critical readouts uncomfortably far apart. On a small screen, they can crowd. Neither is something you should just endure.
 
@@ -684,24 +743,21 @@ A layout that suits you reduces the number of things you have to consciously rem
 ### Two menus you should visit early
 
 - **Keybind menu** — you can rebind any default key. If a hotkey feels wrong to your hand, change it rather than fighting it for a hundred games (Appendix B).
-- **Widget selector** — turn any interface element on or off to taste.
+- **Widget selector** (`F11`) — turn any interface element on or off to taste. Only the game's own widgets are listed: add-ons of your own are not loaded unless the host enables *Allow User Widgets* (Appendix C).
 
----
 ---
 
 # PART IV — ECONOMY
 
 This is the part new players skip and then lose to. Read it twice.
 
-## 13. METAL, ENERGY AND SUPPLY
+## 13. Metal, Energy And Supply
 
 Three things govern your economy. Two are resources you spend; one is a ceiling on how much army you're allowed to have.
 
-**METAL** — the primary constraint. Everything costs metal. It comes from **EM Converters built on resource locations** and from **reclaiming wreckage**. That is the complete list. There is no third source, no hidden trick, and no way to build metal income at home without taking ground.
+**METAL** — the primary constraint. Everything costs metal. It comes from **EM Converters built on resource locations** and from **reclaiming wreckage**. Beyond those two there is only the small fixed trickle described below and, late in the game, the Geothermal E→M Converter, which sits on a vent instead of a resource location (§15). There is no hidden trick, and no way to build serious metal income at home without taking ground.
 
-**ENERGY** — the enabler, and *upstream of metal*. Comes from power plants you can build anywhere. Energy powers construction, weapons, special systems — and your EM Converters, which means **your energy economy and your metal economy are the same economy.**
-
-**SUPPLY** — not spent, but capped. Every mobile unit occupies supply. Run out and you cannot build more units. Covered in §16.
+**ENERGY** — the enabler, and *upstream of metal*. Comes from power plants you can build anywhere. Energy powers construction, weapons, special systems — and your EM Converters, which means **your energy economy and your metal economy are the same economy.SUPPLY** — not spent, but capped. Every mobile unit occupies supply. Run out and you cannot build more units. Covered in §16.
 
 ### Everything is a flow, not a pile
 
@@ -717,17 +773,15 @@ If expenditure exceeds income and the buffer empties, you **stall** (§17).
 
 ### The trickle
 
-**You receive a small amount of metal and energy simply for being alive**, independent of anything you've built.
+You receive a small amount of metal and energy simply for being alive, independent of anything you've built: **6 metal and 25 energy a second.** You also start every match with 1000 of each in the bank.
 
 It is not much and you cannot live on it. What it does is stop you from locking yourself out of the game. If you make a mess of your opening, lose your converters, or simply don't understand what you're doing yet, the trickle means you always have *something* coming in and can always eventually rebuild. You cannot reach a state where you have zero income and no way back.
 
 New commanders: this is a safety net, not a plan. It exists so your bad early games are recoverable, not so you can skip building an economy.
 
----
+## 14. Em Converters And Resource Locations
 
-## 14. EM CONVERTERS AND RESOURCE LOCATIONS
-
-<!-- IMAGE: screenshot of a resource location with an EM Converter built on it, ideally showing the upgrade buttons in the orders menu -->
+*[Image: screenshot of a resource location with an EM Converter built on it, ideally showing the upgrade buttons in the orders menu]*
 
 **EM Converters can only be built on resource locations** — fixed positions scattered across the map. Under the hood they're metal makers restricted to specific spots: they consume energy and produce metal, continuously, until destroyed.
 
@@ -735,7 +789,7 @@ This single restriction produces the most important consequence in the game:
 
 > **THE MAP IS THE ECONOMY. TAKING GROUND IS TAKING INCOME.**
 
-There is no way to build more metal income inside your base. If you want more metal, you must physically go out and hold more of the map. This is why RTS players fight over apparently empty ground — it isn't empty, it's income.
+There is no way to build meaningful metal income inside your base. If you want more metal, you must physically go out and hold more of the map. This is why RTS players fight over apparently empty ground — it isn't empty, it's income.
 
 ### They run on energy
 
@@ -753,20 +807,29 @@ This is helpful, but don't mistake it for the system solving your problems. A co
 
 ### Upgrading converters
 
-Converters can be upgraded through **tech levels**, exactly like your Commander — a button in the orders menu takes it to the next tier, paid with **Research Points** (§18).
+Converters can be upgraded through **tech levels**, like your Commander. The converter your constructors place is **Tech 1**. A button in the orders menu — or the small button floating above the converter itself — takes it to the next tier, paid with **Research Points** (§18) and no metal: **25 RP** for Tech 2, **50** for Tech 3, **100** for Tech 4. Each tier needs your Commander to have reached that tech level first (§32).
 
 **Higher tech converters produce more metal and consume more energy to do it.** That trade is the whole decision. An upgraded converter is a bigger draw on your power economy, so upgrading without power to back it up makes your economy *worse*, not better.
 
+| Converter | Output | Energy it draws |
+|---|---|---|
+| Tech 1 (what you build) | ×2 | 25 |
+| Tech 2 | ×6.5 | 108 |
+| Tech 3 | ×14 | 233 |
+| Tech 4 | ×28 | 583 |
+
+The multiplier is applied to the **map's base value for a resource location**, which is set at the start of each match from the number of players and the number of locations: fewer locations to go round means each one is worth more. The energy figures are for a typical map and scale the same way. Every converter's description states its multiplier ("×6.5 extraction"), so you never have to remember the table.
+
+Notice what the table says about efficiency: a Tech 4 converter makes fourteen times the metal of a Tech 1 and draws more than twenty-three times the energy. Upgrades buy metal with power.
+
 **Expand or upgrade?**
 
-- **Expanding** (new converters on new locations) is cheaper per unit of income and spreads your risk across the map. But it requires you to defend more ground.
-- **Upgrading** is safe, needs no map control, and concentrates income into a small footprint — which is also its danger, since a single successful raid flattens a large fraction of your economy.
+- **Expanding** (new converters on new locations) costs metal and a constructor's time but no Research Points, takes far less energy for the metal it gives, and spreads your risk across the map. But it requires you to defend more ground.
+- **Upgrading** is safe, costs no metal, needs no map control, and concentrates income into a small footprint — which is also its danger, since a single successful raid flattens a large fraction of your economy.
 
 **General guidance: expand first, upgrade second.** Upgrade when the map is genuinely contested, when you're out of safe locations, or when you have surplus energy and RP and nothing better to do with them.
 
----
-
-## 15. MAKING POWER
+## 15. Making Power
 
 Energy plants can be built anywhere, which makes energy the part of your economy you control most directly. It's also the part that gates everything else — converters, construction, shields, cloaks and weapons all draw on it.
 
@@ -781,20 +844,22 @@ Energy plants can be built anywhere, which makes energy the part of your economy
 
 Plus the **Geothermal Power Plant**, which is built on geothermal vents — fixed map features, like resource locations. Geothermal output is excellent, and vents are worth taking and holding.
 
+What each rung buys, in energy per second and metal cost: **Fission** 25 for 100 · **Fusion** 450 for 1,600 · **Cold Fusion** 2,700 for 8,000 · **Black Hole** 20,000 for 54,000 · **Geothermal** (on a vent, Tech 1) 350 for 650. Each step up is cheaper per unit of energy than the last, which is the whole argument for teching your power.
+
 ### What you can build on a vent
 
 A vent supports four different structures, and you pick one:
 
 | Structure | What it gives you |
 |---|---|
-| **Geothermal Energy Generator** | 350 energy — outperforms a Fusion plant at comparable cost |
+| **Geothermal Energy Generator** | 350 energy for 650 metal, at Tech 1 — less than a Fusion plant's 450, but a tier earlier and at well under half the price |
 | **Geothermal E→M Converter** | The highest metal output of any structure in the game |
 | **Research Center** | Serious RP acceleration (§18) |
 | **Geothermal Condenser** | Combined resource storage and supply capacity |
 
 > **TAKE VENTS EARLY.** A vent you don't hold is a vent your opponent gets to make all four of those choices on. They're fixed, finite, and every one of them is a significant economic asset. Scout for them at the start of the match and factor them into where you expand.
 
-**A warning about Research Centers:** they consume an enormous amount of power — **more than the vent itself generates.** A Research Center is a net drain on your grid, not a self-sufficient building. Don't site one thinking the vent pays for it, because it doesn't.
+**A warning about Research Centers:** they consume a great deal of power — 250 energy a second — and **generate none.** A Geothermal generator on the same vent would be making you 350, so the true cost of the choice is 600. A Research Center is a net drain on your grid, not a self-sufficient building. Don't site one thinking the vent pays for it, because it doesn't.
 
 ### Principles
 
@@ -814,23 +879,21 @@ A vent supports four different structures, and you pick one:
 
 **Power scales with everything else.** Every converter, every upgrade, every new army capability increases demand. If you take one habit from this section: whenever you build anything that draws power, build power in the same breath.
 
----
-
-## 16. SUPPLY
+## 16. Supply
 
 Supply is a cap on **army size**. It is not a resource you spend — it's a ceiling you raise.
 
 **Every mobile unit occupies supply proportional to its value.** Cheap scouts take very little; expensive heavy units take a lot. So your supply usage tracks the real size of your army, not just the number of things in it.
 
-**Supply Depots raise your available supply.** Build more depots, field more army. That's the whole mechanism.
+**Supply Depots raise your available supply.** The basic depot gives **+20**; the Medium depot (Tech 2) gives **+100**. Two larger buildings add supply as a side benefit: the Geothermal Condenser (+100) and the Large Resource Storage (+500). You start with 10. Build more, field more army.
+
+**What a unit costs in supply follows its price:** about 1% of its metal cost for Tech 1 and Tech 2 units, a little less for Tech 3 and Tech 4. Big units take supply in big bites — check the card before you queue five of something expensive.
 
 > **⚠ WHEN YOU RUN OUT OF SUPPLY, YOU STOP BEING ABLE TO BUILD UNITS.**
 >
 > Not slowly. Not at reduced rate. You simply cannot produce. Your factories sit there with a full metal bank and nothing happens.
 >
-> This is the failure new commanders find most bewildering, because nothing looks broken. **Watch the supply readout (§12), and listen to the voice advisor (§8) — it will tell you to build more supply, out loud, before it becomes a problem.**
-
-**There is a hard cap, but it is set so high you will never reach it.** Don't plan around it. In practice, your army size is limited by your economy and your supply depots, not by any ceiling the game imposes.
+> This is the failure new commanders find most bewildering, because nothing looks broken. **Watch the supply readout (§12), and listen to the voice advisor (§8) — it will tell you to build more supply, out loud, before it becomes a problem.There is a hard cap, but it is set so high you will never reach it.** Don't plan around it. In practice, your army size is limited by your economy and your supply depots, not by any ceiling the game imposes.
 
 ### Supply is a target
 
@@ -840,9 +903,7 @@ Destroying enemy supply depots doesn't just cost them the metal — **it directl
 
 Which means, in reverse: **don't leave your supply depots undefended or clumped somewhere a raider can reach.** They're a legitimate strategic target and a good opponent will treat them as one. Spread them, and put them behind your defensive line rather than out on an exposed flank.
 
----
-
-## 17. STORAGE, STALL AND EXCESS
+## 17. Storage, Stall And Excess
 
 ### Stall
 
@@ -877,11 +938,18 @@ With good storage:
 
 Storage produces nothing on its own — it's insurance and it's a shock absorber. But an economy with good storage does noticeably more with the same income than one without.
 
+There are three sizes, plus one that needs a vent:
+
+| Building | Tech | Adds |
+|---|---|---|
+| Small Resource Storage | 1 | 200 metal and 200 energy storage, for 50 metal. Cheap enough to drop in the first minutes. |
+| Medium Resource Storage | 2 | 2000 of each |
+| Large Resource Storage | 3 | 20,000 of each, and +500 supply |
+| Geothermal Condenser (on a vent) | 1 | 2000 of each, and +100 supply |
+
 **The healthy state:** metal hovering low but not at zero (you're spending, but not stalling), energy comfortable with headroom, storage never pinned at maximum for long, supply always a little ahead of your army.
 
----
-
-## 18. RESEARCH POINTS
+## 18. Research Points
 
 SplinterFaction's third resource. RP is not bulk material — it's a currency of **capability**. Metal buys you *more*; RP buys you *better*.
 
@@ -891,7 +959,7 @@ SplinterFaction's third resource. RP is not bulk material — it's a currency of
 
 **2. Research Centers, built on geothermal vents.** Fixed map locations, like resource locations. This is how you meaningfully accelerate your research — and it's why vents are contested ground (§15). Note the tension: a vent can host a Geothermal Power Plant *or* a Research Center. You're choosing between power and progress every time you take one.
 
-**3. Killing enemy units and structures.** You receive **a percentage of the destroyed thing's metal value back as RP.**
+**3. Killing enemy units and structures.** Every kill pays you **5% of the destroyed thing's metal cost** as RP, up to 250 RP for a single kill.
 
 That third source deserves emphasis, because it changes how you should think about combat:
 
@@ -904,10 +972,20 @@ That third source deserves emphasis, because it changes how you should think abo
 - **Upgrading your Commander** through tech levels, unlocking what you're able to build
 - **Upgrading EM Converters** to higher tiers (§14)
 - **Army-wide upgrades** — weapons and armor tracks that improve your entire force
-- **Abilities** such as scanner sweep
+- **Abilities** from the abilities panel: **Scanner Sweep** (100 RP — reveals an area for five seconds, then needs twenty to recharge) and **Production Boost** (100 RP per builder or factory boosted, §20)
 - Other unlocks and capabilities across both factions
 
-Upgrades appear as **Tech 1 Upgrade / Tech 2 Upgrade / etc.** buttons in the orders menu of eligible units, and can be **queued** — queued upgrades process one at a time as RP becomes available (§11).
+Upgrades appear as **Tech 2 Upgrade / Tech 3 Upgrade / etc.** buttons in the orders menu of eligible units, and can be **queued** — queued upgrades process one at a time as RP becomes available (§11).
+
+| What | RP cost |
+|---|---|
+| Commander to Tech 2 / 3 / 4 | 300 / 600 / 1200 |
+| A converter to Tech 2 / 3 / 4 | 25 / 50 / 100 (each) |
+| Weapons or Armor, levels 1 to 6 | 250 / 400 / 650 / 1000 / 1600 / 2500 |
+| Scanner Sweep | 100 |
+| Production Boost | 100 per builder or factory |
+
+A Research Center adds **4 RP a second** — four times the baseline, from one building.
 
 ### How to spend it
 
@@ -920,11 +998,10 @@ Upgrades appear as **Tech 1 Upgrade / Tech 2 Upgrade / etc.** buttons in the ord
 **Check the RP display every few minutes.** It's the easiest resource in the game to forget about, and arriving at minute twenty holding a fortune you never spent is a genuinely common way to lose.
 
 ---
----
 
 # PART V — CONSTRUCTION
 
-## 19. CONSTRUCTORS AND THE BUILD QUEUE
+## 19. Constructors And The Build Queue
 
 **Constructor units** build everything. Your Commander is one. You will want more — quickly.
 
@@ -934,6 +1011,8 @@ Upgrades appear as **Tech 1 Upgrade / Tech 2 Upgrade / etc.** buttons in the ord
 - **Air Constructor** — built from your air factory. Flies, so it ignores terrain entirely.
 
 That's the whole roster. **Constructors are never upgraded** — there's no advanced builder tier to tech into, and no reason to hold off building them early.
+
+Factories come in three kinds — **Land**, **VTOL** (air) and **Sea** — and every constructor, and your Commander, can place all three. The Sea Factory has to stand in deep water.
 
 **Your Commander and your constructors share the same build list.** Whatever your Commander can build, an ordinary constructor can build too. This is genuinely important and it has one big consequence:
 
@@ -971,7 +1050,7 @@ To build: select a constructor, open the build menu, pick a structure, place it 
 
 You are not limited to one click, one building. Hold **Shift** and **drag** while placing, and the modifier keys reshape what gets queued. These are worth ten minutes of practice — laying a power farm or a turret line becomes one gesture instead of twenty clicks.
 
-<!-- IMAGE: four small side-by-side screenshots showing the line, filled block, hollow box and surround patterns as build ghosts -->
+*[Image: four small side-by-side screenshots showing the line, filled block, hollow box and surround patterns as build ghosts]*
 
 | What you want | How to do it |
 |---|---|
@@ -999,13 +1078,76 @@ Two more controls that make placement tidy:
 - **Ringing something valuable:** Shift+Ctrl and point at it.
 - **Claiming resource locations:** right-click drag connect-the-dots across the spots (§38).
 
+### Several constructors, one queue
+
+Select several constructors, hold Shift and queue buildings as usual. You do not have to decide who builds what: **each job goes to the constructor that would have it finished soonest**, counting what that constructor already has queued, the walk to the site, and how fast it builds. Only constructors that can actually build the thing are considered.
+
+- A dragged line of buildings is cut into stretches, one per constructor, each worked from the end nearest its builder — so they do not walk past one another.
+- The sharing carries on afterwards. A constructor that runs out of work takes over a waiting job from the crewmate with the most still queued.
+- Every job still has exactly one builder (§20). The split shares the *list*, never a single building.
+- Give a constructor any other order and it leaves the crew and does what you told it.
+
+This is on by default. It can be switched off under **Menu → Settings → Controls → Split build orders**.
+
+### Global Build — building without picking a builder
+
+Most of the time you do not care *which* constructor builds something. You care that it gets built. **Global Build** is for exactly that: you place buildings on a shared **board**, and whichever of your constructors is best placed takes each job.
+
+*[Image: a base with several Global Build jobs on the ground — white, yellow and green corner markers, with translucent ghosts of the buildings on the jobs not yet started]*
+
+There are three ways to put a job on the board:
+
+| What you do | What happens |
+|---|---|
+| `Alt` + left-click a building in the world | Samples it — yours, an ally's, or an enemy's you can see. You are now placing more of that building, with nothing selected. Works for anything one of your constructors can build. |
+| `Alt` + left-click a card in the build menu | Places that building for the board instead of for the selected constructor. |
+| **GLOBAL** switch at the top of the build menu, or `Alt + Q` | Turns on **board mode**. Until you switch it off, *everything* you place goes to the board — from the menu, from a build hotkey, from the converter drag. |
+
+Placing works exactly as it always does: click for one, Shift-drag for a line, the block and box modifiers above, spacing and facing keys. A **GLOBAL BUILD** tag follows the cursor so you know where the order is going.
+
+**Board mode stays on until you turn it off.** The build menu wears an orange frame and its header reads "Global build" for as long as it is on, so you cannot forget. While it is on, `Alt` + click on a card does the opposite of usual: it orders the selected constructor itself, that once.
+
+#### How the board hands out work
+
+Twice a second the board looks at every waiting job and every constructor it may use, and pairs them so that each job is **finished as soon as possible**: the time until that constructor is free, plus its walk to the site, plus the build itself.
+
+- **An idle constructor is preferred, but not blindly.** If one across the map is idle and one next to the site will be free in a few seconds, the job waits for the near one. A job held back like this for more than about twenty seconds goes to an idle constructor after all.
+- **Your own orders are never interrupted.** A constructor busy with something you told it to do is counted (it will come free eventually) but the board does not pull it off its work.
+- **Constructors on patrol, on guard or on repeat are left alone.** So is your Commander — it stays where you put it.
+- **One job, one builder.** The board does not break the no-assist rule (§20). An idle constructor with nothing it can usefully take stays idle.
+- **Jobs do not get lost.** If the constructor on a job dies or you give it other orders, or the half-built frame is destroyed, the job goes back on the board. A job that cannot be started after three tries is dropped, and the game tells you.
+
+#### Reading the markers
+
+Every job shows on the ground as four corner brackets, and — until its frame is started — as a translucent ghost of the building, the same as a constructor's own queue.
+
+| Marker | Meaning |
+|---|---|
+| **White** | Waiting. No constructor has it yet. |
+| **Yellow** | Kept for a constructor that is about to come free. |
+| **Green** | Being built. |
+
+#### Managing the board
+
+| Key | Action |
+|---|---|
+| `Alt` + right-click a marker | Take that job off the board. |
+| `Alt + G` | Keep the selected constructors off the board — or put them back. A grey ring marks a constructor the board will not touch. |
+| `Alt + Q` | Board mode on or off. |
+
+In board mode, a card in the build menu is **dimmed** when none of the constructors on the board can build it — most often because your Commander is the only one who can, and Commanders do not work for the board. The tooltip says so. `Alt` + click it to order the selected constructor directly.
+
+> **TIP:** The board is at its best for the things you build everywhere and never think about — converters on newly taken ground, power, supply depots. Flip board mode on, paint a dozen of them across the map, flip it off. Keep one or two constructors off the board with `Alt + G` for the jobs you want done by a particular builder, right now.
+
+Global Build can be switched off entirely under **Menu → Settings → Controls → Global build**.
+
 **AN IDLE CONSTRUCTOR IS A BUG IN YOUR PLAY.** Every constructor should always have work: building, reclaiming, capturing, or on patrol (which makes it find its own work).
 
 > **HOLD `SPACE` TO FIND YOUR CONSTRUCTORS.** An animated colored ring appears around every one of them, anywhere on screen.
 >
 > This turns "do I have idle constructors?" from a chore into a one-second glance. Hold Space, look for a ring that isn't doing anything, give it a job. Do this every couple of minutes and you will never lose a game to a builder that quietly finished its queue ten minutes ago.
 
-## 20. THERE IS NO BUILD ASSIST
+## 20. There Is No Build Assist
 
 > **⚠ SPLINTERFACTION RULE: CONSTRUCTORS CANNOT ASSIST ANYTHING — INCLUDING EACH OTHER.**
 >
@@ -1030,7 +1172,7 @@ Practically: plan for your second factory well before you're floating metal, and
 
 There *is* one way to make something build faster: the **Production Boost** ability.
 
-Select a builder or factory, activate the boost, and **its production speed increases significantly for 20 seconds.**
+Select builders or factories and press **Production Boost** in the abilities panel: each of them **builds at five times its normal speed for 20 seconds.** It costs **100 Research Points for every builder or factory boosted**, so boost the one that matters, not the whole base. It works on anything that builds, your Commander included.
 
 Because no form of build assist exists, this is your only lever for producing something *right now* — and 20 seconds is short enough that when you use it matters:
 
@@ -1041,7 +1183,35 @@ Because no form of build assist exists, this is your only lever for producing so
 
 **Don't waste it on routine production.** Anything that would have finished comfortably anyway gains you nothing. Boost is for the moments where twenty seconds is the difference between having the thing and not having it.
 
-## 21. THERE IS NO REPAIR
+### Linked factories — one queue for several factories
+
+Once you have two or three factories, keeping each one's queue topped up becomes a chore. **Linking** them removes it: linked factories share a single build queue, and each takes the next unit from it as it comes free.
+
+*[Image: three linked factories joined by a coloured line on the ground, with the shared queue strip showing at the top of the build menu]*
+
+| Input | Result |
+|---|---|
+| Select two or more factories, press **Link** in the orders menu or `Alt + L` | They become a group with one queue. Linking a factory that is already linked joins the two groups. |
+| **Unlink**, or `Alt + Shift + L` | Takes the selected factories out of their group again. |
+| Order a unit from any linked factory | It is ordered from the *group*. "Five tanks" is five in all — not five from each factory. |
+| Hold `Space` while ordering | The order goes to the selected factory alone. |
+| Right-click a unit in the shared queue strip | Removes one of it from the queue (Shift 5, Ctrl 20). |
+
+How it behaves:
+
+- **Nothing is promised ahead of time.** A factory holds only the unit it is building, and takes the next thing in the shared queue *that it can build* when that one is nearly done. A faster factory simply ends up building more.
+- **Different factory types can share a queue.** Each only ever takes what it is able to produce.
+- **The usual modifiers still work.** Shift orders five, Ctrl twenty, and Alt puts the order at the front of the queue.
+- **Repeat belongs to the group.** A finished unit goes back on the end of the shared queue — except one ordered with Alt, which is built once and then gone. That makes Alt the way to slip a one-off (a constructor, a scout) into a repeating production loop.
+- **A lost factory gives back what it held.** Nothing in the queue disappears with it.
+- **Rally points stay each factory's own**, unless you turn on *Shared rally point* in the settings — then a move, fight, patrol or guard order to one linked factory is given to all.
+- Linked factories are joined by a line on the ground in their group's colour, brighter while one of them is selected. The links are your own: allies and spectators do not see them.
+
+Linking does not make anything build faster — every factory still produces at its own rate, and the no-assist rule stands. What it buys you is attention: one queue to fill instead of three, and no factory sitting idle because you forgot it.
+
+The setting is **Menu → Settings → Controls → Linked factories**.
+
+## 21. There Is No Repair
 
 > **⚠ SPLINTERFACTION RULE: THERE IS NO CONSTRUCTOR REPAIR. AT ALL.**
 >
@@ -1049,7 +1219,7 @@ Because no form of build assist exists, this is your only lever for producing so
 
 This is a deliberate, defining design decision and it reshapes how the whole game is played. Absorb it properly:
 
-**Damage is permanent.** A tank that comes out of a fight at 40% health stays at 40% health. You cannot pull your army home, patch it up, and send it back out fresh. Your damaged defensive turret stays damaged until something finishes it off.
+**Damage is permanent.** A tank that comes out of a fight at 40% health stays at 40% health. You cannot pull your army home, patch it up, and send it back out fresh. Your damaged defensive turret stays damaged until something finishes it off. (The Federation is the one exception to all of this — see *What healing does exist*, below.)
 
 **Consequences you must internalize:**
 
@@ -1066,8 +1236,8 @@ This is a deliberate, defining design decision and it reshapes how the whole gam
 Only two things in the entire game restore health, and they are both faction-specific:
 
 **FEDERATION OF KALA:**
-- **Hull regeneration.** Fed units recover hull automatically over time, out of combat. Slow, but it's real, and over a long game it's an enormous cumulative advantage.
-- **The healstation.** A Fed structure that repairs hull damage for friendly Fed units within its radius. **This is the only genuine healing structure in SplinterFaction, and only Fed has it.** Build them, and rotate damaged units through. A Fed player using healstations well can sustain aggression indefinitely in a way no other force in the game can.
+- **Hull regeneration.** Everything the Federation builds as its own — units, and its turrets and factories too — recovers hull automatically once it has gone five seconds without taking damage: 30 hull a second at Tech 1, doubling with each tier to 240 at Tech 4. Over a long game it's an enormous cumulative advantage. (Buildings both factions share, such as power plants and storage, do not regenerate.)
+- **The healstation.** A Fed structure (Tech 2) that restores 100 hull a second to every friendly unit and structure within its radius, five seconds after it was last hit. **This is the only genuine healing structure in SplinterFaction, and only Fed can build it.** (It heals whatever is friendly: in a team game, a Loz ally parked beside your healstation is healed too.) Build them, and rotate damaged units through. A Fed player using healstations well can sustain aggression indefinitely in a way no other force in the game can.
 
 **LOZ ALLIANCE:**
 - **Shields recharge quickly** out of combat, and shields absorb damage before hull does. But **hull damage underneath is permanent, exactly as for everyone else.** Loz has no healstation and no hull regeneration. Once a Loz unit's hull is chewed, it is chewed forever.
@@ -1076,7 +1246,7 @@ Only two things in the entire game restore health, and they are both faction-spe
 
 Understand this and half of Part VII makes sense before you read it.
 
-## 22. LAYING OUT A BASE
+## 22. Laying Out A Base
 
 Base layout is free power. It costs nothing but thought.
 
@@ -1087,9 +1257,7 @@ Base layout is free power. It costs nothing but thought.
 - **Protect your supply depots.** They cap your army size (§16), which makes them a high-value raid target. Interior, not perimeter.
 - **Build defenses at chokes, not around every building.** One turret covering a pass beats four turrets scattered pointlessly.
 - **Check the range rings when placing defenses.** They're shown by default — so there is no excuse for a turret whose radius doesn't reach the thing it was built to protect. That's 100% wasted metal.
-- **Keep constructors near the front but not *at* the front.**
-
-**Don't:**
+- **Keep constructors near the front but not *at* the front.Don't:**
 - Wall yourself in so completely that you can't expand.
 - Ring your entire base in defenses — it costs more than an army, it can't attack, and remember §21: those turrets never get repaired.
 - Bunch everything so tightly that one artillery barrage hits six buildings.
@@ -1100,15 +1268,14 @@ Base layout is free power. It costs nothing but thought.
 > So pack your power plants however you like. Spread them if you're worried about artillery hitting several at once, but you'll never lose a grid to a chain reaction.
 
 ---
----
 
 # PART VI — COMBAT
 
-## 23. UNIT ROLES
+## 23. Unit Roles
 
 Every unit occupies a role. SplinterFaction's ground rosters follow a consistent shape at each tech tier, which makes them easy to learn: **a raider, a main battle tank, and an artillery piece** — with the artillery frequently doubling as anti-air.
 
-**SCOUT** — Fast, cheap, sees far, often unarmed. Its job is *information*, not damage. Loz field the **Flea** on the ground; both factions use the **Gnat** air scout drone. Build them early and keep building them.
+**SCOUT** — Fast, cheap, sees far, often unarmed. Its job is *information*, not damage. Both factions use the **Gnat** air scout drone. Build them early and keep building them.
 
 **RAIDER** — Fast, cheap, hits hard, dies fast. Its job is to get *behind* the enemy line and kill constructors, converters and supply depots. Fed's **A.K.** and Loz's **Diamondback** are the archetypes. Raiders lose head-on fights and should never be in one.
 
@@ -1133,16 +1300,14 @@ Every unit occupies a role. SplinterFaction's ground rosters follow a consistent
 > **A NOTE ON "MASSIVE" TARGETS.** Two Tier 3 turrets — Fed's **Guardian** and Loz's **Annihilator** — **prefer** MASSIVE-category targets: enemy heavy units and capital ships. If one is in range, that's what they shoot.
 >
 > They aren't useless otherwise — with no MASSIVE target available they'll happily engage ordinary ground units and structures. But their targeting priority means **they'll turn away from whatever's currently hurting them the moment something big walks into range.** Build them as your answer to things nothing else can threaten, and keep other defenses alongside to handle everything smaller.
-
-> **TIER 4 UNITS ARE GAME-ENDERS.** Fed's **Juggernaut** and Loz's **Silverback** are not simply "the best units" — they are, in most matches, the unit that decides the match. Both mount four to six weapon systems simultaneously and both take an enormous amount of concentrated firepower to bring down.
+>
+> **TIER 4 UNITS ARE GAME-ENDERS.** Fed's **Juggernaut** and Loz's **Silverback** are not simply "the best units" — they are, in most matches, the unit that decides the match. Both mount several weapon systems at once (six on the Juggernaut, three on the Silverback) and both take an enormous amount of concentrated firepower to bring down.
 >
 > They *can* be killed. They take a LOT of killing. If your opponent fields one and you have no answer prepared, the game is probably over — and if you field one, understand that you've committed a very large fraction of your economy to a single target that must not be caught alone or unsupported.
 
 **A mixed army beats a pure army.** Any single unit type has an answer. Tanks in front, artillery behind, AA along, support tucked in the middle — that composition has no clean counter.
 
----
-
-## 24. SPECIALIST WEAPONS: HEAT AND DISRUPTION
+## 24. Specialist Weapons: Heat And Disruption
 
 > **THERE IS NO COUNTER WEB IN SPLINTERFACTION.**
 >
@@ -1152,7 +1317,7 @@ Every unit occupies a role. SplinterFaction's ground rosters follow a consistent
 
 What the game *does* have is two **specialist weapon effects** that do something other than reduce hit points. Both accumulate on the target, and both are tracked separately from health.
 
-<!-- IMAGE: close-up of a unit showing the heat bar (left) and disruption bar (right) alongside its healthbar -->
+*[Image: close-up of a unit showing the heat bar (left) and disruption bar (right) alongside its healthbar]*
 
 ### Reading the bars
 
@@ -1169,18 +1334,18 @@ Heat weapons raise a target's thermal level with every hit. The effect escalates
 
 | Heat level | Effect |
 |---|---|
-| **50%** | The target suffers a **movement penalty** — it slows down |
+| **55%** | The target suffers a **movement penalty** — it drops to 70% of its speed, and stays slowed until its heat has fallen back below 45% |
 | **100%** | The target **explodes** |
 
-This is a kill mechanism that ignores how much health the target has left. A fully healthy heavy tank that has been cooking under sustained fire dies anyway.
+Heat weapons do no hull damage at all — the heat *is* the damage. This is a kill mechanism that ignores how much health the target has left. A fully healthy heavy tank that has been cooking under sustained fire dies anyway.
 
-The escalation is what makes it nasty. At 50% the target is slowed, which means **it can no longer escape the weapon that's heating it.** Heat is self-reinforcing: the longer you hold the beam on something, the less able it is to leave.
+The escalation is what makes it nasty. Past the halfway mark the target is slowed, which means **it can no longer escape the weapon that's heating it.** Heat is self-reinforcing: the longer you hold the beam on something, the less able it is to leave.
 
 **Loz are the heat faction.** The **Flashpoint** (T1) and **Cauterizer** (T2) are built around it, the **Mammoth** carries it as one of three systems, and the **Loz Commander's** own weapon is a heat ray.
 
 **Playing with heat:** stay on one target. Switching targets wastes accumulated heat. Pick something, cook it, kill it, move on.
 
-**Playing against heat:** watch the left bar on your units. **Pull anything past 50% out immediately** — after that it can't outrun the thing killing it. Rotating a heating unit to the back of your formation lets it cool while something fresh takes over.
+**Playing against heat:** watch the left bar on your units. **Pull anything nearing half out immediately** — after that it can't outrun the thing killing it. Rotating a heating unit to the back of your formation lets it cool while something fresh takes over.
 
 ### Disruption weapons
 
@@ -1190,13 +1355,13 @@ Disruption weapons stack an impairment effect. The escalation:
 |---|---|
 | **50%** | The target is **blinded** |
 | **75%** | The target **cannot fire** |
-| **100%** | The target is **immobilized** for a time — and suffers a **disruption nova**, spreading disruption to everything around it |
+| **100%** | The target is **immobilized** for ten seconds — and suffers a **disruption nova**, spreading disruption to everything around it |
 
 That last stage is the one to plan around. **A fully disrupted unit becomes a weapon against its own army**, seeding disruption into the units packed near it. Against a clumped enemy force, driving one target to 100% can cascade into the whole group.
 
 A fully disrupted unit is, for that window, not in the battle at all. It cannot shoot and it cannot leave. Against an expensive target that's effectively a kill, with the actual destruction as a formality.
 
-**Fed are the disruption faction.** The **Equalizer** (T1, a support unit that stacks disruption rather than killing) and **Dominator** (T2) are dedicated platforms, the **Striker** (T3) pairs a disruption laser with a particle cannon, and the **Fed Commander** carries an EMG Disruption Cannon. Loz's **Diamondback** raider also applies disruption, which is what makes it so dangerous to constructors.
+**Fed are the disruption faction.** The **Equalizer** (T1, a support unit that stacks disruption rather than killing) and **Dominator** (T2) are dedicated platforms, the **Striker** (T3) pairs a disruption laser with a particle cannon, and the **Fed Commander** carries an EMG Disruption Cannon.
 
 **Playing with disruption:** focus a volley on high-value targets. Several disruption units hitting the same target lock it down far faster than one — and if you can drive one target in a tight enemy formation all the way to 100%, the nova does the rest of the work for you.
 
@@ -1206,9 +1371,7 @@ A fully disrupted unit is, for that window, not in the battle at all. It cannot 
 
 Because these effects **bypass health entirely**, the usual instinct — "my unit is at 80%, it's fine" — is wrong. Damage is not the only clock running on your units. Check all three bars: health, heat, disruption.
 
----
-
-## 25. TERRAIN, WATER AND LINE OF FIRE
+## 25. Terrain, Water And Line Of Fire
 
 Recoil simulates terrain and projectiles physically, which produces a few consequences worth knowing.
 
@@ -1248,9 +1411,7 @@ Naval play follows the same principles as ground play — economy, composition, 
 
 Many ships carry anti-air as a secondary. Check what yours have before assuming your fleet is safe from bombers.
 
----
-
-## 26. MICRO TECHNIQUES THAT ACTUALLY MATTER
+## 26. Micro Techniques That Actually Matter
 
 In rough order of value-per-effort:
 
@@ -1268,7 +1429,7 @@ In rough order of value-per-effort:
 
 **7. Focus the support.** In an enemy army, the constructors and artillery are worth ten times the assault units. Snipe them.
 
-## 27. TRANSPORTS, GUNSHIPS AND FERRY LINES
+## 27. Transports, Gunships And Ferry Lines
 
 SplinterFaction's air transports come with an important framing difference:
 
@@ -1286,7 +1447,7 @@ Loz's **Dragonfly** is the exception: a genuine unarmed Tier 1 transport with no
 
 **3. Not crossing water on foot.** Per §25, ground units can't fire while swimming. A transport turns a defenseless crossing into a fast, armed one.
 
-<!-- IMAGE: a transport with a repeat ferry queue drawn on the map -->
+*[Image: a transport with a repeat ferry queue drawn on the map]*
 
 ### Ferry lines — and why Loz need them
 
@@ -1298,9 +1459,7 @@ A ferry line fixes that structurally. Loz production comes off the line and gets
 
 **Cautions:** a ferry line flying through contested airspace is a delivery service for your opponent. Route it around known anti-air, and check on it occasionally — a repeat loop will happily keep flying into a Rattlesnake forever.
 
----
-
-## 28. WRECKAGE AND RECLAIM
+## 28. Wreckage And Reclaim
 
 When a unit dies, it has **a chance to drop a reclaimable part** on the ground. When it does, that part is worth **a high percentage of the dead unit's total cost.** Constructors reclaim these parts, turning them back into metal.
 
@@ -1322,11 +1481,10 @@ Also reclaimable: terrain features such as rocks and debris, and your own unwant
 Given that damaged units cannot be repaired (§21), reclaim is your only way to recover value from a battle. Do not walk past it.
 
 ---
----
 
 # PART VII — THE FACTIONS
 
-## 29. FEDERATION OF KALA
+## 29. Federation Of Kala
 
 **Doctrine: speed, stealth, sustainability.**
 
@@ -1337,7 +1495,7 @@ Fed fields **fast walkers** — legged chassis that reposition rapidly and prefe
 - **Cloaking — true stealth.** Not merely invisibility. See §34; in a game with no radar, this is the most powerful information tool either faction has.
 - **Hull regeneration.** Fed units recover hull automatically over time. In a game where damage is otherwise permanent (§21), this is enormous.
 - **The Healstation.** A repair field structure, unique to Fed, that restores health to friendly units in its radius. It pauses briefly when a unit takes damage, so it heals units rotating *off* the line rather than units still on it.
-- **Disruption weapons.** The Equalizer, Dominator and Striker stack impairment until a target is blind, then immobile (§24).
+- **Disruption weapons.** The Equalizer, Dominator and Striker stack impairment until a target is blind, then disarmed, then immobile (§24).
 - **Mobility.** Fed arrive first, leave first, and choose whether a fight happens at all.
 
 **How to play Fed:**
@@ -1350,9 +1508,7 @@ Fed fields **fast walkers** — legged chassis that reposition rapidly and prefe
 
 **Fed's weakness:** individual units are fragile. Caught in the open, or pinned somewhere they can't withdraw, Fed evaporates. Fed is never allowed to be careless — but is allowed to be wrong twice, which Loz isn't.
 
----
-
-## 30. LOZ ALLIANCE
+## 30. Loz Alliance
 
 **Doctrine: mass, protection, inevitability.**
 
@@ -1376,18 +1532,14 @@ Loz field **slow heavy tanks** built around **energy shields at every scale**, w
 
 **Loz's weakness:** you cannot choose your engagements. A faster opponent decides when and where fights happen. And because you have no healstation and no regeneration, every hull point you lose is gone for the rest of the game.
 
----
-
-## 31. MATCHUP NOTES
+## 31. Matchup Notes
 
 **Fed vs. Loz is a race between attrition and commitment.**
 
 - **Fed's plan:** never fight fair. Bleed shields through repeated skirmishes, disengage, regenerate, and win on cumulative permanent damage.
 - **Loz's plan:** refuse to be bled. Force decisive engagements, take ground and hold it, and win on the fact that a Fed army that gets caught dies.
 
-**The three things that decide it:**
-
-**1. Economy.** Neither faction's signature system costs energy (§15), so this isn't a question of powering your cloak or your shields — it's the plain question of who converts more metal, fields more army, and researches faster. The faction mechanics are free; the army using them is not.
+**The three things that decide it:1. Economy.** Neither faction's signature system costs energy (§15), so this isn't a question of powering your cloak or your shields — it's the plain question of who converts more metal, fields more army, and researches faster. The faction mechanics are free; the army using them is not.
 
 **2. Information.** With no radar and Fed cloaking suppressing seismic pings (§34), Loz can be attacked by an army they never saw coming. Loz commanders must scout relentlessly and sweep ground before crossing it, or accept fighting blind.
 
@@ -1398,17 +1550,16 @@ Loz field **slow heavy tanks** built around **energy shields at every scale**, w
 **Mirror matchups** collapse into positioning and economy, which is an excellent way to learn fundamentals without a faction puzzle on top.
 
 ---
----
 
 # PART VIII — ADVANCED SYSTEMS
 
-## 32. TECH TIERS AND UPGRADES
+## 32. Tech Tiers And Upgrades
 
 ### Your Commander is your tech tree
 
 > **⚠ THE ONLY WAY TO RAISE YOUR TECH LEVEL IS TO UPGRADE YOUR COMMANDER.**
 
-Nothing else does it. Not a research building, not a factory upgrade. Your Commander advances through **four tiers**, paid for with Research Points (§18), and **your Commander's tier is your tech level.** Everything you can build is gated behind it.
+Nothing else does it. Not a research building, not a factory upgrade. Your Commander moves through **four tech levels**. It starts the match at Tech 1, and is upgraded to Tech 2 for 300 RP, Tech 3 for 600 and Tech 4 for 1200, paid for with Research Points (§18), and **your Commander's tier is your tech level.** Everything you can build is gated behind it.
 
 ### Your Commander is also a weapon
 
@@ -1417,11 +1568,11 @@ Upgrading gains you more weapon range and dramatically more damage at each tier.
 Each faction's Commander carries its faction's signature weapon:
 
 - **Fed Commander** — an **EMG Disruption Cannon.** It blinds and then immobilizes what it hits (§24), which makes it superb at pinning a raiding party in place.
-- **Loz Commander** — a **heat ray.** It cooks targets toward detonation, and once something passes 50% heat it's too slow to escape.
+- **Loz Commander** — a **heat ray.** It cooks targets toward detonation, and once something passes about half heat it drops to 70% speed and seldom escapes.
 
 > **⚠ COMMANDER WEAPONS ARE MOSTLY INEFFECTIVE AGAINST OTHER COMMANDERS.**
 >
-> Do not plan on winning a duel. Two Commanders shooting at each other is close to a stalemate — deliberately, since the alternative would be a game decided by one lucky meeting.
+> Do not plan on winning a duel. Commanders are immune to heat and to disruption, so two of them shooting at each other is a stalemate — deliberately, since the alternative would be a game decided by one lucky meeting.
 >
 > The practical read: your Commander bullies *armies*, not other Commanders. And if you want to kill their Commander, bring an army to do it, because yours won't manage the job alone.
 
@@ -1447,23 +1598,19 @@ That's the intended shape of the recovery. It is **not efficient** — you'll sp
 
 ### Upgrades in the orders menu
 
-Upgradeable units show **Tech 1 Upgrade / Tech 2 Upgrade / etc.** buttons in the orders menu, with tooltips explaining each — and a **clickable upgrade button floating above the unit itself**, which is quicker still (§11). Alongside them: **add to upgrade queue**, **pause upgrade**, **cancel upgrade**. Queued upgrades process one at a time as RP becomes available.
+Upgradeable units show **Tech 2 Upgrade / Tech 3 Upgrade / etc.** buttons in the orders menu, with tooltips explaining each — and a **clickable upgrade button floating above the unit itself**, which is quicker still (§11). Alongside them: **add to upgrade queue**, **pause upgrade**, **cancel upgrade**. Queued upgrades process one at a time as RP becomes available.
 
 Upgrades currently complete in about **three seconds**, so there's little vulnerability window in practice.
 
-**What's upgradeable:** your Commander (four tiers, gating all tech), **EM Converters** (four tiers, multiplying output — Tier 1 doubles base, Tier 2 triples, Tier 3 more than five times, Tier 4 more than ten), and army-wide **weapons and armor** tracks.
+**What's upgradeable:** your Commander (Tech 2, 3 and 4, gating all tech), **EM Converters** (built at Tech 1, which doubles the map's base value; Tech 2 is ×6.5, Tech 3 ×14 and Tech 4 ×28, each needing your Commander at that tier — §14), and army-wide **weapons and armor** tracks (six levels each, taking your whole army from +15% to double).
 
 **Guidance:** converter upgrades and Commander tech both raise your ceiling and should come early. Weapons and armor scale with the size of your army, so they're worth more the bigger your force gets — and they're the entire fallback plan if your Commander dies.
 
----
-
-## 33. SHIELDS (LOZ ALLIANCE)
+## 33. Shields (Loz Alliance)
 
 Loz shielding operates at three scales, and they stack.
 
-**1. Personal shields.** Every Loz unit carries one. It absorbs damage before the hull, and recharges quickly once out of combat. **The hull underneath does not recover.**
-
-**2. The Protector.** A mobile shield tank that projects a bubble over nearby friendlies. It carries no weapons and cannot fight — its entire value is the cover it provides. A Protector embedded in an advancing formation absorbs fire that would otherwise shred the units around it. Keep it behind the front rank and keep it alive.
+**1. Personal shields.** Every Loz unit carries one. It absorbs damage before the hull, and recharges quickly once out of combat. **The hull underneath does not recover.2. The Protector.** A mobile shield tank that projects a bubble over nearby friendlies. It carries no weapons and cannot fight — its entire value is the cover it provides. A Protector embedded in an advancing formation absorbs fire that would otherwise shred the units around it. Keep it behind the front rank and keep it alive.
 
 **3. Shield Generators.** Static projected bubbles. The **Small** (Tier 2, 250 radius, 1,200 shield power) buys time under light pressure. The **Large** (Tier 3, 750 radius, 10,000 shield power, 300/sec regeneration) can absorb a serious volume of fire — but once collapsed it takes **25 seconds** to come back, and that window is when a good opponent commits.
 
@@ -1479,13 +1626,11 @@ Every point a shield absorbs is a point your permanently-damageable hull never t
 
 This means an energy stall, however bad for your economy, **never leaves your army unshielded.** Whatever else is going wrong, your protection stays up.
 
----
-
-## 34. STEALTH, SENSORS AND SEEING THE MAP
+## 34. Stealth, Sensors And Seeing The Map
 
 This section applies to everyone, because SplinterFaction's information model is unusual and it shapes every game.
 
-<!-- IMAGE: the same area shown twice — a seismic contact on the minimap vs. what's actually there once scouted -->
+*[Image: the same area shown twice — a seismic contact on the minimap vs. what's actually there once scouted]*
 
 ### There is no radar
 
@@ -1512,10 +1657,13 @@ Cloaking doesn't just make Fed units invisible to the eye. **It also suppresses 
 
 This is why cloaking is the strongest information tool in the game and why the Fed matchup is genuinely unnerving for Loz.
 
-**Cloak breaks in two situations:**
+**Cloak breaks in three situations:**
 
 1. **Proximity.** Every cloaked unit has a decloak radius. Enemies that get close enough will reveal it.
 2. **Firing.** Opening fire drops the cloak.
+3. **Taking damage.** A hit drops the cloak as well.
+
+Cloak comes back by itself: about three seconds after an enemy that merely came close has gone, about eight after firing or being hit.
 
 **Fed's cloaking assets:** the **Deleter** (mobile mech projecting an area cloak field), the **Cloaking Tower** (300 radius) and **Large Cloaking Tower** (800 radius, Tier 3). All of them cloak everything friendly inside their radius, and notably **they run at no energy cost** — the cloak field itself is free once built. They're fragile and unarmed; their value is entirely the invisibility they grant.
 
@@ -1534,17 +1682,25 @@ This is why cloaking is the strongest information tool in the game and why the F
 
 ---
 
----
-
-
----
----
-
 # PART IX — GAME MODES
 
-## 35. SKIRMISH VS. AI
+## 35. Skirmish Vs. Ai
 
-Add a **SimpleAI** opponent for a standard one-on-one match. SimpleAI plays a conventional game — builds an economy, produces an army, attacks. It is the right way to learn the fundamentals without the pressure of a human opponent noticing every mistake.
+For a standard match against the computer you have a choice of opponents, all of which play a conventional game — build an economy, produce an army, attack:
+
+| AI | How it plays |
+|---|---|
+| **AdaptiveAI** | Adjusts its difficulty while the game is running to be a good match for you. It tries to stay slightly ahead — enough to push you, not enough to roll you. **The recommended opponent.** |
+| **AdaptiveAIRelaxed** | The same, toned down: it steers for an even game and stops short of its best play. |
+| **AdaptiveAIEasy** | Lets you keep a small lead. Cautious, and never plays above plain SimpleAI. |
+| **AdaptiveAIBeginner** | Lets you keep a clear lead. Slow and timid throughout. **Start here if you have never played an RTS.** |
+| **SimpleAI** | Fixed strength, no adapting. Predictable, which makes it good for practising one thing at a time. |
+| **SimpleDefenderAI**, **SimpleConstructorAI** | SimpleAI leaning toward defense, and toward building. |
+| **Sandbox** | Does nothing at all. An empty opponent, for trying things out in peace. |
+
+The three toned-down Adaptive opponents are pre-set and ignore the AdaptiveAI mod options; plain AdaptiveAI follows them (starting difficulty, how far ahead it aims to stay, and aggression — §2). By default AIs cannot run out of resources: that is the *NeverStall* mod option, and turning it off makes every AI noticeably weaker.
+
+An AI is the right way to learn the fundamentals without the pressure of a human opponent noticing every mistake.
 
 **Learn against the AI in this order:**
 1. Just survive a full game. Don't optimize anything.
@@ -1555,7 +1711,7 @@ Add a **SimpleAI** opponent for a standard one-on-one match. SimpleAI plays a co
 
 Each of these is a single habit. Learn them one at a time, not all at once.
 
-## 36. SURVIVALAI: WAVE DEFENSE
+## 36. Survivalai: Wave Defense
 
 **SurvivalAI** is SplinterFaction's wave-based survival mode, and it's an excellent way to learn the game because it removes the "what is my opponent doing?" problem while keeping every economic and defensive lesson intact.
 
@@ -1581,7 +1737,7 @@ The AI operates from **beacon** units, which act as its spawn points and command
 **Beacon network specialization.** Beacons aren't identical — they take on roles that make the waves they support meaningfully harder:
 
 - **Shield beacons** — reinforce attacking waves with protection
-- **Cloaking beacons** — every unit sent from this beacon arrives **cloaked**. Given there is no radar and cloak suppresses seismic pings (§34), a cloaking beacon's waves are genuinely invisible until they're on top of you
+- **Jammer beacons** — every unit sent from this beacon arrives **cloaked**. Given there is no radar and cloak suppresses seismic pings (§34), a jammer beacon's waves are genuinely invisible until they're on top of you
 - **Accelerator beacons** — increase wave frequency or speed
 - **Forge beacons** — improve the quality of units produced
 
@@ -1604,29 +1760,54 @@ This creates a target priority list. **Killing the right beacon changes the shap
 
 The dedicated **survival panel** shows wave timing, composition and status. The **beacon labels** overlay identifies beacons and their specializations on the map. Keep both on.
 
-## 37. MULTIPLAYER
+### The numbers, at default settings
+
+- **Difficulty** is a mod option: Easy, Normal, Hard or Impossibru (§2).
+- **The first three minutes are quiet.** After that a wave comes about once a minute.
+- **Waves tech up on the clock:** Tech 2 units from ten minutes, Tech 3 from twenty, Tech 4 from thirty. From ten minutes the survival side also starts buying weapons and armor upgrades.
+- **Every tenth wave is a surge:** double strength, launched from every beacon at once.
+- **Killing a beacon pays you Research Points** (up to 250) — and provokes an immediate retaliation wave from the two nearest beacons, so arrive with enough to hold what you took.
+- **A dead beacon grows back** after about ten minutes, so a beacon you killed early is not gone for good.
+- **You win by destroying every beacon.** Survival is not endless: it is an assault with a deadline you set yourself.
+
+## 37. Multiplayer
+
+SplinterFaction's lobby is **Coilbox**, the same program you launch the game from (§1). Everything before a match — finding players, chatting, setting up a battle — happens there.
+
+### Getting online
+
+To play with other people you log in to a **lobby server**: the place that lists the battles, carries the chat and holds your account. Each game community uses its own. **SplinterFaction's is *Recoil Official*** (`lobby.recoilengine.org`), which Coilbox already knows about.
+
+1. Open **Multiplayer → Login** in the sidebar and choose **Register a new account**.
+2. Pick **Recoil Official** as the server, then a username, a password and your email. The server may email you a code to confirm the account.
+3. Back on the Login page, select your new login. Coilbox connects and takes you to the **Battles** page.
+
+Coilbox remembers the login, and can sign you in automatically each time it starts. **Multiplayer → Chat** has the server's channels and direct messages — a good place to find a game or ask a question.
 
 ### Joining a game
 
-Joining works through the lobby. Pick a room, pick a team, ready up.
+The **Battles** page lists every battle on the server, grouped into Open, Passworded and In progress. Each row shows the map, the game and how full it is. Select **Join**.
+
+- **Anything you are missing is downloaded for you** — the map, the game version, even the engine version the host is using. The battle room shows the progress, and the game cannot start for you until it is done.
+- **Pick your team and ally** on your own row of the player list. Players with the same ally letter are on the same side. (The faction column is there too, but with default options SplinterFaction asks you again in game — §3.)
+- **Turn on Ready** when you are set. The host presses Start once everyone is ready; anyone else can call a vote to start.
+- **Spectate**, at the top of the room, lets you watch instead of play. You can also join a battle that is already running and watch it.
+
+Many battles are run by a bot rather than a person (an *autohost*). It reads the battle chat and answers there, and the room may show a row of buttons for the common requests, such as balancing the teams.
 
 ### Hosting a game
 
-You have two options, and one of them is much easier.
+On the Battles page choose **Host a battle** under Recoil Official. Give it a title, pick the game and a map, set the player limit, add a password if you want it private, and select **Host battle**. You are then in the battle room as host: you choose the map, the start positions and the mod options (§2), and you press Start.
 
-**Option 1 — use a SPADS autohost.** There are **official SPADS autohosts** available. An autohost is a permanently-running server that hosts battles for you; you join it, set up your game through its commands, and play. **This requires no configuration on your end and no network setup.** If you just want to play a game with friends, use an autohost.
-
-**Option 2 — host it yourself.** Hosting directly from your own machine means other players connect to *you*, which means your router has to let them in.
-
-> **⚠ SELF-HOSTING REQUIRES PORT FORWARDING.**
+> **YOU DO NOT HAVE TO FORWARD A PORT.**
 >
-> You must forward **port 8254** to the machine running the game. This is the default; it can be changed on the *Host a New Battle* screen if 8254 is already in use on your network.
+> Hosting used to mean opening a port on your router by hand, and a battle nobody could join was the usual result of skipping it. Coilbox now hosts through the lobby's **relay**: players connect to the relay, the relay passes them on to you, and your router needs no setting up at all.
 >
-> If you skip this step, the battle will appear in the lobby and **nobody will be able to connect to it.** This is the single most common hosting problem, and it looks like a bug rather than a configuration issue — which is why it's worth saying plainly.
+> You can still forward the port yourself if you would rather have players connect to you directly — the game's port is **8452** (UDP), forwarded in your router's admin pages to the computer that hosts. Coilbox does not do this for you. It is optional: the relay works without it.
 
-Port forwarding is done in your router's admin interface, not in the game. The procedure varies by router; search for your model plus "port forwarding" if you haven't done it before. You forward TCP/UDP port 8254 to the local IP address of the computer that will host.
+**Playing with friends and no server.** *Host on LAN* starts a room straight from your computer, with no account needed. Friends on your home network see it by themselves. Friends elsewhere need your address — the **Share** button copies an invite link — and for them the room has to be reachable from outside: that means forwarding the room port (8200) and the game port (8452) on your router yourself. Hosting on the lobby server, above, avoids the question.
 
-**If you can't or don't want to forward ports, use an autohost.** There's no penalty for doing so and it's what most players use anyway.
+Coilbox does a good deal more than this — replays, saved battle presets, map packs, and a set of tools aimed at people making games rather than playing them. Its own guides cover those; nothing in this manual depends on them.
 
 **Multiplayer etiquette:**
 - Ready up promptly.
@@ -1641,15 +1822,14 @@ Port forwarding is done in your router's admin interface, not in the game. The p
 - **Divide the map.** Decide who covers which flank before the game starts.
 
 ---
----
 
 # PART X — STRATEGY
 
-## 38. YOUR FIRST FIVE MINUTES
+## 38. Your First Five Minutes
 
 Here is a concrete, working opening. It isn't the only one, but it's a real one, and it will not embarrass you.
 
-<!-- IMAGE: the opening build laid out in a base — converter, two fission plants, factory -->
+*[Image: the opening build laid out in a base — converter, two fission plants, factory]*
 
 ### The build
 
@@ -1701,9 +1881,7 @@ Every couple of minutes, ask:
 
 That list beats most opponents on its own.
 
----
-
-## 39. SCOUTING
+## 39. Scouting
 
 **Scouting is the highest-value action in the game, and in SplinterFaction it matters more than in most RTS games.**
 
@@ -1737,9 +1915,7 @@ In other games, scouting supplements your radar picture. **Here, scouting *is* y
 
 **Losing your scout tells you something too.** A scout that dies instantly at a specific place means something is defending that place.
 
----
-
-## 40. ATTACKING ON A TIMING
+## 40. Attacking On A Timing
 
 Random attacks fail. Attacks with a *reason* work. A **timing attack** is one launched at the specific moment you hold an advantage.
 
@@ -1762,9 +1938,7 @@ Random attacks fail. Attacks with a *reason* work. A **timing attack** is one la
 - **Have an objective.** "Kill their eastern expansion" is an objective. "Attack" is not.
 - **Remember §21.** Damage taken is permanent. An attack without a reason isn't neutral — it's a permanent cost.
 
----
-
-## 41. TURTLING, BOOMING, RUSHING
+## 41. Turtling, Booming, Rushing
 
 Three postures. Each beats one and loses to another.
 
@@ -1772,13 +1946,7 @@ Three postures. Each beats one and loses to another.
 **BOOM** — skip early army, maximize economy, overwhelm later. Beats turtling. Loses to rushing.
 **TURTLE** — heavy defense, hold a small area, tech up. Beats rushing. Loses to booming.
 
-```
-        RUSH ────beats────► BOOM
-          ▲                   │
-          │                   │ beats
-        beaten by             ▼
-          └───────────────  TURTLE
-```
+Each beats one and loses to another. None is stronger.
 
 > **NO STRATEGY IS BETTER THAN THE OTHERS. THIS IS DELIBERATE.**
 >
@@ -1790,9 +1958,7 @@ Three postures. Each beats one and loses to another.
 
 **Which is why §39 cuts both ways.** Scouting is how you find out what they've chosen. Denying scouting — killing their scouts, cloaking your expansions if you're Fed — is how you stop them finding out what you've chosen.
 
-**A note on turtling in this game specifically — and it differs by faction.**
-
-**Loz cannot turtle indefinitely.** Nothing repairs a Loz structure. Defenses degrade permanently under repeated pressure, so every wave that hits your line leaves it weaker than before, forever. A Loz turtle has a shelf life measured in how many attacks it can absorb, and the only way to extend it is to keep building replacements.
+**A note on turtling in this game specifically — and it differs by faction.Loz cannot turtle indefinitely.** Nothing repairs a Loz structure. Defenses degrade permanently under repeated pressure, so every wave that hits your line leaves it weaker than before, forever. A Loz turtle has a shelf life measured in how many attacks it can absorb, and the only way to extend it is to keep building replacements.
 
 **Fed can.** Fed structures regenerate, and healstations repair them. A Fed defensive line that survives an attack **comes back to full strength before the next one**, which makes turtling a far more sustainable posture — you can genuinely sit behind a line and let an opponent break themselves against it.
 
@@ -1800,9 +1966,7 @@ Three postures. Each beats one and loses to another.
 
 **For new players:** aim for the middle. Build economy hard, keep a modest army for safety, one defense at your choke, expand steadily. It beats nothing perfectly and loses to nothing catastrophically, which is what you want while learning.
 
----
-
-## 42. COMMON MISTAKES AND THEIR FIXES
+## 42. Common Mistakes And Their Fixes
 
 ### The five that cost the most games
 
@@ -1853,174 +2017,191 @@ Three postures. Each beats one and loses to another.
 | 25 | Expecting to repair | You can't. Plan for permanent damage (§21). |
 
 ---
----
 
-## APPENDIX A — GLOSSARY
+## A. Glossary
 
 Terms used in this manual and by other players. Where SplinterFaction differs from the genre convention, the entry says so.
 
 **AA**
-: Anti-air. Weapons that hit aircraft. Most cannot shoot ground targets.
+ — Anti-air. Weapons that hit aircraft. Most cannot shoot ground targets.
 
 **All-in**
-: An attack that commits everything. Wins or loses the game outright.
+ — An attack that commits everything. Wins or loses the game outright.
 
 **APM**
-: Actions Per Minute — a measure of clicking speed. Massively overrated.
+ — Actions Per Minute — a measure of clicking speed. Massively overrated.
 
 **Attack-move**
-: What other games call the **Fight** command. See *Fight*.
+ — What other games call the **Fight** command. See *Fight*.
 
 **Autohost**
-: A permanently-running server (SPADS) that hosts battles, so no player needs to forward ports.
+ — A bot that hosts and runs battles on the lobby server, so no player has to host. It answers commands typed in the battle chat.
 
 **Base race**
-: Both players attack instead of defending; whoever kills faster wins.
+ — Both players attack instead of defending; whoever kills faster wins.
 
 **Beacon**
-: A SurvivalAI spawn point. Killing them reduces incoming pressure.
+ — A SurvivalAI spawn point. Killing them reduces incoming pressure.
+
+**Board**
+ — The Global Build job list. Buildings placed on it are taken by whichever constructor can finish them soonest (§19).
+
+**Board mode**
+ — The GLOBAL switch on the build menu (`Alt + q`). While on, everything you place goes to the board.
 
 **Boom**
-: Prioritizing economy over army.
+ — Prioritizing economy over army.
 
 **Build order**
-: A planned sequence of construction for the opening.
+ — A planned sequence of construction for the opening.
 
 **Cheese**
-: A gimmicky all-in that wins by surprise. Beaten by scouting.
+ — A gimmicky all-in that wins by surprise. Beaten by scouting.
 
 **Choke / Chokepoint**
-: A narrow passage. Defensively valuable.
+ — A narrow passage. Defensively valuable.
 
 **Composition**
-: The mix of unit types in your army.
+ — The mix of unit types in your army.
 
 **Concave**
-: A shallow arc formation curving toward the enemy. Beats a clump.
+ — A shallow arc formation curving toward the enemy. Beats a clump.
 
 **Contain**
-: Trapping an enemy in their base so they can't expand.
+ — Trapping an enemy in their base so they can't expand.
 
 **Converter**
-: **EM Converter** — the structure that produces metal, buildable only on resource locations.
+ — **EM Converter** — the structure that produces metal, buildable only on resource locations.
 
 **Counter**
-: A unit that beats another unit type. Note SplinterFaction has no damage-type counter web (§24).
+ — A unit that beats another unit type. Note SplinterFaction has no damage-type counter web (§24).
 
 **Deathball**
-: One large army moving as a single blob. Vulnerable to area damage.
+ — One large army moving as a single blob. Vulnerable to area damage.
 
 **Disruption**
-: Weapon effect that blinds, then silences, then immobilizes a target. Tracked on the right-side bar.
+ — Weapon effect that blinds, then silences, then immobilizes a target. Tracked on the right-side bar.
 
 **Drop**
-: Delivering units behind enemy lines by transport.
+ — Delivering units behind enemy lines by transport.
 
 **Eco**
-: Economy.
+ — Economy.
 
 **Expand**
-: Taking a new resource location.
+ — Taking a new resource location.
 
 **Ferry line**
-: A transport on a repeating pick-up/drop-off loop, delivering units to the front.
+ — A transport on a repeating pick-up/drop-off loop, delivering units to the front.
 
 **Fight**
-: The order that moves units while engaging anything encountered. What other games call attack-move. Use it.
+ — The order that moves units while engaging anything encountered. What other games call attack-move. Use it.
 
 **Float**
-: Accumulating unspent resources. Bad.
+ — Accumulating unspent resources. Bad.
 
 **Geo / Vent**
-: Geothermal vent. Hosts a geothermal power plant, converter, research center or condenser.
+ — Geothermal vent. Hosts a geothermal power plant, converter, research center or condenser.
 
 **Harass**
-: Small attacks to disrupt economy without committing.
+ — Small attacks to disrupt economy without committing.
 
 **Heat**
-: Weapon effect that cooks a target toward detonation. Tracked on the left-side bar.
+ — Weapon effect that cooks a target toward detonation. Tracked on the left-side bar.
+
+**Hotbind**
+ — Binding a key to a build or order button by hovering it and pressing `Ctrl + Insert`.
 
 **Kiting**
-: Shooting while retreating so the enemy never fires back.
+ — Shooting while retreating so the enemy never fires back.
+
+**Linked factories**
+ — Factories joined into a group that shares one build queue (§20).
+
+**Lobby server**
+ — Where battles are listed and accounts are held. SplinterFaction uses *Recoil Official*, lobby.recoilengine.org (§37).
 
 **Macro**
-: Economy and production management.
+ — Economy and production management.
 
 **Map control**
-: How much of the map you can safely operate in.
+ — How much of the map you can safely operate in.
 
 **MASSIVE**
-: Target category for the heaviest units and capital ships. Some Tier 3 turrets prefer them.
+ — Target category for the heaviest units and capital ships. Some Tier 3 turrets prefer them.
 
 **Mex**
-: Slang from other Recoil-family games for a metal extractor. SplinterFaction's equivalent is the EM Converter.
+ — Slang from other Recoil-family games for a metal extractor. SplinterFaction's equivalent is the EM Converter.
 
 **Micro**
-: Individual unit control in combat.
+ — Individual unit control in combat.
 
 **Natural**
-: The expansion nearest your base, easiest to defend.
+ — The expansion nearest your base, easiest to defend.
 
 **Nova**
-: The burst of disruption a unit emits when driven to 100% disruption, spreading it to nearby units.
+ — The burst of disruption a unit emits when driven to 100% disruption, spreading it to nearby units.
 
 **Push**
-: A deliberate advance with your army.
+ — A deliberate advance with your army.
 
 **Raid**
-: Fast attack on undefended economy.
+ — Fast attack on undefended economy.
 
 **Reclaim**
-: Converting wreckage back into metal.
+ — Converting wreckage back into metal.
 
 **Reclaim field**
-: A battlefield covered in reclaimable parts after a large engagement. Free money.
+ — A battlefield covered in reclaimable parts after a large engagement. Free money.
+
+**Rank tracks**
+ — Four cosmetic per-match scores — Combat, Economy, Industry, Territory — shown under the Menu button (§12).
 
 **RP**
-: Research Points. Spent on tech tiers, converter upgrades, and weapons/armor tracks.
+ — Research Points. Spent on tech tiers, converter upgrades, and weapons/armor tracks.
+
+**Relay**
+ — A route through the lobby server that carries a hosted battle to its players, so the host does not have to forward a port. Coilbox uses it when you host (§37).
 
 **Rush**
-: Very early aggression.
+ — Very early aggression.
 
 **Seismic sensor**
-: Detects that *something* moving is present. Not radar — gives no identity and no count.
+ — Detects that *something* moving is present. Not radar — gives no identity and no count.
 
 **Snowball**
-: Small advantage compounding into a large one.
+ — Small advantage compounding into a large one.
 
 **Stall**
-: Running out of a resource, causing everything that needs it to slow.
+ — Running out of a resource, causing everything that needs it to slow.
 
-**Supply**
-: The cap on army size. Raised by building supply depots.
+— The cap on army size. Raised by building supply depots (and by the Geothermal Condenser and Large Resource Storage).
+
+— The cap on army size. Raised by building supply depots.
 
 **Supply blocked**
-: At your supply cap and unable to build units. Build depots.
+ — At your supply cap and unable to build units. Build depots.
 
 **Tech**
-: Advancing to more powerful units and capabilities. Gated by your Commander's tier.
+ — Advancing to more powerful units and capabilities. Gated by your Commander's tier.
 
 **Timing attack**
-: Attacking at a moment of specific advantage.
+ — Attacking at a moment of specific advantage.
 
 **Trade**
-: Exchanging losses. A "good trade" means you lost less value than they did.
+ — Exchanging losses. A "good trade" means you lost less value than they did.
 
 **Turtle**
-: Heavy defense, little aggression.
+ — Heavy defense, little aggression.
 
 **Wall / Wall-in**
-: Using buildings to block a path.
+ — Using buildings to block a path.
 
----
+## B. Keybindings
 
-## APPENDIX B — KEYBINDINGS
+SplinterFaction's bindings come from two files that ship with the game: **SplinterFaction's own bindings** in `sf_keys.txt`, and a copy of the **standard Recoil defaults** that fills in everything SF does not set itself. On top of both sits whatever you have changed in the Keybinds window.
 
-SplinterFaction's bindings come from two places: the **engine defaults** (the standard Recoil `uikeys.txt` set, familiar to anyone who has played a Recoil-family game) and **SplinterFaction's own additions** in `sf_keys.txt`.
-
-**Your own bindings always win.** SF's defaults are appended *behind* anything you've already bound in your personal `uikeys.txt`, so keys you've claimed keep their meaning and SF only fills in the gaps.
-
----
+**SplinterFaction does not read your personal `uikeys.txt`.** Many players share one Recoil install between several games, and bindings another game left in that file used to override SplinterFaction's. So the game builds its key table from scratch every time it starts. Your `uikeys.txt` is not touched — it simply is not used here. To change a key in SplinterFaction, use the Keybinds window (below).
 
 ### The keys that matter most
 
@@ -2033,9 +2214,7 @@ If you learn six, learn these.
 | **E** | Reclaim | Turn wreckage into metal (§28). |
 | **Shift** | Queue | Hold while ordering to queue. Also the build-placement modifier (§19). |
 | **Ctrl + [0–9]** | Set control group | Bind army, constructors, factory (§10). |
-| **Alt + wheel** | Camera angle | Plus Alt + middle-drag to rotate (§9). |
-
----
+| **Ctrl + wheel** | Camera angle | Tilts the view between overhead and close-in (§9). |
 
 ### Orders
 
@@ -2100,11 +2279,11 @@ Set through the orders menu. Move states: Hold Position, Maneuver, Roam. Fire st
 |---|---|
 | `Ctrl + [0–9]` | Assign control group |
 | `[0–9]` | Recall control group |
-| `q` | Select similar units nearby |
+| `q` | Repeat on / off |
 | `Shift + q` | Clear group |
 | `Ctrl + a` | Select all units on map |
 | `Ctrl + b` | Select one idle builder |
-| `Ctrl + z` | Reselect previous selection |
+| `Ctrl + z` | Select every unit on the map of the types currently selected |
 | `Ctrl + w` | Select all armed non-aircraft |
 
 ### Selection splitting *(SplinterFaction addition)*
@@ -2123,7 +2302,7 @@ Set through the orders menu. Move states: Hold Position, Maneuver, Roam. Fire st
 |---|---|
 | Arrow keys / screen edge | Pan |
 | Mouse wheel | Zoom |
-| **`Alt` + wheel** | **Change camera angle** |
+| **`Ctrl` + wheel** | **Change camera angle** |
 | **`Alt` + middle-drag** | **Rotate camera** |
 | `Shift` (held) | Move camera faster |
 | `Ctrl` (held) | Move camera slower |
@@ -2136,83 +2315,130 @@ Set through the orders menu. Move states: Hold Position, Maneuver, Roam. Fire st
 | `Enter` | Chat (all) |
 | `Alt + Enter` | Chat (allies) |
 | **`Ctrl + p`** | **Pause** *(SF rebind)* |
-| `h` | Share dialog |
-| `i` | Game info |
+| `h` | Sharing window |
+| `i` | Game Info window |
 | `l` | Toggle line-of-sight view |
 | `Tab` | Overview map |
 | `F1` | Show elevation |
 | `F3` | Jump to last message position |
 | `F5` | Hide interface |
 | `F9` | Show health bars |
-| `F11` | Screenshot |
-| `` ` `` or `\` | Draw on map |
-| `+` / `-` | Speed up / slow down *(vs AI only)* |
+| `F12` or `F4` | Screenshot |
+| ``` or `\` | Draw on map |
+| `Alt + +` / `Alt + -` | Speed up / slow down *(vs AI only)* |
 | `Ctrl + F11` | Tweak mode — drag GUI elements to reposition them (§12) |
 | `Ctrl + Insert` | Hotbind — see below |
 | `Ctrl + Delete` | Remove hotbind |
 
----
+### Global Build and linked factories (SplinterFaction additions)
+
+| Key | Action |
+|---|---|
+| `Alt` + left-click a building | Sample it and place more of it for the Global Build board (§19) |
+| `Alt` + left-click a build menu card | Place that building for the board — or, in board mode, for the selected constructor |
+| `Alt + q` | Board mode on / off |
+| `Alt + g` | Keep the selected constructors off the board, or put them back |
+| `Alt` + right-click a job marker | Cancel that job |
+| `Alt + l` | Link the selected factories into one shared queue (§20) |
+| `Alt + Shift + l` | Unlink them |
+| `Space` held while ordering from a linked factory | Order from that factory alone |
+
+### Editing a queue
+
+| Key | Action |
+|---|---|
+| `Shift` + order | Add to the end of the queue |
+| `Space` + order | Put it at the front of the queue |
+| `Ctrl` + Move or Fight (several units) | The group keeps to the pace of its slowest unit |
+| `Alt + `` | Take the selected units out of their auto-group |
 
 ### Hotbinding: the fastest way to bind anything
 
-Hover the mouse over **any button in the orders or build menu** and press **`Ctrl + Insert`**. The game asks for a key, and that button is bound to it immediately.
+Hover the mouse over **any button in the orders or build menu** and press **`Ctrl + Insert`**. The game asks for a key, and that button is bound to it immediately. `Esc` or a click cancels.
 
 `Ctrl + Delete` over the same button removes the binding.
 
 This is the quickest way to put your most-built structures on keys without opening any menus.
 
----
+A hotbind is saved with your other rebinds and shows up in the Keybinds window, where it can be changed or removed like any other.
 
-### The Static Keybinds editor
+### The Keybinds window
 
-SplinterFaction includes an in-game keybind editor so you never have to hand-edit a text file.
+SplinterFaction includes an in-game keybind editor so you never have to hand-edit a text file. Open it from **Menu → Keybinds**, or type `/keybinds`. `Esc` or the X closes it. While it is open the keyboard belongs to the window, so nothing you press reaches the game.
 
-<!-- IMAGE: screenshot of the Static Keybinds panel, ideally mid-rebind with the conflict dialog showing -->
+*[Image: screenshot of the Keybinds window on the Build Keys tab, with a filter typed in and one row waiting for keys]*
 
-**Two tabs:**
+Four tabs:
 
 - **SF Keys** — SplinterFaction's own bindings, grouped under the same section headings used in this appendix. This is where you'll spend your time.
-- **All Bindings** — every binding the engine currently knows about, including all engine defaults. Comprehensive, and long.
+- **All Bindings** — every binding the engine currently knows about, including all engine defaults. Comprehensive, and long — which is what the filter box is for.
+- **Custom Binds** — bindings you make yourself, with a name of your choosing. This is where selection hotkeys live ("select all idle constructors", "select every damaged tank on screen").
+- **Build Keys** — the key sequences that pick a structure or unit from the build menu (below).
 
-**Rebinding:**
+**The filter box.** On *All Bindings* and *Build Keys* there is a box above the list. Type, and only the rows that contain every word you typed stay — it matches the name and the keys, so typing `ctrl` shows everything on a Ctrl combination. `Esc` clears it; `Esc` again closes the window.
+
+Rebinding:
 
 | Input | Result |
 |---|---|
-| **Left-click a row** | Starts capture — press the key or combination you want. `Esc` cancels. |
-| **Right-click a row** | Unbinds that action entirely. |
+| Left-click a row | Starts capture — press the key or combination you want. `Esc` cancels. |
+| Right-click a row | Unbinds that action entirely. |
+| **EDIT** on a row | Opens the full editor on that binding (see *Custom binds* below). |
 
-Key colors tell you the state at a glance: **yellow** for bound, **gray** for unbound, **green** for something you've changed this session.
+A binding you have changed is shown with its name highlighted; an action with no key reads *unbound*.
 
 **Conflicts are handled, not hidden.** If the key you pressed is already used, a confirmation dialog lists exactly what it's currently bound to before anything changes. Confirming unbinds those actions; canceling leaves everything alone. You will never silently break an existing binding.
 
-**Two buttons at the bottom:**
+Two buttons at the bottom:
 
 - **Reapply Key Files** — reloads the keybind files from disk. Useful if you've hand-edited something outside the game.
-- **Reset All Rebinds** — clears everything you've changed and returns to engine defaults plus your own `uikeys.txt` plus SF's defaults.
+- **Reset All Rebinds** — clears everything you've changed and returns to the defaults. On the *Build Keys* tab it resets only the build keys.
 
----
+### Custom binds
+
+The **Custom Binds** tab holds bindings you build yourself. **New custom bind** opens an editor with four parts:
+
+- **Name** — whatever you want to call it. Optional, but it is what the list shows.
+- **Key** — click the key badge and press the combination, or type a keyset by hand.
+- **Command** — pick what the key does from the row of chips. For a selection command, three more rows appear: where to look (*Source*), which units count (*Filters* — click a chip once to require it, again to exclude it, again to turn it off), and what to do with the result.
+- **Action line** — the command as the engine reads it. The chips write it for you; you can also type it yourself, and the chips follow when it makes sense to them.
+
+Save, and the bind is live. Every row on every tab has an **EDIT** button that opens this same editor on that binding.
+
+### Build Keys — the keys on the build menu
+
+Every card in the build menu can show a short key sequence — `B` then `F` for a Land Factory, for instance. Press the keys one after another with a constructor or factory selected and that thing is picked, ready to place or queue. As you type, the game shows the sequence so far at the bottom of the screen and the matching cards light up.
+
+The **Build Keys** tab lists every structure and unit that can be built, with its keys, and lets you change them:
+
+| Input | Result |
+|---|---|
+| Left-click a row | Type the keys, one after another (up to four), then `Enter` to accept. `Backspace` takes one back; `Esc` cancels. |
+| Right-click a changed row | Puts it back to its default. |
+| Right-click an unchanged row | Removes its keys altogether. |
+
+If the sequence you chose is already used by something else *in the same build menu*, the window tells you which. It lets you keep it — the two factions deliberately share keys for their equivalent buildings — but two things in one menu on the same keys means only one of them can be reached.
+
+Build keys are saved with your settings, and the build menu cards and tooltips show whatever you set.
 
 ### Where your changes are saved
 
-> **⚠ THE EDITOR NEVER TOUCHES YOUR `uikeys.txt`.**
+> **⚠ YOUR `uikeys.txt` IS NEITHER READ NOR WRITTEN.**
 
-Changes are written to a separate file called **`sf_uikeys.txt`** in your Recoil write directory, alongside `uikeys.txt`. Your personal bindings from other Recoil-family games are safe.
+Changes are written to a separate file called **`sf_uikeys.txt`** in your Recoil write directory. Bindings you made for other Recoil-family games in `uikeys.txt` are left exactly as they were — and do not apply in SplinterFaction.
 
 The load order is:
 
-1. Engine defaults
-2. **Your** `uikeys.txt`
-3. SplinterFaction's `sf_keys.txt` *(fills gaps only — never overrides the above)*
-4. **Your** `sf_uikeys.txt` *(loaded last, so it wins)*
+1. SplinterFaction's `sf_keys.txt`
+2. The standard Recoil defaults, for everything SF does not bind itself
+3. **Your** `sf_uikeys.txt` *(loaded last, so it wins)*
 
-Because `sf_uikeys.txt` loads last, it can also **remove** an SF default you don't want: add a plain `unbind` line for it. Hand edits to that file survive the editor, provided they're plain `bind` / `unbind` lines.
+Typing `/sfkeys` rebuilds the bindings at any time. Build Keys are not kept in this file: they are saved with the game's other interface settings.
 
----
-
-## APPENDIX C — TROUBLESHOOTING
+## C. Troubleshooting
 
 **Nobody can join the game I'm hosting.**
-You almost certainly haven't forwarded port 8254 to your machine. See §37. Alternatively, host through an official SPADS autohost instead and skip the network configuration entirely.
+Host on the lobby server (Recoil Official) and Coilbox carries the battle through the lobby's relay, which needs nothing from your router. If you are hosting a direct room for friends outside your network instead, they can only reach you if you forward the room port (8200) and the game port (8452) on your router yourself. See §37.
 
 **The game won't launch.**
 Update your graphics drivers first — this fixes most cases. Then check that your antivirus hasn't quarantined the engine executable. Then let Coilbox re-verify the game files.
@@ -2222,11 +2448,15 @@ SplinterFaction uses a GL4 rendering pipeline with deferred rendering and severa
 - Lower the graphics settings in the options menu
 - Disable weather and time-of-day effects
 - Turn off non-essential widgets in the widget selector
+- Find out what is costing you: **Menu → Settings → Game → Debug** has a widget profiler and a gadget profiler, two panels that list everything running and how much time each is taking, worst first
 - Reduce shadow quality
 - Verify you're running on your dedicated GPU, not integrated graphics
 
 **The interface looks wrong / panels are missing or misplaced.**
-Open the widget selector and re-enable what's missing. If panels are badly positioned, reset widget configuration to defaults.
+Open the widget selector (`F11`) and re-enable what's missing. If panels are badly positioned, enter tweak mode (`Ctrl + F11`) and press **Reset all**, or type `/resetlayout`. Typing `/luaui reset` returns every widget to its default on or off state.
+
+**My own widgets do not load.**
+They are not supposed to. SplinterFaction runs only the interface code that ships with the game; files in your own LuaUI folders are ignored, so that everyone in a match is playing the same game. The host can allow players' own widgets with the *Allow User Widgets* mod option (§2). Even then, only widgets are loaded.
 
 **The game desyncs or crashes in multiplayer.**
 First, check that everyone is on the same game version — Coilbox handles this automatically, but manual installs may not match.
@@ -2250,7 +2480,7 @@ They can't. See §21. This is intentional.
 **My constructors won't speed up my factory.**
 They can't. See §20. This is also intentional.
 
-## APPENDIX D — UNIT REFERENCE: FEDERATION OF KALA
+## D. Unit Reference: Federation Of Kala
 
 *Fast walkers, cloaking, hull regeneration, missiles and plasma.*
 
@@ -2267,13 +2497,13 @@ The Air Engineer is the Federation of Kala's flying construction unit, capable o
 
 ### Production
 
-**Land Factory**
+**Federation Land Factory**
 The Land Factory is the Federation of Kala's primary ground production facility, responsible for building the full range of land units available at its tech tier. It requires a Tech Facility to unlock higher-tier units and Supply Depots to support a larger army. A second factory running in parallel dramatically increases unit output when metal income is sufficient to sustain it. Keep it away from the front — a destroyed factory sets production back significantly.
 
-**VTOL Factory**
+**Federation VTOL Factory**
 The Air Plant is the factory responsible for producing all air units for its faction. It activates immediately on completion and can begin building aircraft as soon as it finishes. A second Air Plant can be built to run parallel production queues when air power is the primary strategic focus. Keep it away from the front line — a destroyed factory cannot be replaced quickly.
 
-**Sea Factory**
+**Federation Sea Factory**
 The Sea Plant is the naval production facility for its faction, built on water and capable of producing the full range of naval units. It must be placed in sufficiently deep water to operate. A second Sea Plant allows parallel naval build queues when controlling water is a strategic priority. Position it in a sheltered bay or behind a defensive line if possible — it is difficult to replace quickly once lost.
 
 ### Ground — Tier 1
@@ -2305,7 +2535,7 @@ The Cobra is a dual-weapon fire support mech that pairs a burst plasma cannon wi
 The Dominator is the Federation's premier disruption platform at Tier 2, wielding a heavier EMG Disruption Cannon that hits harder and reaches further than the Equalizer it succeeds. Like its predecessor, it stacks an impairment effect with each hit that eventually locks its target down entirely for ten seconds. Against high-value units, a Dominator that lands its full disruption cycle effectively removes the target from the fight long enough to finish it off.
 
 **Avalanche** — *Burst artillery*
-The Avalanche is a long-range burst artillery unit that fires two simultaneous volleys of scatter-shot plasma shells, blanketing a wide area with high-damage impacts at ranges that most units cannot effectively answer. It defaults to a hold-fire stance and must be directed deliberately — its enormous per-volley damage and area coverage make it devastating against clustered formations, but its slow reload and fragile frame mean poor positioning will get it killed before it fires twice.
+The Avalanche is a long-range burst artillery unit that fires two simultaneous volleys of scatter-shot plasma shells, blanketing a wide area with high-damage impacts at ranges that most units cannot effectively answer. Its enormous per-volley damage and area coverage make it devastating against clustered formations, but its slow reload and fragile frame mean poor positioning will get it killed before it fires twice.
 
 **Phalanx** — *Mobile anti-air*
 The Phalanx is the Federation's dedicated Tier 2 anti-air platform, trading the Crasher's guided missiles for a high-velocity burst machinegun that saturates a column of airspace with an overwhelming volume of fire. Its long range and high burst count make it extremely difficult for aircraft to approach without taking crippling damage. Slow and lightly armored, it should always operate behind a frontline screen — but positioned correctly, it makes enemy air operations against your forces an expensive proposition.
@@ -2380,7 +2610,7 @@ The Immolator is the Federation of Kala's Tier 2 medium anti-ground turret, firi
 The Javelin is the Federation of Kala's Tier 2 long-range anti-air turret, firing pairs of fast guided missiles with excellent tracking that make escape extremely difficult for aircraft at range. Its coverage extends well beyond most Tier 1 anti-air, giving the Federation a credible defensive layer against aircraft operating at standoff distance. Position it to cover approaches that shorter-range turrets cannot reach.
 
 **Guardian** — *T3 anti-MASSIVE*
-The Guardian is the Federation of Kala's Tier 3 heavy anti-armor turret, firing a massive plasma shell that detonates with a large blast radius exclusively against MASSIVE-category targets. Its enormous per-shot damage and area of effect make it the definitive answer to enemy heavy units and capital ships that smaller turrets cannot reliably threaten. Keep it screened from raiders — it has no interest in small targets and will not protect itself.
+The Guardian is the Federation of Kala's Tier 3 heavy anti-armor turret, firing a massive plasma shell that detonates with a large blast radius meant for MASSIVE-category targets, which it will always prefer; it can fire at ordinary ground and naval targets too. Its enormous per-shot damage and area of effect make it the definitive answer to enemy heavy units and capital ships that smaller turrets cannot reliably threaten. Keep it screened from raiders — it has no interest in small targets and will not protect itself.
 
 **Cloaking Tower** — *Area cloak field*
 The Cloaking Tower projects a 300-radius area cloaking field that conceals all friendly units within it from enemy detection. It activates instantly on completion, cloaks itself, and runs at no energy cost. It is fragile and provides no defensive capability of its own — its value is entirely in the invisibility it grants to whatever you position underneath it. A well-placed tower can make an entire defensive line or advance staging area disappear.
@@ -2391,16 +2621,14 @@ The Large Cloaking Tower is the Tier 3 upgrade to the Cloaking Tower, projecting
 **Healstation** — *Repair field — Fed only*
 The Heal Station projects a 500-radius repair field that continuously restores health to all friendly units within range, with a brief pause after any unit takes damage before healing resumes. It does not repair during active combat — it is a recovery tool for units rotating off the front line or holding a position between engagements. Place it far enough behind the line that units can actually benefit from its field without being destroyed before healing completes.
 
----
-
-## APPENDIX E — UNIT REFERENCE: LOZ ALLIANCE
+## E. Unit Reference: Loz Alliance
 
 *Slow heavy tanks, personal and projected energy shields, heat and railgun weaponry.*
 
 ### Command and Construction
 
 **Loz Alliance Command Unit**
-The Loz Alliance Commander is the player's starting unit and the irreplaceable center of every match. It builds all structures, reclaims wreckage, and captures enemy buildings, while its heat ray weapon accumulates thermal stress on targets with every burst — a sufficiently overheated unit will malfunction and shut down entirely. The Commander upgrades through four tiers alongside tech progression, gaining range and dramatically increased damage output at each step. Losing the Commander ends the game; using it aggressively while keeping it alive is the defining challenge of every match.
+The Loz Alliance Commander is the player's starting unit and the irreplaceable center of every match. It builds all structures, reclaims wreckage, and captures enemy buildings, while its heat ray weapon accumulates thermal stress on targets with every burst — a sufficiently overheated unit slows to a crawl and, at full heat, explodes. The Commander upgrades through four tiers alongside tech progression, gaining range and dramatically increased damage output at each step. Losing the Commander ends the game; using it aggressively while keeping it alive is the defining challenge of every match.
 
 **Architect — Ground Constructor**
 The Loz Alliance Engineer is the dedicated ground construction unit, capable of building structures, reclaiming wreckage, and capturing enemy buildings. Engineers are the engine of any expanding economy — build them constantly and keep them busy. A stationary engineer is a wasted investment.
@@ -2410,22 +2638,19 @@ The Loz Alliance Air Engineer is a flying construction unit capable of building 
 
 ### Production
 
-**Land Factory**
+**Loz Land Factory**
 The Land Factory is the Loz Alliance's primary ground production facility, responsible for producing the full range of land units available at its current tech tier. It requires a Tech Facility to unlock higher-tier units and Supply Depots to field a larger army. Running two factories in parallel when metal income allows it dramatically accelerates unit production. Losing a factory is a serious setback — keep it away from the front.
 
-**VTOL Factory**
+**Loz VTOL Factory**
 The Air Plant is the factory responsible for producing all air units for its faction. It activates immediately on completion and can begin building aircraft as soon as it finishes. A second Air Plant can be built to run parallel production queues when air power is the primary strategic focus. Keep it away from the front line — a destroyed factory cannot be replaced quickly.
 
-**Sea Factory**
+**Loz Sea Factory**
 The Sea Plant is the naval production facility for its faction, built on water and capable of producing the full range of naval units. It must be placed in sufficiently deep water to operate. A second Sea Plant allows parallel naval build queues when controlling water is a strategic priority. Position it in a sheltered bay or behind a defensive line if possible — it is difficult to replace quickly once lost.
 
 ### Ground — Tier 1
 
-**Flea** — *Scout*
-The Flea is the Loz Alliance's dedicated scout, built exclusively for speed and vision range. It carries no weapons and cannot fight — its job is to stay alive and relay information. The fastest ground unit the Alliance fields at Tier 1, it is exceptionally difficult to catch when handled correctly. Use it to probe enemy positions, spot for artillery, and maintain map awareness without committing combat units.
-
 **Diamondback** — *Raider*
-The Diamondback is the Loz Alliance's standard fast raider, built for hit-and-run harassment of lightly defended targets. Its disruption laser deals modest damage but applies a stacking impairment effect, making it dangerous to economy units and constructors that cannot easily escape its reach. Deploy in packs and exploit its superior speed to stay out of return fire.
+The Diamondback is the Loz Alliance's standard fast raider, built for hit-and-run harassment of lightly defended targets. Its rapid-fire laser deals modest damage, but its speed makes it dangerous to economy units and constructors that cannot easily escape its reach. Deploy in packs and exploit its superior speed to stay out of return fire.
 
 **Roach** — *Main battle tank*
 The Roach is the Loz Alliance's Tier 1 main battle tank, wielding a beam railgun that delivers consistent damage at respectable range. It is slower than the Diamondback raiders but significantly more durable, and its sustained beam fire is effective against armored targets that skirmishers cannot reliably threaten. The workhorse of any early Alliance ground push.
@@ -2448,7 +2673,7 @@ The Cauterizer is the Loz Alliance's Tier 2 heat ray tank, carrying a significan
 The Pulverizer is the Loz Alliance's Tier 2 anti-air support tank, combining a lightning cannon for engaging light ground and air targets with a burst flak cannon that detonates at altitude and saturates the surrounding airspace with lethal shrapnel. The two systems together create overlapping coverage — the lightning cannon handles closer threats while the flak denies higher-altitude approaches. Aircraft that attempt to operate within its reach do so at serious cost.
 
 **Luger** — *Self-propelled artillery*
-The Luger is a self-propelled long-range artillery piece that lobs massive plasma shells at extreme range with a slow but devastating reload cycle. It defaults to hold-fire and must be directed manually — its enormous per-shot damage and wide blast radius make it capable of erasing grouped formations or key structures in a single volley. It is not a frontline unit and will not survive direct engagement; it needs screening, good positioning, and patience.
+The Luger is a self-propelled long-range artillery piece that lobs massive plasma shells at extreme range with a slow but devastating reload cycle. Its enormous per-shot damage and wide blast radius make it capable of erasing grouped formations or key structures in a single volley. It is not a frontline unit and will not survive direct engagement; it needs screening, good positioning, and patience.
 
 **Protector** — *Mobile shield tank*
 The Protector is the Loz Alliance's dedicated shield tank, projecting a wide protective bubble around itself and any nearby friendly units. It carries no offensive weapons and cannot fight — its value is entirely in the cover it provides. A Protector embedded in an advancing formation absorbs incoming fire that would otherwise shred your units, buying them the time to close with the enemy. Keep it behind the frontline and keep it alive.
@@ -2521,10 +2746,7 @@ The Inferno is the Loz Alliance's Tier 2 heavy anti-armor turret, deploying a su
 The Rattlesnake is the Loz Alliance's Tier 2 anti-air turret, firing high-explosive flak rounds that detonate in the airspace above and scatter lethal fragments across a wide area. Its large blast radius and high damage per shot make it exceptionally effective against both individual aircraft and formations attempting to pass through its coverage zone. Aircraft that ignore the Rattlesnake rarely get a second chance to do so.
 
 **Annihilator** — *T3 anti-MASSIVE*
-The Annihilator is the Loz Alliance's Tier 3 heavy anti-armor turret, built exclusively to destroy MASSIVE-category targets. Its high-intensity beam laser holds on target long enough to burn through the armor of even the largest ground units and warships, dealing devastating single-target damage at considerable range. It has no interest in light targets — keep it screened from raiders and let it focus on the threats nothing else can handle.
-
-**Earthquake Mine** — *Cloaked proximity mine*
-The Earthquake Mine is a cheap, cloaked Tier 1 proximity mine that deploys invisibly and waits for ground or naval units to wander into its trigger radius. When tripped it fires a tight shotgun burst that shreds lightly armored units and deals meaningful damage even to heavier targets. Inexpensive enough to scatter liberally across chokepoints and approach routes — an enemy that doesn't sweep for mines will pay for it.
+The Annihilator is the Loz Alliance's Tier 3 heavy anti-armor turret, built to destroy MASSIVE-category targets, which it always prefers, though it can fire at ordinary ground and naval targets too. Its high-intensity beam laser holds on target long enough to burn through the armor of even the largest ground units and warships, dealing devastating single-target damage at considerable range. It has no interest in light targets — keep it screened from raiders and let it focus on the threats nothing else can handle.
 
 **Small Shield Generator** — *T2 area shield*
 The Small Shield Generator projects a 250-radius protective bubble that intercepts incoming fire for anything underneath it. With 1200 shield power and modest regeneration it is not designed to weather sustained fire, but it provides meaningful protection against lighter attacks and buys time for units to reposition when under pressure. The Loz Alliance's entry-level area shield at Tier 2.
@@ -2532,36 +2754,34 @@ The Small Shield Generator projects a 250-radius protective bubble that intercep
 **Large Shield Generator** — *T3 area shield*
 The Large Shield Generator projects a 750-radius protective bubble that intercepts incoming weapons fire on behalf of everything inside. With 10,000 shield power and 300 regeneration per second it can absorb a significant volume of fire before failing, and the 25-second recharge delay means a collapsed shield requires careful positioning until it recovers. It is the Loz Alliance's primary Tier 3 area defense against projectile weapons.
 
----
-
-## APPENDIX F — SHARED STRUCTURES and SURVIVAL MODE
+## F. Shared Structures And Survival Mode
 
 *Available to both factions.*
 
 ### Metal Production
 
-**E→M Converter (Tiers 1–4)**
-The E->M Converter is the primary metal income structure for both factions, converting energy into metal at a rate scaled by the map's metalSpot_value and the converter's tech tier. Output and energy consumption are set dynamically at runtime by the metal maker scaling system — the higher the map's spot value and the higher the tier, the more metal it produces and the more energy it draws. Higher tiers multiply the base output substantially: Tier 1 doubles it, Tier 2 triples it, Tier 3 produces more than five times the base rate, and Tier 4 more than ten. Place converters on high-value spots and upgrade them as your tech and energy economy allows.
+**Federation / Loz E→M Converter (Tech 1–4)**
+The E->M Converter is the primary metal income structure for both factions, converting energy into metal at a rate scaled by the map's metalSpot_value and the converter's tech tier. Output and energy consumption are set dynamically at runtime by the metal maker scaling system — the higher the map's spot value and the higher the tier, the more metal it produces and the more energy it draws. Higher tiers multiply the base output substantially: Tier 1 doubles it, Tier 2 gives 6.5 times, Tier 3 fourteen times and Tier 4 twenty-eight times the base rate. Place converters on high-value spots and upgrade them as your tech and energy economy allows.
 
 **Geothermal E→M Converter**
-The Geothermal E->M Converter is the highest-output metal production structure in the game, placed on geothermal vents and operating at the Tier 4 multiplier — over 21 times the base extraction rate. Like the standard converters its output scales with the map's metalSpot_value. A single well-sited Geothermal Converter on a high-value vent generates more metal than most players can spend in real time. Protect it as the strategic asset it is.
+The Geothermal E->M Converter is the highest-output metal production structure in the game, placed on geothermal vents and operating above even the Tier 4 multiplier — 35 times the base extraction rate. Like the standard converters its output scales with the map's metalSpot_value. A single well-sited Geothermal Converter on a high-value vent generates more metal than most players can spend in real time. Protect it as the strategic asset it is.
 
 ### Energy Production
 
 **Fission Energy Generator** — *T1 — 25 energy*
 The Fission Energy Generator is the game's first available power plant, producing 25 energy from a compact footprint at essentially no tech requirement. Its output is modest but its cost is low and it can be built early, making it the foundation of any energy economy before more advanced generators become available. Stack several to bridge the gap to Tier 2 power.
 
-**Fusion Energy Generator** — *T2 — 200 energy*
-The Fusion Energy Generator is the Tier 2 power plant, producing 200 energy from a medium-sized installation. It represents a meaningful step up from the Fission Generator and provides a stable energy foundation for mid-game economies without requiring the investment of higher-tier structures. Build several to sustain the energy demands that Tier 2 units and upgrades introduce.
+**Fusion Energy Generator** — *T2 — 450 energy*
+The Fusion Energy Generator is the Tier 2 power plant, producing 450 energy from a medium-sized installation. It represents a meaningful step up from the Fission Generator and provides a stable energy foundation for mid-game economies without requiring the investment of higher-tier structures. Build several to sustain the energy demands that Tier 2 units and upgrades introduce.
 
-**Cold Fusion Energy Generator** — *T3 — 1000 energy*
-The Cold Fusion Energy Generator is the Tier 3 power plant, producing 1000 energy from a large footprint installation. It sits between the Fusion Generator and the Black Hole Facility in both cost and output, filling the Tier 3 energy gap for commanders who need substantial power before reaching the game's final tier. Its explosion is spectacular — build it somewhere defensible.
+**Cold Fusion Energy Generator** — *T3 — 2700 energy*
+The Cold Fusion Energy Generator is the Tier 3 power plant, producing 2700 energy from a large footprint installation. It sits between the Fusion Generator and the Black Hole Facility in both cost and output, filling the Tier 3 energy gap for commanders who need substantial power before reaching the game's final tier. Its explosion is spectacular — build it somewhere defensible.
 
-**Black Hole Power Facility** — *T4 — 4000 energy*
-The Black Hole Power Facility is the apex energy generator available to both factions, harnessing singularity-based power conversion to produce 4000 energy — more than any other structure in the game. Its enormous footprint, extreme cost, and Tier 4 requirement make it a late-game commitment, but a single facility can sustain an energy economy that nothing else can match at comparable size. Protect it accordingly.
+**Black Hole Power Facility** — *T4 — 20,000 energy*
+The Black Hole Power Facility is the apex energy generator available to both factions, harnessing singularity-based power conversion to produce 20,000 energy — more than any other structure in the game. Its enormous footprint, extreme cost, and Tier 4 requirement make it a late-game commitment, but a single facility can sustain an energy economy that nothing else can match at comparable size. Protect it accordingly.
 
 **Geothermal Energy Generator** — *On vents — 350 energy*
-The Geothermal Energy Generator taps into natural thermal vents to produce 350 energy at Tier 1, outperforming the Fusion Generator at comparable cost when sited correctly. It must be placed on geothermal vent terrain. If your map has accessible vents, this is one of the most efficient early energy investments available to either faction.
+The Geothermal Energy Generator taps into natural thermal vents to produce 350 energy at Tier 1, giving most of a Fusion Generator's output a tier earlier and at well under half the cost. It must be placed on geothermal vent terrain. If your map has accessible vents, this is one of the most efficient early energy investments available to either faction.
 
 ### Geothermal Vents
 
@@ -2576,11 +2796,14 @@ The Basic Supply Depot is the foundational supply structure available from Tier 
 **Medium Supply Depot** — *T2 — +100 supply*
 The Medium Supply Depot provides 100 supply capacity at Tier 2, enabling a meaningfully larger standing army than the basic depot allows. It has no storage or other function — it exists solely to raise your unit ceiling. Build them when your army composition is consistently hitting supply limits before you run out of metal to spend.
 
+**Small Resource Storage Facility** — *T1 — 200 each*
+The Small Resource Storage Facility adds 200 units each of metal and energy storage for 50 metal. It is the cheapest buffer in the game and the only storage available before Tier 2: one or two in the opening stop the small spikes of early construction from turning into stalls or waste.
+
 **Medium Resource Storage Facility** — *T2 — 2000 each*
 The Medium Resource Storage Facility provides 2000 units each of metal and energy storage in a moderate footprint at Tier 2. Its primary value is extending the resource buffer available during mid-game expansion — preventing income spikes from going to waste and smoothing out the energy fluctuations that come with running multiple production facilities simultaneously.
 
 **Large Resource Storage Facility** — *T3 — 20,000 storage, +500 supply*
-The Large Resource Storage Facility provides 20,000 units of combined metal and energy storage alongside 500 supply capacity — the largest storage structure in the game. At Tier 3 it enables the resource reserves needed to sustain prolonged Tier 3 and Tier 4 operations without income fluctuation disrupting critical build queues. The supply grant also contributes meaningfully to fielding larger armies.
+The Large Resource Storage Facility provides 20,000 units each of metal and energy storage alongside 500 supply capacity — the largest storage structure in the game. At Tier 3 it enables the resource reserves needed to sustain prolonged Tier 3 and Tier 4 operations without income fluctuation disrupting critical build queues. The supply grant also contributes meaningfully to fielding larger armies.
 
 **Geothermal Condenser** — *On vents — 2000 storage, +100 supply*
 The Geothermal Condenser is a combined resource storage and supply depot that provides 2000 metal and energy storage alongside 100 supply capacity in a single building. It must be placed on geothermal vent sites. The combination of storage and supply in one structure makes it an efficient use of a vent location when you need both.
@@ -2595,7 +2818,26 @@ A fast, nimble air scout drone. Doesn’t have a lot of vision range, but it doe
 **Spawn Beacon**
 The spawn beacon is very tough to kill, but doing so will push back the invasion. The more beacons that exist on the field, the more enemies you will have to contend with. As the enemy territory expands, so do the number of beacons.
 
----
+**Beacon kinds**
+Beacons are not all alike. A **Forge** beacon sends tougher, harder-hitting waves; an **Accelerator** shortens the time between waves; a **Shield** beacon gives its units an overshield; a **Jammer** beacon sends its units cloaked. Destroy every beacon on the map to win. See §36.
+
+## G. Revision History
+
+**Version 3.0 — 26 November 2026.** Covers SplinterFaction 0.1.97 and the development build that follows it.
+
+- **New:** Global Build and board mode, sharing a queue between several constructors, and linked factories (§19, §20).
+- **New:** the Keybinds window's four tabs, the filter, custom binds and Build Keys; tables for the Global Build, factory link and queue-editing keys (Appendix B).
+- **New:** the build menu's tabs, *Hide what I cannot build* and key sequences; ranks and awards; weather; the Game Menu and Settings tabs (§12).
+- **New:** moving as a group, Wait and its markers, front-of-queue orders (§11); the minimap click (§9).
+- **New:** the Adaptive AI opponents (§35) and the mod options that change the start of a match (§2); survival mode numbers (§36).
+- **New:** getting online with Coilbox — the Recoil Official lobby server, joining and hosting, and relay hosting, which means no port has to be forwarded (§37). The game's port is 8452.
+- **Corrected:** the interface is Bastion, not "Static GUI"; how faction choice and start placement actually work; the Commander starts at Tech 1 and is put in control group 1.
+- **Corrected:** converter multipliers and upgrade costs, power plant outputs, supply sources, storage sizes, Research Point income and prices, Production Boost.
+- **Corrected:** key files and load order (your `uikeys.txt` is no longer used), and several default keys (camera angle, Repeat, screenshot, game speed).
+- **Corrected:** Federation regeneration and the healstation; cloak; heat and disruption wording; unit reference names and numbers. The Flea and the Earthquake Mine, which can no longer be built, are removed.
+
+**Version 2 — August 2026.** Second edition. **Version 1 — August 2026.** First edition.
+
 ---
 
 > **CLOSING NOTE**
