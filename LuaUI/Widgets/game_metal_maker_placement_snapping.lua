@@ -489,13 +489,17 @@ function widget:MousePress(x, y, button)
 		local shift = select(4, spGetModKeyState())  -- alt, ctrl, meta, shift
 		local gy = math.max(0, spGetGroundHeight(spot.x, spot.z))
 
-		if not shift then
-			-- clears current command queue for selected units
-			spGiveOrder(CMD.STOP, {}, {})
-		end
+		-- Global Build's board mode: the mex goes on the board, the builder is left alone
+		local board = WG.globalBuild and WG.globalBuild.Intercept
+		if not (board and board(cmdID, {spot.x, gy, spot.z, 0})) then
+			if not shift then
+				-- clears current command queue for selected units
+				spGiveOrder(CMD.STOP, {}, {})
+			end
 
-		-- then issue the build
-		spGiveOrder(cmdID, {spot.x, gy, spot.z, 0}, shift and {"shift"} or {})
+			-- then issue the build
+			spGiveOrder(cmdID, {spot.x, gy, spot.z, 0}, shift and {"shift"} or {})
+		end
 		if not shift then
 			-- Cancel the current active build command so it doesn't queue up more
 			Spring.SetActiveCommand(0)
@@ -559,7 +563,10 @@ function widget:MouseRelease(x, y, button)
 
 	-- shift is read at release time
 	local shift = select(4, spGetModKeyState())
-	if not shift then
+	-- Global Build's board mode: the mexes go on the board, the builders keep their orders
+	local board = WG.globalBuild and WG.globalBuild.Intercept
+	local toBoard = WG.globalBuild and WG.globalBuild.Diverts and WG.globalBuild.Diverts(mexDefID)
+	if not shift and not toBoard then
 		spGiveOrder(CMD.STOP, {}, {})
 	end
 
@@ -573,7 +580,9 @@ function widget:MouseRelease(x, y, button)
 		else
 			local s = e.spot
 			local gy = math.max(0, spGetGroundHeight(s.x, s.z))
-			spGiveOrder(-mexDefID, {s.x, gy, s.z, 0}, {"shift"})
+			if not (board and board(-mexDefID, {s.x, gy, s.z, 0})) then
+				spGiveOrder(-mexDefID, {s.x, gy, s.z, 0}, {"shift"})
+			end
 		end
 	end
 

@@ -83,6 +83,58 @@
 		/* ---- build list --------------------------------------------------- */
 		/* "All" and one tab per category, above the list; they wrap onto a
 		   second row when there are many. The list takes the height left over. */
+		/* above the tabs: what the menu is doing, and the switch for Global Build's board mode */
+		#build-head {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			flex: 0 0 auto;
+			margin: 0dp 4dp 6dp 0dp;
+		}
+		#build-head.hidden {
+			display: none;
+		}
+		#build-title {
+			flex: 1;
+			font-size: 11dp;
+			line-height: 13dp;
+			letter-spacing: 1dp;
+			text-transform: uppercase;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #8593a1;
+		}
+		#build-global {
+			padding: 3dp 9dp 3dp 9dp;
+			box-sizing: border-box;
+			font-size: 11dp;
+			line-height: 13dp;
+			letter-spacing: 1dp;
+			text-transform: uppercase;
+			color: #8593a1;
+			background-color: #1a222b;
+			border: 1dp #35434f;
+		}
+		#build-global:hover {
+			color: #f0f4f8;
+			border-color: #ff9b21;
+		}
+		#build-global.on {
+			color: #0b0e12;
+			background-color: #ff9b21;
+			border-color: #ff9b21;
+		}
+		/* board mode: the whole menu wears the board's orange */
+		#build.global {
+			border-color: #ff9b21;
+		}
+		#build.global #build-title {
+			color: #ff9b21;
+		}
+		/* board mode: nobody on the board can build this */
+		.card.noboard {
+			opacity: 0.35;
+		}
 		#build-tabs {
 			display: flex;
 			flex-direction: row;
@@ -319,6 +371,10 @@
 	<div id="build" class="panel hidden">
 		<div class="bracket tl"/>
 		<div class="bracket br"/>
+		<div id="build-head" class="hidden">
+			<div id="build-title">Build</div>
+			<div id="build-global">Global</div>
+		</div>
 		<div id="build-tabs" class="hidden"/>
 		<div id="build-link" class="hidden">
 			<div id="build-link-head" class="linkhead"/>

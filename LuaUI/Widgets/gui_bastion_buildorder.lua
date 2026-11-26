@@ -113,6 +113,7 @@ local buildFilter       -- the category the list is narrowed to, or nil for all
 local lastSections      -- the sections ShowBuildList was last given
 local sharedItems = {}  -- the shared queue strip's items, in the order shown (linked factories)
 local hideUnavailable = false -- leave out the cards that cannot be built right now (saved with the widget)
+local hasBuilderMenu = false  -- the build list holds a builder's buildings (not only a factory's units)
 local orderSignature
 local showBuild, showOrders = false, false
 local activeCmdID
@@ -680,9 +681,21 @@ local function RefreshCards()
 		shared, pool = link.Counts()
 	end
 	ShowSharedQueue(pool)
+	-- Global Build's board mode: the switch, the orange frame, and the cards no
+	-- builder on the board can build
+	local board = WG.globalBuild
+	local canSwitch = board ~= nil and board.GetMode ~= nil and hasBuilderMenu
+	local boardMode = canSwitch and board.GetMode() or false
+	view.SetClass("build-head", "hidden", not canSwitch)
+	view.SetClass("build", "global", boardMode)
+	view.SetClass("build-global", "on", boardMode)
+	view.SetText("build-title", boardMode and "Global build: to the board" or "Build")
 	for i = 1, #buildCards do
 		local cmd = buildCards[i]
 		local id = "b" .. i
+		local ud = boardMode and cmd.id < 0 and UnitDefs[-cmd.id]
+		cmd.noboard = (ud and not ud.canMove and board.Capable(-cmd.id) == 0) or false
+		view.SetClass(id, "noboard", cmd.noboard)
 		local queued = tonumber(cmd.params and cmd.params[1]) or 0
 		if shared then
 			queued = shared[-cmd.id] or 0
@@ -758,6 +771,7 @@ local function ProcessCommands()
 	end
 
 	local families, hasSelection, hasProducer = ReadSelection()
+	hasBuilderMenu = families.Builder.present
 	if not hasSelection then
 		showBuild, showOrders = false, false
 	elseif hasProducer then
@@ -797,18 +811,29 @@ local function ApplyCommand(cmd, button)
 		return
 	end
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
-	-- Alt + left click on a building: place it for the Global Build board, to be
-	-- built by whichever builder is best placed, not by the selected one
-	if alt and button == 1 and cmd.id < 0 and WG.globalBuild then
-		local ud = UnitDefs[-cmd.id]
-		if ud and not ud.canMove then
+	-- Global Build. Board mode (the GLOBAL switch) sends every building placed to
+	-- the board, and Alt + click then orders the selected builder itself, that
+	-- once. Out of board mode it is the other way round: Alt + click places for
+	-- the board.
+	local board = WG.globalBuild
+	local ud = cmd.id < 0 and UnitDefs[-cmd.id]
+	if board and button == 1 and ud and not ud.canMove then
+		if board.GetMode and board.GetMode() then
+			if alt then
+				board.DirectOnce(-cmd.id)
+			elseif cmd.noboard then
+				Spring.Echo("[Global Build] no builder on the board can build " .. (ud.humanName or ud.name))
+				return
+			end
+			alt = false
+		elseif alt then
 			local x, z
 			local first = (spGetSelectedUnits() or {})[1]
 			if first then
 				local ux, _, uz = Spring.GetUnitPosition(first)
 				x, z = ux, uz
 			end
-			if WG.globalBuild.StartSession(-cmd.id, x, z) then
+			if board.StartSession(-cmd.id, x, z) then
 				return
 			end
 		end
@@ -971,6 +996,20 @@ function widget:Initialize()
 	end
 	view.SetClass("build-hide", "on", hideUnavailable)
 
+	-- the GLOBAL switch: Global Build's board mode
+	view.Assume("build-head", "hidden", true)
+	local globalSwitch = view.Element("build-global")
+	if globalSwitch then
+		globalSwitch:AddEventListener("mousedown", function(event)
+			local board = WG.globalBuild
+			if board and board.SetMode and event.parameters and event.parameters.button == 0 then
+				spPlaySoundFile("leftclick", 1.0, "ui")
+				board.SetMode(not board.GetMode())
+				lastUpdate = nil
+			end
+		end)
+	end
+
 	-- What the hotbind widget and the tooltip panel ask of this widget.
 	WG.StaticBuildOrderMenu = {
 		-- the command under the mouse and whether it is disabled, or nil
@@ -1016,7 +1055,11 @@ function widget:Initialize()
 			if not cmd then
 				return ""
 			end
-			return (string.gsub(cmd.tooltip or "", "Metal cost %d*\nEnergy cost %d*\n", ""))
+			local text = string.gsub(cmd.tooltip or "", "Metal cost %d*\nEnergy cost %d*\n", "")
+			if cmd.noboard then
+				text = text .. "\nNo builder on the board can build this (commanders and builders kept off the board do not count). Alt+click orders the selected builder."
+			end
+			return text
 		end,
 	}
 

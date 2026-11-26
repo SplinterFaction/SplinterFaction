@@ -28,6 +28,13 @@ end
 --    as a stand-in. Nothing is ordered of it: every build placed is caught in
 --    CommandNotify and put on the board instead.
 --
+--  BOARD MODE
+--    The GLOBAL switch on the build menu (or Alt+Q) turns board mode on, and it
+--    stays on until it is switched off. While it is on, every building placed
+--    with a builder selected goes on the board instead of to that builder: from
+--    the build menu, from a build hotkey, from the mex snapping. Alt + click on
+--    a card in the menu orders the selected builder itself, that once.
+--
 --  THE BOARD
 --    A job on the board belongs to no builder until one starts on it. Every
 --    half second the board plans all waiting jobs over all free-to-use
@@ -78,6 +85,7 @@ local TUNE = {
 
 local DEBUG = false
 local EXCLUDE_KEY = "g" -- with Alt: take the selected builders off the board, or put them back
+local MODE_KEY    = "q" -- with Alt: board mode on or off
 
 local BT = VFS.Include("LuaUI/Widgets/Include/builder_time.lua")
 
@@ -406,6 +414,66 @@ end
 -- session: {def, proxy, previous = {unitIDs}, started (bool), startFrame (draw frames waited)}
 local session = nil
 
+-- Board mode: placed buildings go on the board, not to the selected builder.
+local boardMode = false
+-- {def, idle}: in board mode, this building is being placed for the selected
+-- builder itself (Alt + click on its card). Over when that placing ends.
+local direct = nil
+
+local function IsBuilding(unitDefID)
+	local ud = unitDefID and UnitDefs[unitDefID]
+	return ud ~= nil and not ud.canMove
+end
+
+-- Would a build of this, placed now, go on the board?
+local function Diverts(unitDefID)
+	return boardMode and not spectating and session == nil and IsBuilding(unitDefID)
+		and not (direct and direct.def == unitDefID)
+end
+
+-- A build order that was about to be given to the selection: puts it on the
+-- board when board mode says so. True if the board took it.
+local function Intercept(cmdID, params)
+	if not (cmdID and cmdID < 0 and params and #params >= 3 and Diverts(-cmdID)) then
+		return false
+	end
+	AddJob(-cmdID, params[1], params[2], params[3], params[4])
+	return true
+end
+
+-- How many builders the board may use can build each building: [unitDefID] = count.
+local capable, capableAt = {}, nil
+local function Capable(unitDefID)
+	local now = Spring.GetTimer()
+	if not capableAt or Spring.DiffTimers(now, capableAt) > 0.5 then
+		capableAt = now
+		capable = {}
+		local units = spGetTeamUnits(myTeam) or {}
+		for i = 1, #units do
+			local unitID = units[i]
+			if not excluded[unitID] and (TUNE.useCommanders or not isCommander[spGetUnitDefID(unitID) or 0]) then
+				local info = BT.Info(unitID)
+				if info then
+					for def in pairs(info.can) do
+						capable[def] = (capable[def] or 0) + 1
+					end
+				end
+			end
+		end
+	end
+	return capable[unitDefID] or 0
+end
+
+local function SetMode(on)
+	on = on and true or false
+	if on ~= boardMode then
+		boardMode = on
+		direct = nil
+		spEcho("[Global Build] board mode " .. (on and "on: buildings you place go on the board" or "off"))
+	end
+	return boardMode
+end
+
 local function EndSession()
 	if not session then return end
 	local s = session
@@ -452,6 +520,18 @@ local function StartSession(unitDefID, x, z)
 end
 
 function widget:Update()
+	if direct then
+		-- placing for the selected builder itself: over when that command is let go
+		local _, active = spGetActiveCommand()
+		if active == -direct.def then
+			direct.idle = 0
+		else
+			direct.idle = direct.idle + 1
+			if direct.idle >= 3 then
+				direct = nil
+			end
+		end
+	end
 	if not session then return end
 	local _, cmdID = spGetActiveCommand()
 	if not session.started then
@@ -482,7 +562,9 @@ function widget:Update()
 end
 
 function widget:CommandNotify(cmdID, cmdParams, cmdOpts)
-	if not session then return false end
+	if not session then
+		return Intercept(cmdID, cmdParams) -- board mode
+	end
 	if cmdID == -session.def and cmdParams and #cmdParams >= 3 then
 		AddJob(session.def, cmdParams[1], cmdParams[2], cmdParams[3], cmdParams[4])
 		return true -- on the board: the stand-in is not ordered to build it
@@ -542,6 +624,10 @@ function widget:MouseRelease() return false end
 
 function widget:KeyPress(key, mods, isRepeat)
 	if isRepeat or not mods.alt or mods.ctrl or mods.shift or mods.meta then return false end
+	if key == Spring.GetKeyCode(MODE_KEY) and not spectating then
+		SetMode(not boardMode)
+		return true
+	end
 	if key ~= Spring.GetKeyCode(EXCLUDE_KEY) then return false end
 	local selected = spGetSelectedUnits() or {}
 	local builders, anyIn = {}, false
@@ -555,6 +641,7 @@ function widget:KeyPress(key, mods, isRepeat)
 	for i = 1, #builders do
 		excluded[builders[i]] = anyIn or nil
 	end
+	capableAt = nil
 	spEcho("[Global Build] " .. #builders .. (anyIn and " builder(s) taken off the board" or " builder(s) back on the board"))
 	lastPlan = 0
 	return true
@@ -661,7 +748,11 @@ function widget:DrawWorld()
 end
 
 function widget:DrawScreen()
-	if not session then return end
+	if not session then
+		-- board mode: the tag shows while a building is being placed for the board
+		local _, cmdID = spGetActiveCommand()
+		if not (cmdID and cmdID < 0 and Diverts(-cmdID)) then return end
+	end
 	local mx, my = spGetMouseState()
 	local waiting = 0
 	for i = 1, #jobs do
@@ -692,7 +783,19 @@ function widget:Initialize()
 		StartSession = StartSession,
 		EndSession   = EndSession,
 		InSession    = function() return session ~= nil, session and session.started or false end,
-		SetExcluded  = function(unitID, off) excluded[unitID] = off and true or nil; lastPlan = 0 end,
+		-- board mode: buildings placed with a builder selected go on the board
+		GetMode      = function() return boardMode end,
+		SetMode      = SetMode,
+		-- in board mode: this building, placed next, is for the selected builder after all
+		DirectOnce   = function(unitDefID) direct = { def = unitDefID, idle = 0 } end,
+		-- would a build of this, placed now, go on the board? (no side effects)
+		Diverts      = Diverts,
+		-- for whoever gives build orders itself: Intercept(cmdID, params) puts the
+		-- order on the board if board mode says so, and returns true if it did
+		Intercept    = Intercept,
+		-- how many builders the board may use can build this
+		Capable      = Capable,
+		SetExcluded  = function(unitID, off) excluded[unitID] = off and true or nil; lastPlan = 0; capableAt = nil end,
 		IsExcluded   = function(unitID) return excluded[unitID] == true end,
 		tune         = TUNE,
 	}
