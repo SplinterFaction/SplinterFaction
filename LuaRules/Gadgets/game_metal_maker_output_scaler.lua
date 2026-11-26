@@ -49,45 +49,15 @@ local BASE_SPOT_VALUE = 3
 -- Tier multipliers / base energy
 -- ------------------------------------------------------------
 
+-- The numbers are in gamedata/configs/metal_makers.lua, which the unit
+-- definitions read too (a converter's description quotes its multiplier).
+local makerConfig = VFS.Include("gamedata/configs/metal_makers.lua")
+
 -- Tier multipliers (metalSpot_value * multiplier)
-local multipliersByName = {
-	lozmetalextractor     = 1,
-	fedmetalextractor     = 1,
-
-	lozmetalextractor_up1 = 2,
-	fedmetalextractor_up1 = 2,
-
-	lozmetalextractor_up2 = 6.5,
-	fedmetalextractor_up2 = 6.5,
-
-	lozmetalextractor_up3 = 14,
-	fedmetalextractor_up3 = 14,
-
-	lozmetalextractor_up4 = 28,
-	fedmetalextractor_up4 = 28,
-
-	geometalmaker         = 35,
-}
+local multipliersByName = makerConfig.multipliers
 
 -- Base energy upkeep by tier (these are the numbers for metalSpot_value == 3)
-local energyBaseByName = {
-	lozmetalextractor     = 12.5,
-	fedmetalextractor     = 12.5,
-
-	lozmetalextractor_up1 = 25,
-	fedmetalextractor_up1 = 25,
-
-	lozmetalextractor_up2 = 108,
-	fedmetalextractor_up2 = 108,
-
-	lozmetalextractor_up3 = 233,
-	fedmetalextractor_up3 = 233,
-
-	lozmetalextractor_up4 = 583,
-	fedmetalextractor_up4 = 583,
-
-	geometalmaker         = 700,
-}
+local energyBaseByName = makerConfig.energyBase
 
 -- ------------------------------------------------------------
 -- Precompute unitDefID -> config (store ONLY base values here)

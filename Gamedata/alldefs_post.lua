@@ -56,7 +56,21 @@ function tobool(val)
 end
 
 -- process unitdef
+-- the E->M converters' multipliers: the same table the output gadget works from
+local metalMakerMultipliers = VFS.Include("gamedata/configs/metal_makers.lua").multipliers
+
 function UnitDef_Post(name, uDef)
+
+	-- An E->M converter's description says how much it multiplies the map's metal spot value by
+	local makerMultiplier = metalMakerMultipliers[name] or metalMakerMultipliers[uDef.unitname or ""]
+	if makerMultiplier then
+		-- (this function is run more than once over a definition: add it only once)
+		local note = string.format(" (x%g extraction)", makerMultiplier)
+		local description = uDef.description or ""
+		if description:sub(-#note) ~= note then
+			uDef.description = description .. note
+		end
+	end
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
