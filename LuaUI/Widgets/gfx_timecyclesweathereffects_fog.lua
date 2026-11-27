@@ -85,6 +85,14 @@ local TUNE = {
 	ambScatter    = 0.85,   -- shadowed fog brightness
 	anisotropy    = 0.55,   -- forward scattering: fog toward the sun glows
 	maxDist       = 14000,  -- view rays are not marched past this
+	-- The march takes short steps near the eye and long ones far away (steps grow
+	-- as position^stepCurve; 1 = all the same length). Detail the steps are too
+	-- long to follow is faded out, so far fog is smooth instead of striped.
+	stepCurve     = 1.7,
+	shadowStepNear = 140,   -- shadows are looked up while a step is shorter than this (elmos) ...
+	shadowStepFar  = 360,   -- ... and not at all once it is longer than this
+	animateDither = false,  -- true: the grain moves every frame (hides the pattern, shimmers)
+	detailFade    = true,   -- false: sample noise and shadows however long the step (the old look, for comparing)
 	edgeFade      = 1400,   -- the layer fades out over this distance past the map's edge
 
 	-- battle smoke: a dark volume where a unit with a big death explosion died
@@ -200,6 +208,8 @@ uniform vec4 lightParams;     // x = sun scatter, y = ambient scatter, z = aniso
 uniform vec4 marchParams;     // x = steps, y = max distance, z = wind offset x, w = wind offset z
 
 uniform float edgeFade;       // elmos past the map edge over which the layer fades out
+uniform vec4 stepParams;      // x = step curve, y = shadow step near, z = shadow step far, w = 1 if the dither moves
+uniform float detailFade;     // 1: fade what a step is too long to follow, 0: sample it regardless
 uniform int numVolumes;
 uniform vec4 volPos[MAX_VOLUMES]; // xyz = centre, w = radius
 uniform vec4 volCol[MAX_VOLUMES]; // rgb = colour, a = extinction per elmo at the centre
@@ -245,8 +255,10 @@ void main() {
 	}
 
 	int steps = int(marchParams.x);
-	float ds = (tmax - tmin) / float(steps);
-	float t = tmin + ds * IGN(gl_FragCoord.xy + 5.588238 * mod(timeInfo.z, 64.0));
+	float span = tmax - tmin;
+	// where in each step the sample is taken: a per-pixel offset, so that the
+	// steps of neighbouring pixels do not line up into bands
+	float jitter = IGN(gl_FragCoord.xy + 5.588238 * mod(timeInfo.z, 64.0) * stepParams.w);
 
 	// how much light fog scatters toward the eye from the sun's direction
 	float g = lightParams.z;
@@ -262,13 +274,22 @@ void main() {
 	float trans = 1.0;
 
 	for (int i = 0; i < steps; i++) {
-		vec3 p = eye + dir * t;
-		t += ds;
+		// Steps grow with distance: short near the eye, where detail shows, long
+		// far away. ds is this step's own length.
+		float t0 = tmin + span * pow(float(i) / float(steps), stepParams.x);
+		float t1 = tmin + span * pow(float(i + 1) / float(steps), stepParams.x);
+		float ds = t1 - t0;
+		vec3 p = eye + dir * (t0 + ds * jitter);
 
-		// two octaves of drifting noise, the second drifting the other way a little faster
+		// Two octaves of drifting noise, the second drifting the other way a
+		// little faster. A step longer than half a repeat of an octave cannot
+		// follow it: sampled anyway, it comes out as regular stripes ("zebra").
+		// Each octave is therefore faded to its average as the step outgrows it.
 		vec3 np = p + windOff;
 		float n1 = textureLod(noiseTex, np * noiseParams.x, 0.0).a;
 		float n2 = textureLod(noiseTex, (p - windOff * 1.7).zyx * noiseParams.y, 0.0).a;
+		n1 = mix(0.5, n1, 1.0 - detailFade * smoothstep(0.22, 0.50, ds * noiseParams.x));
+		n2 = mix(0.5, n2, 1.0 - detailFade * smoothstep(0.22, 0.50, ds * noiseParams.y));
 		float n = n1 * 0.65 + n2 * 0.35;
 
 		// the layer: exponential in height, its top pushed up and down by the noise
@@ -300,11 +321,14 @@ void main() {
 		if (sigma > 0.000001) {
 			albedo /= sigma;
 			float lit = 1.0;
-			if (lightParams.w > 0.5) {
+			// the same goes for shadows: a long step skips over many cells of the
+			// shadow map and returns stripes, so far steps are simply lit
+			float shadowWeight = 1.0 - detailFade * smoothstep(stepParams.y, stepParams.z, ds);
+			if (lightParams.w > 0.5 && shadowWeight > 0.0) {
 				vec3 sc = (shadowView * vec4(p, 1.0)).xyz;
 				sc.xy += vec2(0.5);
 				if (all(greaterThan(sc.xy, vec2(0.0))) && all(lessThan(sc.xy, vec2(1.0)))) {
-					lit = texture(shadowTex, sc);
+					lit = mix(1.0, texture(shadowTex, sc), shadowWeight);
 				}
 			}
 			float a = 1.0 - exp(-sigma * ds);
@@ -585,6 +609,21 @@ local function SetQuality(q)
 	end
 end
 
+-- "/fogmarch old" and "/fogmarch new": the march as it was before the stripes
+-- were dealt with, and as it is now, to compare in the same game. "/fogmarch"
+-- alone says which is on. Not saved: every game starts on the new one.
+local NEW_MARCH = { stepCurve = TUNE.stepCurve, detailFade = TUNE.detailFade, animateDither = TUNE.animateDither }
+local function FogMarch(_, _, words)
+	local which = words and words[1]
+	if which == "old" then
+		TUNE.stepCurve, TUNE.detailFade, TUNE.animateDither = 1, false, true
+	elseif which == "new" then
+		TUNE.stepCurve, TUNE.detailFade, TUNE.animateDither = NEW_MARCH.stepCurve, NEW_MARCH.detailFade, NEW_MARCH.animateDither
+	end
+	spEcho("[GFX Fog] march: " .. (TUNE.detailFade and "new" or "old") .. "  (/fogmarch old | new)")
+	return true
+end
+
 function widget:Initialize()
 	if not (gl.GetVAO and gl.GetVBO and glRenderToTexture) then
 		Goodbye("GL4 buffers or render-to-texture unavailable")
@@ -656,6 +695,7 @@ function widget:Initialize()
 		return
 	end
 
+	widgetHandler:AddAction("fogmarch", FogMarch, nil, "t")
 	WG.fog = {
 		AddVolume    = AddVolume,
 		RemoveVolume = RemoveVolume,
@@ -664,6 +704,7 @@ function widget:Initialize()
 		SetQuality   = SetQuality,
 		GetAmount    = function() return TUNE.amountMult end,
 		GetAmountNow = function() return lastAmount end, -- how much fog is being drawn, 0 = none
+		tune         = TUNE, -- the tuning table itself, for trying values while the game runs
 		SetAmount    = function(v) TUNE.amountMult = max(0, min(3, tonumber(v) or 1)) end,
 		GetBattleSmoke = function() return TUNE.battleSmoke end,
 		SetBattleSmoke = function(v) TUNE.battleSmoke = v and true or false end,
@@ -675,6 +716,7 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
+	widgetHandler:RemoveAction("fogmarch")
 	widgetHandler:DeregisterGlobal("FogVolumeAdd")
 	widgetHandler:DeregisterGlobal("FogVolumeRemove")
 	WG.fog = nil
@@ -786,6 +828,8 @@ function widget:DrawWorld()
 	marchShader:SetUniform("lightParams", TUNE.sunScatter, TUNE.ambScatter, TUNE.anisotropy, shadows and 1 or 0)
 	marchShader:SetUniform("marchParams", q.steps, TUNE.maxDist, windOffX, windOffZ)
 	marchShader:SetUniform("edgeFade", TUNE.edgeFade)
+	marchShader:SetUniform("stepParams", TUNE.stepCurve, TUNE.shadowStepNear, TUNE.shadowStepFar, TUNE.animateDither and 1 or 0)
+	marchShader:SetUniform("detailFade", TUNE.detailFade and 1 or 0)
 	marchShader:SetUniformInt("numVolumes", nVolumes)
 	for i = 1, nVolumes do
 		local e = active[i]
