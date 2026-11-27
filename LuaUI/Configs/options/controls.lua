@@ -56,6 +56,8 @@ return {
 		{ id = "areaattacktweak", name = "Area attack tweak", type = "bool", widget = "Area Attack Tweak", requires = "Area Attack Tweak" },
 		{ id = "aacommandhelper", name = "AA area attack filter", type = "bool", widget = "AA Command Helper", requires = "AA Command Helper",
 		  desc = "Anti-air units ignore ground targets inside an area attack." },
+		{ id = "grabpan", name = "Middle mouse drags the map", type = "bool", widget = "Grab Pan", requires = "Grab Pan",
+		  desc = "Hold the middle mouse button and drag to pull the map along under the cursor. Off: the engine's own middle-click scrolling." },
 		{ id = "splitbuildorders", name = "Split build orders", type = "bool", widget = "Build Order Splitter", requires = "Build Order Splitter",
 		  desc = "Queued build orders go to whichever selected builder would finish each soonest, and builders that run out take over the others' waiting work." },
 		{ id = "globalbuild", name = "Global build", type = "bool", widget = "Global Build", requires = "Global Build",

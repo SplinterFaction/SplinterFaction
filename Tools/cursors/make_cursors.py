@@ -1154,6 +1154,7 @@ def b_areamex(g, t, color=(150, 196, 240)):
 
 
 BOLD = {
+    "grab": lambda g, t: h_grab(g, t),
     "normal": b_normal, "move": b_move, "attack": b_attack, "areaattack": b_areaattack, "setattack": b_setattack,
     "fight": b_fight, "patrol": b_patrol, "defend": b_defend, "repair": b_repair, "reclamate": b_reclamate,
     "revive": b_revive, "restore": b_restore, "capture": b_capture, "pickup": b_pickup, "unload": b_unload,
@@ -1448,7 +1449,26 @@ def h_areamex(g, t, color=(169, 201, 234)):
     g.dot(0, 0, 0.18, CREAM)
 
 
+def h_grab(g, t, color=(236, 243, 255)):
+    """Grab: a hand closed on the map, arrows showing it can be pulled any way.
+    Shown by the Grab Pan widget while the middle mouse button drags the view."""
+    k = pulse(t * 2)
+    for i in range(4):                                   # the four ways it can go
+        x, y = polar(lerp(0.80, 0.90, k), i / 4)
+        chev(g, x, y, i / 4, 0.20, 0.10, (150, 196, 240), 0.55 + 0.45 * k, spread=0.80)
+    skin, shade = color, (150, 172, 204)
+    g.line([(-0.20, 0.20), (0.26, 0.20)], 0.50, skin)    # the palm
+    for i, x in enumerate((-0.25, -0.08, 0.10, 0.27)):   # four fingers, curled short
+        top = (-0.24, -0.31, -0.30, -0.21)[i]
+        g.line([(x, 0.02), (x, top)], 0.15, skin)
+        g.line([(x - 0.085, 0.00), (x - 0.085, top + 0.06)], 0.025, shade, 0.9)   # the gap beside it
+    g.line([(-0.34, 0.30), (-0.50, 0.10)], 0.15, skin)   # thumb
+    g.line([(-0.26, 0.02), (0.30, 0.02)], 0.03, shade, 0.9)                       # knuckle line
+    g.line([(-0.10, 0.50), (0.22, 0.50)], 0.20, shade)   # wrist
+
+
 FA = {
+    "grab": h_grab,
     "normal": h_normal, "move": h_move, "attack": h_attack, "areaattack": h_areaattack, "setattack": b_setattack,
     "fight": h_fight, "patrol": h_patrol, "defend": h_defend, "repair": h_repair, "reclamate": b_reclamate,
     "revive": h_revive, "restore": b_restore, "capture": h_capture, "pickup": h_pickup, "unload": h_unload,
@@ -1481,9 +1501,10 @@ CURSORS = [
     ("bomb",       flashy(c_bomb, fx_bomb), 48, "center", 0),
     ("purchase",   flashy(c_purchase, fx_purchase), 48, "center", 0),
     ("areamex",    flashy(c_areamex, fx_areamex), 48, "center", 0),
+    ("grab",       lambda g, t: h_grab(g, t), 48, "center", 0),
 ]
 
-LABELS = {"normal": "pointer", "setattack": "set target", "defend": "guard", "repair": "build / repair",
+LABELS = {"grab": "grab (pan the view)", "normal": "pointer", "setattack": "set target", "defend": "guard", "repair": "build / repair",
           "reclamate": "reclaim", "revive": "resurrect", "pickup": "load", "dgun": "manual fire",
           "selfd": "self-destruct", "areaattack": "area attack", "areamex": "area mex"}
 
