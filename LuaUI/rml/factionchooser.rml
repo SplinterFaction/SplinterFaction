@@ -62,6 +62,11 @@
 			display: flex;
 			flex-direction: row;
 		}
+		/* a spectator has nothing to choose: without this the id rule above beats
+		   the theme's .hidden and the cards stay on screen */
+		#cards.hidden {
+			display: none;
+		}
 		.card {
 			position: relative;
 			width: 420dp;

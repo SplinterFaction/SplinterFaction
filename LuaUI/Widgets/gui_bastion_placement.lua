@@ -598,6 +598,10 @@ function widget:Update()
 		return
 	end
 
+	-- player or spectator, as of now (this widget only lives until the start
+	-- units are spawned, so this is asked for the first moments of a match only)
+	isSpectator = Spring.GetSpectatingState()
+
 	local newPhase = spGetGameRulesParam("phase")
 	if newPhase == nil then return end  -- gadget not initialised yet
 

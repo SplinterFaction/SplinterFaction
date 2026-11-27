@@ -518,6 +518,17 @@ end
 
 --------------------------------------------------------------------------------
 
+-- The team a message speaks for: the sender's, unless the sender is a
+-- spectator. (A spectator has a team number too, usually 0, so without this a
+-- spectator's message would be taken as that team's choice.)
+local function SenderTeam(playerID)
+	local _, _, spectator, teamID = Spring.GetPlayerInfo(playerID, false)
+	if spectator or not teamID then
+		return nil
+	end
+	return teamID
+end
+
 function gadget:RecvLuaMsg(msg, playerID)
 	local firstByte = msg:sub(1, 1)
 
@@ -528,7 +539,8 @@ function gadget:RecvLuaMsg(msg, playerID)
 		local commDefID = tonumber(msg:sub(2) or "-1")
 		if not validStartComm[commDefID] then return end
 
-		local teamID = select(4, Spring.GetPlayerInfo(playerID, false))
+		local teamID = SenderTeam(playerID)
+		if not teamID then return end   -- a spectator has no say
 		Spring.SetTeamRulesParam(teamID, "startUnit", commDefID, ACCESS_LEVEL)
 		factionChosen[teamID] = true
 		Spring.Echo("[Game Spawn] Stored faction for team " .. teamID .. ": defID " .. commDefID)
@@ -544,7 +556,8 @@ function gadget:RecvLuaMsg(msg, playerID)
 		local spotIdx = tonumber(msg:sub(2) or "0")
 		if not spotIdx or not mapSpots[spotIdx] then return end
 
-		local teamID = select(4, Spring.GetPlayerInfo(playerID, false))
+		local teamID = SenderTeam(playerID)
+		if not teamID then return end   -- a spectator has no say
 		if placementConfirmed[teamID] then return end   -- already locked
 
 		local _, _, _, _, _, allyID = Spring.GetTeamInfo(teamID)
@@ -580,7 +593,8 @@ function gadget:RecvLuaMsg(msg, playerID)
 	elseif firstByte == CONFIRM_BYTE then
 		if phase ~= "placement" then return end
 
-		local teamID = select(4, Spring.GetPlayerInfo(playerID, false))
+		local teamID = SenderTeam(playerID)
+		if not teamID then return end   -- a spectator has no say
 		if placementConfirmed[teamID] then return end
 
 		local spotIdx = selectedSpots[teamID]

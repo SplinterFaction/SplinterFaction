@@ -261,6 +261,11 @@ function widget:Update()
 		return
 	end
 
+	-- Player or spectator, as of now: the answer taken when the widget loaded can
+	-- be out of date. Asked every update, but only while this widget is alive,
+	-- which is the faction step at the start of the match.
+	isSpectator = Spring.GetSpectatingState()
+
 	-- Once the phase is no longer "faction" (placement has started, or the
 	-- game is already under way), the job here is done.
 	local currentPhase = Spring.GetGameRulesParam("phase")
