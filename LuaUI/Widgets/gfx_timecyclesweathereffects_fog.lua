@@ -85,14 +85,18 @@ local TUNE = {
 	ambScatter    = 0.85,   -- shadowed fog brightness
 	anisotropy    = 0.55,   -- forward scattering: fog toward the sun glows
 	maxDist       = 14000,  -- view rays are not marched past this
-	-- The march takes short steps near the eye and long ones far away (steps grow
-	-- as position^stepCurve; 1 = all the same length). Detail the steps are too
-	-- long to follow is faded out, so far fog is smooth instead of striped.
-	stepCurve     = 1.7,
-	shadowStepNear = 140,   -- shadows are looked up while a step is shorter than this (elmos) ...
-	shadowStepFar  = 360,   -- ... and not at all once it is longer than this
-	animateDither = false,  -- true: the grain moves every frame (hides the pattern, shimmers)
-	detailFade    = true,   -- false: sample noise and shadows however long the step (the old look, for comparing)
+	-- Far from the eye the march cannot follow fine detail, and what it cannot
+	-- follow comes out as regular stripes ("zebra") instead of fog. So detail is
+	-- faded out with distance, the finest first: each noise octave goes to its
+	-- average between the two distances given, and shadows are not looked up at
+	-- all past shadowMaxDist (far fog counts as lit). Distances in elmos from the
+	-- eye; the numbers are the ones the Zero-K port of this widget settled on.
+	noiseFadeCoarse = { 7000, 11000 },  -- the 1500-elmo octave
+	noiseFadeFine   = { 2500, 6000 },   -- the 430-elmo octave
+	shadowMaxDist = 5000,
+	animateDither = false,  -- true: the grain moves every frame (hides the pattern, shimmers far off)
+	detailFade    = true,   -- false: none of the above (the old look; "/fogmarch old")
+	stepCurve     = 1.0,    -- 1: steps all the same length. Above 1 they are shorter near the eye and longer far off
 	edgeFade      = 1400,   -- the layer fades out over this distance past the map's edge
 
 	-- battle smoke: a dark volume where a unit with a big death explosion died
@@ -208,8 +212,8 @@ uniform vec4 lightParams;     // x = sun scatter, y = ambient scatter, z = aniso
 uniform vec4 marchParams;     // x = steps, y = max distance, z = wind offset x, w = wind offset z
 
 uniform float edgeFade;       // elmos past the map edge over which the layer fades out
-uniform vec4 stepParams;      // x = step curve, y = shadow step near, z = shadow step far, w = 1 if the dither moves
-uniform float detailFade;     // 1: fade what a step is too long to follow, 0: sample it regardless
+uniform vec4 stepParams;      // x = step curve, y = shadow max distance, z = 1 to fade detail with distance, w = 1 if the dither moves
+uniform vec4 noiseFade;       // x, y = the coarse octave fades between these distances; z, w = the fine one
 uniform int numVolumes;
 uniform vec4 volPos[MAX_VOLUMES]; // xyz = centre, w = radius
 uniform vec4 volCol[MAX_VOLUMES]; // rgb = colour, a = extinction per elmo at the centre
@@ -274,23 +278,27 @@ void main() {
 	float trans = 1.0;
 
 	for (int i = 0; i < steps; i++) {
-		// Steps grow with distance: short near the eye, where detail shows, long
-		// far away. ds is this step's own length.
+		// this step, from t0 to t1 along the ray; ds is its own length (the steps
+		// are all alike unless the step curve is above 1)
 		float t0 = tmin + span * pow(float(i) / float(steps), stepParams.x);
 		float t1 = tmin + span * pow(float(i + 1) / float(steps), stepParams.x);
 		float ds = t1 - t0;
 		vec3 p = eye + dir * (t0 + ds * jitter);
 
+		float d = t0 + ds * jitter;   // this sample's distance from the eye
+
 		// Two octaves of drifting noise, the second drifting the other way a
-		// little faster. A step longer than half a repeat of an octave cannot
-		// follow it: sampled anyway, it comes out as regular stripes ("zebra").
-		// Each octave is therefore faded to its average as the step outgrows it.
-		vec3 np = p + windOff;
-		float n1 = textureLod(noiseTex, np * noiseParams.x, 0.0).a;
-		float n2 = textureLod(noiseTex, (p - windOff * 1.7).zyx * noiseParams.y, 0.0).a;
-		n1 = mix(0.5, n1, 1.0 - detailFade * smoothstep(0.22, 0.50, ds * noiseParams.x));
-		n2 = mix(0.5, n2, 1.0 - detailFade * smoothstep(0.22, 0.50, ds * noiseParams.y));
-		float n = n1 * 0.65 + n2 * 0.35;
+		// little faster. At range the march undersamples them and they draw
+		// stripes, so each fades to its 0.5 average with distance, the fine one
+		// first. At 0.5 the carving below is neutral: far fog stays as dense but
+		// goes smooth. An octave that has faded out is not fetched at all.
+		float fade1 = 1.0 - stepParams.z * smoothstep(noiseFade.x, noiseFade.y, d);
+		float fade2 = 1.0 - stepParams.z * smoothstep(noiseFade.z, noiseFade.w, d);
+		float n1 = 0.5;
+		float n2 = 0.5;
+		if (fade1 > 0.001) n1 = textureLod(noiseTex, (p + windOff) * noiseParams.x, 0.0).a;
+		if (fade2 > 0.001) n2 = textureLod(noiseTex, (p - windOff * 1.7).zyx * noiseParams.y, 0.0).a;
+		float n = 0.5 + (n1 - 0.5) * 0.65 * fade1 + (n2 - 0.5) * 0.35 * fade2;
 
 		// the layer: exponential in height, its top pushed up and down by the noise
 		float base = textureLod(baseTex, p.xz / mapSize.xy, 0.0).r;
@@ -321,9 +329,10 @@ void main() {
 		if (sigma > 0.000001) {
 			albedo /= sigma;
 			float lit = 1.0;
-			// the same goes for shadows: a long step skips over many cells of the
-			// shadow map and returns stripes, so far steps are simply lit
-			float shadowWeight = 1.0 - detailFade * smoothstep(stepParams.y, stepParams.z, ds);
+			// the same goes for shadows: far off, one step and the next fall on
+			// either side of a shadow's edge and flip between lit and dark, which
+			// is the other stripe. Far fog is simply lit, eased in over the last fifth.
+			float shadowWeight = 1.0 - stepParams.z * smoothstep(0.8 * stepParams.y, stepParams.y, d);
 			if (lightParams.w > 0.5 && shadowWeight > 0.0) {
 				vec3 sc = (shadowView * vec4(p, 1.0)).xyz;
 				sc.xy += vec2(0.5);
@@ -828,8 +837,8 @@ function widget:DrawWorld()
 	marchShader:SetUniform("lightParams", TUNE.sunScatter, TUNE.ambScatter, TUNE.anisotropy, shadows and 1 or 0)
 	marchShader:SetUniform("marchParams", q.steps, TUNE.maxDist, windOffX, windOffZ)
 	marchShader:SetUniform("edgeFade", TUNE.edgeFade)
-	marchShader:SetUniform("stepParams", TUNE.stepCurve, TUNE.shadowStepNear, TUNE.shadowStepFar, TUNE.animateDither and 1 or 0)
-	marchShader:SetUniform("detailFade", TUNE.detailFade and 1 or 0)
+	marchShader:SetUniform("stepParams", TUNE.stepCurve, TUNE.shadowMaxDist, TUNE.detailFade and 1 or 0, TUNE.animateDither and 1 or 0)
+	marchShader:SetUniform("noiseFade", TUNE.noiseFadeCoarse[1], TUNE.noiseFadeCoarse[2], TUNE.noiseFadeFine[1], TUNE.noiseFadeFine[2])
 	marchShader:SetUniformInt("numVolumes", nVolumes)
 	for i = 1, nVolumes do
 		local e = active[i]
