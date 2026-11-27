@@ -1456,15 +1456,37 @@ def h_grab(g, t, color=(236, 243, 255)):
     for i in range(4):                                   # the four ways it can go
         x, y = polar(lerp(0.80, 0.90, k), i / 4)
         chev(g, x, y, i / 4, 0.20, 0.10, (150, 196, 240), 0.55 + 0.45 * k, spread=0.80)
-    skin, shade = color, (150, 172, 204)
-    g.line([(-0.20, 0.20), (0.26, 0.20)], 0.50, skin)    # the palm
-    for i, x in enumerate((-0.25, -0.08, 0.10, 0.27)):   # four fingers, curled short
-        top = (-0.24, -0.31, -0.30, -0.21)[i]
-        g.line([(x, 0.02), (x, top)], 0.15, skin)
-        g.line([(x - 0.085, 0.00), (x - 0.085, top + 0.06)], 0.025, shade, 0.9)   # the gap beside it
-    g.line([(-0.34, 0.30), (-0.50, 0.10)], 0.15, skin)   # thumb
-    g.line([(-0.26, 0.02), (0.30, 0.02)], 0.03, shade, 0.9)                       # knuckle line
-    g.line([(-0.10, 0.50), (0.22, 0.50)], 0.20, shade)   # wrist
+    # A cartoon glove closed into a fist, seen from the back of the hand: four
+    # fat fingers in a row with a knuckle on each, the thumb tucked against the
+    # side (it never crosses the back of the fingers), a rolled cuff below.
+    # Every part is laid down twice, dark and a little larger first, so each
+    # keeps a bold outline.
+    skin, ink = (255, 251, 232), (38, 44, 58)
+    g.zoom = 0.90
+    edge = 0.085                                          # how much wider the dark pass is
+    up = -0.10                                            # sits above centre, clear of the lower arrow
+    tops = (-0.10, -0.19, -0.18, -0.08)                   # index, middle, ring, little
+    xs = (-0.28, -0.08, 0.12, 0.32)
+    body = [(-0.13, 0.22 + up), (0.17, 0.22 + up)]
+    cuff = [(-0.21, 0.60 + up), (0.25, 0.60 + up)]
+    thumb = [(-0.50, 0.12 + up), (-0.44, 0.32 + up)]      # beside the index finger, pointing up
+    fingers = [[(x, 0.04 + up), (x, top + up)] for x, top in zip(xs, tops)]
+    g.line(thumb, 0.20 + edge, ink)                       # the thumb first: the hand overlaps it
+    g.line(thumb, 0.20, skin)
+    g.line(body, 0.56 + edge, ink)
+    for f in fingers:
+        g.line(f, 0.21 + edge, ink)
+    g.line(body, 0.56, skin)
+    for f in fingers:
+        g.line(f, 0.21, skin)
+    for i in range(3):                                    # the gaps between the fingers
+        x = (xs[i] + xs[i + 1]) / 2
+        g.line([(x, max(tops[i], tops[i + 1]) + 0.03 + up), (x, 0.12 + up)], 0.035, ink)
+    for x in xs:                                          # a knuckle on the back of each
+        g.arc(0.06, 0.30, 0.70, 0.028, ink, 0.6, cx=x, cy=0.24 + up)
+    g.line(cuff, 0.24 + edge, ink)                        # the cuff, over the wrist
+    g.line(cuff, 0.24, skin)
+    g.zoom = 1.0
 
 
 FA = {
